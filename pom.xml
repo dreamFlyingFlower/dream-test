@@ -11,8 +11,8 @@
 	<description>the test for myself</description>
 
 	<modules>
-		<module>dream-test8</module>
-		<module>dream-test17</module>
+		<module>dream-test2</module>
+		<module>dream-test3</module>
 	</modules>
 
 </project>
