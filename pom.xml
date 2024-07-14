@@ -3,9 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>dream.flying.flower</groupId>
+	<parent>
+		<groupId>dream.flying.flower</groupId>
+		<artifactId>dream-parent</artifactId>
+		<version>0.0.1</version>
+		<relativePath />
+	</parent>
+
 	<artifactId>dream-test</artifactId>
-	<version>0.0.1</version>
 	<packaging>pom</packaging>
 	<name>dream-test</name>
 	<description>the test for myself</description>
@@ -13,6 +18,7 @@
 	<modules>
 		<module>dream-test2</module>
 		<module>dream-test3</module>
+		<module>dream-test-auth2</module>
 	</modules>
 
 </project>
