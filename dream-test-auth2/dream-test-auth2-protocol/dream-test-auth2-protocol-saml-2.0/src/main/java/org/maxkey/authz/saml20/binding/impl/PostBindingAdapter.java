@@ -1,24 +1,7 @@
-/*
- * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
-
-
 package org.maxkey.authz.saml20.binding.impl;
 
 import java.security.KeyStore;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,15 +11,12 @@ import org.maxkey.authz.saml.common.AuthnRequestInfo;
 import org.maxkey.authz.saml.common.TrustResolver;
 import org.maxkey.authz.saml20.binding.BindingAdapter;
 import org.maxkey.authz.saml20.binding.ExtractBindingAdapter;
-import org.maxkey.crypto.keystore.KeyStoreLoader;
-import org.maxkey.crypto.keystore.KeyStoreUtil;
-import org.maxkey.entity.apps.AppsSAML20Details;
-import org.opensaml.common.SignableSAMLObject;
 import org.opensaml.common.binding.BasicSAMLMessageContext;
-import org.opensaml.common.binding.decoding.SAMLMessageDecoder;
-import org.opensaml.common.binding.encoding.SAMLMessageEncoder;
-import org.opensaml.saml2.binding.encoding.HTTPPostEncoder;
-import org.opensaml.saml2.metadata.Endpoint;
+import org.opensaml.saml.common.SignableSAMLObject;
+import org.opensaml.saml.common.binding.decoding.SAMLMessageDecoder;
+import org.opensaml.saml.common.binding.encoding.SAMLMessageEncoder;
+import org.opensaml.saml.saml2.binding.encoding.impl.HTTPPostEncoder;
+import org.opensaml.saml.saml2.metadata.Endpoint;
 import org.opensaml.ws.message.encoder.MessageEncodingException;
 import org.opensaml.ws.security.SecurityPolicyResolver;
 import org.opensaml.ws.transport.http.HttpServletResponseAdapter;
@@ -51,6 +31,10 @@ import org.opensaml.xml.security.criteria.UsageCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+
+import com.wy.test.crypto.keystore.KeyStoreLoader;
+import com.wy.test.crypto.keystore.KeyStoreUtil;
+import com.wy.test.entity.apps.AppsSAML20Details;
 
 public class PostBindingAdapter implements BindingAdapter, InitializingBean{
 	private final static Logger logger = LoggerFactory.getLogger(PostBindingAdapter.class);

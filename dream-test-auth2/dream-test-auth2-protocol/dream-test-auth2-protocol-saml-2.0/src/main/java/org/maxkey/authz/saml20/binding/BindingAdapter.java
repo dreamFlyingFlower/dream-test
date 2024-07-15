@@ -1,58 +1,39 @@
-/*
- * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
-
-
 package org.maxkey.authz.saml20.binding;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.maxkey.authz.saml.common.AuthnRequestInfo;
-import org.maxkey.entity.apps.AppsSAML20Details;
-import org.opensaml.common.SignableSAMLObject;
-import org.opensaml.saml2.metadata.Endpoint;
+import org.opensaml.saml.common.SignableSAMLObject;
+import org.opensaml.saml.saml2.metadata.Endpoint;
+import org.opensaml.security.credential.Credential;
 import org.opensaml.ws.message.encoder.MessageEncodingException;
 import org.opensaml.ws.security.SecurityPolicyResolver;
-import org.opensaml.xml.security.credential.Credential;
+
+import com.wy.test.entity.apps.AppsSAML20Details;
 
 /**
  * 
  * Abstracts the SAML Binding used to send/receive messages.
- * 
- *
  */
 public interface BindingAdapter {
 
-	public void sendSAMLMessage(SignableSAMLObject samlMessage, Endpoint endpoint, HttpServletRequest request, HttpServletResponse response) throws MessageEncodingException;
-	
-	public void setSecurityPolicyResolver(SecurityPolicyResolver securityPolicyResolver);
-	
-	public void setExtractBindingAdapter(ExtractBindingAdapter extractBindingAdapter);
-	
-	public void setAuthnRequestInfo(AuthnRequestInfo authnRequestInfo);
-	
-	public void setRelayState(String relayState);
-	
-	public AppsSAML20Details getSaml20Details();
-	
-	public AuthnRequestInfo getAuthnRequestInfo();
-	
-	public Credential getSigningCredential();
-	
-	public Credential getSpSigningCredential();
-	
+	void sendSAMLMessage(SignableSAMLObject samlMessage, Endpoint endpoint, HttpServletRequest request,
+			HttpServletResponse response) throws MessageEncodingException;
+
+	void setSecurityPolicyResolver(SecurityPolicyResolver securityPolicyResolver);
+
+	void setExtractBindingAdapter(ExtractBindingAdapter extractBindingAdapter);
+
+	void setAuthnRequestInfo(AuthnRequestInfo authnRequestInfo);
+
+	void setRelayState(String relayState);
+
+	AppsSAML20Details getSaml20Details();
+
+	AuthnRequestInfo getAuthnRequestInfo();
+
+	Credential getSigningCredential();
+
+	Credential getSpSigningCredential();
 }

@@ -23,9 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.maxkey.authz.saml20.binding.ExtractBindingAdapter;
 import org.maxkey.authz.saml20.xml.SAML2ValidatorSuite;
-import org.maxkey.web.WebContext;
 import org.opensaml.common.binding.SAMLMessageContext;
-import org.opensaml.saml2.core.LogoutRequest;
 import org.opensaml.ws.message.decoder.MessageDecodingException;
 import org.opensaml.xml.security.SecurityException;
 import org.opensaml.xml.validation.ValidationException;
@@ -37,6 +35,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.wy.test.web.WebContext;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

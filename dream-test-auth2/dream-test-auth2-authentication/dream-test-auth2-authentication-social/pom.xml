@@ -15,7 +15,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>dream.flying.flower</groupId>
-			<artifactId>dream-test-auth2-core</artifactId>
+			<artifactId>dream-test-auth2-authentication-core</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>dream.flying.flower</groupId>
+			<artifactId>dream-test-auth2-authentication-provider</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 		<dependency>
@@ -129,6 +134,11 @@
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-webmvc-core</artifactId>
 			<version>1.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>me.zhyd.oauth</groupId>
+			<artifactId>JustAuth</artifactId>
+			<version>1.16.6</version>
 		</dependency>
 
 		<dependency>

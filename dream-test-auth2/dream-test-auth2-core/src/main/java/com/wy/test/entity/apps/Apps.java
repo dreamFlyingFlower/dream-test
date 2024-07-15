@@ -19,9 +19,6 @@ import com.wy.test.crypto.Base64Utils;
 @Table(name = "MXK_APPS")
 public class Apps extends JpaEntity implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6264641546959620712L;
 
 	public static final class CREDENTIALS {
@@ -138,9 +135,8 @@ public class Apps extends JpaEntity implements Serializable {
 	private String userPropertys;
 
 	/**
-	 * Signature for client verify create by SignaturePublicKey &
-	 * SignaturePrivateKey issuer is domain name subject is app id append domain
-	 * name
+	 * Signature for client verify create by SignaturePublicKey & SignaturePrivateKey issuer is domain name subject is
+	 * app id append domain name
 	 */
 	@Column
 	private int isSignature;

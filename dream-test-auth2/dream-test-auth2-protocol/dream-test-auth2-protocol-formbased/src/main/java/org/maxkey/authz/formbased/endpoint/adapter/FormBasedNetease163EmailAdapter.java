@@ -17,10 +17,11 @@
 
 package org.maxkey.authz.formbased.endpoint.adapter;
 
-import org.maxkey.authz.endpoint.adapter.AbstractAuthorizeAdapter;
-import org.maxkey.constants.ConstsBoolean;
-import org.maxkey.entity.apps.AppsFormBasedDetails;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
+import com.wy.test.constants.ConstsBoolean;
+import com.wy.test.entity.apps.AppsFormBasedDetails;
 
 public class FormBasedNetease163EmailAdapter extends AbstractAuthorizeAdapter {
 	

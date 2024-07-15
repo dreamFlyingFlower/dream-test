@@ -22,18 +22,7 @@ package org.maxkey.authz.formbased.endpoint;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.maxkey.authn.annotation.CurrentUser;
-import org.maxkey.authn.web.AuthorizationUtils;
-import org.maxkey.authz.endpoint.AuthorizeBaseEndpoint;
-import org.maxkey.authz.endpoint.adapter.AbstractAuthorizeAdapter;
 import org.maxkey.authz.formbased.endpoint.adapter.FormBasedDefaultAdapter;
-import org.maxkey.constants.ConstsBoolean;
-import org.maxkey.entity.Accounts;
-import org.maxkey.entity.UserInfo;
-import org.maxkey.entity.apps.Apps;
-import org.maxkey.entity.apps.AppsFormBasedDetails;
-import org.maxkey.persistence.service.AppsFormBasedDetailsService;
-import org.maxkey.util.Instance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +30,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.wy.test.authorize.endpoint.AuthorizeBaseEndpoint;
+import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
+import com.wy.test.constants.ConstsBoolean;
+import com.wy.test.core.authn.annotation.CurrentUser;
+import com.wy.test.core.authn.web.AuthorizationUtils;
+import com.wy.test.entity.Accounts;
+import com.wy.test.entity.UserInfo;
+import com.wy.test.entity.apps.Apps;
+import com.wy.test.entity.apps.AppsFormBasedDetails;
+import com.wy.test.persistence.service.AppsFormBasedDetailsService;
+import com.wy.test.util.Instance;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

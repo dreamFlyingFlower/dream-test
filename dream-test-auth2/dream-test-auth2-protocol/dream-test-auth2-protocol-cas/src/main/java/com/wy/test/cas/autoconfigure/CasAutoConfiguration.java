@@ -1,0 +1,66 @@
+package com.wy.test.cas.autoconfigure;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import com.wy.test.cas.authz.endpoint.ticket.TicketServices;
+import com.wy.test.cas.authz.endpoint.ticket.pgt.ProxyGrantingTicketServicesFactory;
+import com.wy.test.cas.authz.endpoint.ticket.st.TicketServicesFactory;
+import com.wy.test.cas.authz.endpoint.ticket.tgt.TicketGrantingTicketServicesFactory;
+import com.wy.test.persistence.redis.RedisConnectionFactory;
+
+@AutoConfiguration
+@ComponentScan(basePackages = { "org.maxkey.authz.cas.endpoint" })
+public class CasAutoConfiguration implements InitializingBean {
+
+	private static final Logger _logger = LoggerFactory.getLogger(CasAutoConfiguration.class);
+
+	/**
+	 * TicketServices.
+	 * 
+	 * @param persistence int
+	 * @param validity int
+	 * @return casTicketServices
+	 */
+	@Bean(name = "casTicketServices")
+	public TicketServices casTicketServices(@Value("${maxkey.server.persistence}") int persistence,
+			@Value("${maxkey.login.remeberme.validity}") int validity, JdbcTemplate jdbcTemplate,
+			RedisConnectionFactory redisConnFactory) {
+		_logger.debug("init casTicketServices.");
+		return new TicketServicesFactory().getService(persistence, jdbcTemplate, redisConnFactory);
+	}
+
+	/**
+	 * TicketServices.
+	 * 
+	 * @param persistence int
+	 * @param validity int
+	 * @return casTicketServices
+	 */
+	@Bean(name = "casTicketGrantingTicketServices")
+	public TicketServices casTicketGrantingTicketServices(@Value("${maxkey.server.persistence}") int persistence,
+			@Value("${maxkey.login.remeberme.validity}") int validity, JdbcTemplate jdbcTemplate,
+			RedisConnectionFactory redisConnFactory) {
+		_logger.debug("init casTicketGrantingTicketServices.");
+		return new TicketGrantingTicketServicesFactory().getService(persistence, jdbcTemplate, redisConnFactory);
+	}
+
+	@Bean(name = "casProxyGrantingTicketServices")
+	public TicketServices casProxyGrantingTicketServices(@Value("${maxkey.server.persistence}") int persistence,
+			@Value("${maxkey.login.remeberme.validity}") int validity, JdbcTemplate jdbcTemplate,
+			RedisConnectionFactory redisConnFactory) {
+		_logger.debug("init casTicketGrantingTicketServices.");
+		return new ProxyGrantingTicketServicesFactory().getService(persistence, jdbcTemplate, redisConnFactory);
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+
+	}
+}

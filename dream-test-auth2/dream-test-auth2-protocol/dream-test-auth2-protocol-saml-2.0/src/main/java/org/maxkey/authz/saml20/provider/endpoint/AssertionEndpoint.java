@@ -22,17 +22,10 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.maxkey.authn.annotation.CurrentUser;
-import org.maxkey.authn.web.AuthorizationUtils;
 import org.maxkey.authz.saml.common.AuthnRequestInfo;
 import org.maxkey.authz.saml.common.EndpointGenerator;
 import org.maxkey.authz.saml20.binding.BindingAdapter;
 import org.maxkey.authz.saml20.provider.xml.AuthnResponseGenerator;
-import org.maxkey.entity.UserInfo;
-import org.maxkey.entity.apps.AppsSAML20Details;
-import org.maxkey.web.WebConstants;
-import org.opensaml.saml2.core.Response;
-import org.opensaml.saml2.metadata.Endpoint;
 import org.opensaml.ws.message.encoder.MessageEncodingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +34,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.wy.test.core.authn.annotation.CurrentUser;
+import com.wy.test.core.authn.web.AuthorizationUtils;
+import com.wy.test.entity.apps.AppsSAML20Details;
+import com.wy.test.web.WebConstants;
 
 
 @Controller

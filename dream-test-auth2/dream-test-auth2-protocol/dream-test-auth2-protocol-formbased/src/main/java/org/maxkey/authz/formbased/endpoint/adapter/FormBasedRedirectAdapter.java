@@ -1,30 +1,14 @@
-/*
- * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
-
 package org.maxkey.authz.formbased.endpoint.adapter;
 
 import java.time.Instant;
 
-import org.maxkey.authz.endpoint.adapter.AbstractAuthorizeAdapter;
-import org.maxkey.constants.ConstsBoolean;
-import org.maxkey.crypto.DigestUtils;
-import org.maxkey.entity.apps.AppsFormBasedDetails;
-import org.maxkey.web.WebContext;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
+import com.wy.test.constants.ConstsBoolean;
+import com.wy.test.crypto.DigestUtils;
+import com.wy.test.entity.apps.AppsFormBasedDetails;
+import com.wy.test.web.WebContext;
 
 public class FormBasedRedirectAdapter extends AbstractAuthorizeAdapter {
 

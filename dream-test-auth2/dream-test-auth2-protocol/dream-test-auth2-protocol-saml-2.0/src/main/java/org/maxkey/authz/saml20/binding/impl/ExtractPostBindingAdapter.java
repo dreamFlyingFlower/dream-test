@@ -1,36 +1,17 @@
-/*
- * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
-
-
 package org.maxkey.authz.saml20.binding.impl;
 
 import java.security.KeyStore;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
 import org.maxkey.authz.saml.common.TrustResolver;
 import org.maxkey.authz.saml20.binding.ExtractBindingAdapter;
-import org.maxkey.crypto.keystore.KeyStoreLoader;
-import org.maxkey.entity.apps.AppsSAML20Details;
 import org.opensaml.common.binding.BasicSAMLMessageContext;
 import org.opensaml.common.binding.SAMLMessageContext;
-import org.opensaml.common.binding.decoding.SAMLMessageDecoder;
 import org.opensaml.common.binding.security.IssueInstantRule;
 import org.opensaml.common.binding.security.MessageReplayRule;
+import org.opensaml.saml.common.binding.decoding.SAMLMessageDecoder;
 import org.opensaml.ws.message.decoder.MessageDecodingException;
 import org.opensaml.ws.security.SecurityPolicyResolver;
 import org.opensaml.ws.transport.http.HttpServletRequestAdapter;
@@ -39,6 +20,9 @@ import org.opensaml.xml.security.credential.CredentialResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+
+import com.wy.test.crypto.keystore.KeyStoreLoader;
+import com.wy.test.entity.apps.AppsSAML20Details;
 
 public class ExtractPostBindingAdapter implements ExtractBindingAdapter, InitializingBean{
 	private final static Logger _logger = LoggerFactory.getLogger(ExtractPostBindingAdapter.class);

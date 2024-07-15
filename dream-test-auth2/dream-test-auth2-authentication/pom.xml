@@ -15,8 +15,11 @@
 	<description>study for spring security auth</description>
 
 	<modules>
-		<module>dream-test-auth2-web-gateway</module>
-		<module>dream-test-auth2-web-mgt</module>
-		<module>dream-test-auth2-web-server</module>
+		<module>dream-test-auth2-authentication-captcha</module>
+		<module>dream-test-auth2-authentication-core</module>
+		<module>dream-test-auth2-authentication-otp</module>
+		<module>dream-test-auth2-authentication-provider</module>
+		<module>dream-test-auth2-authentication-sms</module>
+		<module>dream-test-auth2-authentication-social</module>
 	</modules>
 </project>

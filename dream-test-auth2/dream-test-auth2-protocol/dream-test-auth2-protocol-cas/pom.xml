@@ -15,7 +15,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>dream.flying.flower</groupId>
-			<artifactId>dream-test-auth2-core</artifactId>
+			<artifactId>dream-test-auth2-protocol-authorize</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>dream.flying.flower</groupId>
+			<artifactId>dream-test-auth2-authentication-provider</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 		<dependency>
@@ -130,6 +135,18 @@
 			<artifactId>springdoc-openapi-webmvc-core</artifactId>
 			<version>1.7.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.pac4j</groupId>
+			<artifactId>pac4j-core</artifactId>
+			<version>3.8.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.pac4j</groupId>
+			<artifactId>pac4j-cas</artifactId>
+			<version>3.8.1</version>
+			<scope>runtime</scope>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

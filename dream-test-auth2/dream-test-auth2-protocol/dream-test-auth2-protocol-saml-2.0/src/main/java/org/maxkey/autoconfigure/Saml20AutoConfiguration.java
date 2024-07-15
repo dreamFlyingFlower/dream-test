@@ -1,20 +1,3 @@
-/*
- * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
-
 package org.maxkey.autoconfigure;
 
 import java.io.IOException;
@@ -34,8 +17,6 @@ import org.maxkey.authz.saml20.binding.impl.PostBindingAdapter;
 import org.maxkey.authz.saml20.binding.impl.PostSimpleSignBindingAdapter;
 import org.maxkey.authz.saml20.provider.xml.AuthnResponseGenerator;
 import org.maxkey.authz.saml20.xml.SAML2ValidatorSuite;
-import org.maxkey.crypto.keystore.KeyStoreLoader;
-import org.maxkey.entity.Saml20Metadata;
 import org.opensaml.common.binding.security.IssueInstantRule;
 import org.opensaml.common.binding.security.MessageReplayRule;
 import org.opensaml.util.storage.MapBasedStorageService;
@@ -51,6 +32,9 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.ui.velocity.VelocityEngineFactoryBean;
+
+import com.wy.test.crypto.keystore.KeyStoreLoader;
+import com.wy.test.entity.Saml20Metadata;
 
 @AutoConfiguration
 @ComponentScan(basePackages = {

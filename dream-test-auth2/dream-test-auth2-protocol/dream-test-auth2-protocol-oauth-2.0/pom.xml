@@ -15,7 +15,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>dream.flying.flower</groupId>
-			<artifactId>dream-test-auth2-core</artifactId>
+			<artifactId>dream-test-auth2-authentication-core</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>dream.flying.flower</groupId>
+			<artifactId>dream-test-auth2-authentication-provider</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 		<dependency>
@@ -155,6 +160,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>dream.flying.flower</groupId>
+			<artifactId>dream-test-auth2-protocol-authorize</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
 </project>

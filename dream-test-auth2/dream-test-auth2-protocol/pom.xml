@@ -15,8 +15,13 @@
 	<description>study for spring security auth</description>
 
 	<modules>
-		<module>dream-test-auth2-web-gateway</module>
-		<module>dream-test-auth2-web-mgt</module>
-		<module>dream-test-auth2-web-server</module>
+		<module>dream-test-auth2-protocol-authorize</module>
+		<module>dream-test-auth2-protocol-cas</module>
+		<module>dream-test-auth2-protocol-extendapi</module>
+		<module>dream-test-auth2-protocol-formbased</module>
+		<module>dream-test-auth2-protocol-jwt</module>
+		<module>dream-test-auth2-protocol-oauth-2.0</module>
+		<module>dream-test-auth2-protocol-saml-2.0</module>
+		<module>dream-test-auth2-protocol-tokenbased</module>
 	</modules>
 </project>

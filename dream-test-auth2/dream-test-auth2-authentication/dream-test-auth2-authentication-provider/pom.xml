@@ -15,7 +15,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>dream.flying.flower</groupId>
-			<artifactId>dream-test-auth2-core</artifactId>
+			<artifactId>dream-test-auth2-authentication-core</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>dream.flying.flower</groupId>
+			<artifactId>dream-test-auth2-authentication-sms</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 		<dependency>
@@ -81,6 +86,22 @@
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml-core</artifactId>
 			<version>3.4.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.opensaml</groupId>
+			<artifactId>opensaml-saml-impl</artifactId>
+			<version>3.4.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.opensaml</groupId>
+			<artifactId>opensaml-saml-api</artifactId>
+			<version>3.4.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.opensaml</groupId>
+			<artifactId>openws</artifactId>
+			<version>1.5.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>

@@ -15,7 +15,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>dream.flying.flower</groupId>
-			<artifactId>dream-test-auth2-core</artifactId>
+			<artifactId>dream-test-auth2-authentication-core</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>dream.flying.flower</groupId>
+			<artifactId>dream-test-auth2-authentication-provider</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 		<dependency>
