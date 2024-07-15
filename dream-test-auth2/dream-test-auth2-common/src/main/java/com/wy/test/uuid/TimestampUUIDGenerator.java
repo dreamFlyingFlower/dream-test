@@ -22,6 +22,7 @@ public class TimestampUUIDGenerator extends UnsynchronizedTimestampUUIDGenerator
 	 *
 	 * @throws IllegalStateException if adjustmentOverflow() throws it
 	 */
+	@Override
 	public UUID nextUUID() {
 		synchronized (this) {
 			checkSystemTime();

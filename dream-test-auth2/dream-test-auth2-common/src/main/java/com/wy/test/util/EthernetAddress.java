@@ -7,6 +7,7 @@ import java.net.NetworkInterface;
 import java.net.Socket;
 import java.security.SecureRandom;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -156,6 +157,7 @@ public class EthernetAddress implements Serializable, Cloneable, Comparable<Ethe
 	/**
 	 * Default cloning behaviour (bitwise copy) is just fine...
 	 */
+	@Override
 	public Object clone() {
 		return new EthernetAddress(_address);
 	}
@@ -375,6 +377,27 @@ public class EthernetAddress implements Serializable, Cloneable, Comparable<Ethe
 	 * /**********************************************************************
 	 */
 
+	/**
+	 * Method that compares this EthernetAddress to one passed in as argument.
+	 * Comparison is done simply by comparing individual address bytes in the order.
+	 *
+	 * @return negative number if this EthernetAddress should be sorted before the
+	 *         parameter address if they are equal, os positive non-zero number if
+	 *         this address should be sorted after parameter
+	 */
+	@Override
+	public int compareTo(EthernetAddress other) {
+		long l = _address - other._address;
+		if (l < 0L)
+			return -1;
+		return (l == 0L) ? 0 : 1;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(_address, _asString);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == this)
@@ -384,21 +407,6 @@ public class EthernetAddress implements Serializable, Cloneable, Comparable<Ethe
 		if (o.getClass() != getClass())
 			return false;
 		return ((EthernetAddress) o)._address == _address;
-	}
-
-	/**
-	 * Method that compares this EthernetAddress to one passed in as argument.
-	 * Comparison is done simply by comparing individual address bytes in the order.
-	 *
-	 * @return negative number if this EthernetAddress should be sorted before the
-	 *         parameter address if they are equal, os positive non-zero number if
-	 *         this address should be sorted after parameter
-	 */
-	public int compareTo(EthernetAddress other) {
-		long l = _address - other._address;
-		if (l < 0L)
-			return -1;
-		return (l == 0L) ? 0 : 1;
 	}
 
 	/**

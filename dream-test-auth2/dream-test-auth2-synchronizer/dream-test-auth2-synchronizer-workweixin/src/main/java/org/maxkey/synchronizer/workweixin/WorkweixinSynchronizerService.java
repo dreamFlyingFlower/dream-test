@@ -17,12 +17,13 @@
 
 package org.maxkey.synchronizer.workweixin;
 
-import org.maxkey.entity.Synchronizers;
-import org.maxkey.synchronizer.ISynchronizerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.wy.test.entity.Synchronizers;
+import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
 @Service
 public class WorkweixinSynchronizerService  implements ISynchronizerService{

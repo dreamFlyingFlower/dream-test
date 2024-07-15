@@ -18,6 +18,7 @@
 package com.wy.test.web.apps.contorller;
 
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +41,8 @@ import com.nimbusds.jose.jwk.OctetSequenceKey;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.gen.OctetSequenceKeyGenerator;
 import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
-import com.wy.test.authn.annotation.CurrentUser;
 import com.wy.test.constants.ConstsProtocols;
+import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.crypto.ReciprocalUtils;
 import com.wy.test.entity.Message;
 import com.wy.test.entity.UserInfo;
@@ -67,7 +68,7 @@ public class ApplicationsController extends BaseAppContorller {
 	@ResponseBody
 	public ResponseEntity<?> fetch(@ModelAttribute Apps apps,@CurrentUser UserInfo currentUser) {
 		apps.setInstId(currentUser.getInstId());
-		JpaPageResults<Apps> appsList =appsService.queryPageResults(apps);
+		JpaPageResults<Apps> appsList =appsService.fetchPageResults(apps);
 		for (Apps app : appsList.getRows()){
 			app.transIconBase64();
 			app.setSecret(null);
@@ -81,7 +82,7 @@ public class ApplicationsController extends BaseAppContorller {
 	@RequestMapping(value={"/query"}, produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<?> query(@ModelAttribute Apps apps,@CurrentUser UserInfo currentUser) {
 		_logger.debug("-query  :" + apps);
-		if (appsService.load(apps)!=null) {
+		if (CollectionUtils.isNotEmpty(appsService.query(apps))) {
 			 return new Message<Apps>(Message.SUCCESS).buildResponse();
 		} else {
 			 return new Message<Apps>(Message.SUCCESS).buildResponse();

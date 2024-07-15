@@ -49,10 +49,12 @@ public class AppsTokenBasedDetails extends Apps {
 		super();
 	}
 
+	@Override
 	public String getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -105,18 +107,22 @@ public class AppsTokenBasedDetails extends Apps {
 		this.expires = expires;
 	}
 
+	@Override
 	public String getInstId() {
 		return instId;
 	}
 
+	@Override
 	public void setInstId(String instId) {
 		this.instId = instId;
 	}
 
+	@Override
 	public String getInstName() {
 		return instName;
 	}
 
+	@Override
 	public void setInstName(String instName) {
 		this.instName = instName;
 	}

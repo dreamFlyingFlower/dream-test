@@ -10,16 +10,21 @@ package com.wy.test.uuid;
  * @see http://www.opengroup.org/onlinepubs/9629399/apdxa.htm
  * @see http://www.ics.uci.edu/~ejw/authoring/uuid-guid/draft-leach-uuids-guids-01.txt
  */
-
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInput;
+import java.io.DataInputStream;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.security.MessageDigest;
 import java.util.Arrays;
 
 public final class UUID implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 687078561200656066L;
 
 	// Format variants.
@@ -194,6 +199,7 @@ public final class UUID implements Serializable {
 	/*
 	 * Returns true if two UUIDs are equal by value.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == null || !(obj instanceof UUID))
 			return false;
@@ -214,6 +220,7 @@ public final class UUID implements Serializable {
 	/**
 	 * Returns a hash code for this UUID.
 	 */
+	@Override
 	public int hashCode() {
 		if (hash_code == 0) {
 			synchronized (this) {
@@ -256,6 +263,7 @@ public final class UUID implements Serializable {
 	/**
 	 * Returns the string representation of this UUID.
 	 */
+	@Override
 	public String toString() {
 		if (string_rep == null) {
 			synchronized (this) {

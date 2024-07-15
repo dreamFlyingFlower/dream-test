@@ -7,6 +7,7 @@
 		<groupId>dream.flying.flower</groupId>
 		<artifactId>dream-test-auth2</artifactId>
 		<version>0.0.1</version>
+		<relativePath />
 	</parent>
 	<artifactId>dream-test-auth2-synchronizer-dingtalk</artifactId>
 	<name>dream-test-auth2-synchronizer-dingtalk</name>
@@ -129,6 +130,16 @@
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-webmvc-core</artifactId>
 			<version>1.7.0</version>
+		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.dingtalk.open</groupId>-->
+<!--			<artifactId>taobao-sdk-java-auto</artifactId>-->
+<!--			<version>1479188381469-20180227</version>-->
+<!--		</dependency>-->
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>alibaba-dingtalk-service-sdk</artifactId>
+			<version>2.0.0</version>
 		</dependency>
 
 		<dependency>

@@ -1,36 +1,20 @@
-/*
- * Copyright [2021] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
-
 package org.maxkey.synchronizer.workweixin;
 
 import java.util.List;
 
-import org.maxkey.constants.ConstsStatus;
-import org.maxkey.entity.SynchroRelated;
-import org.maxkey.entity.UserInfo;
-import org.maxkey.synchronizer.AbstractSynchronizerService;
-import org.maxkey.synchronizer.ISynchronizerService;
 import org.maxkey.synchronizer.workweixin.entity.WorkWeixinUsers;
 import org.maxkey.synchronizer.workweixin.entity.WorkWeixinUsersResponse;
-import org.maxkey.util.JsonUtils;
-import org.maxkey.web.HttpRequestAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import com.wy.test.constants.ConstsStatus;
+import com.wy.test.entity.SynchroRelated;
+import com.wy.test.entity.UserInfo;
+import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
+import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
+import com.wy.test.util.JsonUtils;
+import com.wy.test.web.HttpRequestAdapter;
 
 @Service
 public class WorkweixinUsersService extends AbstractSynchronizerService implements ISynchronizerService{

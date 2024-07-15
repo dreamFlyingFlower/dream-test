@@ -1,20 +1,3 @@
-/*
- * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
-
 package com.wy.test.web.permissions.contorller;
 
 import java.util.List;
@@ -33,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authn.annotation.CurrentUser;
 import com.wy.test.constants.ConstsEntryType;
 import com.wy.test.constants.ConstsOperateAction;
 import com.wy.test.constants.ConstsOperateResult;
+import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.entity.Message;
 import com.wy.test.entity.Resources;
 import com.wy.test.entity.UserInfo;
@@ -63,7 +46,7 @@ public class ResourcesController {
 		_logger.debug("fetch {}" , resource);
 		resource.setInstId(currentUser.getInstId());
 		return new Message<JpaPageResults<Resources>>(
-				resourcesService.queryPageResults(resource)).buildResponse();
+				resourcesService.fetchPageResults(resource)).buildResponse();
 	}
 
 	@ResponseBody

@@ -79,6 +79,7 @@ public class UnsynchronizedTimestampUUIDGenerator implements UUIDGenerator {
 	 *
 	 * @throws IllegalStateException if adjustmentOverflow() throws it
 	 */
+	@Override
 	public UUID nextUUID() {
 		long unique_time = (last_time + EPOCH_OFFSET) * CLOCK_RES + clock_adj;
 		if (++clock_adj > CLOCK_RES)

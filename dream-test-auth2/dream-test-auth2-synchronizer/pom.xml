@@ -15,8 +15,13 @@
 	<description>study for spring security auth</description>
 
 	<modules>
-		<module>dream-test-auth2-web-gateway</module>
-		<module>dream-test-auth2-web-mgt</module>
-		<module>dream-test-auth2-web-server</module>
+		<module>dream-test-auth2-synchronizer-activedirectory</module>
+		<module>dream-test-auth2-synchronizer-dingtalk</module>
+		<module>dream-test-auth2-synchronizer-feishu</module>
+		<module>dream-test-auth2-synchronizer-jdbc</module>
+		<module>dream-test-auth2-synchronizer-ldap</module>
+		<module>dream-test-auth2-synchronizer-reorgdept</module>
+		<module>dream-test-auth2-synchronizer-server</module>
+		<module>dream-test-auth2-synchronizer-workweixin</module>
 	</modules>
 </project>

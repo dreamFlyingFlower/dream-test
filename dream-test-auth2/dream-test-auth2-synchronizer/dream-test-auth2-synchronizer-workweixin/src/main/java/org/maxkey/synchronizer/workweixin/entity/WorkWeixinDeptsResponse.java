@@ -19,7 +19,7 @@ package org.maxkey.synchronizer.workweixin.entity;
 
 import java.util.ArrayList;
 
-import org.maxkey.synchronizer.entity.ResponseData;
+import com.wy.test.synchronizer.core.synchronizer.entity.ResponseData;
 
 public class WorkWeixinDeptsResponse extends ResponseData{
 

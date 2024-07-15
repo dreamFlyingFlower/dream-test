@@ -32,13 +32,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authn.annotation.CurrentUser;
+import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.crypto.password.PasswordReciprocal;
 import com.wy.test.entity.Message;
 import com.wy.test.entity.Synchronizers;
 import com.wy.test.entity.UserInfo;
 import com.wy.test.persistence.service.SynchronizersService;
-import com.wy.test.synchronizer.ISynchronizerService;
+import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 import com.wy.test.util.StringUtils;
 import com.wy.test.web.WebContext;
 
@@ -56,7 +56,7 @@ public class SynchronizersController {
 		_logger.debug(""+synchronizers);
 		synchronizers.setInstId(currentUser.getInstId());
 		return new Message<JpaPageResults<Synchronizers>>(
-				synchronizersService.queryPageResults(synchronizers)).buildResponse();
+				synchronizersService.fetchPageResults(synchronizers)).buildResponse();
 	}
 	
 	@RequestMapping(value = { "/get/{id}" }, produces = {MediaType.APPLICATION_JSON_VALUE})

@@ -63,43 +63,41 @@ public class BaseClientDetails implements ClientDetails {
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	private Map<String, Object> additionalInformation = new LinkedHashMap<String, Object>();
 
-	//for OpenID Connect
+	// for OpenID Connect
 
 	private String issuer;
-	
+
 	private String audience;
-	
+
 	private String algorithm;
-	
+
 	private String algorithmKey;
-	
+
 	private String encryptionMethod;
-	
+
 	private String signature;
-	
+
 	private String signatureKey;
-	
+
 	private String subject;
-	
+
 	private String userInfoResponse;
-	
+
 	private String approvalPrompt;
-	
+
 	private String pkce;
-	
+
 	private String protocol;
-	
+
 	private String instId;
-	
-	
+
 	public BaseClientDetails() {
 	}
 
 	public BaseClientDetails(ClientDetails prototype) {
 		this();
 		setAccessTokenValiditySeconds(prototype.getAccessTokenValiditySeconds());
-		setRefreshTokenValiditySeconds(prototype
-				.getRefreshTokenValiditySeconds());
+		setRefreshTokenValiditySeconds(prototype.getRefreshTokenValiditySeconds());
 		setAuthorities(prototype.getAuthorities());
 		setAuthorizedGrantTypes(prototype.getAuthorizedGrantTypes());
 		setClientId(prototype.getClientId());
@@ -109,20 +107,18 @@ public class BaseClientDetails implements ClientDetails {
 		setResourceIds(prototype.getResourceIds());
 	}
 
-	public BaseClientDetails(String clientId, String resourceIds,
-			String scopes, String grantTypes, String authorities) {
+	public BaseClientDetails(String clientId, String resourceIds, String scopes, String grantTypes,
+			String authorities) {
 		this(clientId, resourceIds, scopes, grantTypes, authorities, null);
 	}
 
-	public BaseClientDetails(String clientId, String resourceIds,
-			String scopes, String grantTypes, String authorities,
+	public BaseClientDetails(String clientId, String resourceIds, String scopes, String grantTypes, String authorities,
 			String redirectUris) {
 
 		this.clientId = clientId;
 
 		if (StringUtils.hasText(resourceIds)) {
-			Set<String> resources = StringUtils
-					.commaDelimitedListToSet(resourceIds);
+			Set<String> resources = StringUtils.commaDelimitedListToSet(resourceIds);
 			if (!resources.isEmpty()) {
 				this.resourceIds = resources;
 			}
@@ -136,24 +132,21 @@ public class BaseClientDetails implements ClientDetails {
 		}
 
 		if (StringUtils.hasText(grantTypes)) {
-			this.authorizedGrantTypes = StringUtils
-					.commaDelimitedListToSet(grantTypes);
+			this.authorizedGrantTypes = StringUtils.commaDelimitedListToSet(grantTypes);
 		} else {
-			this.authorizedGrantTypes = new HashSet<String>(Arrays.asList(
-					"authorization_code", "refresh_token"));
+			this.authorizedGrantTypes = new HashSet<String>(Arrays.asList("authorization_code", "refresh_token"));
 		}
 
 		if (StringUtils.hasText(authorities)) {
-			this.authorities = AuthorityUtils
-					.commaSeparatedStringToAuthorityList(authorities);
+			this.authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
 		}
 
 		if (StringUtils.hasText(redirectUris)) {
-			this.registeredRedirectUris = StringUtils
-					.commaDelimitedListToSet(redirectUris);
+			this.registeredRedirectUris = StringUtils.commaDelimitedListToSet(redirectUris);
 		}
 	}
 
+	@Override
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public String getClientId() {
 		return clientId;
@@ -184,12 +177,14 @@ public class BaseClientDetails implements ClientDetails {
 	public Set<String> getAutoApproveScopes() {
 		return autoApproveScopes;
 	}
-	
+
+	@Override
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isSecretRequired() {
 		return this.clientSecret != null;
 	}
 
+	@Override
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public String getClientSecret() {
 		return clientSecret;
@@ -199,74 +194,76 @@ public class BaseClientDetails implements ClientDetails {
 		this.clientSecret = clientSecret;
 	}
 
+	@Override
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isScoped() {
 		return this.scope != null && !this.scope.isEmpty();
 	}
 
+	@Override
 	public Set<String> getScope() {
 		return scope;
 	}
 
 	public void setScope(Collection<String> scope) {
-		this.scope = scope == null ? Collections.<String> emptySet()
-				: new LinkedHashSet<String>(scope);
+		this.scope = scope == null ? Collections.<String>emptySet() : new LinkedHashSet<String>(scope);
 	}
 
+	@Override
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public Set<String> getResourceIds() {
 		return resourceIds;
 	}
 
 	public void setResourceIds(Collection<String> resourceIds) {
-		this.resourceIds = resourceIds == null ? Collections
-				.<String> emptySet() : new LinkedHashSet<String>(resourceIds);
+		this.resourceIds =
+				resourceIds == null ? Collections.<String>emptySet() : new LinkedHashSet<String>(resourceIds);
 	}
 
+	@Override
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public Set<String> getAuthorizedGrantTypes() {
 		return authorizedGrantTypes;
 	}
 
 	public void setAuthorizedGrantTypes(Collection<String> authorizedGrantTypes) {
-		this.authorizedGrantTypes = new LinkedHashSet<String>(
-				authorizedGrantTypes);
+		this.authorizedGrantTypes = new LinkedHashSet<String>(authorizedGrantTypes);
 	}
 
+	@Override
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public Set<String> getRegisteredRedirectUri() {
 		return registeredRedirectUris;
 	}
 
 	public void setRegisteredRedirectUri(Set<String> registeredRedirectUris) {
-		this.registeredRedirectUris = registeredRedirectUris == null ? null
-				: new LinkedHashSet<String>(registeredRedirectUris);
+		this.registeredRedirectUris =
+				registeredRedirectUris == null ? null : new LinkedHashSet<String>(registeredRedirectUris);
 	}
 
 	@com.fasterxml.jackson.annotation.JsonProperty("authorities")
 	private List<String> getAuthoritiesAsStrings() {
-		return new ArrayList<String>(
-				AuthorityUtils.authorityListToSet(authorities));
+		return new ArrayList<String>(AuthorityUtils.authorityListToSet(authorities));
 	}
 
 	@com.fasterxml.jackson.annotation.JsonProperty("authorities")
 	@com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = Jackson2ArrayOrStringDeserializer.class)
 	private void setAuthoritiesAsStrings(Set<String> values) {
-		setAuthorities(AuthorityUtils.createAuthorityList(values
-				.toArray(new String[values.size()])));
+		setAuthorities(AuthorityUtils.createAuthorityList(values.toArray(new String[values.size()])));
 	}
 
+	@Override
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public Collection<GrantedAuthority> getAuthorities() {
 		return authorities;
 	}
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
-	public void setAuthorities(
-			Collection<? extends GrantedAuthority> authorities) {
+	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
 		this.authorities = new ArrayList<GrantedAuthority>(authorities);
 	}
 
+	@Override
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public Integer getAccessTokenValiditySeconds() {
 		return accessTokenValiditySeconds;
@@ -276,21 +273,21 @@ public class BaseClientDetails implements ClientDetails {
 		this.accessTokenValiditySeconds = accessTokenValiditySeconds;
 	}
 
+	@Override
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public Integer getRefreshTokenValiditySeconds() {
 		return refreshTokenValiditySeconds;
 	}
 
-	public void setRefreshTokenValiditySeconds(
-			Integer refreshTokenValiditySeconds) {
+	public void setRefreshTokenValiditySeconds(Integer refreshTokenValiditySeconds) {
 		this.refreshTokenValiditySeconds = refreshTokenValiditySeconds;
 	}
 
 	public void setAdditionalInformation(Map<String, ?> additionalInformation) {
-		this.additionalInformation = new LinkedHashMap<String, Object>(
-				additionalInformation);
+		this.additionalInformation = new LinkedHashMap<String, Object>(additionalInformation);
 	}
 
+	@Override
 	@com.fasterxml.jackson.annotation.JsonAnyGetter
 	public Map<String, Object> getAdditionalInformation() {
 		return Collections.unmodifiableMap(this.additionalInformation);
@@ -300,7 +297,8 @@ public class BaseClientDetails implements ClientDetails {
 	public void addAdditionalInformation(String key, Object value) {
 		this.additionalInformation.put(key, value);
 	}
-	
+
+	@Override
 	public String getIssuer() {
 		return issuer;
 	}
@@ -309,6 +307,7 @@ public class BaseClientDetails implements ClientDetails {
 		this.issuer = issuer;
 	}
 
+	@Override
 	public String getAudience() {
 		return audience;
 	}
@@ -317,6 +316,7 @@ public class BaseClientDetails implements ClientDetails {
 		this.audience = audience;
 	}
 
+	@Override
 	public String getAlgorithm() {
 		return algorithm;
 	}
@@ -325,6 +325,7 @@ public class BaseClientDetails implements ClientDetails {
 		this.algorithm = algorithm;
 	}
 
+	@Override
 	public String getAlgorithmKey() {
 		return algorithmKey;
 	}
@@ -333,6 +334,7 @@ public class BaseClientDetails implements ClientDetails {
 		this.algorithmKey = algorithmKey;
 	}
 
+	@Override
 	public String getEncryptionMethod() {
 		return encryptionMethod;
 	}
@@ -341,6 +343,7 @@ public class BaseClientDetails implements ClientDetails {
 		this.encryptionMethod = encryptionMethod;
 	}
 
+	@Override
 	public String getSignature() {
 		return signature;
 	}
@@ -349,6 +352,7 @@ public class BaseClientDetails implements ClientDetails {
 		this.signature = signature;
 	}
 
+	@Override
 	public String getSignatureKey() {
 		return signatureKey;
 	}
@@ -357,7 +361,7 @@ public class BaseClientDetails implements ClientDetails {
 		this.signatureKey = signatureKey;
 	}
 
-	
+	@Override
 	public String getSubject() {
 		return subject;
 	}
@@ -366,6 +370,7 @@ public class BaseClientDetails implements ClientDetails {
 		this.subject = subject;
 	}
 
+	@Override
 	public String getUserInfoResponse() {
 		return userInfoResponse;
 	}
@@ -374,36 +379,39 @@ public class BaseClientDetails implements ClientDetails {
 		this.userInfoResponse = userInfoResponse;
 	}
 
+	@Override
 	public String getApprovalPrompt() {
-        return approvalPrompt;
-    }
+		return approvalPrompt;
+	}
 
-    public void setApprovalPrompt(String approvalPrompt) {
-        this.approvalPrompt = approvalPrompt;
-    }
- 
-    public String getPkce() {
-        return pkce;
-    }
+	public void setApprovalPrompt(String approvalPrompt) {
+		this.approvalPrompt = approvalPrompt;
+	}
 
-    public void setPkce(String pkce) {
-        this.pkce = pkce;
-    }
+	@Override
+	public String getPkce() {
+		return pkce;
+	}
 
-    public String getProtocol() {
-        return protocol;
-    }
+	public void setPkce(String pkce) {
+		this.pkce = pkce;
+	}
 
-    public void setProtocol(String protocol) {
-        this.protocol = protocol;
-    }
+	@Override
+	public String getProtocol() {
+		return protocol;
+	}
+
+	public void setProtocol(String protocol) {
+		this.protocol = protocol;
+	}
 
 	@Override
 	public String getInstId() {
 		return this.instId;
 	}
-	
-    public void setInstId(String instId) {
+
+	public void setInstId(String instId) {
 		this.instId = instId;
 	}
 
@@ -411,30 +419,14 @@ public class BaseClientDetails implements ClientDetails {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime
-				* result
-				+ ((accessTokenValiditySeconds == null) ? 0
-						: accessTokenValiditySeconds);
-		result = prime
-				* result
-				+ ((refreshTokenValiditySeconds == null) ? 0
-						: refreshTokenValiditySeconds);
-		result = prime * result
-				+ ((authorities == null) ? 0 : authorities.hashCode());
-		result = prime
-				* result
-				+ ((authorizedGrantTypes == null) ? 0 : authorizedGrantTypes
-						.hashCode());
-		result = prime * result
-				+ ((clientId == null) ? 0 : clientId.hashCode());
-		result = prime * result
-				+ ((clientSecret == null) ? 0 : clientSecret.hashCode());
-		result = prime
-				* result
-				+ ((registeredRedirectUris == null) ? 0
-						: registeredRedirectUris.hashCode());
-		result = prime * result
-				+ ((resourceIds == null) ? 0 : resourceIds.hashCode());
+		result = prime * result + ((accessTokenValiditySeconds == null) ? 0 : accessTokenValiditySeconds);
+		result = prime * result + ((refreshTokenValiditySeconds == null) ? 0 : refreshTokenValiditySeconds);
+		result = prime * result + ((authorities == null) ? 0 : authorities.hashCode());
+		result = prime * result + ((authorizedGrantTypes == null) ? 0 : authorizedGrantTypes.hashCode());
+		result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
+		result = prime * result + ((clientSecret == null) ? 0 : clientSecret.hashCode());
+		result = prime * result + ((registeredRedirectUris == null) ? 0 : registeredRedirectUris.hashCode());
+		result = prime * result + ((resourceIds == null) ? 0 : resourceIds.hashCode());
 		result = prime * result + ((scope == null) ? 0 : scope.hashCode());
 		result = prime * result + additionalInformation.hashCode();
 		return result;
@@ -546,7 +538,5 @@ public class BaseClientDetails implements ClientDetails {
 		builder.append("]");
 		return builder.toString();
 	}
-
-
 
 }

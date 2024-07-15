@@ -51,17 +51,17 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	}
 
 	@Bean
-	public DataSourceTransactionManager transactionManager(DataSource dataSource) {
+	 DataSourceTransactionManager transactionManager(DataSource dataSource) {
 		return new DataSourceTransactionManager(dataSource);
 	}
 
 	@Bean
-	public InstitutionsRepository institutionsRepository(JdbcTemplate jdbcTemplate) {
+	 InstitutionsRepository institutionsRepository(JdbcTemplate jdbcTemplate) {
 		return new InstitutionsRepository(jdbcTemplate);
 	}
 
 	@Bean
-	public LocalizationRepository localizationRepository(JdbcTemplate jdbcTemplate,
+	 LocalizationRepository localizationRepository(JdbcTemplate jdbcTemplate,
 			InstitutionsRepository institutionsRepository) {
 		return new LocalizationRepository(jdbcTemplate, institutionsRepository);
 	}
@@ -72,7 +72,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	public PasswordEncoder passwordEncoder(@Value("${maxkey.crypto.password.encoder:bcrypt}") String idForEncode) {
+	 PasswordEncoder passwordEncoder(@Value("${maxkey.crypto.password.encoder:bcrypt}") String idForEncode) {
 		Map<String, PasswordEncoder> encoders = new HashMap<String, PasswordEncoder>();
 		encoders.put("bcrypt", new BCryptPasswordEncoder());
 		encoders.put("plain", NoOpPasswordEncoder.getInstance());

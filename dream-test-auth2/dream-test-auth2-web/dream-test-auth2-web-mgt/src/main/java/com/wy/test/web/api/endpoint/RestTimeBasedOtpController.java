@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.entity.UserInfo;
-import com.wy.test.password.onetimepwd.AbstractOtpAuthn;
+import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.persistence.service.UserInfoService;
 
 import io.swagger.v3.oas.annotations.Operation;

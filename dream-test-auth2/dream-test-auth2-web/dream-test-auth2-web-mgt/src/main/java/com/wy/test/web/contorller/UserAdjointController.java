@@ -17,6 +17,7 @@
 
 package com.wy.test.web.contorller;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.authn.annotation.CurrentUser;
+import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.entity.Message;
 import com.wy.test.entity.UserInfo;
 import com.wy.test.entity.UserInfoAdjoint;
@@ -60,7 +61,7 @@ public class UserAdjointController {
 			@CurrentUser UserInfo currentUser){
 		_logger.debug(""+userInfoAdjoint);
 		userInfoAdjoint.setInstId(currentUser.getInstId());
-		return userInfoAdjointService.queryPageResults(userInfoAdjoint);
+		return userInfoAdjointService.fetchPageResults(userInfoAdjoint);
 	}
 
 	
@@ -107,7 +108,7 @@ public class UserAdjointController {
 			@CurrentUser UserInfo currentUser) {
 		_logger.debug("-query  :" + userInfoAdjoint);
 		userInfoAdjoint.setInstId(currentUser.getInstId());
-		if (userInfoAdjointService.load(userInfoAdjoint)!=null) {
+		if (CollectionUtils.isNotEmpty(userInfoAdjointService.query(userInfoAdjoint))) {
 			return new Message<UserInfoAdjoint>(Message.SUCCESS).buildResponse();
 			
 		} else {

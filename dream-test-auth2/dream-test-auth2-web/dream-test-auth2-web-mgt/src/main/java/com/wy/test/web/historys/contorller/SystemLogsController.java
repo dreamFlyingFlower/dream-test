@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authn.annotation.CurrentUser;
+import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.entity.HistorySystemLogs;
 import com.wy.test.entity.Message;
 import com.wy.test.entity.UserInfo;
@@ -67,7 +67,7 @@ final static Logger _logger = LoggerFactory.getLogger(SystemLogsController.class
 		_logger.debug("historys/historyLog/fetch {} ",historyLog);
 		historyLog.setInstId(currentUser.getInstId());
 		return new Message<JpaPageResults<HistorySystemLogs>>(
-				 	historySystemLogsService.queryPageResults(historyLog)
+				 	historySystemLogsService.fetchPageResults(historyLog)
 				).buildResponse();
 	}
 	

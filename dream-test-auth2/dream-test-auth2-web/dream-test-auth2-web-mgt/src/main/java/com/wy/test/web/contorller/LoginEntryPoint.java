@@ -29,13 +29,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.wy.test.authn.LoginCredential;
-import com.wy.test.authn.jwt.AuthJwt;
-import com.wy.test.authn.jwt.AuthTokenService;
-import com.wy.test.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.configuration.ApplicationConfig;
+import com.wy.test.core.authn.LoginCredential;
+import com.wy.test.core.authn.jwt.AuthJwt;
+import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.entity.Institutions;
 import com.wy.test.entity.Message;
+import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.web.WebConstants;
 import com.wy.test.web.WebContext;
 

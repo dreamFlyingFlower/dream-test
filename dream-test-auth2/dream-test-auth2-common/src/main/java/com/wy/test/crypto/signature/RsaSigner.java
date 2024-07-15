@@ -46,6 +46,7 @@ public final class RsaSigner implements ISigner {
 		return signature.sign();
 	}
 
+	@Override
 	public byte[] sign(byte[] dataBytes, byte[] privateKeyBytes) throws Exception {
 		return sign(dataBytes, privateKeyBytes, SIGNATURE_ALGORITHM);
 	}
@@ -53,6 +54,7 @@ public final class RsaSigner implements ISigner {
 	/**
 	 * sign with BASE64 privateKey use SHA1withRSA Algorithm
 	 */
+	@Override
 	public String signB64(String data, String privateKey) throws Exception {
 		byte[] keyBytes = Base64Utils.decoder(privateKey);
 		byte[] dataBytes = data.getBytes();
@@ -84,6 +86,7 @@ public final class RsaSigner implements ISigner {
 	 * @see com.connsec.crypto.signature.Signer#verify(java.lang.String,
 	 * java.lang.String, java.lang.String)
 	 */
+	@Override
 	public boolean verify(byte[] dataBytes, byte[] publicKeyBytes, byte[] signBytes) throws Exception {
 		// verify
 		return verify(dataBytes, publicKeyBytes, signBytes, SIGNATURE_ALGORITHM);
@@ -99,6 +102,7 @@ public final class RsaSigner implements ISigner {
 	 * @see com.connsec.crypto.signature.Signer#verify(java.lang.String,
 	 * java.lang.String, java.lang.String)
 	 */
+	@Override
 	public boolean verifyB64(String data, String publicKey, String sign) throws Exception {
 		// ���ܹ�Կ
 		byte[] keyBytes = Base64Utils.decoder(publicKey);

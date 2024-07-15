@@ -102,6 +102,7 @@ public class SqlPretty implements Pretty {
 
 		boolean afterByOrSetOrFromOrSelect;
 
+		@SuppressWarnings("unused")
 		boolean afterValues;
 
 		boolean afterOn;

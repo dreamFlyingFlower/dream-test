@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authn.annotation.CurrentUser;
+import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.entity.Message;
 import com.wy.test.entity.RolePermissions;
 import com.wy.test.entity.UserInfo;
@@ -56,7 +56,7 @@ public class RolePermissionsController {
 			@CurrentUser UserInfo currentUser) {
 		JpaPageResults<RolePermissions> rolePermissions;
 		rolePermission.setInstId(currentUser.getInstId());
-		rolePermissions= rolePermissionssService.queryPageResults("appsInRole",rolePermission);
+		rolePermissions= rolePermissionssService.fetchPageResults("appsInRole",rolePermission);
 
 		if(rolePermissions!=null&&rolePermissions.getRows()!=null){
 			for (Apps app : rolePermissions.getRows()){
@@ -73,7 +73,7 @@ public class RolePermissionsController {
 				@CurrentUser UserInfo currentUser) {
 		JpaPageResults<RolePermissions> rolePermissions;
 		rolePermission.setInstId(currentUser.getInstId());
-		rolePermissions= rolePermissionssService.queryPageResults("appsNotInRole",rolePermission);
+		rolePermissions= rolePermissionssService.fetchPageResults("appsNotInRole",rolePermission);
 
 		if(rolePermissions!=null&&rolePermissions.getRows()!=null){
 			for (Apps app : rolePermissions.getRows()){

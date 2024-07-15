@@ -27,7 +27,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.wy.test.authn.annotation.CurrentUser;
+import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.entity.Institutions;
 import com.wy.test.entity.Message;
 import com.wy.test.entity.UserInfo;

@@ -15,8 +15,7 @@
 	<description>study for spring security auth</description>
 
 	<modules>
-		<module>dream-test-auth2-web-gateway</module>
-		<module>dream-test-auth2-web-mgt</module>
-		<module>dream-test-auth2-web-server</module>
+		<module>dream-test-auth2-web-api-rest</module>
+		<module>dream-test-auth2-web-api-scim</module>
 	</modules>
 </project>

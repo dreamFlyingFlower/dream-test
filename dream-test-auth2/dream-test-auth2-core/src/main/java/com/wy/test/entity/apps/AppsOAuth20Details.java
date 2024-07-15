@@ -345,18 +345,22 @@ public class AppsOAuth20Details extends Apps {
 		this.signatureKey = signatureKey;
 	}
 
+	@Override
 	public String getInstId() {
 		return instId;
 	}
 
+	@Override
 	public void setInstId(String instId) {
 		this.instId = instId;
 	}
 
+	@Override
 	public String getInstName() {
 		return instName;
 	}
 
+	@Override
 	public void setInstName(String instName) {
 		this.instName = instName;
 	}

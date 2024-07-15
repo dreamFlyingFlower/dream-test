@@ -17,6 +17,7 @@
 
 package com.wy.test.web.config.contorller;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authn.annotation.CurrentUser;
+import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.crypto.password.PasswordReciprocal;
 import com.wy.test.entity.Message;
 import com.wy.test.entity.SocialsProvider;
@@ -53,7 +54,7 @@ public class SocialsProviderController {
 		_logger.debug(""+socialsProvider);
 		socialsProvider.setInstId(currentUser.getInstId());
 		return new Message<JpaPageResults<SocialsProvider>>(
-				socialsProviderService.queryPageResults(socialsProvider)).buildResponse();
+				socialsProviderService.fetchPageResults(socialsProvider)).buildResponse();
 	}
 
 	@ResponseBody
@@ -61,7 +62,7 @@ public class SocialsProviderController {
 	public ResponseEntity<?> query(@ModelAttribute SocialsProvider socialsProvider,@CurrentUser UserInfo currentUser) {
 		_logger.debug("-query  :" + socialsProvider);
 		socialsProvider.setInstId(currentUser.getInstId());
-		if (socialsProviderService.load(socialsProvider)!=null) {
+		if (CollectionUtils.isNotEmpty(socialsProviderService.query(socialsProvider))) {
 			 return new Message<SocialsProvider>(Message.SUCCESS).buildResponse();
 		} else {
 			 return new Message<SocialsProvider>(Message.SUCCESS).buildResponse();

@@ -1,5 +1,7 @@
 package com.wy.test.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +13,7 @@ import org.dromara.mybatis.jpa.entity.JpaEntity;
 
 @Entity
 @Table(name = "MXK_EMAIL_SENDERS")
-public class EmailSenders extends JpaEntity {
+public class EmailSenders extends JpaEntity implements Serializable {
 
 	private static final long serialVersionUID = 3689854324601731505L;
 

@@ -30,10 +30,10 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.wy.test.authn.provider.AbstractAuthenticationProvider;
-import com.wy.test.authn.web.CurrentUserMethodArgumentResolver;
-import com.wy.test.authn.web.interceptor.PermissionInterceptor;
 import com.wy.test.configuration.ApplicationConfig;
+import com.wy.test.core.authn.web.CurrentUserMethodArgumentResolver;
+import com.wy.test.core.authn.web.interceptor.PermissionInterceptor;
+import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.web.interceptor.RestApiPermissionAdapter;
 
 @EnableWebMvc

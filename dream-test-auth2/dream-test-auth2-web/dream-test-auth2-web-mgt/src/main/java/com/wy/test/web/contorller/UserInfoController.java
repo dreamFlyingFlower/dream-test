@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -40,7 +41,6 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -51,11 +51,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
-import com.wy.test.authn.annotation.CurrentUser;
 import com.wy.test.constants.ConstsEntryType;
 import com.wy.test.constants.ConstsOperateAction;
 import com.wy.test.constants.ConstsOperateResult;
 import com.wy.test.constants.ConstsPasswordSetType;
+import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.entity.ChangePassword;
 import com.wy.test.entity.ExcelImport;
 import com.wy.test.entity.Message;
@@ -93,14 +93,14 @@ public class UserInfoController {
 		_logger.debug(""+userInfo);
 		userInfo.setInstId(currentUser.getInstId());
 		return new Message<JpaPageResults<UserInfo>>(
-				userInfoService.queryPageResults(userInfo)).buildResponse();
+				userInfoService.fetchPageResults(userInfo)).buildResponse();
 	}
 
 	@ResponseBody
 	@RequestMapping(value={"/query"}, produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<?> query(@ModelAttribute UserInfo userInfo,@CurrentUser UserInfo currentUser) {
 		_logger.debug("-query  :" + userInfo);
-		if (userInfoService.load(userInfo)!=null) {
+		if (CollectionUtils.isNotEmpty(userInfoService.query(userInfo))) {
 			 return new Message<UserInfo>(Message.SUCCESS).buildResponse();
 		} else {
 			 return new Message<UserInfo>(Message.SUCCESS).buildResponse();

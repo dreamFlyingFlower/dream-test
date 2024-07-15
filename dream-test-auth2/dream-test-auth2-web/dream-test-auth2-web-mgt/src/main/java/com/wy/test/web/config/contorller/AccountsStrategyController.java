@@ -1,22 +1,6 @@
-/*
- * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
-
 package com.wy.test.web.config.contorller;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authn.annotation.CurrentUser;
+import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.entity.AccountsStrategy;
 import com.wy.test.entity.Message;
 import com.wy.test.entity.UserInfo;
@@ -53,7 +37,7 @@ public class AccountsStrategyController {
 	@ResponseBody
 	public ResponseEntity<?> fetch(@ModelAttribute AccountsStrategy accountsStrategy,@CurrentUser UserInfo currentUser) {
 		accountsStrategy.setInstId(currentUser.getInstId());
-		JpaPageResults<AccountsStrategy> accountsStrategyList =accountsStrategyService.queryPageResults(accountsStrategy);
+		JpaPageResults<AccountsStrategy> accountsStrategyList =accountsStrategyService.fetchPageResults(accountsStrategy);
 		for (AccountsStrategy strategy : accountsStrategyList.getRows()){
 			strategy.transIconBase64();
 		}
@@ -66,7 +50,7 @@ public class AccountsStrategyController {
 	@RequestMapping(value={"/query"}, produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<?> query(@ModelAttribute AccountsStrategy accountsStrategy,@CurrentUser UserInfo currentUser) {
 		_logger.debug("-query  :" + accountsStrategy);
-		if (accountsStrategyService.load(accountsStrategy)!=null) {
+		if (CollectionUtils.isNotEmpty(accountsStrategyService.query(accountsStrategy))) {
 			 return new Message<AccountsStrategy>(Message.SUCCESS).buildResponse();
 		} else {
 			 return new Message<AccountsStrategy>(Message.SUCCESS).buildResponse();

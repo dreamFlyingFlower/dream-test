@@ -34,7 +34,7 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
-import com.wy.test.authn.web.AuthorizationUtils;
+import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.util.AuthorizationHeader;
 import com.wy.test.util.AuthorizationHeaderUtils;
 import com.wy.test.util.StringUtils;

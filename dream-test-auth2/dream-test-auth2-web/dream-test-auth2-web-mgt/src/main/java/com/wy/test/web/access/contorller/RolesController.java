@@ -17,6 +17,7 @@
 
 package com.wy.test.web.access.contorller;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +32,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authn.annotation.CurrentUser;
 import com.wy.test.constants.ConstsEntryType;
 import com.wy.test.constants.ConstsOperateAction;
 import com.wy.test.constants.ConstsOperateResult;
+import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.entity.Message;
 import com.wy.test.entity.Roles;
 import com.wy.test.entity.UserInfo;
@@ -62,7 +63,7 @@ public class RolesController {
 		_logger.debug(""+role);
 		role.setInstId(currentUser.getInstId());
 		return new Message<JpaPageResults<Roles>>(
-				rolesService.queryPageResults(role)).buildResponse();
+				rolesService.fetchPageResults(role)).buildResponse();
 	}
 
 	@ResponseBody
@@ -70,7 +71,7 @@ public class RolesController {
 	public ResponseEntity<?> query(@ModelAttribute Roles role,@CurrentUser UserInfo currentUser) {
 		_logger.debug("-query  :" + role);
 		role.setInstId(currentUser.getInstId());
-		if (rolesService.load(role)!=null) {
+		if (CollectionUtils.isNotEmpty(rolesService.query(role))) {
 			 return new Message<Roles>(Message.SUCCESS).buildResponse();
 		} else {
 			 return new Message<Roles>(Message.FAIL).buildResponse();
