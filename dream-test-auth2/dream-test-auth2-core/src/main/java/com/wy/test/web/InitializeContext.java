@@ -29,7 +29,6 @@ import org.springframework.core.env.StandardEnvironment;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.wy.test.configuration.ApplicationConfig;
-import com.wy.test.crypto.Md5Sum;
 import com.wy.test.util.PathUtils;
 
 /**
@@ -119,9 +118,6 @@ public class InitializeContext extends HttpServlet {
 				_logger.debug("DBMS  URL             :   {}", databaseMetaData.getURL());
 				_logger.debug("UserName              :   {}", databaseMetaData.getUserName());
 				_logger.debug("-----------------------------------------------------------");
-				if (Md5Sum.checkVersion()) {
-					_logger.trace("The Version dependent on is Reliable .");
-				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 				_logger.error("DatabaseMetaData Variables Error .", e);

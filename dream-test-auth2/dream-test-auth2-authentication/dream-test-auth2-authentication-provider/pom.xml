@@ -7,6 +7,7 @@
 		<groupId>dream.flying.flower</groupId>
 		<artifactId>dream-test-auth2</artifactId>
 		<version>0.0.1</version>
+		<relativePath />
 	</parent>
 	<artifactId>dream-test-auth2-authentication-provider</artifactId>
 	<name>dream-test-auth2-authentication-provider</name>
@@ -82,20 +83,15 @@
 			<artifactId>joda-time</artifactId>
 			<version>2.11.1</version>
 		</dependency>
+		<!--		<dependency>-->
+		<!--			<groupId>org.opensaml</groupId>-->
+		<!--			<artifactId>opensaml-saml-impl</artifactId>-->
+		<!--			<version>3.4.6</version>-->
+		<!--		</dependency>-->
 		<dependency>
 			<groupId>org.opensaml</groupId>
-			<artifactId>opensaml-core</artifactId>
-			<version>3.4.6</version>
-		</dependency>
-		<dependency>
-			<groupId>org.opensaml</groupId>
-			<artifactId>opensaml-saml-impl</artifactId>
-			<version>3.4.6</version>
-		</dependency>
-		<dependency>
-			<groupId>org.opensaml</groupId>
-			<artifactId>opensaml-saml-api</artifactId>
-			<version>3.4.6</version>
+			<artifactId>opensaml</artifactId>
+			<version>2.6.4</version>
 		</dependency>
 
 		<dependency>

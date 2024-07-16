@@ -2,7 +2,7 @@ package com.wy.test.util;
 
 import java.io.Serializable;
 
-import com.wy.test.crypto.HexUtils;
+import dream.flying.flower.binary.HexHelper;
 
 /**
  * ObjectTransformer<br>
@@ -22,7 +22,7 @@ public class ObjectTransformer {
 	 * @return String
 	 */
 	public static final String serialize(Serializable s) {
-		return HexUtils.hex2String(SerializationUtils.serialize(s));
+		return HexHelper.encodeHexString(SerializationUtils.serialize(s));
 	}
 
 	/**
@@ -32,7 +32,6 @@ public class ObjectTransformer {
 	 * @return Object
 	 */
 	public static final <T> T deserialize(String hex) {
-		return SerializationUtils.deserialize(HexUtils.hex2Bytes(hex));
+		return SerializationUtils.deserialize(HexHelper.decode(hex));
 	}
-
 }

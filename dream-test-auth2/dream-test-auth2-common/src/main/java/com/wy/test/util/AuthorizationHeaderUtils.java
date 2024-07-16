@@ -2,7 +2,8 @@ package com.wy.test.util;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.wy.test.crypto.Base64Utils;
+import dream.flying.flower.binary.Base64Helper;
+import dream.flying.flower.primitive.ByteHelper;
 
 public class AuthorizationHeaderUtils {
 
@@ -18,7 +19,7 @@ public class AuthorizationHeaderUtils {
 
 	public static String createBasic(String username, String password) {
 		String authUserPass = username + ":" + password;
-		String encodedAuthUserPass = Base64Utils.encode(authUserPass);
+		String encodedAuthUserPass = Base64Helper.encodeString(authUserPass.getBytes());
 		return AuthorizationHeader.Credential.BASIC + encodedAuthUserPass;
 	}
 
@@ -33,7 +34,7 @@ public class AuthorizationHeaderUtils {
 
 	public static AuthorizationHeader resolve(String authorization) {
 		if (StringUtils.isNotBlank(authorization) && isBasic(authorization)) {
-			String decodeUserPass = Base64Utils.decode(authorization.split(" ")[1]);
+			String decodeUserPass = ByteHelper.toString(Base64Helper.decode(authorization.split(" ")[1].getBytes()));
 			String[] userPass = decodeUserPass.split(":");
 			return new AuthorizationHeader(userPass[0], userPass[1]);
 		} else {

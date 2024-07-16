@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.constants.ConstsBoolean;
 import com.wy.test.core.authn.SignPrincipal;
-import com.wy.test.crypto.Base64Utils;
 import com.wy.test.crypto.ReciprocalUtils;
 import com.wy.test.crypto.cert.CertSigner;
 import com.wy.test.crypto.keystore.KeyStoreLoader;
@@ -20,95 +19,100 @@ import com.wy.test.entity.UserInfo;
 import com.wy.test.entity.apps.Apps;
 import com.wy.test.web.WebContext;
 
+import dream.flying.flower.binary.Base64Helper;
+
 public abstract class AbstractAuthorizeAdapter {
+
 	final static Logger _logger = LoggerFactory.getLogger(AbstractAuthorizeAdapter.class);
-	
+
 	protected Apps app;
-	
+
 	protected UserInfo userInfo;
-	
+
 	protected Accounts account;
-	
+
 	protected SignPrincipal principal;
-	
+
 	public abstract Object generateInfo();
-	
-	public  ModelAndView authorize(ModelAndView modelAndView) {
+
+	public ModelAndView authorize(ModelAndView modelAndView) {
 		return modelAndView;
 	}
-	
-	public Object  sign(Object data,String signatureKey,String signature){
-		if(ConstsBoolean.isTrue(app.getIsSignature())){
-			KeyStoreLoader keyStoreLoader = WebContext.getBean("keyStoreLoader",KeyStoreLoader.class);
-			try {	
-				byte[] signData= CertSigner.sign(data.toString().getBytes(), keyStoreLoader.getKeyStore(), keyStoreLoader.getEntityName(), keyStoreLoader.getKeystorePassword());
-				_logger.debug("signed Token : "+data);
-				_logger.debug("signature : "+signData.toString());
-				
-				return Base64Utils.base64UrlEncode(data.toString().getBytes("UTF-8"))+"."+Base64Utils.base64UrlEncode(signData);
+
+	public Object sign(Object data, String signatureKey, String signature) {
+		if (ConstsBoolean.isTrue(app.getIsSignature())) {
+			KeyStoreLoader keyStoreLoader = WebContext.getBean("keyStoreLoader", KeyStoreLoader.class);
+			try {
+				byte[] signData = CertSigner.sign(data.toString().getBytes(), keyStoreLoader.getKeyStore(),
+						keyStoreLoader.getEntityName(), keyStoreLoader.getKeystorePassword());
+				_logger.debug("signed Token : " + data);
+				_logger.debug("signature : " + signData.toString());
+
+				return Base64Helper.encodeUrl(data.toString().getBytes("UTF-8")) + "."
+						+ Base64Helper.encodeUrl(signData);
 			} catch (UnsupportedEncodingException e) {
-				_logger.error("UnsupportedEncodingException " , e);
+				_logger.error("UnsupportedEncodingException ", e);
 			} catch (Exception e) {
-				_logger.error("Exception " , e);
+				_logger.error("Exception ", e);
 			}
-			_logger.debug("Token {}" , data);
-			
-		}else{
+			_logger.debug("Token {}", data);
+
+		} else {
 			_logger.debug("data not need sign .");
 			return data;
 		}
-		
+
 		return null;
 	}
-	
-	public  Object encrypt(Object data,String algorithmKey,String algorithm){
-		
+
+	public Object encrypt(Object data, String algorithmKey, String algorithm) {
+
 		algorithmKey = PasswordReciprocal.getInstance().decoder(algorithmKey);
-		_logger.debug("algorithm : "+algorithm);
-		_logger.debug("algorithmKey : "+algorithmKey);
-		//Chinese , encode data to HEX
+		_logger.debug("algorithm : " + algorithm);
+		_logger.debug("algorithmKey : " + algorithmKey);
+		// Chinese , encode data to HEX
 		try {
 			data = new String(Hex.encodeHex(data.toString().getBytes("UTF-8")));
-		} catch (UnsupportedEncodingException e) { 
+		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-		}     
+		}
 		byte[] encodeData = ReciprocalUtils.encode(data.toString(), algorithmKey, algorithm);
-		String tokenString = Base64Utils.base64UrlEncode(encodeData);
-		_logger.trace("Reciprocal then HEX  Token : "+tokenString);
-		
+		String tokenString = Base64Helper.encodeUrlString(encodeData);
+		_logger.trace("Reciprocal then HEX  Token : " + tokenString);
+
 		return tokenString;
 	}
-	
-	public static String getValueByUserAttr(UserInfo userInfo,String userAttr) {
+
+	public static String getValueByUserAttr(UserInfo userInfo, String userAttr) {
 		String value = "";
-		if(StringUtils.isBlank(userAttr)) {
+		if (StringUtils.isBlank(userAttr)) {
 			value = userInfo.getUsername();
-		}else if(userAttr.equalsIgnoreCase("username")){
+		} else if (userAttr.equalsIgnoreCase("username")) {
 			value = userInfo.getUsername();
-		}else if(userAttr.equalsIgnoreCase("userId")){
+		} else if (userAttr.equalsIgnoreCase("userId")) {
 			value = userInfo.getId();
-		}else if(userAttr.equalsIgnoreCase("email")){
+		} else if (userAttr.equalsIgnoreCase("email")) {
 			value = userInfo.getEmail();
-		}else if(userAttr.equalsIgnoreCase("mobile")){
+		} else if (userAttr.equalsIgnoreCase("mobile")) {
 			value = userInfo.getMobile();
-		}else if(userAttr.equalsIgnoreCase("workEmail")) {
+		} else if (userAttr.equalsIgnoreCase("workEmail")) {
 			value = userInfo.getWorkEmail();
-		}else if(userAttr.equalsIgnoreCase("windowsAccount")){
+		} else if (userAttr.equalsIgnoreCase("windowsAccount")) {
 			value = userInfo.getWindowsAccount();
-		}else if(userAttr.equalsIgnoreCase("employeeNumber")){
+		} else if (userAttr.equalsIgnoreCase("employeeNumber")) {
 			value = userInfo.getEmployeeNumber();
-		}else {
+		} else {
 			value = userInfo.getId();
 		}
-		
-		if(StringUtils.isBlank(value)) {
+
+		if (StringUtils.isBlank(value)) {
 			value = userInfo.getUsername();
 		}
-		
+
 		return value;
 	}
-	
-	public  String serialize() {
+
+	public String serialize() {
 		return "";
 	};
 
@@ -123,6 +127,6 @@ public abstract class AbstractAuthorizeAdapter {
 
 	public void setAccount(Accounts account) {
 		this.account = account;
-	}	
-	
+	}
+
 }

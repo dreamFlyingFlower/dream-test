@@ -11,8 +11,7 @@ public class DigestUtilsTest {
 	 * 
 	 * System.out.println(DigestUtils.shaB64("mytest"));
 	 * 
-	 * System.out.println(DigestUtils.sha1B64("e707c852-29a4-bf56-f8b9-014716850d89"
-	 * ));
+	 * System.out.println(DigestUtils.sha1B64("e707c852-29a4-bf56-f8b9-014716850d89" ));
 	 * 
 	 * System.out.println(DigestUtils.sha256B64("mytest"));
 	 * 
@@ -20,8 +19,7 @@ public class DigestUtilsTest {
 	 * 
 	 * System.out.println(DigestUtils.sha512B64("mytest"));
 	 * 
-	 * System.out.println(DigestUtils.md5B64("e707c852-29a4-bf56-f8b9-014716850d89")
-	 * ); }
+	 * System.out.println(DigestUtils.md5B64("e707c852-29a4-bf56-f8b9-014716850d89") ); }
 	 */
 	@Test
 	public void testHex() {
@@ -36,8 +34,7 @@ public class DigestUtilsTest {
 		 * 
 		 * System.out.println(DigestUtils.sha512Hex("mytest"));
 		 * 
-		 * System.out.println(DigestUtils.md5Hex("seamingxy99"));
-		 * System.out.println((new Date()).getTime());
+		 * System.out.println(DigestUtils.md5Hex("seamingxy99")); System.out.println((new Date()).getTime());
 		 */
 
 		// String

@@ -14,7 +14,8 @@ import com.nimbusds.jose.jwk.OctetSequenceKey;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.gen.OctetSequenceKeyGenerator;
 import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
-import com.wy.test.crypto.Base64Utils;
+
+import dream.flying.flower.binary.Base64Helper;
 
 public class RSAKeyTest {
 
@@ -30,7 +31,7 @@ public class RSAKeyTest {
 
 		byte[] sharedKey = new byte[32];
 		new SecureRandom().nextBytes(sharedKey);
-		System.out.println(Base64Utils.encoder(sharedKey));
+		System.out.println(Base64Helper.encodeString(sharedKey));
 
 		OctetSequenceKey octKey = new OctetSequenceKeyGenerator(2048).keyID("123").keyUse(KeyUse.SIGNATURE)
 				.algorithm(JWSAlgorithm.HS256).generate();
@@ -49,5 +50,4 @@ public class RSAKeyTest {
 
 		System.out.print("A128KW".substring(1, 4));
 	}
-
 }

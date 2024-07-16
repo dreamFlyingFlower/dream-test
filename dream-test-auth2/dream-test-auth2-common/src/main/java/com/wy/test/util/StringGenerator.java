@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
-import com.wy.test.crypto.Base64Utils;
+import dream.flying.flower.binary.Base64Helper;
 
 public class StringGenerator {
 
@@ -102,7 +102,7 @@ public class StringGenerator {
 
 		Date currentDate = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("ddMMyyyyHHmmssSSS");
-		String dateString = Base64Utils.encodeBase64(dateFormat.format(currentDate).getBytes());
+		String dateString = Base64Helper.encodeString(dateFormat.format(currentDate).getBytes());
 		dateString = dateString.substring(0, dateString.length() - 1);
 		uniqueString.append(dateString);
 
@@ -112,9 +112,8 @@ public class StringGenerator {
 	}
 
 	/**
-	 * Convert these random bytes to a verifier string. The length of the byte array
-	 * can be {@link #setLength(int) configured}. The default implementation mods
-	 * the bytes to fit into the ASCII letters 1-9, A-Z, a-z .
+	 * Convert these random bytes to a verifier string. The length of the byte array can be {@link #setLength(int)
+	 * configured}. The default implementation mods the bytes to fit into the ASCII letters 1-9, A-Z, a-z .
 	 * 
 	 * @param verifierBytes The bytes.
 	 * @return The string.

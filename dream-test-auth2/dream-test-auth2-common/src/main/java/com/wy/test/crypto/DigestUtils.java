@@ -3,9 +3,11 @@ package com.wy.test.crypto;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import dream.flying.flower.binary.Base64Helper;
+import dream.flying.flower.binary.HexHelper;
+
 /**
- * @author Crystal.Sea * algorithm Support MD5,SHA,SHA-1|SHA-256|SHA-384|SHA-512
- *         then encodeBase64
+ * @author Crystal.Sea * algorithm Support MD5,SHA,SHA-1|SHA-256|SHA-384|SHA-512 then encodeBase64
  *
  */
 public final class DigestUtils {
@@ -40,7 +42,7 @@ public final class DigestUtils {
 			messageDigest = MessageDigest.getInstance(algorithm.toUpperCase());
 			messageDigest.update(simple.getBytes());
 			byte[] bCipher = messageDigest.digest();
-			cipherBASE64 = Base64Utils.encodeBase64(bCipher);
+			cipherBASE64 = Base64Helper.encodeString(bCipher);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
@@ -59,7 +61,7 @@ public final class DigestUtils {
 			messageDigest = MessageDigest.getInstance(algorithm.toUpperCase());
 			messageDigest.update(simple.getBytes());
 			byte[] bCipher = messageDigest.digest();
-			cipherBASE64 = Base64Utils.base64UrlEncode(bCipher);
+			cipherBASE64 = Base64Helper.encodeUrlString(bCipher);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
@@ -107,7 +109,7 @@ public final class DigestUtils {
 			messageDigest = MessageDigest.getInstance(algorithm.toUpperCase());
 			messageDigest.update(simpleBytes);
 			byte[] bCipher = messageDigest.digest();
-			cipherHex = HexUtils.bytes2HexString(bCipher);
+			cipherHex = HexHelper.encodeHexString(bCipher);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}

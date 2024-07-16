@@ -7,12 +7,13 @@ import java.security.Signature;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
-import com.wy.test.crypto.Base64Utils;
 import com.wy.test.crypto.KeyPairType;
 
+import dream.flying.flower.binary.Base64Helper;
+
 /**
- * RSA Digital signature default signature algorithm is SHA1withRSA default key
- * size is 1024 RsaSigner support MD5withRSA and MD5withRSA
+ * RSA Digital signature default signature algorithm is SHA1withRSA default key size is 1024 RsaSigner support
+ * MD5withRSA and MD5withRSA
  * 
  * @author Crystal.Sea
  *
@@ -56,11 +57,11 @@ public final class RsaSigner implements ISigner {
 	 */
 	@Override
 	public String signB64(String data, String privateKey) throws Exception {
-		byte[] keyBytes = Base64Utils.decoder(privateKey);
+		byte[] keyBytes = Base64Helper.decode(privateKey);
 		byte[] dataBytes = data.getBytes();
 		byte[] signature = sign(dataBytes, keyBytes);
 
-		return Base64Utils.encoder(signature);
+		return Base64Helper.encodeString(signature);
 	}
 
 	public boolean verify(byte[] dataBytes, byte[] publicKeyBytes, byte[] signBytes, String algorithm)
@@ -83,8 +84,7 @@ public final class RsaSigner implements ISigner {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.connsec.crypto.signature.Signer#verify(java.lang.String,
-	 * java.lang.String, java.lang.String)
+	 * @see com.connsec.crypto.signature.Signer#verify(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
 	public boolean verify(byte[] dataBytes, byte[] publicKeyBytes, byte[] signBytes) throws Exception {
@@ -99,17 +99,15 @@ public final class RsaSigner implements ISigner {
 	 * 
 	 * @param sign is base64
 	 * 
-	 * @see com.connsec.crypto.signature.Signer#verify(java.lang.String,
-	 * java.lang.String, java.lang.String)
+	 * @see com.connsec.crypto.signature.Signer#verify(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
 	public boolean verifyB64(String data, String publicKey, String sign) throws Exception {
 		// ���ܹ�Կ
-		byte[] keyBytes = Base64Utils.decoder(publicKey);
+		byte[] keyBytes = Base64Helper.decode(publicKey);
 		byte[] dataBytes = data.getBytes();
-		byte[] signBytes = Base64Utils.decoder(sign);
+		byte[] signBytes = Base64Helper.decode(sign);
 		// ��֤ǩ���Ƿ���
 		return verify(dataBytes, keyBytes, signBytes);
 	}
-
 }

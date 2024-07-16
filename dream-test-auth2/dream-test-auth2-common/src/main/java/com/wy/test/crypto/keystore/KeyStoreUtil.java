@@ -35,15 +35,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
-import com.wy.test.crypto.Base64Utils;
 import com.wy.test.crypto.cert.CryptoException;
 import com.wy.test.crypto.cert.X509CertUtils;
 import com.wy.test.crypto.cert.X509V3CertGen;
 
+import dream.flying.flower.binary.Base64Helper;
+
 /**
- * Provides utility methods for loading/saving keystores. The Bouncy Castle
- * provider must be registered before using this class to create or load BKS or
- * UBER type keystores.
+ * Provides utility methods for loading/saving keystores. The Bouncy Castle provider must be registered before using
+ * this class to create or load BKS or UBER type keystores.
  */
 public final class KeyStoreUtil {
 
@@ -117,8 +117,7 @@ public final class KeyStoreUtil {
 	}
 
 	/**
-	 * Load keystore entries from PEM reader into a new PKCS #12 keystore. The
-	 * reader is not closed.
+	 * Load keystore entries from PEM reader into a new PKCS #12 keystore. The reader is not closed.
 	 * 
 	 * @param reader reader to read entries from
 	 * @return new PKCS #12 keystore containing read entries, possibly empty
@@ -234,9 +233,8 @@ public final class KeyStoreUtil {
 	 * @param cKeyStorePassword Password of the keystore
 	 * @return The keystore
 	 * @throws CryptoException Problem encountered loading the keystore
-	 * @throws FileNotFoundException If the keystore file does not exist, is a
-	 *         directory rather than a regular file, or for some other reason cannot
-	 *         be opened for reading
+	 * @throws FileNotFoundException If the keystore file does not exist, is a directory rather than a regular file, or
+	 *         for some other reason cannot be opened for reading
 	 */
 	public static KeyStore loadKeyStore(File fKeyStore, char[] cKeyStorePassword, KeyStoreType keyStoreType)
 			throws CryptoException, FileNotFoundException {
@@ -329,7 +327,7 @@ public final class KeyStoreUtil {
 		try {
 			keyStore.store(stream, password.toCharArray());
 			byte[] keyStoreByte = stream.toByteArray();
-			String keyStoreBase64 = Base64Utils.encodeBase64(keyStoreByte);
+			String keyStoreBase64 = Base64Helper.encodeString(keyStoreByte);
 
 			return keyStoreBase64;
 		} catch (KeyStoreException e) {
@@ -345,7 +343,7 @@ public final class KeyStoreUtil {
 	}
 
 	public static KeyStore base642KeyStore(String keyStoreBase64, String password) {
-		byte[] keyStoreByte = Base64Utils.decoderBase64(keyStoreBase64);
+		byte[] keyStoreByte = Base64Helper.decode(keyStoreBase64);
 		return bytes2KeyStore(keyStoreByte, "JKS", password);
 	}
 
@@ -554,9 +552,8 @@ public final class KeyStoreUtil {
 	 * @param cKeyStorePassword The password to protect the keystore with
 	 * @return the saved keystore ready for further use
 	 * @throws CryptoException Problem encountered saving the keystore
-	 * @throws FileNotFoundException If the keystore file exists but is a directory
-	 *         rather than a regular file, does not exist but cannot be created, or
-	 *         cannot be opened for any other reason
+	 * @throws FileNotFoundException If the keystore file exists but is a directory rather than a regular file, does not
+	 *         exist but cannot be created, or cannot be opened for any other reason
 	 * @throws IOException An I/O error occurred
 	 */
 	public static KeyStore saveKeyStore(KeyStore keyStore, File fKeyStoreFile, char[] cKeyStorePassword)
@@ -699,95 +696,61 @@ public final class KeyStoreUtil {
 	 * 
 	 *        public static void main(String[] args) {
 	 * 
-	 *        // new //
-	 *        ByteArrayInputStream(Base64.decodeBase64(b64EncodedKeystore.getBytes()))
+	 *        // new // ByteArrayInputStream(Base64.decodeBase64(b64EncodedKeystore.getBytes()))
 	 * 
-	 *        try { // load a keyStore File file = new
-	 *        File("C:\\cert\\idp-keystore.jks"); String keystorePassword =
-	 *        "secret"; KeyStore ks = KeyStoreUtil.loadKeyStore(file,
-	 *        keystorePassword.toCharArray(), KeyStoreType.JKS);
+	 *        try { // load a keyStore File file = new File("C:\\cert\\idp-keystore.jks"); String keystorePassword =
+	 *        "secret"; KeyStore ks = KeyStoreUtil.loadKeyStore(file, keystorePassword.toCharArray(), KeyStoreType.JKS);
 	 * 
-	 *        String b64 = KeyStoreUtil.keyStore2Base64(ks,keystorePassword);
-	 *        System.out.println(b64); Enumeration<String> temp = ks.aliases(); int
-	 *        i = 0; while (temp.hasMoreElements()) { System.out.println("KeyStore
-	 *        alias name " + (i++) + " : " + temp.nextElement()); }
+	 *        String b64 = KeyStoreUtil.keyStore2Base64(ks,keystorePassword); System.out.println(b64);
+	 *        Enumeration<String> temp = ks.aliases(); int i = 0; while (temp.hasMoreElements()) {
+	 *        System.out.println("KeyStore alias name " + (i++) + " : " + temp.nextElement()); }
 	 * 
-	 *        System.out.println("=================================="); // load
-	 *        X509Certificate
+	 *        System.out.println("=================================="); // load X509Certificate
 	 * 
-	 *        // one from pem file Reader reader =new FileReader(new
-	 *        File("C:\\cert\\onelogin.pem")); X509Certificate certPem =
-	 *        X509CertUtils.loadCertFromReader(reader);
+	 *        // one from pem file Reader reader =new FileReader(new File("C:\\cert\\onelogin.pem")); X509Certificate
+	 *        certPem = X509CertUtils.loadCertFromReader(reader);
 	 * 
 	 *        System.out.println("====loadCertificateFromPEMReader:"+certPem.getIssuerDN());
 	 * 
-	 *        // two from bin file File fileCert = new
-	 *        File("C:\\cert\\clientCert.cert"); InputStream isCert = new
-	 *        FileInputStream(fileCert); X509Certificate trustCert =
-	 *        X509CertUtils.loadCertFromInputStream(isCert);
+	 *        // two from bin file File fileCert = new File("C:\\cert\\clientCert.cert"); InputStream isCert = new
+	 *        FileInputStream(fileCert); X509Certificate trustCert = X509CertUtils.loadCertFromInputStream(isCert);
 	 * 
 	 *        ks = KeyStoreUtil.importTrustCertificate(ks, trustCert);
 	 * 
-	 *        System.out
-	 *        .println("generatePEMEncoded==================================");
+	 *        System.out .println("generatePEMEncoded==================================");
 	 *        System.out.println(X509CertUtils.generatePEMEncoded(trustCert));
 	 * 
 	 *        // output keystore to file KeyStoreUtil.saveKeyStore(ks, new File(
-	 *        "C:\\cert\\ClientRegistrarKeyStore12.jks"),
-	 *        keystorePassword.toCharArray());
+	 *        "C:\\cert\\ClientRegistrarKeyStore12.jks"), keystorePassword.toCharArray());
 	 * 
 	 *        String pemString ="-----BEGIN CERTIFICATE-----"+'\n'; pemString +=
-	 *        "MIIEHjCCAwagAwIBAgIBATANBgkqhkiG9w0BAQUFADBnMQswCQYDVQQGEwJVUzET"+'\n';
-	 *        pemString +=
-	 *        "MBEGA1UECAwKQ2FsaWZvcm5pYTEVMBMGA1UEBwwMU2FudGEgTW9uaWNhMREwDwYD"+'\n';
-	 *        pemString +=
-	 *        "VQQKDAhPbmVMb2dpbjEZMBcGA1UEAwwQYXBwLm9uZWxvZ2luLmNvbTAeFw0xMjEx"+'\n';
-	 *        pemString +=
-	 *        "MDEwNzUzMTJaFw0xNzExMDEwNzUzMTJaMGcxCzAJBgNVBAYTAlVTMRMwEQYDVQQI"+'\n';
-	 *        pemString +=
-	 *        "DApDYWxpZm9ybmlhMRUwEwYDVQQHDAxTYW50YSBNb25pY2ExETAPBgNVBAoMCE9u"+'\n';
-	 *        pemString +=
-	 *        "ZUxvZ2luMRkwFwYDVQQDDBBhcHAub25lbG9naW4uY29tMIIBIjANBgkqhkiG9w0B"+'\n';
-	 *        pemString +=
-	 *        "AQEFAAOCAQ8AMIIBCgKCAQEAsVV3NROfDQBtSmsyZjdHKre1BMzmnjdyM5vViZV+"+'\n';
-	 *        pemString +=
-	 *        "OMjLU/aVejupyeNi6i6fqgBzU8a6vz3bXBnL4I8CAZYuRKxz57O2iTMTHLs6cAIT"+'\n';
-	 *        pemString +=
-	 *        "FTXSfSn/3gxgaOTNfvFXtwSD5yMaxAZckhHCTqVQgUgLLV+JApTSnW22NFadJ8aM"+'\n';
-	 *        pemString +=
-	 *        "hbajNCbpgIW0CFeiSlbojHzpeZewi8cTgjPDBbxwOeR8VUC6bMWsseqEyxUuHH9E"+'\n';
-	 *        pemString +=
-	 *        "TmO2pd9m5EKFpqZWlxGqa9qc6e89kpEhbIRpRjPWqSIjeDrsJllAmglsfD5MpnBq"+'\n';
-	 *        pemString +=
-	 *        "bHXx4BK9cziv6TWMyF0MZ+CnfBWl5JCJaWBFQCs5bG0m8QIDAQABo4HUMIHRMAwG"+'\n';
-	 *        pemString +=
-	 *        "A1UdEwEB/wQCMAAwHQYDVR0OBBYEFG6SGHTIayKeDRRGEkIdVBeRwjcFMIGRBgNV"+'\n';
-	 *        pemString +=
-	 *        "HSMEgYkwgYaAFG6SGHTIayKeDRRGEkIdVBeRwjcFoWukaTBnMQswCQYDVQQGEwJV"+'\n';
-	 *        pemString +=
-	 *        "UzETMBEGA1UECAwKQ2FsaWZvcm5pYTEVMBMGA1UEBwwMU2FudGEgTW9uaWNhMREw"+'\n';
-	 *        pemString +=
-	 *        "DwYDVQQKDAhPbmVMb2dpbjEZMBcGA1UEAwwQYXBwLm9uZWxvZ2luLmNvbYIBATAO"+'\n';
-	 *        pemString +=
-	 *        "BgNVHQ8BAf8EBAMCBPAwDQYJKoZIhvcNAQEFBQADggEBAGkBjaIhHusWRmY0O16+"+'\n';
-	 *        pemString +=
-	 *        "WoKC7l5Re2C+bz+tyuSLlDcuHniAsyhbYG8xvEJSOnxpeFbS/a4ko80wSsd+sUXJ"+'\n';
-	 *        pemString +=
-	 *        "FR3Z40W0JNT6ELn5Tf51b+cbm3erucMxKIDiMsQBcO/nHHBQs25kTXeKBjLnR/9u"+'\n';
-	 *        pemString +=
-	 *        "i3+naVemnRb1cvffenAPpm12yKqWWcKgN19mE2vdrw0y/GoirFFtO/STdkDPKuYu"+'\n';
-	 *        pemString +=
-	 *        "6wubRBeURNzqims0xe4/vPFE7iN50bjgKcuPn6LMaIDrLJVkwMC09MNsr0Dgmqgt"+'\n';
-	 *        pemString +=
-	 *        "hBdnEqXkhdE8F/VneHn5xLSfExC662OaU6jqDASBvN15mrLGaQ+Ou9qOsCFi7wg6"+'\n';
-	 *        pemString += "8QI="+'\n'; pemString += "-----END
-	 *        CERTIFICATE-----"+'\n';
+	 *        "MIIEHjCCAwagAwIBAgIBATANBgkqhkiG9w0BAQUFADBnMQswCQYDVQQGEwJVUzET"+'\n'; pemString +=
+	 *        "MBEGA1UECAwKQ2FsaWZvcm5pYTEVMBMGA1UEBwwMU2FudGEgTW9uaWNhMREwDwYD"+'\n'; pemString +=
+	 *        "VQQKDAhPbmVMb2dpbjEZMBcGA1UEAwwQYXBwLm9uZWxvZ2luLmNvbTAeFw0xMjEx"+'\n'; pemString +=
+	 *        "MDEwNzUzMTJaFw0xNzExMDEwNzUzMTJaMGcxCzAJBgNVBAYTAlVTMRMwEQYDVQQI"+'\n'; pemString +=
+	 *        "DApDYWxpZm9ybmlhMRUwEwYDVQQHDAxTYW50YSBNb25pY2ExETAPBgNVBAoMCE9u"+'\n'; pemString +=
+	 *        "ZUxvZ2luMRkwFwYDVQQDDBBhcHAub25lbG9naW4uY29tMIIBIjANBgkqhkiG9w0B"+'\n'; pemString +=
+	 *        "AQEFAAOCAQ8AMIIBCgKCAQEAsVV3NROfDQBtSmsyZjdHKre1BMzmnjdyM5vViZV+"+'\n'; pemString +=
+	 *        "OMjLU/aVejupyeNi6i6fqgBzU8a6vz3bXBnL4I8CAZYuRKxz57O2iTMTHLs6cAIT"+'\n'; pemString +=
+	 *        "FTXSfSn/3gxgaOTNfvFXtwSD5yMaxAZckhHCTqVQgUgLLV+JApTSnW22NFadJ8aM"+'\n'; pemString +=
+	 *        "hbajNCbpgIW0CFeiSlbojHzpeZewi8cTgjPDBbxwOeR8VUC6bMWsseqEyxUuHH9E"+'\n'; pemString +=
+	 *        "TmO2pd9m5EKFpqZWlxGqa9qc6e89kpEhbIRpRjPWqSIjeDrsJllAmglsfD5MpnBq"+'\n'; pemString +=
+	 *        "bHXx4BK9cziv6TWMyF0MZ+CnfBWl5JCJaWBFQCs5bG0m8QIDAQABo4HUMIHRMAwG"+'\n'; pemString +=
+	 *        "A1UdEwEB/wQCMAAwHQYDVR0OBBYEFG6SGHTIayKeDRRGEkIdVBeRwjcFMIGRBgNV"+'\n'; pemString +=
+	 *        "HSMEgYkwgYaAFG6SGHTIayKeDRRGEkIdVBeRwjcFoWukaTBnMQswCQYDVQQGEwJV"+'\n'; pemString +=
+	 *        "UzETMBEGA1UECAwKQ2FsaWZvcm5pYTEVMBMGA1UEBwwMU2FudGEgTW9uaWNhMREw"+'\n'; pemString +=
+	 *        "DwYDVQQKDAhPbmVMb2dpbjEZMBcGA1UEAwwQYXBwLm9uZWxvZ2luLmNvbYIBATAO"+'\n'; pemString +=
+	 *        "BgNVHQ8BAf8EBAMCBPAwDQYJKoZIhvcNAQEFBQADggEBAGkBjaIhHusWRmY0O16+"+'\n'; pemString +=
+	 *        "WoKC7l5Re2C+bz+tyuSLlDcuHniAsyhbYG8xvEJSOnxpeFbS/a4ko80wSsd+sUXJ"+'\n'; pemString +=
+	 *        "FR3Z40W0JNT6ELn5Tf51b+cbm3erucMxKIDiMsQBcO/nHHBQs25kTXeKBjLnR/9u"+'\n'; pemString +=
+	 *        "i3+naVemnRb1cvffenAPpm12yKqWWcKgN19mE2vdrw0y/GoirFFtO/STdkDPKuYu"+'\n'; pemString +=
+	 *        "6wubRBeURNzqims0xe4/vPFE7iN50bjgKcuPn6LMaIDrLJVkwMC09MNsr0Dgmqgt"+'\n'; pemString +=
+	 *        "hBdnEqXkhdE8F/VneHn5xLSfExC662OaU6jqDASBvN15mrLGaQ+Ou9qOsCFi7wg6"+'\n'; pemString += "8QI="+'\n';
+	 *        pemString += "-----END CERTIFICATE-----"+'\n';
 	 * 
-	 *        System.out.println(pemString); X509Certificate x509Certificate =
-	 *        X509CertUtils.loadCertFromPEM(pemString);
-	 *        System.out.println(x509Certificate.getIssuerDN()); } catch
-	 *        (IOException e) { e.printStackTrace(); } catch (KeyStoreException e) {
-	 *        e.printStackTrace(); } catch (Exception e) { e.printStackTrace(); }
+	 *        System.out.println(pemString); X509Certificate x509Certificate = X509CertUtils.loadCertFromPEM(pemString);
+	 *        System.out.println(x509Certificate.getIssuerDN()); } catch (IOException e) { e.printStackTrace(); } catch
+	 *        (KeyStoreException e) { e.printStackTrace(); } catch (Exception e) { e.printStackTrace(); }
 	 * 
 	 *        }
 	 */

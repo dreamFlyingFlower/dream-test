@@ -9,11 +9,12 @@ import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.crypto.Base32Utils;
 import com.wy.test.crypto.password.PasswordReciprocal;
 import com.wy.test.entity.UserInfo;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.algorithm.TimeBasedOTP;
+
+import dream.flying.flower.framework.core.crypto.Base32Helpers;
 
 public class TimeBasedOtpAuthn extends AbstractOtpAuthn {
 
@@ -41,7 +42,7 @@ public class TimeBasedOtpAuthn extends AbstractOtpAuthn {
 		_logger.debug("utcTime : " + dateFormat.format(new Date()));
 		long currentTimeSeconds = System.currentTimeMillis() / 1000;
 		String sharedSecret = PasswordReciprocal.getInstance().decoder(userInfo.getSharedSecret());
-		byte[] byteSharedSecret = Base32Utils.decode(sharedSecret);
+		byte[] byteSharedSecret = Base32Helpers.decode(sharedSecret);
 		String hexSharedSecret = Hex.encodeHexString(byteSharedSecret);
 		String timeBasedToken = "";
 		if (crypto.equalsIgnoreCase("HmacSHA1")) {
@@ -60,7 +61,5 @@ public class TimeBasedOtpAuthn extends AbstractOtpAuthn {
 			return true;
 		}
 		return false;
-
 	}
-
 }

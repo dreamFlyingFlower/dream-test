@@ -8,8 +8,9 @@ import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 
-import com.wy.test.crypto.HexUtils;
 import com.wy.test.crypto.keystore.KeyStoreUtil;
+
+import dream.flying.flower.binary.HexHelper;
 
 /**
  * 证书数字签名
@@ -63,7 +64,7 @@ public class CertSigner {
 		Signature signature = Signature.getInstance(certificate.getSigAlgName());
 		signature.initVerify(publicKey);
 		signature.update(data);
-		return signature.verify(HexUtils.hex2Bytes(sign));
+		return signature.verify(HexHelper.decode(sign));
 	}
 
 	/** */
@@ -80,7 +81,7 @@ public class CertSigner {
 	 * @throws Exception
 	 */
 	public static String sign2Hex(byte[] data, KeyStore keyStore, String alias, String password) throws Exception {
-		return HexUtils.bytes2HexString(sign(data, keyStore, alias, password));
+		return HexHelper.encodeHexString(sign(data, keyStore, alias, password));
 	}
 
 	/** */
@@ -96,7 +97,7 @@ public class CertSigner {
 	 * @throws Exception
 	 */
 	public static boolean verifyHexSign(String HexString, String sign, X509Certificate certificate) throws Exception {
-		byte[] data = HexUtils.hex2Bytes(HexString);
+		byte[] data = HexHelper.decode(HexString);
 		return verifySign(data, sign, certificate);
 	}
 
@@ -137,7 +138,7 @@ public class CertSigner {
 	 */
 	public static boolean verifyHexSignWithDecrypt(String hexString, String sign, X509Certificate certificate)
 			throws Exception {
-		byte[] encryptedData = HexUtils.hex2Bytes(hexString);
+		byte[] encryptedData = HexHelper.decode(hexString);
 		byte[] data = CertCrypto.decryptByPublicKey(encryptedData, certificate);
 		return verifySign(data, sign, certificate);
 	}

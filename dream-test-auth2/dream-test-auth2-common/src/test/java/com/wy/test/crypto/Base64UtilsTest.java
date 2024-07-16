@@ -2,24 +2,24 @@ package com.wy.test.crypto;
 
 import org.junit.jupiter.api.Test;
 
+import dream.flying.flower.binary.Base64Helper;
+import dream.flying.flower.primitive.ByteHelper;
+
 public class Base64UtilsTest {
 
-	/**
-	 * @param args
-	 */
 	@Test
 	public void test() {
-		String encode = Base64Utils.encoder("base64ToFile".getBytes());
+		String encode = Base64Helper.encodeString("base64ToFile".getBytes());
 		System.out.println(encode);
-		String decode = Base64Utils.decode(encode);
+		String decode = ByteHelper.toString(Base64Helper.decode(encode));
 		System.out.println(decode);
 
-		String urlEncode = Base64Utils.base64UrlEncode("{\"typ\":\"JWT\",\"alg\":\"HS256\"}".getBytes());
+		String urlEncode = Base64Helper.encodeUrlString("{\"typ\":\"JWT\",\"alg\":\"HS256\"}".getBytes());
 		System.out.println(urlEncode);
-		String urlDecode = new String(Base64Utils.base64UrlDecode(urlEncode));
+		String urlDecode = new String(Base64Helper.decodeUrl(urlEncode));
 		System.out.println(urlDecode);
 
-		System.out.println(Base64Utils.decode(
+		System.out.println(Base64Helper.decode(
 				"AAMkADU2OWY1MGQ3LWEyNWQtNDFmOC04MWFiLTI5YTE2NGM5YTZmNABGAAAAAABPKgpqnlfYQ7BVC/BfH2XIBwCS0xhUjzMYSLVky9bw7LddAAAAjov5AACS0xhUjzMYSLVky9bw7LddAAADzoyxAAA="));
 
 		String b =
@@ -27,5 +27,4 @@ public class Base64UtilsTest {
 
 		System.out.println(DigestUtils.digestBase64Url(b, DigestUtils.Algorithm.SHA256));
 	}
-
 }

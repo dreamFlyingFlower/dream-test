@@ -14,6 +14,8 @@ import com.wy.test.util.Instance;
 import com.wy.test.util.StringGenerator;
 import com.wy.test.util.StringUtils;
 
+import dream.flying.flower.binary.HexHelper;
+
 /**
  * Reciprocal cipher or Symmetric-key algorithm
  * 
@@ -149,7 +151,7 @@ public final class ReciprocalUtils {
 		if (keyLengthCheck(secretKey, algorithm)) {
 			byte[] cipher = encode(simple, secretKey, algorithm);
 			// Encode bytes to HEX to get a string
-			return HexUtils.bytes2HexString(cipher);
+			return HexHelper.encodeHexString(cipher);
 		}
 		return null;
 	}
@@ -159,7 +161,7 @@ public final class ReciprocalUtils {
 			return "";
 
 		if (keyLengthCheck(secretKey, algorithm)) {
-			byte[] byteSimple = HexUtils.hex2Bytes(ciphers);
+			byte[] byteSimple = HexHelper.decode(ciphers);
 
 			return decoder(byteSimple, secretKey, algorithm);
 		}

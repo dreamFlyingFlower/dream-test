@@ -12,9 +12,12 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+
 import javax.crypto.Cipher;
 
 import org.apache.commons.lang3.StringUtils;
+
+import dream.flying.flower.binary.HexHelper;
 
 public final class RSAUtils {
 
@@ -73,7 +76,7 @@ public final class RSAUtils {
 	 * @throws Exception
 	 */
 	public static byte[] encryptByPrivateKey(byte[] data, String hexKey) throws Exception {
-		byte[] keyBytes = HexUtils.hex2Bytes(hexKey);
+		byte[] keyBytes = HexHelper.decode(hexKey);
 		return encryptByPrivateKey(data, keyBytes);
 	}
 
@@ -105,7 +108,7 @@ public final class RSAUtils {
 	 */
 	public static byte[] decryptByPrivateKey(byte[] data, String hexKey) throws Exception {
 		// 私钥HEX编码转换为byte
-		byte[] keyBytes = HexUtils.hex2Bytes(hexKey);
+		byte[] keyBytes = HexHelper.decode(hexKey);
 
 		return decryptByPrivateKey(data, keyBytes);
 	}
@@ -138,7 +141,7 @@ public final class RSAUtils {
 	 */
 	public static byte[] encryptByPublicKey(byte[] data, String hexKey) throws Exception {
 		// �Թ�Կ����
-		byte[] keyBytes = HexUtils.hex2Bytes(hexKey);
+		byte[] keyBytes = HexHelper.decode(hexKey);
 		return encryptByPublicKey(data, keyBytes);
 	}
 
@@ -171,7 +174,7 @@ public final class RSAUtils {
 	 */
 	public static byte[] decryptByPublicKey(byte[] data, String hexKey) throws Exception {
 		// hexKey 公钥HEX转换为byte
-		byte[] keyBytes = HexUtils.hex2Bytes(hexKey);
+		byte[] keyBytes = HexHelper.decode(hexKey);
 		return decryptByPublicKey(data, keyBytes);
 	}
 

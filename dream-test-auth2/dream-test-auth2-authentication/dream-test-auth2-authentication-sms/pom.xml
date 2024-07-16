@@ -7,6 +7,7 @@
 		<groupId>dream.flying.flower</groupId>
 		<artifactId>dream-test-auth2</artifactId>
 		<version>0.0.1</version>
+		<relativePath />
 	</parent>
 	<artifactId>dream-test-auth2-authentication-sms</artifactId>
 	<name>dream-test-auth2-authentication-sms</name>
@@ -60,10 +61,6 @@
 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>dream.flying.flower</groupId>
 			<artifactId>dream-framework-core</artifactId>
 		</dependency>
@@ -76,11 +73,6 @@
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 			<version>2.11.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.opensaml</groupId>
-			<artifactId>opensaml-core</artifactId>
-			<version>3.4.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>

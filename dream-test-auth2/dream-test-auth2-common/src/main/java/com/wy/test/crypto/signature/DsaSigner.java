@@ -7,12 +7,13 @@ import java.security.Signature;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
-import com.wy.test.crypto.Base64Utils;
 import com.wy.test.crypto.KeyPairType;
 
+import dream.flying.flower.binary.Base64Helper;
+
 /**
- * DSA Digital signature default signature algorithm is SHA1withDSA default key
- * size is 1024 DsaSigner support SHA1withDSA
+ * DSA Digital signature default signature algorithm is SHA1withDSA default key size is 1024 DsaSigner support
+ * SHA1withDSA
  * 
  * @author 飞花梦影
  * @date 2024-07-14 21:37:49
@@ -48,12 +49,12 @@ public final class DsaSigner implements ISigner {
 	@Override
 	public String signB64(String data, String privateKey) throws Exception {
 
-		byte[] privateKeyByte = Base64Utils.decoder(privateKey);
+		byte[] privateKeyByte = Base64Helper.decode(privateKey);
 		byte[] dataBytes = data.getBytes();
 
 		byte[] signatureBytes = sign(dataBytes, privateKeyByte);
 
-		return Base64Utils.encoder(signatureBytes);
+		return Base64Helper.encodeString(signatureBytes);
 	}
 
 	@Override
@@ -78,12 +79,10 @@ public final class DsaSigner implements ISigner {
 	@Override
 	public boolean verifyB64(String data, String publicKey, String sign) throws Exception {
 
-		byte[] privateKeyByte = Base64Utils.decoder(publicKey);
+		byte[] privateKeyByte = Base64Helper.decode(publicKey);
 		byte[] dataBytes = data.getBytes();
-		byte[] signBytes = Base64Utils.decoder(sign);
+		byte[] signBytes = Base64Helper.decode(sign);
 
-		// ��֤
 		return verify(dataBytes, privateKeyByte, signBytes);
 	}
-
 }

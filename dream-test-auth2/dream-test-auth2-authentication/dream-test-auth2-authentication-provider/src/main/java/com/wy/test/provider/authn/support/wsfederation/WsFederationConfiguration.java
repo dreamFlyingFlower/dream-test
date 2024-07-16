@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-import org.opensaml.security.x509.BasicX509Credential;
+import org.opensaml.xml.security.x509.BasicX509Credential;
 import org.springframework.core.io.Resource;
 
 /**

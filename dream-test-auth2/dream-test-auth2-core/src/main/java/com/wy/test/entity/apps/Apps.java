@@ -13,7 +13,8 @@ import org.springframework.data.annotation.Id;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.wy.test.constants.ConstsBoolean;
-import com.wy.test.crypto.Base64Utils;
+
+import dream.flying.flower.helper.ImageHelper;
 
 @Entity
 @Table(name = "MXK_APPS")
@@ -135,9 +136,8 @@ public class Apps extends JpaEntity implements Serializable {
 	private String userPropertys;
 
 	/**
-	 * Signature for client verify create by SignaturePublicKey &
-	 * SignaturePrivateKey issuer is domain name subject is app id append domain
-	 * name
+	 * Signature for client verify create by SignaturePublicKey & SignaturePrivateKey issuer is domain name subject is
+	 * app id append domain name
 	 */
 	@Column
 	private int isSignature;
@@ -305,7 +305,7 @@ public class Apps extends JpaEntity implements Serializable {
 
 	public void transIconBase64() {
 		if (icon != null) {
-			this.iconBase64 = Base64Utils.encodeImage(icon);
+			this.iconBase64 = ImageHelper.encodeImage(icon);
 		}
 	}
 

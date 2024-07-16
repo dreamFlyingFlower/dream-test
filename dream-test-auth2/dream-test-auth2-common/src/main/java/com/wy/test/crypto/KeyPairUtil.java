@@ -30,6 +30,8 @@ import org.slf4j.LoggerFactory;
 
 import com.wy.test.crypto.cert.CryptoException;
 
+import dream.flying.flower.binary.Base64Helper;
+
 /**
  * Provides utility methods for the generation of keys.
  */
@@ -150,12 +152,12 @@ public final class KeyPairUtil {
 
 	public static String getPublicKey(Map<String, Object> keyMap) throws Exception {
 		Key key = (Key) keyMap.get(PUBLIC_KEY);
-		return Base64Utils.encoder(key.getEncoded());
+		return Base64Helper.encodeString(key.getEncoded());
 	}
 
 	public static String getPrivateKey(Map<String, Object> keyMap) throws Exception {
 		Key key = (Key) keyMap.get(PRIVATE_KEY);
-		return Base64Utils.encoder(key.getEncoded());
+		return Base64Helper.encodeString(key.getEncoded());
 	}
 
 	/**

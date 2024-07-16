@@ -1,4 +1,3 @@
- 
 
 package com.wy.test.web.web.contorller;
 
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.crypto.Base32Utils;
-import com.wy.test.crypto.Base64Utils;
 import com.wy.test.crypto.password.PasswordReciprocal;
 import com.wy.test.entity.Message;
 import com.wy.test.entity.UserInfo;
@@ -27,63 +24,56 @@ import com.wy.test.otp.password.onetimepwd.algorithm.OtpSecret;
 import com.wy.test.persistence.service.UserInfoService;
 import com.wy.test.util.RQCodeUtils;
 
+import dream.flying.flower.framework.core.crypto.Base32Helpers;
+import dream.flying.flower.helper.ImageHelper;
 
-/**
- * .
- * @author Crystal.Sea
- *
- */
 @Controller
-@RequestMapping(value  =  { "/config" })
+@RequestMapping(value = { "/config" })
 public class OneTimePasswordController {
-    static final  Logger _logger  =  LoggerFactory.getLogger(OneTimePasswordController.class);
 
-    @Autowired
-    private UserInfoService userInfoService;
+	static final Logger _logger = LoggerFactory.getLogger(OneTimePasswordController.class);
 
-    @Autowired
-    OtpKeyUriFormat otpKeyUriFormat;
+	@Autowired
+	private UserInfoService userInfoService;
 
-    @RequestMapping(value = {"/timebased"})
-    @ResponseBody
-    public ResponseEntity<?> timebased(
-    			@RequestParam String generate,@CurrentUser UserInfo currentUser) {
-        HashMap<String,Object >timebased =new HashMap<String,Object >();
-        
-        generate(generate,currentUser);
-        
-        String sharedSecret = 
-        		PasswordReciprocal.getInstance().decoder(currentUser.getSharedSecret());
-        
-        otpKeyUriFormat.setSecret(sharedSecret);
-        String otpauth = otpKeyUriFormat.format(currentUser.getUsername());
-        byte[] byteSharedSecret = Base32Utils.decode(sharedSecret);
-        String hexSharedSecret = Hex.encodeHexString(byteSharedSecret);
-        BufferedImage bufferedImage  =  RQCodeUtils.write2BufferedImage(otpauth, "gif", 300, 300);
-    	String rqCode = Base64Utils.encodeImage(bufferedImage);
-        
-        timebased.put("displayName", currentUser.getDisplayName());
-        timebased.put("username", currentUser.getUsername());
-        timebased.put("digits", otpKeyUriFormat.getDigits());
-        timebased.put("period", otpKeyUriFormat.getPeriod());
-        timebased.put("sharedSecret", sharedSecret);
-        timebased.put("hexSharedSecret", hexSharedSecret);
-        timebased.put("rqCode", rqCode);
-        return new Message<HashMap<String,Object >>(timebased).buildResponse();
-    }
+	@Autowired
+	OtpKeyUriFormat otpKeyUriFormat;
 
-    public void generate(String generate,@CurrentUser UserInfo currentUser) {
-    	if((StringUtils.isNotBlank(generate)
-        		&& generate.equalsIgnoreCase("YES"))
-        		||StringUtils.isBlank(currentUser.getSharedSecret())) {
-    		
-        	byte[] byteSharedSecret = OtpSecret.generate(otpKeyUriFormat.getCrypto());
-            String sharedSecret = Base32Utils.encode(byteSharedSecret);
-            sharedSecret = PasswordReciprocal.getInstance().encode(sharedSecret);
-            currentUser.setSharedSecret(sharedSecret);
-            userInfoService.updateSharedSecret(currentUser);
-            
-        }
-    }
-    
+	@RequestMapping(value = { "/timebased" })
+	@ResponseBody
+	public ResponseEntity<?> timebased(@RequestParam String generate, @CurrentUser UserInfo currentUser) {
+		HashMap<String, Object> timebased = new HashMap<String, Object>();
+
+		generate(generate, currentUser);
+
+		String sharedSecret = PasswordReciprocal.getInstance().decoder(currentUser.getSharedSecret());
+
+		otpKeyUriFormat.setSecret(sharedSecret);
+		String otpauth = otpKeyUriFormat.format(currentUser.getUsername());
+		byte[] byteSharedSecret = Base32Helpers.decode(sharedSecret);
+		String hexSharedSecret = Hex.encodeHexString(byteSharedSecret);
+		BufferedImage bufferedImage = RQCodeUtils.write2BufferedImage(otpauth, "gif", 300, 300);
+		String rqCode = ImageHelper.encodeImage(bufferedImage);
+
+		timebased.put("displayName", currentUser.getDisplayName());
+		timebased.put("username", currentUser.getUsername());
+		timebased.put("digits", otpKeyUriFormat.getDigits());
+		timebased.put("period", otpKeyUriFormat.getPeriod());
+		timebased.put("sharedSecret", sharedSecret);
+		timebased.put("hexSharedSecret", hexSharedSecret);
+		timebased.put("rqCode", rqCode);
+		return new Message<HashMap<String, Object>>(timebased).buildResponse();
+	}
+
+	public void generate(String generate, @CurrentUser UserInfo currentUser) {
+		if ((StringUtils.isNotBlank(generate) && generate.equalsIgnoreCase("YES"))
+				|| StringUtils.isBlank(currentUser.getSharedSecret())) {
+
+			byte[] byteSharedSecret = OtpSecret.generate(otpKeyUriFormat.getCrypto());
+			String sharedSecret = Base32Helpers.encode(byteSharedSecret);
+			sharedSecret = PasswordReciprocal.getInstance().encode(sharedSecret);
+			currentUser.setSharedSecret(sharedSecret);
+			userInfoService.updateSharedSecret(currentUser);
+		}
+	}
 }

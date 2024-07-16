@@ -18,22 +18,24 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.opensaml.saml.saml1.core.Attribute;
-import org.opensaml.saml.saml1.core.Conditions;
-import org.opensaml.saml.saml1.core.impl.AssertionImpl;
-import org.opensaml.security.x509.BasicX509Credential;
+import org.opensaml.DefaultBootstrap;
+import org.opensaml.saml1.core.Attribute;
+import org.opensaml.saml1.core.Conditions;
+import org.opensaml.saml1.core.impl.AssertionImpl;
 import org.opensaml.ws.wsfed.RequestedSecurityToken;
 import org.opensaml.ws.wsfed.impl.RequestSecurityTokenResponseImpl;
 import org.opensaml.xml.Configuration;
+import org.opensaml.xml.ConfigurationException;
 import org.opensaml.xml.io.Unmarshaller;
 import org.opensaml.xml.io.UnmarshallerFactory;
 import org.opensaml.xml.io.UnmarshallingException;
 import org.opensaml.xml.parse.BasicParserPool;
 import org.opensaml.xml.parse.XMLParserException;
 import org.opensaml.xml.schema.XSAny;
-import org.opensaml.xmlsec.signature.Signature;
-import org.opensaml.xmlsec.signature.support.SignatureException;
-import org.opensaml.xmlsec.signature.support.SignatureValidator;
+import org.opensaml.xml.security.x509.BasicX509Credential;
+import org.opensaml.xml.signature.Signature;
+import org.opensaml.xml.signature.SignatureValidator;
+import org.opensaml.xml.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -45,6 +47,20 @@ import org.w3c.dom.Element;
  *
  */
 public final class WsFederationUtils {
+
+	/**
+	 * Initialized the openSaml library.
+	 */
+	static {
+		final Logger _logger = LoggerFactory.getLogger(WsFederationUtils.class);
+
+		try {
+			// Initialize the library
+			DefaultBootstrap.bootstrap();
+		} catch (final ConfigurationException ex) {
+			_logger.error(ex.getMessage());
+		}
+	}
 
 	/**
 	 * private constructor.
@@ -141,7 +157,7 @@ public final class WsFederationUtils {
 			final PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
 
 			// add the public key
-			publicCredential = new BasicX509Credential(certificate);
+			publicCredential = new BasicX509Credential();
 			publicCredential.setPublicKey(publicKey);
 
 		} catch (final CertificateException ex) {
@@ -223,18 +239,26 @@ public final class WsFederationUtils {
 	public static boolean validateSignature(final AssertionImpl assertion, final List<BasicX509Credential> x509Creds) {
 		final Logger _logger = LoggerFactory.getLogger(WsFederationUtils.class);
 
+		SignatureValidator signatureValidator;
+
 		for (BasicX509Credential cred : x509Creds) {
+			try {
+				signatureValidator = new SignatureValidator(cred);
+			} catch (final Exception ex) {
+				_logger.warn(ex.getMessage());
+				break;
+			}
+
 			// get the signature to validate from the response object
 			final Signature signature = assertion.getSignature();
 
 			// try to validate
 			try {
-				SignatureValidator.validate(signature, cred);
-
+				signatureValidator.validate(signature);
 				_logger.debug("validateSignature: Signature is valid.");
 				return true;
 
-			} catch (final SignatureException ex) {
+			} catch (final ValidationException ex) {
 				_logger.warn("validateSignature: Signature is NOT valid.");
 				_logger.warn(ex.getMessage());
 			}

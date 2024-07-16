@@ -13,8 +13,9 @@ import javax.persistence.Table;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.wy.test.crypto.Base64Utils;
 import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.helper.ImageHelper;
 
 @Entity
 @Table(name = "MXK_USERINFO")
@@ -50,8 +51,7 @@ public class UserInfo extends JpaEntity {
 	protected String sharedCounter;
 
 	/**
-	 * "Employee", "Supplier","Dealer","Contractor",Partner,Customer "Intern",
-	 * "Temp", "External", and "Unknown" .
+	 * "Employee", "Supplier","Dealer","Contractor",Partner,Customer "Intern", "Temp", "External", and "Unknown" .
 	 */
 	@Column
 	protected String userType;
@@ -303,8 +303,8 @@ public class UserInfo extends JpaEntity {
 	protected String theme;
 
 	/*
-	 * for extended Attribute from userType extraAttribute for database
-	 * extraAttributeName & extraAttributeValue for page submit
+	 * for extended Attribute from userType extraAttribute for database extraAttributeName & extraAttributeValue for
+	 * page submit
 	 */
 	protected String extraAttribute;
 
@@ -518,7 +518,7 @@ public class UserInfo extends JpaEntity {
 
 	public void transPictureBase64() {
 		if (picture != null) {
-			this.pictureBase64 = Base64Utils.encodeImage(picture);
+			this.pictureBase64 = ImageHelper.encodeImage(picture);
 		}
 	}
 

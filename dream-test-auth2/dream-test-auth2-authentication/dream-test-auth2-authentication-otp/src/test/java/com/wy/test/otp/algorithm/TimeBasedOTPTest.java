@@ -8,9 +8,10 @@ import java.util.TimeZone;
 
 import org.apache.commons.codec.binary.Hex;
 
-import com.wy.test.crypto.Base32Utils;
-import com.wy.test.crypto.HexUtils;
 import com.wy.test.otp.password.onetimepwd.algorithm.TimeBasedOTP;
+
+import dream.flying.flower.binary.HexHelper;
+import dream.flying.flower.framework.core.crypto.Base32Helpers;
 
 public class TimeBasedOTPTest {
 
@@ -18,14 +19,14 @@ public class TimeBasedOTPTest {
 
 		// byte[]byteseed=OPTSecret.generate();
 
-		byte[] byteseed = Base32Utils.decode("DCGAGPE2BCDBD6D3FG4NX2QGACVIHXP4");// HexUtils.hex2Bytes(
+		byte[] byteseed = Base32Helpers.decode("DCGAGPE2BCDBD6D3FG4NX2QGACVIHXP4");// HexUtils.hex2Bytes(
 																					// "a1270caecf007f2303cc9db12597a9694ff541aa");
-		String seed = Base32Utils.encode(byteseed);
+		String seed = Base32Helpers.encode(byteseed);
 		System.out.println(seed);
 		String hexString = Hex.encodeHexString(byteseed);
 		// String hexString=HexUtils.bytes2HexString(byteseed);
 		System.out.println(hexString);
-		System.out.println(HexUtils.bytes2HexString(byteseed));
+		System.out.println(HexHelper.encodeHexString(byteseed));
 
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -49,5 +50,4 @@ public class TimeBasedOTPTest {
 		System.out.println(TimeBasedOTP.genOTP(hexString, 3 + "", "6"));
 
 	}
-
 }

@@ -1,16 +1,3 @@
-/*
- * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
-
 package com.wy.test.otp.password.onetimepwd.impl;
 
 import java.security.InvalidKeyException;
@@ -19,10 +6,11 @@ import java.security.NoSuchAlgorithmException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.crypto.Base32Utils;
 import com.wy.test.entity.UserInfo;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.algorithm.HOTP;
+
+import dream.flying.flower.framework.core.crypto.Base32Helpers;
 
 public class HotpOtpAuthn extends AbstractOtpAuthn {
 
@@ -44,7 +32,7 @@ public class HotpOtpAuthn extends AbstractOtpAuthn {
 	@Override
 	public boolean validate(UserInfo userInfo, String token) {
 		_logger.debug("SharedCounter : " + userInfo.getSharedCounter());
-		byte[] byteSharedSecret = Base32Utils.decode(userInfo.getSharedSecret());
+		byte[] byteSharedSecret = Base32Helpers.decode(userInfo.getSharedSecret());
 		String hotpToken;
 		try {
 			hotpToken = HOTP.generateOTP(byteSharedSecret, Long.parseLong(userInfo.getSharedCounter()), digits,
@@ -89,5 +77,4 @@ public class HotpOtpAuthn extends AbstractOtpAuthn {
 	public void setTruncation(int truncation) {
 		this.truncation = truncation;
 	}
-
 }

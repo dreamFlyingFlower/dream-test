@@ -14,15 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.google.code.kaptcha.Producer;
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.crypto.Base64Utils;
 import com.wy.test.entity.Message;
 import com.wy.test.persistence.cache.MomentaryService;
+
+import dream.flying.flower.helper.ImageHelper;
 
 /**
  * ImageCaptchaEndpoint Producer captcha.
  * 
- * @author Crystal.Sea
- *
  */
 @Controller
 public class ImageCaptchaEndpoint {
@@ -75,7 +74,7 @@ public class ImageCaptchaEndpoint {
 			momentaryService.put("", kaptchaKey, kaptchaValue);
 			// create the image with the text
 			BufferedImage bufferedImage = captchaProducer.createImage(kaptchaText);
-			String b64Image = Base64Utils.encodeImage(bufferedImage);
+			String b64Image = ImageHelper.encodeImage(bufferedImage);
 
 			_logger.trace("b64Image {}", b64Image);
 
@@ -89,5 +88,4 @@ public class ImageCaptchaEndpoint {
 	public void setCaptchaProducer(Producer captchaProducer) {
 		this.captchaProducer = captchaProducer;
 	}
-
 }
