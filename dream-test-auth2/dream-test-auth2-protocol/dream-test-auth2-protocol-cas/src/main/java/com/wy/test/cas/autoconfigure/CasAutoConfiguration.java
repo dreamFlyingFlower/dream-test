@@ -29,7 +29,7 @@ public class CasAutoConfiguration implements InitializingBean {
 	 * @return casTicketServices
 	 */
 	@Bean(name = "casTicketServices")
-	public TicketServices casTicketServices(@Value("${maxkey.server.persistence}") int persistence,
+	TicketServices casTicketServices(@Value("${maxkey.server.persistence}") int persistence,
 			@Value("${maxkey.login.remeberme.validity}") int validity, JdbcTemplate jdbcTemplate,
 			RedisConnectionFactory redisConnFactory) {
 		_logger.debug("init casTicketServices.");
@@ -44,7 +44,7 @@ public class CasAutoConfiguration implements InitializingBean {
 	 * @return casTicketServices
 	 */
 	@Bean(name = "casTicketGrantingTicketServices")
-	public TicketServices casTicketGrantingTicketServices(@Value("${maxkey.server.persistence}") int persistence,
+	TicketServices casTicketGrantingTicketServices(@Value("${maxkey.server.persistence}") int persistence,
 			@Value("${maxkey.login.remeberme.validity}") int validity, JdbcTemplate jdbcTemplate,
 			RedisConnectionFactory redisConnFactory) {
 		_logger.debug("init casTicketGrantingTicketServices.");
@@ -52,7 +52,7 @@ public class CasAutoConfiguration implements InitializingBean {
 	}
 
 	@Bean(name = "casProxyGrantingTicketServices")
-	public TicketServices casProxyGrantingTicketServices(@Value("${maxkey.server.persistence}") int persistence,
+	TicketServices casProxyGrantingTicketServices(@Value("${maxkey.server.persistence}") int persistence,
 			@Value("${maxkey.login.remeberme.validity}") int validity, JdbcTemplate jdbcTemplate,
 			RedisConnectionFactory redisConnFactory) {
 		_logger.debug("init casTicketGrantingTicketServices.");

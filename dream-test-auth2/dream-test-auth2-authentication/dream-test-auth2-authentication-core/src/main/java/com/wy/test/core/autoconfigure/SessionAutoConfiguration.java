@@ -20,21 +20,20 @@ public class SessionAutoConfiguration implements InitializingBean {
 	private static final Logger _logger = LoggerFactory.getLogger(SessionAutoConfiguration.class);
 
 	@Bean(name = "savedRequestSuccessHandler")
-	public SavedRequestAwareAuthenticationSuccessHandler savedRequestAwareAuthenticationSuccessHandler() {
+	SavedRequestAwareAuthenticationSuccessHandler savedRequestAwareAuthenticationSuccessHandler() {
 		return new SavedRequestAwareAuthenticationSuccessHandler();
 	}
 
 	@Bean
-	public SessionManager sessionManager(@Value("${maxkey.server.persistence}") int persistence,
-			JdbcTemplate jdbcTemplate, RedisConnectionFactory redisConnFactory,
-			@Value("${maxkey.session.timeout:1800}") int timeout) {
+	SessionManager sessionManager(@Value("${maxkey.server.persistence}") int persistence, JdbcTemplate jdbcTemplate,
+			RedisConnectionFactory redisConnFactory, @Value("${maxkey.session.timeout:1800}") int timeout) {
 		_logger.debug("session timeout " + timeout);
 		SessionManager sessionManager = new SessionManagerFactory(persistence, jdbcTemplate, redisConnFactory, timeout);
 		return sessionManager;
 	}
 
 	@Bean
-	public HttpSessionListenerAdapter httpSessionListenerAdapter() {
+	HttpSessionListenerAdapter httpSessionListenerAdapter() {
 		return new HttpSessionListenerAdapter();
 	}
 

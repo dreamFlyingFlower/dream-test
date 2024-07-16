@@ -3,10 +3,13 @@ package com.wy.test.synchronizer.core.synchronizer.entity;
 public class ResponseData {
 
 	protected long errcode;
+
 	protected long code;
 
 	protected String errmsg;
+
 	protected String msg;
+
 	protected String message;
 
 	public long getErrcode() {

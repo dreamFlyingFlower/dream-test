@@ -7,10 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-/**
- * @author Crystal.Sea
- *
- */
 @Entity
 @Table(name = "MXK_APPS_FORM_BASED_DETAILS")
 public class AppsFormBasedDetails extends Apps {

@@ -12,11 +12,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,7 +49,7 @@ public class ScimGroupController {
 	@Autowired
 	RoleMemberService roleMemberService;
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@GetMapping(value = "/{id}")
 	public MappingJacksonValue get(@PathVariable String id, @RequestParam(required = false) String attributes) {
 		Roles role = rolesService.get(id);
 		ScimGroup scimGroup = role2ScimGroup(role);
@@ -61,7 +64,7 @@ public class ScimGroupController {
 		return new MappingJacksonValue(scimGroup);
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	@PostMapping
 	public MappingJacksonValue create(@RequestBody ScimGroup scimGroup,
 			@RequestParam(required = false) String attributes, UriComponentsBuilder builder) throws IOException {
 		Roles role = scimGroup2Role(scimGroup);
@@ -69,7 +72,7 @@ public class ScimGroupController {
 		return get(role.getId(), attributes);
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@PutMapping(value = "/{id}")
 	public MappingJacksonValue replace(@PathVariable String id, @RequestBody ScimGroup scimGroup,
 			@RequestParam(required = false) String attributes) throws IOException {
 		Roles role = scimGroup2Role(scimGroup);
@@ -77,18 +80,18 @@ public class ScimGroupController {
 		return get(role.getId(), attributes);
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@DeleteMapping(value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable final String id) {
 		rolesService.remove(id);
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@GetMapping
 	public MappingJacksonValue searchWithGet(@ModelAttribute ScimParameters requestParameters) {
 		return searchWithPost(requestParameters);
 	}
 
-	@RequestMapping(value = "/.search", method = RequestMethod.POST)
+	@PostMapping(value = "/.search")
 	public MappingJacksonValue searchWithPost(@ModelAttribute ScimParameters requestParameters) {
 		requestParameters.parse();
 		_logger.debug("requestParameters {} ", requestParameters);

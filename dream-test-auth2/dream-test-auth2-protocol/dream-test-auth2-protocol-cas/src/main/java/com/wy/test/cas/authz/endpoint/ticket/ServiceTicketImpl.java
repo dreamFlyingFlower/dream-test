@@ -1,16 +1,3 @@
-/*
- * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
-
 package com.wy.test.cas.authz.endpoint.ticket;
 
 import javax.persistence.Column;
@@ -22,9 +9,10 @@ import com.wy.test.cas.authz.endpoint.ticket.pgt.ProxyGrantingTicket;
 import com.wy.test.entity.apps.AppsCasDetails;
 
 /**
- * Domain object representing a Service Ticket. A service ticket grants specific access to a particular service. It will
- * only work for a particular service. Generally, it is a one time use Ticket, but the specific expiration policy can be
- * anything.
+ * Domain object representing a Service Ticket. A service ticket grants specific
+ * access to a particular service. It will only work for a particular service.
+ * Generally, it is a one time use Ticket, but the specific expiration policy
+ * can be anything.
  *
  * @author Scott Battaglia
  * @since 3.0.0
@@ -77,11 +65,13 @@ public class ServiceTicketImpl extends AbstractTicket implements ServiceTicket {
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * The state of the ticket is affected by this operation and the ticket will be considered used regardless of the
-	 * match result. The state update subsequently may impact the ticket expiration policy in that, depending on the
-	 * policy configuration, the ticket may be considered expired.
+	 * The state of the ticket is affected by this operation and the ticket will be
+	 * considered used regardless of the match result. The state update subsequently
+	 * may impact the ticket expiration policy in that, depending on the policy
+	 * configuration, the ticket may be considered expired.
 	 */
 
+	@Override
 	public boolean isValidFor(final Service serviceToValidate) {
 		update();
 		return serviceToValidate.matches(this.service);

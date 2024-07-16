@@ -75,10 +75,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * since it represents a request from a valid user to act on his or her behalf.
  * </p>
  * 
- * @author Dave Syer
- * @author Vladimir Kryachko
- * @author Crystal.sea 2022-04-14
- * 
  */
 @Tag(name = "2-1-OAuth v2.0 API文档模块")
 @Controller

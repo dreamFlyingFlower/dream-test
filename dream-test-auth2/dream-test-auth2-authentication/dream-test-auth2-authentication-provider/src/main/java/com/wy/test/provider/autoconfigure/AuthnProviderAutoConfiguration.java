@@ -43,7 +43,7 @@ public class AuthnProviderAutoConfiguration implements InitializingBean {
 	}
 
 	@Bean
-	public AbstractAuthenticationProvider normalAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
+	AbstractAuthenticationProvider normalAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
 			ApplicationConfig applicationConfig, SessionManager sessionManager, AuthTokenService authTokenService) {
 		_logger.debug("init authentication Provider .");
 		return new NormalAuthenticationProvider(authenticationRealm, applicationConfig, sessionManager,
@@ -51,7 +51,7 @@ public class AuthnProviderAutoConfiguration implements InitializingBean {
 	}
 
 	@Bean
-	public AbstractAuthenticationProvider mobileAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
+	AbstractAuthenticationProvider mobileAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
 			ApplicationConfig applicationConfig, SmsOtpAuthnService smsAuthnService, SessionManager sessionManager) {
 		_logger.debug("init Mobile authentication Provider .");
 		return new MobileAuthenticationProvider(authenticationRealm, applicationConfig, smsAuthnService,
@@ -59,24 +59,24 @@ public class AuthnProviderAutoConfiguration implements InitializingBean {
 	}
 
 	@Bean
-	public AbstractAuthenticationProvider trustedAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
+	AbstractAuthenticationProvider trustedAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
 			ApplicationConfig applicationConfig, SessionManager sessionManager) {
 		_logger.debug("init Mobile authentication Provider .");
 		return new TrustedAuthenticationProvider(authenticationRealm, applicationConfig, sessionManager);
 	}
 
 	@Bean
-	public PasswordPolicyValidator passwordPolicyValidator(JdbcTemplate jdbcTemplate, MessageSource messageSource) {
+	PasswordPolicyValidator passwordPolicyValidator(JdbcTemplate jdbcTemplate, MessageSource messageSource) {
 		return new PasswordPolicyValidator(jdbcTemplate, messageSource);
 	}
 
 	@Bean
-	public LoginRepository loginRepository(JdbcTemplate jdbcTemplate) {
+	LoginRepository loginRepository(JdbcTemplate jdbcTemplate) {
 		return new LoginRepository(jdbcTemplate);
 	}
 
 	@Bean
-	public LoginHistoryRepository loginHistoryRepository(JdbcTemplate jdbcTemplate) {
+	LoginHistoryRepository loginHistoryRepository(JdbcTemplate jdbcTemplate) {
 		return new LoginHistoryRepository(jdbcTemplate);
 	}
 
@@ -86,7 +86,7 @@ public class AuthnProviderAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	public AbstractRemeberMeManager remeberMeManager(@Value("${maxkey.server.persistence}") int persistence,
+	AbstractRemeberMeManager remeberMeManager(@Value("${maxkey.server.persistence}") int persistence,
 			@Value("${maxkey.login.remeberme.validity}") int validity, ApplicationConfig applicationConfig,
 			AuthTokenService authTokenService, JdbcTemplate jdbcTemplate) {
 		_logger.trace("init RemeberMeManager , validity {}.", validity);

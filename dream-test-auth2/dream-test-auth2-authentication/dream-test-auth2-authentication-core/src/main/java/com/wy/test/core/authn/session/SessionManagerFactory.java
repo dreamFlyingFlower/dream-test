@@ -19,7 +19,8 @@ import com.wy.test.persistence.redis.RedisConnectionFactory;
 import com.wy.test.util.DateUtils;
 
 /**
- * SessionManager Level 1 in memory,store in Caffeine Level 2 in Redis user session status in database
+ * SessionManager Level 1 in memory,store in Caffeine Level 2 in Redis user
+ * session status in database
  * 
  * @author shimh
  *
@@ -63,6 +64,7 @@ public class SessionManagerFactory implements SessionManager {
 		}
 	}
 
+	@Override
 	public void create(String sessionId, Session session) {
 		inMemorySessionManager.create(sessionId, session);
 		if (isRedis) {
@@ -70,6 +72,7 @@ public class SessionManagerFactory implements SessionManager {
 		}
 	}
 
+	@Override
 	public Session remove(String sessionId) {
 		Session session = inMemorySessionManager.remove(sessionId);
 		if (isRedis) {
@@ -78,6 +81,7 @@ public class SessionManagerFactory implements SessionManager {
 		return session;
 	}
 
+	@Override
 	public Session get(String sessionId) {
 		Session session = inMemorySessionManager.get(sessionId);
 		if (session == null && isRedis) {
@@ -86,6 +90,7 @@ public class SessionManagerFactory implements SessionManager {
 		return session;
 	}
 
+	@Override
 	public Session refresh(String sessionId, LocalDateTime refreshTime) {
 		Session session = null;
 		if (isRedis) {
@@ -98,6 +103,7 @@ public class SessionManagerFactory implements SessionManager {
 		return session;
 	}
 
+	@Override
 	public Session refresh(String sessionId) {
 		Session session = null;
 		if (isRedis) {
@@ -112,6 +118,7 @@ public class SessionManagerFactory implements SessionManager {
 		return session;
 	}
 
+	@Override
 	public List<HistoryLogin> querySessions() {
 		// clear session id is null
 		jdbcTemplate.execute(NO_SESSION_UPDATE_STATEMENT);
@@ -133,6 +140,7 @@ public class SessionManagerFactory implements SessionManager {
 				new int[] { Types.VARCHAR, Types.VARCHAR });
 	}
 
+	@Override
 	public void terminate(String sessionId, String userId, String username) {
 		String lastLogoffTime = DateUtils.formatDateTime(new Date());
 		_logger.trace("{} user {} terminate session {} .", lastLogoffTime, username, sessionId);
@@ -141,6 +149,7 @@ public class SessionManagerFactory implements SessionManager {
 		this.remove(sessionId);
 	}
 
+	@Override
 	public int getValiditySeconds() {
 		return validitySeconds;
 	}

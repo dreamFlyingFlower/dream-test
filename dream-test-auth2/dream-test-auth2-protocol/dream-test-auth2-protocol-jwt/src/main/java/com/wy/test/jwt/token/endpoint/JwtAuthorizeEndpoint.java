@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,7 +51,7 @@ public class JwtAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 	ApplicationConfig applicationConfig;
 
 	@Operation(summary = "JWT应用ID认证接口", description = "应用ID", method = "GET")
-	@RequestMapping("/authz/jwt/{id}")
+	@GetMapping("/authz/jwt/{id}")
 	public ModelAndView authorize(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("id") String id, @CurrentUser UserInfo currentUser) {
 		ModelAndView modelAndView = new ModelAndView();

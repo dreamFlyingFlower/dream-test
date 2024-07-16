@@ -14,9 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.wy.test.cas.authz.endpoint.response.ServiceResponseBuilder;
@@ -35,7 +36,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
- * @author Crystal.Sea https://apereo.github.io/cas/6.2.x/protocol/REST-Protocol.html
+ * https://apereo.github.io/cas/6.2.x/protocol/REST-Protocol.html
  */
 @Tag(name = "2-4-CAS REST API文档模块")
 @Controller
@@ -48,7 +49,7 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 	AbstractAuthenticationProvider authenticationProvider;
 
 	@Operation(summary = "CAS REST认证接口", description = "通过用户名密码获取TGT", method = "POST")
-	@RequestMapping(value = CasConstants.ENDPOINT.ENDPOINT_REST_TICKET_V1, method = RequestMethod.POST,
+	@PostMapping(value = CasConstants.ENDPOINT.ENDPOINT_REST_TICKET_V1,
 			consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ResponseEntity<String> casLoginRestTickets(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = CasConstants.PARAMETER.SERVICE, required = false) String casService,
@@ -87,8 +88,8 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 	}
 
 	@Operation(summary = "CAS REST认证接口", description = "通过TGT获取ST", method = "POST")
-	@RequestMapping(value = CasConstants.ENDPOINT.ENDPOINT_REST_TICKET_V1 + "/{ticketGrantingTicket}",
-			method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	@PostMapping(value = CasConstants.ENDPOINT.ENDPOINT_REST_TICKET_V1 + "/{ticketGrantingTicket}",
+			consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ResponseEntity<String> requestServiceTicket(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("ticketGrantingTicket") String ticketGrantingTicket,
 			@RequestParam(value = CasConstants.PARAMETER.SERVICE, required = false) String casService,
@@ -113,8 +114,7 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 	}
 
 	@Operation(summary = "CAS REST认证接口", description = "检查TGT状态", method = "GET")
-	@RequestMapping(value = CasConstants.ENDPOINT.ENDPOINT_REST_TICKET_V1 + "/{ticketGrantingTicket}",
-			method = RequestMethod.GET)
+	@GetMapping(value = CasConstants.ENDPOINT.ENDPOINT_REST_TICKET_V1 + "/{ticketGrantingTicket}")
 	public ResponseEntity<String> verifyTicketGrantingTicketStatus(
 			@PathVariable("ticketGrantingTicket") String ticketGrantingTicket, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -131,8 +131,7 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 	}
 
 	@Operation(summary = "CAS REST认证接口", description = "注销TGT状态", method = "DELETE")
-	@RequestMapping(value = CasConstants.ENDPOINT.ENDPOINT_REST_TICKET_V1 + "/{ticketGrantingTicket}",
-			method = RequestMethod.DELETE)
+	@DeleteMapping(value = CasConstants.ENDPOINT.ENDPOINT_REST_TICKET_V1 + "/{ticketGrantingTicket}")
 	public ResponseEntity<String> destroyTicketGrantingTicket(
 			@PathVariable("ticketGrantingTicket") String ticketGrantingTicket, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -149,7 +148,7 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 	}
 
 	@Operation(summary = "CAS REST认证接口", description = "用户名密码登录接口", method = "POST")
-	@RequestMapping(value = CasConstants.ENDPOINT.ENDPOINT_REST_USERS_V1, method = RequestMethod.POST,
+	@PostMapping(value = CasConstants.ENDPOINT.ENDPOINT_REST_USERS_V1,
 			consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ResponseEntity<String> casLoginRestUsers(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = CasConstants.PARAMETER.SERVICE, required = false) String casService,

@@ -1,20 +1,3 @@
-/*
- * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
-
 package com.wy.test.web.interceptor;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,23 +12,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
+import com.wy.test.authz.oauth2.provider.OAuth2Authentication;
+import com.wy.test.authz.oauth2.provider.token.DefaultTokenServices;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.util.AuthorizationHeader;
 import com.wy.test.util.AuthorizationHeaderUtils;
 import com.wy.test.util.StringUtils;
 
 /**
- * basic认证Interceptor处理.
- * @author Crystal.Sea
- *
+ * basic认证Interceptor处理
  */
 @Component
-public class RestApiPermissionAdapter  implements AsyncHandlerInterceptor  {
+public class RestApiPermissionAdapter implements AsyncHandlerInterceptor {
+
 	private static final Logger _logger = LoggerFactory.getLogger(RestApiPermissionAdapter.class);
 
 	@Autowired
@@ -53,62 +35,60 @@ public class RestApiPermissionAdapter  implements AsyncHandlerInterceptor  {
 
 	@Autowired
 	ProviderManager oauth20ClientAuthenticationManager;
-	
-	static  ConcurrentHashMap<String ,String >navigationsMap=null;
-	
+
+	static ConcurrentHashMap<String, String> navigationsMap = null;
+
 	/*
-	 * 请求前处理
-	 *  (non-Javadoc)
-	 * @see org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object)
+	 * 请求前处理 (non-Javadoc)
+	 * 
+	 * @see
+	 * org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(
+	 * javax.servlet.http.HttpServletRequest,
+	 * javax.servlet.http.HttpServletResponse, java.lang.Object)
 	 */
 	@Override
-	public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
 		_logger.trace("Rest API Permission Adapter pre handle");
-		 AuthorizationHeader headerCredential = AuthorizationHeaderUtils.resolve(request);
-		 
-		//判断应用的AppId和Secret
-		if(headerCredential != null){
+		AuthorizationHeader headerCredential = AuthorizationHeaderUtils.resolve(request);
+
+		// 判断应用的AppId和Secret
+		if (headerCredential != null) {
 			UsernamePasswordAuthenticationToken authenticationToken = null;
-			if(headerCredential.isBasic()) {
-			    if(StringUtils.isNotBlank(headerCredential.getUsername())&&
-			    		StringUtils.isNotBlank(headerCredential.getCredential())
-			    		) {
-			    	UsernamePasswordAuthenticationToken authRequest = 
-							new UsernamePasswordAuthenticationToken(
-									headerCredential.getUsername(),
-									headerCredential.getCredential());
-			    	authenticationToken= (UsernamePasswordAuthenticationToken)oauth20ClientAuthenticationManager.authenticate(authRequest);
-			    }
-			}else {
-				_logger.trace("Authentication bearer {}" , headerCredential.getCredential());
-				OAuth2Authentication oauth2Authentication = 
+			if (headerCredential.isBasic()) {
+				if (StringUtils.isNotBlank(headerCredential.getUsername())
+						&& StringUtils.isNotBlank(headerCredential.getCredential())) {
+					UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
+							headerCredential.getUsername(), headerCredential.getCredential());
+					authenticationToken = (UsernamePasswordAuthenticationToken) oauth20ClientAuthenticationManager
+							.authenticate(authRequest);
+				}
+			} else {
+				_logger.trace("Authentication bearer {}", headerCredential.getCredential());
+				OAuth2Authentication oauth2Authentication =
 						oauth20TokenServices.loadAuthentication(headerCredential.getCredential());
-				
-				if(oauth2Authentication != null) {
-					_logger.trace("Authentication token {}" , oauth2Authentication.getPrincipal().toString());
-					authenticationToken= new UsernamePasswordAuthenticationToken(
-			    			new User(
-			    					oauth2Authentication.getPrincipal().toString(), 
-			    					"CLIENT_SECRET", 
-			    					oauth2Authentication.getAuthorities()), 
-	                        "PASSWORD", 
-	                        oauth2Authentication.getAuthorities()
-	                );
-				}else {
+
+				if (oauth2Authentication != null) {
+					_logger.trace("Authentication token {}", oauth2Authentication.getPrincipal().toString());
+					authenticationToken = new UsernamePasswordAuthenticationToken(
+							new User(oauth2Authentication.getPrincipal().toString(), "CLIENT_SECRET",
+									oauth2Authentication.getAuthorities()),
+							"PASSWORD", oauth2Authentication.getAuthorities());
+				} else {
 					_logger.trace("Authentication token is null ");
 				}
 			}
-			
-			if(authenticationToken !=null && authenticationToken.isAuthenticated()) {
+
+			if (authenticationToken != null && authenticationToken.isAuthenticated()) {
 				AuthorizationUtils.setAuthentication(authenticationToken);
 				return true;
 			}
 		}
-		
+
 		_logger.trace("No Authentication ... forward to /login");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/login");
-        dispatcher.forward(request, response);
-        
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/login");
+		dispatcher.forward(request, response);
+
 		return false;
 	}
 }

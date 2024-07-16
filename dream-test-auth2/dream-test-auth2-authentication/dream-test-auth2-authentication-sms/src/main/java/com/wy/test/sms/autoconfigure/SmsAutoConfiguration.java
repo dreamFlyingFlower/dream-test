@@ -1,7 +1,5 @@
 package com.wy.test.sms.autoconfigure;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -14,10 +12,11 @@ import com.wy.test.persistence.service.EmailSendersService;
 import com.wy.test.persistence.service.SmsProviderService;
 import com.wy.test.sms.password.sms.SmsOtpAuthnService;
 
-@AutoConfiguration
-public class SmsAutoConfiguration implements InitializingBean {
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Logger _logger = LoggerFactory.getLogger(SmsAutoConfiguration.class);
+@AutoConfiguration
+@Slf4j
+public class SmsAutoConfiguration implements InitializingBean {
 
 	@Bean(name = "smsOtpAuthnService")
 	SmsOtpAuthnService smsOtpAuthnService(@Value("${maxkey.server.persistence}") int persistence,
@@ -30,7 +29,7 @@ public class SmsAutoConfiguration implements InitializingBean {
 			smsOtpAuthnService.setRedisOptTokenStore(redisOptTokenStore);
 		}
 
-		_logger.debug("SmsOtpAuthnService {} inited.", persistence == ConstsPersistence.REDIS ? "Redis" : "InMemory");
+		log.debug("SmsOtpAuthnService {} inited.", persistence == ConstsPersistence.REDIS ? "Redis" : "InMemory");
 		return smsOtpAuthnService;
 	}
 

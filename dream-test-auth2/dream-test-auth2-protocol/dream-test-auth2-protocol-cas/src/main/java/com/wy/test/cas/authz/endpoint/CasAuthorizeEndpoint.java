@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,7 +28,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
- * @author Crystal.Sea https://apereo.github.io/cas/6.2.x/protocol/CAS-Protocol.html
+ * https://apereo.github.io/cas/6.2.x/protocol/CAS-Protocol.html
  */
 @Tag(name = "2-3-CAS API文档模块")
 @Controller
@@ -90,7 +89,7 @@ public class CasAuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 
 	}
 
-	@RequestMapping(CasConstants.ENDPOINT.ENDPOINT_SERVICE_TICKET_GRANTING)
+	@GetMapping(CasConstants.ENDPOINT.ENDPOINT_SERVICE_TICKET_GRANTING)
 	public ModelAndView grantingTicket(Principal principal, HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView("authorize/cas_sso_submint");
 		AppsCasDetails casDetails =
@@ -158,7 +157,7 @@ public class CasAuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 	 * @return
 	 */
 	@Operation(summary = "CAS注销接口", description = "CAS注销接口", method = "GET")
-	@RequestMapping(CasConstants.ENDPOINT.ENDPOINT_LOGOUT)
+	@GetMapping(CasConstants.ENDPOINT.ENDPOINT_LOGOUT)
 	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = CasConstants.PARAMETER.SERVICE, required = false) String casService) {
 		StringBuffer logoutUrl = new StringBuffer("/force/logout");

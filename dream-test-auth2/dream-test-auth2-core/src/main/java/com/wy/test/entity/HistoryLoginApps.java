@@ -9,10 +9,6 @@ import javax.persistence.Table;
 
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 
-/**
- * @author Crystal.Sea
- *
- */
 @Entity
 @Table(name = "MXK_HISTORY_LOGIN_APPS")
 public class HistoryLoginApps extends JpaEntity {

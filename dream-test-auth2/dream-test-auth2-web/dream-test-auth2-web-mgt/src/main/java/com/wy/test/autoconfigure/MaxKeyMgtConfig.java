@@ -17,41 +17,33 @@ import com.wy.test.persistence.service.UserInfoService;
 import com.wy.test.provider.authn.realm.jdbc.JdbcAuthenticationRealm;
 
 @AutoConfiguration
-public class MaxKeyMgtConfig  implements InitializingBean {
-    private static final  Logger _logger = LoggerFactory.getLogger(MaxKeyMgtConfig.class);
-    
-	//authenticationRealm for MaxKeyMgtApplication
+public class MaxKeyMgtConfig implements InitializingBean {
+
+	private static final Logger _logger = LoggerFactory.getLogger(MaxKeyMgtConfig.class);
+
+	// authenticationRealm for MaxKeyMgtApplication
 	@Bean
-	public JdbcAuthenticationRealm authenticationRealm(
- 			PasswordEncoder passwordEncoder,
-	    		PasswordPolicyValidator passwordPolicyValidator,
-	    		LoginRepository loginRepository,
-	    		LoginHistoryRepository loginHistoryRepository,
-	    		UserInfoService userInfoService,
-             JdbcTemplate jdbcTemplate) {
-		
-        JdbcAuthenticationRealm authenticationRealm = new JdbcAuthenticationRealm(
-        		passwordEncoder,
-        		passwordPolicyValidator,
-        		loginRepository,
-        		loginHistoryRepository,
-        		userInfoService,
-        		jdbcTemplate);
-        
-        _logger.debug("JdbcAuthenticationRealm inited.");
-        return authenticationRealm;
-    }
+	JdbcAuthenticationRealm authenticationRealm(PasswordEncoder passwordEncoder,
+			PasswordPolicyValidator passwordPolicyValidator, LoginRepository loginRepository,
+			LoginHistoryRepository loginHistoryRepository, UserInfoService userInfoService, JdbcTemplate jdbcTemplate) {
+
+		JdbcAuthenticationRealm authenticationRealm = new JdbcAuthenticationRealm(passwordEncoder,
+				passwordPolicyValidator, loginRepository, loginHistoryRepository, userInfoService, jdbcTemplate);
+
+		_logger.debug("JdbcAuthenticationRealm inited.");
+		return authenticationRealm;
+	}
 
 	@Bean
-    public AbstractOtpAuthn timeBasedOtpAuthn() {
+	AbstractOtpAuthn timeBasedOtpAuthn() {
 		AbstractOtpAuthn tfaOtpAuthn = new TimeBasedOtpAuthn();
-	    _logger.debug("TimeBasedOtpAuthn inited.");
-        return tfaOtpAuthn;
-    }
+		_logger.debug("TimeBasedOtpAuthn inited.");
+		return tfaOtpAuthn;
+	}
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        
-    }
+	@Override
+	public void afterPropertiesSet() throws Exception {
+
+	}
 
 }

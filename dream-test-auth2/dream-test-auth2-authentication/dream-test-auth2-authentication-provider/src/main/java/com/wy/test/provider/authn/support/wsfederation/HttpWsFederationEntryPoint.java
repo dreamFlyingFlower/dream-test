@@ -15,100 +15,102 @@ import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.util.StringUtils;
 
-
 public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
+
 	private static final Logger _logger = LoggerFactory.getLogger(HttpWsFederationEntryPoint.class);
-	
-    boolean enable;
-    
-  	ApplicationConfig applicationConfig;
-    
-    AbstractAuthenticationProvider authenticationProvider ;
-    
+
+	boolean enable;
+
+	ApplicationConfig applicationConfig;
+
+	AbstractAuthenticationProvider authenticationProvider;
+
 	WsFederationService wsFederationService;
-	
-	 @Override
-	 public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {
-		 boolean isAuthenticated= AuthorizationUtils.isAuthenticated();
-		 String wsFederationWA = request.getParameter(WsFederationConstants.WA);
-		 String wsFederationWResult = request.getParameter(WsFederationConstants.WRESULT);
-		 
-		 if(!enable 
-				 || isAuthenticated 
-				 || !applicationConfig.getLoginConfig().isWsFederation()
-				 || wsFederationWA == null){
-			 return true;
-		 }
-		 
-		 _logger.trace("WsFederation Login Start ...");
-		 _logger.trace("Request url : "+ request.getRequestURL());
-		 _logger.trace("Request URI : "+ request.getRequestURI());
-		 _logger.trace("Request ContextPath : "+ request.getContextPath());
-		 _logger.trace("Request ServletPath : "+ request.getServletPath());
-		 _logger.trace("RequestSessionId : "+ request.getRequestedSessionId());
-		 _logger.trace("isRequestedSessionIdValid : "+ request.isRequestedSessionIdValid());
-		 _logger.trace("getSession : "+ request.getSession(false));
-		 
+
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
+		boolean isAuthenticated = AuthorizationUtils.isAuthenticated();
+		String wsFederationWA = request.getParameter(WsFederationConstants.WA);
+		String wsFederationWResult = request.getParameter(WsFederationConstants.WRESULT);
+
+		if (!enable || isAuthenticated || !applicationConfig.getLoginConfig().isWsFederation()
+				|| wsFederationWA == null) {
+			return true;
+		}
+
+		_logger.trace("WsFederation Login Start ...");
+		_logger.trace("Request url : " + request.getRequestURL());
+		_logger.trace("Request URI : " + request.getRequestURI());
+		_logger.trace("Request ContextPath : " + request.getContextPath());
+		_logger.trace("Request ServletPath : " + request.getServletPath());
+		_logger.trace("RequestSessionId : " + request.getRequestedSessionId());
+		_logger.trace("isRequestedSessionIdValid : " + request.isRequestedSessionIdValid());
+		_logger.trace("getSession : " + request.getSession(false));
+
 		// session not exists，session timeout，recreate new session
-		 if(request.getSession(false) == null) {
-		    _logger.trace("recreate new session .");
+		if (request.getSession(false) == null) {
+			_logger.trace("recreate new session .");
 			request.getSession(true);
-		 }
-		 
-		 _logger.trace("getSession.getId : "+ request.getSession().getId());
+		}
 
-		//for WsFederation Login
-		 _logger.debug("WsFederation : " + wsFederationWA +" , wsFederationWResult : " + wsFederationWResult);
-		 if(applicationConfig.getLoginConfig().isWsFederation()
-				 && StringUtils.isNotEmpty(wsFederationWA) 
-				 && wsFederationWA.equalsIgnoreCase(WsFederationConstants.WSIGNIN)){
-			 _logger.debug("wresult : {}"+wsFederationWResult);
+		_logger.trace("getSession.getId : " + request.getSession().getId());
 
-			 final String wctx = request.getParameter(WsFederationConstants.WCTX);
-			 _logger.debug("wctx : {}"+ wctx);
+		// for WsFederation Login
+		_logger.debug("WsFederation : " + wsFederationWA + " , wsFederationWResult : " + wsFederationWResult);
+		if (applicationConfig.getLoginConfig().isWsFederation() && StringUtils.isNotEmpty(wsFederationWA)
+				&& wsFederationWA.equalsIgnoreCase(WsFederationConstants.WSIGNIN)) {
+			_logger.debug("wresult : {}" + wsFederationWResult);
 
-            // create credentials
-            final AssertionImpl assertion = WsFederationUtils.parseTokenFromString(wsFederationWResult);
-            //Validate the signature
-            if (assertion != null && WsFederationUtils.validateSignature(assertion, wsFederationService.getWsFederationConfiguration().getSigningCertificates())) {
-                final WsFederationCredential wsFederationCredential = WsFederationUtils.createCredentialFromToken(assertion);
+			final String wctx = request.getParameter(WsFederationConstants.WCTX);
+			_logger.debug("wctx : {}" + wctx);
 
-                if (wsFederationCredential != null && wsFederationCredential.isValid(wsFederationService.getWsFederationConfiguration().getRelyingParty(),
-                		wsFederationService.getWsFederationConfiguration().getIdentifier(),
-                		wsFederationService.getWsFederationConfiguration().getTolerance())) {
+			// create credentials
+			final AssertionImpl assertion = WsFederationUtils.parseTokenFromString(wsFederationWResult);
+			// Validate the signature
+			if (assertion != null && WsFederationUtils.validateSignature(assertion,
+					wsFederationService.getWsFederationConfiguration().getSigningCertificates())) {
+				final WsFederationCredential wsFederationCredential =
+						WsFederationUtils.createCredentialFromToken(assertion);
 
-                    //Give the library user a chance to change the attributes as necessary
-                    if (wsFederationService.getWsFederationConfiguration().getAttributeMutator() != null) {
-                    	wsFederationService.getWsFederationConfiguration().getAttributeMutator().modifyAttributes(
-                    			wsFederationCredential.getAttributes(),
-                    			wsFederationService.getWsFederationConfiguration().getUpnSuffix());
-                    }
-                    LoginCredential loginCredential =new LoginCredential(
-                            wsFederationCredential.getAttributes().get("").toString(),"",ConstsLoginType.WSFEDERATION);
-                    authenticationProvider.authenticate(loginCredential,true);
-                    return true;
-                } else {
-                    _logger.warn("SAML assertions are blank or no longer valid.");
-                }
-            } else {
-                _logger.error("WS Requested Security Token is blank or the signature is not valid.");
-            }
-		 }
-		
-		 return true;
-	 }
+				if (wsFederationCredential != null && wsFederationCredential.isValid(
+						wsFederationService.getWsFederationConfiguration().getRelyingParty(),
+						wsFederationService.getWsFederationConfiguration().getIdentifier(),
+						wsFederationService.getWsFederationConfiguration().getTolerance())) {
 
-	 public HttpWsFederationEntryPoint() {
-	        super();
-	 }
+					// Give the library user a chance to change the attributes as necessary
+					if (wsFederationService.getWsFederationConfiguration().getAttributeMutator() != null) {
+						wsFederationService.getWsFederationConfiguration().getAttributeMutator().modifyAttributes(
+								wsFederationCredential.getAttributes(),
+								wsFederationService.getWsFederationConfiguration().getUpnSuffix());
+					}
+					LoginCredential loginCredential =
+							new LoginCredential(wsFederationCredential.getAttributes().get("").toString(), "",
+									ConstsLoginType.WSFEDERATION);
+					authenticationProvider.authenticate(loginCredential, true);
+					return true;
+				} else {
+					_logger.warn("SAML assertions are blank or no longer valid.");
+				}
+			} else {
+				_logger.error("WS Requested Security Token is blank or the signature is not valid.");
+			}
+		}
 
-    public HttpWsFederationEntryPoint (boolean enable) {
-        super();
-        this.enable = enable;
-    }
+		return true;
+	}
 
-    public HttpWsFederationEntryPoint(AbstractAuthenticationProvider authenticationProvider, WsFederationService wsFederationService,
-			ApplicationConfig applicationConfig, boolean enable) {
+	public HttpWsFederationEntryPoint() {
+		super();
+	}
+
+	public HttpWsFederationEntryPoint(boolean enable) {
+		super();
+		this.enable = enable;
+	}
+
+	public HttpWsFederationEntryPoint(AbstractAuthenticationProvider authenticationProvider,
+			WsFederationService wsFederationService, ApplicationConfig applicationConfig, boolean enable) {
 		super();
 		this.authenticationProvider = authenticationProvider;
 		this.wsFederationService = wsFederationService;
@@ -117,12 +119,12 @@ public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 	}
 
 	public boolean isEnable() {
-        return enable;
-    }
+		return enable;
+	}
 
-    public void setEnable(boolean enable) {
-        this.enable = enable;
-    }
+	public void setEnable(boolean enable) {
+		this.enable = enable;
+	}
 
 	public void setApplicationConfig(ApplicationConfig applicationConfig) {
 		this.applicationConfig = applicationConfig;
@@ -136,6 +138,4 @@ public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 		this.wsFederationService = wsFederationService;
 	}
 
-
-	
 }

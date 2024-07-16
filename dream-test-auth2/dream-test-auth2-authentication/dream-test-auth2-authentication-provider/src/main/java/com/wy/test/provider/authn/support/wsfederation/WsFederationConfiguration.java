@@ -9,36 +9,38 @@ import org.opensaml.xml.security.x509.BasicX509Credential;
 import org.springframework.core.io.Resource;
 
 /**
- * This class gathers configuration information for the WS Federation Identity Provider.
+ * This class gathers configuration information for the WS Federation Identity
+ * Provider.
  * 
  */
 public final class WsFederationConfiguration {
-	
-    @NotNull
-    private String identifier;
 
-    @NotNull
-    private String url;
+	@NotNull
+	private String identifier;
 
-    @NotNull
-    private String principal;
-    
-    @NotNull
-    private String relyingParty;
-    
-    private String upnSuffix;
-    @NotNull
-    private List<Resource> signingCertificates;
+	@NotNull
+	private String url;
 
-    private int tolerance = 10000;
+	@NotNull
+	private String principal;
 
-    private List<BasicX509Credential> signingWallet;
+	@NotNull
+	private String relyingParty;
 
-    private WsFederationAttributeMutator attributeMutator;
+	private String upnSuffix;
 
-    private String logoutUrl;
- 
-    public String getIdentifier() {
+	@NotNull
+	private List<Resource> signingCertificates;
+
+	private int tolerance = 10000;
+
+	private List<BasicX509Credential> signingWallet;
+
+	private WsFederationAttributeMutator attributeMutator;
+
+	private String logoutUrl;
+
+	public String getIdentifier() {
 		return identifier;
 	}
 
@@ -78,67 +80,67 @@ public final class WsFederationConfiguration {
 		this.signingWallet = signingWallet;
 	}
 
-    /**
-     * gets the signing certificates.
-     *
-     * @return X509credentials of the signing certs
-     */
-    public List<BasicX509Credential> getSigningCertificates() {
-        return this.signingWallet;
-    }
-    
 	/**
-     * sets the signing certs.
-     *
-     * @param signingCertificateFiles a list of certificate files to read in.
-     */
-    public void setSigningCertificates(final List<Resource> signingCertificateFiles) {
-        this.signingCertificates = signingCertificateFiles;
+	 * gets the signing certificates.
+	 *
+	 * @return X509credentials of the signing certs
+	 */
+	public List<BasicX509Credential> getSigningCertificates() {
+		return this.signingWallet;
+	}
 
-        final List<BasicX509Credential> signingCerts = new ArrayList<BasicX509Credential>();
+	/**
+	 * sets the signing certs.
+	 *
+	 * @param signingCertificateFiles a list of certificate files to read in.
+	 */
+	public void setSigningCertificates(final List<Resource> signingCertificateFiles) {
+		this.signingCertificates = signingCertificateFiles;
 
-        for (Resource file : signingCertificateFiles) {
-            signingCerts.add(WsFederationUtils.getSigningCredential(file));
-        }
+		final List<BasicX509Credential> signingCerts = new ArrayList<BasicX509Credential>();
 
-        this.signingWallet = signingCerts;
-    }
+		for (Resource file : signingCertificateFiles) {
+			signingCerts.add(WsFederationUtils.getSigningCredential(file));
+		}
 
-    /**
-     * gets the tolerance.
-     *
-     * @return the tolerance in milliseconds
-     */
-    public int getTolerance() {
-        return tolerance;
-    }
+		this.signingWallet = signingCerts;
+	}
 
-    /**
-     * sets the tolerance of the validity of the timestamp token.
-     *
-     * @param tolerance the tolerance in milliseconds
-     */
-    public void setTolerance(final int tolerance) {
-        this.tolerance = tolerance;
-    }
+	/**
+	 * gets the tolerance.
+	 *
+	 * @return the tolerance in milliseconds
+	 */
+	public int getTolerance() {
+		return tolerance;
+	}
 
-    /**
-     * gets the attributeMutator.
-     *
-     * @return an attributeMutator
-     */
-    public WsFederationAttributeMutator getAttributeMutator() {
-        return attributeMutator;
-    }
+	/**
+	 * sets the tolerance of the validity of the timestamp token.
+	 *
+	 * @param tolerance the tolerance in milliseconds
+	 */
+	public void setTolerance(final int tolerance) {
+		this.tolerance = tolerance;
+	}
 
-    /**
-     * sets the attributeMutator.
-     *
-     * @param attributeMutator an attributeMutator
-     */
-    public void setAttributeMutator(final WsFederationAttributeMutator attributeMutator) {
-        this.attributeMutator = attributeMutator;
-    }
+	/**
+	 * gets the attributeMutator.
+	 *
+	 * @return an attributeMutator
+	 */
+	public WsFederationAttributeMutator getAttributeMutator() {
+		return attributeMutator;
+	}
+
+	/**
+	 * sets the attributeMutator.
+	 *
+	 * @param attributeMutator an attributeMutator
+	 */
+	public void setAttributeMutator(final WsFederationAttributeMutator attributeMutator) {
+		this.attributeMutator = attributeMutator;
+	}
 
 	public String getUpnSuffix() {
 		return upnSuffix;

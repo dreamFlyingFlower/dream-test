@@ -9,8 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -26,10 +27,6 @@ import com.wy.test.persistence.service.AccountsService;
 import com.wy.test.persistence.service.AppsService;
 import com.wy.test.persistence.service.UserInfoService;
 
-/**
- * AppListController.
- * 
- */
 @Controller
 public class AppListController {
 
@@ -50,7 +47,7 @@ public class AppListController {
 	 * @param gridList 类型
 	 * @return
 	 */
-	@RequestMapping(value = { "/appList" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(value = { "/appList" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
 	public ResponseEntity<?> appList(@RequestParam(value = "gridList", required = false) String gridList,
 			@CurrentUser UserInfo currentUser) {
@@ -66,7 +63,7 @@ public class AppListController {
 		return new Message<List<UserApps>>(appList).buildResponse();
 	}
 
-	@RequestMapping(value = { "/account/get" })
+	@GetMapping(value = { "/account/get" })
 	@ResponseBody
 	public ResponseEntity<?> getAccount(@RequestParam("credential") String credential,
 			@RequestParam("appId") String appId, @CurrentUser UserInfo currentUser) {
@@ -88,7 +85,7 @@ public class AppListController {
 
 	}
 
-	@RequestMapping(value = { "/account/update" })
+	@PostMapping(value = { "/account/update" })
 	@ResponseBody
 	public ResponseEntity<?> updateAccount(@RequestParam("credential") String credential,
 			@ModelAttribute Accounts account, @CurrentUser UserInfo currentUser) {

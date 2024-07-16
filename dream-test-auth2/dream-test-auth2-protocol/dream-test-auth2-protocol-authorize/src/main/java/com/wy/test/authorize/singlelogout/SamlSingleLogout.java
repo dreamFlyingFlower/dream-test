@@ -9,7 +9,8 @@ import com.wy.test.entity.apps.Apps;
 import com.wy.test.util.DateUtils;
 
 /**
- * SamlSingleLogout https://apereo.github.io/cas/6.5.x/installation/Logout-Single-Signout.html
+ * SamlSingleLogout
+ * https://apereo.github.io/cas/6.5.x/installation/Logout-Single-Signout.html
  */
 public class SamlSingleLogout extends SingleLogout {
 

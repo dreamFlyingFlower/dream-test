@@ -15,8 +15,6 @@ import dream.flying.flower.binary.Base64Helper;
  * RSA Digital signature default signature algorithm is SHA1withRSA default key size is 1024 RsaSigner support
  * MD5withRSA and MD5withRSA
  * 
- * @author Crystal.Sea
- *
  */
 
 public final class RsaSigner implements ISigner {

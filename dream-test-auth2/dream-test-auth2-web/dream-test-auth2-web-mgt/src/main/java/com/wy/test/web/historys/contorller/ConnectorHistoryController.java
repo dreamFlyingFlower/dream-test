@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -26,38 +27,34 @@ import com.wy.test.util.DateUtils;
 /**
  * 连接器日志查询
  * 
- * @author Crystal.sea
- *
  */
-
 @Controller
-@RequestMapping(value={"/historys"})
+@RequestMapping(value = { "/historys" })
 public class ConnectorHistoryController {
-final static Logger _logger = LoggerFactory.getLogger(ConnectorHistoryController.class);
+
+	final static Logger _logger = LoggerFactory.getLogger(ConnectorHistoryController.class);
 
 	@Autowired
 	HistoryConnectorService historyConnectorService;
-	
+
 	/**
-     * @param historySynchronizer
-     * @return
-     */
-    @RequestMapping(value={"/connectorHistory/fetch"})
-    @ResponseBody
-    public ResponseEntity<?> fetch(
-    		@ModelAttribute("historyConnector") HistoryConnector historyConnector,
-			@CurrentUser UserInfo currentUser){
-        _logger.debug("historys/historyConnector/fetch/ {}",historyConnector);
-        historyConnector.setInstId(currentUser.getInstId());
-        return new Message<JpaPageResults<HistoryConnector>>(
-        			historyConnectorService.fetchPageResults(historyConnector)
-        		).buildResponse();
-    }
+	 * @param historySynchronizer
+	 * @return
+	 */
+	@PostMapping(value = { "/connectorHistory/fetch" })
+	@ResponseBody
+	public ResponseEntity<?> fetch(@ModelAttribute("historyConnector") HistoryConnector historyConnector,
+			@CurrentUser UserInfo currentUser) {
+		_logger.debug("historys/historyConnector/fetch/ {}", historyConnector);
+		historyConnector.setInstId(currentUser.getInstId());
+		return new Message<JpaPageResults<HistoryConnector>>(historyConnectorService.fetchPageResults(historyConnector))
+				.buildResponse();
+	}
 
 	@InitBinder
-    public void initBinder(WebDataBinder binder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DateUtils.FORMAT_DATE_HH_MM_SS);
-        dateFormat.setLenient(false);  
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
-    }
+	public void initBinder(WebDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(DateUtils.FORMAT_DATE_HH_MM_SS);
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+	}
 }

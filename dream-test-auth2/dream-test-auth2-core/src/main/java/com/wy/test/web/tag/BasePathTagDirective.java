@@ -18,8 +18,6 @@ import freemarker.template.TemplateModel;
 /**
  * <@basePath/> 获取请求地址及应用上下文标签
  * 
- * @author Crystal.Sea
- *
  */
 
 @FreemarkerTag("basePath")

@@ -1,22 +1,4 @@
-/*
- * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
-
 package com.wy.test.web.apps.contorller;
-
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
@@ -25,8 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,58 +32,57 @@ import com.wy.test.entity.Message;
 import com.wy.test.entity.UserInfo;
 import com.wy.test.entity.apps.Apps;
 
-
 @Controller
-@RequestMapping(value={"/apps"})
+@RequestMapping(value = { "/apps" })
 public class ApplicationsController extends BaseAppContorller {
+
 	final static Logger _logger = LoggerFactory.getLogger(ApplicationsController.class);
-	
-	@RequestMapping(value = { "/init" }, produces = {MediaType.APPLICATION_JSON_VALUE})
+
+	@GetMapping(value = { "/init" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> init() {
-		Apps app=new Apps();
+		Apps app = new Apps();
 		app.setId(app.generateId());
 		app.setProtocol(ConstsProtocols.BASIC);
 		app.setSecret(ReciprocalUtils.generateKey(""));
 		return new Message<Apps>(app).buildResponse();
 	}
-	
-	
-	@RequestMapping(value = { "/fetch" }, produces = {MediaType.APPLICATION_JSON_VALUE})
+
+	@GetMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute Apps apps,@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> fetch(@ModelAttribute Apps apps, @CurrentUser UserInfo currentUser) {
 		apps.setInstId(currentUser.getInstId());
-		JpaPageResults<Apps> appsList =appsService.fetchPageResults(apps);
-		for (Apps app : appsList.getRows()){
+		JpaPageResults<Apps> appsList = appsService.fetchPageResults(apps);
+		for (Apps app : appsList.getRows()) {
 			app.transIconBase64();
 			app.setSecret(null);
 			app.setSharedPassword(null);
 		}
-		_logger.debug("List "+appsList);
+		_logger.debug("List " + appsList);
 		return new Message<JpaPageResults<Apps>>(appsList).buildResponse();
 	}
 
 	@ResponseBody
-	@RequestMapping(value={"/query"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> query(@ModelAttribute Apps apps,@CurrentUser UserInfo currentUser) {
+	@GetMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<?> query(@ModelAttribute Apps apps, @CurrentUser UserInfo currentUser) {
 		_logger.debug("-query  :" + apps);
 		if (CollectionUtils.isNotEmpty(appsService.query(apps))) {
-			 return new Message<Apps>(Message.SUCCESS).buildResponse();
+			return new Message<Apps>(Message.SUCCESS).buildResponse();
 		} else {
-			 return new Message<Apps>(Message.SUCCESS).buildResponse();
+			return new Message<Apps>(Message.SUCCESS).buildResponse();
 		}
 	}
-	
-	@RequestMapping(value = { "/get/{id}" }, produces = {MediaType.APPLICATION_JSON_VALUE})
+
+	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
 		Apps apps = appsService.get(id);
 		decoderSecret(apps);
 		apps.transIconBase64();
 		return new Message<Apps>(apps).buildResponse();
 	}
-	
+
 	@ResponseBody
-	@RequestMapping(value={"/add"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> insert(@RequestBody Apps apps,@CurrentUser UserInfo currentUser) {
+	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<?> insert(@RequestBody Apps apps, @CurrentUser UserInfo currentUser) {
 		_logger.debug("-Add  :" + apps);
 		transform(apps);
 		apps.setInstId(currentUser.getInstId());
@@ -109,102 +92,82 @@ public class ApplicationsController extends BaseAppContorller {
 			return new Message<Apps>(Message.FAIL).buildResponse();
 		}
 	}
-	
+
 	@ResponseBody
-	@RequestMapping(value={"/update"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> update(@RequestBody  Apps apps,@CurrentUser UserInfo currentUser) {
+	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<?> update(@RequestBody Apps apps, @CurrentUser UserInfo currentUser) {
 		_logger.debug("-update  :" + apps);
 		transform(apps);
 		apps.setInstId(currentUser.getInstId());
 		if (appsService.update(apps)) {
-		    return new Message<Apps>(Message.SUCCESS).buildResponse();
+			return new Message<Apps>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<Apps>(Message.FAIL).buildResponse();
 		}
 	}
-	
+
 	@ResponseBody
-	@RequestMapping(value={"/delete"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> delete(@RequestParam("ids") String ids,@CurrentUser UserInfo currentUser) {
-		_logger.debug("-delete  ids : {} " , ids);
+	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+		_logger.debug("-delete  ids : {} ", ids);
 		if (appsService.deleteBatch(ids)) {
-			 return new Message<Apps>(Message.SUCCESS).buildResponse();
+			return new Message<Apps>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<Apps>(Message.FAIL).buildResponse();
 		}
 	}
-	
+
 	@ResponseBody
-	@RequestMapping(value = { "/updateExtendAttr" })
+	@PostMapping(value = { "/updateExtendAttr" })
 	public ResponseEntity<?> updateExtendAttr(@RequestBody Apps app) {
-		_logger.debug("-updateExtendAttr  id : {} , ExtendAttr : {}" , app.getId(),app.getExtendAttr());
+		_logger.debug("-updateExtendAttr  id : {} , ExtendAttr : {}", app.getId(), app.getExtendAttr());
 		if (appsService.updateExtendAttr(app)) {
 			return new Message<Apps>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<Apps>(Message.FAIL).buildResponse();
 		}
 	}
-	
-	
+
 	@ResponseBody
-	@RequestMapping(value = { "/generate/secret/{type}" })
-	public ResponseEntity<?> generateSecret(@PathVariable("type") String type,@RequestParam(name="id",required=false) String id) throws JOSEException {
-		String secret="";
-		type=type.toLowerCase();
-		if(type.equals("des")){
-			secret=ReciprocalUtils.generateKey(ReciprocalUtils.Algorithm.DES);
-		}else if(type.equals("desede")){
-			secret=ReciprocalUtils.generateKey(ReciprocalUtils.Algorithm.DESede);
-		}else if(type.equals("aes")){
-			secret=ReciprocalUtils.generateKey(ReciprocalUtils.Algorithm.AES);
-		}else if(type.equals("blowfish")){
-			secret=ReciprocalUtils.generateKey(ReciprocalUtils.Algorithm.Blowfish);
-		}else if(type.equalsIgnoreCase("RS256")
-				||type.equalsIgnoreCase("RS384")
-				||type.equalsIgnoreCase("RS512")) {
-			RSAKey rsaJWK = new RSAKeyGenerator(2048)
-				    .keyID(id + "_sig")
-				    .keyUse(KeyUse.SIGNATURE)
-				    .algorithm(new JWSAlgorithm(type.toUpperCase(), Requirement.OPTIONAL))
-				    .generate();
+	@GetMapping(value = { "/generate/secret/{type}" })
+	public ResponseEntity<?> generateSecret(@PathVariable("type") String type,
+			@RequestParam(name = "id", required = false) String id) throws JOSEException {
+		String secret = "";
+		type = type.toLowerCase();
+		if (type.equals("des")) {
+			secret = ReciprocalUtils.generateKey(ReciprocalUtils.Algorithm.DES);
+		} else if (type.equals("desede")) {
+			secret = ReciprocalUtils.generateKey(ReciprocalUtils.Algorithm.DESede);
+		} else if (type.equals("aes")) {
+			secret = ReciprocalUtils.generateKey(ReciprocalUtils.Algorithm.AES);
+		} else if (type.equals("blowfish")) {
+			secret = ReciprocalUtils.generateKey(ReciprocalUtils.Algorithm.Blowfish);
+		} else if (type.equalsIgnoreCase("RS256") || type.equalsIgnoreCase("RS384") || type.equalsIgnoreCase("RS512")) {
+			RSAKey rsaJWK = new RSAKeyGenerator(2048).keyID(id + "_sig").keyUse(KeyUse.SIGNATURE)
+					.algorithm(new JWSAlgorithm(type.toUpperCase(), Requirement.OPTIONAL)).generate();
 			secret = rsaJWK.toJSONString();
-		}else if(type.equalsIgnoreCase("HS256")
-				||type.equalsIgnoreCase("HS384")
-				||type.equalsIgnoreCase("HS512")) {
-			OctetSequenceKey octKey=  new OctetSequenceKeyGenerator(2048)
-					.keyID(id + "_sig")
-					.keyUse(KeyUse.SIGNATURE)
-					.algorithm(new JWSAlgorithm(type.toUpperCase(), Requirement.OPTIONAL))
-					.generate();
+		} else if (type.equalsIgnoreCase("HS256") || type.equalsIgnoreCase("HS384") || type.equalsIgnoreCase("HS512")) {
+			OctetSequenceKey octKey = new OctetSequenceKeyGenerator(2048).keyID(id + "_sig").keyUse(KeyUse.SIGNATURE)
+					.algorithm(new JWSAlgorithm(type.toUpperCase(), Requirement.OPTIONAL)).generate();
 			secret = octKey.toJSONString();
-		}else if(type.equalsIgnoreCase("RSA1_5")
-				||type.equalsIgnoreCase("RSA_OAEP")
-				||type.equalsIgnoreCase("RSA-OAEP-256")) {
-			RSAKey rsaJWK = new RSAKeyGenerator(2048)
-				    .keyID(id + "_enc")
-				    .keyUse(KeyUse.ENCRYPTION)
-				    .algorithm(new JWEAlgorithm(type.toUpperCase(), Requirement.OPTIONAL))
-				    .generate();
+		} else if (type.equalsIgnoreCase("RSA1_5") || type.equalsIgnoreCase("RSA_OAEP")
+				|| type.equalsIgnoreCase("RSA-OAEP-256")) {
+			RSAKey rsaJWK = new RSAKeyGenerator(2048).keyID(id + "_enc").keyUse(KeyUse.ENCRYPTION)
+					.algorithm(new JWEAlgorithm(type.toUpperCase(), Requirement.OPTIONAL)).generate();
 			secret = rsaJWK.toJSONString();
-		}else if(type.equalsIgnoreCase("A128KW")
-				||type.equalsIgnoreCase("A192KW")
-				||type.equalsIgnoreCase("A256KW")
-				||type.equalsIgnoreCase("A128GCMKW")
-				||type.equalsIgnoreCase("A192GCMKW")
-				||type.equalsIgnoreCase("A256GCMKW")) {
+		} else if (type.equalsIgnoreCase("A128KW") || type.equalsIgnoreCase("A192KW") || type.equalsIgnoreCase("A256KW")
+				|| type.equalsIgnoreCase("A128GCMKW") || type.equalsIgnoreCase("A192GCMKW")
+				|| type.equalsIgnoreCase("A256GCMKW")) {
 			int keyLength = Integer.parseInt(type.substring(1, 4));
-			OctetSequenceKey octKey=  new OctetSequenceKeyGenerator(keyLength)
-					.keyID(id + "_enc")
-					.keyUse(KeyUse.ENCRYPTION)
-					.algorithm(new JWEAlgorithm(type.toUpperCase(), Requirement.OPTIONAL))
-					.generate();
+			OctetSequenceKey octKey =
+					new OctetSequenceKeyGenerator(keyLength).keyID(id + "_enc").keyUse(KeyUse.ENCRYPTION)
+							.algorithm(new JWEAlgorithm(type.toUpperCase(), Requirement.OPTIONAL)).generate();
 			secret = octKey.toJSONString();
-		}else{
-			secret=ReciprocalUtils.generateKey("");
+		} else {
+			secret = ReciprocalUtils.generateKey("");
 		}
-		
-		return new Message<Object>(Message.SUCCESS,(Object)secret).buildResponse();
+
+		return new Message<Object>(Message.SUCCESS, (Object) secret).buildResponse();
 	}
-	
-	
+
 }

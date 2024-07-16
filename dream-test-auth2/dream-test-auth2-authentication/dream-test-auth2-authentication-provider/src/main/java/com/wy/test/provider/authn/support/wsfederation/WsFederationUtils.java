@@ -69,7 +69,8 @@ public final class WsFederationUtils {
 	}
 
 	/**
-	 * createCredentialFromToken converts a SAML 1.1 assertion to a WSFederationCredential.
+	 * createCredentialFromToken converts a SAML 1.1 assertion to a
+	 * WSFederationCredential.
 	 *
 	 * @param assertion the provided assertion
 	 * @return an equivalent credential.
@@ -182,7 +183,8 @@ public final class WsFederationUtils {
 	}
 
 	/**
-	 * parseTokenFromString converts a raw wresult and extracts it into an assertion.
+	 * parseTokenFromString converts a raw wresult and extracts it into an
+	 * assertion.
 	 *
 	 * @param wresult the raw token returned by the IdP
 	 * @return an assertion

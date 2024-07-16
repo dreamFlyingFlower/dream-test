@@ -1,14 +1,9 @@
 package com.wy.test.core.authn.jwt;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.wy.test.persistence.redis.RedisConnection;
 import com.wy.test.persistence.redis.RedisConnectionFactory;
 
 public class RedisCongressService implements CongressService {
-
-	private static final Logger _logger = LoggerFactory.getLogger(RedisCongressService.class);
 
 	protected int validitySeconds = 60 * 3; // default 3 minutes.
 

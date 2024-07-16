@@ -19,116 +19,99 @@ import com.wy.test.sms.password.sms.SmsOtpAuthnService;
 import com.wy.test.web.WebConstants;
 import com.wy.test.web.WebContext;
 
-
 /**
  * Mobile Authentication provider.
- * @author Crystal.Sea
- *
  */
 public class MobileAuthenticationProvider extends AbstractAuthenticationProvider {
 
-    private static final Logger _logger =
-            LoggerFactory.getLogger(MobileAuthenticationProvider.class);
+	private static final Logger _logger = LoggerFactory.getLogger(MobileAuthenticationProvider.class);
 
-    SmsOtpAuthnService smsOtpAuthnService;
-    
-    public String getProviderName() {
-        return "mobile" + PROVIDER_SUFFIX;
-    }
+	SmsOtpAuthnService smsOtpAuthnService;
 
+	@Override
+	public String getProviderName() {
+		return "mobile" + PROVIDER_SUFFIX;
+	}
 
-    public MobileAuthenticationProvider() {
-        super();
-    }
+	public MobileAuthenticationProvider() {
+		super();
+	}
 
+	public MobileAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
+			ApplicationConfig applicationConfig, SmsOtpAuthnService smsOtpAuthnService, SessionManager sessionManager) {
+		this.authenticationRealm = authenticationRealm;
+		this.applicationConfig = applicationConfig;
+		this.smsOtpAuthnService = smsOtpAuthnService;
+		this.sessionManager = sessionManager;
+	}
 
-    public MobileAuthenticationProvider(
-            AbstractAuthenticationRealm authenticationRealm,
-            ApplicationConfig applicationConfig,
-            SmsOtpAuthnService smsOtpAuthnService,
-            SessionManager sessionManager) {
-        this.authenticationRealm = authenticationRealm;
-        this.applicationConfig = applicationConfig;
-        this.smsOtpAuthnService = smsOtpAuthnService;
-        this.sessionManager = sessionManager;
-    }
+	@Override
+	public Authentication doAuthenticate(LoginCredential loginCredential) {
+		UsernamePasswordAuthenticationToken authenticationToken = null;
+		_logger.debug("Trying to authenticate user '{}' via {}", loginCredential.getPrincipal(), getProviderName());
+		try {
 
-    @Override
-    public Authentication doAuthenticate(LoginCredential loginCredential) {
-        UsernamePasswordAuthenticationToken authenticationToken = null;
-        _logger.debug("Trying to authenticate user '{}' via {}",
-                loginCredential.getPrincipal(), getProviderName());
-        try {
+			// 如果是验证码登录，设置mobile为username
+			loginCredential.setUsername(loginCredential.getMobile());
+			// 设置密码为验证码
+			loginCredential.setPassword(loginCredential.getOtpCaptcha());
 
-            //如果是验证码登录，设置mobile为username
-            loginCredential.setUsername(loginCredential.getMobile());
-            //设置密码为验证码
-            loginCredential.setPassword(loginCredential.getOtpCaptcha());
+			_logger.debug("authentication " + loginCredential);
 
-            _logger.debug("authentication " + loginCredential);
+			emptyPasswordValid(loginCredential.getPassword());
 
-            emptyPasswordValid(loginCredential.getPassword());
+			emptyUsernameValid(loginCredential.getUsername());
 
-            emptyUsernameValid(loginCredential.getUsername());
+			UserInfo userInfo = loadUserInfo(loginCredential.getUsername(), loginCredential.getPassword());
 
-            UserInfo userInfo =  loadUserInfo(loginCredential.getUsername(),loginCredential.getPassword());
+			statusValid(loginCredential, userInfo);
 
-            statusValid(loginCredential , userInfo);
+			// Validate PasswordPolicy 取消密码策略验证
+			// authenticationRealm.getPasswordPolicyValidator().passwordPolicyValid(userInfo);
 
-            //Validate PasswordPolicy 取消密码策略验证
-            //authenticationRealm.getPasswordPolicyValidator().passwordPolicyValid(userInfo);
+			mobileCaptchaValid(loginCredential.getPassword(), userInfo);
 
-            mobileCaptchaValid(loginCredential.getPassword(),userInfo);
+			// apply PasswordSetType and resetBadPasswordCount
+			authenticationRealm.getPasswordPolicyValidator().applyPasswordPolicy(userInfo);
 
-            //apply PasswordSetType and resetBadPasswordCount
-            authenticationRealm.getPasswordPolicyValidator().applyPasswordPolicy(userInfo);
+			authenticationToken = createOnlineTicket(loginCredential, userInfo);
+			// user authenticated
+			_logger.debug("'{}' authenticated successfully by {}.", loginCredential.getPrincipal(), getProviderName());
 
-            authenticationToken = createOnlineTicket(loginCredential,userInfo);
-            // user authenticated
-            _logger.debug("'{}' authenticated successfully by {}.",
-                    loginCredential.getPrincipal(), getProviderName());
+			authenticationRealm.insertLoginHistory(userInfo, ConstsLoginType.LOCAL, "", "xe00000004",
+					WebConstants.LOGIN_RESULT.SUCCESS);
+		} catch (AuthenticationException e) {
+			_logger.error("Failed to authenticate user {} via {}: {}",
+					new Object[] { loginCredential.getPrincipal(), getProviderName(), e.getMessage() });
+			WebContext.setAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE, e.getMessage());
+		} catch (Exception e) {
+			_logger.error("Login error Unexpected exception in {} authentication:\n{}", getProviderName(),
+					e.getMessage());
+		}
 
-            authenticationRealm.insertLoginHistory(userInfo,
-                    ConstsLoginType.LOCAL,
-                    "",
-                    "xe00000004",
-                    WebConstants.LOGIN_RESULT.SUCCESS);
-        } catch (AuthenticationException e) {
-            _logger.error("Failed to authenticate user {} via {}: {}",
-                    new Object[] {  loginCredential.getPrincipal(),
-                            getProviderName(),
-                            e.getMessage() });
-            WebContext.setAttribute(
-                    WebConstants.LOGIN_ERROR_SESSION_MESSAGE, e.getMessage());
-        } catch (Exception e) {
-            _logger.error("Login error Unexpected exception in {} authentication:\n{}" ,
-                    getProviderName(), e.getMessage());
-        }
+		return authenticationToken;
+	}
 
-        return  authenticationToken;
-    }
-
-
-    /**
-     * mobile validate.
-     *
-     * @param otpCaptcha String
-     * @param authType   String
-     * @param userInfo   UserInfo
-     */
-    protected void mobileCaptchaValid(String password, UserInfo userInfo) {
-        // for mobile password
-        if (applicationConfig.getLoginConfig().isMfa()) {
-            UserInfo validUserInfo = new UserInfo();
-            validUserInfo.setUsername(userInfo.getUsername());
-            validUserInfo.setId(userInfo.getId());
-            AbstractOtpAuthn smsOtpAuthn = smsOtpAuthnService.getByInstId(userInfo.getInstId());
-            if (password == null || !smsOtpAuthn.validate(validUserInfo, password)) {
-                String message = WebContext.getI18nValue("login.error.captcha");
-                _logger.debug("login captcha valid error.");
-                throw new BadCredentialsException(message);
-            }
-        }
-    }
+	/**
+	 * mobile validate.
+	 *
+	 * @param otpCaptcha String
+	 * @param authType String
+	 * @param userInfo UserInfo
+	 */
+	protected void mobileCaptchaValid(String password, UserInfo userInfo) {
+		// for mobile password
+		if (applicationConfig.getLoginConfig().isMfa()) {
+			UserInfo validUserInfo = new UserInfo();
+			validUserInfo.setUsername(userInfo.getUsername());
+			validUserInfo.setId(userInfo.getId());
+			AbstractOtpAuthn smsOtpAuthn = smsOtpAuthnService.getByInstId(userInfo.getInstId());
+			if (password == null || !smsOtpAuthn.validate(validUserInfo, password)) {
+				String message = WebContext.getI18nValue("login.error.captcha");
+				_logger.debug("login captcha valid error.");
+				throw new BadCredentialsException(message);
+			}
+		}
+	}
 
 }

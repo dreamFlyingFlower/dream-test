@@ -7,8 +7,6 @@ package com.wy.test.crypto.signature;
  * send data and signedData to B 5. B received data & signedData from A 6. B
  * verify data & signedData use public key
  * 
- * @author Crystal.Sea
- *
  */
 public interface ISigner {
 

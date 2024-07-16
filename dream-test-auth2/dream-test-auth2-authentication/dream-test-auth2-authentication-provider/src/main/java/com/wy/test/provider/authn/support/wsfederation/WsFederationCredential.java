@@ -11,141 +11,152 @@ import org.slf4j.LoggerFactory;
  *
  */
 public final class WsFederationCredential {
-    private final Logger _logger = LoggerFactory.getLogger(WsFederationCredential.class);
 
-    private String audience;
-    private String authenticationMethod;
-    private String id;
-    private String issuer;
-    private DateTime issuedOn;
-    private DateTime notBefore;
-    private DateTime notOnOrAfter;
-    private DateTime retrievedOn;
-    private Map<String, Object> attributes;
+	private final Logger _logger = LoggerFactory.getLogger(WsFederationCredential.class);
 
-    public String getAuthenticationMethod() {
-        return this.authenticationMethod;
-    }
+	private String audience;
 
-    public void setAuthenticationMethod(final String authenticationMethod) {
-        this.authenticationMethod = authenticationMethod;
-    }
+	private String authenticationMethod;
 
-    public String getAudience() {
-        return this.audience;
-    }
+	private String id;
 
-    public void setAudience(final String audience) {
-        this.audience = audience;
-    }
+	private String issuer;
 
-    public Map<String, Object> getAttributes() {
-        return this.attributes;
-    }
+	private DateTime issuedOn;
 
-    public void setAttributes(final Map<String, Object> attributes) {
-        this.attributes = attributes;
-    }
+	private DateTime notBefore;
 
-    public String getId() {
-        return this.id;
-    }
+	private DateTime notOnOrAfter;
 
-    public void setId(final String id) {
-        this.id = id;
-    }
+	private DateTime retrievedOn;
 
-    public DateTime getIssuedOn() {
-        return this.issuedOn;
-    }
+	private Map<String, Object> attributes;
 
-    public void setIssuedOn(final DateTime issuedOn) {
-        this.issuedOn = issuedOn;
-    }
+	public String getAuthenticationMethod() {
+		return this.authenticationMethod;
+	}
 
-    public String getIssuer() {
-        return this.issuer;
-    }
+	public void setAuthenticationMethod(final String authenticationMethod) {
+		this.authenticationMethod = authenticationMethod;
+	}
 
-    public void setIssuer(final String issuer) {
-        this.issuer = issuer;
-    }
+	public String getAudience() {
+		return this.audience;
+	}
 
-    public DateTime getNotBefore() {
-        return this.notBefore;
-    }
+	public void setAudience(final String audience) {
+		this.audience = audience;
+	}
 
-    public void setNotBefore(final DateTime notBefore) {
-        this.notBefore = notBefore;
-    }
+	public Map<String, Object> getAttributes() {
+		return this.attributes;
+	}
 
-    public DateTime getNotOnOrAfter() {
-        return this.notOnOrAfter;
-    }
+	public void setAttributes(final Map<String, Object> attributes) {
+		this.attributes = attributes;
+	}
 
-    public void setNotOnOrAfter(final DateTime notOnOrAfter) {
-        this.notOnOrAfter = notOnOrAfter;
-    }
+	public String getId() {
+		return this.id;
+	}
 
-    public DateTime getRetrievedOn() {
-        return this.retrievedOn;
-    }
+	public void setId(final String id) {
+		this.id = id;
+	}
 
-    public void setRetrievedOn(final DateTime retrievedOn) {
-        this.retrievedOn = retrievedOn;
-    }
+	public DateTime getIssuedOn() {
+		return this.issuedOn;
+	}
 
-    /**
-     * toString produces a human readable representation of the WsFederationCredential.
-     *
-     * @return a human readable representation of the WsFederationCredential
-     */
-    @Override
-    public String toString() {
-        String attributeList = "";
+	public void setIssuedOn(final DateTime issuedOn) {
+		this.issuedOn = issuedOn;
+	}
 
-        for (String attr : this.attributes.keySet()) {
-            attributeList += "  " + attr + ": " + (attributes.get(attr)).toString() + "\n";
-        }
+	public String getIssuer() {
+		return this.issuer;
+	}
 
-        final String readable = "ID: %s\nIssuer: %s\nAudience: %s\nAudience Method: %s\nIssued On: %s\n"
-                + "Valid After: %s\nValid Before: %s\nAttributes:\n%s";
+	public void setIssuer(final String issuer) {
+		this.issuer = issuer;
+	}
 
-        return String.format(readable, this.id, this.issuer, this.audience, this.authenticationMethod,
-                this.issuedOn.toString(), this.notBefore.toString(), this.notOnOrAfter.toString(), attributeList);
-    }
+	public DateTime getNotBefore() {
+		return this.notBefore;
+	}
 
-    /**
-     * isValid validates the credential.
-     *
-     * @param expectedAudience the audience that the token was issued to (CAS Server)
-     * @param expectedIssuer   the issuer of the token (the IdP)
-     * @param timeDrift        the amount of acceptable time drift
-     * @return true if the credentials are valid, otherwise false
-     */
-    public boolean isValid(final String expectedAudience, final String expectedIssuer, final int timeDrift) {
-        if (!this.getAudience().equalsIgnoreCase(expectedAudience)) {
-           _logger.warn(".isValid: audience is invalid: {}", this.getAudience());
-            return false;
-        }
+	public void setNotBefore(final DateTime notBefore) {
+		this.notBefore = notBefore;
+	}
 
-        if (!this.getIssuer().equalsIgnoreCase(expectedIssuer)) {
-           _logger.warn(".isValid: issuer is invalid: {}", this.getIssuer());
-            return false;
-        }
+	public DateTime getNotOnOrAfter() {
+		return this.notOnOrAfter;
+	}
 
-        if (this.getIssuedOn().isBefore(this.getRetrievedOn().minusMillis(timeDrift))
-                || this.getIssuedOn().isAfter(this.getRetrievedOn().plusMillis(timeDrift))) {
-           _logger.warn(".isValid: Ticket outside of drift.");
-            return false;
-        }
+	public void setNotOnOrAfter(final DateTime notOnOrAfter) {
+		this.notOnOrAfter = notOnOrAfter;
+	}
 
-        if (this.getRetrievedOn().isAfter(this.getNotOnOrAfter())) {
-           _logger.warn(".isValid: ticket is too late.");
-            return false;
-        }
+	public DateTime getRetrievedOn() {
+		return this.retrievedOn;
+	}
 
-       _logger.debug(".isValid: credential is valid.");
-        return true;
-    }
+	public void setRetrievedOn(final DateTime retrievedOn) {
+		this.retrievedOn = retrievedOn;
+	}
+
+	/**
+	 * toString produces a human readable representation of the
+	 * WsFederationCredential.
+	 *
+	 * @return a human readable representation of the WsFederationCredential
+	 */
+	@Override
+	public String toString() {
+		String attributeList = "";
+
+		for (String attr : this.attributes.keySet()) {
+			attributeList += "  " + attr + ": " + (attributes.get(attr)).toString() + "\n";
+		}
+
+		final String readable = "ID: %s\nIssuer: %s\nAudience: %s\nAudience Method: %s\nIssued On: %s\n"
+				+ "Valid After: %s\nValid Before: %s\nAttributes:\n%s";
+
+		return String.format(readable, this.id, this.issuer, this.audience, this.authenticationMethod,
+				this.issuedOn.toString(), this.notBefore.toString(), this.notOnOrAfter.toString(), attributeList);
+	}
+
+	/**
+	 * isValid validates the credential.
+	 *
+	 * @param expectedAudience the audience that the token was issued to (CAS
+	 *        Server)
+	 * @param expectedIssuer the issuer of the token (the IdP)
+	 * @param timeDrift the amount of acceptable time drift
+	 * @return true if the credentials are valid, otherwise false
+	 */
+	public boolean isValid(final String expectedAudience, final String expectedIssuer, final int timeDrift) {
+		if (!this.getAudience().equalsIgnoreCase(expectedAudience)) {
+			_logger.warn(".isValid: audience is invalid: {}", this.getAudience());
+			return false;
+		}
+
+		if (!this.getIssuer().equalsIgnoreCase(expectedIssuer)) {
+			_logger.warn(".isValid: issuer is invalid: {}", this.getIssuer());
+			return false;
+		}
+
+		if (this.getIssuedOn().isBefore(this.getRetrievedOn().minusMillis(timeDrift))
+				|| this.getIssuedOn().isAfter(this.getRetrievedOn().plusMillis(timeDrift))) {
+			_logger.warn(".isValid: Ticket outside of drift.");
+			return false;
+		}
+
+		if (this.getRetrievedOn().isAfter(this.getNotOnOrAfter())) {
+			_logger.warn(".isValid: ticket is too late.");
+			return false;
+		}
+
+		_logger.debug(".isValid: credential is valid.");
+		return true;
+	}
 }

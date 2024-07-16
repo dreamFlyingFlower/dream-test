@@ -1,16 +1,3 @@
-/*
- * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
-
 package com.wy.test.cas.authz.endpoint.ticket;
 
 import java.util.HashMap;
@@ -36,9 +23,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.wy.test.entity.apps.AppsCasDetails;
 
 /**
- * Concrete implementation of a TicketGrantingTicket. A TicketGrantingTicket is the global identifier of a principal
- * into the system. It grants the Principal single-sign on access to any service that opts into single-sign on.
- * Expiration of a TicketGrantingTicket is controlled by the ExpirationPolicy specified as object creation.
+ * Concrete implementation of a TicketGrantingTicket. A TicketGrantingTicket is
+ * the global identifier of a principal into the system. It grants the Principal
+ * single-sign on access to any service that opts into single-sign on.
+ * Expiration of a TicketGrantingTicket is controlled by the ExpirationPolicy
+ * specified as object creation.
  *
  * @author Scott Battaglia
  * @since 3.0.0
@@ -92,8 +81,8 @@ public class TicketGrantingTicketImpl extends AbstractTicket implements TicketGr
 	private HashSet<String> descendantTickets = new HashSet<>();
 
 	/**
-	 * Constructs a new TicketGrantingTicket. May throw an {@link IllegalArgumentException} if the Authentication object
-	 * is null.
+	 * Constructs a new TicketGrantingTicket. May throw an
+	 * {@link IllegalArgumentException} if the Authentication object is null.
 	 *
 	 * @param id the id of the Ticket
 	 * @param proxiedBy Service that produced this proxy ticket.
@@ -136,13 +125,15 @@ public class TicketGrantingTicketImpl extends AbstractTicket implements TicketGr
 	}
 
 	/**
-	 * Normalize the path of a service by removing the query string and everything after a semi-colon.
+	 * Normalize the path of a service by removing the query string and everything
+	 * after a semi-colon.
 	 *
 	 * @param service the service to normalize
 	 * @return the normalized path
 	 * 
-	 *         private static String normalizePath(final Service service) { String path = service.getId(); path =
-	 *         StringUtils.substringBefore(path, "?"); path = StringUtils.substringBefore(path, ";"); path =
+	 *         private static String normalizePath(final Service service) { String
+	 *         path = service.getId(); path = StringUtils.substringBefore(path,
+	 *         "?"); path = StringUtils.substringBefore(path, ";"); path =
 	 *         StringUtils.substringBefore(path, "#"); return path; }
 	 */
 	/**

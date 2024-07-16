@@ -1,19 +1,3 @@
-/*
- * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
 package com.wy.test.web.access.contorller;
 
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
@@ -23,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,83 +25,80 @@ import com.wy.test.persistence.service.RolePermissionssService;
 import com.wy.test.web.WebContext;
 
 @Controller
-@RequestMapping(value={"/access/permissions"})
+@RequestMapping(value = { "/access/permissions" })
 public class RolePermissionsController {
+
 	final static Logger _logger = LoggerFactory.getLogger(RolePermissionsController.class);
-	
+
 	@Autowired
 	RolePermissionssService rolePermissionssService;
 
 	@Autowired
 	HistorySystemLogsService systemLog;
-	
-	@RequestMapping(value = { "/appsInRole" })
+
+	@GetMapping(value = { "/appsInRole" })
 	@ResponseBody
-	public ResponseEntity<?> appsInRole(
-			@ModelAttribute RolePermissions rolePermission,
+	public ResponseEntity<?> appsInRole(@ModelAttribute RolePermissions rolePermission,
 			@CurrentUser UserInfo currentUser) {
 		JpaPageResults<RolePermissions> rolePermissions;
 		rolePermission.setInstId(currentUser.getInstId());
-		rolePermissions= rolePermissionssService.fetchPageResults("appsInRole",rolePermission);
+		rolePermissions = rolePermissionssService.fetchPageResults("appsInRole", rolePermission);
 
-		if(rolePermissions!=null&&rolePermissions.getRows()!=null){
-			for (Apps app : rolePermissions.getRows()){
+		if (rolePermissions != null && rolePermissions.getRows() != null) {
+			for (Apps app : rolePermissions.getRows()) {
 				app.transIconBase64();
 			}
 		}
-		return new Message<JpaPageResults<RolePermissions>>(Message.FAIL,rolePermissions).buildResponse();
+		return new Message<JpaPageResults<RolePermissions>>(Message.FAIL, rolePermissions).buildResponse();
 	}
-	
-	@RequestMapping(value = { "/appsNotInRole" })
+
+	@GetMapping(value = { "/appsNotInRole" })
 	@ResponseBody
-	public ResponseEntity<?> appsNotInRole(
-				@ModelAttribute RolePermissions rolePermission,
-				@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> appsNotInRole(@ModelAttribute RolePermissions rolePermission,
+			@CurrentUser UserInfo currentUser) {
 		JpaPageResults<RolePermissions> rolePermissions;
 		rolePermission.setInstId(currentUser.getInstId());
-		rolePermissions= rolePermissionssService.fetchPageResults("appsNotInRole",rolePermission);
+		rolePermissions = rolePermissionssService.fetchPageResults("appsNotInRole", rolePermission);
 
-		if(rolePermissions!=null&&rolePermissions.getRows()!=null){
-			for (Apps app : rolePermissions.getRows()){
+		if (rolePermissions != null && rolePermissions.getRows() != null) {
+			for (Apps app : rolePermissions.getRows()) {
 				app.transIconBase64();
 			}
 		}
-		return new Message<JpaPageResults<RolePermissions>>(Message.FAIL,rolePermissions).buildResponse();
+		return new Message<JpaPageResults<RolePermissions>>(Message.FAIL, rolePermissions).buildResponse();
 	}
 
-	@RequestMapping(value = {"/add"})
+	@PostMapping(value = { "/add" })
 	@ResponseBody
-	public ResponseEntity<?> insertPermission(
-				@RequestBody RolePermissions rolePermission,
-				@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> insertPermission(@RequestBody RolePermissions rolePermission,
+			@CurrentUser UserInfo currentUser) {
 		if (rolePermission == null || rolePermission.getRoleId() == null) {
 			return new Message<RolePermissions>(Message.FAIL).buildResponse();
 		}
 		String roleId = rolePermission.getRoleId();
-		
+
 		boolean result = true;
 		String appIds = rolePermission.getAppId();
 		if (appIds != null) {
 			String[] arrAppIds = appIds.split(",");
 			for (int i = 0; i < arrAppIds.length; i++) {
-				RolePermissions newRolePermissions = 
-						new RolePermissions(roleId, arrAppIds[i],currentUser.getInstId());
+				RolePermissions newRolePermissions = new RolePermissions(roleId, arrAppIds[i], currentUser.getInstId());
 				newRolePermissions.setId(WebContext.genId());
 				result = rolePermissionssService.insert(newRolePermissions);
 			}
-			if(result) {
+			if (result) {
 				return new Message<RolePermissions>(Message.SUCCESS).buildResponse();
 			}
 		}
 		return new Message<RolePermissions>(Message.FAIL).buildResponse();
 	}
-	
+
 	@ResponseBody
-	@RequestMapping(value={"/delete"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> delete(@RequestParam("ids") String ids,@CurrentUser UserInfo currentUser) {
-		_logger.debug("-delete ids : {}" , ids);
+	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+		_logger.debug("-delete ids : {}", ids);
 		if (rolePermissionssService.deleteBatch(ids)) {
-			 return new Message<RolePermissions>(Message.SUCCESS).buildResponse();
+			return new Message<RolePermissions>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<RolePermissions>(Message.FAIL).buildResponse();
 		}

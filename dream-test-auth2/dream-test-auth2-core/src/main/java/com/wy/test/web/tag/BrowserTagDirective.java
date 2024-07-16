@@ -15,11 +15,7 @@ import freemarker.template.TemplateModel;
 
 /**
  * 获取应用上下文标签 <@browser name=""></@browser>
- * 
- * @author Crystal.Sea
- *
  */
-
 @FreemarkerTag("browser")
 public class BrowserTagDirective implements TemplateDirectiveModel {
 

@@ -7,9 +7,6 @@ import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
  * Chip Authentication Program EMV stands for Europay, MasterCard and Visa, a global standard for inter-operation of
  * integrated circuit cards (IC cards or "chip cards") and IC card capable point of sale (POS) terminals and automated
  * teller machines (ATMs), for authenticating credit and debit card transactions.
- * 
- * @author Crystal.Sea
- *
  */
 public class RsaOtpAuthn extends AbstractOtpAuthn {
 

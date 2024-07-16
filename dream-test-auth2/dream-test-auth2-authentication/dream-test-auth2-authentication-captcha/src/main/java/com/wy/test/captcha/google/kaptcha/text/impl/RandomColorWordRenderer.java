@@ -16,7 +16,8 @@ import com.google.code.kaptcha.util.ConfigHelper;
 import com.google.code.kaptcha.util.Configurable;
 
 /**
- * The default implementation of {@link WordRenderer}, creates an image with a word rendered on it.
+ * The default implementation of {@link WordRenderer}, creates an image with a
+ * word rendered on it.
  */
 public class RandomColorWordRenderer extends Configurable implements WordRenderer {
 
@@ -30,6 +31,7 @@ public class RandomColorWordRenderer extends Configurable implements WordRendere
 	 * @param height The height of the image to be created.
 	 * @return The BufferedImage created from the word.
 	 */
+	@Override
 	public BufferedImage renderWord(String word, int width, int height) {
 		int fontSize = getConfig().getTextProducerFontSize();
 		Font[] fonts = getConfig().getTextProducerFonts(fontSize);

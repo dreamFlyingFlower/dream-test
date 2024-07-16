@@ -74,7 +74,6 @@ public class AuthorizationCodeTokenGranter extends AbstractTokenGranter {
 		/*
 		 * 
 		 * add for RedirectUri
-		 * add by Crystal.Sea
 		 */
 		Set<String> redirectUris = client.getRegisteredRedirectUri();
 		boolean redirectMismatch=false;

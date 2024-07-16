@@ -7,7 +7,7 @@ import dream.flying.flower.binary.Base64Helper;
 import dream.flying.flower.binary.HexHelper;
 
 /**
- * @author Crystal.Sea * algorithm Support MD5,SHA,SHA-1|SHA-256|SHA-384|SHA-512 then encodeBase64
+ *  algorithm Support MD5,SHA,SHA-1|SHA-256|SHA-384|SHA-512 then encodeBase64
  *
  */
 public final class DigestUtils {

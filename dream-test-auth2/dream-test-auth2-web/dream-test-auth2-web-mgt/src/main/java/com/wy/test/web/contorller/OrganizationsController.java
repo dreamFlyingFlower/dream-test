@@ -1,20 +1,3 @@
-/*
- * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
-
 package com.wy.test.web.contorller;
 
 import java.io.IOException;
@@ -35,8 +18,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,111 +42,97 @@ import com.wy.test.util.ExcelUtils;
 import com.wy.test.web.component.TreeAttributes;
 import com.wy.test.web.component.TreeNode;
 
-
 @Controller
-@RequestMapping({"/orgs"})
+@RequestMapping({ "/orgs" })
 public class OrganizationsController {
-  static final Logger _logger = LoggerFactory.getLogger(OrganizationsController.class);
+
+	static final Logger _logger = LoggerFactory.getLogger(OrganizationsController.class);
 
 	@Autowired
 	OrganizationsService organizationsService;
-	
+
 	@Autowired
 	HistorySystemLogsService systemLog;
 
-	@RequestMapping(value = { "/fetch" }, produces = {MediaType.APPLICATION_JSON_VALUE})
+	@PostMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute Organizations org,@CurrentUser UserInfo currentUser) {
-		_logger.debug("fetch {}" , org);
+	public ResponseEntity<?> fetch(@ModelAttribute Organizations org, @CurrentUser UserInfo currentUser) {
+		_logger.debug("fetch {}", org);
 		org.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<Organizations>>(
-				organizationsService.fetchPageResults(org)).buildResponse();
+		return new Message<JpaPageResults<Organizations>>(organizationsService.fetchPageResults(org)).buildResponse();
 	}
 
 	@ResponseBody
-	@RequestMapping(value={"/query"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> query(@ModelAttribute Organizations org,@CurrentUser UserInfo currentUser) {
-		_logger.debug("-query  {}" , org);
+	@PostMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<?> query(@ModelAttribute Organizations org, @CurrentUser UserInfo currentUser) {
+		_logger.debug("-query  {}", org);
 		org.setInstId(currentUser.getInstId());
-		List<Organizations>  orgList = organizationsService.query(org);
+		List<Organizations> orgList = organizationsService.query(org);
 		if (orgList != null) {
-			 return new Message<List<Organizations>>(Message.SUCCESS,orgList).buildResponse();
+			return new Message<List<Organizations>>(Message.SUCCESS, orgList).buildResponse();
 		} else {
-			 return new Message<List<Organizations>>(Message.FAIL).buildResponse();
+			return new Message<List<Organizations>>(Message.FAIL).buildResponse();
 		}
 	}
-	
-	@RequestMapping(value = { "/get/{id}" }, produces = {MediaType.APPLICATION_JSON_VALUE})
+
+	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		Organizations org=organizationsService.get(id);
+		Organizations org = organizationsService.get(id);
 		return new Message<Organizations>(org).buildResponse();
 	}
-	
+
 	@ResponseBody
-	@RequestMapping(value={"/add"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> insert(@RequestBody Organizations org,@CurrentUser UserInfo currentUser) {
+	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<?> insert(@RequestBody Organizations org, @CurrentUser UserInfo currentUser) {
 		_logger.debug("-Add  :" + org);
 		org.setInstId(currentUser.getInstId());
 		if (organizationsService.insert(org)) {
-			systemLog.insert(
-					ConstsEntryType.ORGANIZATION, 
-					org, 
-					ConstsOperateAction.CREATE, 
-					ConstsOperateResult.SUCCESS, 
+			systemLog.insert(ConstsEntryType.ORGANIZATION, org, ConstsOperateAction.CREATE, ConstsOperateResult.SUCCESS,
 					currentUser);
 			return new Message<Organizations>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<Organizations>(Message.FAIL).buildResponse();
 		}
 	}
-	
+
 	@ResponseBody
-	@RequestMapping(value={"/update"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> update(@RequestBody  Organizations org,@CurrentUser UserInfo currentUser) {
+	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<?> update(@RequestBody Organizations org, @CurrentUser UserInfo currentUser) {
 		_logger.debug("-update  :" + org);
 		org.setInstId(currentUser.getInstId());
 		if (organizationsService.update(org)) {
-			systemLog.insert(
-					ConstsEntryType.ORGANIZATION, 
-					org, 
-					ConstsOperateAction.UPDATE, 
-					ConstsOperateResult.SUCCESS, 
+			systemLog.insert(ConstsEntryType.ORGANIZATION, org, ConstsOperateAction.UPDATE, ConstsOperateResult.SUCCESS,
 					currentUser);
-		    return new Message<Organizations>(Message.SUCCESS).buildResponse();
+			return new Message<Organizations>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<Organizations>(Message.FAIL).buildResponse();
 		}
 	}
-	
+
 	@ResponseBody
-	@RequestMapping(value={"/delete"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> delete(@RequestParam("ids") String ids,@CurrentUser UserInfo currentUser) {
-		_logger.debug("-delete  ids : {} " , ids);
+	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+		_logger.debug("-delete  ids : {} ", ids);
 		if (organizationsService.deleteBatch(ids)) {
-			systemLog.insert(
-					ConstsEntryType.ORGANIZATION, 
-					ids, 
-					ConstsOperateAction.DELETE, 
-					ConstsOperateResult.SUCCESS, 
+			systemLog.insert(ConstsEntryType.ORGANIZATION, ids, ConstsOperateAction.DELETE, ConstsOperateResult.SUCCESS,
 					currentUser);
-			 return new Message<Organizations>(Message.SUCCESS).buildResponse();
+			return new Message<Organizations>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<Organizations>(Message.FAIL).buildResponse();
 		}
 	}
-  
-  
+
 	@ResponseBody
-	@RequestMapping(value={"/tree"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<?> tree(@ModelAttribute Organizations organization,@CurrentUser UserInfo currentUser) {
-		_logger.debug("-query  {}" , organization);
+	@PostMapping(value = { "/tree" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<?> tree(@ModelAttribute Organizations organization, @CurrentUser UserInfo currentUser) {
+		_logger.debug("-query  {}", organization);
 		organization.setInstId(currentUser.getInstId());
-		List<Organizations>  orgList = organizationsService.query(organization);
+		List<Organizations> orgList = organizationsService.query(organization);
 		if (orgList != null) {
 			TreeAttributes treeAttributes = new TreeAttributes();
 			int nodeCount = 0;
 			for (Organizations org : orgList) {
-				TreeNode treeNode = new TreeNode(org.getId(),org.getOrgName());
+				TreeNode treeNode = new TreeNode(org.getId(), org.getOrgName());
 				treeNode.setCode(org.getOrgCode());
 				treeNode.setCodePath(org.getCodePath());
 				treeNode.setNamePath(org.getNamePath());
@@ -171,69 +142,70 @@ public class OrganizationsController {
 				treeNode.setAttrs(org);
 				treeNode.setLeaf(true);
 				treeAttributes.addNode(treeNode);
-				nodeCount ++;
-				//root organization node,parentId is null or parentId = -1 or parentId = 0 or  id = instId or id = parentId 
-				if(org.getParentId() == null 
-						||org.getParentId().equalsIgnoreCase("0")
-						||org.getParentId().equalsIgnoreCase("-1")
-						||org.getId().equalsIgnoreCase(currentUser.getInstId())
-						||org.getId().equalsIgnoreCase(org.getParentId())
-						) {
+				nodeCount++;
+				// root organization node,parentId is null or parentId = -1 or parentId = 0 or
+				// id = instId or id = parentId
+				if (org.getParentId() == null || org.getParentId().equalsIgnoreCase("0")
+						|| org.getParentId().equalsIgnoreCase("-1")
+						|| org.getId().equalsIgnoreCase(currentUser.getInstId())
+						|| org.getId().equalsIgnoreCase(org.getParentId())) {
 					treeNode.setExpanded(true);
 					treeNode.setLeaf(false);
 					treeAttributes.setRootNode(treeNode);
 				}
 			}
 			treeAttributes.setNodeCount(nodeCount);
-			 return new Message<TreeAttributes>(Message.SUCCESS,treeAttributes).buildResponse();
+			return new Message<TreeAttributes>(Message.SUCCESS, treeAttributes).buildResponse();
 		} else {
-			 return new Message<TreeAttributes>(Message.FAIL).buildResponse();
+			return new Message<TreeAttributes>(Message.FAIL).buildResponse();
 		}
 	}
 
-  @RequestMapping(value = "/import")
-  public ResponseEntity<?> importingOrganizations(
-		  @ModelAttribute("excelImportFile")ExcelImport excelImportFile,
-		  @CurrentUser UserInfo currentUser)  {
-      if (excelImportFile.isExcelNotEmpty() ) {
-        try {
-            List<Organizations> orgsList = Lists.newArrayList();
-            Workbook workbook = excelImportFile.biuldWorkbook();
-            int sheetSize = workbook.getNumberOfSheets();
-            //遍历sheet页
-            for (int i = 0; i < sheetSize; i++) {
-                Sheet sheet = workbook.getSheetAt(i);
-                int rowSize = sheet.getLastRowNum() + 1;
-                for (int j = 1; j < rowSize; j++) {//遍历行
-                	Row row = sheet.getRow(j);
-                    if (row == null || j <3 ) {//略过空行和前3行
-                        continue;
-                    } else {//其他行是数据行
-                        orgsList.add(buildOrganizationsFromSheetRow(row,currentUser));
-                    }
-                }
-            }
-            // 数据去重
-            if(!CollectionUtils.isEmpty(orgsList)){
-                orgsList = orgsList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(o -> o.getId()))), ArrayList::new));
-                if(organizationsService.insertBatch(orgsList)) {
-                	return new Message<Organizations>(Message.SUCCESS).buildResponse();
-		        }else {
-		        	return new Message<Organizations>(Message.FAIL).buildResponse();
-		        }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-        	excelImportFile.closeWorkbook();
-        }
-	}
-      
-	return new Message<Organizations>(Message.FAIL).buildResponse();
-      
-  }
+	@PostMapping(value = "/import")
+	public ResponseEntity<?> importingOrganizations(@ModelAttribute("excelImportFile") ExcelImport excelImportFile,
+			@CurrentUser UserInfo currentUser) {
+		if (excelImportFile.isExcelNotEmpty()) {
+			try {
+				List<Organizations> orgsList = Lists.newArrayList();
+				Workbook workbook = excelImportFile.biuldWorkbook();
+				int sheetSize = workbook.getNumberOfSheets();
+				// 遍历sheet页
+				for (int i = 0; i < sheetSize; i++) {
+					Sheet sheet = workbook.getSheetAt(i);
+					int rowSize = sheet.getLastRowNum() + 1;
+					for (int j = 1; j < rowSize; j++) {// 遍历行
+						Row row = sheet.getRow(j);
+						if (row == null || j < 3) {// 略过空行和前3行
+							continue;
+						} else {// 其他行是数据行
+							orgsList.add(buildOrganizationsFromSheetRow(row, currentUser));
+						}
+					}
+				}
+				// 数据去重
+				if (!CollectionUtils.isEmpty(orgsList)) {
+					orgsList = orgsList.stream()
+							.collect(Collectors.collectingAndThen(
+									Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(o -> o.getId()))),
+									ArrayList::new));
+					if (organizationsService.insertBatch(orgsList)) {
+						return new Message<Organizations>(Message.SUCCESS).buildResponse();
+					} else {
+						return new Message<Organizations>(Message.FAIL).buildResponse();
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				excelImportFile.closeWorkbook();
+			}
+		}
 
-  public Organizations buildOrganizationsFromSheetRow(Row row,UserInfo currentUser) {
+		return new Message<Organizations>(Message.FAIL).buildResponse();
+
+	}
+
+	public Organizations buildOrganizationsFromSheetRow(Row row, UserInfo currentUser) {
 		Organizations organization = new Organizations();
 		// 上级编码
 		organization.setParentId(ExcelUtils.getValue(row, 0));
@@ -280,8 +252,8 @@ public class OrganizationsController {
 		// 详细描述
 		organization.setDescription(ExcelUtils.getValue(row, 20));
 		organization.setStatus(1);
-		
+
 		organization.setInstId(currentUser.getInstId());
-      return organization;
-  }
+		return organization;
+	}
 }

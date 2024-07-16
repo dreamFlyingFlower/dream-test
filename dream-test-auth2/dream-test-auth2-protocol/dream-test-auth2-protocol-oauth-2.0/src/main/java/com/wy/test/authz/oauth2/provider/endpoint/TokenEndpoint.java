@@ -140,7 +140,7 @@ public class TokenEndpoint extends AbstractEndpoint {
 			
 			logger.debug("request parameters " + parameters);
 			// The scope was requested or determined during the authorization step
-			/**crystal.sea
+			/**
 			 * code must uuid format
 			 */
 			 if (parameters.get(OAuth2Constants.PARAMETER.CODE) != null 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -33,7 +34,7 @@ public class InstitutionEndpoint {
 	@Autowired
 	ApplicationConfig applicationConfig;
 
-	@RequestMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(HttpServletRequest request,
 			@RequestHeader(value = "Origin", required = false) String originURL,
 			@RequestHeader(value = HEADER_HOSTNAME, required = false) String headerHostName,

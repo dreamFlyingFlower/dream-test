@@ -36,8 +36,8 @@ public class SmsOtpAuthn extends AbstractOtpAuthn {
 
 	}
 
+	@Override
 	public void initPropertys() {
 
 	}
-
 }

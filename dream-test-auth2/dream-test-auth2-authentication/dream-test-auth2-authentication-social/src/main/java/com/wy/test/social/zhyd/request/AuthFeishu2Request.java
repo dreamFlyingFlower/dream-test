@@ -21,7 +21,8 @@ import me.zhyd.oauth.utils.HttpUtils;
 import me.zhyd.oauth.utils.UrlBuilder;
 
 /**
- * 飞书平台，企业自建应用授权登录， https://open.feishu.cn/document/common-capabilities/sso/web-application-sso/web-app-overview
+ * 飞书平台，企业自建应用授权登录，
+ * https://open.feishu.cn/document/common-capabilities/sso/web-application-sso/web-app-overview
  * <p>
  * 所以，最终修改该平台的实际发布版本为 支持扫码登录
  *
@@ -43,7 +44,8 @@ public class AuthFeishu2Request extends AuthDefaultRequest {
 	/**
 	 * 获取 app_access_token（企业自建应用）
 	 * <p>
-	 * Token 有效期为 2 小时，在此期间调用该接口 token 不会改变。当 token 有效期小于 30 分的时候，再次请求获取 token 的时候， 会生成一个新的 token，与此同时老的 token 依然有效。
+	 * Token 有效期为 2 小时，在此期间调用该接口 token 不会改变。当 token 有效期小于 30 分的时候，再次请求获取 token 的时候，
+	 * 会生成一个新的 token，与此同时老的 token 依然有效。
 	 *
 	 * @return appAccessToken
 	 */
@@ -96,7 +98,7 @@ public class AuthFeishu2Request extends AuthDefaultRequest {
 	}
 
 	@Override
-	public AuthResponse refresh(AuthToken authToken) {
+	public AuthResponse<?> refresh(AuthToken authToken) {
 		JSONObject requestObject = new JSONObject();
 		requestObject.put("app_access_token", this.getAppAccessToken());
 		requestObject.put("grant_type", "refresh_token");

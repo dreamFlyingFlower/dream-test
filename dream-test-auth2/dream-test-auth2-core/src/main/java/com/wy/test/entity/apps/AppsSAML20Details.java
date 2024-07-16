@@ -9,17 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-/**
- * @author Crystal.Sea
- *
- */
 @Entity
 @Table(name = "MXK_APPS_SAML_V20_DETAILS")
 public class AppsSAML20Details extends Apps {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -291159876339333345L;
 
 	@Id

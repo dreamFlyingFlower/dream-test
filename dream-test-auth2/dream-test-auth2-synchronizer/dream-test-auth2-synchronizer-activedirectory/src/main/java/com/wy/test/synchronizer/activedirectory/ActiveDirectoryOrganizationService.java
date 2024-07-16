@@ -32,6 +32,7 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 
 	ActiveDirectoryUtils ldapUtils;
 
+	@Override
 	public void sync() {
 		loadOrgsByInstId(this.synchronizer.getInstId(), Organizations.ROOT_ORG_ID);
 		_logger.info("Sync ActiveDirectory Organizations ...");

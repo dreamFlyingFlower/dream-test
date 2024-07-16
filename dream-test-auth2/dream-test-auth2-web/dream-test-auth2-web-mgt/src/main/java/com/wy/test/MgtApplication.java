@@ -10,7 +10,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -26,7 +25,6 @@ import com.wy.test.web.InitializeContext;
 		"org.maxkey.web.tag" })
 @MapperScan("org.maxkey.persistence.mapper,")
 @SpringBootApplication
-@EnableDiscoveryClient
 public class MgtApplication extends SpringBootServletInitializer {
 
 	private static final Logger _logger = LoggerFactory.getLogger(MgtApplication.class);
@@ -48,6 +46,7 @@ public class MgtApplication extends SpringBootServletInitializer {
 
 	}
 
+	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(MgtApplication.class);
 	}

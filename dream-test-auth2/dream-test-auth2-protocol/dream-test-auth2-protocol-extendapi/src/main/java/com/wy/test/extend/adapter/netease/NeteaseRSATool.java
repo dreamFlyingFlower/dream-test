@@ -1,20 +1,3 @@
-/*
- * Copyright [2022] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
-
 package com.wy.test.extend.adapter.netease;
 
 import java.security.Key;
@@ -40,14 +23,15 @@ import org.slf4j.LoggerFactory;
 public class NeteaseRSATool {
 
 	final static Logger _logger = LoggerFactory.getLogger(NeteaseRSATool.class);
-			
-	private static final char[] bcdLookup = { '0', '1', '2', '3', '4', '5',
-			'6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+
+	private static final char[] bcdLookup =
+			{ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
 	private String description = "1024-bit RSA key";
+
 	private String priKey = null;
+
 	private String pubKey = null;
-	
 
 	public String bytesToHexStr(byte[] bcd) {
 		StringBuffer s = new StringBuffer(bcd.length * 2);
@@ -66,8 +50,7 @@ public class NeteaseRSATool {
 		bytes = new byte[s.length() / 2];
 
 		for (int i = 0; i < bytes.length; i++) {
-			bytes[i] = (byte) Integer.parseInt(s.substring(2 * i, 2 * i + 2),
-					16);
+			bytes[i] = (byte) Integer.parseInt(s.substring(2 * i, 2 * i + 2), 16);
 		}
 
 		return bytes;
@@ -90,8 +73,8 @@ public class NeteaseRSATool {
 
 			pubKey = bytesToHexStr(rsaPublic.getEncoded());
 			priKey = bytesToHexStr(rsaPrivate.getEncoded());
-			_logger.trace("pubKey: {}" , pubKey);
-			_logger.trace("priKey: {}" , priKey);
+			_logger.trace("pubKey: {}", pubKey);
+			_logger.trace("priKey: {}", priKey);
 			_logger.trace("1024-bit RSA key GENERATED.");
 		} catch (Exception e) {
 			_logger.error("Exception genRSAKeyPair:" + e);
@@ -104,7 +87,7 @@ public class NeteaseRSATool {
 			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(pribyte);
 			KeyFactory fac = KeyFactory.getInstance("RSA");
 			RSAPrivateKey privateKey = (RSAPrivateKey) fac.generatePrivate(keySpec);
-			
+
 			Signature sigEng = Signature.getInstance("SHA1withRSA");
 			sigEng.initSign(privateKey);
 			sigEng.update(src.getBytes());
@@ -115,20 +98,20 @@ public class NeteaseRSATool {
 			return null;
 		}
 	}
-	
+
 	public String encryptWithPriKey(String src, String priKey) {
 		try {
 			byte[] pribyte = hexStrToBytes(priKey.trim());
 			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(pribyte);
 			KeyFactory fac = KeyFactory.getInstance("RSA");
 			Key privateKey = fac.generatePrivate(keySpec);
-			
+
 			Cipher cipher = Cipher.getInstance("RSA");
 			cipher.init(Cipher.ENCRYPT_MODE, privateKey);
-			
+
 			byte[] bytes = src.getBytes();
 			byte[] encodedByteArray = new byte[] {};
-			for (int i = 0; i < bytes.length; i += 102){
+			for (int i = 0; i < bytes.length; i += 102) {
 				byte[] subarray = ArrayUtils.subarray(bytes, i, i + 102);
 				byte[] doFinal = cipher.doFinal(subarray);
 				encodedByteArray = ArrayUtils.addAll(encodedByteArray, doFinal);
@@ -140,8 +123,7 @@ public class NeteaseRSATool {
 		}
 	}
 
-	public boolean verifySHA1withRSASigature(String sign, String src,
-			String pubKeyStr) {
+	public boolean verifySHA1withRSASigature(String sign, String src, String pubKeyStr) {
 		try {
 
 			Signature sigEng = Signature.getInstance("SHA1withRSA");
@@ -164,13 +146,12 @@ public class NeteaseRSATool {
 		}
 	}
 
-	
 	public String encryptLongTextWithPriKey(String src, String priKey) {
 		final int ENCRYPT_LENGTH = 117;
 		if (src.length() <= ENCRYPT_LENGTH) {
 			return encryptWithPriKey(src, priKey);
 		}
-		
+
 		StringBuffer sb = new StringBuffer();
 		int idx = 0;
 		while (idx < src.length()) {
@@ -180,7 +161,7 @@ public class NeteaseRSATool {
 			sb.append(encSub);
 			idx += ENCRYPT_LENGTH;
 		}
-		
+
 		return sb.toString();
 	}
 
@@ -227,8 +208,7 @@ public class NeteaseRSATool {
 
 			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(pribyte);
 			KeyFactory fac = KeyFactory.getInstance("RSA");
-			RSAPrivateKey privateKey = (RSAPrivateKey) fac
-					.generatePrivate(keySpec);
+			RSAPrivateKey privateKey = (RSAPrivateKey) fac.generatePrivate(keySpec);
 
 			// privateKey.getModulus() + privateKey.getPrivateExponent() +
 			// privateKey.getAlgorithm();

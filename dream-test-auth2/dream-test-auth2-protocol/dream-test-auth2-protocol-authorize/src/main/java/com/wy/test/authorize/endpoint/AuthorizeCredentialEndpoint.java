@@ -1,11 +1,12 @@
 package com.wy.test.authorize.endpoint;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.wy.test.constants.ConstsStatus;
 import com.wy.test.core.authn.annotation.CurrentUser;
@@ -16,12 +17,11 @@ import com.wy.test.entity.UserInfo;
 import com.wy.test.entity.apps.Apps;
 import com.wy.test.util.StringUtils;
 
-@Controller
+@RestController
 @RequestMapping(value = { "/authz/credential" })
 public class AuthorizeCredentialEndpoint extends AuthorizeBaseEndpoint {
 
-	@RequestMapping("/get/{appId}")
-	@ResponseBody
+	@GetMapping("/get/{appId}")
 	public ResponseEntity<?> get(@PathVariable("appId") String appId, @CurrentUser UserInfo currentUser) {
 		Apps app = getApp(appId);
 		Accounts account = getAccounts(app, currentUser);
@@ -42,7 +42,7 @@ public class AuthorizeCredentialEndpoint extends AuthorizeBaseEndpoint {
 		return new Message<Accounts>(account).buildResponse();
 	}
 
-	@RequestMapping("/update")
+	@PostMapping("/update")
 	public ResponseEntity<?> update(@RequestBody Accounts account, @CurrentUser UserInfo currentUser) {
 		if (StringUtils.isNotEmpty(account.getRelatedPassword())
 				&& StringUtils.isNotEmpty(account.getRelatedPassword())) {
@@ -61,5 +61,4 @@ public class AuthorizeCredentialEndpoint extends AuthorizeBaseEndpoint {
 
 		return new Message<Accounts>(Message.FAIL).buildResponse();
 	}
-
 }

@@ -22,11 +22,7 @@ import freemarker.template.TemplateModel;
 
 /**
  * 获取应用上下文标签 .<@locale/>
- * 
- * @author Crystal.Sea
- *
  */
-
 @FreemarkerTag("locale")
 public class LocaleTagDirective implements TemplateDirectiveModel {
 

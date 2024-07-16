@@ -7,35 +7,35 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.constants.ConstsStatus;
-import com.wy.test.entity.DbTableMetaData;
 import com.wy.test.entity.UserInfo;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
-import com.wy.test.util.JdbcUtils;
 import com.wy.test.util.StringUtils;
 
-@Service
-public class JdbcUsersService extends AbstractSynchronizerService implements ISynchronizerService {
+import dream.flying.flower.db.JdbcHelper;
+import dream.flying.flower.db.TableMetaData;
+import lombok.extern.slf4j.Slf4j;
 
-	final static Logger _logger = LoggerFactory.getLogger(JdbcUsersService.class);
+@Service
+@Slf4j
+public class JdbcUsersService extends AbstractSynchronizerService implements ISynchronizerService {
 
 	static ArrayList<ColumnFieldMapper> mapperList = new ArrayList<ColumnFieldMapper>();
 
+	@Override
 	public void sync() {
-		_logger.info("Sync Jdbc Users...");
+		log.info("Sync Jdbc Users...");
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 
 		try {
 			if (StringUtils.isNotBlank(synchronizer.getOrgFilters())) {
-				_logger.info("Sync User Filters {}", synchronizer.getOrgFilters());
-				conn = JdbcUtils.connect(synchronizer.getProviderUrl(), synchronizer.getPrincipal(),
+				log.info("Sync User Filters {}", synchronizer.getOrgFilters());
+				conn = JdbcHelper.connect(synchronizer.getProviderUrl(), synchronizer.getPrincipal(),
 						synchronizer.getCredentials(), synchronizer.getDriverClass());
 
 				stmt = conn.createStatement();
@@ -62,24 +62,27 @@ public class JdbcUsersService extends AbstractSynchronizerService implements ISy
 						userInfoService.update(user);
 						updateCount++;
 					}
-					_logger.trace("read Count {} , insert Count {} , updateCount {} ", readCount, insertCount,
-							updateCount);
+					log.trace("read Count {} , insert Count {} , updateCount {} ", readCount, insertCount, updateCount);
 				}
-				_logger.info("read Count {} , insert Count {} , updateCount {} ", readCount, insertCount, updateCount);
+				log.info("read Count {} , insert Count {} , updateCount {} ", readCount, insertCount, updateCount);
 			}
 		} catch (Exception e) {
-			_logger.error("Exception ", e);
+			log.error("Exception:{} ", e);
 		} finally {
-			JdbcUtils.release(conn, stmt, rs);
+			try {
+				JdbcHelper.release(conn, stmt, rs);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public UserInfo buildUserInfo(ResultSet rs) throws SQLException {
-		DbTableMetaData meta = JdbcUtils.getMetaData(rs);
+		TableMetaData meta = JdbcHelper.getMetaData(rs);
 		UserInfo user = new UserInfo();
 		// basic
 		for (ColumnFieldMapper mapper : mapperList) {
-			if (meta.getColumnsMap().containsKey(mapper.getColumn())) {
+			if (meta.getColumnDetail().containsKey(mapper.getColumn())) {
 				Object value = null;
 				if (mapper.getType().equalsIgnoreCase("String")) {
 					value = rs.getString(mapper.getColumn());
@@ -90,13 +93,13 @@ public class JdbcUsersService extends AbstractSynchronizerService implements ISy
 					try {
 						PropertyUtils.setSimpleProperty(user, mapper.getField(), value);
 					} catch (Exception e) {
-						_logger.error("setSimpleProperty {}", e);
+						log.error("setSimpleProperty {}", e);
 					}
 				}
 			}
 		}
 
-		if (meta.getColumnsMap().containsKey("status")) {
+		if (meta.getColumnDetail().containsKey("status")) {
 			user.setStatus(rs.getInt("status"));
 		} else {
 			user.setStatus(ConstsStatus.ACTIVE);
@@ -104,7 +107,7 @@ public class JdbcUsersService extends AbstractSynchronizerService implements ISy
 		user.setInstId(this.synchronizer.getInstId());
 
 		// password
-		if (meta.getColumnsMap().containsKey("password")) {
+		if (meta.getColumnDetail().containsKey("password")) {
 			user.setPassword(rs.getString("password"));
 		} else {
 			// 后4位
@@ -119,7 +122,7 @@ public class JdbcUsersService extends AbstractSynchronizerService implements ISy
 			user.setPassword(user.getUsername() + "@M" + last4Char);
 		}
 
-		_logger.debug("User {} ", user);
+		log.debug("User {} ", user);
 		return user;
 	}
 

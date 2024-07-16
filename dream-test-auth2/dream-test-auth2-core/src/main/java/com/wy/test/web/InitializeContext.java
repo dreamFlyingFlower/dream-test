@@ -33,9 +33,6 @@ import com.wy.test.util.PathUtils;
 
 /**
  * InitApplicationContext .
- * 
- * @author Crystal.Sea
- *
  */
 public class InitializeContext extends HttpServlet {
 
@@ -192,12 +189,12 @@ public class InitializeContext extends HttpServlet {
 	 */
 	public void showLicense() {
 		_logger.info("-----------------------------------------------------------");
-		_logger.info("+                      MaxKey Community  Edition ");
+		_logger.info("+                       Community  Edition ");
 		_logger.info("+                      Single   Sign  On ( SSO ) ");
 		_logger.info("+                           Version {}",
 				WebContext.properties.getProperty("application.formatted-version"));
 		_logger.info("+");
-		_logger.info("+                 {}Copyright 2018 - {} https://www.maxkey.top/", (char) 0xA9,
+		_logger.info("+                 {}Copyright 2018 - {} https://www.top/", (char) 0xA9,
 				new DateTime().getYear());
 		_logger.info("+                 Licensed under the Apache License, Version 2.0 ");
 		_logger.info("-----------------------------------------------------------");

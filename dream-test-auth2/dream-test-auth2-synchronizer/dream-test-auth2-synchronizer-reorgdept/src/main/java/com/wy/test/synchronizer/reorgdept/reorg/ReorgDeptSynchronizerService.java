@@ -11,34 +11,34 @@ import com.wy.test.synchronizer.reorgdept.workweixin.service.ReorgDeptService;
 
 @Service
 public class ReorgDeptSynchronizerService implements ISynchronizerService {
-    final static Logger _logger = LoggerFactory.getLogger(ReorgDeptSynchronizerService.class);
-    Synchronizers synchronizer;
 
-    @Autowired
-    ReorgDeptService reorgDeptService;
+	final static Logger _logger = LoggerFactory.getLogger(ReorgDeptSynchronizerService.class);
 
+	Synchronizers synchronizer;
 
-    public ReorgDeptSynchronizerService() {
-        super();
-    }
+	@Autowired
+	ReorgDeptService reorgDeptService;
 
-    public void sync() throws Exception {
-        _logger.info("Sync ...");
-        reorgDeptService.setSynchronizer(synchronizer);
-        reorgDeptService.sync();
+	public ReorgDeptSynchronizerService() {
+		super();
+	}
 
-    }
+	@Override
+	public void sync() throws Exception {
+		_logger.info("Sync ...");
+		reorgDeptService.setSynchronizer(synchronizer);
+		reorgDeptService.sync();
 
- 
+	}
 
-    public void setReorgDeptService(ReorgDeptService reorgDeptService) {
+	public void setReorgDeptService(ReorgDeptService reorgDeptService) {
 		this.reorgDeptService = reorgDeptService;
 	}
 
 	@Override
-    public void setSynchronizer(Synchronizers synchronizer) {
-        this.synchronizer = synchronizer;
+	public void setSynchronizer(Synchronizers synchronizer) {
+		this.synchronizer = synchronizer;
 
-    }
+	}
 
 }

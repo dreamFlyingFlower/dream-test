@@ -9,22 +9,23 @@ import me.zhyd.oauth.request.AuthDefaultRequest;
 
 public class AuthMaxkeyRequest extends AuthDefaultRequest {
 
-    public static final String KEY = "maxkey";
-    public AuthMaxkeyRequest(AuthConfig config) {
-        super(config, WeLinkAuthDefaultSource.HUAWEI_WELINK);
-    }
+	public static final String KEY = "maxkey";
 
-    public AuthMaxkeyRequest(AuthConfig config, AuthStateCache authStateCache) {
-        super(config, MaxkeyAuthDefaultSource.MAXKEY, authStateCache);
-    }
+	public AuthMaxkeyRequest(AuthConfig config) {
+		super(config, WeLinkAuthDefaultSource.HUAWEI_WELINK);
+	}
 
-    @Override
-    protected AuthToken getAccessToken(AuthCallback authCallback) {
-        return null;
-    }
+	public AuthMaxkeyRequest(AuthConfig config, AuthStateCache authStateCache) {
+		super(config, MaxkeyAuthDefaultSource.MAXKEY, authStateCache);
+	}
 
-    @Override
-    protected AuthUser getUserInfo(AuthToken authToken) {
-        return null;
-    }
+	@Override
+	protected AuthToken getAccessToken(AuthCallback authCallback) {
+		return null;
+	}
+
+	@Override
+	protected AuthUser getUserInfo(AuthToken authToken) {
+		return null;
+	}
 }

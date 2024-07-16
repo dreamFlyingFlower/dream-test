@@ -6,8 +6,6 @@ import com.wy.test.persistence.redis.RedisConnectionFactory;
 
 /**
  * Implementation of authorization code services that stores the codes and authentication in Redis.
- * 
- * @author Crystal.Sea
  */
 public class RedisAuthorizationCodeServices extends RandomValueAuthorizationCodeServices {
 

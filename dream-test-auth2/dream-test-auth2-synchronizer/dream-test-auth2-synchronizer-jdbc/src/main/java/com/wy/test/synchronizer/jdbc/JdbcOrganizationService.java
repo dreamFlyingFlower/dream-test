@@ -8,32 +8,32 @@ import java.util.ArrayList;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.constants.ConstsStatus;
-import com.wy.test.entity.DbTableMetaData;
 import com.wy.test.entity.Organizations;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
-import com.wy.test.util.JdbcUtils;
+
+import dream.flying.flower.db.JdbcHelper;
+import dream.flying.flower.db.TableMetaData;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class JdbcOrganizationService extends AbstractSynchronizerService implements ISynchronizerService {
-
-	final static Logger _logger = LoggerFactory.getLogger(JdbcOrganizationService.class);
 
 	static ArrayList<ColumnFieldMapper> mapperList = new ArrayList<ColumnFieldMapper>();
 
+	@Override
 	public void sync() {
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			if (StringUtils.isNotBlank(synchronizer.getOrgFilters())) {
-				_logger.info("Sync Org Filters {}", synchronizer.getOrgFilters());
-				conn = JdbcUtils.connect(synchronizer.getProviderUrl(), synchronizer.getPrincipal(),
+				log.info("Sync Org Filters {}", synchronizer.getOrgFilters());
+				conn = JdbcHelper.connect(synchronizer.getProviderUrl(), synchronizer.getPrincipal(),
 						synchronizer.getCredentials(), synchronizer.getDriverClass());
 
 				stmt = conn.createStatement();
@@ -49,18 +49,22 @@ public class JdbcOrganizationService extends AbstractSynchronizerService impleme
 				}
 			}
 		} catch (Exception e) {
-			_logger.error("Exception ", e);
+			log.error("Exception:{} ", e);
 		} finally {
-			JdbcUtils.release(conn, stmt, rs);
+			try {
+				JdbcHelper.release(conn, stmt, rs);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public Organizations buildOrganization(ResultSet rs) throws SQLException {
-		DbTableMetaData meta = JdbcUtils.getMetaData(rs);
+		TableMetaData meta = JdbcHelper.getMetaData(rs);
 		Organizations org = new Organizations();
 
 		for (ColumnFieldMapper mapper : mapperList) {
-			if (meta.getColumnsMap().containsKey(mapper.getColumn())) {
+			if (meta.getColumnDetail().containsKey(mapper.getColumn())) {
 				Object value = null;
 				if (mapper.getType().equalsIgnoreCase("String")) {
 					value = rs.getString(mapper.getColumn());
@@ -71,7 +75,7 @@ public class JdbcOrganizationService extends AbstractSynchronizerService impleme
 					try {
 						PropertyUtils.setSimpleProperty(org, mapper.getField(), value);
 					} catch (Exception e) {
-						_logger.error("setSimpleProperty {}", e);
+						log.error("setSimpleProperty {}", e);
 					}
 				}
 			}
@@ -79,13 +83,13 @@ public class JdbcOrganizationService extends AbstractSynchronizerService impleme
 
 		org.setId(org.generateId());
 		org.setInstId(this.synchronizer.getInstId());
-		if (meta.getColumnsMap().containsKey("status")) {
+		if (meta.getColumnDetail().containsKey("status")) {
 			org.setStatus(rs.getInt("status"));
 		} else {
 			org.setStatus(ConstsStatus.ACTIVE);
 		}
 
-		_logger.debug("Organization {}", org);
+		log.debug("Organization {}", org);
 		return org;
 	}
 

@@ -32,6 +32,7 @@ public class ActiveDirectoryUsersService extends AbstractSynchronizerService imp
 
 	ActiveDirectoryUtils ldapUtils;
 
+	@Override
 	public void sync() {
 		_logger.info("Sync ActiveDirectory Users...");
 		loadOrgsByInstId(this.synchronizer.getInstId(), Organizations.ROOT_ORG_ID);

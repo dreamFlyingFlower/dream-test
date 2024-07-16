@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -25,40 +26,35 @@ import com.wy.test.util.DateUtils;
 
 /**
  * 单点登录日志查询
- * 
- * @author Crystal.sea
- *
  */
-
 @Controller
-@RequestMapping(value={"/historys"})
+@RequestMapping(value = { "/historys" })
 public class LoginAppsHistoryController {
-final static Logger _logger = LoggerFactory.getLogger(LoginAppsHistoryController.class);
-	
+
+	final static Logger _logger = LoggerFactory.getLogger(LoginAppsHistoryController.class);
+
 	@Autowired
-  	protected HistoryLoginAppsService historyLoginAppsService;
-	
+	protected HistoryLoginAppsService historyLoginAppsService;
+
 	/**
 	 * @param loginAppsHistory
 	 * @return
 	 */
-	@RequestMapping(value={"/loginAppsHistory/fetch"})
+	@PostMapping(value = { "/loginAppsHistory/fetch" })
 	@ResponseBody
-	public ResponseEntity<?> fetch(
-				@ModelAttribute("historyLoginApp") HistoryLoginApps historyLoginApp,
-				@CurrentUser UserInfo currentUser){
-		_logger.debug("historys/loginAppsHistory/fetch/  {}",historyLoginApp);
+	public ResponseEntity<?> fetch(@ModelAttribute("historyLoginApp") HistoryLoginApps historyLoginApp,
+			@CurrentUser UserInfo currentUser) {
+		_logger.debug("historys/loginAppsHistory/fetch/  {}", historyLoginApp);
 		historyLoginApp.setId(null);
 		historyLoginApp.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<HistoryLoginApps>>(
-					historyLoginAppsService.fetchPageResults(historyLoginApp)
-				).buildResponse();
+		return new Message<JpaPageResults<HistoryLoginApps>>(historyLoginAppsService.fetchPageResults(historyLoginApp))
+				.buildResponse();
 	}
 
 	@InitBinder
-    public void initBinder(WebDataBinder binder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DateUtils.FORMAT_DATE_HH_MM_SS);
-        dateFormat.setLenient(false);  
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
-    }
+	public void initBinder(WebDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(DateUtils.FORMAT_DATE_HH_MM_SS);
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+	}
 }

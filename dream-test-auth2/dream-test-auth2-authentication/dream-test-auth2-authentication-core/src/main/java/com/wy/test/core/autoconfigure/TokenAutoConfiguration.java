@@ -24,7 +24,7 @@ public class TokenAutoConfiguration implements InitializingBean {
 	private static final Logger _logger = LoggerFactory.getLogger(TokenAutoConfiguration.class);
 
 	@Bean
-	public AuthTokenService authTokenService(AuthJwkConfig authJwkConfig, RedisConnectionFactory redisConnFactory,
+	AuthTokenService authTokenService(AuthJwkConfig authJwkConfig, RedisConnectionFactory redisConnFactory,
 			MomentaryService momentaryService, AuthRefreshTokenService refreshTokenService,
 			@Value("${maxkey.server.persistence}") int persistence) throws JOSEException {
 		CongressService congressService;
@@ -42,7 +42,7 @@ public class TokenAutoConfiguration implements InitializingBean {
 	}
 
 	@Bean
-	public AuthRefreshTokenService refreshTokenService(AuthJwkConfig authJwkConfig) throws JOSEException {
+	AuthRefreshTokenService refreshTokenService(AuthJwkConfig authJwkConfig) throws JOSEException {
 		return new AuthRefreshTokenService(authJwkConfig);
 	}
 

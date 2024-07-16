@@ -1,16 +1,3 @@
-/*
- * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
-
 package com.wy.test.cas.authz.endpoint.ticket;
 
 import java.util.Collection;
@@ -24,8 +11,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.wy.test.entity.apps.AppsCasDetails;
 
 /**
- * Interface for a ticket granting ticket. A TicketGrantingTicket is the main access into the CAS service layer. Without
- * a TicketGrantingTicket, a user of CAS cannot do anything.
+ * Interface for a ticket granting ticket. A TicketGrantingTicket is the main
+ * access into the CAS service layer. Without a TicketGrantingTicket, a user of
+ * CAS cannot do anything.
  *
  * @author Scott Battaglia
  * @since 3.0.0
@@ -43,6 +31,7 @@ public interface TicketGrantingTicket extends Ticket {
 	 *
 	 * @return the authentication
 	 */
+	@Override
 	Authentication getAuthentication();
 
 	/**
@@ -51,17 +40,22 @@ public interface TicketGrantingTicket extends Ticket {
 	 * @param id The unique identifier for this ticket.
 	 * @param service The service for which we are granting a ticket
 	 * @param expirationPolicy the expiration policy.
-	 * @param credentialProvided current credential event for issuing this ticket. Could be null.
-	 * @param onlyTrackMostRecentSession track the most recent session by keeping the latest service ticket
-	 * @return the service ticket granted to a specific service for the principal of the TicketGrantingTicket
+	 * @param credentialProvided current credential event for issuing this ticket.
+	 *        Could be null.
+	 * @param onlyTrackMostRecentSession track the most recent session by keeping
+	 *        the latest service ticket
+	 * @return the service ticket granted to a specific service for the principal of
+	 *         the TicketGrantingTicket
 	 */
 	ServiceTicket grantServiceTicket(String id, Service service, AppsCasDetails casDetails,
 			ExpirationPolicy expirationPolicy, boolean credentialProvided, boolean onlyTrackMostRecentSession);
 
 	/**
-	 * Gets an immutable map of service ticket and services accessed by this ticket-granting ticket.
+	 * Gets an immutable map of service ticket and services accessed by this
+	 * ticket-granting ticket.
 	 *
-	 * @return an immutable map of service ticket and services accessed by this ticket-granting ticket.
+	 * @return an immutable map of service ticket and services accessed by this
+	 *         ticket-granting ticket.
 	 */
 	Map<String, Service> getServices();
 
@@ -78,7 +72,8 @@ public interface TicketGrantingTicket extends Ticket {
 	void removeAllServices();
 
 	/**
-	 * Convenience method to determine if the TicketGrantingTicket is the root of the hierarchy of tickets.
+	 * Convenience method to determine if the TicketGrantingTicket is the root of
+	 * the hierarchy of tickets.
 	 *
 	 * @return true if it has no parent, false otherwise.
 	 */
@@ -92,24 +87,27 @@ public interface TicketGrantingTicket extends Ticket {
 	TicketGrantingTicket getRoot();
 
 	/**
-	 * Gets all authentications ({@link #getAuthentication()} from this instance and all dependent tickets that
-	 * reference this one.
+	 * Gets all authentications ({@link #getAuthentication()} from this instance and
+	 * all dependent tickets that reference this one.
 	 *
-	 * @return Non -null list of authentication associated with this ticket in leaf-first order.
+	 * @return Non -null list of authentication associated with this ticket in
+	 *         leaf-first order.
 	 */
 	List<Authentication> getChainedAuthentications();
 
 	/**
 	 * Gets the service that produced a proxy-granting ticket.
 	 *
-	 * @return Service that produced proxy-granting ticket or null if this is not a proxy-granting ticket.
+	 * @return Service that produced proxy-granting ticket or null if this is not a
+	 *         proxy-granting ticket.
 	 * @since 4.1
 	 */
 	Service getProxiedBy();
 
 	/**
-	 * Gets descendant tickets. These are generally ticket ids whose life-line is separate from the TGT until and unless
-	 * the TGT goes away entirely. Things such as OAuth access tokens are a good example of such linked tickets.
+	 * Gets descendant tickets. These are generally ticket ids whose life-line is
+	 * separate from the TGT until and unless the TGT goes away entirely. Things
+	 * such as OAuth access tokens are a good example of such linked tickets.
 	 *
 	 * @return the descendant tickets
 	 * @since 5.1

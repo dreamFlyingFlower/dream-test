@@ -1,20 +1,3 @@
-/*
- * Copyright [2022] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
-
 package com.wy.test.web.access.contorller;
 
 import java.text.SimpleDateFormat;
@@ -28,6 +11,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,74 +30,68 @@ import com.wy.test.util.StringUtils;
 
 /**
  * 登录会话管理.
- * 
- * @author Crystal.sea
  *
  */
-
 @Controller
 @RequestMapping(value = { "/access/session" })
 public class SessionController {
-    static final Logger _logger = LoggerFactory.getLogger(SessionController.class);
 
-    @Autowired
-    HistoryLoginService historyLoginService;
-    
-    @Autowired
-    SessionManager sessionManager;
+	static final Logger _logger = LoggerFactory.getLogger(SessionController.class);
 
-    @Autowired
+	@Autowired
+	HistoryLoginService historyLoginService;
+
+	@Autowired
+	SessionManager sessionManager;
+
+	@Autowired
 	HistorySystemLogsService systemLog;
-    
-    /**
-     * 查询登录日志.
-     * 
-     * @param logsAuth
-     * @return
-     */
-    @RequestMapping(value = { "/fetch" })
-    @ResponseBody
-    public ResponseEntity<?> fetch(
-    			@ModelAttribute("historyLogin") HistoryLogin historyLogin,
-    			@CurrentUser UserInfo currentUser) {
-        _logger.debug("history/session/fetch {}" , historyLogin);
-        historyLogin.setInstId(currentUser.getInstId());
-        return new Message<JpaPageResults<HistoryLogin>>(
-        			historyLoginService.queryOnlineSession(historyLogin)
-        		).buildResponse();
-    }
 
+	/**
+	 * 查询登录日志.
+	 * 
+	 * @param logsAuth
+	 * @return
+	 */
+	@GetMapping(value = { "/fetch" })
+	@ResponseBody
+	public ResponseEntity<?> fetch(@ModelAttribute("historyLogin") HistoryLogin historyLogin,
+			@CurrentUser UserInfo currentUser) {
+		_logger.debug("history/session/fetch {}", historyLogin);
+		historyLogin.setInstId(currentUser.getInstId());
+		return new Message<JpaPageResults<HistoryLogin>>(historyLoginService.queryOnlineSession(historyLogin))
+				.buildResponse();
+	}
 
-    
-    @ResponseBody
-    @RequestMapping(value="/terminate")  
-    public ResponseEntity<?> terminate(@RequestParam("ids") String ids,@CurrentUser UserInfo currentUser) {
-        _logger.debug(ids);
-        boolean isTerminated = false;
-        try {
-            for(String sessionId : StringUtils.string2List(ids, ",")) {
-                _logger.trace("terminate session Id {} ",sessionId);
-                if(currentUser.getSessionId().contains(sessionId)) {
-                    continue;//skip current session
-                }
-                sessionManager.terminate(sessionId,currentUser.getId(),currentUser.getUsername());
-            }
-            isTerminated = true;
-        }catch(Exception e) {
-            _logger.debug("terminate Exception .",e);
-        }
-        
-        if(isTerminated) {
-        	return new Message<HistoryLogin>(Message.SUCCESS).buildResponse();
-        } else {
-        	return new Message<HistoryLogin>(Message.ERROR).buildResponse();
-        }
-    }
-    
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DateUtils.FORMAT_DATE_HH_MM_SS);
-        dateFormat.setLenient(false);
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
-    }
+	@ResponseBody
+	@GetMapping(value = "/terminate")
+	public ResponseEntity<?> terminate(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+		_logger.debug(ids);
+		boolean isTerminated = false;
+		try {
+			for (String sessionId : StringUtils.string2List(ids, ",")) {
+				_logger.trace("terminate session Id {} ", sessionId);
+				if (currentUser.getSessionId().contains(sessionId)) {
+					continue;// skip current session
+				}
+				sessionManager.terminate(sessionId, currentUser.getId(), currentUser.getUsername());
+			}
+			isTerminated = true;
+		} catch (Exception e) {
+			_logger.debug("terminate Exception .", e);
+		}
+
+		if (isTerminated) {
+			return new Message<HistoryLogin>(Message.SUCCESS).buildResponse();
+		} else {
+			return new Message<HistoryLogin>(Message.ERROR).buildResponse();
+		}
+	}
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(DateUtils.FORMAT_DATE_HH_MM_SS);
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+	}
 }

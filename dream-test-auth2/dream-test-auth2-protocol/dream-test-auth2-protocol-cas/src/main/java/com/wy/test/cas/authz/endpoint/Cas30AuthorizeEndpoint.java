@@ -9,7 +9,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
@@ -30,7 +30,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
- * @author Crystal.Sea https://apereo.github.io/cas/6.2.x/protocol/CAS-Protocol-Specification.html
+ * https://apereo.github.io/cas/6.2.x/protocol/CAS-Protocol-Specification.html
  */
 @Tag(name = "2-3-CAS API文档模块")
 @Controller
@@ -39,7 +39,7 @@ public class Cas30AuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 	final static Logger _logger = LoggerFactory.getLogger(Cas30AuthorizeEndpoint.class);
 
 	@Operation(summary = "CAS 3.0 ticket验证接口", description = "通过ticket获取当前登录用户信息", method = "POST")
-	@RequestMapping(value = CasConstants.ENDPOINT.ENDPOINT_SERVICE_VALIDATE_V3)
+	@GetMapping(value = CasConstants.ENDPOINT.ENDPOINT_SERVICE_VALIDATE_V3)
 	public void serviceValidate(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = CasConstants.PARAMETER.TICKET) String ticket,
 			@RequestParam(value = CasConstants.PARAMETER.SERVICE) String service,
@@ -100,7 +100,7 @@ public class Cas30AuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 
 	@Operation(summary = "CAS 3.0 ProxyTicket代理验证接口", description = "通过ProxyGrantingTicket获取ProxyTicket",
 			method = "POST")
-	@RequestMapping(CasConstants.ENDPOINT.ENDPOINT_PROXY_V3)
+	@GetMapping(CasConstants.ENDPOINT.ENDPOINT_PROXY_V3)
 	public void proxy(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = CasConstants.PARAMETER.PROXY_GRANTING_TICKET) String pgt,
 			@RequestParam(value = CasConstants.PARAMETER.TARGET_SERVICE) String targetService,
@@ -123,7 +123,7 @@ public class Cas30AuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 	}
 
 	@Operation(summary = "CAS 3.0 ticket代理验证接口", description = "通过ProxyTicket获取当前登录用户信息", method = "POST")
-	@RequestMapping(CasConstants.ENDPOINT.ENDPOINT_PROXY_VALIDATE_V3)
+	@GetMapping(CasConstants.ENDPOINT.ENDPOINT_PROXY_VALIDATE_V3)
 	public void proxy(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = CasConstants.PARAMETER.TICKET) String ticket,
 			@RequestParam(value = CasConstants.PARAMETER.SERVICE) String service,

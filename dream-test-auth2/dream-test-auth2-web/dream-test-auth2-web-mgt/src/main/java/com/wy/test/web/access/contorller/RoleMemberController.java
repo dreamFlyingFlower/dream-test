@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,7 +45,7 @@ public class RoleMemberController {
 	@Autowired
 	HistorySystemLogsService systemLog;
 
-	@RequestMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
 	public ResponseEntity<?> fetch(@ModelAttribute RoleMember roleMember, @CurrentUser UserInfo currentUser) {
 		_logger.debug("fetch " + roleMember);
@@ -51,7 +53,7 @@ public class RoleMemberController {
 		return new Message<JpaPageResults<RoleMember>>(roleMemberService.fetchPageResults(roleMember)).buildResponse();
 	}
 
-	@RequestMapping(value = { "/memberInRole" })
+	@GetMapping(value = { "/memberInRole" })
 	@ResponseBody
 	public ResponseEntity<?> memberInRole(@ModelAttribute RoleMember roleMember, @CurrentUser UserInfo currentUser) {
 		_logger.debug("roleMember : " + roleMember);
@@ -61,7 +63,7 @@ public class RoleMemberController {
 
 	}
 
-	@RequestMapping(value = { "/memberNotInRole" })
+	@GetMapping(value = { "/memberNotInRole" })
 	@ResponseBody
 	public ResponseEntity<?> memberNotInRole(@ModelAttribute RoleMember roleMember, @CurrentUser UserInfo currentUser) {
 		roleMember.setInstId(currentUser.getInstId());
@@ -69,7 +71,7 @@ public class RoleMemberController {
 				roleMemberService.fetchPageResults("memberNotInRole", roleMember)).buildResponse();
 	}
 
-	@RequestMapping(value = { "/rolesNoMember" })
+	@GetMapping(value = { "/rolesNoMember" })
 	@ResponseBody
 	public ResponseEntity<?> rolesNoMember(@ModelAttribute RoleMember roleMember, @CurrentUser UserInfo currentUser) {
 		roleMember.setInstId(currentUser.getInstId());
@@ -83,7 +85,7 @@ public class RoleMemberController {
 	 * @param currentUser
 	 * @return
 	 */
-	@RequestMapping(value = { "/add" })
+	@PostMapping(value = { "/add" })
 	@ResponseBody
 	public ResponseEntity<?> addRoleMember(@RequestBody RoleMember roleMember, @CurrentUser UserInfo currentUser) {
 		if (roleMember == null || roleMember.getRoleId() == null) {
@@ -121,7 +123,7 @@ public class RoleMemberController {
 	 * @param currentUser
 	 * @return
 	 */
-	@RequestMapping(value = { "/addMember2Roles" })
+	@PostMapping(value = { "/addMember2Roles" })
 	@ResponseBody
 	public ResponseEntity<?> addMember2Roles(@RequestBody RoleMember roleMember, @CurrentUser UserInfo currentUser) {
 		if (roleMember == null || StringUtils.isBlank(roleMember.getUsername())) {
@@ -150,7 +152,7 @@ public class RoleMemberController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
 		_logger.debug("-delete ids : {}", ids);
 		if (roleMemberService.deleteBatch(ids)) {

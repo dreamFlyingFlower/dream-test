@@ -10,12 +10,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,7 +58,7 @@ public class ScimOrganizationController {
 		return new MappingJacksonValue(scimOrg);
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	@PostMapping
 	public MappingJacksonValue create(@RequestBody ScimOrganization scimOrg,
 			@RequestParam(required = false) String attributes, UriComponentsBuilder builder) throws IOException {
 		Organizations createOrg = scimOrg2Org(scimOrg);
@@ -64,7 +66,7 @@ public class ScimOrganizationController {
 		return get(createOrg.getId(), attributes);
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@PutMapping(value = "/{id}")
 	public MappingJacksonValue replace(@PathVariable String id, @RequestBody ScimOrganization scimOrg,
 			@RequestParam(required = false) String attributes) throws IOException {
 		Organizations updateOrg = scimOrg2Org(scimOrg);
@@ -72,18 +74,18 @@ public class ScimOrganizationController {
 		return get(id, attributes);
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@DeleteMapping(value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable final String id) {
 		organizationsService.remove(id);
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@GetMapping
 	public MappingJacksonValue searchWithGet(@ModelAttribute ScimParameters requestParameters) {
 		return searchWithPost(requestParameters);
 	}
 
-	@RequestMapping(value = "/.search", method = RequestMethod.POST)
+	@PostMapping(value = "/.search")
 	public MappingJacksonValue searchWithPost(@ModelAttribute ScimParameters requestParameters) {
 		requestParameters.parse();
 		_logger.debug("requestParameters {} ", requestParameters);

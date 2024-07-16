@@ -11,10 +11,6 @@ import com.wy.test.entity.Accounts;
 import com.wy.test.entity.AccountsStrategy;
 import com.wy.test.entity.UserInfo;
 
-/**
- * @author Crystal.sea
- *
- */
 public interface AccountsMapper extends IJpaMapper<Accounts> {
 
 	public List<UserInfo> queryUserNotInStrategy(AccountsStrategy strategy);

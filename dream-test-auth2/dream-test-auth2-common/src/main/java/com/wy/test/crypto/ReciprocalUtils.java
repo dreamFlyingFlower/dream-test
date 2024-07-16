@@ -25,8 +25,6 @@ import dream.flying.flower.binary.HexHelper;
  * 
  * generateKey is generate random key for algorithm
  * 
- * @author Crystal.Sea
- * 
  */
 public final class ReciprocalUtils {
 

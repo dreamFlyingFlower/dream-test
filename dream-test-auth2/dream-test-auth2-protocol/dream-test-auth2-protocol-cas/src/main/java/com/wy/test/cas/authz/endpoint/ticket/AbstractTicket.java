@@ -1,16 +1,3 @@
-/*
- * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
-
 package com.wy.test.cas.authz.endpoint.ticket;
 
 import java.time.ZoneOffset;
@@ -26,14 +13,17 @@ import org.springframework.util.Assert;
 import com.wy.test.entity.apps.AppsCasDetails;
 
 /**
- * Abstract implementation of a ticket that handles all ticket state for policies. Also incorporates properties common
- * among all tickets. As this is an abstract class, it cannnot be instanciated. It is recommended that implementations
- * of the Ticket interface extend the AbstractTicket as it handles common functionality amongst different ticket types
- * (such as state updating).
+ * Abstract implementation of a ticket that handles all ticket state for
+ * policies. Also incorporates properties common among all tickets. As this is
+ * an abstract class, it cannnot be instanciated. It is recommended that
+ * implementations of the Ticket interface extend the AbstractTicket as it
+ * handles common functionality amongst different ticket types (such as state
+ * updating).
  *
- * AbstractTicket does not provide a logger instance to avoid instantiating many such Loggers at runtime (there will be
- * many instances of subclasses of AbstractTicket in a typical running CAS server). Instead subclasses should use static
- * Logger instances.
+ * AbstractTicket does not provide a logger instance to avoid instantiating many
+ * such Loggers at runtime (there will be many instances of subclasses of
+ * AbstractTicket in a typical running CAS server). Instead subclasses should
+ * use static Logger instances.
  *
  * @author Scott Battaglia
  * @since 3.0.0
@@ -75,8 +65,8 @@ public abstract class AbstractTicket implements Ticket {
 	}
 
 	/**
-	 * Constructs a new Ticket with a unique id, a possible parent Ticket (can be null) and a specified Expiration
-	 * Policy.
+	 * Constructs a new Ticket with a unique id, a possible parent Ticket (can be
+	 * null) and a specified Expiration Policy.
 	 *
 	 * @param id the unique identifier for the ticket
 	 * @param expirationPolicy the expiration policy for the ticket.

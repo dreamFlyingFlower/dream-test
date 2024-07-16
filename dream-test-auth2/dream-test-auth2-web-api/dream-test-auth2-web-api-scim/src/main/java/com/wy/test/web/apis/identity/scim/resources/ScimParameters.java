@@ -1,50 +1,39 @@
-/*
- * Copyright [2022] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
-
 package com.wy.test.web.apis.identity.scim.resources;
 
 import com.wy.test.web.apis.identity.scim.ScimServiceProviderConfigController;
 
 public class ScimParameters {
+
 	int startIndex = 1;
+
 	int count = ScimServiceProviderConfigController.MAX_RESULTS;
+
 	String ﬁlter;
+
 	String sortBy;
+
 	String sortOrder = "ascending";
+
 	String attributes;
 
 	public ScimParameters() {
 	}
 
 	public void parse() {
-		if(startIndex == -1) {
-    		count = ScimServiceProviderConfigController.MAX_RESULTS_LIMIT;
-    	}
-		
-		if(startIndex <= 0) {
+		if (startIndex == -1) {
+			count = ScimServiceProviderConfigController.MAX_RESULTS_LIMIT;
+		}
+
+		if (startIndex <= 0) {
 			startIndex = 1;
 		}
-		
-		if(count > ScimServiceProviderConfigController.MAX_RESULTS
+
+		if (count > ScimServiceProviderConfigController.MAX_RESULTS
 				&& count != ScimServiceProviderConfigController.MAX_RESULTS_LIMIT) {
-    		count = ScimServiceProviderConfigController.MAX_RESULTS;
-    	}
+			count = ScimServiceProviderConfigController.MAX_RESULTS;
+		}
 	}
-	
+
 	public int getCount() {
 		return count;
 	}

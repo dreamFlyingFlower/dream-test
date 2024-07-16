@@ -21,45 +21,47 @@ import com.wy.test.web.WebConstants;
 import com.wy.test.web.WebContext;
 
 @Component
-public class HistorySignOnAppInterceptor  implements AsyncHandlerInterceptor  {
-    private static final Logger _logger = LoggerFactory.getLogger(HistorySignOnAppInterceptor.class);
+public class HistorySignOnAppInterceptor implements AsyncHandlerInterceptor {
 
-    @Autowired
-    HistoryLoginAppsService historyLoginAppsService;
+	private static final Logger _logger = LoggerFactory.getLogger(HistorySignOnAppInterceptor.class);
 
-    @Autowired
-    protected AppsService appsService;
+	@Autowired
+	HistoryLoginAppsService historyLoginAppsService;
 
-    /**
-     * postHandle .
-     * @see org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(
-     *          javax.servlet.http.HttpServletRequest, 
-     *          javax.servlet.http.HttpServletResponse, java.lang.Object)
-     */
-    public void postHandle(HttpServletRequest request,
-            HttpServletResponse response,
-            Object handler,ModelAndView modelAndView) throws Exception {
-        _logger.debug("postHandle");
-       
-        final Apps app = (Apps)WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
-        
-        SignPrincipal principal = AuthorizationUtils.getPrincipal();
-        if(principal != null && app !=null) {
-        	final UserInfo userInfo = principal.getUserInfo();
-        	String sessionId = principal.getSession().getId();
-        	 _logger.debug("sessionId : " + sessionId + " ,appId : " + app.getId());
-             HistoryLoginApps historyLoginApps = new HistoryLoginApps();
-             historyLoginApps.setAppId(app.getId());
-             historyLoginApps.setSessionId(sessionId);
-             historyLoginApps.setAppName(app.getAppName());
-             historyLoginApps.setUserId(userInfo.getId());
-             historyLoginApps.setUsername(userInfo.getUsername());
-             historyLoginApps.setDisplayName(userInfo.getDisplayName());
-             historyLoginApps.setInstId(userInfo.getInstId());
-             historyLoginAppsService.insert(historyLoginApps);
-             WebContext.removeAttribute(WebConstants.CURRENT_SINGLESIGNON_URI);
-             WebContext.removeAttribute(WebConstants.SINGLE_SIGN_ON_APP_ID);
-        }
-       
-    }
+	@Autowired
+	protected AppsService appsService;
+
+	/**
+	 * postHandle .
+	 * 
+	 * @see org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(
+	 *      javax.servlet.http.HttpServletRequest,
+	 *      javax.servlet.http.HttpServletResponse, java.lang.Object)
+	 */
+	@Override
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+			ModelAndView modelAndView) throws Exception {
+		_logger.debug("postHandle");
+
+		final Apps app = (Apps) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
+
+		SignPrincipal principal = AuthorizationUtils.getPrincipal();
+		if (principal != null && app != null) {
+			final UserInfo userInfo = principal.getUserInfo();
+			String sessionId = principal.getSession().getId();
+			_logger.debug("sessionId : " + sessionId + " ,appId : " + app.getId());
+			HistoryLoginApps historyLoginApps = new HistoryLoginApps();
+			historyLoginApps.setAppId(app.getId());
+			historyLoginApps.setSessionId(sessionId);
+			historyLoginApps.setAppName(app.getAppName());
+			historyLoginApps.setUserId(userInfo.getId());
+			historyLoginApps.setUsername(userInfo.getUsername());
+			historyLoginApps.setDisplayName(userInfo.getDisplayName());
+			historyLoginApps.setInstId(userInfo.getInstId());
+			historyLoginAppsService.insert(historyLoginApps);
+			WebContext.removeAttribute(WebConstants.CURRENT_SINGLESIGNON_URI);
+			WebContext.removeAttribute(WebConstants.SINGLE_SIGN_ON_APP_ID);
+		}
+
+	}
 }

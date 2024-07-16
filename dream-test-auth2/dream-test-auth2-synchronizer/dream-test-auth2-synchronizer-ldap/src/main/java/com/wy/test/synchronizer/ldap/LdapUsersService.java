@@ -30,6 +30,7 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 
 	LdapUtils ldapUtils;
 
+	@Override
 	public void sync() {
 		_logger.info("Sync Ldap Users ...");
 		loadOrgsByInstId(this.synchronizer.getInstId(), Organizations.ROOT_ORG_ID);

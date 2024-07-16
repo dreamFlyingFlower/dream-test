@@ -19,115 +19,101 @@ import com.wy.test.provider.authn.realm.AbstractAuthenticationRealm;
 import com.wy.test.web.WebConstants;
 import com.wy.test.web.WebContext;
 
-
 /**
  * database Authentication provider.
- * @author Crystal.Sea
- *
  */
 public class MfaAuthenticationProvider extends AbstractAuthenticationProvider {
-    private static final Logger _logger =
-            LoggerFactory.getLogger(MfaAuthenticationProvider.class);
 
-    public String getProviderName() {
-        return "mfa" + PROVIDER_SUFFIX;
-    }
-    
-    public MfaAuthenticationProvider() {
+	private static final Logger _logger = LoggerFactory.getLogger(MfaAuthenticationProvider.class);
+
+	@Override
+	public String getProviderName() {
+		return "mfa" + PROVIDER_SUFFIX;
+	}
+
+	public MfaAuthenticationProvider() {
 		super();
 	}
 
-    public MfaAuthenticationProvider(
-    		AbstractAuthenticationRealm authenticationRealm,
-    		ApplicationConfig applicationConfig,
-    	    SessionManager sessionManager,
-    	    AuthTokenService authTokenService) {
+	public MfaAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
+			ApplicationConfig applicationConfig, SessionManager sessionManager, AuthTokenService authTokenService) {
 		this.authenticationRealm = authenticationRealm;
 		this.applicationConfig = applicationConfig;
 		this.sessionManager = sessionManager;
 		this.authTokenService = authTokenService;
 	}
 
-    @Override
+	@Override
 	public Authentication doAuthenticate(LoginCredential loginCredential) {
 		UsernamePasswordAuthenticationToken authenticationToken = null;
-		_logger.debug("Trying to authenticate user '{}' via {}", 
-                loginCredential.getPrincipal(), getProviderName());
-        try {
-        	
-	        _logger.debug("authentication " + loginCredential);
-	        
-	        Institutions inst = (Institutions)WebContext.getAttribute(WebConstants.CURRENT_INST);
+		_logger.debug("Trying to authenticate user '{}' via {}", loginCredential.getPrincipal(), getProviderName());
+		try {
 
-	        emptyPasswordValid(loginCredential.getPassword());
-	
-	        UserInfo userInfo = null;
-	
-	        emptyUsernameValid(loginCredential.getUsername());
-	
-	        userInfo =  loadUserInfo(loginCredential.getUsername(),loginCredential.getPassword());
-	
-	        statusValid(loginCredential , userInfo);
-	        //mfa 
-	        mfacaptchaValid(loginCredential.getOtpCaptcha(),userInfo);
-	        
-	        //Validate PasswordPolicy
-	        authenticationRealm.getPasswordPolicyValidator().passwordPolicyValid(userInfo);
-	             
-	        //Match password 
-	        authenticationRealm.passwordMatches(userInfo, loginCredential.getPassword());
+			_logger.debug("authentication " + loginCredential);
 
-	        //apply PasswordSetType and resetBadPasswordCount
-	        authenticationRealm.getPasswordPolicyValidator().applyPasswordPolicy(userInfo);
-	        
-	        authenticationToken = createOnlineTicket(loginCredential,userInfo);
-	        // user authenticated
-	        _logger.debug("'{}' authenticated successfully by {}.", 
-	        		loginCredential.getPrincipal(), getProviderName());
-	        
-	        authenticationRealm.insertLoginHistory(userInfo, 
-							        				ConstsLoginType.LOCAL, 
-									                "", 
-									                "xe00000004", 
-									                WebConstants.LOGIN_RESULT.SUCCESS);
-        } catch (AuthenticationException e) {
-            _logger.error("Failed to authenticate user {} via {}: {}",
-                    new Object[] {  loginCredential.getPrincipal(),
-                                    getProviderName(),
-                                    e.getMessage() });
-            WebContext.setAttribute(
-                    WebConstants.LOGIN_ERROR_SESSION_MESSAGE, e.getMessage());
-        } catch (Exception e) {
-            _logger.error("Login error Unexpected exception in {} authentication:\n{}" ,
-                            getProviderName(), e.getMessage());
-        }
-       
-        return  authenticationToken;
-    }
-    
-    
+			@SuppressWarnings("unused")
+			Institutions inst = (Institutions) WebContext.getAttribute(WebConstants.CURRENT_INST);
 
-    /**
-     * captcha validate.
-     * 
-     * @param otpCaptcha String
-     * @param authType   String
-     * @param userInfo   UserInfo
-     */
-    protected void mfacaptchaValid(String otpCaptcha, UserInfo userInfo) {
-        // for one time password 2 factor
-        if (applicationConfig.getLoginConfig().isMfa()) {
-            UserInfo validUserInfo = new UserInfo();
-            validUserInfo.setUsername(userInfo.getUsername());
-            validUserInfo.setSharedSecret(userInfo.getSharedSecret());
-            validUserInfo.setSharedCounter(userInfo.getSharedCounter());
-            validUserInfo.setId(userInfo.getId());
-            if (otpCaptcha == null || !tfaOtpAuthn.validate(validUserInfo, otpCaptcha)) {
-                String message = WebContext.getI18nValue("login.error.captcha");
-                _logger.debug("login captcha valid error.");
-                throw new BadCredentialsException(message);
-            }
-        }
-    }
+			emptyPasswordValid(loginCredential.getPassword());
+
+			UserInfo userInfo = null;
+
+			emptyUsernameValid(loginCredential.getUsername());
+
+			userInfo = loadUserInfo(loginCredential.getUsername(), loginCredential.getPassword());
+
+			statusValid(loginCredential, userInfo);
+			// mfa
+			mfacaptchaValid(loginCredential.getOtpCaptcha(), userInfo);
+
+			// Validate PasswordPolicy
+			authenticationRealm.getPasswordPolicyValidator().passwordPolicyValid(userInfo);
+
+			// Match password
+			authenticationRealm.passwordMatches(userInfo, loginCredential.getPassword());
+
+			// apply PasswordSetType and resetBadPasswordCount
+			authenticationRealm.getPasswordPolicyValidator().applyPasswordPolicy(userInfo);
+
+			authenticationToken = createOnlineTicket(loginCredential, userInfo);
+			// user authenticated
+			_logger.debug("'{}' authenticated successfully by {}.", loginCredential.getPrincipal(), getProviderName());
+
+			authenticationRealm.insertLoginHistory(userInfo, ConstsLoginType.LOCAL, "", "xe00000004",
+					WebConstants.LOGIN_RESULT.SUCCESS);
+		} catch (AuthenticationException e) {
+			_logger.error("Failed to authenticate user {} via {}: {}",
+					new Object[] { loginCredential.getPrincipal(), getProviderName(), e.getMessage() });
+			WebContext.setAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE, e.getMessage());
+		} catch (Exception e) {
+			_logger.error("Login error Unexpected exception in {} authentication:\n{}", getProviderName(),
+					e.getMessage());
+		}
+
+		return authenticationToken;
+	}
+
+	/**
+	 * captcha validate.
+	 * 
+	 * @param otpCaptcha String
+	 * @param authType String
+	 * @param userInfo UserInfo
+	 */
+	protected void mfacaptchaValid(String otpCaptcha, UserInfo userInfo) {
+		// for one time password 2 factor
+		if (applicationConfig.getLoginConfig().isMfa()) {
+			UserInfo validUserInfo = new UserInfo();
+			validUserInfo.setUsername(userInfo.getUsername());
+			validUserInfo.setSharedSecret(userInfo.getSharedSecret());
+			validUserInfo.setSharedCounter(userInfo.getSharedCounter());
+			validUserInfo.setId(userInfo.getId());
+			if (otpCaptcha == null || !tfaOtpAuthn.validate(validUserInfo, otpCaptcha)) {
+				String message = WebContext.getI18nValue("login.error.captcha");
+				_logger.debug("login captcha valid error.");
+				throw new BadCredentialsException(message);
+			}
+		}
+	}
 
 }

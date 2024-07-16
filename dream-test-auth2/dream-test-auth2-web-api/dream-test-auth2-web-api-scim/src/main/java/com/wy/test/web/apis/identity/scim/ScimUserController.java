@@ -10,12 +10,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,13 +35,13 @@ import com.wy.test.web.apis.identity.scim.resources.ScimFormattedName;
 import com.wy.test.web.apis.identity.scim.resources.ScimGroupRef;
 import com.wy.test.web.apis.identity.scim.resources.ScimManager;
 import com.wy.test.web.apis.identity.scim.resources.ScimMeta;
+import com.wy.test.web.apis.identity.scim.resources.ScimOrganizationEmail.UserEmailType;
+import com.wy.test.web.apis.identity.scim.resources.ScimOrganizationPhoneNumber.UserPhoneNumberType;
 import com.wy.test.web.apis.identity.scim.resources.ScimParameters;
 import com.wy.test.web.apis.identity.scim.resources.ScimSearchResult;
 import com.wy.test.web.apis.identity.scim.resources.ScimUser;
 import com.wy.test.web.apis.identity.scim.resources.ScimUserEmail;
 import com.wy.test.web.apis.identity.scim.resources.ScimUserPhoneNumber;
-import com.wy.test.web.apis.identity.scim.resources.ScimOrganizationEmail.UserEmailType;
-import com.wy.test.web.apis.identity.scim.resources.ScimOrganizationPhoneNumber.UserPhoneNumberType;
 
 /**
  * This Controller is used to manage User
@@ -62,14 +64,14 @@ public class ScimUserController {
 	@Autowired
 	RolesService rolesService;
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@GetMapping(value = "/{id}")
 	public MappingJacksonValue get(@PathVariable String id, @RequestParam(required = false) String attributes) {
 		UserInfo userInfo = userInfoService.get(id);
 		ScimUser scimUser = userInfo2ScimUser(userInfo);
 		return new MappingJacksonValue(scimUser);
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	@PostMapping
 	public MappingJacksonValue create(@RequestBody ScimUser user, @RequestParam(required = false) String attributes,
 			UriComponentsBuilder builder) throws IOException {
 		UserInfo userInfo = scimUser2UserInfo(user);
@@ -77,7 +79,7 @@ public class ScimUserController {
 		return get(userInfo.getId(), attributes);
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@PutMapping(value = "/{id}")
 	public MappingJacksonValue replace(@PathVariable String id, @RequestBody ScimUser user,
 			@RequestParam(required = false) String attributes) throws IOException {
 		UserInfo userInfo = scimUser2UserInfo(user);
@@ -85,13 +87,13 @@ public class ScimUserController {
 		return get(id, attributes);
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@DeleteMapping(value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable final String id) {
 		userInfoService.remove(id);
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@GetMapping
 	public MappingJacksonValue searchWithGet(@ModelAttribute ScimParameters requestParameters) {
 		return searchWithPost(requestParameters);
 	}

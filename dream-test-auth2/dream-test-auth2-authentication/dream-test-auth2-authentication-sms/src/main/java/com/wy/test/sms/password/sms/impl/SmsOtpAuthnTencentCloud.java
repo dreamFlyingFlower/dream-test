@@ -12,31 +12,35 @@ import com.tencentcloudapi.sms.v20190711.models.SendSmsResponse;
 import com.wy.test.entity.UserInfo;
 import com.wy.test.sms.password.sms.SmsOtpAuthn;
 
-
 /**
  * 腾讯云短信验证.
  */
 public class SmsOtpAuthnTencentCloud extends SmsOtpAuthn {
-    private static final  Logger logger = LoggerFactory.getLogger(SmsOtpAuthnTencentCloud.class);
 
-    //
-    String secretId;
-    //
-    String secretKey;
-    //短信SDKAPPID
-    String smsSdkAppid;
-    //短信模板
-    String templateId;
-    //签名
-    String sign;
-    
-    public SmsOtpAuthnTencentCloud() {
-        otpType = OtpTypes.SMS;
-    }
-    
-    public SmsOtpAuthnTencentCloud(String secretId, String secretKey, String smsSdkAppid, String templateId,
+	private static final Logger logger = LoggerFactory.getLogger(SmsOtpAuthnTencentCloud.class);
+
+	//
+	String secretId;
+
+	//
+	String secretKey;
+
+	// 短信SDKAPPID
+	String smsSdkAppid;
+
+	// 短信模板
+	String templateId;
+
+	// 签名
+	String sign;
+
+	public SmsOtpAuthnTencentCloud() {
+		otpType = OtpTypes.SMS;
+	}
+
+	public SmsOtpAuthnTencentCloud(String secretId, String secretKey, String smsSdkAppid, String templateId,
 			String sign) {
-    	otpType = OtpTypes.SMS;
+		otpType = OtpTypes.SMS;
 		this.secretId = secretId;
 		this.secretKey = secretKey;
 		this.smsSdkAppid = smsSdkAppid;
@@ -45,92 +49,85 @@ public class SmsOtpAuthnTencentCloud extends SmsOtpAuthn {
 	}
 
 	@Override
-    public boolean produce(UserInfo userInfo) {
-        // 手机号
-        String mobile = userInfo.getMobile();
-        if (mobile != null && !mobile.equals("")) {
-            try {
-                Credential cred = new Credential(secretId, secretKey);
-                
-                HttpProfile httpProfile = new HttpProfile();
-                httpProfile.setEndpoint("sms.tencentcloudapi.com");
+	public boolean produce(UserInfo userInfo) {
+		// 手机号
+		String mobile = userInfo.getMobile();
+		if (mobile != null && !mobile.equals("")) {
+			try {
+				Credential cred = new Credential(secretId, secretKey);
 
-                ClientProfile clientProfile = new ClientProfile();
-                clientProfile.setHttpProfile(httpProfile);
-                
-                SmsClient client = new SmsClient(cred, "ap-beijing", clientProfile);
-                String token = this.genToken(userInfo);
-                String params = "{\"PhoneNumberSet\":[\"" + mobile + "\"]," 
-                        + "\"TemplateID\":\"" + templateId + "\",\"Sign\":\"" + sign + "\","
-                        + "\"TemplateParamSet\":[\"" + token + "\",\"" + this.interval + "\"],"
-                        + "\"SmsSdkAppid\":\"" + smsSdkAppid + "\"}";
-                
-                SendSmsRequest req = SendSmsRequest.fromJsonString(params, SendSmsRequest.class);
-                
-                SendSmsResponse resp = client.SendSms(req);
-                
-                logger.debug("responseString " + SendSmsRequest.toJsonString(resp));
-                if (resp.getSendStatusSet()[0].getCode().equalsIgnoreCase("Ok")) {
-                    this.optTokenStore.store(
-                            userInfo, 
-                            token, 
-                            userInfo.getMobile(), 
-                            OtpTypes.SMS);
-                    return true;
-                }
-               
-            } catch  (Exception e) {
-                logger.error(" produce code error ", e);
-            }
-        }
-        return false;
-    }
+				HttpProfile httpProfile = new HttpProfile();
+				httpProfile.setEndpoint("sms.tencentcloudapi.com");
 
-    @Override
-    public boolean validate(UserInfo userInfo, String token) {
-        return this.optTokenStore.validate(userInfo, token, OtpTypes.SMS, interval);
-    }
+				ClientProfile clientProfile = new ClientProfile();
+				clientProfile.setHttpProfile(httpProfile);
 
-    public String getSecretId() {
-        return secretId;
-    }
+				SmsClient client = new SmsClient(cred, "ap-beijing", clientProfile);
+				String token = this.genToken(userInfo);
+				String params = "{\"PhoneNumberSet\":[\"" + mobile + "\"]," + "\"TemplateID\":\"" + templateId
+						+ "\",\"Sign\":\"" + sign + "\"," + "\"TemplateParamSet\":[\"" + token + "\",\"" + this.interval
+						+ "\"]," + "\"SmsSdkAppid\":\"" + smsSdkAppid + "\"}";
 
-    public void setSecretId(String secretId) {
-        this.secretId = secretId;
-    }
+				SendSmsRequest req = SendSmsRequest.fromJsonString(params, SendSmsRequest.class);
 
-    public String getSecretKey() {
-        return secretKey;
-    }
+				SendSmsResponse resp = client.SendSms(req);
 
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-    }
+				logger.debug("responseString " + SendSmsRequest.toJsonString(resp));
+				if (resp.getSendStatusSet()[0].getCode().equalsIgnoreCase("Ok")) {
+					this.optTokenStore.store(userInfo, token, userInfo.getMobile(), OtpTypes.SMS);
+					return true;
+				}
 
-    public String getSmsSdkAppid() {
-        return smsSdkAppid;
-    }
+			} catch (Exception e) {
+				logger.error(" produce code error ", e);
+			}
+		}
+		return false;
+	}
 
-    public void setSmsSdkAppid(String smsSdkAppid) {
-        this.smsSdkAppid = smsSdkAppid;
-    }
+	@Override
+	public boolean validate(UserInfo userInfo, String token) {
+		return this.optTokenStore.validate(userInfo, token, OtpTypes.SMS, interval);
+	}
 
-    public String getTemplateId() {
-        return templateId;
-    }
+	public String getSecretId() {
+		return secretId;
+	}
 
-    public void setTemplateId(String templateId) {
-        this.templateId = templateId;
-    }
+	public void setSecretId(String secretId) {
+		this.secretId = secretId;
+	}
 
-    public String getSign() {
-        return sign;
-    }
+	public String getSecretKey() {
+		return secretKey;
+	}
 
+	public void setSecretKey(String secretKey) {
+		this.secretKey = secretKey;
+	}
 
-    public void setSign(String sign) {
-        this.sign = sign;
-    }
+	public String getSmsSdkAppid() {
+		return smsSdkAppid;
+	}
 
-    
+	public void setSmsSdkAppid(String smsSdkAppid) {
+		this.smsSdkAppid = smsSdkAppid;
+	}
+
+	public String getTemplateId() {
+		return templateId;
+	}
+
+	public void setTemplateId(String templateId) {
+		this.templateId = templateId;
+	}
+
+	public String getSign() {
+		return sign;
+	}
+
+	public void setSign(String sign) {
+		this.sign = sign;
+	}
+
 }

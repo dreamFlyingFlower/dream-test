@@ -1,27 +1,11 @@
-/*
- * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
-
 package com.wy.test.cas.authz.endpoint.ticket.generator;
 
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * The default numeric generator for generating long values. Implementation allows for wrapping (to restart count) if
- * the maximum is reached.
+ * The default numeric generator for generating long values. Implementation
+ * allows for wrapping (to restart count) if the maximum is reached.
  *
- * @author Scott Battaglia
- * 
- * @since 3.0.0
  */
 public class DefaultLongNumericGenerator implements LongNumericGenerator {
 
@@ -73,8 +57,8 @@ public class DefaultLongNumericGenerator implements LongNumericGenerator {
 	/**
 	 * Gets the next value.
 	 *
-	 * @return the next value. If the count has reached {@link Long#MAX_VALUE}, then {@link Long#MAX_VALUE} is returned.
-	 *         Otherwise, the next increment.
+	 * @return the next value. If the count has reached {@link Long#MAX_VALUE}, then
+	 *         {@link Long#MAX_VALUE} is returned. Otherwise, the next increment.
 	 */
 	protected long getNextValue() {
 		if (this.count.compareAndSet(Long.MAX_VALUE, 0)) {
