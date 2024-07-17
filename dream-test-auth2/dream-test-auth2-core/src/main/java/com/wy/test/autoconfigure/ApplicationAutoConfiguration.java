@@ -15,11 +15,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
 import org.springframework.security.crypto.password.Md4PasswordEncoder;
 import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
@@ -46,7 +46,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	private static final Logger _logger = LoggerFactory.getLogger(ApplicationAutoConfiguration.class);
 
 	@Bean
-	public PasswordReciprocal passwordReciprocal() {
+	 PasswordReciprocal passwordReciprocal() {
 		return new PasswordReciprocal();
 	}
 
@@ -69,19 +69,16 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	/**
 	 * Authentication Password Encoder .
 	 * 
-	 * @return
+	 * 参照{@link PasswordEncoderFactories}
+	 * 
+	 * @return  
 	 */
 	@Bean
 	 PasswordEncoder passwordEncoder(@Value("${maxkey.crypto.password.encoder:bcrypt}") String idForEncode) {
 		Map<String, PasswordEncoder> encoders = new HashMap<String, PasswordEncoder>();
 		encoders.put("bcrypt", new BCryptPasswordEncoder());
-		encoders.put("plain", NoOpPasswordEncoder.getInstance());
 		encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
 		encoders.put("scrypt", new SCryptPasswordEncoder());
-		// md
-		encoders.put("md4", new Md4PasswordEncoder());
-		encoders.put("md5", new MessageDigestPasswordEncoder("MD5"));
-		// sha
 		encoders.put("sha1", new StandardPasswordEncoder("SHA-1", ""));
 		encoders.put("sha256", new StandardPasswordEncoder());
 		encoders.put("sha384", new StandardPasswordEncoder("SHA-384", ""));
@@ -110,7 +107,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	public KeyStoreLoader keyStoreLoader(@Value("${maxkey.saml.v20.idp.issuing.entity.id}") String entityName,
+	 KeyStoreLoader keyStoreLoader(@Value("${maxkey.saml.v20.idp.issuing.entity.id}") String entityName,
 			@Value("${maxkey.saml.v20.idp.keystore.password}") String keystorePassword,
 			@Value("${maxkey.saml.v20.idp.keystore}") Resource keystoreFile) {
 		KeyStoreLoader keyStoreLoader = new KeyStoreLoader();
@@ -126,7 +123,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	public KeyStoreLoader spKeyStoreLoader(@Value("${maxkey.saml.v20.sp.issuing.entity.id}") String entityName,
+	 KeyStoreLoader spKeyStoreLoader(@Value("${maxkey.saml.v20.sp.issuing.entity.id}") String entityName,
 			@Value("${maxkey.saml.v20.sp.keystore.password}") String keystorePassword,
 			@Value("${maxkey.saml.v20.sp.keystore}") Resource keystoreFile) {
 		KeyStoreLoader keyStoreLoader = new KeyStoreLoader();
@@ -142,7 +139,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	public String spIssuingEntityName(@Value("${maxkey.saml.v20.sp.issuing.entity.id}") String spIssuingEntityName) {
+	 String spIssuingEntityName(@Value("${maxkey.saml.v20.sp.issuing.entity.id}") String spIssuingEntityName) {
 		return spIssuingEntityName;
 	}
 
@@ -152,7 +149,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	public IdGenerator idGenerator(@Value("${maxkey.id.strategy:SnowFlake}") String strategy,
+	 IdGenerator idGenerator(@Value("${maxkey.id.strategy:SnowFlake}") String strategy,
 			@Value("${maxkey.id.datacenterId:0}") int datacenterId, @Value("${maxkey.id.machineId:0}") int machineId) {
 		IdGenerator idGenerator = new IdGenerator(strategy);
 		SnowFlakeId SnowFlakeId = new SnowFlakeId(datacenterId, machineId);
@@ -162,7 +159,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	}
 
 	@Bean
-	public MomentaryService momentaryService(RedisConnectionFactory redisConnFactory,
+	MomentaryService momentaryService(RedisConnectionFactory redisConnFactory,
 			@Value("${maxkey.server.persistence}") int persistence) throws JOSEException {
 		MomentaryService momentaryService;
 		if (persistence == ConstsPersistence.REDIS) {
