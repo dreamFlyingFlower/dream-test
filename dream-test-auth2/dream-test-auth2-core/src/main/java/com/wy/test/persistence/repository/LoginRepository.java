@@ -185,6 +185,7 @@ public class LoginRepository {
 				String.format(DEFAULT_MYAPPS_SELECT_STATEMENT, grantedAuthorityString),
 				new RowMapper<GrantedAuthority>() {
 
+					@Override
 					public GrantedAuthority mapRow(ResultSet rs, int rowNum) throws SQLException {
 						return new SimpleGrantedAuthority(rs.getString("id"));
 					}
@@ -197,6 +198,7 @@ public class LoginRepository {
 	public List<Roles> queryRoles(UserInfo userInfo) {
 		List<Roles> listRoles = jdbcTemplate.query(ROLES_SELECT_STATEMENT, new RowMapper<Roles>() {
 
+			@Override
 			public Roles mapRow(ResultSet rs, int rowNum) throws SQLException {
 				Roles role = new Roles(rs.getString("id"), rs.getString("rolecode"), rs.getString("rolename"), 0);
 

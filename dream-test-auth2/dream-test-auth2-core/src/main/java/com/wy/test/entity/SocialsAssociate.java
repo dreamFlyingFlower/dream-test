@@ -1,5 +1,7 @@
 package com.wy.test.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +13,7 @@ import org.dromara.mybatis.jpa.entity.JpaEntity;
 
 @Entity
 @Table(name = "MXK_SOCIALS_ASSOCIATE")
-public class SocialsAssociate extends JpaEntity {
+public class SocialsAssociate extends JpaEntity implements Serializable {
 
 	/**
 	 * 

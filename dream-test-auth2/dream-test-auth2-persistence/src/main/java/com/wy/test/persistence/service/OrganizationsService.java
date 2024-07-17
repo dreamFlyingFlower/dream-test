@@ -35,6 +35,7 @@ public class OrganizationsService extends JpaService<Organizations> {
 		return (OrganizationsMapper) super.getMapper();
 	}
 
+	@Override
 	public boolean insert(Organizations organization) {
 		if (super.insert(organization)) {
 			provisionService.send(ProvisionTopic.ORG_TOPIC, organization, ProvisionAction.CREATE_ACTION);
@@ -43,6 +44,7 @@ public class OrganizationsService extends JpaService<Organizations> {
 		return false;
 	}
 
+	@Override
 	public boolean update(Organizations organization) {
 		if (super.update(organization)) {
 			provisionService.send(ProvisionTopic.ORG_TOPIC, organization, ProvisionAction.UPDATE_ACTION);
@@ -67,6 +69,7 @@ public class OrganizationsService extends JpaService<Organizations> {
 		return getMapper().queryOrgs(organization);
 	}
 
+	@Override
 	public boolean delete(Organizations organization) {
 		if (super.delete(organization)) {
 			provisionService.send(ProvisionTopic.ORG_TOPIC, organization, ProvisionAction.DELETE_ACTION);

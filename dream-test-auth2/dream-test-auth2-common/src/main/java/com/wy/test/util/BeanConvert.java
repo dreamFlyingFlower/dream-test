@@ -11,9 +11,6 @@ import org.apache.commons.logging.LogFactory;
 
 public class BeanConvert {
 
-	/**
-	 * 
-	 */
 	public BeanConvert() {
 
 	}

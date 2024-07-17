@@ -1,5 +1,7 @@
 package com.wy.test.autoconfigure;
 
+import java.time.Duration;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -48,7 +50,7 @@ public class RedisAutoConfiguration implements InitializingBean {
 		poolConfig.setMaxIdle(maxIdle);
 		poolConfig.setMinIdle(minIdle);
 		poolConfig.setMaxTotal(maxActive);
-		poolConfig.setMaxWaitMillis(maxWait);
+		poolConfig.setMaxWait(Duration.ofMillis(maxWait));
 
 		factory.setPoolConfig(poolConfig);
 

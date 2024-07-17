@@ -54,6 +54,7 @@ public class AccountsService extends JpaService<Accounts> {
 		return (AccountsMapper) super.getMapper();
 	}
 
+	@Override
 	public boolean insert(Accounts account) {
 		if (super.insert(account)) {
 			if (provisionService.getApplicationConfig().isProvisionSupport()) {
@@ -71,6 +72,7 @@ public class AccountsService extends JpaService<Accounts> {
 		return false;
 	}
 
+	@Override
 	public boolean update(Accounts account) {
 		if (super.update(account)) {
 			if (provisionService.getApplicationConfig().isProvisionSupport()) {
@@ -92,6 +94,7 @@ public class AccountsService extends JpaService<Accounts> {
 		return this.getMapper().updateStatus(accounts) > 0;
 	}
 
+	@Override
 	public boolean remove(String id) {
 		Accounts account = this.get(id);
 		if (super.remove(id)) {

@@ -1,7 +1,5 @@
 package com.wy.test.web.config.contorller;
 
-import java.util.List;
-
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +22,9 @@ import com.wy.test.entity.Synchronizers;
 import com.wy.test.entity.UserInfo;
 import com.wy.test.persistence.service.SynchronizersService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
-import com.wy.test.util.StringUtils;
 import com.wy.test.web.WebContext;
+
+import dream.flying.flower.lang.StrHelper;
 
 @Controller
 @RequestMapping(value = { "/config/synchronizers" })
@@ -70,7 +69,7 @@ public class SynchronizersController {
 	public ResponseEntity<?> synchr(@RequestParam("id") String id) {
 		_logger.debug("-sync ids :" + id);
 
-		List<String> ids = StringUtils.string2List(id, ",");
+		String[] ids = StrHelper.split(id, ",");
 		try {
 			for (String sysId : ids) {
 				Synchronizers synchronizer = synchronizersService.get(sysId);

@@ -30,7 +30,7 @@ public class SwaggerConfig {
 	boolean enable;
 
 	@Bean
-	public GroupedOpenApi userApi() {
+	GroupedOpenApi userApi() {
 		String[] paths = { "/login", "/logout", "/login/**", "/logout/**", "/authz/**", "/authz/**/**",
 				"/metadata/saml20/**", "/onlineticket/validate/**", "/api/connect/v10/userinfo", "/api/oauth/v20/me"
 
@@ -40,7 +40,7 @@ public class SwaggerConfig {
 	}
 
 	@Bean
-	public OpenAPI docOpenAPI() {
+	OpenAPI docOpenAPI() {
 		return new OpenAPI()
 				.info(new Info().title(title).description(description).version(version)
 						.termsOfService("https://www.maxkey.top/")

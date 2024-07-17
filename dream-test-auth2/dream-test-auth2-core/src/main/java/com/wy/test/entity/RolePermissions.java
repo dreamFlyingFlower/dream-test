@@ -19,9 +19,6 @@ import com.wy.test.entity.apps.Apps;
 @Table(name = "MXK_ROLE_PERMISSIONS")
 public class RolePermissions extends Apps implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8634166407201007340L;
 
 	@Id
@@ -52,7 +49,7 @@ public class RolePermissions extends Apps implements Serializable {
 	 * @param groupId
 	 * @param appId
 	 */
-	public RolePermissions(String roleId, String appId, String instId) {
+	public RolePermissions(final String roleId, final String appId, final String instId) {
 		super();
 		this.roleId = roleId;
 		this.appId = appId;
@@ -63,7 +60,7 @@ public class RolePermissions extends Apps implements Serializable {
 		return roleId;
 	}
 
-	public void setRoleId(String roleId) {
+	public void setRoleId(final String roleId) {
 		this.roleId = roleId;
 	}
 
@@ -71,7 +68,7 @@ public class RolePermissions extends Apps implements Serializable {
 		return roleName;
 	}
 
-	public void setRoleName(String roleName) {
+	public void setRoleName(final String roleName) {
 		this.roleName = roleName;
 	}
 
@@ -85,45 +82,53 @@ public class RolePermissions extends Apps implements Serializable {
 	/**
 	 * @param appId the appId to set
 	 */
-	public void setAppId(String appId) {
+	public void setAppId(final String appId) {
 		this.appId = appId;
 	}
 
+	@Override
 	public String getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	@Override
+	public void setId(final String id) {
 		this.id = id;
 	}
 
+	@Override
 	public String getInstId() {
 		return instId;
 	}
 
-	public void setInstId(String instId) {
+	@Override
+	public void setInstId(final String instId) {
 		this.instId = instId;
 	}
 
+	@Override
 	public String getInstName() {
 		return instName;
 	}
 
-	public void setInstName(String instName) {
+	@Override
+	public void setInstName(final String instName) {
 		this.instName = instName;
 	}
 
+	@Override
 	public String getAppName() {
 		return appName;
 	}
 
-	public void setAppName(String appName) {
+	@Override
+	public void setAppName(final String appName) {
 		this.appName = appName;
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		builder.append("RolePermissions [id=");
 		builder.append(id);
 		builder.append(", roleId=");

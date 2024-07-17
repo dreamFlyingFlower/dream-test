@@ -2,6 +2,7 @@ package com.wy.test.entity;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -16,11 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class ExcelImport extends JpaEntity {
+public class ExcelImport extends JpaEntity implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4665009770629818479L;
 
 	@Id

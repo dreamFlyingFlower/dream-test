@@ -1,5 +1,7 @@
 package com.wy.test.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "MXK_FILE_UPLOAD")
-public class FileUpload extends JpaEntity {
+public class FileUpload extends JpaEntity implements Serializable {
 
 	private static final long serialVersionUID = -4338400992411166457L;
 

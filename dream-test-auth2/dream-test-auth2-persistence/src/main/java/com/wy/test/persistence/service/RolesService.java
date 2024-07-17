@@ -19,6 +19,8 @@ import com.wy.test.entity.Roles;
 import com.wy.test.persistence.mapper.RolesMapper;
 import com.wy.test.util.StringUtils;
 
+import dream.flying.flower.db.SqlHelper;
+
 @Repository
 public class RolesService extends JpaService<Roles> implements Serializable {
 
@@ -103,7 +105,7 @@ public class RolesService extends JpaService<Roles> implements Serializable {
 
 			String filters = dynamicRole.getFilters();
 			if (StringUtils.isNotBlank(filters)) {
-				if (StringUtils.filtersSQLInjection(filters.toLowerCase())) {
+				if (SqlHelper.filtersSQLInjection(filters.toLowerCase())) {
 					_logger.info("filters include SQL Injection Attack Risk.");
 					return;
 				}

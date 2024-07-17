@@ -10,7 +10,7 @@ import org.dromara.mybatis.jpa.entity.JpaEntity;
  * xml can not include array , MultipartFile
  */
 @XmlRootElement
-public class UserInfoXML extends JpaEntity implements Serializable{
+public class UserInfoXML extends JpaEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

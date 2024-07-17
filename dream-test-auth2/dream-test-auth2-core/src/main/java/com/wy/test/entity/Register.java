@@ -1,5 +1,7 @@
 package com.wy.test.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,11 +13,8 @@ import org.dromara.mybatis.jpa.entity.JpaEntity;
 
 @Entity
 @Table(name = "MXK_REGISTER")
-public class Register extends JpaEntity {
+public class Register extends JpaEntity implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4021412077583763378L;
 
 	@Id

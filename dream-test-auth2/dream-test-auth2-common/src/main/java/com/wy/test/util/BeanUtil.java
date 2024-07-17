@@ -3,65 +3,10 @@ package com.wy.test.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.logging.LogFactory;
-
 public class BeanUtil {
-
-	public static void copyBean(Object origin, Object target) {
-		if (origin == null || target == null)
-			return;
-		try {
-			BeanUtils.copyProperties(origin, target);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static Object cloneSupper(Object origin) {
-		Object target = null;
-		if (origin == null)
-			return target;
-		try {
-			target = origin.getClass().getSuperclass().newInstance();
-			BeanUtils.copyProperties(target, origin);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return target;
-	}
-
-	public static String getValue(Object bean, String field) {
-		if (bean == null)
-			return null;
-		String retVal = "";
-		try {
-			retVal = BeanUtils.getProperty(bean, field);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return retVal;
-	}
-
-	@SuppressWarnings("rawtypes")
-	public static boolean isNotNull(Collection collection) {
-		if (collection != null && collection.size() > 0) {
-			return true;
-		}
-		return false;
-	}
-
-	@SuppressWarnings("rawtypes")
-	public static boolean isNotNull(Map map) {
-		if (map != null && map.size() > 0) {
-			return true;
-		}
-		return false;
-	}
 
 	public static Object get(Object bean, String fieldName) {
 		try {
@@ -275,27 +220,20 @@ public class BeanUtil {
 				isFieldNotEmpty = false;
 		}
 
-		LogFactory.getLog(BeanUtil.class).debug("isFieldNotEmpty() fieldName : " + field.getName() + ", fieldType : "
-				+ fieldType + ", Value : " + fillValue + ", isFieldNotEmpty : " + isFieldNotEmpty);
-
 		return isFieldNotEmpty;
 	}
 
-	public static void displayValues(Object bean) {
-		Field[] flds = bean.getClass().getDeclaredFields();
-		LogFactory.getLog(BeanUtil.class).debug("displayValues() *******************************************");
-		LogFactory.getLog(BeanUtil.class).debug("displayValues() " + bean.getClass().getName());
-		for (int i = 0; i < flds.length; i++) {
-			String name = flds[i].getName();
-			if (isGetProperty(bean.getClass(), name)) {
-				LogFactory.getLog(BeanUtil.class)
-						.debug("displayValues() Field " + (i + 1) + " : " + name + " = " + BeanUtil.get(bean, name));
-			}
-		}
-
-		LogFactory.getLog(BeanUtils.class).debug("displayValues() *******************************************");
-
-	}
+	// public static void displayValues(Object bean) {
+	// Field[] flds = bean.getClass().getDeclaredFields();
+	// for (int i = 0; i < flds.length; i++) {
+	// String name = flds[i].getName();
+	// if (isGetProperty(bean.getClass(), name)) {
+	// LogFactory.getLog(BeanUtil.class)
+	// .debug("displayValues() Field " + (i + 1) + " : " + name + " = " +
+	// BeanUtil.get(bean, name));
+	// }
+	// }
+	// }
 
 	public static <T> void beanClone(T target, T origin) {
 		Field[] flds = target.getClass().getDeclaredFields();

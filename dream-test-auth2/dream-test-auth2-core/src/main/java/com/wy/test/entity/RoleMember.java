@@ -17,9 +17,6 @@ import javax.persistence.Table;
 @Table(name = "MXK_ROLE_MEMBER")
 public class RoleMember extends UserInfo implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8059639972590554760L;
 
 	@Id
@@ -74,10 +71,12 @@ public class RoleMember extends UserInfo implements Serializable {
 		this.instId = instId;
 	}
 
+	@Override
 	public String getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -142,18 +141,22 @@ public class RoleMember extends UserInfo implements Serializable {
 		this.category = category;
 	}
 
+	@Override
 	public String getInstId() {
 		return instId;
 	}
 
+	@Override
 	public void setInstId(String instId) {
 		this.instId = instId;
 	}
 
+	@Override
 	public String getInstName() {
 		return instName;
 	}
 
+	@Override
 	public void setInstName(String instName) {
 		this.instName = instName;
 	}

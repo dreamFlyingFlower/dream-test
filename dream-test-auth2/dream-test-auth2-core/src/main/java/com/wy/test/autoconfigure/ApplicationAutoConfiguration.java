@@ -18,8 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
-import org.springframework.security.crypto.password.Md4PasswordEncoder;
-import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
@@ -40,28 +38,30 @@ import com.wy.test.util.IdGenerator;
 import com.wy.test.util.SnowFlakeId;
 import com.wy.test.web.WebContext;
 
+
+@SuppressWarnings("deprecation")
 @AutoConfiguration
 public class ApplicationAutoConfiguration implements InitializingBean {
 
 	private static final Logger _logger = LoggerFactory.getLogger(ApplicationAutoConfiguration.class);
 
 	@Bean
-	 PasswordReciprocal passwordReciprocal() {
+	PasswordReciprocal passwordReciprocal() {
 		return new PasswordReciprocal();
 	}
 
 	@Bean
-	 DataSourceTransactionManager transactionManager(DataSource dataSource) {
+	DataSourceTransactionManager transactionManager(DataSource dataSource) {
 		return new DataSourceTransactionManager(dataSource);
 	}
 
 	@Bean
-	 InstitutionsRepository institutionsRepository(JdbcTemplate jdbcTemplate) {
+	InstitutionsRepository institutionsRepository(JdbcTemplate jdbcTemplate) {
 		return new InstitutionsRepository(jdbcTemplate);
 	}
 
 	@Bean
-	 LocalizationRepository localizationRepository(JdbcTemplate jdbcTemplate,
+	LocalizationRepository localizationRepository(JdbcTemplate jdbcTemplate,
 			InstitutionsRepository institutionsRepository) {
 		return new LocalizationRepository(jdbcTemplate, institutionsRepository);
 	}
@@ -71,10 +71,10 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * 
 	 * 参照{@link PasswordEncoderFactories}
 	 * 
-	 * @return  
+	 * @return
 	 */
 	@Bean
-	 PasswordEncoder passwordEncoder(@Value("${maxkey.crypto.password.encoder:bcrypt}") String idForEncode) {
+	PasswordEncoder passwordEncoder(@Value("${maxkey.crypto.password.encoder:bcrypt}") String idForEncode) {
 		Map<String, PasswordEncoder> encoders = new HashMap<String, PasswordEncoder>();
 		encoders.put("bcrypt", new BCryptPasswordEncoder());
 		encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
@@ -107,7 +107,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	 KeyStoreLoader keyStoreLoader(@Value("${maxkey.saml.v20.idp.issuing.entity.id}") String entityName,
+	KeyStoreLoader keyStoreLoader(@Value("${maxkey.saml.v20.idp.issuing.entity.id}") String entityName,
 			@Value("${maxkey.saml.v20.idp.keystore.password}") String keystorePassword,
 			@Value("${maxkey.saml.v20.idp.keystore}") Resource keystoreFile) {
 		KeyStoreLoader keyStoreLoader = new KeyStoreLoader();
@@ -123,7 +123,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	 KeyStoreLoader spKeyStoreLoader(@Value("${maxkey.saml.v20.sp.issuing.entity.id}") String entityName,
+	KeyStoreLoader spKeyStoreLoader(@Value("${maxkey.saml.v20.sp.issuing.entity.id}") String entityName,
 			@Value("${maxkey.saml.v20.sp.keystore.password}") String keystorePassword,
 			@Value("${maxkey.saml.v20.sp.keystore}") Resource keystoreFile) {
 		KeyStoreLoader keyStoreLoader = new KeyStoreLoader();
@@ -139,7 +139,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	 String spIssuingEntityName(@Value("${maxkey.saml.v20.sp.issuing.entity.id}") String spIssuingEntityName) {
+	String spIssuingEntityName(@Value("${maxkey.saml.v20.sp.issuing.entity.id}") String spIssuingEntityName) {
 		return spIssuingEntityName;
 	}
 
@@ -149,7 +149,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	 IdGenerator idGenerator(@Value("${maxkey.id.strategy:SnowFlake}") String strategy,
+	IdGenerator idGenerator(@Value("${maxkey.id.strategy:SnowFlake}") String strategy,
 			@Value("${maxkey.id.datacenterId:0}") int datacenterId, @Value("${maxkey.id.machineId:0}") int machineId) {
 		IdGenerator idGenerator = new IdGenerator(strategy);
 		SnowFlakeId SnowFlakeId = new SnowFlakeId(datacenterId, machineId);

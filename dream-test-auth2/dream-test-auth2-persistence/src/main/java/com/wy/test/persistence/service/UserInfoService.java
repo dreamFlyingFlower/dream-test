@@ -53,6 +53,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 		return (UserInfoMapper) super.getMapper();
 	}
 
+	@Override
 	public boolean insert(UserInfo userInfo) {
 		this.passwordEncoder(userInfo);
 		if (super.insert(userInfo)) {
@@ -83,6 +84,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 		return false;
 	}
 
+	@Override
 	public boolean update(UserInfo userInfo) {
 		ChangePassword changePassword = this.passwordEncoder(userInfo);
 		if (super.update(userInfo)) {
@@ -99,6 +101,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 		return false;
 	}
 
+	@Override
 	public boolean delete(UserInfo userInfo) {
 		UserInfo loadUserInfo = null;
 		if (provisionService.getApplicationConfig().isProvisionSupport()) {

@@ -23,6 +23,7 @@ public class HistoryLoginAppsService extends JpaService<HistoryLoginApps> {
 		return (HistoryLoginAppsMapper) super.getMapper();
 	}
 
+	@Override
 	public boolean insert(HistoryLoginApps loginAppsHistory) {
 		return getMapper().insert(loginAppsHistory) > 0;
 	}

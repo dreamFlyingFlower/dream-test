@@ -123,6 +123,7 @@ public class RedisConnection {
 		return conn.lrange(key, start, end);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void openPipeline() {
 		this.pipeline = conn.pipelined();
 	}

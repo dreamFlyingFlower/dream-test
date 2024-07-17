@@ -22,7 +22,8 @@ import com.wy.test.entity.RolePrivileges;
 import com.wy.test.entity.UserInfo;
 import com.wy.test.persistence.service.HistorySystemLogsService;
 import com.wy.test.persistence.service.RolePrivilegesService;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 @Controller
 @RequestMapping(value = { "/permissions/privileges" })
@@ -51,7 +52,7 @@ public class RolePrivilegesController {
 		}
 		// Maybe insert
 		ArrayList<RolePrivileges> newRolePrivilegesList = new ArrayList<RolePrivileges>();
-		List<String> resourceIds = StringUtils.string2List(rolePrivileges.getResourceId(), ",");
+		String[] resourceIds = StrHelper.split(rolePrivileges.getResourceId(), ",");
 		HashMap<String, String> newPrivilegesMap = new HashMap<String, String>();
 		for (String resourceId : resourceIds) {
 			RolePrivileges newRolePrivilege = new RolePrivileges(rolePrivileges.getAppId(), rolePrivileges.getRoleId(),

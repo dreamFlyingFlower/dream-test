@@ -26,7 +26,8 @@ import com.wy.test.entity.UserInfo;
 import com.wy.test.persistence.service.HistoryLoginService;
 import com.wy.test.persistence.service.HistorySystemLogsService;
 import com.wy.test.util.DateUtils;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 /**
  * 登录会话管理.
@@ -69,7 +70,7 @@ public class SessionController {
 		_logger.debug(ids);
 		boolean isTerminated = false;
 		try {
-			for (String sessionId : StringUtils.string2List(ids, ",")) {
+			for (String sessionId : StrHelper.split(ids, ",")) {
 				_logger.trace("terminate session Id {} ", sessionId);
 				if (currentUser.getSessionId().contains(sessionId)) {
 					continue;// skip current session

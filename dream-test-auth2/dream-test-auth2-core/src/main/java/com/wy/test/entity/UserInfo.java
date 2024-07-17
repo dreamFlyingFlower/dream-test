@@ -1,5 +1,6 @@
 package com.wy.test.entity;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import dream.flying.flower.helper.ImageHelper;
 
 @Entity
 @Table(name = "MXK_USERINFO")
-public class UserInfo extends JpaEntity {
+public class UserInfo extends JpaEntity implements Serializable {
 
 	private static final long serialVersionUID = 6402443942083382236L;
 
@@ -51,7 +52,8 @@ public class UserInfo extends JpaEntity {
 	protected String sharedCounter;
 
 	/**
-	 * "Employee", "Supplier","Dealer","Contractor",Partner,Customer "Intern", "Temp", "External", and "Unknown" .
+	 * "Employee", "Supplier","Dealer","Contractor",Partner,Customer "Intern",
+	 * "Temp", "External", and "Unknown" .
 	 */
 	@Column
 	protected String userType;
@@ -303,8 +305,8 @@ public class UserInfo extends JpaEntity {
 	protected String theme;
 
 	/*
-	 * for extended Attribute from userType extraAttribute for database extraAttributeName & extraAttributeValue for
-	 * page submit
+	 * for extended Attribute from userType extraAttribute for database
+	 * extraAttributeName & extraAttributeValue for page submit
 	 */
 	protected String extraAttribute;
 
