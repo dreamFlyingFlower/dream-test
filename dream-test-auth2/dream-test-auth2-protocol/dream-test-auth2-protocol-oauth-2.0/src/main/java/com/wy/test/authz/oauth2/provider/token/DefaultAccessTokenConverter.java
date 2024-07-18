@@ -27,7 +27,7 @@ import com.wy.test.authz.oauth2.provider.OAuth2Request;
 public class DefaultAccessTokenConverter implements AccessTokenConverter {
 
 	private UserAuthenticationConverter userTokenConverter = new DefaultUserAuthenticationConverter();
-	
+
 	private boolean includeGrantType;
 
 	/**
@@ -40,14 +40,16 @@ public class DefaultAccessTokenConverter implements AccessTokenConverter {
 	}
 
 	/**
-	 * Flag to indicate the the grant type should be included in the converted token.
+	 * Flag to indicate the the grant type should be included in the converted
+	 * token.
 	 * 
 	 * @param includeGrantType the flag value (default false)
 	 */
 	public void setIncludeGrantType(boolean includeGrantType) {
-		this.includeGrantType = includeGrantType;	
+		this.includeGrantType = includeGrantType;
 	}
 
+	@Override
 	public Map<String, ?> convertAccessToken(OAuth2AccessToken token, OAuth2Authentication authentication) {
 		Map<String, Object> response = new HashMap<String, Object>();
 		OAuth2Request clientToken = authentication.getOAuth2Request();
@@ -55,13 +57,13 @@ public class DefaultAccessTokenConverter implements AccessTokenConverter {
 		if (!authentication.isClientOnly()) {
 			response.putAll(userTokenConverter.convertUserAuthentication(authentication.getUserAuthentication()));
 		} else {
-			if (clientToken.getAuthorities()!=null && !clientToken.getAuthorities().isEmpty()) {
+			if (clientToken.getAuthorities() != null && !clientToken.getAuthorities().isEmpty()) {
 				response.put(UserAuthenticationConverter.AUTHORITIES,
-							 AuthorityUtils.authorityListToSet(clientToken.getAuthorities()));
+						AuthorityUtils.authorityListToSet(clientToken.getAuthorities()));
 			}
 		}
 
-		if (token.getScope()!=null) {
+		if (token.getScope() != null) {
 			response.put(SCOPE, token.getScope());
 		}
 		if (token.getAdditionalInformation().containsKey(JTI)) {
@@ -71,8 +73,8 @@ public class DefaultAccessTokenConverter implements AccessTokenConverter {
 		if (token.getExpiration() != null) {
 			response.put(EXP, token.getExpiration().getTime() / 1000);
 		}
-		
-		if (includeGrantType && authentication.getOAuth2Request().getGrantType()!=null) {
+
+		if (includeGrantType && authentication.getOAuth2Request().getGrantType() != null) {
 			response.put(GRANT_TYPE, authentication.getOAuth2Request().getGrantType());
 		}
 
@@ -82,13 +84,14 @@ public class DefaultAccessTokenConverter implements AccessTokenConverter {
 		if (clientToken.getResourceIds() != null && !clientToken.getResourceIds().isEmpty()) {
 			response.put(AUD, clientToken.getResourceIds());
 		}
-		
-		//default 
+
+		// default
 		response.put("active", Boolean.TRUE);
-		
+
 		return response;
 	}
 
+	@Override
 	public OAuth2AccessToken extractAccessToken(String value, Map<String, ?> map) {
 		DefaultOAuth2AccessToken token = new DefaultOAuth2AccessToken(value);
 		Map<String, Object> info = new HashMap<String, Object>(map);
@@ -111,11 +114,12 @@ public class DefaultAccessTokenConverter implements AccessTokenConverter {
 		return token;
 	}
 
+	@Override
 	public OAuth2Authentication extractAuthentication(Map<String, ?> map) {
 		Map<String, String> parameters = new HashMap<String, String>();
 		@SuppressWarnings("unchecked")
-		Set<String> scope = new LinkedHashSet<String>(map.containsKey(SCOPE) ? (Collection<String>) map.get(SCOPE)
-				: Collections.<String>emptySet());
+		Set<String> scope = new LinkedHashSet<String>(
+				map.containsKey(SCOPE) ? (Collection<String>) map.get(SCOPE) : Collections.<String>emptySet());
 		Authentication user = userTokenConverter.extractAuthentication(map);
 		String clientId = (String) map.get(CLIENT_ID);
 		parameters.put(CLIENT_ID, clientId);
@@ -123,17 +127,17 @@ public class DefaultAccessTokenConverter implements AccessTokenConverter {
 			parameters.put(GRANT_TYPE, (String) map.get(GRANT_TYPE));
 		}
 		@SuppressWarnings("unchecked")
-		Set<String> resourceIds = new LinkedHashSet<String>(map.containsKey(AUD) ? (Collection<String>) map.get(AUD)
-				: Collections.<String>emptySet());
-		
+		Set<String> resourceIds = new LinkedHashSet<String>(
+				map.containsKey(AUD) ? (Collection<String>) map.get(AUD) : Collections.<String>emptySet());
+
 		Collection<? extends GrantedAuthority> authorities = null;
-		if (user==null && map.containsKey(AUTHORITIES)) {
+		if (user == null && map.containsKey(AUTHORITIES)) {
 			@SuppressWarnings("unchecked")
-			String[] roles = ((Collection<String>)map.get(AUTHORITIES)).toArray(new String[0]);
+			String[] roles = ((Collection<String>) map.get(AUTHORITIES)).toArray(new String[0]);
 			authorities = AuthorityUtils.createAuthorityList(roles);
 		}
-		OAuth2Request request = new OAuth2Request(parameters, clientId, authorities, true, scope, resourceIds, null, null,
-				null, null, null);
+		OAuth2Request request = new OAuth2Request(parameters, clientId, authorities, true, scope, resourceIds, null,
+				null, null, null, null);
 		return new OAuth2Authentication(request, user);
 	}
 

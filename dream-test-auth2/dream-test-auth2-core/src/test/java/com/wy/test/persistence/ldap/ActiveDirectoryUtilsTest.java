@@ -3,6 +3,8 @@ package com.wy.test.persistence.ldap;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 
+import com.wy.test.core.persistence.ldap.ActiveDirectoryUtils;
+
 public class ActiveDirectoryUtilsTest {
 	public static void main(String[] args) throws Exception {
 		String trustStore="D:/JavaIDE/jdk1.6.0_30/jre/lib/security/cacerts";

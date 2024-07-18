@@ -20,238 +20,246 @@ import com.wy.test.authz.oauth2.common.exceptions.OAuth2Exception;
  */
 public class DefaultOAuth2AccessToken implements Serializable, OAuth2AccessToken {
 
-    private static final long serialVersionUID = 914967629530462926L;
+	private static final long serialVersionUID = 914967629530462926L;
 
-    private String value;
+	private String value;
 
-    private Date expiration;
+	private Date expiration;
 
-    private String tokenType = BEARER_TYPE.toLowerCase();
+	private String tokenType = BEARER_TYPE.toLowerCase();
 
-    private OAuth2RefreshToken refreshToken;
+	private OAuth2RefreshToken refreshToken;
 
-    private Set<String> scope;
+	private Set<String> scope;
 
-    private Map<String, Object> additionalInformation = Collections.emptyMap();
-    
-    private OAuth2Exception oauth2Exception; 
-    
-    /**
-     * Create an access token from the value provided.
-     */
-    public DefaultOAuth2AccessToken(String value) {
-        this.value = value;
-    }
+	private Map<String, Object> additionalInformation = Collections.emptyMap();
 
-    /**
-     * Private constructor for JPA and other serialization tools.
-     */
-    @SuppressWarnings("unused")
-    private DefaultOAuth2AccessToken() {
-        this((String) null);
-    }
+	private OAuth2Exception oauth2Exception;
 
-    /**
-     * Copy constructor for access token.
-     * 
-     * @param accessToken
-     */
-    public DefaultOAuth2AccessToken(OAuth2AccessToken accessToken) {
-        this(accessToken.getValue());
-        setAdditionalInformation(accessToken.getAdditionalInformation());
-        setRefreshToken(accessToken.getRefreshToken());
-        setExpiration(accessToken.getExpiration());
-        setScope(accessToken.getScope());
-        setTokenType(accessToken.getTokenType());
-    }
+	/**
+	 * Create an access token from the value provided.
+	 */
+	public DefaultOAuth2AccessToken(String value) {
+		this.value = value;
+	}
 
-    public DefaultOAuth2AccessToken(OAuth2Exception oauth2Exception) {
-    	this.oauth2Exception = oauth2Exception;
-    }
-    
-    public void setValue(String value) {
-        this.value = value;
-    }
+	/**
+	 * Private constructor for JPA and other serialization tools.
+	 */
+	@SuppressWarnings("unused")
+	private DefaultOAuth2AccessToken() {
+		this((String) null);
+	}
 
-    /**
-     * The token value.
-     * 
-     * @return The token value.
-     */
-    public String getValue() {
-        return value;
-    }
+	/**
+	 * Copy constructor for access token.
+	 * 
+	 * @param accessToken
+	 */
+	public DefaultOAuth2AccessToken(OAuth2AccessToken accessToken) {
+		this(accessToken.getValue());
+		setAdditionalInformation(accessToken.getAdditionalInformation());
+		setRefreshToken(accessToken.getRefreshToken());
+		setExpiration(accessToken.getExpiration());
+		setScope(accessToken.getScope());
+		setTokenType(accessToken.getTokenType());
+	}
 
-    public int getExpiresIn() {
-        return expiration != null ? Long.valueOf((expiration.getTime() - System.currentTimeMillis()) / 1000L).intValue()
-                : 0;
-    }
+	public DefaultOAuth2AccessToken(OAuth2Exception oauth2Exception) {
+		this.oauth2Exception = oauth2Exception;
+	}
 
-    protected void setExpiresIn(int delta) {
-        setExpiration(new Date(System.currentTimeMillis() + delta));
-    }
+	public void setValue(String value) {
+		this.value = value;
+	}
 
-    /**
-     * The instant the token expires.
-     * 
-     * @return The instant the token expires.
-     */
-    public Date getExpiration() {
-        return expiration;
-    }
+	/**
+	 * The token value.
+	 * 
+	 * @return The token value.
+	 */
+	@Override
+	public String getValue() {
+		return value;
+	}
 
-    /**
-     * The instant the token expires.
-     * 
-     * @param expiration The instant the token expires.
-     */
-    public void setExpiration(Date expiration) {
-        this.expiration = expiration;
-    }
+	@Override
+	public int getExpiresIn() {
+		return expiration != null ? Long.valueOf((expiration.getTime() - System.currentTimeMillis()) / 1000L).intValue()
+				: 0;
+	}
 
-    /**
-     * Convenience method for checking expiration
-     * 
-     * @return true if the expiration is befor ethe current time
-     */
-    public boolean isExpired() {
-        return expiration != null && expiration.before(new Date());
-    }
+	protected void setExpiresIn(int delta) {
+		setExpiration(new Date(System.currentTimeMillis() + delta));
+	}
 
-    /**
-     * The token type, as introduced in draft 11 of the OAuth 2 spec. The spec
-     * doesn't define (yet) that the valid token types are, but says it's required
-     * so the default will just be "undefined".
-     * 
-     * @return The token type, as introduced in draft 11 of the OAuth 2 spec.
-     */
-    public String getTokenType() {
-        return tokenType;
-    }
+	/**
+	 * The instant the token expires.
+	 * 
+	 * @return The instant the token expires.
+	 */
+	@Override
+	public Date getExpiration() {
+		return expiration;
+	}
 
-    /**
-     * The token type, as introduced in draft 11 of the OAuth 2 spec.
-     * 
-     * @param tokenType The token type, as introduced in draft 11 of the OAuth 2
-     *                  spec.
-     */
-    public void setTokenType(String tokenType) {
-        this.tokenType = tokenType;
-    }
+	/**
+	 * The instant the token expires.
+	 * 
+	 * @param expiration The instant the token expires.
+	 */
+	public void setExpiration(Date expiration) {
+		this.expiration = expiration;
+	}
 
-    /**
-     * The refresh token associated with the access token, if any.
-     * 
-     * @return The refresh token associated with the access token, if any.
-     */
-    public OAuth2RefreshToken getRefreshToken() {
-        return refreshToken;
-    }
+	/**
+	 * Convenience method for checking expiration
+	 * 
+	 * @return true if the expiration is befor ethe current time
+	 */
+	@Override
+	public boolean isExpired() {
+		return expiration != null && expiration.before(new Date());
+	}
 
-    /**
-     * The refresh token associated with the access token, if any.
-     * 
-     * @param refreshToken The refresh token associated with the access token, if
-     *                     any.
-     */
-    public void setRefreshToken(OAuth2RefreshToken refreshToken) {
-        this.refreshToken = refreshToken;
-    }
+	/**
+	 * The token type, as introduced in draft 11 of the OAuth 2 spec. The spec
+	 * doesn't define (yet) that the valid token types are, but says it's required
+	 * so the default will just be "undefined".
+	 * 
+	 * @return The token type, as introduced in draft 11 of the OAuth 2 spec.
+	 */
+	@Override
+	public String getTokenType() {
+		return tokenType;
+	}
 
-    /**
-     * The scope of the token.
-     * 
-     * @return The scope of the token.
-     */
-    public Set<String> getScope() {
-        return scope;
-    }
+	/**
+	 * The token type, as introduced in draft 11 of the OAuth 2 spec.
+	 * 
+	 * @param tokenType The token type, as introduced in draft 11 of the OAuth 2
+	 *        spec.
+	 */
+	public void setTokenType(String tokenType) {
+		this.tokenType = tokenType;
+	}
 
-    /**
-     * The scope of the token.
-     * 
-     * @param scope The scope of the token.
-     */
-    public void setScope(Set<String> scope) {
-        this.scope = scope;
-    }
+	/**
+	 * The refresh token associated with the access token, if any.
+	 * 
+	 * @return The refresh token associated with the access token, if any.
+	 */
+	@Override
+	public OAuth2RefreshToken getRefreshToken() {
+		return refreshToken;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        return obj != null && toString().equals(obj.toString());
-    }
+	/**
+	 * The refresh token associated with the access token, if any.
+	 * 
+	 * @param refreshToken The refresh token associated with the access token, if
+	 *        any.
+	 */
+	public void setRefreshToken(OAuth2RefreshToken refreshToken) {
+		this.refreshToken = refreshToken;
+	}
 
-    @Override
-    public int hashCode() {
-        return toString().hashCode();
-    }
+	/**
+	 * The scope of the token.
+	 * 
+	 * @return The scope of the token.
+	 */
+	@Override
+	public Set<String> getScope() {
+		return scope;
+	}
 
-    @Override
-    public String toString() {
-        return String.valueOf(getValue());
-    }
+	/**
+	 * The scope of the token.
+	 * 
+	 * @param scope The scope of the token.
+	 */
+	public void setScope(Set<String> scope) {
+		this.scope = scope;
+	}
 
-    public static OAuth2AccessToken valueOf(Map<String, String> tokenParams) {
-        DefaultOAuth2AccessToken token = new DefaultOAuth2AccessToken(tokenParams.get(ACCESS_TOKEN));
+	@Override
+	public boolean equals(Object obj) {
+		return obj != null && toString().equals(obj.toString());
+	}
 
-        if (tokenParams.containsKey(EXPIRES_IN)) {
-            long expiration = 0;
-            try {
-                expiration = Long.parseLong(String.valueOf(tokenParams.get(EXPIRES_IN)));
-            } catch (NumberFormatException e) {
-                // fall through...
-            }
-            token.setExpiration(new Date(System.currentTimeMillis() + (expiration * 1000L)));
-        }
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
+	}
 
-        if (tokenParams.containsKey(REFRESH_TOKEN)) {
-            String refresh = tokenParams.get(REFRESH_TOKEN);
-            DefaultOAuth2RefreshToken refreshToken = new DefaultOAuth2RefreshToken(refresh);
-            token.setRefreshToken(refreshToken);
-        }
+	@Override
+	public String toString() {
+		return String.valueOf(getValue());
+	}
 
-        if (tokenParams.containsKey(SCOPE)) {
-            Set<String> scope = new TreeSet<String>();
-            for (StringTokenizer tokenizer = new StringTokenizer(tokenParams.get(SCOPE), " ,"); tokenizer
-                    .hasMoreTokens();) {
-                scope.add(tokenizer.nextToken());
-            }
-            token.setScope(scope);
-        }
+	public static OAuth2AccessToken valueOf(Map<String, String> tokenParams) {
+		DefaultOAuth2AccessToken token = new DefaultOAuth2AccessToken(tokenParams.get(ACCESS_TOKEN));
 
-        if (tokenParams.containsKey(TOKEN_TYPE)) {
-            token.setTokenType(tokenParams.get(TOKEN_TYPE));
-        }
+		if (tokenParams.containsKey(EXPIRES_IN)) {
+			long expiration = 0;
+			try {
+				expiration = Long.parseLong(String.valueOf(tokenParams.get(EXPIRES_IN)));
+			} catch (NumberFormatException e) {
+				// fall through...
+			}
+			token.setExpiration(new Date(System.currentTimeMillis() + (expiration * 1000L)));
+		}
 
-        return token;
-    }
+		if (tokenParams.containsKey(REFRESH_TOKEN)) {
+			String refresh = tokenParams.get(REFRESH_TOKEN);
+			DefaultOAuth2RefreshToken refreshToken = new DefaultOAuth2RefreshToken(refresh);
+			token.setRefreshToken(refreshToken);
+		}
 
-    /**
-     * Additional information that token granters would like to add to the token,
-     * e.g. to support new token types.
-     * 
-     * @return the additional information (default empty)
-     */
-    public Map<String, Object> getAdditionalInformation() {
-        return additionalInformation;
-    }
+		if (tokenParams.containsKey(SCOPE)) {
+			Set<String> scope = new TreeSet<String>();
+			for (StringTokenizer tokenizer = new StringTokenizer(tokenParams.get(SCOPE), " ,"); tokenizer
+					.hasMoreTokens();) {
+				scope.add(tokenizer.nextToken());
+			}
+			token.setScope(scope);
+		}
 
-    /**
-     * Additional information that token granters would like to add to the token,
-     * e.g. to support new token types. If the values in the map are primitive then
-     * remote communication is going to always work. It should also be safe to use
-     * maps (nested if desired), or something that is explicitly serializable by
-     * Jackson.
-     * 
-     * @param additionalInformation the additional information to set
-     */
-    public void setAdditionalInformation(Map<String, Object> additionalInformation) {
-        this.additionalInformation = new LinkedHashMap<String, Object>(additionalInformation);
-    }
+		if (tokenParams.containsKey(TOKEN_TYPE)) {
+			token.setTokenType(tokenParams.get(TOKEN_TYPE));
+		}
+
+		return token;
+	}
+
+	/**
+	 * Additional information that token granters would like to add to the token,
+	 * e.g. to support new token types.
+	 * 
+	 * @return the additional information (default empty)
+	 */
+	@Override
+	public Map<String, Object> getAdditionalInformation() {
+		return additionalInformation;
+	}
+
+	/**
+	 * Additional information that token granters would like to add to the token,
+	 * e.g. to support new token types. If the values in the map are primitive then
+	 * remote communication is going to always work. It should also be safe to use
+	 * maps (nested if desired), or something that is explicitly serializable by
+	 * Jackson.
+	 * 
+	 * @param additionalInformation the additional information to set
+	 */
+	public void setAdditionalInformation(Map<String, Object> additionalInformation) {
+		this.additionalInformation = new LinkedHashMap<String, Object>(additionalInformation);
+	}
 
 	@Override
 	public OAuth2Exception getOAuth2Exception() {
-		
+
 		return this.oauth2Exception;
 	}
 

@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
+import com.wy.test.core.entity.SocialsAssociate;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.entity.Message;
-import com.wy.test.entity.SocialsAssociate;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.entity.apps.Apps;
 import com.wy.test.persistence.service.SocialsAssociatesService;
 
 @Controller

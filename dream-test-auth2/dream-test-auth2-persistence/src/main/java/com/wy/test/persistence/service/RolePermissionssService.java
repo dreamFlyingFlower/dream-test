@@ -3,7 +3,7 @@ package com.wy.test.persistence.service;
 import org.dromara.mybatis.jpa.JpaService;
 import org.springframework.stereotype.Repository;
 
-import com.wy.test.entity.RolePermissions;
+import com.wy.test.core.entity.RolePermissions;
 import com.wy.test.persistence.mapper.RolePermissionsMapper;
 
 @Repository

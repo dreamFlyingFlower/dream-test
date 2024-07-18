@@ -12,7 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.wy.test.authz.oauth2.common.util.OAuth2Utils;
-import com.wy.test.entity.apps.oauth2.provider.ClientDetails;
+import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 
 /**
  * A request for authorization by an OAuth 2 Client, normally received and
@@ -48,15 +48,15 @@ public class AuthorizationRequest extends BaseRequest implements Serializable {
 	private Map<String, String> approvalParameters = Collections.unmodifiableMap(new HashMap<String, String>());
 
 	/**
-	 * The value of the "state" parameter sent by the client in the request, if
-	 * sent by the client. As this must be echoed back to the client unchanged,
-	 * it should not be modified by any processing classes.
+	 * The value of the "state" parameter sent by the client in the request, if sent
+	 * by the client. As this must be echoed back to the client unchanged, it should
+	 * not be modified by any processing classes.
 	 */
 	private String state;
 
 	/**
-	 * Resolved requested response types initialized (by the
-	 * OAuth2RequestFactory) with the response types originally requested.
+	 * Resolved requested response types initialized (by the OAuth2RequestFactory)
+	 * with the response types originally requested.
 	 */
 	private Set<String> responseTypes = new HashSet<String>();
 
@@ -80,35 +80,33 @@ public class AuthorizationRequest extends BaseRequest implements Serializable {
 
 	/**
 	 * The resolved redirect URI of this request. A URI may be present in the
-	 * original request, in the authorizationParameters, or it may not be
-	 * provided, in which case it will be defaulted (by processing classes) to
-	 * the Client's default registered value.
+	 * original request, in the authorizationParameters, or it may not be provided,
+	 * in which case it will be defaulted (by processing classes) to the Client's
+	 * default registered value.
 	 */
 	private String redirectUri;
 
 	/**
 	 * Extension point for custom processing classes which may wish to store
-	 * additional information about the OAuth2 request. Since this class will
-	 * create a serializable OAuth2Request, all members of this extension map
-	 * must be serializable.
+	 * additional information about the OAuth2 request. Since this class will create
+	 * a serializable OAuth2Request, all members of this extension map must be
+	 * serializable.
 	 */
 	private Map<String, Serializable> extensions = new HashMap<String, Serializable>();
-	
-	//support oauth 2.1, PKCE
+
+	// support oauth 2.1, PKCE
 	/**
-	 * A challenge derived from the code verifier that is sent in the
-     * authorization request, to be verified against later.
+	 * A challenge derived from the code verifier that is sent in the authorization
+	 * request, to be verified against later.
 	 */
 	private String codeChallenge;
-	
+
 	/**
 	 * A method that was used to derive code challenge.
 	 * 
-	 * plain
-     *      code_challenge = code_verifier
-     * 
-     * S256
-     *      code_challenge = BASE64URL-ENCODE(SHA256(ASCII(code_verifier)))
+	 * plain code_challenge = code_verifier
+	 * 
+	 * S256 code_challenge = BASE64URL-ENCODE(SHA256(ASCII(code_verifier)))
 	 */
 	private String codeChallengeMethod = "S256";
 
@@ -121,11 +119,13 @@ public class AuthorizationRequest extends BaseRequest implements Serializable {
 	/**
 	 * Full constructor.
 	 */
-	public AuthorizationRequest(Map<String, String> authorizationParameters, Map<String, String> approvalParameters, String clientId, Set<String> scope, Set<String> resourceIds, Collection<? extends GrantedAuthority> authorities, boolean approved, String state, String redirectUri,
-	        Set<String> responseTypes,String codeChallenge,String codeChallengeMethod) {
+	public AuthorizationRequest(Map<String, String> authorizationParameters, Map<String, String> approvalParameters,
+			String clientId, Set<String> scope, Set<String> resourceIds,
+			Collection<? extends GrantedAuthority> authorities, boolean approved, String state, String redirectUri,
+			Set<String> responseTypes, String codeChallenge, String codeChallengeMethod) {
 		setClientId(clientId);
 		setRequestParameters(authorizationParameters); // in case we need to
-													   // wrap the collection
+														// wrap the collection
 		setScope(scope); // in case we need to parse
 		if (resourceIds != null) {
 			this.resourceIds = new HashSet<String>(resourceIds);
@@ -140,20 +140,22 @@ public class AuthorizationRequest extends BaseRequest implements Serializable {
 			this.responseTypes = responseTypes;
 		}
 		this.state = state;
-		//add oauth 2.1 PKCE
+		// add oauth 2.1 PKCE
 		this.codeChallenge = codeChallenge;
 		if (codeChallengeMethod != null) {
-		    this.codeChallengeMethod = codeChallengeMethod;
+			this.codeChallengeMethod = codeChallengeMethod;
 		}
 	}
 
 	public OAuth2Request createOAuth2Request() {
-		return new OAuth2Request(getRequestParameters(), getClientId(), getAuthorities(), isApproved(), getScope(), getResourceIds(), getRedirectUri(), getResponseTypes(), getCodeChallenge(),getCodeChallengeMethod(),getExtensions());
+		return new OAuth2Request(getRequestParameters(), getClientId(), getAuthorities(), isApproved(), getScope(),
+				getResourceIds(), getRedirectUri(), getResponseTypes(), getCodeChallenge(), getCodeChallengeMethod(),
+				getExtensions());
 	}
 
 	/**
-	 * Convenience constructor for unit tests, where client ID and scope are
-	 * often the only needed fields.
+	 * Convenience constructor for unit tests, where client ID and scope are often
+	 * the only needed fields.
 	 * 
 	 * @param clientId
 	 * @param scopes
@@ -227,32 +229,35 @@ public class AuthorizationRequest extends BaseRequest implements Serializable {
 		this.resourceIds = resourceIds;
 	}
 
+	@Override
 	public void setClientId(String clientId) {
 		super.setClientId(clientId);
 	}
 
 	/**
-	 * Set the scope value. If the collection contains only a single scope
-	 * value, this method will parse that value into a collection using
+	 * Set the scope value. If the collection contains only a single scope value,
+	 * this method will parse that value into a collection using
 	 * {@link OAuth2Utils.parseParameterList}.
 	 * 
 	 * @see TokenRequest.setScope
 	 * 
 	 * @param scope
 	 */
+	@Override
 	public void setScope(Collection<String> scope) {
 		super.setScope(scope);
 	}
 
 	/**
-	 * Set the Request Parameters on this authorization request, which represent
-	 * the original request parameters and should never be changed during
-	 * processing. The map passed in is wrapped in an unmodifiable map instance.
+	 * Set the Request Parameters on this authorization request, which represent the
+	 * original request parameters and should never be changed during processing.
+	 * The map passed in is wrapped in an unmodifiable map instance.
 	 * 
 	 * @see TokenRequest.setRequestParameters
 	 * 
 	 * @param requestParameters
 	 */
+	@Override
 	public void setRequestParameters(Map<String, String> requestParameters) {
 		super.setRequestParameters(requestParameters);
 	}
@@ -286,22 +291,22 @@ public class AuthorizationRequest extends BaseRequest implements Serializable {
 	}
 
 	public String getCodeChallenge() {
-        return codeChallenge;
-    }
+		return codeChallenge;
+	}
 
-    public void setCodeChallenge(String codeChallenge) {
-        this.codeChallenge = codeChallenge;
-    }
+	public void setCodeChallenge(String codeChallenge) {
+		this.codeChallenge = codeChallenge;
+	}
 
-    public String getCodeChallengeMethod() {
-        return codeChallengeMethod;
-    }
+	public String getCodeChallengeMethod() {
+		return codeChallengeMethod;
+	}
 
-    public void setCodeChallengeMethod(String codeChallengeMethod) {
-        this.codeChallengeMethod = codeChallengeMethod;
-    }
+	public void setCodeChallengeMethod(String codeChallengeMethod) {
+		this.codeChallengeMethod = codeChallengeMethod;
+	}
 
-    @Override
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();

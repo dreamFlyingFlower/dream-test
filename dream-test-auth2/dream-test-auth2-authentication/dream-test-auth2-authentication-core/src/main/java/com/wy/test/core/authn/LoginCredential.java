@@ -6,7 +6,7 @@ import java.util.Collection;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-import com.wy.test.web.WebConstants;
+import com.wy.test.core.web.WebConstants;
 
 public class LoginCredential implements Authentication {
 

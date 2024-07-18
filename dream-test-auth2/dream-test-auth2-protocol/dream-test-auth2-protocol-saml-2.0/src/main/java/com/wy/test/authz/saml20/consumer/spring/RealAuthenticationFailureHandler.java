@@ -13,11 +13,12 @@ import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
 /**
- * Handles authn failures of the SAMLResponseAuthenticationProcessingFilter. 
+ * Handles authn failures of the SAMLResponseAuthenticationProcessingFilter.
  * 
- * If the AuthenticationException is of type IdentityProviderAuthenticationException,
- * retry the original request, which will cause a new authn attempt with the IDP.  This
- * is nearly identical to Spring's SavedRequestAwareAuthenticationSuccessHandler.
+ * If the AuthenticationException is of type
+ * IdentityProviderAuthenticationException, retry the original request, which
+ * will cause a new authn attempt with the IDP. This is nearly identical to
+ * Spring's SavedRequestAwareAuthenticationSuccessHandler.
  * 
  * Any other exceptions will result in responding with forbidden (403).
  * 
@@ -28,31 +29,27 @@ import org.springframework.security.web.savedrequest.SavedRequest;
  * @author jcox
  *
  */
-public class RealAuthenticationFailureHandler implements
-		AuthenticationFailureHandler {
+public class RealAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
-	private final static Logger logger = LoggerFactory
-	.getLogger(RealAuthenticationFailureHandler.class);
+	private final static Logger logger = LoggerFactory.getLogger(RealAuthenticationFailureHandler.class);
 
 	private final RequestCache requestCache;
-	
-	
+
 	public RealAuthenticationFailureHandler(RequestCache requestCache) {
 		super();
 		this.requestCache = requestCache;
 	}
 
 	@Override
-	public void onAuthenticationFailure(HttpServletRequest request,
-			HttpServletResponse response, AuthenticationException authenticationException)
-			throws IOException, ServletException {
-		
+	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+			AuthenticationException authenticationException) throws IOException, ServletException {
+
 		SavedRequest savedRequest = requestCache.getRequest(request, response);
-		
+
 		logger.debug("saved Request: {}", savedRequest);
-		
-		if( authenticationException instanceof IdentityProviderAuthenticationException && savedRequest != null) {
-			
+
+		if (authenticationException instanceof IdentityProviderAuthenticationException && savedRequest != null) {
+
 			logger.warn("Authn Failure reported by the IDP.", authenticationException);
 			logger.debug("Retry original request of {}", savedRequest.getRedirectUrl());
 			response.sendRedirect(savedRequest.getRedirectUrl());
@@ -60,7 +57,7 @@ public class RealAuthenticationFailureHandler implements
 
 		else {
 			logger.warn("Unrecoverable authn failure. Sending to Forbidden", authenticationException);
-			response.sendError(HttpServletResponse.SC_FORBIDDEN);		
+			response.sendError(HttpServletResponse.SC_FORBIDDEN);
 		}
 	}
 }

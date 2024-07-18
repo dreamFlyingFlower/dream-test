@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
-import com.wy.test.constants.ConstsPersistence;
+import com.wy.test.core.constants.ConstsPersistence;
+import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.otp.password.onetimepwd.token.RedisOtpTokenStore;
-import com.wy.test.persistence.redis.RedisConnectionFactory;
 import com.wy.test.persistence.service.EmailSendersService;
 import com.wy.test.persistence.service.SmsProviderService;
 import com.wy.test.sms.password.sms.SmsOtpAuthnService;

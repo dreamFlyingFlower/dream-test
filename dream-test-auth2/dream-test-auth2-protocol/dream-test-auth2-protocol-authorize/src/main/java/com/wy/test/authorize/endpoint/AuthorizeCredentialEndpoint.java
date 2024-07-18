@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wy.test.constants.ConstsStatus;
 import com.wy.test.core.authn.annotation.CurrentUser;
+import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.entity.Accounts;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.crypto.password.PasswordReciprocal;
-import com.wy.test.entity.Accounts;
 import com.wy.test.entity.Message;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.entity.apps.Apps;
 import com.wy.test.util.StringUtils;
 
 @RestController

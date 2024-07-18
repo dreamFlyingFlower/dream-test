@@ -9,8 +9,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.cas.authz.endpoint.response.ServiceResponseBuilder;
-import com.wy.test.entity.apps.AppsCasDetails;
-import com.wy.test.web.WebConstants;
+import com.wy.test.core.entity.apps.AppsCasDetails;
+import com.wy.test.core.web.WebConstants;
 
 public class CasDefaultAdapter extends AbstractAuthorizeAdapter {
 

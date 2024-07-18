@@ -13,16 +13,16 @@ import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
 import com.wy.test.authz.oauth2.common.OAuth2Constants;
 import com.wy.test.cas.authz.endpoint.ticket.CasConstants;
-import com.wy.test.configuration.ApplicationConfig;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.entity.apps.Apps;
+import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.web.WebConstants;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.AppsCasDetailsService;
 import com.wy.test.persistence.service.AppsService;
-import com.wy.test.web.WebConstants;
-import com.wy.test.web.WebContext;
 
 import dream.flying.flower.binary.Base64Helper;
 

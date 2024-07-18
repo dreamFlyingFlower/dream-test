@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.wy.test.core.authn.session.Session;
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.entity.UserInfo;
 
 public class SignPrincipal implements UserDetails {
 

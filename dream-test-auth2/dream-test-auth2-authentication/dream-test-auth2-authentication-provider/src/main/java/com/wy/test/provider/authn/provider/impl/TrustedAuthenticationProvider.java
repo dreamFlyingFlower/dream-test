@@ -5,13 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 
-import com.wy.test.configuration.ApplicationConfig;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.provider.authn.realm.AbstractAuthenticationRealm;
-import com.wy.test.web.WebContext;
 
 /**
  * Trusted Authentication provider.

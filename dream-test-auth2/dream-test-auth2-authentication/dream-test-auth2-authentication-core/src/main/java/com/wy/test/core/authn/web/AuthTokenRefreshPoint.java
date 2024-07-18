@@ -18,9 +18,9 @@ import com.wy.test.core.authn.jwt.AuthRefreshTokenService;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.entity.Message;
 import com.wy.test.util.StringUtils;
-import com.wy.test.web.WebContext;
 
 @Controller
 @RequestMapping(value = "/auth")

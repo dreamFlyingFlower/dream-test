@@ -1,6 +1,5 @@
 package com.wy.test.authz.oauth2.provider.endpoint;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +24,8 @@ import com.wy.test.authz.oauth2.provider.password.ResourceOwnerPasswordTokenGran
 import com.wy.test.authz.oauth2.provider.refresh.RefreshTokenGranter;
 import com.wy.test.authz.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import com.wy.test.authz.oauth2.provider.token.AuthorizationServerTokenServices;
-import com.wy.test.configuration.ApplicationConfig;
-import com.wy.test.persistence.cache.MomentaryService;
+import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.persistence.cache.MomentaryService;
 import com.wy.test.persistence.service.AppsService;
 
 public class AbstractEndpoint implements InitializingBean {
@@ -34,60 +33,63 @@ public class AbstractEndpoint implements InitializingBean {
 	protected final Log logger = LogFactory.getLog(getClass());
 
 	private TokenGranter tokenGranter;
-	
+
 	@Autowired
-  	@Qualifier("oauth20AuthorizationCodeServices")
+	@Qualifier("oauth20AuthorizationCodeServices")
 	protected AuthorizationCodeServices authorizationCodeServices = new InMemoryAuthorizationCodeServices();
-	
+
 	@Autowired
-  	@Qualifier("oauth20TokenServices")
-	protected AuthorizationServerTokenServices tokenServices ;
-	
+	@Qualifier("oauth20TokenServices")
+	protected AuthorizationServerTokenServices tokenServices;
+
 	@Autowired
-  	@Qualifier("oauth20JdbcClientDetailsService")
+	@Qualifier("oauth20JdbcClientDetailsService")
 	protected ClientDetailsService clientDetailsService;
-	
+
 	@Autowired
-  	@Qualifier("oAuth2RequestFactory")
+	@Qualifier("oAuth2RequestFactory")
 	protected OAuth2RequestFactory oAuth2RequestFactory;
-	
+
 	@Autowired
-  	@Qualifier("oAuth2RequestFactory")
+	@Qualifier("oAuth2RequestFactory")
 	protected OAuth2RequestFactory defaultOAuth2RequestFactory;
 
 	@Autowired
-    @Qualifier("oauth20UserAuthenticationManager")
+	@Qualifier("oauth20UserAuthenticationManager")
 	AuthenticationManager authenticationManager;
-	
+
 	@Autowired
-    @Qualifier("appsService")
-    protected AppsService appsService;
-	
-	@Autowired 
-    @Qualifier("applicationConfig")
-    protected ApplicationConfig applicationConfig;
-	
-	@Autowired 
+	@Qualifier("appsService")
+	protected AppsService appsService;
+
+	@Autowired
+	@Qualifier("applicationConfig")
+	protected ApplicationConfig applicationConfig;
+
+	@Autowired
 	protected MomentaryService momentaryService;
-	
-	
+
+	@Override
 	public void afterPropertiesSet() throws Exception {
 		if (tokenGranter == null) {
-			//ClientDetailsService clientDetails = clientDetailsService();
-			//AuthorizationServerTokenServices tokenServices = tokenServices();
-			//AuthorizationCodeServices authorizationCodeServices = authorizationCodeServices();
-			//OAuth2RequestFactory requestFactory = requestFactory();
+			// ClientDetailsService clientDetails = clientDetailsService();
+			// AuthorizationServerTokenServices tokenServices = tokenServices();
+			// AuthorizationCodeServices authorizationCodeServices =
+			// authorizationCodeServices();
+			// OAuth2RequestFactory requestFactory = requestFactory();
 
 			List<TokenGranter> tokenGranters = new ArrayList<TokenGranter>();
 			tokenGranters.add(new AuthorizationCodeTokenGranter(tokenServices, authorizationCodeServices,
 					clientDetailsService, oAuth2RequestFactory));
 			tokenGranters.add(new RefreshTokenGranter(tokenServices, clientDetailsService, oAuth2RequestFactory));
-			ImplicitTokenGranter implicit = new ImplicitTokenGranter(tokenServices, clientDetailsService, oAuth2RequestFactory);
+			ImplicitTokenGranter implicit =
+					new ImplicitTokenGranter(tokenServices, clientDetailsService, oAuth2RequestFactory);
 			tokenGranters.add(implicit);
-			tokenGranters.add(new ClientCredentialsTokenGranter(tokenServices, clientDetailsService, oAuth2RequestFactory));
+			tokenGranters
+					.add(new ClientCredentialsTokenGranter(tokenServices, clientDetailsService, oAuth2RequestFactory));
 			if (authenticationManager != null) {
 				tokenGranters.add(new ResourceOwnerPasswordTokenGranter(authenticationManager, tokenServices,
-				        clientDetailsService, oAuth2RequestFactory));
+						clientDetailsService, oAuth2RequestFactory));
 			}
 			tokenGranter = new CompositeTokenGranter(tokenGranters);
 		}
@@ -99,8 +101,6 @@ public class AbstractEndpoint implements InitializingBean {
 		}
 	}
 
-
-
 	public void setTokenGranter(TokenGranter tokenGranter) {
 		this.tokenGranter = tokenGranter;
 	}
@@ -108,8 +108,6 @@ public class AbstractEndpoint implements InitializingBean {
 	protected TokenGranter getTokenGranter() {
 		return tokenGranter;
 	}
-
-
 
 	protected OAuth2RequestFactory getOAuth2RequestFactory() {
 		return oAuth2RequestFactory;

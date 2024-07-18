@@ -3,13 +3,14 @@ package com.wy.test.authz.saml20.consumer.spring;
 import org.springframework.security.core.AuthenticationException;
 
 /**
- * Indicates that the Service Provider was the entity that failed the authentication.
- * This could be because of an invalid Signature, invalid Message structure....
+ * Indicates that the Service Provider was the entity that failed the
+ * authentication. This could be because of an invalid Signature, invalid
+ * Message structure....
  * 
  * The user 'may' be authenticated with the Identity Provider.
  * 
- * Further attempts to authenticate the user with the IDP would most probably
- * be fruitless;
+ * Further attempts to authenticate the user with the IDP would most probably be
+ * fruitless;
  */
 public class ServiceProviderAuthenticationException extends AuthenticationException {
 

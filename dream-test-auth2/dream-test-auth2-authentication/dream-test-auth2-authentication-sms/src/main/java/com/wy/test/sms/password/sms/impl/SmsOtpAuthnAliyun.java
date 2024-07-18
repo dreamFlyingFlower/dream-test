@@ -9,7 +9,7 @@ import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.entity.UserInfo;
 import com.wy.test.sms.password.sms.SmsOtpAuthn;
 
 /**

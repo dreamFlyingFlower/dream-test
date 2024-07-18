@@ -5,7 +5,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -21,7 +21,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
- * Controller which decodes access tokens for clients who are not able to do so (or where opaque token values are used).
+ * Controller which decodes access tokens for clients who are not able to do so
+ * (or where opaque token values are used).
  * 
  * @author Luke Taylor
  * @author Joel D'sa
@@ -36,12 +37,9 @@ public class CheckTokenEndpoint {
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
-
 	public CheckTokenEndpoint(ResourceServerTokenServices resourceServerTokenServices) {
 		this.resourceServerTokenServices = resourceServerTokenServices;
 	}
-	
-
 
 	/**
 	 * @param accessTokenConverter the accessTokenConverter to set
@@ -50,8 +48,8 @@ public class CheckTokenEndpoint {
 		this.accessTokenConverter = accessTokenConverter;
 	}
 
-	@Operation(summary = "OAuth 2.0 token检查接口", description = "传递参数token",method="POST")
-	@RequestMapping(value = OAuth2Constants.ENDPOINT.ENDPOINT_CHECK_TOKEN)
+	@Operation(summary = "OAuth 2.0 token检查接口", description = "传递参数token", method = "POST")
+	@PostMapping(value = OAuth2Constants.ENDPOINT.ENDPOINT_CHECK_TOKEN)
 	@ResponseBody
 	public Map<String, ?> checkToken(@RequestParam(OAuth2Constants.PARAMETER.TOKEN) String value) {
 
@@ -70,7 +68,5 @@ public class CheckTokenEndpoint {
 
 		return response;
 	}
-
-	
 
 }

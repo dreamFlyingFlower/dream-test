@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import com.wy.test.entity.Synchronizers;
+import com.wy.test.core.entity.Synchronizers;
 import com.wy.test.persistence.mapper.SynchronizersMapper;
 
 @Repository

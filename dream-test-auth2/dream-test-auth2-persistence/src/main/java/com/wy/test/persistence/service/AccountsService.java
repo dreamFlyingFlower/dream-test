@@ -6,12 +6,12 @@ import org.dromara.mybatis.jpa.JpaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.wy.test.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.entity.Accounts;
+import com.wy.test.core.entity.AccountsStrategy;
+import com.wy.test.core.entity.OrganizationsCast;
+import com.wy.test.core.entity.UserInfo;
 import com.wy.test.crypto.password.PasswordReciprocal;
-import com.wy.test.entity.Accounts;
-import com.wy.test.entity.AccountsStrategy;
-import com.wy.test.entity.OrganizationsCast;
-import com.wy.test.entity.UserInfo;
 import com.wy.test.persistence.mapper.AccountsMapper;
 import com.wy.test.provision.ProvisionAction;
 import com.wy.test.provision.ProvisionService;

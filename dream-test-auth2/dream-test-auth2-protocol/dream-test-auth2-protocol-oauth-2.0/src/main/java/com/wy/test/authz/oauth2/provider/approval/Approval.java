@@ -30,7 +30,7 @@ public class Approval {
 	}
 
 	private ApprovalStatus status;
-	
+
 	private Date expiresAt;
 
 	private Date lastUpdatedAt;
@@ -46,7 +46,8 @@ public class Approval {
 		this(userId, clientId, scope, expiresAt, status, new Date());
 	}
 
-	public Approval(String userId, String clientId, String scope, Date expiresAt, ApprovalStatus status, Date lastUpdatedAt) {
+	public Approval(String userId, String clientId, String scope, Date expiresAt, ApprovalStatus status,
+			Date lastUpdatedAt) {
 		this.userId = userId;
 		this.clientId = clientId;
 		this.scope = scope;
@@ -55,7 +56,8 @@ public class Approval {
 		this.lastUpdatedAt = lastUpdatedAt;
 	}
 
-	protected Approval() { }
+	protected Approval() {
+	}
 
 	public String getUserId() {
 		return userId;
@@ -115,7 +117,7 @@ public class Approval {
 
 	@JsonIgnore
 	public boolean isApproved() {
-		return isCurrentlyActive() && status==ApprovalStatus.APPROVED;
+		return isCurrentlyActive() && status == ApprovalStatus.APPROVED;
 	}
 
 	public void setStatus(ApprovalStatus status) {
@@ -143,12 +145,14 @@ public class Approval {
 			return false;
 		}
 		Approval other = (Approval) o;
-		return userId.equals(other.userId) && clientId.equals(other.clientId) && scope.equals(other.scope) && status == other.status;
+		return userId.equals(other.userId) && clientId.equals(other.clientId) && scope.equals(other.scope)
+				&& status == other.status;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("[%s, %s, %s, %s, %s, %s]", userId, scope, clientId, expiresAt, status.toString(), lastUpdatedAt);
+		return String.format("[%s, %s, %s, %s, %s, %s]", userId, scope, clientId, expiresAt, status.toString(),
+				lastUpdatedAt);
 	}
 
 }

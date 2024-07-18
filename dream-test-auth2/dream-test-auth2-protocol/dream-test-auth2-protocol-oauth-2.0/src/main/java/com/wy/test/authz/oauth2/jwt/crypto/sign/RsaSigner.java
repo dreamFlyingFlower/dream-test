@@ -8,19 +8,21 @@ import java.security.spec.RSAPrivateKeySpec;
 /**
  * A signer for signing using an RSA private key.
  *
- * The key can be supplied directly, or as an SSH private key string (in
- * the standard format produced by <tt>ssh-keygen</tt>)
+ * The key can be supplied directly, or as an SSH private key string (in the
+ * standard format produced by <tt>ssh-keygen</tt>)
  *
  * @author Luke Taylor
  */
 public class RsaSigner implements Signer {
+
 	static final String DEFAULT_ALGORITHM = "SHA256withRSA";
 
 	private final RSAPrivateKey key;
+
 	private final String algorithm;
 
 	public RsaSigner(BigInteger n, BigInteger d) {
-		this(createPrivateKey(n,d));
+		this(createPrivateKey(n, d));
 	}
 
 	public RsaSigner(RSAPrivateKey key) {
@@ -36,18 +38,19 @@ public class RsaSigner implements Signer {
 		this(loadPrivateKey(sshKey));
 	}
 
+	@Override
 	public byte[] sign(byte[] bytes) {
 		try {
 			Signature signature = Signature.getInstance(algorithm);
 			signature.initSign(key);
 			signature.update(bytes);
 			return signature.sign();
-		}
-		catch (GeneralSecurityException e) {
+		} catch (GeneralSecurityException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
+	@Override
 	public String algorithm() {
 		return algorithm;
 	}
@@ -55,8 +58,7 @@ public class RsaSigner implements Signer {
 	private static RSAPrivateKey createPrivateKey(BigInteger n, BigInteger d) {
 		try {
 			return (RSAPrivateKey) KeyFactory.getInstance("RSA").generatePrivate(new RSAPrivateKeySpec(n, d));
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}

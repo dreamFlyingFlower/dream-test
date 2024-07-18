@@ -13,13 +13,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.wy.test.constants.ldap.InetOrgPerson;
+import com.wy.test.core.constants.ldap.InetOrgPerson;
+import com.wy.test.core.entity.HistorySynchronizer;
+import com.wy.test.core.entity.Organizations;
+import com.wy.test.core.entity.SynchroRelated;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.persistence.ldap.LdapUtils;
 import com.wy.test.crypto.DigestUtils;
-import com.wy.test.entity.HistorySynchronizer;
-import com.wy.test.entity.Organizations;
-import com.wy.test.entity.SynchroRelated;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.persistence.ldap.LdapUtils;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 

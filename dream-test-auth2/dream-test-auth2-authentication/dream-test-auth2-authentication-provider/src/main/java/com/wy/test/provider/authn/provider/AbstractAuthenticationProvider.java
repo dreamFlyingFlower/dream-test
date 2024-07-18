@@ -11,21 +11,21 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
-import com.wy.test.configuration.ApplicationConfig;
-import com.wy.test.constants.ConstsLoginType;
-import com.wy.test.constants.ConstsStatus;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.constants.ConstsLoginType;
+import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.web.WebConstants;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.MailOtpAuthnService;
 import com.wy.test.provider.authn.realm.AbstractAuthenticationRealm;
-import com.wy.test.web.WebConstants;
-import com.wy.test.web.WebContext;
 
 /**
  * login Authentication abstract class.

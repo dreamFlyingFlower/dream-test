@@ -21,19 +21,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.AuthorizeBaseEndpoint;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.configuration.ApplicationConfig;
-import com.wy.test.constants.ConstsBoolean;
-import com.wy.test.constants.ContentType;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
+import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.constants.ConstsBoolean;
+import com.wy.test.core.constants.ContentType;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.entity.apps.AppsJwtDetails;
+import com.wy.test.core.web.WebConstants;
 import com.wy.test.crypto.jose.keystore.JWKSetKeyStore;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.entity.apps.Apps;
-import com.wy.test.entity.apps.AppsJwtDetails;
 import com.wy.test.jwt.jwt.endpoint.adapter.JwtAdapter;
 import com.wy.test.persistence.service.AppsJwtDetailsService;
 import com.wy.test.util.Instance;
-import com.wy.test.web.WebConstants;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

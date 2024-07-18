@@ -33,10 +33,11 @@ import org.w3c.dom.Element;
 import com.wy.test.crypto.cert.StringUtil;
 
 public class MetadataDescriptorUtil {
+
 	private final static Logger logger = LoggerFactory.getLogger(MetadataDescriptorUtil.class);
-	
+
 	private static MetadataDescriptorUtil instance = null;
-	
+
 	/**
 	 * 
 	 */
@@ -61,11 +62,9 @@ public class MetadataDescriptorUtil {
 	// // DefaultBootstrap.bootstrap();
 	// }
 
-	public EntityDescriptor getEntityDescriptor(File file)
-			throws Exception {
+	public EntityDescriptor getEntityDescriptor(File file) throws Exception {
 		try {
-			FilesystemMetadataProvider filesystemMetadataProvider = new FilesystemMetadataProvider(
-					file);
+			FilesystemMetadataProvider filesystemMetadataProvider = new FilesystemMetadataProvider(file);
 			filesystemMetadataProvider.setRequireValidMetadata(true); // Enable
 			// validation
 			filesystemMetadataProvider.setParserPool(new BasicParserPool());
@@ -79,8 +78,7 @@ public class MetadataDescriptorUtil {
 
 	}
 
-	public EntityDescriptor getEntityDescriptor(InputStream inputStream)
-			throws Exception {
+	public EntityDescriptor getEntityDescriptor(InputStream inputStream) throws Exception {
 		BasicParserPool basicParserPool = new BasicParserPool();
 		basicParserPool.setNamespaceAware(true);
 		try {
@@ -107,15 +105,13 @@ public class MetadataDescriptorUtil {
 
 	}
 
-	public EntityDescriptor getEntityDescriptor(String strMetadata)
-			throws Exception {
+	public EntityDescriptor getEntityDescriptor(String strMetadata) throws Exception {
 		InputStream inputStream = StringUtil.String2InputStream(strMetadata);
 		return getEntityDescriptor(inputStream);
 	}
 
 	// from dom
-	public EntityDescriptor getEntityDescriptor(Element elementMetadata)
-			throws Exception {
+	public EntityDescriptor getEntityDescriptor(Element elementMetadata) throws Exception {
 		try {
 			DOMMetadataProvider dOMMetadataProvider = new DOMMetadataProvider(elementMetadata);
 			dOMMetadataProvider.setRequireValidMetadata(true); // Enable
@@ -138,12 +134,11 @@ public class MetadataDescriptorUtil {
 	 * @throws ConfigurationException
 	 * @throws FileNotFoundException
 	 */
-	public static void main(String[] args) throws Exception,
-			ConfigurationException, FileNotFoundException {
+	public static void main(String[] args) throws Exception, ConfigurationException, FileNotFoundException {
 		//
 		File file = new File("d:\\SAMLSP-00D90000000hf9n.xml");
 		org.opensaml.DefaultBootstrap.bootstrap();
-		
+
 		EntityDescriptor entityDescriptor = MetadataDescriptorUtil.getInstance().getEntityDescriptor(file);
 
 		// System.out.println("2 : "+entityDescriptor.getRoleDescriptors());
@@ -158,16 +153,19 @@ public class MetadataDescriptorUtil {
 			// sPSSODescriptor1=idpEntityDescriptor.getSPSSODescriptor(SAMLConstants.SAML20P_NS);
 			if (roleDescriptor instanceof IDPSSODescriptorImpl) {
 				IDPSSODescriptor iDPSSODescriptor = (IDPSSODescriptorImpl) roleDescriptor;
-				 System.out.println("3 : "+iDPSSODescriptor.getSingleSignOnServices().get(0).getLocation());
-				// System.out.println("- : "+iDPSSODescriptor.getNameIDFormats().get(0).getFormat());
+				System.out.println("3 : " + iDPSSODescriptor.getSingleSignOnServices().get(0).getLocation());
+				// System.out.println("- :
+				// "+iDPSSODescriptor.getNameIDFormats().get(0).getFormat());
 
-				// System.out.println("- : "+iDPSSODescriptor.getKeyDescriptors().get(0).getKeyInfo().getX509Datas().get(0));
+				// System.out.println("- :
+				// "+iDPSSODescriptor.getKeyDescriptors().get(0).getKeyInfo().getX509Datas().get(0));
 			} else {
 				SPSSODescriptor sPSSODescriptor = (SPSSODescriptorImpl) roleDescriptor;
 
-				 System.out.println("- : "+sPSSODescriptor.getAssertionConsumerServices().get(0).getLocation());
+				System.out.println("- : " + sPSSODescriptor.getAssertionConsumerServices().get(0).getLocation());
 
-				// System.out.println("- : "+sPSSODescriptor.getAssertionConsumerServices().get(0).getBinding());
+				// System.out.println("- :
+				// "+sPSSODescriptor.getAssertionConsumerServices().get(0).getBinding());
 			}
 
 			// System.out.println("===============================================");
@@ -179,13 +177,16 @@ public class MetadataDescriptorUtil {
 
 		SPSSODescriptor sPSSODescriptor = entityDescriptor1.getSPSSODescriptor(SAMLConstants.SAML20P_NS);
 
-		 System.out.println("ok :"+sPSSODescriptor.getAssertionConsumerServices().get(0).getLocation());
+		System.out.println("ok :" + sPSSODescriptor.getAssertionConsumerServices().get(0).getLocation());
 
-		// System.out.println("ok :"+sPSSODescriptor.getAssertionConsumerServices().get(0).getBinding());
+		// System.out.println("ok
+		// :"+sPSSODescriptor.getAssertionConsumerServices().get(0).getBinding());
 
-		// System.out.println("ok :"+sPSSODescriptor.getNameIDFormats().get(0).getFormat());
+		// System.out.println("ok
+		// :"+sPSSODescriptor.getNameIDFormats().get(0).getFormat());
 
-		// System.out.println("ok :"+sPSSODescriptor.getKeyDescriptors().get(0).getKeyInfo().getX509Datas().get(0));
+		// System.out.println("ok
+		// :"+sPSSODescriptor.getKeyDescriptors().get(0).getKeyInfo().getX509Datas().get(0));
 	}
 
 }

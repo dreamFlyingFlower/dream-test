@@ -7,7 +7,8 @@ import org.springframework.security.core.Authentication;
 import com.wy.test.authz.oauth2.provider.AuthorizationRequest;
 
 /**
- * Basic interface for determining whether a given client authentication request has been approved by the current user.
+ * Basic interface for determining whether a given client authentication request
+ * has been approved by the current user.
  * 
  * @author Ryan Heaton
  * @author Dave Syer
@@ -17,7 +18,8 @@ public interface UserApprovalHandler {
 
 	/**
 	 * <p>
-	 * Tests whether the specified authorization request has been approved by the current user (if there is one).
+	 * Tests whether the specified authorization request has been approved by the
+	 * current user (if there is one).
 	 * </p>
 	 * 
 	 * @param authorizationRequest the authorization request.
@@ -28,10 +30,12 @@ public interface UserApprovalHandler {
 
 	/**
 	 * <p>
-	 * Provides a hook for allowing requests to be pre-approved (skipping the User Approval Page). Some implementations
-	 * may allow users to store approval decisions so that they only have to approve a site once. This method is called
-	 * in the AuthorizationEndpoint before sending the user to the Approval page. If this method sets
-	 * oAuth2Request.approved to true, the Approval page will be skipped.
+	 * Provides a hook for allowing requests to be pre-approved (skipping the User
+	 * Approval Page). Some implementations may allow users to store approval
+	 * decisions so that they only have to approve a site once. This method is
+	 * called in the AuthorizationEndpoint before sending the user to the Approval
+	 * page. If this method sets oAuth2Request.approved to true, the Approval page
+	 * will be skipped.
 	 * </p>
 	 * 
 	 * @param authorizationRequest the authorization request.
@@ -43,10 +47,11 @@ public interface UserApprovalHandler {
 
 	/**
 	 * <p>
-	 * Provides an opportunity to update the authorization request before it is checked for approval in cases where the
-	 * incoming approval parameters contain richer information than just true/false (e.g. some scopes are approved, and
-	 * others are rejected), implementations may need to be able to modify the {@link AuthorizationRequest} before a
-	 * token is generated from it.
+	 * Provides an opportunity to update the authorization request before it is
+	 * checked for approval in cases where the incoming approval parameters contain
+	 * richer information than just true/false (e.g. some scopes are approved, and
+	 * others are rejected), implementations may need to be able to modify the
+	 * {@link AuthorizationRequest} before a token is generated from it.
 	 * </p>
 	 * 
 	 * @param authorizationRequest the authorization request.
@@ -57,8 +62,9 @@ public interface UserApprovalHandler {
 			Authentication userAuthentication);
 
 	/**
-	 * Generate a request for the authorization server to ask for the user's approval. Typically this will be rendered
-	 * into a view (HTML etc.) to prompt for the approval, so it needs to contain information about the grant (scopes
+	 * Generate a request for the authorization server to ask for the user's
+	 * approval. Typically this will be rendered into a view (HTML etc.) to prompt
+	 * for the approval, so it needs to contain information about the grant (scopes
 	 * and client id for instance).
 	 * 
 	 * @param authorizationRequest the authorization request

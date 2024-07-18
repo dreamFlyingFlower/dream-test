@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public interface OAuth2RefreshToken  extends Serializable {
+public interface OAuth2RefreshToken extends Serializable {
 
 	/**
 	 * The value of the token.

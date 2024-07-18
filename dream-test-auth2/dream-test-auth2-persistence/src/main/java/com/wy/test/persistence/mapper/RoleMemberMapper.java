@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.dromara.mybatis.jpa.IJpaMapper;
 
-import com.wy.test.entity.RoleMember;
-import com.wy.test.entity.Roles;
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.entity.RoleMember;
+import com.wy.test.core.entity.Roles;
+import com.wy.test.core.entity.UserInfo;
 
 public interface RoleMemberMapper extends IJpaMapper<RoleMember> {
 

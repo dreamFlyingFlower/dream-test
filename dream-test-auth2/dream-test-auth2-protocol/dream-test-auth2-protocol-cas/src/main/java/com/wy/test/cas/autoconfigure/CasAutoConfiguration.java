@@ -13,7 +13,7 @@ import com.wy.test.cas.authz.endpoint.ticket.TicketServices;
 import com.wy.test.cas.authz.endpoint.ticket.pgt.ProxyGrantingTicketServicesFactory;
 import com.wy.test.cas.authz.endpoint.ticket.st.TicketServicesFactory;
 import com.wy.test.cas.authz.endpoint.ticket.tgt.TicketGrantingTicketServicesFactory;
-import com.wy.test.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 
 @AutoConfiguration
 @ComponentScan(basePackages = { "org.maxkey.authz.cas.endpoint" })

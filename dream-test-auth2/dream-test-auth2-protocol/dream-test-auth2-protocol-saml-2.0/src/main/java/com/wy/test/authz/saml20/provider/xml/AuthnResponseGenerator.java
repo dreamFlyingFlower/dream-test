@@ -22,9 +22,9 @@ import com.wy.test.authz.saml.service.IDService;
 import com.wy.test.authz.saml.service.TimeService;
 import com.wy.test.authz.saml20.binding.BindingAdapter;
 import com.wy.test.authz.saml20.xml.IssuerGenerator;
-import com.wy.test.constants.ConstsBoolean;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.entity.apps.AppsSAML20Details;
+import com.wy.test.core.constants.ConstsBoolean;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.apps.AppsSAML20Details;
 
 public class AuthnResponseGenerator {
 

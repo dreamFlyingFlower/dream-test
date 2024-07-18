@@ -5,8 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Update;
 import org.dromara.mybatis.jpa.IJpaMapper;
 
-import com.wy.test.entity.apps.Apps;
-import com.wy.test.entity.apps.UserApps;
+import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.entity.apps.UserApps;
 
 public interface AppsMapper extends IJpaMapper<Apps> {
 

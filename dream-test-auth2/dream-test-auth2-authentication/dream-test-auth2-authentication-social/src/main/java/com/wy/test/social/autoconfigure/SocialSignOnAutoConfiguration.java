@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.wy.test.entity.SocialsProvider;
-import com.wy.test.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.entity.SocialsProvider;
+import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.social.authn.support.socialsignon.service.JdbcSocialsAssociateService;
 import com.wy.test.social.authn.support.socialsignon.service.SocialSignOnProviderService;
 import com.wy.test.social.authn.support.socialsignon.token.RedisTokenStore;

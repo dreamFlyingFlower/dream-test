@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.wy.test.core.persistence.repository.LoginHistoryRepository;
+import com.wy.test.core.persistence.repository.LoginRepository;
+import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.impl.TimeBasedOtpAuthn;
-import com.wy.test.persistence.repository.LoginHistoryRepository;
-import com.wy.test.persistence.repository.LoginRepository;
-import com.wy.test.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.persistence.service.UserInfoService;
 import com.wy.test.provider.authn.realm.jdbc.JdbcAuthenticationRealm;
 

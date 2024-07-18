@@ -10,7 +10,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.Assert;
 
-import com.wy.test.entity.apps.AppsCasDetails;
+import com.wy.test.core.entity.apps.AppsCasDetails;
 
 /**
  * Abstract implementation of a ticket that handles all ticket state for

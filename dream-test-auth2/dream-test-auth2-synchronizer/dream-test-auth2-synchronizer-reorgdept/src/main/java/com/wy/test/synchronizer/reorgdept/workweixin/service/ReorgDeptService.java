@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.wy.test.constants.ConstsStatus;
-import com.wy.test.entity.Organizations;
+import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.entity.Organizations;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 

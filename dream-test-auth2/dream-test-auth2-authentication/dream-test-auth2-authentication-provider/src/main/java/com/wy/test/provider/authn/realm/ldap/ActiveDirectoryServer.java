@@ -3,7 +3,7 @@ package com.wy.test.provider.authn.realm.ldap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.persistence.ldap.ActiveDirectoryUtils;
+import com.wy.test.core.persistence.ldap.ActiveDirectoryUtils;
 import com.wy.test.provider.authn.realm.IAuthenticationServer;
 
 public final class ActiveDirectoryServer implements IAuthenticationServer {

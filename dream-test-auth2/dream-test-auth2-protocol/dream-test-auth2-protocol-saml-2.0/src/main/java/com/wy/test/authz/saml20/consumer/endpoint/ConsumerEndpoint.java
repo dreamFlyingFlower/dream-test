@@ -51,11 +51,11 @@ import com.wy.test.authz.saml20.consumer.spring.IdentityProviderAuthenticationEx
 import com.wy.test.authz.saml20.consumer.spring.ServiceProviderAuthenticationException;
 import com.wy.test.authz.saml20.provider.xml.AuthnResponseGenerator;
 import com.wy.test.authz.saml20.xml.SAML2ValidatorSuite;
-import com.wy.test.constants.ConstsLoginType;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthTokenService;
+import com.wy.test.core.constants.ConstsLoginType;
+import com.wy.test.core.entity.apps.AppsSAML20Details;
 import com.wy.test.crypto.keystore.KeyStoreLoader;
-import com.wy.test.entity.apps.AppsSAML20Details;
 import com.wy.test.persistence.service.AppsSaml20DetailsService;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
@@ -64,6 +64,7 @@ public class ConsumerEndpoint {
 
 	private final static Logger logger = LoggerFactory.getLogger(ConsumerEndpoint.class);
 
+	@SuppressWarnings("unused")
 	private BindingAdapter bindingAdapter;
 
 	@Autowired
@@ -82,8 +83,10 @@ public class ConsumerEndpoint {
 	@Qualifier("authenticationProvider")
 	AbstractAuthenticationProvider authenticationProvider;
 
+	@SuppressWarnings("unused")
 	private String singleSignOnServiceURL;
 
+	@SuppressWarnings("unused")
 	private String assertionConsumerServiceURL;
 
 	@Autowired
@@ -114,6 +117,7 @@ public class ConsumerEndpoint {
 
 	SAML2ValidatorSuite validatorSuite = new SAML2ValidatorSuite();
 
+	@SuppressWarnings({ "rawtypes", "null", "unused" })
 	@GetMapping(value = "/authz/saml20/consumer/{id}")
 	public ModelAndView consumer(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("id") String appId) throws Exception {
@@ -124,9 +128,12 @@ public class ConsumerEndpoint {
 
 		SAMLMessageContext messageContext = null;
 		/*
-		 * try { messageContext = bindingAdapter.extractSAMLMessageContext(request); } catch (MessageDecodingException
-		 * me) { logger.error("Could not decode SAML Response", me); throw new Exception(me); } catch (SecurityException
-		 * se) { logger.error("Could not decode SAML Response", se); throw new Exception(se); }
+		 * try { messageContext = bindingAdapter.extractSAMLMessageContext(request); }
+		 * catch (MessageDecodingException me) {
+		 * logger.error("Could not decode SAML Response", me); throw new Exception(me);
+		 * } catch (SecurityException se) {
+		 * logger.error("Could not decode SAML Response", se); throw new Exception(se);
+		 * }
 		 */
 
 		logger.debug("Message received from issuer: " + messageContext.getInboundMessageIssuer());
@@ -200,6 +207,7 @@ public class ConsumerEndpoint {
 	 * 
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unused")
 	private void initCredential(String appId) throws Exception {
 		// 1. 获取 sp keyStore
 		AppsSAML20Details saml20Details = saml20DetailsService.get(appId);

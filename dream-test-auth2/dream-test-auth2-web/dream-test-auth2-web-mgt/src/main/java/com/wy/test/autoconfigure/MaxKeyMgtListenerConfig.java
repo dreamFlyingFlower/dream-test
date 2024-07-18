@@ -10,8 +10,8 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.wy.test.configuration.ApplicationConfig;
 import com.wy.test.core.authn.session.SessionManager;
+import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.listener.DynamicRolesListenerAdapter;
 import com.wy.test.listener.ListenerAdapter;
 import com.wy.test.listener.ListenerParameter;

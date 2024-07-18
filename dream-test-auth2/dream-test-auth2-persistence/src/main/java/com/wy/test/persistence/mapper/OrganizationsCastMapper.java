@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.dromara.mybatis.jpa.IJpaMapper;
 
-import com.wy.test.entity.Organizations;
-import com.wy.test.entity.OrganizationsCast;
+import com.wy.test.core.entity.Organizations;
+import com.wy.test.core.entity.OrganizationsCast;
 
 public interface OrganizationsCastMapper extends IJpaMapper<OrganizationsCast> {
 

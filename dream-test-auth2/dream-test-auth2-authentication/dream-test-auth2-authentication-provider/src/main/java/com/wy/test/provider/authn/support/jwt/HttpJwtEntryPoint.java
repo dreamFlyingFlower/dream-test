@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nimbusds.jwt.SignedJWT;
-import com.wy.test.configuration.ApplicationConfig;
-import com.wy.test.constants.ConstsLoginType;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthJwt;
 import com.wy.test.core.authn.jwt.AuthTokenService;
+import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.constants.ConstsLoginType;
+import com.wy.test.core.web.WebConstants;
 import com.wy.test.entity.Message;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
-import com.wy.test.web.WebConstants;
 
 @Controller
 @RequestMapping(value = "/login")

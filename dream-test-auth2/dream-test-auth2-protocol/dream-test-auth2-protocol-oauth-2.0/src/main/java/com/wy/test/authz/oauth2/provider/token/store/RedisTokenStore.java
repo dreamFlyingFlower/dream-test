@@ -16,32 +16,40 @@ import com.wy.test.authz.oauth2.provider.OAuth2Authentication;
 import com.wy.test.authz.oauth2.provider.token.AuthenticationKeyGenerator;
 import com.wy.test.authz.oauth2.provider.token.DefaultAuthenticationKeyGenerator;
 import com.wy.test.authz.oauth2.provider.token.TokenStore;
-import com.wy.test.persistence.redis.RedisConnection;
-import com.wy.test.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.persistence.redis.RedisConnection;
+import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.util.ObjectTransformer;
 
 /**
  * @author efenderbosch
  */
 public class RedisTokenStore implements TokenStore {
+
 	static final Logger _logger = LoggerFactory.getLogger(RedisTokenStore.class);
-	
-	private static final String PREFIX                 = "MXK_OAUTH_V20_";
-	
-	private static final String ACCESS                 = PREFIX + "ACCESS_";
-	private static final String AUTH_TO_ACCESS         = PREFIX + "AUTH_TO_ACCESS_";
-	private static final String AUTH                   = PREFIX + "AUTH_";
-	private static final String REFRESH_AUTH           = PREFIX + "REFRESH_AUTH_";
-	private static final String ACCESS_TO_REFRESH      = PREFIX + "ACCESS_TO_REFRESH_";
-	private static final String REFRESH                = PREFIX + "REFRESH_";
-	private static final String REFRESH_TO_ACCESS      = PREFIX + "REFRESH_TO_ACCESS_";
-	private static final String CLIENT_ID_TO_ACCESS    = PREFIX + "CLIENT_ID_TO_ACCESS_";
-	private static final String UNAME_TO_ACCESS        = PREFIX + "UNAME_TO_ACCESS_";
+
+	private static final String PREFIX = "MXK_OAUTH_V20_";
+
+	private static final String ACCESS = PREFIX + "ACCESS_";
+
+	private static final String AUTH_TO_ACCESS = PREFIX + "AUTH_TO_ACCESS_";
+
+	private static final String AUTH = PREFIX + "AUTH_";
+
+	private static final String REFRESH_AUTH = PREFIX + "REFRESH_AUTH_";
+
+	private static final String ACCESS_TO_REFRESH = PREFIX + "ACCESS_TO_REFRESH_";
+
+	private static final String REFRESH = PREFIX + "REFRESH_";
+
+	private static final String REFRESH_TO_ACCESS = PREFIX + "REFRESH_TO_ACCESS_";
+
+	private static final String CLIENT_ID_TO_ACCESS = PREFIX + "CLIENT_ID_TO_ACCESS_";
+
+	private static final String UNAME_TO_ACCESS = PREFIX + "UNAME_TO_ACCESS_";
 
 	private final RedisConnectionFactory connectionFactory;
+
 	private AuthenticationKeyGenerator authenticationKeyGenerator = new DefaultAuthenticationKeyGenerator();
-	
-	
 
 	public RedisTokenStore(RedisConnectionFactory connectionFactory) {
 		this.connectionFactory = connectionFactory;
@@ -61,7 +69,7 @@ public class RedisTokenStore implements TokenStore {
 		String serializedKey = (AUTH_TO_ACCESS + key);
 		RedisConnection conn = getConnection();
 		try {
-			OAuth2AccessToken accessToken =conn.getObject(serializedKey);
+			OAuth2AccessToken accessToken = conn.getObject(serializedKey);
 			if (accessToken != null
 					&& !key.equals(authenticationKeyGenerator.extractKey(readAuthentication(accessToken.getValue())))) {
 				// Keep the stores consistent (maybe the same user is
@@ -152,8 +160,8 @@ public class RedisTokenStore implements TokenStore {
 					ExpiringOAuth2RefreshToken expiringRefreshToken = (ExpiringOAuth2RefreshToken) refreshToken;
 					Date expiration = expiringRefreshToken.getExpiration();
 					if (expiration != null) {
-						int seconds = Long.valueOf((expiration.getTime() - System.currentTimeMillis()) / 1000L)
-								.intValue();
+						int seconds =
+								Long.valueOf((expiration.getTime() - System.currentTimeMillis()) / 1000L).intValue();
 						conn.expire(refreshToAccessKey, seconds);
 						conn.expire(accessToRefreshKey, seconds);
 					}
@@ -166,8 +174,8 @@ public class RedisTokenStore implements TokenStore {
 	}
 
 	private static String getApprovalKey(OAuth2Authentication authentication) {
-		String userName = authentication.getUserAuthentication() == null ? ""
-				: authentication.getUserAuthentication().getName();
+		String userName =
+				authentication.getUserAuthentication() == null ? "" : authentication.getUserAuthentication().getName();
 		return getApprovalKey(authentication.getOAuth2Request().getClientId(), userName);
 	}
 
@@ -203,7 +211,7 @@ public class RedisTokenStore implements TokenStore {
 			conn.getPipeline().get(authKey);
 			conn.getPipeline().del(accessKey);
 			conn.getPipeline().del(accessToRefreshKey);
-			 //Don't remove the refresh token - it's up to the caller to do that
+			// Don't remove the refresh token - it's up to the caller to do that
 			conn.getPipeline().del(authKey);
 			List<Object> results = conn.closePipeline();
 			String access = (String) results.get(0);
@@ -235,13 +243,12 @@ public class RedisTokenStore implements TokenStore {
 			conn.openPipeline();
 			conn.setObject(refreshKey, refreshToken);
 			conn.setObject(refreshAuthKey, authentication);
-			
+
 			if (refreshToken instanceof ExpiringOAuth2RefreshToken) {
 				ExpiringOAuth2RefreshToken expiringRefreshToken = (ExpiringOAuth2RefreshToken) refreshToken;
 				Date expiration = expiringRefreshToken.getExpiration();
 				if (expiration != null) {
-					int seconds = Long.valueOf((expiration.getTime() - System.currentTimeMillis()) / 1000L)
-							.intValue();
+					int seconds = Long.valueOf((expiration.getTime() - System.currentTimeMillis()) / 1000L).intValue();
 					conn.expire(refreshKey, seconds);
 					conn.expire(refreshAuthKey, seconds);
 				}
@@ -308,12 +315,12 @@ public class RedisTokenStore implements TokenStore {
 		if (results == null) {
 			return;
 		}
-		String  accessToken = (String) results.get(0);
-		//String accessToken = ObjectTransformer.deserialize(bytes);
+		String accessToken = (String) results.get(0);
+		// String accessToken = ObjectTransformer.deserialize(bytes);
 		if (accessToken != null) {
 			removeAccessToken(accessToken);
 		}
-		
+
 	}
 
 	@Override
@@ -328,15 +335,15 @@ public class RedisTokenStore implements TokenStore {
 			conn.close();
 		}
 		if (stringList == null || stringList.size() == 0) {
-			return Collections.<OAuth2AccessToken> emptySet();
+			return Collections.<OAuth2AccessToken>emptySet();
 		}
 		List<OAuth2AccessToken> accessTokens = new ArrayList<OAuth2AccessToken>(stringList.size());
 		for (String str : stringList) {
-			//accessToken may expired
+			// accessToken may expired
 			OAuth2AccessToken accessToken = conn.getObject(str);
 			accessTokens.add(accessToken);
 		}
-		return Collections.<OAuth2AccessToken> unmodifiableCollection(accessTokens);
+		return Collections.<OAuth2AccessToken>unmodifiableCollection(accessTokens);
 	}
 
 	@Override
@@ -351,14 +358,14 @@ public class RedisTokenStore implements TokenStore {
 			conn.close();
 		}
 		if (stringList == null || stringList.size() == 0) {
-			return Collections.<OAuth2AccessToken> emptySet();
+			return Collections.<OAuth2AccessToken>emptySet();
 		}
 		List<OAuth2AccessToken> accessTokens = new ArrayList<OAuth2AccessToken>(stringList.size());
 		for (String str : stringList) {
 			OAuth2AccessToken accessToken = conn.getObject(str);
 			accessTokens.add(accessToken);
 		}
-		return Collections.<OAuth2AccessToken> unmodifiableCollection(accessTokens);
+		return Collections.<OAuth2AccessToken>unmodifiableCollection(accessTokens);
 	}
 
 }

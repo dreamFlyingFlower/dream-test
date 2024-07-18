@@ -5,8 +5,9 @@ import java.util.Set;
 import com.wy.test.authz.oauth2.common.util.OAuth2Utils;
 
 /**
- * Exception representing insufficient scope in a token when a request is handled by a Resource Server. It is akin to an
- * {@link AccessDeniedException} and should result in a 403 (FORBIDDEN) HTTP status.
+ * Exception representing insufficient scope in a token when a request is
+ * handled by a Resource Server. It is akin to an {@link AccessDeniedException}
+ * and should result in a 403 (FORBIDDEN) HTTP status.
  */
 @SuppressWarnings("serial")
 public class InsufficientScopeException extends OAuth2Exception {

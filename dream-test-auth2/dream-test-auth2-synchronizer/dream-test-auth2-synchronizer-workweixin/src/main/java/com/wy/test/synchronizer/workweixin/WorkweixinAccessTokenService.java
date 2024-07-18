@@ -3,9 +3,9 @@ package com.wy.test.synchronizer.workweixin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.wy.test.core.web.HttpRequestAdapter;
 import com.wy.test.synchronizer.core.synchronizer.entity.AccessToken;
 import com.wy.test.util.JsonUtils;
-import com.wy.test.web.HttpRequestAdapter;
 
 public class WorkweixinAccessTokenService {
 

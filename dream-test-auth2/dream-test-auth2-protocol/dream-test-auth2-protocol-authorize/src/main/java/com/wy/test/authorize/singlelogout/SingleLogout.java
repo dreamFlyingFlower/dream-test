@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 
-import com.wy.test.entity.apps.Apps;
-import com.wy.test.web.HttpRequestAdapter;
+import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.web.HttpRequestAdapter;
 
 public abstract class SingleLogout {
 

@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.dromara.mybatis.jpa.IJpaMapper;
 
-import com.wy.test.entity.SocialsAssociate;
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.entity.SocialsAssociate;
+import com.wy.test.core.entity.UserInfo;
 
 public interface SocialsAssociateMapper extends IJpaMapper<SocialsAssociate> {
 

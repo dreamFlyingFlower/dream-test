@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.authz.oauth2.common.OAuth2Constants;
-import com.wy.test.constants.ContentType;
+import com.wy.test.core.constants.ContentType;
+import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
+import com.wy.test.core.web.WebConstants;
 import com.wy.test.crypto.jose.keystore.JWKSetKeyStore;
-import com.wy.test.entity.apps.oauth2.provider.ClientDetails;
-import com.wy.test.web.WebConstants;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

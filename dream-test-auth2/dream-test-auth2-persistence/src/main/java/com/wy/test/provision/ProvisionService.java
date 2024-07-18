@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import com.wy.test.configuration.ApplicationConfig;
+import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.provision.thread.ProvisioningThread;
 import com.wy.test.util.DateUtils;
 

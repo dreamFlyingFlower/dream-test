@@ -12,13 +12,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.entity.HistoryLoginApps;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.entity.apps.Apps;
+import com.wy.test.core.entity.HistoryLoginApps;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.web.WebConstants;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.AppsService;
 import com.wy.test.persistence.service.HistoryLoginAppsService;
-import com.wy.test.web.WebConstants;
-import com.wy.test.web.WebContext;
 
 @Component
 public class HistorySignOnAppInterceptor implements AsyncHandlerInterceptor {

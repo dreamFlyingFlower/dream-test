@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import com.wy.test.constants.ConstsDatabase;
-import com.wy.test.entity.SocialsAssociate;
+import com.wy.test.core.constants.ConstsDatabase;
+import com.wy.test.core.entity.SocialsAssociate;
 
 public class JdbcSocialsAssociateService implements SocialsAssociateService {
 

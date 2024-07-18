@@ -21,7 +21,7 @@ public class DefaultSecurityContextAccessor implements SecurityContextAccessor {
 		Authentication authentication = getUserAuthentication();
 		return authentication != null;
 	}
-	
+
 	@Override
 	public Set<GrantedAuthority> getAuthorities() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -6,9 +6,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.entity.HistoryLogin;
-import com.wy.test.persistence.redis.RedisConnection;
-import com.wy.test.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.entity.HistoryLogin;
+import com.wy.test.core.persistence.redis.RedisConnection;
+import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 
 public class RedisSessionManager implements SessionManager {
 

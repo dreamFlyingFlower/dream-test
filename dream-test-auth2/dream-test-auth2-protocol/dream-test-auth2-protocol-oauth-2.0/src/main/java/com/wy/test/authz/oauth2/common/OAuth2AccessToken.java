@@ -14,7 +14,7 @@ import com.wy.test.authz.oauth2.common.exceptions.OAuth2Exception;
 @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = OAuth2AccessTokenJackson2Serializer.class)
 @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = OAuth2AccessTokenJackson2Deserializer.class)
 
-public interface OAuth2AccessToken  extends Serializable {
+public interface OAuth2AccessToken extends Serializable {
 
 	public static String BEARER_TYPE = "Bearer";
 
@@ -26,40 +26,47 @@ public interface OAuth2AccessToken  extends Serializable {
 	public static String ACCESS_TOKEN = "access_token";
 
 	/**
-	 * The type of the token issued as described in <a
-	 * href="http://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-7.1">Section 7.1</a>. Value is case insensitive.
-	 * This value is REQUIRED.
+	 * The type of the token issued as described in <a href=
+	 * "http://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-7.1">Section
+	 * 7.1</a>. Value is case insensitive. This value is REQUIRED.
 	 */
 	public static String TOKEN_TYPE = "token_type";
 
 	/**
-	 * The lifetime in seconds of the access token. For example, the value "3600" denotes that the access token will
-	 * expire in one hour from the time the response was generated. This value is OPTIONAL.
+	 * The lifetime in seconds of the access token. For example, the value "3600"
+	 * denotes that the access token will expire in one hour from the time the
+	 * response was generated. This value is OPTIONAL.
 	 */
 	public static String EXPIRES_IN = "expires_in";
 
 	/**
-	 * The refresh token which can be used to obtain new access tokens using the same authorization grant as described
-	 * in <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-6">Section 6</a>. This value is OPTIONAL.
+	 * The refresh token which can be used to obtain new access tokens using the
+	 * same authorization grant as described in
+	 * <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-6">Section
+	 * 6</a>. This value is OPTIONAL.
 	 */
 	public static String REFRESH_TOKEN = "refresh_token";
 
 	/**
-	 * The scope of the access token as described by <a
-	 * href="http://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-3.3">Section 3.3</a>
+	 * The scope of the access token as described by <a href=
+	 * "http://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-3.3">Section
+	 * 3.3</a>
 	 */
 	public static String SCOPE = "scope";
-	
+
 	public static String ERROR = "error";
-	
+
 	public static String ERROR_DESCRIPTION = "error_description";
-	
 
 	/**
-	 * The additionalInformation map is used by the token serializers to export any fields used by extensions of OAuth.
-	 * @return a map from the field name in the serialized token to the value to be exported. The default serializers 
-	 * make use of Jackson's automatic JSON mapping for Java objects (for the Token Endpoint flows) or implicitly call 
-	 * .toString() on the "value" object (for the implicit flow) as part of the serialization process.
+	 * The additionalInformation map is used by the token serializers to export any
+	 * fields used by extensions of OAuth.
+	 * 
+	 * @return a map from the field name in the serialized token to the value to be
+	 *         exported. The default serializers make use of Jackson's automatic
+	 *         JSON mapping for Java objects (for the Token Endpoint flows) or
+	 *         implicitly call .toString() on the "value" object (for the implicit
+	 *         flow) as part of the serialization process.
 	 */
 	Map<String, Object> getAdditionalInformation();
 
@@ -68,7 +75,7 @@ public interface OAuth2AccessToken  extends Serializable {
 	OAuth2RefreshToken getRefreshToken();
 
 	String getTokenType();
-	
+
 	OAuth2Exception getOAuth2Exception();
 
 	boolean isExpired();

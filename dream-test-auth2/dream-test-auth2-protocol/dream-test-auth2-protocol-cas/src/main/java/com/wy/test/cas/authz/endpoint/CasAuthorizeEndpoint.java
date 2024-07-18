@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -20,9 +19,9 @@ import com.wy.test.cas.authz.endpoint.ticket.CasConstants;
 import com.wy.test.cas.authz.endpoint.ticket.ServiceTicketImpl;
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.entity.apps.AppsCasDetails;
-import com.wy.test.web.WebConstants;
-import com.wy.test.web.WebContext;
+import com.wy.test.core.entity.apps.AppsCasDetails;
+import com.wy.test.core.web.WebConstants;
+import com.wy.test.core.web.WebContext;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -146,24 +145,5 @@ public class CasAuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 		_logger.debug("redirect to CAS Client URL {}", callbackUrl);
 		modelAndView.addObject("callbackUrl", callbackUrl.toString());
 		return modelAndView;
-	}
-
-	/**
-	 * for cas logout then redirect to logout
-	 * 
-	 * @param request
-	 * @param response
-	 * @param casService
-	 * @return
-	 */
-	@Operation(summary = "CAS注销接口", description = "CAS注销接口", method = "GET")
-	@GetMapping(CasConstants.ENDPOINT.ENDPOINT_LOGOUT)
-	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam(value = CasConstants.PARAMETER.SERVICE, required = false) String casService) {
-		StringBuffer logoutUrl = new StringBuffer("/force/logout");
-		if (StringUtils.isNotBlank(casService)) {
-			logoutUrl.append("?").append("redirect_uri=").append(casService);
-		}
-		return WebContext.forward(logoutUrl.toString());
 	}
 }

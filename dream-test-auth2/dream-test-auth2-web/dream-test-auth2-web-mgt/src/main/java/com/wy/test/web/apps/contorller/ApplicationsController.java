@@ -25,12 +25,12 @@ import com.nimbusds.jose.jwk.OctetSequenceKey;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.gen.OctetSequenceKeyGenerator;
 import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
-import com.wy.test.constants.ConstsProtocols;
 import com.wy.test.core.authn.annotation.CurrentUser;
+import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.crypto.ReciprocalUtils;
 import com.wy.test.entity.Message;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.entity.apps.Apps;
 
 @Controller
 @RequestMapping(value = { "/apps" })

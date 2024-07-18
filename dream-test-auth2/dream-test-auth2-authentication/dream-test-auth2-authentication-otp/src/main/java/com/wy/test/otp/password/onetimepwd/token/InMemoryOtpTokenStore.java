@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.entity.UserInfo;
 import com.wy.test.otp.password.onetimepwd.OneTimePassword;
 
 public class InMemoryOtpTokenStore extends AbstractOtpTokenStore {

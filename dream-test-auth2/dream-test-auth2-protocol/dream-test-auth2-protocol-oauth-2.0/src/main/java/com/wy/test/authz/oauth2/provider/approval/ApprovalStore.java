@@ -3,7 +3,8 @@ package com.wy.test.authz.oauth2.provider.approval;
 import java.util.Collection;
 
 /**
- * Interface for saving, retrieving and revoking user approvals (per client, per scope). 
+ * Interface for saving, retrieving and revoking user approvals (per client, per
+ * scope).
  * 
  * @author Dave Syer
  *

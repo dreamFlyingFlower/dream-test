@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.dromara.mybatis.jpa.IJpaMapper;
 
-import com.wy.test.entity.RolePrivileges;
+import com.wy.test.core.entity.RolePrivileges;
 
 public interface RolePrivilegesMapper extends IJpaMapper<RolePrivileges> {
 

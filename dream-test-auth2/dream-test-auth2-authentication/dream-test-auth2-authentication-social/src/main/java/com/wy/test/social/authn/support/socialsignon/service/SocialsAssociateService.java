@@ -2,7 +2,7 @@ package com.wy.test.social.authn.support.socialsignon.service;
 
 import java.util.List;
 
-import com.wy.test.entity.SocialsAssociate;
+import com.wy.test.core.entity.SocialsAssociate;
 
 public interface SocialsAssociateService {
 

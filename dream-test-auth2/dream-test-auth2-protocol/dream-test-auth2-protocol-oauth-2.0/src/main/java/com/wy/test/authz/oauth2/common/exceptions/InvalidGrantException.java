@@ -1,4 +1,5 @@
 package com.wy.test.authz.oauth2.common.exceptions;
+
 @SuppressWarnings("serial")
 public class InvalidGrantException extends ClientAuthenticationException {
 

@@ -8,8 +8,8 @@ import org.apache.commons.mail.HtmlEmail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.configuration.EmailConfig;
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.configuration.EmailConfig;
+import com.wy.test.core.entity.UserInfo;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 
 public class MailOtpAuthn extends AbstractOtpAuthn {

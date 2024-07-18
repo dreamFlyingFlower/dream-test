@@ -10,8 +10,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.web.WebConstants;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.web.WebConstants;
 
 public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentResolver {
 

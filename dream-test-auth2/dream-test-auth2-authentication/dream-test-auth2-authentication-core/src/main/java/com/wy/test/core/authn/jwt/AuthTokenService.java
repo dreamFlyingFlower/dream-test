@@ -8,10 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 
 import com.nimbusds.jose.JOSEException;
-import com.wy.test.configuration.AuthJwkConfig;
+import com.wy.test.core.configuration.AuthJwkConfig;
+import com.wy.test.core.persistence.cache.MomentaryService;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.crypto.jwt.HMAC512Service;
-import com.wy.test.persistence.cache.MomentaryService;
-import com.wy.test.web.WebContext;
 
 public class AuthTokenService extends AuthJwtService {
 

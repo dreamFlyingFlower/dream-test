@@ -7,15 +7,17 @@ import java.util.Map;
 import com.wy.test.authz.oauth2.common.util.OAuth2Utils;
 import com.wy.test.authz.oauth2.provider.endpoint.AuthorizationEndpoint;
 import com.wy.test.authz.oauth2.provider.endpoint.TokenEndpoint;
-import com.wy.test.entity.apps.oauth2.provider.ClientDetails;
+import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 
 /**
- * Represents an OAuth2 token request, made at the {@link TokenEndpoint}. The requestParameters map should contain the
- * original, unmodified parameters from the original OAuth2 request.
+ * Represents an OAuth2 token request, made at the {@link TokenEndpoint}. The
+ * requestParameters map should contain the original, unmodified parameters from
+ * the original OAuth2 request.
  * 
- * In the implicit flow, a token is requested through the {@link AuthorizationEndpoint} directly, and in that case the
- * {@link AuthorizationRequest} is converted into a {@link TokenRequest} for processing through the token granting
- * chain.
+ * In the implicit flow, a token is requested through the
+ * {@link AuthorizationEndpoint} directly, and in that case the
+ * {@link AuthorizationRequest} is converted into a {@link TokenRequest} for
+ * processing through the token granting chain.
  * 
  * @author Amanda Anganes
  * @author Dave Syer
@@ -33,7 +35,8 @@ public class TokenRequest extends BaseRequest {
 	}
 
 	/**
-     * Full constructor. Sets this TokenRequest's requestParameters map to an unmodifiable version of the one provided.
+	 * Full constructor. Sets this TokenRequest's requestParameters map to an
+	 * unmodifiable version of the one provided.
 	 * 
 	 * @param requestParameters
 	 * @param clientId
@@ -41,7 +44,7 @@ public class TokenRequest extends BaseRequest {
 	 * @param grantType
 	 */
 	public TokenRequest(Map<String, String> requestParameters, String clientId, Collection<String> scope,
-						String grantType) {
+			String grantType) {
 		setClientId(clientId);
 		setRequestParameters(requestParameters);
 		setScope(scope);
@@ -56,30 +59,35 @@ public class TokenRequest extends BaseRequest {
 		this.grantType = grantType;
 	}
 
+	@Override
 	public void setClientId(String clientId) {
 		super.setClientId(clientId);
 	}
 
 	/**
-	 * Set the scope value. If the collection contains only a single scope value, this method will parse that value into
-	 * a collection using {@link OAuth2Utils.parseParameterList}.
+	 * Set the scope value. If the collection contains only a single scope value,
+	 * this method will parse that value into a collection using
+	 * {@link OAuth2Utils.parseParameterList}.
 	 * 
 	 * @see AuthorizationRequest.setScope
 	 * 
 	 * @param scope
 	 */
+	@Override
 	public void setScope(Collection<String> scope) {
 		super.setScope(scope);
 	}
 
 	/**
-     * Set the Request Parameters on this authorization request, which represent the original request parameters and
-	 * should never be changed during processing. The map passed in is wrapped in an unmodifiable map instance.
+	 * Set the Request Parameters on this authorization request, which represent the
+	 * original request parameters and should never be changed during processing.
+	 * The map passed in is wrapped in an unmodifiable map instance.
 	 * 
 	 * @see AuthorizationRequest.setRequestParameters
 	 * 
 	 * @param requestParameters
 	 */
+	@Override
 	public void setRequestParameters(Map<String, String> requestParameters) {
 		super.setRequestParameters(requestParameters);
 	}
@@ -91,9 +99,9 @@ public class TokenRequest extends BaseRequest {
 		modifiable.remove("password");
 		modifiable.remove("client_secret");
 		// Add grant type so it can be retrieved from OAuth2Request
-		 modifiable.put("grant_type", grantType);
+		modifiable.put("grant_type", grantType);
 		return new OAuth2Request(modifiable, client.getClientId(), client.getAuthorities(), true, this.getScope(),
-					client.getResourceIds(), null, null, null, null, null);
+				client.getResourceIds(), null, null, null, null, null);
 	}
 
 }

@@ -6,20 +6,20 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.wy.test.constants.ConstsLoginType;
-import com.wy.test.constants.ConstsStatus;
-import com.wy.test.entity.ChangePassword;
-import com.wy.test.entity.PasswordPolicy;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.persistence.repository.LoginHistoryRepository;
-import com.wy.test.persistence.repository.LoginRepository;
-import com.wy.test.persistence.repository.PasswordPolicyValidator;
+import com.wy.test.core.constants.ConstsLoginType;
+import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.entity.ChangePassword;
+import com.wy.test.core.entity.PasswordPolicy;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.persistence.repository.LoginHistoryRepository;
+import com.wy.test.core.persistence.repository.LoginRepository;
+import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
+import com.wy.test.core.web.WebConstants;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.UserInfoService;
 import com.wy.test.provider.authn.realm.AbstractAuthenticationRealm;
 import com.wy.test.provider.authn.realm.ldap.LdapAuthenticationRealm;
 import com.wy.test.provider.authn.realm.ldap.LdapAuthenticationRealmService;
-import com.wy.test.web.WebConstants;
-import com.wy.test.web.WebContext;
 
 /**
  * JdbcAuthenticationRealm.

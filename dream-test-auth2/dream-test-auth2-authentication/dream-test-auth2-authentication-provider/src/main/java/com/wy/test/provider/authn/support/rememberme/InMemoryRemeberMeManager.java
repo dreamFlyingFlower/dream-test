@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.constants.ConstsTimeInterval;
+import com.wy.test.core.constants.ConstsTimeInterval;
 
 public class InMemoryRemeberMeManager extends AbstractRemeberMeManager {
 

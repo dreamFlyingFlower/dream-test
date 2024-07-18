@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.taobao.api.ApiException;
-import com.wy.test.entity.Synchronizers;
+import com.wy.test.core.entity.Synchronizers;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
 @Service

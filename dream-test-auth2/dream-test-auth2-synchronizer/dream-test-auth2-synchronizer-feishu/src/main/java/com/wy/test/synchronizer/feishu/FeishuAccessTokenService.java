@@ -6,10 +6,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.constants.ContentType;
+import com.wy.test.core.constants.ContentType;
+import com.wy.test.core.web.HttpRequestAdapter;
 import com.wy.test.synchronizer.core.synchronizer.entity.AccessToken;
 import com.wy.test.util.JsonUtils;
-import com.wy.test.web.HttpRequestAdapter;
 
 public class FeishuAccessTokenService {
 

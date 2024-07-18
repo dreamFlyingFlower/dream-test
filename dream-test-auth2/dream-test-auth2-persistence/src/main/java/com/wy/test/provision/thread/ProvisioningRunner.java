@@ -10,12 +10,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
+import com.wy.test.core.entity.ChangePassword;
+import com.wy.test.core.entity.Connectors;
+import com.wy.test.core.entity.Organizations;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.web.HttpRequestAdapter;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.crypto.password.PasswordReciprocal;
-import com.wy.test.entity.ChangePassword;
-import com.wy.test.entity.Connectors;
 import com.wy.test.entity.Message;
-import com.wy.test.entity.Organizations;
-import com.wy.test.entity.UserInfo;
 import com.wy.test.persistence.service.ConnectorsService;
 import com.wy.test.provision.ProvisionAction;
 import com.wy.test.provision.ProvisionMessage;
@@ -23,8 +25,6 @@ import com.wy.test.provision.ProvisionTopic;
 import com.wy.test.util.DateUtils;
 import com.wy.test.util.JsonUtils;
 import com.wy.test.util.ObjectTransformer;
-import com.wy.test.web.HttpRequestAdapter;
-import com.wy.test.web.WebContext;
 
 public class ProvisioningRunner {
 

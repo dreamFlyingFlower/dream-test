@@ -27,7 +27,8 @@ import com.wy.test.authz.oauth2.provider.OAuth2Authentication;
 /**
  * Queries the /check_token endpoint to obtain the contents of an access token.
  * 
- * If the endpoint returns a 400 response, this indicates that the token is invalid.
+ * If the endpoint returns a 400 response, this indicates that the token is
+ * invalid.
  * 
  * @author Dave Syer
  * @author Luke Taylor
@@ -50,6 +51,7 @@ public class RemoteTokenServices implements ResourceServerTokenServices {
 	public RemoteTokenServices() {
 		restTemplate = new RestTemplate();
 		((RestTemplate) restTemplate).setErrorHandler(new DefaultResponseErrorHandler() {
+
 			@Override
 			// Ignore 400
 			public void handleError(ClientHttpResponse response) throws IOException {
@@ -81,7 +83,8 @@ public class RemoteTokenServices implements ResourceServerTokenServices {
 	}
 
 	@Override
-	public OAuth2Authentication loadAuthentication(String accessToken) throws AuthenticationException, InvalidTokenException {
+	public OAuth2Authentication loadAuthentication(String accessToken)
+			throws AuthenticationException, InvalidTokenException {
 
 		MultiValueMap<String, String> formData = new LinkedMultiValueMap<String, String>();
 		formData.add("token", accessToken);
@@ -107,8 +110,7 @@ public class RemoteTokenServices implements ResourceServerTokenServices {
 		String creds = String.format("%s:%s", clientId, clientSecret);
 		try {
 			return "Basic " + new String(Base64.getEncoder().encodeToString(creds.getBytes("UTF-8")));
-		}
-		catch (UnsupportedEncodingException e) {
+		} catch (UnsupportedEncodingException e) {
 			throw new IllegalStateException("Could not convert String");
 		}
 	}

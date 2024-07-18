@@ -8,23 +8,22 @@ import org.opensaml.ws.security.SecurityPolicyException;
 import org.opensaml.ws.security.SecurityPolicyRule;
 import org.opensaml.ws.security.provider.BasicSecurityPolicy;
 
-public class SecurityPolicyDelegate implements SecurityPolicy  {
+public class SecurityPolicyDelegate implements SecurityPolicy {
 
 	private final BasicSecurityPolicy basicSecurityPolicy;
-	
-	
+
 	public SecurityPolicyDelegate() {
 		super();
 		basicSecurityPolicy = new BasicSecurityPolicy();
 	}
-	
+
 	public SecurityPolicyDelegate(List<SecurityPolicyRule> securityPolicyRules) {
 		super();
 		basicSecurityPolicy = new BasicSecurityPolicy();
 		basicSecurityPolicy.getPolicyRules().addAll(securityPolicyRules);
 	}
-	
-	public void addSecurityPolicy(SecurityPolicyRule securityPolicyRule){
+
+	public void addSecurityPolicy(SecurityPolicyRule securityPolicyRule) {
 		basicSecurityPolicy.getPolicyRules().add(securityPolicyRule);
 	}
 

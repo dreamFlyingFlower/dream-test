@@ -3,8 +3,9 @@ package com.wy.test.authz.oauth2.provider;
 import com.wy.test.authz.oauth2.common.OAuth2AccessToken;
 
 /**
- * Interface for granters of access tokens. Various grant types are defined in the specification, and each of those has
- * an implementation, leaving room for extensions to the specification as needed.
+ * Interface for granters of access tokens. Various grant types are defined in
+ * the specification, and each of those has an implementation, leaving room for
+ * extensions to the specification as needed.
  * 
  * @author Dave Syer
  * 

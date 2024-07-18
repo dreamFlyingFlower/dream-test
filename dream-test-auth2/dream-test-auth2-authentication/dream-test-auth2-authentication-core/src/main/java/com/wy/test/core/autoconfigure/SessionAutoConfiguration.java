@@ -12,7 +12,7 @@ import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.authn.session.SessionManagerFactory;
 import com.wy.test.core.authn.web.HttpSessionListenerAdapter;
 import com.wy.test.core.authn.web.SavedRequestAwareAuthenticationSuccessHandler;
-import com.wy.test.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 
 @AutoConfiguration
 public class SessionAutoConfiguration implements InitializingBean {

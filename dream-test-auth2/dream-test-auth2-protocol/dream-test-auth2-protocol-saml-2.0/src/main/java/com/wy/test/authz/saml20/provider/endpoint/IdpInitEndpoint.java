@@ -17,18 +17,19 @@ import org.springframework.web.servlet.ModelAndView;
 import com.wy.test.authz.saml.common.AuthnRequestInfo;
 import com.wy.test.authz.saml20.binding.BindingAdapter;
 import com.wy.test.authz.saml20.binding.ExtractBindingAdapter;
+import com.wy.test.core.entity.apps.AppsSAML20Details;
+import com.wy.test.core.web.WebConstants;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.crypto.keystore.KeyStoreLoader;
 import com.wy.test.crypto.keystore.KeyStoreUtil;
-import com.wy.test.entity.apps.AppsSAML20Details;
 import com.wy.test.persistence.service.AppsSaml20DetailsService;
-import com.wy.test.web.WebConstants;
-import com.wy.test.web.WebContext;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
- * idp init not need extract SAML request message AuthnRequestInfo use default init
+ * idp init not need extract SAML request message AuthnRequestInfo use default
+ * init
  *
  * @author 飞花梦影
  * @date 2024-07-16 11:10:34

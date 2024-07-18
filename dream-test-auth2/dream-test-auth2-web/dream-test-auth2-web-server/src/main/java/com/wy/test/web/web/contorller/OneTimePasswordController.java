@@ -17,11 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
+import com.wy.test.core.entity.UserInfo;
 import com.wy.test.crypto.password.PasswordReciprocal;
 import com.wy.test.entity.Message;
-import com.wy.test.entity.UserInfo;
 import com.wy.test.otp.password.onetimepwd.algorithm.OtpKeyUriFormat;
 import com.wy.test.otp.password.onetimepwd.algorithm.OtpSecret;
+import com.wy.test.otp.password.onetimepwd.impl.TimeBasedOtpAuthn;
 import com.wy.test.persistence.service.UserInfoService;
 import com.wy.test.util.RQCodeUtils;
 
@@ -39,6 +40,9 @@ public class OneTimePasswordController {
 
 	@Autowired
 	OtpKeyUriFormat otpKeyUriFormat;
+
+	@Autowired
+	private TimeBasedOtpAuthn timeBasedOtpAuthn;
 
 	@GetMapping(value = { "/timebased" })
 	@ResponseBody
@@ -75,6 +79,20 @@ public class OneTimePasswordController {
 			sharedSecret = PasswordReciprocal.getInstance().encode(sharedSecret);
 			currentUser.setSharedSecret(sharedSecret);
 			userInfoService.updateSharedSecret(currentUser);
+		}
+	}
+
+	@SuppressWarnings("unused")
+	@GetMapping("/verify")
+	public ResponseEntity<?> verify(@RequestParam("otp") String otp, @CurrentUser UserInfo currentUser) {
+		// 从当前用户信息中获取共享密钥
+		String sharedSecret = PasswordReciprocal.getInstance().decoder(currentUser.getSharedSecret());
+		// 计算当前时间对应的动态密码
+		boolean validate = timeBasedOtpAuthn.validate(currentUser, otp);
+		if (validate) {
+			return new Message<>(0, "One-Time Password verification succeeded").buildResponse();
+		} else {
+			return new Message<>(2, "One-Time Password verification failed").buildResponse();
 		}
 	}
 }

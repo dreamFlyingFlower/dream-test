@@ -5,8 +5,8 @@ import java.util.List;
 import org.dromara.mybatis.jpa.JpaService;
 import org.springframework.stereotype.Repository;
 
-import com.wy.test.entity.Register;
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.entity.Register;
+import com.wy.test.core.entity.UserInfo;
 import com.wy.test.persistence.mapper.RegisterMapper;
 
 @Repository

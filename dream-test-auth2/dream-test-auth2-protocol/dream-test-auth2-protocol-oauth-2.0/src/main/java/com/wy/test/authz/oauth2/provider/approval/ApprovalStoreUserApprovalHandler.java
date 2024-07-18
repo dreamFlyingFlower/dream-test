@@ -22,10 +22,11 @@ import com.wy.test.authz.oauth2.provider.ClientDetailsService;
 import com.wy.test.authz.oauth2.provider.ClientRegistrationException;
 import com.wy.test.authz.oauth2.provider.OAuth2RequestFactory;
 import com.wy.test.authz.oauth2.provider.approval.Approval.ApprovalStatus;
-import com.wy.test.entity.apps.oauth2.provider.ClientDetails;
+import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 
 /**
- * A user approval handler that remembers approval decisions by consulting existing approvals.
+ * A user approval handler that remembers approval decisions by consulting
+ * existing approvals.
  * 
  * @author Dave Syer
  * 
@@ -52,7 +53,8 @@ public class ApprovalStoreUserApprovalHandler implements UserApprovalHandler, In
 	}
 
 	/**
-	 * The prefix applied to incoming parameters that signal approval or denial of a scope.
+	 * The prefix applied to incoming parameters that signal approval or denial of a
+	 * scope.
 	 * 
 	 * @param scopePrefix the prefix (default {@link OAuth2Utils#SCOPE_PREFIX})
 	 */
@@ -77,15 +79,18 @@ public class ApprovalStoreUserApprovalHandler implements UserApprovalHandler, In
 		this.approvalExpirySeconds = approvalExpirySeconds;
 	}
 
+	@Override
 	public void afterPropertiesSet() {
 		Assert.state(approvalStore != null, "ApprovalStore must be provided");
 		Assert.state(requestFactory != null, "OAuth2RequestFactory must be provided");
 	}
 
+	@Override
 	public boolean isApproved(AuthorizationRequest authorizationRequest, Authentication userAuthentication) {
 		return authorizationRequest.isApproved();
 	}
 
+	@Override
 	public AuthorizationRequest checkForPreApproval(AuthorizationRequest authorizationRequest,
 			Authentication userAuthentication) {
 
@@ -96,7 +101,7 @@ public class ApprovalStoreUserApprovalHandler implements UserApprovalHandler, In
 
 		if (clientDetailsService != null) {
 			try {
-				ClientDetails client = clientDetailsService.loadClientByClientId(clientId,true);
+				ClientDetails client = clientDetailsService.loadClientByClientId(clientId, true);
 				for (String scope : requestedScopes) {
 					if (client.isAutoApprove(scope) || client.isAutoApprove("all")) {
 						approvedScopes.add(scope);
@@ -106,8 +111,7 @@ public class ApprovalStoreUserApprovalHandler implements UserApprovalHandler, In
 					authorizationRequest.setApproved(true);
 					return authorizationRequest;
 				}
-			}
-			catch (ClientRegistrationException e) {
+			} catch (ClientRegistrationException e) {
 				logger.warn("Client registration problem prevent autoapproval check for client=" + clientId);
 			}
 		}
@@ -154,24 +158,27 @@ public class ApprovalStoreUserApprovalHandler implements UserApprovalHandler, In
 		Calendar expiresAt = Calendar.getInstance();
 		if (approvalExpirySeconds == -1) { // use default of 1 month
 			expiresAt.add(Calendar.MONTH, 1);
-		}
-		else {
+		} else {
 			expiresAt.add(Calendar.SECOND, approvalExpirySeconds);
 		}
 		return expiresAt.getTime();
 	}
 
 	/**
-	 * Requires the authorization request to be explicitly approved, including all individual scopes, and the user to be
-	 * authenticated. A scope that was requested in the authorization request can be approved by sending a request
-	 * parameter <code>scope.&lt;scopename&gt;</code> equal to "true" or "approved" (otherwise it will be assumed to
-	 * have been denied). The {@link ApprovalStore} will be updated to reflect the inputs.
+	 * Requires the authorization request to be explicitly approved, including all
+	 * individual scopes, and the user to be authenticated. A scope that was
+	 * requested in the authorization request can be approved by sending a request
+	 * parameter <code>scope.&lt;scopename&gt;</code> equal to "true" or "approved"
+	 * (otherwise it will be assumed to have been denied). The {@link ApprovalStore}
+	 * will be updated to reflect the inputs.
 	 * 
 	 * @param authorizationRequest The authorization request.
 	 * @param userAuthentication the current user authentication
 	 * 
-	 * @return An approved request if all scopes have been approved by the current user.
+	 * @return An approved request if all scopes have been approved by the current
+	 *         user.
 	 */
+	@Override
 	public AuthorizationRequest updateAfterApproval(AuthorizationRequest authorizationRequest,
 			Authentication userAuthentication) {
 		// Get the approved scopes
@@ -191,8 +198,7 @@ public class ApprovalStoreUserApprovalHandler implements UserApprovalHandler, In
 				approvedScopes.add(requestedScope);
 				approvals.add(new Approval(userAuthentication.getName(), authorizationRequest.getClientId(),
 						requestedScope, expiry, ApprovalStatus.APPROVED));
-			}
-			else {
+			} else {
 				approvals.add(new Approval(userAuthentication.getName(), authorizationRequest.getClientId(),
 						requestedScope, expiry, ApprovalStatus.DENIED));
 			}
@@ -203,8 +209,7 @@ public class ApprovalStoreUserApprovalHandler implements UserApprovalHandler, In
 		authorizationRequest.setScope(approvedScopes);
 		if (approvedScopes.isEmpty() && !requestedScopes.isEmpty()) {
 			approved = false;
-		}
-		else {
+		} else {
 			approved = true;
 		}
 		authorizationRequest.setApproved(approved);

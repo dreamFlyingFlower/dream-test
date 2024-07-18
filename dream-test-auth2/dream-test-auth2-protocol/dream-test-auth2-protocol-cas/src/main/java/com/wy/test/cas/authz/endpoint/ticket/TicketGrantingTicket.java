@@ -8,7 +8,7 @@ import java.util.Map;
 import org.springframework.security.core.Authentication;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.wy.test.entity.apps.AppsCasDetails;
+import com.wy.test.core.entity.apps.AppsCasDetails;
 
 /**
  * Interface for a ticket granting ticket. A TicketGrantingTicket is the main

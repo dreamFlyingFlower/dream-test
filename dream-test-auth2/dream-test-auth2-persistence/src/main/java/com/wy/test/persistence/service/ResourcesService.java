@@ -5,7 +5,7 @@ import java.util.List;
 import org.dromara.mybatis.jpa.JpaService;
 import org.springframework.stereotype.Repository;
 
-import com.wy.test.entity.Resources;
+import com.wy.test.core.entity.Resources;
 import com.wy.test.persistence.mapper.ResourcesMapper;
 
 @Repository

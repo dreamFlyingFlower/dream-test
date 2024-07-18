@@ -11,13 +11,15 @@ import org.apache.commons.lang3.StringUtils;
  * 2) header 的Authorization或者authorization <br/>
  * 3) 参数 token <br/>
  * </p>
- * 
  */
-
 public class RequestTokenUtils {
 
 	/**
-	 * resolveAccessToken
+	 * 从请求中获取token令牌信息,优先级顺序如下
+	 * 
+	 * 1) 参数 access_token <br/>
+	 * 2) 参数 token <br/>
+	 * 3) header 的Authorization或者authorization
 	 * 
 	 * @param request
 	 * @return access_token

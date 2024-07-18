@@ -3,7 +3,8 @@ package com.wy.test.authz.oauth2.provider.token;
 import com.wy.test.authz.oauth2.provider.OAuth2Authentication;
 
 /**
- * Strategy interface for extracting a unique key from an {@link OAuth2Authentication}.
+ * Strategy interface for extracting a unique key from an
+ * {@link OAuth2Authentication}.
  * 
  * @author Dave Syer
  * 

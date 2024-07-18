@@ -50,19 +50,23 @@ public class IdTokenHashUtils {
 
 	public static Base64URL getHash(JWSAlgorithm signingAlg, byte[] bytes) {
 
-		//Switch based on the given signing algorithm - use SHA-xxx with the same 'xxx' bitnumber
-		//as the JWSAlgorithm to hash the token.
+		// Switch based on the given signing algorithm - use SHA-xxx with the same 'xxx'
+		// bitnumber
+		// as the JWSAlgorithm to hash the token.
 		String hashAlg = null;
 
-		if (signingAlg.equals(JWSAlgorithm.HS256) || signingAlg.equals(JWSAlgorithm.ES256) || signingAlg.equals(JWSAlgorithm.RS256)) {
+		if (signingAlg.equals(JWSAlgorithm.HS256) || signingAlg.equals(JWSAlgorithm.ES256)
+				|| signingAlg.equals(JWSAlgorithm.RS256)) {
 			hashAlg = "SHA-256";
 		}
 
-		else if (signingAlg.equals(JWSAlgorithm.ES384) || signingAlg.equals(JWSAlgorithm.HS384) || signingAlg.equals(JWSAlgorithm.RS384)) {
+		else if (signingAlg.equals(JWSAlgorithm.ES384) || signingAlg.equals(JWSAlgorithm.HS384)
+				|| signingAlg.equals(JWSAlgorithm.RS384)) {
 			hashAlg = "SHA-384";
 		}
 
-		else if (signingAlg.equals(JWSAlgorithm.ES512) || signingAlg.equals(JWSAlgorithm.HS512) || signingAlg.equals(JWSAlgorithm.RS512)) {
+		else if (signingAlg.equals(JWSAlgorithm.ES512) || signingAlg.equals(JWSAlgorithm.HS512)
+				|| signingAlg.equals(JWSAlgorithm.RS512)) {
 			hashAlg = "SHA-512";
 		}
 

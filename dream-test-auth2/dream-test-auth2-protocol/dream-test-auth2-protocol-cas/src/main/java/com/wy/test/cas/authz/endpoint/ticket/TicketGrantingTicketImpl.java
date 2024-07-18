@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.wy.test.entity.apps.AppsCasDetails;
+import com.wy.test.core.entity.apps.AppsCasDetails;
 
 /**
  * Concrete implementation of a TicketGrantingTicket. A TicketGrantingTicket is

@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import com.wy.test.entity.Connectors;
+import com.wy.test.core.entity.Connectors;
 import com.wy.test.persistence.mapper.ConnectorsMapper;
 
 @Repository

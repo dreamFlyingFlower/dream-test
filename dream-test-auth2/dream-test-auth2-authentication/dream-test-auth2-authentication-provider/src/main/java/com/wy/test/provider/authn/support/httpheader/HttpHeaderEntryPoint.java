@@ -11,8 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
-import com.wy.test.constants.ConstsLoginType;
 import com.wy.test.core.authn.LoginCredential;
+import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
 public class HttpHeaderEntryPoint implements AsyncHandlerInterceptor {

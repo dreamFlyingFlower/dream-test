@@ -14,7 +14,7 @@ import com.wy.test.authz.oauth2.common.exceptions.InvalidGrantException;
 import com.wy.test.authz.oauth2.common.exceptions.InvalidRequestException;
 import com.wy.test.authz.oauth2.common.exceptions.OAuth2Exception;
 import com.wy.test.authz.oauth2.common.exceptions.RedirectMismatchException;
-import com.wy.test.entity.apps.oauth2.provider.ClientDetails;
+import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 
 /**
  * Default implementation for a redirect resolver.
@@ -29,7 +29,8 @@ public class DefaultRedirectResolver implements RedirectResolver {
 	private boolean matchSubdomains = true;
 
 	/**
-	 * Flag to indicate that requested URIs will match if they are a subdomain of the registered value.
+	 * Flag to indicate that requested URIs will match if they are a subdomain of
+	 * the registered value.
 	 * 
 	 * @param matchSubdomains the flag value to set (deafult true)
 	 */
@@ -46,6 +47,7 @@ public class DefaultRedirectResolver implements RedirectResolver {
 		this.redirectGrantTypes = new HashSet<String>(redirectGrantTypes);
 	}
 
+	@Override
 	public String resolveRedirect(String requestedRedirect, ClientDetails client) throws OAuth2Exception {
 
 		Set<String> authorizedGrantTypes = client.getAuthorizedGrantTypes();
@@ -61,11 +63,9 @@ public class DefaultRedirectResolver implements RedirectResolver {
 
 		if (redirectUris != null && !redirectUris.isEmpty()) {
 			return obtainMatchingRedirect(redirectUris, requestedRedirect);
-		}
-		else if (StringUtils.hasText(requestedRedirect)) {
+		} else if (StringUtils.hasText(requestedRedirect)) {
 			return requestedRedirect;
-		}
-		else {
+		} else {
 			throw new InvalidRequestException("A redirect_uri must be supplied.");
 		}
 
@@ -73,7 +73,8 @@ public class DefaultRedirectResolver implements RedirectResolver {
 
 	/**
 	 * @param grantTypes some grant types
-	 * @return true if the supplied grant types includes one or more of the redirect types
+	 * @return true if the supplied grant types includes one or more of the redirect
+	 *         types
 	 */
 	private boolean containsRedirectGrantType(Set<String> grantTypes) {
 		for (String type : grantTypes) {
@@ -85,15 +86,18 @@ public class DefaultRedirectResolver implements RedirectResolver {
 	}
 
 	/**
-	 * Whether the requested redirect URI "matches" the specified redirect URI. For a URL, this implementation tests if
-	 * the user requested redirect starts with the registered redirect, so it would have the same host and root path if
-	 * it is an HTTP URL.
+	 * Whether the requested redirect URI "matches" the specified redirect URI. For
+	 * a URL, this implementation tests if the user requested redirect starts with
+	 * the registered redirect, so it would have the same host and root path if it
+	 * is an HTTP URL.
 	 * <p>
-	 * For other (non-URL) cases, such as for some implicit clients, the redirect_uri must be an exact match.
+	 * For other (non-URL) cases, such as for some implicit clients, the
+	 * redirect_uri must be an exact match.
 	 * 
 	 * @param requestedRedirect The requested redirect URI.
 	 * @param redirectUri The registered redirect URI.
-	 * @return Whether the requested redirect URI "matches" the specified redirect URI.
+	 * @return Whether the requested redirect URI "matches" the specified redirect
+	 *         URI.
 	 */
 	protected boolean redirectMatches(String requestedRedirect, String redirectUri) {
 		try {
@@ -103,8 +107,7 @@ public class DefaultRedirectResolver implements RedirectResolver {
 			if (reg.getProtocol().equals(req.getProtocol()) && hostMatches(reg.getHost(), req.getHost())) {
 				return StringUtils.cleanPath(req.getPath()).startsWith(StringUtils.cleanPath(reg.getPath()));
 			}
-		}
-		catch (MalformedURLException e) {
+		} catch (MalformedURLException e) {
 		}
 		return requestedRedirect.equals(redirectUri);
 	}
@@ -126,7 +129,8 @@ public class DefaultRedirectResolver implements RedirectResolver {
 	/**
 	 * Attempt to match one of the registered URIs to the that of the requested one.
 	 * 
-	 * @param redirectUris the set of the registered URIs to try and find a match. This cannot be null or empty.
+	 * @param redirectUris the set of the registered URIs to try and find a match.
+	 *        This cannot be null or empty.
 	 * @param requestedRedirect the URI used as part of the request
 	 * @return the matching URI
 	 * @throws RedirectMismatchException if no match was found

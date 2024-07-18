@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.wy.test.constants.ConstsPersistence;
-import com.wy.test.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.constants.ConstsPersistence;
+import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 
 public class RemeberMeManagerFactory {
 

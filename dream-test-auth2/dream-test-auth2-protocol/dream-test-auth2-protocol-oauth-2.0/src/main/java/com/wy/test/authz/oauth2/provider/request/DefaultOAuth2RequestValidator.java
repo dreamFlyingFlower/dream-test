@@ -6,24 +6,24 @@ import com.wy.test.authz.oauth2.common.exceptions.InvalidScopeException;
 import com.wy.test.authz.oauth2.provider.AuthorizationRequest;
 import com.wy.test.authz.oauth2.provider.OAuth2RequestValidator;
 import com.wy.test.authz.oauth2.provider.TokenRequest;
-import com.wy.test.entity.apps.oauth2.provider.ClientDetails;
+import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 
 /**
- * Default implementation of {@link OAuth2RequestValidator}. 
- * 
- * @author Amanda Anganes
- *
+ * Default implementation of {@link OAuth2RequestValidator}.
  */
 public class DefaultOAuth2RequestValidator implements OAuth2RequestValidator {
 
-	public void validateScope(AuthorizationRequest authorizationRequest, ClientDetails client) throws InvalidScopeException {
+	@Override
+	public void validateScope(AuthorizationRequest authorizationRequest, ClientDetails client)
+			throws InvalidScopeException {
 		validateScope(authorizationRequest.getScope(), client.getScope());
 	}
 
+	@Override
 	public void validateScope(TokenRequest tokenRequest, ClientDetails client) throws InvalidScopeException {
 		validateScope(tokenRequest.getScope(), client.getScope());
 	}
-	
+
 	private void validateScope(Set<String> requestScopes, Set<String> clientScopes) {
 
 		if (clientScopes != null && !clientScopes.isEmpty()) {
@@ -33,9 +33,10 @@ public class DefaultOAuth2RequestValidator implements OAuth2RequestValidator {
 				}
 			}
 		}
-		
+
 		if (requestScopes.isEmpty()) {
-			throw new InvalidScopeException("Empty scope (either the client or the user is not allowed the requested scopes)");
+			throw new InvalidScopeException(
+					"Empty scope (either the client or the user is not allowed the requested scopes)");
 		}
 	}
 

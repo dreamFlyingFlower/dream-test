@@ -80,15 +80,17 @@ public interface TokenStore {
 	void removeRefreshToken(OAuth2RefreshToken token);
 
 	/**
-	 * Remove an access token using a refresh token. This functionality is necessary so refresh tokens can't be used to
-	 * create an unlimited number of access tokens.
+	 * Remove an access token using a refresh token. This functionality is necessary
+	 * so refresh tokens can't be used to create an unlimited number of access
+	 * tokens.
 	 * 
 	 * @param refreshToken The refresh token.
 	 */
 	void removeAccessTokenUsingRefreshToken(OAuth2RefreshToken refreshToken);
 
 	/**
-	 * Retrieve an access token stored against the provided authentication key, if it exists.
+	 * Retrieve an access token stored against the provided authentication key, if
+	 * it exists.
 	 * 
 	 * @param authentication the authentication key for the access token
 	 * 

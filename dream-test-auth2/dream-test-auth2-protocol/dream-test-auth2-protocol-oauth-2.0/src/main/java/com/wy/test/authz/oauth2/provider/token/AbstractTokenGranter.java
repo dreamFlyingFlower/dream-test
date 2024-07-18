@@ -13,18 +13,18 @@ import com.wy.test.authz.oauth2.provider.OAuth2Request;
 import com.wy.test.authz.oauth2.provider.OAuth2RequestFactory;
 import com.wy.test.authz.oauth2.provider.TokenGranter;
 import com.wy.test.authz.oauth2.provider.TokenRequest;
-import com.wy.test.entity.apps.oauth2.provider.ClientDetails;
+import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 
 public abstract class AbstractTokenGranter implements TokenGranter {
-	
+
 	protected final Log logger = LogFactory.getLog(getClass());
 
 	private final AuthorizationServerTokenServices tokenServices;
 
 	private final ClientDetailsService clientDetailsService;
-	
+
 	private final OAuth2RequestFactory requestFactory;
-	
+
 	private final String grantType;
 
 	protected AbstractTokenGranter(AuthorizationServerTokenServices tokenServices,
@@ -35,16 +35,17 @@ public abstract class AbstractTokenGranter implements TokenGranter {
 		this.requestFactory = requestFactory;
 	}
 
+	@Override
 	public OAuth2AccessToken grant(String grantType, TokenRequest tokenRequest) {
 
 		if (!this.grantType.equals(grantType)) {
 			return null;
 		}
-		
+
 		String clientId = tokenRequest.getClientId();
-		ClientDetails client = clientDetailsService.loadClientByClientId(clientId,true);
+		ClientDetails client = clientDetailsService.loadClientByClientId(clientId, true);
 		validateGrantType(grantType, client);
-		
+
 		logger.debug("Getting access token for: " + clientId);
 
 		return getAccessToken(client, tokenRequest);
@@ -71,7 +72,7 @@ public abstract class AbstractTokenGranter implements TokenGranter {
 	protected AuthorizationServerTokenServices getTokenServices() {
 		return tokenServices;
 	}
-	
+
 	protected OAuth2RequestFactory getRequestFactory() {
 		return requestFactory;
 	}

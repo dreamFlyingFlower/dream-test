@@ -28,14 +28,15 @@ public class OpenHTTPPostDecoder extends HTTPPostDecoder {
 	}
 
 	/**
-	 * Check the validity of the SAML protocol message receiver endpoint against requirements indicated in the message.
+	 * Check the validity of the SAML protocol message receiver endpoint against
+	 * requirements indicated in the message.
 	 * 
 	 * @param messageContext current message context
 	 * 
-	 * @throws SecurityException thrown if the message Destination attribute is invalid with respect to the receiver's
-	 *         endpoint
-	 * @throws MessageDecodingException thrown if there is a problem decoding and processing the message Destination or
-	 *         receiver endpoint information
+	 * @throws SecurityException thrown if the message Destination attribute is
+	 *         invalid with respect to the receiver's endpoint
+	 * @throws MessageDecodingException thrown if there is a problem decoding and
+	 *         processing the message Destination or receiver endpoint information
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override

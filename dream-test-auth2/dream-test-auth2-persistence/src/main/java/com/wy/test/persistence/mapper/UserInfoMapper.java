@@ -6,11 +6,11 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.dromara.mybatis.jpa.IJpaMapper;
 
-import com.wy.test.constants.ConstsStatus;
-import com.wy.test.entity.ChangePassword;
-import com.wy.test.entity.Organizations;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.entity.UserInfoAdjoint;
+import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.entity.ChangePassword;
+import com.wy.test.core.entity.Organizations;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserInfoAdjoint;
 
 public interface UserInfoMapper extends IJpaMapper<UserInfo> {
 

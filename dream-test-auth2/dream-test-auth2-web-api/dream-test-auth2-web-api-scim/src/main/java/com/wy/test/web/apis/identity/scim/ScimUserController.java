@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.wy.test.constants.ConstsStatus;
-import com.wy.test.entity.Roles;
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.entity.Roles;
+import com.wy.test.core.entity.UserInfo;
 import com.wy.test.persistence.service.RolesService;
 import com.wy.test.persistence.service.UserInfoService;
 import com.wy.test.util.DateUtils;

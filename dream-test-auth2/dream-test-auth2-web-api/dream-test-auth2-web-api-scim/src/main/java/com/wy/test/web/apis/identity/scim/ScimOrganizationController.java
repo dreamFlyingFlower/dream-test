@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.wy.test.entity.Organizations;
+import com.wy.test.core.entity.Organizations;
 import com.wy.test.persistence.service.OrganizationsService;
 import com.wy.test.util.DateUtils;
 import com.wy.test.util.StringUtils;

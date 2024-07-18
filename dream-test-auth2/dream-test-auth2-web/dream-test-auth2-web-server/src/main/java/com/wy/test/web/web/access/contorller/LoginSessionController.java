@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.entity.HistoryLogin;
+import com.wy.test.core.entity.HistoryLogin;
+import com.wy.test.core.entity.UserInfo;
 import com.wy.test.entity.Message;
-import com.wy.test.entity.UserInfo;
 import com.wy.test.persistence.service.HistoryLoginService;
 import com.wy.test.util.DateUtils;
 

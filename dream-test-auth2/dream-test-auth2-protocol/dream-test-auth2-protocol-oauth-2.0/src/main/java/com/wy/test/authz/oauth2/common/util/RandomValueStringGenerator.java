@@ -11,8 +11,8 @@ import java.util.Random;
  */
 public class RandomValueStringGenerator {
 
-	private static final char[] DEFAULT_CODEC = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-			.toCharArray();
+	private static final char[] DEFAULT_CODEC =
+			"1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
 
 	private Random random = new SecureRandom();
 
@@ -41,9 +41,9 @@ public class RandomValueStringGenerator {
 	}
 
 	/**
-	 * Convert these random bytes to a verifier string. The length of the byte array can be
-	 * {@link #setLength(int) configured}. The default implementation mods the bytes to fit into the
-	 * ASCII letters 1-9, A-Z, a-z .
+	 * Convert these random bytes to a verifier string. The length of the byte array
+	 * can be {@link #setLength(int) configured}. The default implementation mods
+	 * the bytes to fit into the ASCII letters 1-9, A-Z, a-z .
 	 * 
 	 * @param verifierBytes The bytes.
 	 * @return The string.
@@ -64,7 +64,7 @@ public class RandomValueStringGenerator {
 	public void setRandom(Random random) {
 		this.random = random;
 	}
-	
+
 	/**
 	 * The length of string to generate.
 	 * 

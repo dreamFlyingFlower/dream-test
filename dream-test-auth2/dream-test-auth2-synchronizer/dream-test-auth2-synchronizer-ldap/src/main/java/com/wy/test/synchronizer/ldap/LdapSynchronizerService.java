@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wy.test.entity.Synchronizers;
-import com.wy.test.persistence.ldap.LdapUtils;
+import com.wy.test.core.entity.Synchronizers;
+import com.wy.test.core.persistence.ldap.LdapUtils;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
 @Service

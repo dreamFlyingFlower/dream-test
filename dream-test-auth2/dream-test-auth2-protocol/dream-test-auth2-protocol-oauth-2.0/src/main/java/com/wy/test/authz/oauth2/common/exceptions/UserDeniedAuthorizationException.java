@@ -6,17 +6,17 @@ package com.wy.test.authz.oauth2.common.exceptions;
 @SuppressWarnings("serial")
 public class UserDeniedAuthorizationException extends OAuth2Exception {
 
-  public UserDeniedAuthorizationException(String msg, Throwable t) {
-    super(msg, t);
-  }
+	public UserDeniedAuthorizationException(String msg, Throwable t) {
+		super(msg, t);
+	}
 
-  public UserDeniedAuthorizationException(String msg) {
-    super(msg);
-  }
+	public UserDeniedAuthorizationException(String msg) {
+		super(msg);
+	}
 
-  @Override
-  public String getOAuth2ErrorCode() {
-    return "access_denied";
-  }
+	@Override
+	public String getOAuth2ErrorCode() {
+		return "access_denied";
+	}
 
 }

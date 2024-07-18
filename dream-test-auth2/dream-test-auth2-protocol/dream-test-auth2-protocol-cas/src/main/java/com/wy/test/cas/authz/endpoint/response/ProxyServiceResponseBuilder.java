@@ -1,6 +1,6 @@
 package com.wy.test.cas.authz.endpoint.response;
 
-import com.wy.test.web.HttpResponseConstants;
+import com.wy.test.core.web.HttpResponseConstants;
 
 public class ProxyServiceResponseBuilder extends ServiceResponseBuilder {
 

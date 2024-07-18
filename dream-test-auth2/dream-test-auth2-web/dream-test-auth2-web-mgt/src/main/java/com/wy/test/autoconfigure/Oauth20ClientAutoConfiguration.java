@@ -19,7 +19,7 @@ import com.wy.test.authz.oauth2.provider.token.DefaultTokenServices;
 import com.wy.test.authz.oauth2.provider.token.TokenStore;
 import com.wy.test.authz.oauth2.provider.token.store.InMemoryTokenStore;
 import com.wy.test.authz.oauth2.provider.token.store.RedisTokenStore;
-import com.wy.test.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 
 /**
  * like Oauth20AutoConfiguration for mgmt

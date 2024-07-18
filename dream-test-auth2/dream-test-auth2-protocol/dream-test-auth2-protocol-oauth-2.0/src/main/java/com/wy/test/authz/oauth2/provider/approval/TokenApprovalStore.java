@@ -14,17 +14,19 @@ import com.wy.test.authz.oauth2.provider.token.AuthorizationServerTokenServices;
 import com.wy.test.authz.oauth2.provider.token.TokenStore;
 
 /**
- * An {@link ApprovalStore} that works with an existing {@link TokenStore}, extracting implicit {@link Approval
- * Approvals} from the content of tokens already in the store. Useful interface so that users can list and revoke
- * approvals even if they are not really represented in such a way internally. For full fine-grained control of user
- * approvals don't use a TokenStore at all, and don't use this ApprovalStore with Approval-based
+ * An {@link ApprovalStore} that works with an existing {@link TokenStore},
+ * extracting implicit {@link Approval Approvals} from the content of tokens
+ * already in the store. Useful interface so that users can list and revoke
+ * approvals even if they are not really represented in such a way internally.
+ * For full fine-grained control of user approvals don't use a TokenStore at
+ * all, and don't use this ApprovalStore with Approval-based
  * {@link AuthorizationServerTokenServices} implementations.
  * 
  */
 public class TokenApprovalStore implements ApprovalStore {
 
 	static final Logger _logger = LoggerFactory.getLogger(TokenApprovalStore.class);
-			
+
 	private TokenStore store;
 
 	/**
@@ -35,8 +37,9 @@ public class TokenApprovalStore implements ApprovalStore {
 	}
 
 	/**
-	 * This implementation is a no-op. We assume that the {@link TokenStore} is populated elsewhere, by (for example) a
-	 * token services instance that knows more about granted tokens than we could possibly infer from the approvals.
+	 * This implementation is a no-op. We assume that the {@link TokenStore} is
+	 * populated elsewhere, by (for example) a token services instance that knows
+	 * more about granted tokens than we could possibly infer from the approvals.
 	 * 
 	 * @see com.wy.test.authz.oauth2.provider.approval.ApprovalStore#addApprovals(java.util.Collection)
 	 */
@@ -56,7 +59,8 @@ public class TokenApprovalStore implements ApprovalStore {
 		_logger.debug("revoke Approvals " + approvals);
 		boolean success = true;
 		for (Approval approval : approvals) {
-			Collection<OAuth2AccessToken> tokens = store.findTokensByClientIdAndUserName(approval.getClientId(), approval.getUserId());
+			Collection<OAuth2AccessToken> tokens =
+					store.findTokensByClientIdAndUserName(approval.getClientId(), approval.getUserId());
 			for (OAuth2AccessToken token : tokens) {
 				OAuth2Authentication authentication = store.readAuthentication(token);
 				if (authentication != null
@@ -69,20 +73,21 @@ public class TokenApprovalStore implements ApprovalStore {
 	}
 
 	/**
-	 * Extract the implied approvals from any tokens associated with the user and client id supplied.
+	 * Extract the implied approvals from any tokens associated with the user and
+	 * client id supplied.
 	 * 
 	 * @see com.wy.test.authz.oauth2.provider.approval.ApprovalStore#getApprovals(java.lang.String,
-	 * java.lang.String)
+	 *      java.lang.String)
 	 */
 	@Override
 	public Collection<Approval> getApprovals(String userId, String clientId) {
-		_logger.trace("userId " + userId+" , clientId " + clientId);
+		_logger.trace("userId " + userId + " , clientId " + clientId);
 		Collection<Approval> result = new HashSet<Approval>();
 		Collection<OAuth2AccessToken> tokens = store.findTokensByClientIdAndUserName(clientId, userId);
 		_logger.trace("tokens Collection " + tokens);
 		for (OAuth2AccessToken token : tokens) {
 			_logger.trace("token " + token);
-			if(token != null) {
+			if (token != null) {
 				OAuth2Authentication authentication = store.readAuthentication(token);
 				_logger.trace("authentication " + authentication);
 				if (authentication != null) {

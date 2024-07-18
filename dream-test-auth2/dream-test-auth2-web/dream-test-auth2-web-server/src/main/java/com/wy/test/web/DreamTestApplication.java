@@ -14,7 +14,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import com.wy.test.configuration.ApplicationConfig;
+import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.web.InitializeContext;
 
 @SpringBootApplication
 @MapperScan("com.wy.persistence.mapper,")

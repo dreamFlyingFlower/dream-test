@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
+import com.wy.test.core.entity.Synchronizers;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.crypto.password.PasswordReciprocal;
 import com.wy.test.entity.Message;
-import com.wy.test.entity.Synchronizers;
-import com.wy.test.entity.UserInfo;
 import com.wy.test.persistence.service.SynchronizersService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
-import com.wy.test.web.WebContext;
 
 import dream.flying.flower.lang.StrHelper;
 
@@ -77,8 +77,12 @@ public class SynchronizersController {
 				_logger.debug("synchronizer " + synchronizer);
 				ISynchronizerService synchronizerService =
 						WebContext.getBean(synchronizer.getService(), ISynchronizerService.class);
-				synchronizerService.setSynchronizer(synchronizer);
-				synchronizerService.sync();
+				if (synchronizerService != null) {
+					synchronizerService.setSynchronizer(synchronizer);
+					synchronizerService.sync();
+				} else {
+					_logger.info("synchronizer {} not exist .", synchronizer.getService());
+				}
 			}
 		} catch (Exception e) {
 			_logger.error("synchronizer Exception ", e);

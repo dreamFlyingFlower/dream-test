@@ -7,13 +7,15 @@ import java.security.interfaces.RSAPublicKey;
 /**
  * Verifies signatures using an RSA public key.
  *
- * The key can be supplied directly, or as an SSH public or private key string (in
- * the standard format produced by <tt>ssh-keygen</tt>).
+ * The key can be supplied directly, or as an SSH public or private key string
+ * (in the standard format produced by <tt>ssh-keygen</tt>).
  *
  * @author Luke Taylor
  */
 public class RsaVerifier implements SignatureVerifier {
+
 	private final RSAPublicKey key;
+
 	private final String algorithm;
 
 	public RsaVerifier(BigInteger n, BigInteger e) {
@@ -33,6 +35,7 @@ public class RsaVerifier implements SignatureVerifier {
 		this(RsaKeyHelper.parsePublicKey(key.trim()), RsaSigner.DEFAULT_ALGORITHM);
 	}
 
+	@Override
 	public void verify(byte[] content, byte[] sig) {
 		try {
 			Signature signature = Signature.getInstance(algorithm);
@@ -42,12 +45,12 @@ public class RsaVerifier implements SignatureVerifier {
 			if (!signature.verify(sig)) {
 				throw new InvalidSignatureException("RSA Signature did not match content");
 			}
-		}
-		catch (GeneralSecurityException e) {
+		} catch (GeneralSecurityException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
+	@Override
 	public String algorithm() {
 		return algorithm;
 	}

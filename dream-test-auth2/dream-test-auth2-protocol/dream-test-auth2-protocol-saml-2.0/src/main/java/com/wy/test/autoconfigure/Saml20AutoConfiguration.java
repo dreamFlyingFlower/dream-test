@@ -33,20 +33,26 @@ import com.wy.test.authz.saml20.binding.impl.PostBindingAdapter;
 import com.wy.test.authz.saml20.binding.impl.PostSimpleSignBindingAdapter;
 import com.wy.test.authz.saml20.provider.xml.AuthnResponseGenerator;
 import com.wy.test.authz.saml20.xml.SAML2ValidatorSuite;
+import com.wy.test.core.entity.Saml20Metadata;
 import com.wy.test.crypto.keystore.KeyStoreLoader;
-import com.wy.test.entity.Saml20Metadata;
 
-//import org.dromara.maxkey.authz.saml20.binding.decoder.OpenHTTPPostDecoder;
-//import org.dromara.maxkey.authz.saml20.binding.decoder.OpenHTTPPostSimpleSignDecoder;
-//import org.dromara.maxkey.authz.saml20.binding.decoder.OpenHTTPRedirectDecoder;
-//import org.dromara.maxkey.authz.saml20.binding.impl.ExtractPostBindingAdapter;
-//import org.dromara.maxkey.authz.saml20.binding.impl.ExtractRedirectBindingAdapter;
-//import org.dromara.maxkey.authz.saml20.binding.impl.PostBindingAdapter;
-//import org.dromara.maxkey.authz.saml20.binding.impl.PostSimpleSignBindingAdapter;
-//import org.dromara.maxkey.authz.saml20.provider.xml.AuthnResponseGenerator;
-//import org.dromara.maxkey.authz.saml20.xml.SAML2ValidatorSuite;
-//import org.dromara.maxkey.crypto.keystore.KeyStoreLoader;
+// import org.dromara.maxkey.authz.saml20.binding.decoder.OpenHTTPPostDecoder;
+// import
+// org.dromara.maxkey.authz.saml20.binding.decoder.OpenHTTPPostSimpleSignDecoder;
+// import
+// org.dromara.maxkey.authz.saml20.binding.decoder.OpenHTTPRedirectDecoder;
+// import
+// org.dromara.maxkey.authz.saml20.binding.impl.ExtractPostBindingAdapter;
+// import
+// org.dromara.maxkey.authz.saml20.binding.impl.ExtractRedirectBindingAdapter;
+// import org.dromara.maxkey.authz.saml20.binding.impl.PostBindingAdapter;
+// import
+// org.dromara.maxkey.authz.saml20.binding.impl.PostSimpleSignBindingAdapter;
+// import org.dromara.maxkey.authz.saml20.provider.xml.AuthnResponseGenerator;
+// import org.dromara.maxkey.authz.saml20.xml.SAML2ValidatorSuite;
+// import org.dromara.maxkey.crypto.keystore.KeyStoreLoader;
 
+@SuppressWarnings({ "deprecation" })
 @AutoConfiguration
 @ComponentScan(
 		basePackages = { "org.maxkey.authz.saml20.provider.endpoint", "org.maxkey.authz.saml20.metadata.endpoint", })
@@ -179,7 +185,6 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 * @throws IOException
 	 * @throws VelocityException
 	 */
-	@SuppressWarnings({ "deprecation" })
 	@Bean(name = "velocityEngine")
 	VelocityEngine velocityEngine() throws VelocityException, IOException {
 		VelocityEngineFactoryBean factory = new VelocityEngineFactoryBean();
@@ -330,7 +335,7 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 * @return postBindingAdapter
 	 */
 	@Bean(name = "postBindingAdapter")
-	public PostBindingAdapter postBindingAdapter(VelocityEngine velocityEngine,
+	PostBindingAdapter postBindingAdapter(VelocityEngine velocityEngine,
 			@Value("${maxkey.saml.v20.idp.issuer}") String issuerEntityName) {
 		PostBindingAdapter adapter = new PostBindingAdapter();
 		adapter.setVelocityEngine(velocityEngine);

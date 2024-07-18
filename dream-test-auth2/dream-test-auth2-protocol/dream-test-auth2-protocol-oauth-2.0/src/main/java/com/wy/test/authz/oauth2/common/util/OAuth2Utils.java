@@ -30,10 +30,12 @@ public abstract class OAuth2Utils {
 	}
 
 	/**
-	 * Formats a set of string values into a format appropriate for sending as a single-valued form value.
+	 * Formats a set of string values into a format appropriate for sending as a
+	 * single-valued form value.
 	 * 
 	 * @param value The value of the parameter.
-	 * @return The value formatted for form submission etc, or null if the input is empty
+	 * @return The value formatted for form submission etc, or null if the input is
+	 *         empty
 	 */
 	public static String formatParameterList(Collection<String> value) {
 		return value == null ? null : StringUtils.collectionToDelimitedString(value, " ");
@@ -47,8 +49,8 @@ public abstract class OAuth2Utils {
 	 */
 	public static Map<String, String> extractMap(String query) {
 		Map<String, String> map = new HashMap<String, String>();
-		Properties properties = StringUtils.splitArrayElementsIntoProperties(
-				StringUtils.delimitedListToStringArray(query, "&"), "=");
+		Properties properties =
+				StringUtils.splitArrayElementsIntoProperties(StringUtils.delimitedListToStringArray(query, "&"), "=");
 		if (properties != null) {
 			for (Object key : properties.keySet()) {
 				map.put(key.toString(), properties.get(key).toString());

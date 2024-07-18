@@ -2,8 +2,8 @@ package com.wy.test.cas.authz.endpoint.ticket.tgt;
 
 import com.wy.test.cas.authz.endpoint.ticket.RandomServiceTicketServices;
 import com.wy.test.cas.authz.endpoint.ticket.Ticket;
-import com.wy.test.persistence.redis.RedisConnection;
-import com.wy.test.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.persistence.redis.RedisConnection;
+import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 
 public class RedisTicketGrantingTicketServices extends RandomServiceTicketServices {
 

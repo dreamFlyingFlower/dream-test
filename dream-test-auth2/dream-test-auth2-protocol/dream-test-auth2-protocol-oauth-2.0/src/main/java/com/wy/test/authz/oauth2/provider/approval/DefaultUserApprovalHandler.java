@@ -17,7 +17,7 @@ import com.wy.test.authz.oauth2.provider.AuthorizationRequest;
 public class DefaultUserApprovalHandler implements UserApprovalHandler {
 
 	private String approvalParameter = OAuth2Constants.PARAMETER.USER_OAUTH_APPROVAL;
-	
+
 	/**
 	 * @param approvalParameter the approvalParameter to set
 	 */
@@ -26,14 +26,15 @@ public class DefaultUserApprovalHandler implements UserApprovalHandler {
 	}
 
 	/**
-	 * Basic implementation just requires the authorization request to be explicitly approved and the user to be
-	 * authenticated.
+	 * Basic implementation just requires the authorization request to be explicitly
+	 * approved and the user to be authenticated.
 	 * 
 	 * @param authorizationRequest The authorization request.
 	 * @param userAuthentication the current user authentication
 	 * 
 	 * @return Whether the specified request has been approved by the current user.
 	 */
+	@Override
 	public boolean isApproved(AuthorizationRequest authorizationRequest, Authentication userAuthentication) {
 		if (authorizationRequest.isApproved()) {
 			return true;
@@ -41,19 +42,22 @@ public class DefaultUserApprovalHandler implements UserApprovalHandler {
 		return false;
 	}
 
-	public AuthorizationRequest checkForPreApproval(AuthorizationRequest authorizationRequest, Authentication userAuthentication) {
+	@Override
+	public AuthorizationRequest checkForPreApproval(AuthorizationRequest authorizationRequest,
+			Authentication userAuthentication) {
 		return authorizationRequest;
 	}
 
 	@Override
-	public AuthorizationRequest updateAfterApproval(AuthorizationRequest authorizationRequest, Authentication userAuthentication) {
+	public AuthorizationRequest updateAfterApproval(AuthorizationRequest authorizationRequest,
+			Authentication userAuthentication) {
 		Map<String, String> approvalParameters = authorizationRequest.getApprovalParameters();
 		String flag = approvalParameters.get(approvalParameter);
 		boolean approved = flag != null && flag.toLowerCase().equals("true");
 		authorizationRequest.setApproved(approved);
 		return authorizationRequest;
 	}
-	
+
 	@Override
 	public Map<String, Object> getUserApprovalRequest(AuthorizationRequest authorizationRequest,
 			Authentication userAuthentication) {

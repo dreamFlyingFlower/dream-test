@@ -21,8 +21,8 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.wy.test.authz.saml.common.TrustResolver;
 import com.wy.test.authz.saml20.binding.ExtractBindingAdapter;
+import com.wy.test.core.entity.apps.AppsSAML20Details;
 import com.wy.test.crypto.keystore.KeyStoreLoader;
-import com.wy.test.entity.apps.AppsSAML20Details;
 
 public class ExtractPostBindingAdapter implements ExtractBindingAdapter, InitializingBean {
 
@@ -99,6 +99,7 @@ public class ExtractPostBindingAdapter implements ExtractBindingAdapter, Initial
 
 	}
 
+	@Override
 	public void buildSecurityPolicyResolver(KeyStore trustKeyStore) {
 		_logger.debug("EntityName {}, KeystorePassword {}", keyStoreLoader.getEntityName(),
 				keyStoreLoader.getKeystorePassword());
@@ -112,6 +113,7 @@ public class ExtractPostBindingAdapter implements ExtractBindingAdapter, Initial
 	/**
 	 * @param securityPolicyResolver the securityPolicyResolver to set
 	 */
+	@Override
 	public void setSecurityPolicyResolver(SecurityPolicyResolver securityPolicyResolver) {
 		this.securityPolicyResolver = securityPolicyResolver;
 	}
@@ -126,10 +128,12 @@ public class ExtractPostBindingAdapter implements ExtractBindingAdapter, Initial
 		this.saml20Detail = saml20Detail;
 	}
 
+	@Override
 	public AppsSAML20Details getSaml20Detail() {
 		return saml20Detail;
 	}
 
+	@Override
 	public KeyStoreLoader getKeyStoreLoader() {
 		return keyStoreLoader;
 	}

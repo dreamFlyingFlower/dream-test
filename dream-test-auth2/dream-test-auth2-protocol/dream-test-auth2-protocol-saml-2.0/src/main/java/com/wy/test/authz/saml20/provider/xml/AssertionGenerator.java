@@ -30,9 +30,9 @@ import com.wy.test.authz.saml.service.TimeService;
 import com.wy.test.authz.saml20.binding.BindingAdapter;
 import com.wy.test.authz.saml20.xml.IssuerGenerator;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.entity.apps.AppsSAML20Details;
-import com.wy.test.web.WebContext;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.apps.AppsSAML20Details;
+import com.wy.test.core.web.WebContext;
 
 public class AssertionGenerator {
 

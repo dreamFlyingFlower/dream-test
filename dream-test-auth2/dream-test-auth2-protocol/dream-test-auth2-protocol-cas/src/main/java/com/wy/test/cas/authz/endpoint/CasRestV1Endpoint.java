@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,11 +27,11 @@ import com.wy.test.cas.authz.endpoint.ticket.ServiceTicketImpl;
 import com.wy.test.cas.authz.endpoint.ticket.TicketGrantingTicketImpl;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.entity.apps.AppsCasDetails;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.apps.AppsCasDetails;
+import com.wy.test.core.web.HttpResponseConstants;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.util.StringUtils;
-import com.wy.test.web.HttpResponseConstants;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -61,9 +62,14 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 						"No credentials are provided or extracted to authenticate the REST request");
 			}
 
-			LoginCredential loginCredential = new LoginCredential(username, password, "CASREST");
+			LoginCredential loginCredential = new LoginCredential(username, password, "normal");
 
-			authenticationProvider.authenticate(loginCredential, false);
+			// authenticationProvider.authenticate(loginCredential, false);
+			Authentication authentication = authenticationProvider.authenticate(loginCredential);
+			if (authentication == null) {
+				_logger.debug("Bad Credentials Exception");
+				return new ResponseEntity<>("Bad Credentials", HttpStatus.BAD_REQUEST);
+			}
 
 			TicketGrantingTicketImpl ticketGrantingTicket =
 					new TicketGrantingTicketImpl("Random", AuthorizationUtils.getAuthentication(), null);

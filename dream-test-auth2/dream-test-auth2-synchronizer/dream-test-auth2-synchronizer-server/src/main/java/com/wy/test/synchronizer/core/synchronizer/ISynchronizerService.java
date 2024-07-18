@@ -1,6 +1,6 @@
 package com.wy.test.synchronizer.core.synchronizer;
 
-import com.wy.test.entity.Synchronizers;
+import com.wy.test.core.entity.Synchronizers;
 
 public interface ISynchronizerService {
 

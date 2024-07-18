@@ -1,6 +1,6 @@
 package com.wy.test.otp.password.onetimepwd.impl;
 
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.entity.UserInfo;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 
 public class MobileOtpAuthn extends AbstractOtpAuthn {

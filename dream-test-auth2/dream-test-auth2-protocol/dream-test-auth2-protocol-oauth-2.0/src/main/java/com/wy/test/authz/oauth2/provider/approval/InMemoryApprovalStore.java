@@ -51,7 +51,7 @@ public class InMemoryApprovalStore implements ApprovalStore {
 		approval.setClientId(clientId);
 		return Collections.unmodifiableCollection(getApprovals(approval));
 	}
-	
+
 	public void clear() {
 		map.clear();
 	}
@@ -88,14 +88,12 @@ public class InMemoryApprovalStore implements ApprovalStore {
 			if (clientId == null) {
 				if (other.clientId != null)
 					return false;
-			}
-			else if (!clientId.equals(other.clientId))
+			} else if (!clientId.equals(other.clientId))
 				return false;
 			if (userId == null) {
 				if (other.userId != null)
 					return false;
-			}
-			else if (!userId.equals(other.userId))
+			} else if (!userId.equals(other.userId))
 				return false;
 			return true;
 		}

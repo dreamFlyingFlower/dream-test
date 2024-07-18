@@ -12,11 +12,8 @@ import com.wy.test.authz.oauth2.provider.OAuth2Authentication;
 import com.wy.test.authz.oauth2.provider.OAuth2Request;
 
 /**
- * Basic key generator taking into account the client id, scope, reource ids and username (principal name) if they
- * exist.
- * 
- * @author Dave Syer
- * 
+ * Basic key generator taking into account the client id, scope, reource ids and
+ * username (principal name) if they exist.
  */
 public class DefaultAuthenticationKeyGenerator implements AuthenticationKeyGenerator {
 
@@ -26,6 +23,7 @@ public class DefaultAuthenticationKeyGenerator implements AuthenticationKeyGener
 
 	private static final String USERNAME = "username";
 
+	@Override
 	public String extractKey(OAuth2Authentication authentication) {
 		Map<String, String> values = new LinkedHashMap<String, String>();
 		OAuth2Request authorizationRequest = authentication.getOAuth2Request();
@@ -39,16 +37,14 @@ public class DefaultAuthenticationKeyGenerator implements AuthenticationKeyGener
 		MessageDigest digest;
 		try {
 			digest = MessageDigest.getInstance("MD5");
-		}
-		catch (NoSuchAlgorithmException e) {
+		} catch (NoSuchAlgorithmException e) {
 			throw new IllegalStateException("MD5 algorithm not available.  Fatal (should be in the JDK).");
 		}
 
 		try {
 			byte[] bytes = digest.digest(values.toString().getBytes("UTF-8"));
 			return String.format("%032x", new BigInteger(1, bytes));
-		}
-		catch (UnsupportedEncodingException e) {
+		} catch (UnsupportedEncodingException e) {
 			throw new IllegalStateException("UTF-8 encoding not available.  Fatal (should be in the JDK).");
 		}
 	}

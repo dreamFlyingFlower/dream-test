@@ -21,10 +21,10 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.PlainJWT;
 import com.nimbusds.jwt.SignedJWT;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
+import com.wy.test.core.entity.apps.AppsJwtDetails;
+import com.wy.test.core.web.WebConstants;
 import com.wy.test.crypto.jwt.encryption.service.impl.DefaultJwtEncryptionAndDecryptionService;
 import com.wy.test.crypto.jwt.signer.service.impl.DefaultJwtSigningAndValidationService;
-import com.wy.test.entity.apps.AppsJwtDetails;
-import com.wy.test.web.WebConstants;
 
 public class JwtAdapter extends AbstractAuthorizeAdapter {
 

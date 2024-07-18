@@ -13,11 +13,10 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.wy.test.configuration.ApplicationConfig;
 import com.wy.test.core.authn.web.CurrentUserMethodArgumentResolver;
 import com.wy.test.core.authn.web.interceptor.PermissionInterceptor;
+import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
-import com.wy.test.web.interceptor.RestApiPermissionAdapter;
 
 @EnableWebMvc
 @AutoConfiguration
@@ -33,9 +32,6 @@ public class MaxKeyMgtMvcConfig implements WebMvcConfigurer {
 
 	@Autowired
 	PermissionInterceptor permissionInterceptor;
-
-	@Autowired
-	RestApiPermissionAdapter restApiPermissionAdapter;
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -84,14 +80,6 @@ public class MaxKeyMgtMvcConfig implements WebMvcConfigurer {
 				.addPathPatterns("/logout").addPathPatterns("/logout/**");
 
 		_logger.debug("add Permission Adapter");
-
-		/*
-		 * api idm scim
-		 */
-		registry.addInterceptor(restApiPermissionAdapter).addPathPatterns("/api/**").addPathPatterns("/api/idm/**")
-				.addPathPatterns("/api/idm/scim/**");
-
-		_logger.debug("add Rest Api Permission Adapter");
 
 	}
 

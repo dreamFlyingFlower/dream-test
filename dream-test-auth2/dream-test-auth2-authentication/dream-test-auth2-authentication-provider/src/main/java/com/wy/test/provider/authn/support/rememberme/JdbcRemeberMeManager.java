@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import com.wy.test.configuration.ApplicationConfig;
 import com.wy.test.core.authn.jwt.AuthTokenService;
+import com.wy.test.core.configuration.ApplicationConfig;
 
 public class JdbcRemeberMeManager extends AbstractRemeberMeManager {
 

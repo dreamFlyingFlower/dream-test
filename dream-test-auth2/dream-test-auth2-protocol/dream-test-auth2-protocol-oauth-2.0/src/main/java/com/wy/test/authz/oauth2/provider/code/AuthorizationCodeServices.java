@@ -22,9 +22,9 @@ public interface AuthorizationCodeServices {
 	 * 
 	 * @param code The authorization code to consume.
 	 * @return The authentications associated with the code.
-	 * @throws InvalidGrantException If the authorization code is invalid or expired.
+	 * @throws InvalidGrantException If the authorization code is invalid or
+	 *         expired.
 	 */
-	OAuth2Authentication consumeAuthorizationCode(String code)
-			throws InvalidGrantException;
+	OAuth2Authentication consumeAuthorizationCode(String code) throws InvalidGrantException;
 
 }

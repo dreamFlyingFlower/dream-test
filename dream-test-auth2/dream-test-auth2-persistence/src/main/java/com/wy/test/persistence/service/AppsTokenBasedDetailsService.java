@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.entity.apps.AppsTokenBasedDetails;
+import com.wy.test.core.entity.apps.AppsTokenBasedDetails;
 import com.wy.test.persistence.mapper.AppsTokenBasedDetailsMapper;
 
 @Repository

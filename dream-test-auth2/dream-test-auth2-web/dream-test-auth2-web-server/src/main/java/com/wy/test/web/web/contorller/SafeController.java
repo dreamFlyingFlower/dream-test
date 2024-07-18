@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.constants.ConstsTimeInterval;
 import com.wy.test.core.authn.annotation.CurrentUser;
+import com.wy.test.core.constants.ConstsTimeInterval;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.web.WebConstants;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.entity.Message;
-import com.wy.test.entity.UserInfo;
 import com.wy.test.persistence.service.UserInfoService;
-import com.wy.test.web.WebConstants;
-import com.wy.test.web.WebContext;
 
 @Controller
 @RequestMapping(value = { "/safe" })

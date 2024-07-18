@@ -10,8 +10,8 @@ import org.opensaml.ws.security.SecurityPolicyResolver;
 import org.opensaml.xml.security.SecurityException;
 import org.opensaml.xml.security.credential.CredentialResolver;
 
+import com.wy.test.core.entity.apps.AppsSAML20Details;
 import com.wy.test.crypto.keystore.KeyStoreLoader;
-import com.wy.test.entity.apps.AppsSAML20Details;
 
 /**
  * 

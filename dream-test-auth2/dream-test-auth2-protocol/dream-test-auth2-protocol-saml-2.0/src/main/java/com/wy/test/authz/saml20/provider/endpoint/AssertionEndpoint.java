@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authz.saml.common.AuthnRequestInfo;
@@ -22,9 +22,9 @@ import com.wy.test.authz.saml20.binding.BindingAdapter;
 import com.wy.test.authz.saml20.provider.xml.AuthnResponseGenerator;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.entity.apps.AppsSAML20Details;
-import com.wy.test.web.WebConstants;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.apps.AppsSAML20Details;
+import com.wy.test.core.web.WebConstants;
 
 @Controller
 public class AssertionEndpoint {
@@ -41,7 +41,7 @@ public class AssertionEndpoint {
 	@Qualifier("authnResponseGenerator")
 	AuthnResponseGenerator authnResponseGenerator;
 
-	@RequestMapping(value = "/authz/saml20/assertion")
+	@GetMapping(value = "/authz/saml20/assertion")
 	public ModelAndView assertion(HttpServletRequest request, HttpServletResponse response,
 			@CurrentUser UserInfo currentUser) throws Exception {
 		logger.debug("saml20 assertion start.");

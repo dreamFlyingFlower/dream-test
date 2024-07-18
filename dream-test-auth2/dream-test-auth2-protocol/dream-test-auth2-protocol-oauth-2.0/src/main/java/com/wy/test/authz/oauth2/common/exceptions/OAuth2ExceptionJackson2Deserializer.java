@@ -21,8 +21,8 @@ public class OAuth2ExceptionJackson2Deserializer extends StdDeserializer<OAuth2E
 	}
 
 	@Override
-	public OAuth2Exception deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException,
-			JsonProcessingException {
+	public OAuth2Exception deserialize(JsonParser jp, DeserializationContext ctxt)
+			throws IOException, JsonProcessingException {
 
 		JsonToken t = jp.getCurrentToken();
 		if (t == JsonToken.START_OBJECT) {
@@ -42,19 +42,17 @@ public class OAuth2ExceptionJackson2Deserializer extends StdDeserializer<OAuth2E
 			// Some servers might send back complex content
 			else if (t == JsonToken.START_ARRAY) {
 				value = jp.readValueAs(List.class);
-			}
-			else if (t == JsonToken.START_OBJECT) {
+			} else if (t == JsonToken.START_OBJECT) {
 				value = jp.readValueAs(Map.class);
-			}
-			else {
+			} else {
 				value = jp.getText();
 			}
 			errorParams.put(fieldName, value);
 		}
 
 		Object errorCode = errorParams.get("error");
-		String errorMessage = errorParams.containsKey("error_description") ? errorParams.get("error_description")
-				.toString() : null;
+		String errorMessage =
+				errorParams.containsKey("error_description") ? errorParams.get("error_description").toString() : null;
 		if (errorMessage == null) {
 			errorMessage = errorCode == null ? "OAuth Error" : errorCode.toString();
 		}
@@ -62,44 +60,32 @@ public class OAuth2ExceptionJackson2Deserializer extends StdDeserializer<OAuth2E
 		OAuth2Exception ex;
 		if ("invalid_client".equals(errorCode)) {
 			ex = new InvalidClientException(errorMessage);
-		}
-		else if ("unauthorized_client".equals(errorCode)) {
+		} else if ("unauthorized_client".equals(errorCode)) {
 			ex = new UnauthorizedUserException(errorMessage);
-		}
-		else if ("invalid_grant".equals(errorCode)) {
+		} else if ("invalid_grant".equals(errorCode)) {
 			if (errorMessage.toLowerCase().contains("redirect") && errorMessage.toLowerCase().contains("match")) {
 				ex = new RedirectMismatchException(errorMessage);
-			}
-			else {
+			} else {
 				ex = new InvalidGrantException(errorMessage);
 			}
-		}
-		else if ("invalid_scope".equals(errorCode)) {
+		} else if ("invalid_scope".equals(errorCode)) {
 			ex = new InvalidScopeException(errorMessage);
-		}
-		else if ("invalid_token".equals(errorCode)) {
+		} else if ("invalid_token".equals(errorCode)) {
 			ex = new InvalidTokenException(errorMessage);
-		}
-		else if ("invalid_request".equals(errorCode)) {
+		} else if ("invalid_request".equals(errorCode)) {
 			ex = new InvalidRequestException(errorMessage);
-		}
-		else if ("redirect_uri_mismatch".equals(errorCode)) {
+		} else if ("redirect_uri_mismatch".equals(errorCode)) {
 			ex = new RedirectMismatchException(errorMessage);
-		}
-		else if ("unsupported_grant_type".equals(errorCode)) {
+		} else if ("unsupported_grant_type".equals(errorCode)) {
 			ex = new UnsupportedGrantTypeException(errorMessage);
-		}
-		else if ("unsupported_response_type".equals(errorCode)) {
+		} else if ("unsupported_response_type".equals(errorCode)) {
 			ex = new UnsupportedResponseTypeException(errorMessage);
-		}
-		else if ("insufficient_scope".equals(errorCode)) {
-			ex = new InsufficientScopeException(errorMessage, OAuth2Utils.parseParameterList((String) errorParams
-					.get("scope")));
-		}
-		else if ("access_denied".equals(errorCode)) {
+		} else if ("insufficient_scope".equals(errorCode)) {
+			ex = new InsufficientScopeException(errorMessage,
+					OAuth2Utils.parseParameterList((String) errorParams.get("scope")));
+		} else if ("access_denied".equals(errorCode)) {
 			ex = new UserDeniedAuthorizationException(errorMessage);
-		}
-		else {
+		} else {
 			ex = new OAuth2Exception(errorMessage);
 		}
 

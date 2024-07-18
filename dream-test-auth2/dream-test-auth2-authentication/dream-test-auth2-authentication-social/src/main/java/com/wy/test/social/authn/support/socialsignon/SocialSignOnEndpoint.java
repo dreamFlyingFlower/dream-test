@@ -17,17 +17,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.constants.ConstsLoginType;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.jwt.AuthJwt;
+import com.wy.test.core.constants.ConstsLoginType;
+import com.wy.test.core.entity.SocialsAssociate;
+import com.wy.test.core.entity.SocialsProvider;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.entity.Message;
-import com.wy.test.entity.SocialsAssociate;
-import com.wy.test.entity.SocialsProvider;
-import com.wy.test.entity.UserInfo;
 import com.wy.test.social.zhyd.request.AuthMaxkeyRequest;
 import com.wy.test.uuid.UUID;
-import com.wy.test.web.WebContext;
 
 import me.zhyd.oauth.request.AuthRequest;
 

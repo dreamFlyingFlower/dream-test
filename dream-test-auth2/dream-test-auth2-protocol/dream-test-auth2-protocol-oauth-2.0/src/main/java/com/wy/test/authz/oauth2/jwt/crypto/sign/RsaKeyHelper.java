@@ -16,13 +16,15 @@ import java.util.regex.Pattern;
 import org.bouncycastle.asn1.ASN1Sequence;
 
 /**
- * Reads RSA key pairs using BC provider classes but without the
- * need to specify a crypto provider or have BC added as one.
+ * Reads RSA key pairs using BC provider classes but without the need to specify
+ * a crypto provider or have BC added as one.
  *
  * @author Luke Taylor
  */
 class RsaKeyHelper {
+
 	private static String BEGIN = "-----BEGIN";
+
 	private static Pattern PEM_DATA = Pattern.compile("-----BEGIN (.*)-----(.*)-----END (.*)-----", Pattern.DOTALL);
 
 	static KeyPair parseKeyPair(String pemData) {
@@ -45,11 +47,12 @@ class RsaKeyHelper {
 				if (seq.size() != 9) {
 					throw new IllegalArgumentException("Invalid RSA Private Key ASN1 sequence.");
 				}
-				org.bouncycastle.asn1.pkcs.RSAPrivateKey key = org.bouncycastle.asn1.pkcs.RSAPrivateKey.getInstance(seq);
+				org.bouncycastle.asn1.pkcs.RSAPrivateKey key =
+						org.bouncycastle.asn1.pkcs.RSAPrivateKey.getInstance(seq);
 				RSAPublicKeySpec pubSpec = new RSAPublicKeySpec(key.getModulus(), key.getPublicExponent());
 				RSAPrivateCrtKeySpec privSpec = new RSAPrivateCrtKeySpec(key.getModulus(), key.getPublicExponent(),
-					key.getPrivateExponent(), key.getPrime1(), key.getPrime2(), key.getExponent1(), key.getExponent2(),
-					key.getCoefficient());
+						key.getPrivateExponent(), key.getPrime1(), key.getPrime2(), key.getExponent1(),
+						key.getExponent2(), key.getCoefficient());
 				publicKey = fact.generatePublic(pubSpec);
 				privateKey = fact.generatePrivate(privSpec);
 			} else if (type.equals("PUBLIC KEY")) {
@@ -65,11 +68,9 @@ class RsaKeyHelper {
 			}
 
 			return new KeyPair(publicKey, privateKey);
-		}
-		catch (InvalidKeySpecException e) {
+		} catch (InvalidKeySpecException e) {
 			throw new RuntimeException(e);
-		}
-		catch (NoSuchAlgorithmException e) {
+		} catch (NoSuchAlgorithmException e) {
 			throw new IllegalStateException(e);
 		}
 	}
@@ -82,7 +83,7 @@ class RsaKeyHelper {
 		if (m.matches()) {
 			String alg = m.group(1);
 			String encKey = m.group(2);
-			//String id = m.group(3);
+			// String id = m.group(3);
 
 			if (!"rsa".equalsIgnoreCase(alg)) {
 				throw new IllegalArgumentException("Only RSA is currently supported, but algorithm was " + alg);
@@ -90,7 +91,8 @@ class RsaKeyHelper {
 
 			return parseSSHPublicKey(encKey);
 		} else if (!key.startsWith(BEGIN)) {
-			// Assume it's the plain Base64 encoded ssh key without the "ssh-rsa" at the start
+			// Assume it's the plain Base64 encoded ssh key without the "ssh-rsa" at the
+			// start
 			return parseSSHPublicKey(key);
 		}
 
@@ -104,7 +106,7 @@ class RsaKeyHelper {
 	}
 
 	private static RSAPublicKey parseSSHPublicKey(String encKey) {
-		final byte[] PREFIX = new byte[] {0,0,0,7, 's','s','h','-','r','s','a'};
+		final byte[] PREFIX = new byte[] { 0, 0, 0, 7, 's', 's', 'h', '-', 'r', 's', 'a' };
 		ByteArrayInputStream in = new ByteArrayInputStream(b64Decode(utf8Encode(encKey)));
 
 		byte[] prefix = new byte[11];
@@ -126,8 +128,7 @@ class RsaKeyHelper {
 	static RSAPublicKey createPublicKey(BigInteger n, BigInteger e) {
 		try {
 			return (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new RSAPublicKeySpec(n, e));
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
 	}

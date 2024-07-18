@@ -7,8 +7,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.core.context.SecurityContextImpl;
 
-import com.wy.test.web.WebConstants;
-import com.wy.test.web.WebContext;
+import com.wy.test.core.web.WebConstants;
+import com.wy.test.core.web.WebContext;
 
 /**
  * SecurityContext Session for Request , use

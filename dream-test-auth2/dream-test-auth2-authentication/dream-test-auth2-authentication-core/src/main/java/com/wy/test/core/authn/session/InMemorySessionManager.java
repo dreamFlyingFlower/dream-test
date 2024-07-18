@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.entity.HistoryLogin;
+import com.wy.test.core.entity.HistoryLogin;
 
 public class InMemorySessionManager implements SessionManager {
 

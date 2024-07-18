@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>dream.flying.flower</groupId>
+		<artifactId>dream-test-auth2</artifactId>
+		<version>0.0.1</version>
+		<relativePath />
+	</parent>
+	<artifactId>dream-test-auth2-web-openapi</artifactId>
+	<name>dream-test-auth2-web-openapi</name>
+	<description>study for spring cloud security</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>dream.flying.flower</groupId>
+			<artifactId>dream-test-auth2-authentication-captcha</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>dream.flying.flower</groupId>
+			<artifactId>dream-test-auth2-authentication-provider</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>dream.flying.flower</groupId>
+			<artifactId>dream-test-auth2-authentication-sms</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>dream.flying.flower</groupId>
+			<artifactId>dream-test-auth2-protocol-oauth-2.0</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>dream.flying.flower</groupId>
+			<artifactId>dream-test-auth2-protocol-saml-2.0</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>dream.flying.flower</groupId>
+			<artifactId>dream-test-auth2-web-api-rest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>dream.flying.flower</groupId>
+			<artifactId>dream-test-auth2-web-api-scim</artifactId>
+		</dependency>
+	</dependencies>
+</project>

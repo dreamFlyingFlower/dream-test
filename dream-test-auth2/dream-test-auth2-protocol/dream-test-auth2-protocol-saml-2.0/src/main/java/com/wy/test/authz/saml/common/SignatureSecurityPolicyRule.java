@@ -20,11 +20,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
- * Rule to check that the message has been signed by an issuer that has credentials in the keystore.
+ * Rule to check that the message has been signed by an issuer that has
+ * credentials in the keystore.
  * 
- * We could use a SAMLProtocolMessageXMLSignatureSecurityPolicyRule, but, that relies on role info to be set (which we
- * will not be using). Also, we will insist that the message be signed and not rely on an additional rule to check the
- * isAuthenticated flag on the message context.
+ * We could use a SAMLProtocolMessageXMLSignatureSecurityPolicyRule, but, that
+ * relies on role info to be set (which we will not be using). Also, we will
+ * insist that the message be signed and not rely on an additional rule to check
+ * the isAuthenticated flag on the message context.
  */
 public class SignatureSecurityPolicyRule implements InitializingBean, SecurityPolicyRule {
 
@@ -87,7 +89,8 @@ public class SignatureSecurityPolicyRule implements InitializingBean, SecurityPo
 		logger.debug("Inbound issuer is {}", messageContext.getInboundMessageIssuer());
 		// https://localhost-dev-ed.my.salesforce.com
 		criteriaSet.add(new EntityIDCriteria(messageContext.getInboundMessageIssuer()));
-		// criteriaSet.add( new EntityIDCriteria("https://localhost-dev-ed.my.salesforce.com"));
+		// criteriaSet.add( new
+		// EntityIDCriteria("https://localhost-dev-ed.my.salesforce.com"));
 		criteriaSet.add(new UsageCriteria(UsageType.SIGNING));
 
 		try {

@@ -11,12 +11,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.AuthorizeBaseEndpoint;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.constants.ConstsBoolean;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.entity.Accounts;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.entity.apps.Apps;
+import com.wy.test.core.constants.ConstsBoolean;
+import com.wy.test.core.entity.Accounts;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.util.Instance;
 
 import io.swagger.v3.oas.annotations.Operation;

@@ -9,7 +9,7 @@ import org.dromara.mybatis.jpa.JpaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.wy.test.entity.Organizations;
+import com.wy.test.core.entity.Organizations;
 import com.wy.test.persistence.mapper.OrganizationsMapper;
 import com.wy.test.provision.ProvisionAction;
 import com.wy.test.provision.ProvisionService;

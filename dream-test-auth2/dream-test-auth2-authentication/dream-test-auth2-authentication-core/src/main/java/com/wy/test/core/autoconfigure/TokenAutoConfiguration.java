@@ -8,15 +8,15 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
 import com.nimbusds.jose.JOSEException;
-import com.wy.test.configuration.AuthJwkConfig;
-import com.wy.test.constants.ConstsPersistence;
 import com.wy.test.core.authn.jwt.AuthRefreshTokenService;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.jwt.CongressService;
 import com.wy.test.core.authn.jwt.InMemoryCongressService;
 import com.wy.test.core.authn.jwt.RedisCongressService;
-import com.wy.test.persistence.cache.MomentaryService;
-import com.wy.test.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.configuration.AuthJwkConfig;
+import com.wy.test.core.constants.ConstsPersistence;
+import com.wy.test.core.persistence.cache.MomentaryService;
+import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 
 @AutoConfiguration
 public class TokenAutoConfiguration implements InitializingBean {

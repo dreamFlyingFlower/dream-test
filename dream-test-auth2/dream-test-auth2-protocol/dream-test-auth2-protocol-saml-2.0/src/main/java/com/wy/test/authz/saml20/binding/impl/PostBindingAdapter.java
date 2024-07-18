@@ -32,9 +32,9 @@ import com.wy.test.authz.saml.common.AuthnRequestInfo;
 import com.wy.test.authz.saml.common.TrustResolver;
 import com.wy.test.authz.saml20.binding.BindingAdapter;
 import com.wy.test.authz.saml20.binding.ExtractBindingAdapter;
+import com.wy.test.core.entity.apps.AppsSAML20Details;
 import com.wy.test.crypto.keystore.KeyStoreLoader;
 import com.wy.test.crypto.keystore.KeyStoreUtil;
-import com.wy.test.entity.apps.AppsSAML20Details;
 
 public class PostBindingAdapter implements BindingAdapter, InitializingBean {
 
@@ -153,6 +153,7 @@ public class PostBindingAdapter implements BindingAdapter, InitializingBean {
 	/**
 	 * @param securityPolicyResolver the securityPolicyResolver to set
 	 */
+	@Override
 	public void setSecurityPolicyResolver(SecurityPolicyResolver securityPolicyResolver) {
 		this.securityPolicyResolver = securityPolicyResolver;
 	}
@@ -165,6 +166,7 @@ public class PostBindingAdapter implements BindingAdapter, InitializingBean {
 		return extractBindingAdapter.getKeyStoreLoader();
 	}
 
+	@Override
 	public Credential getSigningCredential() {
 		return signingCredential;
 	}
@@ -173,6 +175,7 @@ public class PostBindingAdapter implements BindingAdapter, InitializingBean {
 		this.signingCredential = signingCredential;
 	}
 
+	@Override
 	public Credential getSpSigningCredential() {
 		return spSigningCredential;
 	}
@@ -181,14 +184,17 @@ public class PostBindingAdapter implements BindingAdapter, InitializingBean {
 		this.spSigningCredential = spSigningCredential;
 	}
 
+	@Override
 	public AuthnRequestInfo getAuthnRequestInfo() {
 		return authnRequestInfo;
 	}
 
+	@Override
 	public void setAuthnRequestInfo(AuthnRequestInfo authnRequestInfo) {
 		this.authnRequestInfo = authnRequestInfo;
 	}
 
+	@Override
 	public void setRelayState(String relayState) {
 		this.relayState = relayState;
 	}

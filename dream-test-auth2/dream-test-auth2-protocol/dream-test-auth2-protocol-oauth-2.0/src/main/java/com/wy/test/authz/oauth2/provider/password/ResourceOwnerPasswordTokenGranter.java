@@ -17,7 +17,7 @@ import com.wy.test.authz.oauth2.provider.OAuth2RequestFactory;
 import com.wy.test.authz.oauth2.provider.TokenRequest;
 import com.wy.test.authz.oauth2.provider.token.AbstractTokenGranter;
 import com.wy.test.authz.oauth2.provider.token.AuthorizationServerTokenServices;
-import com.wy.test.entity.apps.oauth2.provider.ClientDetails;
+import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 
 /**
  * @author Dave Syer
@@ -30,7 +30,8 @@ public class ResourceOwnerPasswordTokenGranter extends AbstractTokenGranter {
 	private final AuthenticationManager authenticationManager;
 
 	public ResourceOwnerPasswordTokenGranter(AuthenticationManager authenticationManager,
-			AuthorizationServerTokenServices tokenServices, ClientDetailsService clientDetailsService, OAuth2RequestFactory requestFactory) {
+			AuthorizationServerTokenServices tokenServices, ClientDetailsService clientDetailsService,
+			OAuth2RequestFactory requestFactory) {
 		super(tokenServices, clientDetailsService, requestFactory, GRANT_TYPE);
 		this.authenticationManager = authenticationManager;
 	}
@@ -47,20 +48,19 @@ public class ResourceOwnerPasswordTokenGranter extends AbstractTokenGranter {
 		Authentication userAuth = new UsernamePasswordAuthenticationToken(username, password);
 		try {
 			userAuth = authenticationManager.authenticate(userAuth);
-		}
-		catch (AccountStatusException ase) {
-			//covers expired, locked, disabled cases (mentioned in section 5.2, draft 31)
+		} catch (AccountStatusException ase) {
+			// covers expired, locked, disabled cases (mentioned in section 5.2, draft 31)
 			throw new InvalidGrantException(ase.getMessage());
-		}
-		catch (BadCredentialsException e) {
-			// If the username/password are wrong the spec says we should send 400/invlid grant
+		} catch (BadCredentialsException e) {
+			// If the username/password are wrong the spec says we should send 400/invlid
+			// grant
 			throw new InvalidGrantException(e.getMessage());
 		}
 		if (userAuth == null || !userAuth.isAuthenticated()) {
 			throw new InvalidGrantException("Could not authenticate user: " + username);
 		}
-		
-		OAuth2Request storedOAuth2Request = getRequestFactory().createOAuth2Request(client, tokenRequest);		
+
+		OAuth2Request storedOAuth2Request = getRequestFactory().createOAuth2Request(client, tokenRequest);
 		return new OAuth2Authentication(storedOAuth2Request, userAuth);
 	}
 }

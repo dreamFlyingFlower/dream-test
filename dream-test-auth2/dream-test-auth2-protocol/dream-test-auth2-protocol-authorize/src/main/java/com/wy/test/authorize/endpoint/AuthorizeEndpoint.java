@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.constants.ConstsProtocols;
-import com.wy.test.entity.apps.Apps;
+import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.web.WebConstants;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.AppsCasDetailsService;
-import com.wy.test.web.WebConstants;
-import com.wy.test.web.WebContext;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

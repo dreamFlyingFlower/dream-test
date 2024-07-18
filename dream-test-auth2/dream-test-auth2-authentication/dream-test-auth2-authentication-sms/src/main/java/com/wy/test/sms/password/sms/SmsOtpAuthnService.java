@@ -5,11 +5,11 @@ import java.util.concurrent.TimeUnit;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.configuration.EmailConfig;
-import com.wy.test.constants.ConstsBoolean;
+import com.wy.test.core.configuration.EmailConfig;
+import com.wy.test.core.constants.ConstsBoolean;
+import com.wy.test.core.entity.EmailSenders;
+import com.wy.test.core.entity.SmsProvider;
 import com.wy.test.crypto.password.PasswordReciprocal;
-import com.wy.test.entity.EmailSenders;
-import com.wy.test.entity.SmsProvider;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.impl.MailOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.token.RedisOtpTokenStore;

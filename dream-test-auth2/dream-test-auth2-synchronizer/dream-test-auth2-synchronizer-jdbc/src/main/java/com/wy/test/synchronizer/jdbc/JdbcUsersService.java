@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.stereotype.Service;
 
-import com.wy.test.constants.ConstsStatus;
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.entity.UserInfo;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 import com.wy.test.util.StringUtils;
@@ -128,7 +128,7 @@ public class JdbcUsersService extends AbstractSynchronizerService implements ISy
 
 	static {
 		mapperList.add(new ColumnFieldMapper("id", "id", "String"));
-		mapperList.add(new ColumnFieldMapper("username", "userUame", "String"));
+		mapperList.add(new ColumnFieldMapper("username", "userName", "String"));
 		mapperList.add(new ColumnFieldMapper("picture", "picture", "String"));
 		mapperList.add(new ColumnFieldMapper("displayname", "displayName", "String"));
 		mapperList.add(new ColumnFieldMapper("nickname", "nickName", "String"));

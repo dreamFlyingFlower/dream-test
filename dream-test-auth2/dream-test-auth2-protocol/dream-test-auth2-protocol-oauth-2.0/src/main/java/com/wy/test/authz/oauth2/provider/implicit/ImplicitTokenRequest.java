@@ -15,7 +15,8 @@ public class ImplicitTokenRequest extends TokenRequest {
 	private OAuth2Request oauth2Request;
 
 	public ImplicitTokenRequest(TokenRequest tokenRequest, OAuth2Request oauth2Request) {
-		super(tokenRequest.getRequestParameters(), tokenRequest.getClientId(), tokenRequest.getScope(), tokenRequest.getGrantType());
+		super(tokenRequest.getRequestParameters(), tokenRequest.getClientId(), tokenRequest.getScope(),
+				tokenRequest.getGrantType());
 		this.oauth2Request = oauth2Request;
 	}
 

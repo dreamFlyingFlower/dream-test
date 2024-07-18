@@ -6,7 +6,8 @@ import com.wy.test.authz.oauth2.common.OAuth2AccessToken;
 import com.wy.test.authz.oauth2.provider.OAuth2Authentication;
 
 /**
- * Converter interface for token service implementations that store authentication data inside the token.
+ * Converter interface for token service implementations that store
+ * authentication data inside the token.
  * 
  * @author Dave Syer
  * 
@@ -20,7 +21,7 @@ public interface AccessTokenConverter {
 	final String EXP = "exp";
 
 	final String JTI = "jti";
-	
+
 	final String GRANT_TYPE = "grant_type";
 
 	final String ATI = "ati";
@@ -49,7 +50,8 @@ public interface AccessTokenConverter {
 	OAuth2AccessToken extractAccessToken(String value, Map<String, ?> map);
 
 	/**
-	 * Recover an {@link OAuth2Authentication} from the converted access token. Half the inverse of
+	 * Recover an {@link OAuth2Authentication} from the converted access token. Half
+	 * the inverse of
 	 * {@link #convertAccessToken(OAuth2AccessToken, OAuth2Authentication)}.
 	 * 
 	 * @param map information decoded from an access token

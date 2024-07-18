@@ -6,8 +6,8 @@ import java.util.HashMap;
 
 import org.springframework.security.core.Authentication;
 
-import com.wy.test.entity.apps.Apps;
-import com.wy.test.web.WebContext;
+import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.web.WebContext;
 
 public class Session implements Serializable {
 

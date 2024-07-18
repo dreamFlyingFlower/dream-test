@@ -10,7 +10,7 @@ import org.opensaml.ws.security.SecurityPolicyResolver;
 import org.opensaml.xml.security.credential.Credential;
 
 import com.wy.test.authz.saml.common.AuthnRequestInfo;
-import com.wy.test.entity.apps.AppsSAML20Details;
+import com.wy.test.core.entity.apps.AppsSAML20Details;
 
 /**
  * 

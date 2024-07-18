@@ -13,5 +13,4 @@ public interface JdbcListFactory {
 	 * @return a list of {@link T}
 	 */
 	<T> List<T> getList(String sql, Map<String, Object> parameters, RowMapper<T> rowMapper);
-
 }

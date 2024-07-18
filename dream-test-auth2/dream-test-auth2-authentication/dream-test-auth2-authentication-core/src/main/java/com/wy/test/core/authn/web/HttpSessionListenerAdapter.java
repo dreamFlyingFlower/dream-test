@@ -13,8 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 
 import com.wy.test.core.authn.SignPrincipal;
+import com.wy.test.core.web.WebConstants;
 import com.wy.test.util.DateUtils;
-import com.wy.test.web.WebConstants;
 
 @WebListener
 public class HttpSessionListenerAdapter implements HttpSessionListener {

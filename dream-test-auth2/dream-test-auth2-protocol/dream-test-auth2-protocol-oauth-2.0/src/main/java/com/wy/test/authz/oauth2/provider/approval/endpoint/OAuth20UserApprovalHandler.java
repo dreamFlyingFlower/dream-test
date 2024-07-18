@@ -8,12 +8,8 @@ import com.wy.test.authz.oauth2.provider.AuthorizationRequest;
 import com.wy.test.authz.oauth2.provider.ClientDetailsService;
 import com.wy.test.authz.oauth2.provider.ClientRegistrationException;
 import com.wy.test.authz.oauth2.provider.approval.ApprovalStoreUserApprovalHandler;
-import com.wy.test.entity.apps.oauth2.provider.ClientDetails;
+import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 
-/**
- * @author Dave Syer
- * 
- */
 public class OAuth20UserApprovalHandler extends ApprovalStoreUserApprovalHandler {
 
 	private boolean useApprovalStore = true;
@@ -25,6 +21,7 @@ public class OAuth20UserApprovalHandler extends ApprovalStoreUserApprovalHandler
 	 * 
 	 * @param clientDetailsService a client details service
 	 */
+	@Override
 	public void setClientDetailsService(ClientDetailsService clientDetailsService) {
 		this.clientDetailsService = clientDetailsService;
 		super.setClientDetailsService(clientDetailsService);
@@ -38,37 +35,38 @@ public class OAuth20UserApprovalHandler extends ApprovalStoreUserApprovalHandler
 	}
 
 	/**
-	 * Allows automatic approval for a white list of clients in the implicit grant case.
+	 * Allows automatic approval for a white list of clients in the implicit grant
+	 * case.
 	 * 
 	 * @param authorizationRequest The authorization request.
 	 * @param userAuthentication the current user authentication
 	 * 
-	 * @return An updated request if it has already been approved by the current user.
+	 * @return An updated request if it has already been approved by the current
+	 *         user.
 	 */
 	@Override
 	public AuthorizationRequest checkForPreApproval(AuthorizationRequest authorizationRequest,
 			Authentication userAuthentication) {
 
 		boolean approved = false;
-		// If we are allowed to check existing approvals this will short circuit the decision
+		// If we are allowed to check existing approvals this will short circuit the
+		// decision
 		if (useApprovalStore) {
 			authorizationRequest = super.checkForPreApproval(authorizationRequest, userAuthentication);
 			approved = authorizationRequest.isApproved();
-		}
-		else {
+		} else {
 			if (clientDetailsService != null) {
 				Collection<String> requestedScopes = authorizationRequest.getScope();
 				try {
-					ClientDetails client = clientDetailsService
-							.loadClientByClientId(authorizationRequest.getClientId(),true);
+					ClientDetails client =
+							clientDetailsService.loadClientByClientId(authorizationRequest.getClientId(), true);
 					for (String scope : requestedScopes) {
 						if (client.isAutoApprove(scope) || client.isAutoApprove("all")) {
 							approved = true;
 							break;
 						}
 					}
-				}
-				catch (ClientRegistrationException e) {
+				} catch (ClientRegistrationException e) {
 				}
 			}
 		}

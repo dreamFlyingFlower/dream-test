@@ -14,13 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authz.saml20.binding.ExtractBindingAdapter;
 import com.wy.test.authz.saml20.xml.SAML2ValidatorSuite;
-import com.wy.test.web.WebContext;
+import com.wy.test.core.web.WebContext;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,7 +40,7 @@ public class LogoutSamlEndpoint {
 
 	@Operation(summary = "SAML单点注销地址接口", description = "", method = "GET")
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "/logout/saml", method = RequestMethod.GET)
+	@GetMapping(value = "/logout/saml")
 	public ModelAndView samlRedirectLogout(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		SAMLMessageContext messageContext;
 		logger.debug("extract SAML Message .");

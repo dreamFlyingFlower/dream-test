@@ -29,16 +29,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.authz.saml20.metadata.MetadataDescriptorUtil;
-import com.wy.test.configuration.ApplicationConfig;
-import com.wy.test.constants.ConstsProtocols;
 import com.wy.test.core.authn.annotation.CurrentUser;
+import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.apps.AppsSAML20Details;
 import com.wy.test.crypto.ReciprocalUtils;
 import com.wy.test.crypto.cert.X509CertUtils;
 import com.wy.test.crypto.keystore.KeyStoreLoader;
 import com.wy.test.crypto.keystore.KeyStoreUtil;
 import com.wy.test.entity.Message;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.entity.apps.AppsSAML20Details;
 import com.wy.test.persistence.service.AppsSaml20DetailsService;
 
 @Controller

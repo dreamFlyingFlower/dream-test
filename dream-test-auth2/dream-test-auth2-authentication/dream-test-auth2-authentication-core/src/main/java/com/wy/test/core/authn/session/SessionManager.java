@@ -3,7 +3,7 @@ package com.wy.test.core.authn.session;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.wy.test.entity.HistoryLogin;
+import com.wy.test.core.entity.HistoryLogin;
 
 public interface SessionManager {
 

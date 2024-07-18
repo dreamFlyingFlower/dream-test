@@ -8,7 +8,7 @@ import javax.naming.directory.SearchResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.persistence.ldap.LdapUtils;
+import com.wy.test.core.persistence.ldap.LdapUtils;
 import com.wy.test.provider.authn.realm.IAuthenticationServer;
 
 public final class StandardLdapServer implements IAuthenticationServer {

@@ -9,12 +9,12 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.wy.test.configuration.ApplicationConfig;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.persistence.repository.LoginHistoryRepository;
-import com.wy.test.persistence.repository.LoginRepository;
-import com.wy.test.persistence.repository.PasswordPolicyValidator;
+import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.persistence.repository.LoginHistoryRepository;
+import com.wy.test.core.persistence.repository.LoginRepository;
+import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.provider.authn.provider.AuthenticationProviderFactory;
 import com.wy.test.provider.authn.provider.impl.MobileAuthenticationProvider;

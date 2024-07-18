@@ -4,7 +4,7 @@ import org.dromara.mybatis.jpa.JpaService;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.springframework.stereotype.Repository;
 
-import com.wy.test.entity.HistoryLogin;
+import com.wy.test.core.entity.HistoryLogin;
 import com.wy.test.persistence.mapper.HistoryLoginMapper;
 
 @Repository

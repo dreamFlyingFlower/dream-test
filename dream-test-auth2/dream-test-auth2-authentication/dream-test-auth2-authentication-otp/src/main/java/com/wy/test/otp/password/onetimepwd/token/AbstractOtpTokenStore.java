@@ -1,6 +1,6 @@
 package com.wy.test.otp.password.onetimepwd.token;
 
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.entity.UserInfo;
 
 public abstract class AbstractOtpTokenStore {
 

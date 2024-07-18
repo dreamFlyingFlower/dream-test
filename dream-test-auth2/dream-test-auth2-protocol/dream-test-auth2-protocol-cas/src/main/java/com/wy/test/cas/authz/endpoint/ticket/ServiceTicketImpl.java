@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.springframework.security.core.Authentication;
 
 import com.wy.test.cas.authz.endpoint.ticket.pgt.ProxyGrantingTicket;
-import com.wy.test.entity.apps.AppsCasDetails;
+import com.wy.test.core.entity.apps.AppsCasDetails;
 
 /**
  * Domain object representing a Service Ticket. A service ticket grants specific

@@ -8,18 +8,18 @@ package com.wy.test.authz.oauth2.common.exceptions;
 @SuppressWarnings("serial")
 public class SerializationException extends RuntimeException {
 
-  public SerializationException() {
-  }
+	public SerializationException() {
+	}
 
-  public SerializationException(String message) {
-    super(message);
-  }
+	public SerializationException(String message) {
+		super(message);
+	}
 
-  public SerializationException(String message, Throwable cause) {
-    super(message, cause);
-  }
+	public SerializationException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-  public SerializationException(Throwable cause) {
-    super(cause);
-  }
+	public SerializationException(Throwable cause) {
+		super(cause);
+	}
 }

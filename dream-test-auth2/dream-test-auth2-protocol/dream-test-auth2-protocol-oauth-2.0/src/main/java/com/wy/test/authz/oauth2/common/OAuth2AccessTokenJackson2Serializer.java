@@ -13,8 +13,12 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 /**
- * Provides the ability to serialize an {@link com.wy.test.authz.oauth2.common.OAuth2AccessToken} with jackson2 by implementing {@link com.fasterxml.jackson.databind.JsonDeserializer}.
- * Refer to {@link org.maxkey.authz.oauth2.common.OAuth2AccessTokenJackson1Deserializer} to learn more about the JSON format that is used.
+ * Provides the ability to serialize an
+ * {@link com.wy.test.authz.oauth2.common.OAuth2AccessToken} with jackson2 by
+ * implementing {@link com.fasterxml.jackson.databind.JsonDeserializer}. Refer
+ * to
+ * {@link org.maxkey.authz.oauth2.common.OAuth2AccessTokenJackson1Deserializer}
+ * to learn more about the JSON format that is used.
  *
  * @author Rob Winch
  * @author Brian Clozel
@@ -32,10 +36,10 @@ public final class OAuth2AccessTokenJackson2Serializer extends StdSerializer<OAu
 	}
 
 	@Override
-	public void serialize(OAuth2AccessToken token, JsonGenerator jgen, SerializerProvider provider) throws IOException,
-			JsonGenerationException {
+	public void serialize(OAuth2AccessToken token, JsonGenerator jgen, SerializerProvider provider)
+			throws IOException, JsonGenerationException {
 		jgen.writeStartObject();
-		if(token.getOAuth2Exception()==null) {
+		if (token.getOAuth2Exception() == null) {
 			jgen.writeStringField(OAuth2AccessToken.ACCESS_TOKEN, token.getValue());
 			jgen.writeStringField(OAuth2AccessToken.TOKEN_TYPE, token.getTokenType());
 			OAuth2RefreshToken refreshToken = token.getRefreshToken();
@@ -57,7 +61,7 @@ public final class OAuth2AccessTokenJackson2Serializer extends StdSerializer<OAu
 				}
 				jgen.writeStringField(OAuth2AccessToken.SCOPE, scopes.substring(0, scopes.length() - 1));
 			}
-		}else {
+		} else {
 			jgen.writeStringField(OAuth2AccessToken.ERROR, token.getOAuth2Exception().getOAuth2ErrorCode());
 			jgen.writeStringField(OAuth2AccessToken.ERROR_DESCRIPTION, token.getOAuth2Exception().getMessage());
 		}

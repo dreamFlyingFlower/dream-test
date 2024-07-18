@@ -5,14 +5,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.wy.test.configuration.ApplicationConfig;
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.entity.SocialsAssociate;
-import com.wy.test.entity.SocialsProvider;
+import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.entity.SocialsAssociate;
+import com.wy.test.core.entity.SocialsProvider;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.social.authn.support.socialsignon.service.SocialSignOnProviderService;
 import com.wy.test.social.authn.support.socialsignon.service.SocialsAssociateService;
-import com.wy.test.web.WebContext;
 
 import me.zhyd.oauth.model.AuthCallback;
 import me.zhyd.oauth.model.AuthResponse;

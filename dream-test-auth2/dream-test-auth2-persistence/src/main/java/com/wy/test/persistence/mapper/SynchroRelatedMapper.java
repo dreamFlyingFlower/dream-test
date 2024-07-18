@@ -3,7 +3,7 @@ package com.wy.test.persistence.mapper;
 import org.apache.ibatis.annotations.Update;
 import org.dromara.mybatis.jpa.IJpaMapper;
 
-import com.wy.test.entity.SynchroRelated;
+import com.wy.test.core.entity.SynchroRelated;
 
 public interface SynchroRelatedMapper extends IJpaMapper<SynchroRelated> {
 

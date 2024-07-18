@@ -19,11 +19,13 @@ import com.wy.test.authz.oauth2.provider.approval.Approval.ApprovalStatus;
 import com.wy.test.authz.oauth2.provider.token.TokenStore;
 
 /**
- * A {@link TokenStore} implementation that just reads data from the tokens themselves. Not really a store since it
- * never persists anything, and methods like {@link #getAccessToken(OAuth2Authentication)} always return null. But
- * nevertheless a useful tool since it translates access tokens to and from authentications. Use this wherever a
- * {@link TokenStore} is needed, but remember to use the same {@link JwtAccessTokenConverter} instance (or one with the same
- * verifier) as was used when the tokens were minted.
+ * A {@link TokenStore} implementation that just reads data from the tokens
+ * themselves. Not really a store since it never persists anything, and methods
+ * like {@link #getAccessToken(OAuth2Authentication)} always return null. But
+ * nevertheless a useful tool since it translates access tokens to and from
+ * authentications. Use this wherever a {@link TokenStore} is needed, but
+ * remember to use the same {@link JwtAccessTokenConverter} instance (or one
+ * with the same verifier) as was used when the tokens were minted.
  * 
  * @author Dave Syer
  *
@@ -35,7 +37,8 @@ public class JwtTokenStore implements TokenStore {
 	private ApprovalStore approvalStore;
 
 	/**
-	 * Create a JwtTokenStore with this token enhancer (should be shared with the DefaultTokenServices if used).
+	 * Create a JwtTokenStore with this token enhancer (should be shared with the
+	 * DefaultTokenServices if used).
 	 * 
 	 * @param jwtTokenEnhancer
 	 */
@@ -133,7 +136,8 @@ public class JwtTokenStore implements TokenStore {
 
 	@Override
 	public OAuth2AccessToken getAccessToken(OAuth2Authentication authentication) {
-		// We don't want to accidentally issue a token, and we have no way to reconstruct the refresh token
+		// We don't want to accidentally issue a token, and we have no way to
+		// reconstruct the refresh token
 		return null;
 	}
 

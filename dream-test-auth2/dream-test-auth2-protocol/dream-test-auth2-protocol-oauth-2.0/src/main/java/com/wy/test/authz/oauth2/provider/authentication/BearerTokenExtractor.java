@@ -12,9 +12,10 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 import com.wy.test.authz.oauth2.common.OAuth2AccessToken;
 
 /**
- * {@link TokenExtractor} that strips the authenticator from a bearer token request (with an Authorization header in the
- * form "Bearer <code><TOKEN></code>", or as a request parameter if that fails). The access token is the principal in
- * the authentication token that is extracted.
+ * {@link TokenExtractor} that strips the authenticator from a bearer token
+ * request (with an Authorization header in the form "Bearer
+ * <code><TOKEN></code>", or as a request parameter if that fails). The access
+ * token is the principal in the authentication token that is extracted.
  * 
  * @author Dave Syer
  * 
@@ -27,7 +28,8 @@ public class BearerTokenExtractor implements TokenExtractor {
 	public Authentication extract(HttpServletRequest request) {
 		String tokenValue = extractToken(request);
 		if (tokenValue != null) {
-			PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(tokenValue, "");
+			PreAuthenticatedAuthenticationToken authentication =
+					new PreAuthenticatedAuthenticationToken(tokenValue, "");
 			return authentication;
 		}
 		return null;
@@ -43,7 +45,7 @@ public class BearerTokenExtractor implements TokenExtractor {
 			token = request.getParameter(OAuth2AccessToken.ACCESS_TOKEN);
 			if (token == null) {
 				logger.debug("Token not found in request parameters.  Not an OAuth2 request.");
-			}else {
+			} else {
 				request.setAttribute(OAuth2AuthenticationDetails.ACCESS_TOKEN_TYPE, OAuth2AccessToken.BEARER_TYPE);
 			}
 		}
@@ -63,9 +65,10 @@ public class BearerTokenExtractor implements TokenExtractor {
 			String value = headers.nextElement();
 			if ((value.toLowerCase().startsWith(OAuth2AccessToken.BEARER_TYPE.toLowerCase()))) {
 				String authHeaderValue = value.substring(OAuth2AccessToken.BEARER_TYPE.length()).trim();
-				// Add this here for the auth details later. Would be better to change the signature of this method.
+				// Add this here for the auth details later. Would be better to change the
+				// signature of this method.
 				request.setAttribute(OAuth2AuthenticationDetails.ACCESS_TOKEN_TYPE,
-				value.substring(0, OAuth2AccessToken.BEARER_TYPE.length()).trim());
+						value.substring(0, OAuth2AccessToken.BEARER_TYPE.length()).trim());
 				int commaIndex = authHeaderValue.indexOf(',');
 				if (commaIndex > 0) {
 					authHeaderValue = authHeaderValue.substring(0, commaIndex);

@@ -8,15 +8,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
-import com.wy.test.configuration.ApplicationConfig;
-import com.wy.test.constants.ConstsLoginType;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.web.AuthorizationUtils;
+import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.constants.ConstsLoginType;
+import com.wy.test.core.web.WebConstants;
 import com.wy.test.crypto.ReciprocalUtils;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.util.DateUtils;
 import com.wy.test.util.JsonUtils;
-import com.wy.test.web.WebConstants;
 
 public class HttpKerberosEntryPoint implements AsyncHandlerInterceptor {
 

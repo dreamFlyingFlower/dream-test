@@ -3,10 +3,11 @@ package com.wy.test.authz.oauth2.provider;
 import com.wy.test.authz.oauth2.common.exceptions.InvalidScopeException;
 import com.wy.test.authz.oauth2.provider.endpoint.AuthorizationEndpoint;
 import com.wy.test.authz.oauth2.provider.endpoint.TokenEndpoint;
-import com.wy.test.entity.apps.oauth2.provider.ClientDetails;
+import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 
 /**
- * Validation interface for OAuth2 requests to the {@link AuthorizationEndpoint} and {@link TokenEndpoint}.
+ * Validation interface for OAuth2 requests to the {@link AuthorizationEndpoint}
+ * and {@link TokenEndpoint}.
  * 
  * @author Amanda Anganes
  *
@@ -20,8 +21,9 @@ public interface OAuth2RequestValidator {
 	 * @param client the client that is making the request
 	 * @throws InvalidScopeException if a requested scope is invalid
 	 */
-	public void validateScope(AuthorizationRequest authorizationRequest, ClientDetails client) throws InvalidScopeException;
-	
+	public void validateScope(AuthorizationRequest authorizationRequest, ClientDetails client)
+			throws InvalidScopeException;
+
 	/**
 	 * Ensure that the client has requested a valid set of scopes.
 	 * 
@@ -30,5 +32,5 @@ public interface OAuth2RequestValidator {
 	 * @throws InvalidScopeException if a requested scope is invalid
 	 */
 	public void validateScope(TokenRequest tokenRequest, ClientDetails client) throws InvalidScopeException;
-	
+
 }

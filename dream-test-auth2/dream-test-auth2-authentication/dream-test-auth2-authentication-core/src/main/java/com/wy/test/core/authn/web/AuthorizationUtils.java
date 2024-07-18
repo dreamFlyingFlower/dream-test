@@ -13,10 +13,10 @@ import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.web.WebConstants;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.util.AuthorizationHeaderUtils;
-import com.wy.test.web.WebConstants;
-import com.wy.test.web.WebContext;
 
 public class AuthorizationUtils {
 

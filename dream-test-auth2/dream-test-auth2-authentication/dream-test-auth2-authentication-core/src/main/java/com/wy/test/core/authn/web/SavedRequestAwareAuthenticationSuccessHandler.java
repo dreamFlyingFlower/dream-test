@@ -17,8 +17,8 @@ import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.util.StringUtils;
 
-import com.wy.test.web.WebConstants;
-import com.wy.test.web.WebContext;
+import com.wy.test.core.web.WebConstants;
+import com.wy.test.core.web.WebContext;
 
 /**
  * An authentication success strategy which can make use of the

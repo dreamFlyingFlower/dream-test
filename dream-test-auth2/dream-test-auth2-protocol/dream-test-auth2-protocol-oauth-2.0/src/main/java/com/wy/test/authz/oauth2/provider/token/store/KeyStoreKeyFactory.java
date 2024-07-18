@@ -10,8 +10,10 @@ import java.security.spec.RSAPublicKeySpec;
 import org.springframework.core.io.Resource;
 
 /**
- * Factory for RSA key pairs from a JKS keystore file. User provides a {@link Resource} location of a keystore file and
- * the password to unlock it, and the factory grabs the keypairs from the store by name (and optionally password).
+ * Factory for RSA key pairs from a JKS keystore file. User provides a
+ * {@link Resource} location of a keystore file and the password to unlock it,
+ * and the factory grabs the keypairs from the store by name (and optionally
+ * password).
  * 
  * @author Dave Syer
  *
@@ -49,8 +51,7 @@ public class KeyStoreKeyFactory {
 			RSAPublicKeySpec spec = new RSAPublicKeySpec(key.getModulus(), key.getPublicExponent());
 			PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(spec);
 			return new KeyPair(publicKey, key);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new IllegalStateException("Cannot load keys from store: " + resource, e);
 		}
 	}

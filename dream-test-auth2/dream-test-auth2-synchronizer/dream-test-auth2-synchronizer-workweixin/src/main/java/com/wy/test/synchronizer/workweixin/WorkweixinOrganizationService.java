@@ -4,15 +4,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.wy.test.constants.ConstsStatus;
-import com.wy.test.entity.Organizations;
-import com.wy.test.entity.SynchroRelated;
+import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.entity.Organizations;
+import com.wy.test.core.entity.SynchroRelated;
+import com.wy.test.core.web.HttpRequestAdapter;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 import com.wy.test.synchronizer.workweixin.entity.WorkWeixinDepts;
 import com.wy.test.synchronizer.workweixin.entity.WorkWeixinDeptsResponse;
 import com.wy.test.util.JsonUtils;
-import com.wy.test.web.HttpRequestAdapter;
 
 @Service
 public class WorkweixinOrganizationService extends AbstractSynchronizerService implements ISynchronizerService {

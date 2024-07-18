@@ -3,33 +3,55 @@ package com.wy.test.authz.oauth2.provider.wellknown;
 import java.util.Set;
 
 public class OpenidConfiguration {
+
 	String client_id;
+
 	String issuer;
+
 	String authorization_endpoint;
+
 	String token_endpoint;
+
 	String userinfo_endpoint;
+
 	String registration_endpoint;
+
 	String jwks_uri;
+
 	Set<String> response_types_supported;
+
 	Set<String> response_modes_supported;
+
 	Set<String> grant_types_supported;
+
 	Set<String> subject_types_supported;
+
 	Set<String> id_token_signing_alg_values_supported;
 
 	Set<String> scopes_supported;
+
 	Set<String> token_endpoint_auth_methods_supported;
+
 	Set<String> claims_supported;
+
 	String introspection_endpoint;
+
 	Set<String> introspection_endpoint_auth_methods_supported;
+
 	String revocation_endpoint;
+
 	Set<String> revocation_endpoint_auth_methods_supported;
+
 	String end_session_endpoint;
+
 	boolean request_parameter_supported;
+
 	Set<String> request_object_signing_alg_values_supported;
+
 	Set<String> backchannel_token_delivery_modes_supported;
+
 	Set<String> backchannel_authentication_request_signing_alg_values_supported;
 
-	
 	public String getClient_id() {
 		return client_id;
 	}
@@ -179,8 +201,7 @@ public class OpenidConfiguration {
 		return revocation_endpoint_auth_methods_supported;
 	}
 
-	public void setRevocation_endpoint_auth_methods_supported(
-			Set<String> revocation_endpoint_auth_methods_supported) {
+	public void setRevocation_endpoint_auth_methods_supported(Set<String> revocation_endpoint_auth_methods_supported) {
 		this.revocation_endpoint_auth_methods_supported = revocation_endpoint_auth_methods_supported;
 	}
 
@@ -204,8 +225,8 @@ public class OpenidConfiguration {
 		return request_object_signing_alg_values_supported;
 	}
 
-	public void setRequest_object_signing_alg_values_supported(
-			Set<String> request_object_signing_alg_values_supported) {
+	public void
+			setRequest_object_signing_alg_values_supported(Set<String> request_object_signing_alg_values_supported) {
 		this.request_object_signing_alg_values_supported = request_object_signing_alg_values_supported;
 	}
 
@@ -213,8 +234,7 @@ public class OpenidConfiguration {
 		return backchannel_token_delivery_modes_supported;
 	}
 
-	public void setBackchannel_token_delivery_modes_supported(
-			Set<String> backchannel_token_delivery_modes_supported) {
+	public void setBackchannel_token_delivery_modes_supported(Set<String> backchannel_token_delivery_modes_supported) {
 		this.backchannel_token_delivery_modes_supported = backchannel_token_delivery_modes_supported;
 	}
 
@@ -224,7 +244,8 @@ public class OpenidConfiguration {
 
 	public void setBackchannel_authentication_request_signing_alg_values_supported(
 			Set<String> backchannel_authentication_request_signing_alg_values_supported) {
-		this.backchannel_authentication_request_signing_alg_values_supported = backchannel_authentication_request_signing_alg_values_supported;
+		this.backchannel_authentication_request_signing_alg_values_supported =
+				backchannel_authentication_request_signing_alg_values_supported;
 	}
 
 	public OpenidConfiguration() {

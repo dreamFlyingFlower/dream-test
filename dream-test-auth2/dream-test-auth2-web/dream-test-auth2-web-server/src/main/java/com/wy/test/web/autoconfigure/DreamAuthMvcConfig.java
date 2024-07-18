@@ -14,9 +14,9 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.wy.test.configuration.ApplicationConfig;
 import com.wy.test.core.authn.web.CurrentUserMethodArgumentResolver;
 import com.wy.test.core.authn.web.interceptor.PermissionInterceptor;
+import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.provider.authn.support.basic.BasicEntryPoint;
 import com.wy.test.provider.authn.support.httpheader.HttpHeaderEntryPoint;
@@ -66,12 +66,11 @@ public class DreamAuthMvcConfig implements WebMvcConfigurer {
 		_logger.debug("add templates");
 		registry.addResourceHandler("/templates/**").addResourceLocations("classpath:/templates/");
 
-		_logger.debug("add swagger");
-		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-
 		_logger.debug("add knife4j");
 		registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
+
+		_logger.debug("add swagger");
+		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
 		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
 
 		_logger.debug("add Resource Handler finished .");

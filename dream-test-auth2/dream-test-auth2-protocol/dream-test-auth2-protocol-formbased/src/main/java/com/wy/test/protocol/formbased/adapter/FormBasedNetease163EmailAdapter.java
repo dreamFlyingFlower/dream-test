@@ -3,8 +3,8 @@ package com.wy.test.protocol.formbased.adapter;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.constants.ConstsBoolean;
-import com.wy.test.entity.apps.AppsFormBasedDetails;
+import com.wy.test.core.constants.ConstsBoolean;
+import com.wy.test.core.entity.apps.AppsFormBasedDetails;
 
 public class FormBasedNetease163EmailAdapter extends AbstractAuthorizeAdapter {
 

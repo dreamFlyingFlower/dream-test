@@ -18,11 +18,12 @@ import com.wy.test.authz.oauth2.provider.OAuth2Request;
 import com.wy.test.authz.oauth2.provider.OAuth2RequestFactory;
 import com.wy.test.authz.oauth2.provider.SecurityContextAccessor;
 import com.wy.test.authz.oauth2.provider.TokenRequest;
-import com.wy.test.entity.apps.oauth2.provider.ClientDetails;
+import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 
 /**
- * Default implementation of {@link OAuth2RequestFactory} which initializes fields from the parameters map, validates
- * grant types and scopes, and fills in scopes with the default values from the client if they are missing.
+ * Default implementation of {@link OAuth2RequestFactory} which initializes
+ * fields from the parameters map, validates grant types and scopes, and fills
+ * in scopes with the default values from the client if they are missing.
  * 
  * @author Dave Syer
  * @author Amanda Anganes
@@ -48,8 +49,9 @@ public class DefaultOAuth2RequestFactory implements OAuth2RequestFactory {
 	}
 
 	/**
-	 * Flag to indicate that scopes should be interpreted as valid authorities. No scopes will be granted to a user
-	 * unless they are permitted as a granted authority to that user.
+	 * Flag to indicate that scopes should be interpreted as valid authorities. No
+	 * scopes will be granted to a user unless they are permitted as a granted
+	 * authority to that user.
 	 * 
 	 * @param checkUserScopes the checkUserScopes to set (default false)
 	 */
@@ -57,50 +59,53 @@ public class DefaultOAuth2RequestFactory implements OAuth2RequestFactory {
 		this.checkUserScopes = checkUserScopes;
 	}
 
+	@Override
 	public AuthorizationRequest createAuthorizationRequest(Map<String, String> authorizationParameters) {
 
 		String clientId = authorizationParameters.get(OAuth2Constants.PARAMETER.CLIENT_ID);
 		String state = authorizationParameters.get(OAuth2Constants.PARAMETER.STATE);
 		String redirectUri = authorizationParameters.get(OAuth2Constants.PARAMETER.REDIRECT_URI);
-		//oauth 2.1 PKCE
+		// oauth 2.1 PKCE
 		String codeChallenge = authorizationParameters.get(OAuth2Constants.PARAMETER.CODE_CHALLENGE);
 		String codeChallengeMethod = authorizationParameters.get(OAuth2Constants.PARAMETER.CODE_CHALLENGE_METHOD);
-		Set<String> responseTypes = OAuth2Utils.parseParameterList(authorizationParameters
-				.get(OAuth2Constants.PARAMETER.RESPONSE_TYPE));
+		Set<String> responseTypes =
+				OAuth2Utils.parseParameterList(authorizationParameters.get(OAuth2Constants.PARAMETER.RESPONSE_TYPE));
 
 		Set<String> scopes = extractScopes(authorizationParameters, clientId);
-		
-		AuthorizationRequest request = new AuthorizationRequest(authorizationParameters,
-				Collections.<String, String> emptyMap(), clientId, scopes, null, null, false, state, redirectUri,
-				responseTypes,codeChallenge,codeChallengeMethod);
 
-		ClientDetails clientDetails = clientDetailsService.loadClientByClientId(clientId,true);		
+		AuthorizationRequest request = new AuthorizationRequest(authorizationParameters,
+				Collections.<String, String>emptyMap(), clientId, scopes, null, null, false, state, redirectUri,
+				responseTypes, codeChallenge, codeChallengeMethod);
+
+		ClientDetails clientDetails = clientDetailsService.loadClientByClientId(clientId, true);
 		request.setResourceIdsAndAuthoritiesFromClientDetails(clientDetails);
 
 		return request;
 
 	}
 
+	@Override
 	public OAuth2Request createOAuth2Request(AuthorizationRequest request) {
 		return request.createOAuth2Request();
 	}
 
+	@Override
 	public TokenRequest createTokenRequest(Map<String, String> requestParameters, ClientDetails authenticatedClient) {
 
 		String clientId = requestParameters.get(OAuth2Constants.PARAMETER.CLIENT_ID);
 		if (clientId == null) {
-			// if the clientId wasn't passed in in the map, we add pull it from the authenticated client object
+			// if the clientId wasn't passed in in the map, we add pull it from the
+			// authenticated client object
 			clientId = authenticatedClient.getClientId();
-		}
-		else {
+		} else {
 			// otherwise, make sure that they match
 			if (!clientId.equals(authenticatedClient.getClientId())) {
 				throw new InvalidClientException("Given client ID does not match authenticated client");
 			}
 		}
 		String grantType = requestParameters.get(OAuth2Constants.PARAMETER.GRANT_TYPE);
-		if(StringUtils.isBlank(grantType)) {
-			//default client_credentials
+		if (StringUtils.isBlank(grantType)) {
+			// default client_credentials
 			grantType = OAuth2Constants.PARAMETER.GRANT_TYPE_CLIENT_CREDENTIALS;
 		}
 
@@ -110,23 +115,27 @@ public class DefaultOAuth2RequestFactory implements OAuth2RequestFactory {
 		return tokenRequest;
 	}
 
+	@Override
 	public TokenRequest createTokenRequest(AuthorizationRequest authorizationRequest, String grantType) {
 		TokenRequest tokenRequest = new TokenRequest(authorizationRequest.getRequestParameters(),
 				authorizationRequest.getClientId(), authorizationRequest.getScope(), grantType);
 		return tokenRequest;
 	}
 
+	@Override
 	public OAuth2Request createOAuth2Request(ClientDetails client, TokenRequest tokenRequest) {
 		return tokenRequest.createOAuth2Request(client);
 	}
 
 	private Set<String> extractScopes(Map<String, String> requestParameters, String clientId) {
 		Set<String> scopes = OAuth2Utils.parseParameterList(requestParameters.get(OAuth2Constants.PARAMETER.SCOPE));
-		ClientDetails clientDetails = clientDetailsService.loadClientByClientId(clientId,true);
+		ClientDetails clientDetails = clientDetailsService.loadClientByClientId(clientId, true);
 
 		if ((scopes == null || scopes.isEmpty())) {
-			// If no scopes are specified in the incoming data, use the default values registered with the client
-			// (the spec allows us to choose between this option and rejecting the request completely, so we'll take the
+			// If no scopes are specified in the incoming data, use the default values
+			// registered with the client
+			// (the spec allows us to choose between this option and rejecting the request
+			// completely, so we'll take the
 			// least obnoxious choice as a default).
 			scopes = clientDetails.getScope();
 		}

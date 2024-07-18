@@ -12,59 +12,62 @@ import java.io.Serializable;
  */
 public class DefaultOAuth2RefreshToken implements Serializable, OAuth2RefreshToken {
 
-    private static final long serialVersionUID = 8349970621900575838L;
+	private static final long serialVersionUID = 8349970621900575838L;
 
-    private String value;
+	private String value;
 
-    /**
-     * Create a new refresh token.
-     */
-    @JsonCreator
-    public DefaultOAuth2RefreshToken(String value) {
-        this.value = value;
-    }
-    
-    /**
-     * Default constructor for JPA and other serialization tools.
-     */
-    @SuppressWarnings("unused")
-    private DefaultOAuth2RefreshToken() {
-        this(null);
-    }
+	/**
+	 * Create a new refresh token.
+	 */
+	@JsonCreator
+	public DefaultOAuth2RefreshToken(String value) {
+		this.value = value;
+	}
 
-    /* (non-Javadoc)
-     * @see org.springframework.security.oauth2.common.IFOO#getValue()
-     */
-    @JsonValue
-    public String getValue() {
-        return value;
-    }
+	/**
+	 * Default constructor for JPA and other serialization tools.
+	 */
+	@SuppressWarnings("unused")
+	private DefaultOAuth2RefreshToken() {
+		this(null);
+	}
 
-    @Override
-    public String toString() {
-        return getValue();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.springframework.security.oauth2.common.IFOO#getValue()
+	 */
+	@Override
+	@JsonValue
+	public String getValue() {
+		return value;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof DefaultOAuth2RefreshToken)) {
-            return false;
-        }
+	@Override
+	public String toString() {
+		return getValue();
+	}
 
-        DefaultOAuth2RefreshToken that = (DefaultOAuth2RefreshToken) o;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof DefaultOAuth2RefreshToken)) {
+			return false;
+		}
 
-        if (value != null ? !value.equals(that.value) : that.value != null) {
-            return false;
-        }
+		DefaultOAuth2RefreshToken that = (DefaultOAuth2RefreshToken) o;
 
-        return true;
-    }
+		if (value != null ? !value.equals(that.value) : that.value != null) {
+			return false;
+		}
 
-    @Override
-    public int hashCode() {
-        return value != null ? value.hashCode() : 0;
-    }
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		return value != null ? value.hashCode() : 0;
+	}
 }

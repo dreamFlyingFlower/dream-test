@@ -17,6 +17,7 @@
 	<modules>
 		<module>dream-test-auth2-web-gateway</module>
 		<module>dream-test-auth2-web-mgt</module>
+		<module>dream-test-auth2-web-openapi</module>
 		<module>dream-test-auth2-web-server</module>
 	</modules>
 </project>

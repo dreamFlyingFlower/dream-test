@@ -8,9 +8,6 @@ import com.wy.test.authz.oauth2.provider.OAuth2Authentication;
 
 /**
  * A composite token enhancer that loops over its delegate enhancers.
- * 
- * @author Dave Syer
- * 
  */
 public class TokenEnhancerChain implements TokenEnhancer {
 
@@ -24,11 +21,13 @@ public class TokenEnhancerChain implements TokenEnhancer {
 	}
 
 	/**
-	 * Loop over the {@link #setTokenEnhancers(List) delegates} passing the result into the next member of the chain.
+	 * Loop over the {@link #setTokenEnhancers(List) delegates} passing the result
+	 * into the next member of the chain.
 	 * 
 	 * @see com.wy.test.authz.oauth2.provider.token.TokenEnhancer#enhance(com.wy.test.authz.oauth2.common.OAuth2AccessToken,
-	 * com.wy.test.authz.oauth2.provider.OAuth2Authentication)
+	 *      com.wy.test.authz.oauth2.provider.OAuth2Authentication)
 	 */
+	@Override
 	public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
 		OAuth2AccessToken result = accessToken;
 		for (TokenEnhancer enhancer : delegates) {

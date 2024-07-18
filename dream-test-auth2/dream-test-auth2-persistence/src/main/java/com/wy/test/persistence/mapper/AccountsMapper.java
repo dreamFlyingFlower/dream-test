@@ -7,9 +7,9 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.dromara.mybatis.jpa.IJpaMapper;
 
-import com.wy.test.entity.Accounts;
-import com.wy.test.entity.AccountsStrategy;
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.entity.Accounts;
+import com.wy.test.core.entity.AccountsStrategy;
+import com.wy.test.core.entity.UserInfo;
 
 public interface AccountsMapper extends IJpaMapper<Accounts> {
 

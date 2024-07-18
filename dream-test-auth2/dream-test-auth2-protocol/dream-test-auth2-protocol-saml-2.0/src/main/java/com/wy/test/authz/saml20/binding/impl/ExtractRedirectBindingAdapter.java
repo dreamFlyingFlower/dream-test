@@ -27,6 +27,7 @@ public class ExtractRedirectBindingAdapter extends ExtractPostBindingAdapter {
 		this.securityPolicyResolver = securityPolicyResolver;
 	}
 
+	@Override
 	public void buildSecurityPolicyResolver(KeyStore trustKeyStore) {
 
 		TrustResolver trustResolver = new TrustResolver(trustKeyStore, keyStoreLoader.getEntityName(),

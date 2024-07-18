@@ -8,10 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.wy.test.entity.Organizations;
-import com.wy.test.entity.SocialsAssociate;
-import com.wy.test.entity.SynchroRelated;
-import com.wy.test.entity.Synchronizers;
+import com.wy.test.core.entity.Organizations;
+import com.wy.test.core.entity.SocialsAssociate;
+import com.wy.test.core.entity.SynchroRelated;
+import com.wy.test.core.entity.Synchronizers;
 import com.wy.test.persistence.service.HistorySynchronizerService;
 import com.wy.test.persistence.service.OrganizationsService;
 import com.wy.test.persistence.service.SocialsAssociatesService;

@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.wy.test.constants.ConstsStatus;
-import com.wy.test.entity.Institutions;
-import com.wy.test.entity.Roles;
+import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.entity.Institutions;
+import com.wy.test.core.entity.Roles;
 import com.wy.test.persistence.mapper.RolesMapper;
 import com.wy.test.util.StringUtils;
 

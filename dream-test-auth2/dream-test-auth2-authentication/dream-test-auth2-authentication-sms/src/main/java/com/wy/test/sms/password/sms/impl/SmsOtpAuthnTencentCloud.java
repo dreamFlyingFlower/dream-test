@@ -9,7 +9,7 @@ import com.tencentcloudapi.common.profile.HttpProfile;
 import com.tencentcloudapi.sms.v20190711.SmsClient;
 import com.tencentcloudapi.sms.v20190711.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20190711.models.SendSmsResponse;
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.entity.UserInfo;
 import com.wy.test.sms.password.sms.SmsOtpAuthn;
 
 /**

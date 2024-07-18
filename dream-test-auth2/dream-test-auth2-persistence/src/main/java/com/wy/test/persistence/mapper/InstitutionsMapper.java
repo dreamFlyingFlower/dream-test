@@ -3,8 +3,8 @@ package com.wy.test.persistence.mapper;
 import org.apache.ibatis.annotations.Select;
 import org.dromara.mybatis.jpa.IJpaMapper;
 
-import com.wy.test.constants.ConstsStatus;
-import com.wy.test.entity.Institutions;
+import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.entity.Institutions;
 
 public interface InstitutionsMapper extends IJpaMapper<Institutions> {
 

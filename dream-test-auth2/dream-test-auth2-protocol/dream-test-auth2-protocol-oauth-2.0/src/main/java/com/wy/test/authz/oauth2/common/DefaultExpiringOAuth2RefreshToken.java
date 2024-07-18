@@ -2,9 +2,6 @@ package com.wy.test.authz.oauth2.common;
 
 import java.util.Date;
 
-/**
- * @author Ryan Heaton
- */
 public class DefaultExpiringOAuth2RefreshToken extends DefaultOAuth2RefreshToken implements ExpiringOAuth2RefreshToken {
 
 	private static final long serialVersionUID = 3449554332764129719L;
@@ -24,8 +21,8 @@ public class DefaultExpiringOAuth2RefreshToken extends DefaultOAuth2RefreshToken
 	 * 
 	 * @return The instant the token expires.
 	 */
+	@Override
 	public Date getExpiration() {
 		return expiration;
 	}
-
 }

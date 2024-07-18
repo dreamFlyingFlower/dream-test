@@ -20,12 +20,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 
-import com.wy.test.constants.ConstsBoolean;
-import com.wy.test.constants.ldap.ActiveDirectoryUser;
-import com.wy.test.entity.ExtraAttr;
-import com.wy.test.entity.ExtraAttrs;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.entity.apps.AppsSAML20Details;
+import com.wy.test.core.constants.ConstsBoolean;
+import com.wy.test.core.constants.ldap.ActiveDirectoryUser;
+import com.wy.test.core.entity.ExtraAttr;
+import com.wy.test.core.entity.ExtraAttrs;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.apps.AppsSAML20Details;
 
 public class AttributeStatementGenerator {
 

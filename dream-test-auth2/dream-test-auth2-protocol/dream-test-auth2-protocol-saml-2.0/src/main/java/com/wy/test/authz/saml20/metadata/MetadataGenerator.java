@@ -316,7 +316,8 @@ public class MetadataGenerator {
 
 		signKeyDescriptor.setUse(UsageType.SIGNING); // Set usage
 
-		// Generating key info. The element will contain the public key. The key is used to by the IDP to verify
+		// Generating key info. The element will contain the public key. The key is used
+		// to by the IDP to verify
 		// signatures
 		try {
 			signKeyDescriptor.setKeyInfo(getKeyInfoGenerator().generate(signingCredential));
@@ -332,7 +333,8 @@ public class MetadataGenerator {
 
 		encryptionKeyDescriptor.setUse(UsageType.ENCRYPTION);
 
-		// Generating key info. The element will contain the public key. The key is used to by the IDP to encrypt data
+		// Generating key info. The element will contain the public key. The key is used
+		// to by the IDP to encrypt data
 		try {
 			encryptionKeyDescriptor.setKeyInfo(getKeyInfoGenerator().generate(signingCredential));
 		} catch (SecurityException e) {

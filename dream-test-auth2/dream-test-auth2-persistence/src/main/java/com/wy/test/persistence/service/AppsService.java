@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.entity.apps.Apps;
-import com.wy.test.entity.apps.UserApps;
+import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.entity.apps.UserApps;
 import com.wy.test.persistence.mapper.AppsMapper;
 
 @Repository

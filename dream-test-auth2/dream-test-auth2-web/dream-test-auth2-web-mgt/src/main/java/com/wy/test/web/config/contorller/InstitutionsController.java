@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.entity.Institutions;
+import com.wy.test.core.entity.Institutions;
+import com.wy.test.core.entity.UserInfo;
 import com.wy.test.entity.Message;
-import com.wy.test.entity.UserInfo;
 import com.wy.test.persistence.service.InstitutionsService;
 
 @Controller

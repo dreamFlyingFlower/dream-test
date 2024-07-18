@@ -5,8 +5,8 @@ import java.util.Date;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
+import com.wy.test.core.entity.apps.AppsFormBasedDetails;
 import com.wy.test.crypto.DigestUtils;
-import com.wy.test.entity.apps.AppsFormBasedDetails;
 
 public class FormBasedNeteaseNoteYoudaoAdapter extends AbstractAuthorizeAdapter {
 

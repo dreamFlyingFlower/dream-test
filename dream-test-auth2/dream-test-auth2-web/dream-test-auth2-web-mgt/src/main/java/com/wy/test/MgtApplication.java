@@ -13,8 +13,8 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.wy.test.configuration.ApplicationConfig;
-import com.wy.test.web.InitializeContext;
+import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.web.InitializeContext;
 
 @ComponentScan(basePackages = { "org.maxkey.authn", "org.maxkey.configuration", "org.maxkey.entity",
 		"org.maxkey.entity.apps", "org.maxkey.entity.userinfo", "org.maxkey.web.apis.identity.kafka",

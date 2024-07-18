@@ -19,10 +19,11 @@ import com.wy.test.authz.oauth2.provider.OAuth2Authentication;
 import com.wy.test.authz.oauth2.provider.OAuth2Request;
 import com.wy.test.authz.oauth2.provider.OAuth2RequestFactory;
 import com.wy.test.authz.oauth2.provider.token.TokenStore;
-import com.wy.test.entity.apps.oauth2.provider.ClientDetails;
+import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 
 /**
- * A user approval handler that remembers approval decisions by consulting existing tokens.
+ * A user approval handler that remembers approval decisions by consulting
+ * existing tokens.
  * 
  * @author Dave Syer
  * 
@@ -32,11 +33,11 @@ public class TokenStoreUserApprovalHandler implements UserApprovalHandler, Initi
 	private static Log logger = LogFactory.getLog(TokenStoreUserApprovalHandler.class);
 
 	private String approvalParameter = OAuth2Constants.PARAMETER.USER_OAUTH_APPROVAL;
-	
+
 	private TokenStore tokenStore;
-	
+
 	private ClientDetailsService clientDetailsService;
-	
+
 	/**
 	 * Service to load client details (optional) for auto approval checks.
 	 * 
@@ -61,20 +62,20 @@ public class TokenStoreUserApprovalHandler implements UserApprovalHandler, Initi
 	}
 
 	private OAuth2RequestFactory requestFactory;
-	
+
 	public void setRequestFactory(OAuth2RequestFactory requestFactory) {
 		this.requestFactory = requestFactory;
 	}
-	
+
 	@Override
 	public void afterPropertiesSet() {
 		Assert.state(tokenStore != null, "TokenStore must be provided");
 		Assert.state(requestFactory != null, "OAuth2RequestFactory must be provided");
 	}
-	
+
 	/**
-	 * Basic implementation just requires the authorization request to be explicitly approved and the user to be
-	 * authenticated.
+	 * Basic implementation just requires the authorization request to be explicitly
+	 * approved and the user to be authenticated.
 	 * 
 	 * @param authorizationRequest The authorization request.
 	 * @param userAuthentication the current user authentication
@@ -87,15 +88,16 @@ public class TokenStoreUserApprovalHandler implements UserApprovalHandler, Initi
 	}
 
 	@Override
-	public AuthorizationRequest checkForPreApproval(AuthorizationRequest authorizationRequest, Authentication userAuthentication) {
-		
+	public AuthorizationRequest checkForPreApproval(AuthorizationRequest authorizationRequest,
+			Authentication userAuthentication) {
+
 		boolean approved = false;
-		
+
 		String clientId = authorizationRequest.getClientId();
 		Set<String> scopes = authorizationRequest.getScope();
-		if (clientDetailsService!=null) {
+		if (clientDetailsService != null) {
 			try {
-				ClientDetails client = clientDetailsService.loadClientByClientId(clientId,true);
+				ClientDetails client = clientDetailsService.loadClientByClientId(clientId, true);
 				approved = true;
 				for (String scope : scopes) {
 					if (!client.isAutoApprove(scope)) {
@@ -106,14 +108,13 @@ public class TokenStoreUserApprovalHandler implements UserApprovalHandler, Initi
 					authorizationRequest.setApproved(true);
 					return authorizationRequest;
 				}
-			}
-			catch (ClientRegistrationException e) {
+			} catch (ClientRegistrationException e) {
 				logger.warn("Client registration problem prevent autoapproval check for client=" + clientId);
-			}		
+			}
 		}
-		
+
 		OAuth2Request storedOAuth2Request = requestFactory.createOAuth2Request(authorizationRequest);
-		
+
 		OAuth2Authentication authentication = new OAuth2Authentication(storedOAuth2Request, userAuthentication);
 		if (logger.isDebugEnabled()) {
 			StringBuilder builder = new StringBuilder("Looking up existing token for ");
@@ -129,19 +130,19 @@ public class TokenStoreUserApprovalHandler implements UserApprovalHandler, Initi
 			logger.debug("User already approved with token=" + accessToken);
 			// A token was already granted and is still valid, so this is already approved
 			approved = true;
-		}
-		else {
+		} else {
 			logger.debug("Checking explicit approval");
 			approved = userAuthentication.isAuthenticated() && approved;
 		}
-		
+
 		authorizationRequest.setApproved(approved);
 
 		return authorizationRequest;
 	}
 
 	@Override
-	public AuthorizationRequest updateAfterApproval(AuthorizationRequest authorizationRequest, Authentication userAuthentication) {
+	public AuthorizationRequest updateAfterApproval(AuthorizationRequest authorizationRequest,
+			Authentication userAuthentication) {
 		Map<String, String> approvalParameters = authorizationRequest.getApprovalParameters();
 		String flag = approvalParameters.get(approvalParameter);
 		boolean approved = flag != null && flag.toLowerCase().equals("true");

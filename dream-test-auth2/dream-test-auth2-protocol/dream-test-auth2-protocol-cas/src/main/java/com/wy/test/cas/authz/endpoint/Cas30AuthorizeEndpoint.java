@@ -20,11 +20,11 @@ import com.wy.test.cas.authz.endpoint.ticket.ProxyGrantingTicketIOUImpl;
 import com.wy.test.cas.authz.endpoint.ticket.ProxyGrantingTicketImpl;
 import com.wy.test.cas.authz.endpoint.ticket.ProxyTicketImpl;
 import com.wy.test.cas.authz.endpoint.ticket.Ticket;
-import com.wy.test.constants.ConstsBoolean;
 import com.wy.test.core.authn.SignPrincipal;
+import com.wy.test.core.constants.ConstsBoolean;
+import com.wy.test.core.web.HttpResponseConstants;
 import com.wy.test.util.Instance;
 import com.wy.test.util.StringUtils;
-import com.wy.test.web.HttpResponseConstants;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -6,7 +6,7 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.web.HttpResponseConstants;
+import com.wy.test.core.web.HttpResponseConstants;
 
 public class ServiceResponseBuilder extends CasServiceResponse {
 

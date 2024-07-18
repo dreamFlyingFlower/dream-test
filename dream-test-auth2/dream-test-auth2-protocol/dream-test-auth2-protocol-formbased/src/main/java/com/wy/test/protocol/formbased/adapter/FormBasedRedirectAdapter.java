@@ -5,10 +5,10 @@ import java.time.Instant;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.constants.ConstsBoolean;
+import com.wy.test.core.constants.ConstsBoolean;
+import com.wy.test.core.entity.apps.AppsFormBasedDetails;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.crypto.DigestUtils;
-import com.wy.test.entity.apps.AppsFormBasedDetails;
-import com.wy.test.web.WebContext;
 
 public class FormBasedRedirectAdapter extends AbstractAuthorizeAdapter {
 

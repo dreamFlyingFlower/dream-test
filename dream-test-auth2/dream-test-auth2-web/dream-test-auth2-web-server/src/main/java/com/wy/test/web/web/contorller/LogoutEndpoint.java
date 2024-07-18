@@ -22,14 +22,14 @@ import com.wy.test.authorize.singlelogout.DefaultSingleLogout;
 import com.wy.test.authorize.singlelogout.LogoutType;
 import com.wy.test.authorize.singlelogout.SamlSingleLogout;
 import com.wy.test.authorize.singlelogout.SingleLogout;
-import com.wy.test.configuration.ApplicationConfig;
-import com.wy.test.constants.ConstsProtocols;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
+import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.entity.Message;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.entity.apps.Apps;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -7,9 +7,9 @@ import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.entity.Synchronizers;
+import com.wy.test.core.entity.Synchronizers;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.SynchronizersService;
-import com.wy.test.web.WebContext;
 
 public class SynchronizerJob implements Job {
 

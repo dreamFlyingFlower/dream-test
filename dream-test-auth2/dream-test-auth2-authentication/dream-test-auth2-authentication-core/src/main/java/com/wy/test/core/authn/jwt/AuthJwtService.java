@@ -13,10 +13,10 @@ import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.wy.test.core.authn.SignPrincipal;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.crypto.jwt.HMAC512Service;
-import com.wy.test.entity.UserInfo;
 import com.wy.test.util.StringUtils;
-import com.wy.test.web.WebContext;
 
 public class AuthJwtService {
 

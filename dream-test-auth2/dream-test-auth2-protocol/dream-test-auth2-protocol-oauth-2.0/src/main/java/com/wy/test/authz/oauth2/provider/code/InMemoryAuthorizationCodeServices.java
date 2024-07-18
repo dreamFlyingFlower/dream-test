@@ -7,16 +7,17 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.wy.test.authz.oauth2.provider.OAuth2Authentication;
 
 /**
- * Implementation of authorization code services that stores the codes and authentication in memory.
+ * Implementation of authorization code services that stores the codes and
+ * authentication in memory.
  * 
  * @author Ryan Heaton
  * @author Dave Syer
  */
 public class InMemoryAuthorizationCodeServices extends RandomValueAuthorizationCodeServices {
-			protected final static  Cache<String, OAuth2Authentication> authorizationCodeStore = 
-			        Caffeine.newBuilder()
-                        .expireAfterWrite(3, TimeUnit.MINUTES)
-                        .build();
+
+	protected final static Cache<String, OAuth2Authentication> authorizationCodeStore =
+			Caffeine.newBuilder().expireAfterWrite(3, TimeUnit.MINUTES).build();
+
 	@Override
 	protected void store(String code, OAuth2Authentication authentication) {
 		authorizationCodeStore.put(code, authentication);

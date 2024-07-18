@@ -2,24 +2,31 @@ package com.wy.test.web.apis.identity.rest;
 
 import java.io.IOException;
 
+import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.wy.test.entity.ChangePassword;
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.entity.ChangePassword;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.entity.Message;
 import com.wy.test.persistence.service.UserInfoService;
+import com.wy.test.util.StringUtils;
 
 @RestController
 @RequestMapping(value = { "/api/idm/Users" })
@@ -78,5 +85,14 @@ public class RestUserInfoController {
 	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable final String id) {
 		userInfoService.logicDelete(id);
+	}
+
+	@GetMapping(value = { "/.search" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@ResponseBody
+	public ResponseEntity<?> search(@ModelAttribute UserInfo userInfo) {
+		if (StringUtils.isBlank(userInfo.getInstId())) {
+			userInfo.setInstId("1");
+		}
+		return new Message<JpaPageResults<UserInfo>>(userInfoService.fetchPageResults(userInfo)).buildResponse();
 	}
 }

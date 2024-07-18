@@ -19,9 +19,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
@@ -51,38 +51,43 @@ import com.wy.test.authz.oauth2.provider.implicit.ImplicitTokenRequest;
 import com.wy.test.authz.oauth2.provider.request.DefaultOAuth2RequestValidator;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
+import com.wy.test.core.web.WebConstants;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.entity.Message;
-import com.wy.test.entity.UserInfo;
-import com.wy.test.entity.apps.Apps;
-import com.wy.test.entity.apps.oauth2.provider.ClientDetails;
 import com.wy.test.util.HttpEncoder;
-import com.wy.test.web.WebConstants;
-import com.wy.test.web.WebContext;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * <p>
- * Implementation of the Authorization Endpoint from the OAuth2 specification. Accepts authorization requests, and
- * handles user approval if the grant type is authorization code. The tokens themselves are obtained from the
- * {@link TokenEndpoint Token Endpoint}, except in the implicit grant type (where they come from the Authorization
- * Endpoint via <code>response_type=token</code>.
+ * Implementation of the Authorization Endpoint from the OAuth2 specification.
+ * Accepts authorization requests, and handles user approval if the grant type
+ * is authorization code. The tokens themselves are obtained from the
+ * {@link TokenEndpoint Token Endpoint}, except in the implicit grant type
+ * (where they come from the Authorization Endpoint via
+ * <code>response_type=token</code>.
  * </p>
  * 
  * <p>
- * This endpoint should be secured so that it is only accessible to fully authenticated users (as a minimum requirement)
- * since it represents a request from a valid user to act on his or her behalf.
+ * This endpoint should be secured so that it is only accessible to fully
+ * authenticated users (as a minimum requirement) since it represents a request
+ * from a valid user to act on his or her behalf.
  * </p>
  * 
  */
 @Tag(name = "2-1-OAuth v2.0 API文档模块")
 @Controller
 public class AuthorizationEndpoint extends AbstractEndpoint {
+
 	final static Logger _logger = LoggerFactory.getLogger(AuthorizationEndpoint.class);
-	
-	private static final String OAUTH_V20_AUTHORIZATION_URL = "" + OAuth2Constants.ENDPOINT.ENDPOINT_AUTHORIZE + "?client_id=%s&response_type=code&redirect_uri=%s&approval_prompt=auto";
-	
+
+	private static final String OAUTH_V20_AUTHORIZATION_URL = "" + OAuth2Constants.ENDPOINT.ENDPOINT_AUTHORIZE
+			+ "?client_id=%s&response_type=code&redirect_uri=%s&approval_prompt=auto";
+
 	private RedirectResolver redirectResolver = new DefaultRedirectResolver();
 
 	private UserApprovalHandler userApprovalHandler = new DefaultUserApprovalHandler();
@@ -91,59 +96,53 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 
 	private String userApprovalPage = "forward:" + OAuth2Constants.ENDPOINT.ENDPOINT_APPROVAL_CONFIRM;
 
+	@SuppressWarnings("unused")
 	private String errorPage = "forward:" + OAuth2Constants.ENDPOINT.ENDPOINT_ERROR;
-	
-	private Object implicitLock = new Object();
 
+	private Object implicitLock = new Object();
 
 	public void setErrorPage(String errorPage) {
 		this.errorPage = errorPage;
 	}
 
-	@Operation(summary = "OAuth 2.0 认证接口", description = "传递参数应用ID，自动完成跳转认证拼接",method="GET")
-    @RequestMapping(value = {OAuth2Constants.ENDPOINT.ENDPOINT_BASE + "/{id}"},method = RequestMethod.GET)
-    public ModelAndView authorize(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            @PathVariable("id") String id){
-        ClientDetails  clientDetails =getClientDetailsService().loadClientByClientId(id,true);
-        _logger.debug(""+clientDetails);
-        String authorizationUrl = "";
-        try {
-            authorizationUrl = String.format(OAUTH_V20_AUTHORIZATION_URL, 
-                            clientDetails.getClientId(), 
-                            HttpEncoder.encode(clientDetails.getRegisteredRedirectUri().toArray()[0].toString())
-                    );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-        _logger.debug("authorizationUrl {}" , authorizationUrl);
-        
-        return WebContext.redirect(authorizationUrl);
-    }
-	   
-	@Operation(summary = "OAuth 2.0 认证接口", description = "传递参数client_id,response_type,redirect_uri等",method="GET")
-	@RequestMapping(value = {
-								OAuth2Constants.ENDPOINT.ENDPOINT_AUTHORIZE,
-								OAuth2Constants.ENDPOINT.ENDPOINT_TENCENT_IOA_AUTHORIZE
-							}, 
-					method = RequestMethod.GET)
-	public ModelAndView authorize(
-	            Map<String, Object> model, 
-	            @RequestParam Map<String, String> parameters,
-	            @CurrentUser UserInfo currentUser,
-	            SessionStatus sessionStatus) {
-	    
-		 Principal principal=(Principal)AuthorizationUtils.getAuthentication();
-		// Pull out the authorization request first, using the OAuth2RequestFactory. All further logic should
-		// query off of the authorization request instead of referring back to the parameters map. The contents of the
-		// parameters map will be stored without change in the AuthorizationRequest object once it is created.
+	@Operation(summary = "OAuth 2.0 认证接口", description = "传递参数应用ID，自动完成跳转认证拼接", method = "GET")
+	@GetMapping(value = { OAuth2Constants.ENDPOINT.ENDPOINT_BASE + "/{id}" })
+	public ModelAndView authorize(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("id") String id) {
+		ClientDetails clientDetails = getClientDetailsService().loadClientByClientId(id, true);
+		_logger.debug("" + clientDetails);
+		String authorizationUrl = "";
+		try {
+			authorizationUrl = String.format(OAUTH_V20_AUTHORIZATION_URL, clientDetails.getClientId(),
+					HttpEncoder.encode(clientDetails.getRegisteredRedirectUri().toArray()[0].toString()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		_logger.debug("authorizationUrl {}", authorizationUrl);
+
+		return WebContext.redirect(authorizationUrl);
+	}
+
+	@Operation(summary = "OAuth 2.0 认证接口", description = "传递参数client_id,response_type,redirect_uri等", method = "GET")
+	@GetMapping(value = { OAuth2Constants.ENDPOINT.ENDPOINT_AUTHORIZE,
+			OAuth2Constants.ENDPOINT.ENDPOINT_TENCENT_IOA_AUTHORIZE })
+	public ModelAndView authorize(Map<String, Object> model, @RequestParam Map<String, String> parameters,
+			@CurrentUser UserInfo currentUser, SessionStatus sessionStatus) {
+
+		Principal principal = (Principal) AuthorizationUtils.getAuthentication();
+		// Pull out the authorization request first, using the OAuth2RequestFactory. All
+		// further logic should
+		// query off of the authorization request instead of referring back to the
+		// parameters map. The contents of the
+		// parameters map will be stored without change in the AuthorizationRequest
+		// object once it is created.
 		AuthorizationRequest authorizationRequest = getOAuth2RequestFactory().createAuthorizationRequest(parameters);
 
 		Set<String> responseTypes = authorizationRequest.getResponseTypes();
 
-		if (!responseTypes.contains(OAuth2Constants.PARAMETER.TOKEN) && !responseTypes.contains(OAuth2Constants.PARAMETER.CODE)) {
+		if (!responseTypes.contains(OAuth2Constants.PARAMETER.TOKEN)
+				&& !responseTypes.contains(OAuth2Constants.PARAMETER.CODE)) {
 			throw new UnsupportedResponseTypeException("Unsupported response types: " + responseTypes);
 		}
 
@@ -158,29 +157,35 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 						"User must be authenticated with Spring Security before authorization can be completed.");
 			}
 
-			ClientDetails client = getClientDetailsService().loadClientByClientId(authorizationRequest.getClientId(),true);
+			ClientDetails client =
+					getClientDetailsService().loadClientByClientId(authorizationRequest.getClientId(), true);
 
-			// The resolved redirect URI is either the redirect_uri from the parameters or the one from
+			// The resolved redirect URI is either the redirect_uri from the parameters or
+			// the one from
 			// clientDetails. Either way we need to store it on the AuthorizationRequest.
-			String redirectUriParameter = authorizationRequest.getRequestParameters().get(OAuth2Constants.PARAMETER.REDIRECT_URI);
+			String redirectUriParameter =
+					authorizationRequest.getRequestParameters().get(OAuth2Constants.PARAMETER.REDIRECT_URI);
 			String resolvedRedirect = redirectResolver.resolveRedirect(redirectUriParameter, client);
 			if (!StringUtils.hasText(resolvedRedirect)) {
-				logger.info("Client redirectUri "+resolvedRedirect);
-				logger.info("Parameter redirectUri "+redirectUriParameter);
-				
+				logger.info("Client redirectUri " + resolvedRedirect);
+				logger.info("Parameter redirectUri " + redirectUriParameter);
+
 				throw new RedirectMismatchException(
 						"A redirectUri must be either supplied or preconfigured in the ClientDetails");
 			}
 			authorizationRequest.setRedirectUri(resolvedRedirect);
 
-			// We intentionally only validate the parameters requested by the client (ignoring any data that may have
+			// We intentionally only validate the parameters requested by the client
+			// (ignoring any data that may have
 			// been added to the request by the manager).
 			oauth2RequestValidator.validateScope(authorizationRequest, client);
 
-			// Some systems may allow for approval decisions to be remembered or approved by default. Check for
-			// such logic here, and set the approved flag on the authorization request accordingly.
-			authorizationRequest = userApprovalHandler.checkForPreApproval(authorizationRequest,
-					(Authentication) principal);
+			// Some systems may allow for approval decisions to be remembered or approved by
+			// default. Check for
+			// such logic here, and set the approved flag on the authorization request
+			// accordingly.
+			authorizationRequest =
+					userApprovalHandler.checkForPreApproval(authorizationRequest, (Authentication) principal);
 			// is this call necessary?
 			boolean approved = userApprovalHandler.isApproved(authorizationRequest, (Authentication) principal);
 			authorizationRequest.setApproved(approved);
@@ -191,49 +196,48 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 					return new ModelAndView(getImplicitGrantResponse(authorizationRequest));
 				}
 				if (responseTypes.contains(OAuth2Constants.PARAMETER.CODE)) {
-					return new ModelAndView(getAuthorizationCodeResponse(authorizationRequest,
-							(Authentication) principal));
+					return new ModelAndView(
+							getAuthorizationCodeResponse(authorizationRequest, (Authentication) principal));
 				}
 			}
-			Apps  app = (Apps)WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
-			//session中为空或者id不一致重新加载
-            if (app == null || !app.getId().equalsIgnoreCase(authorizationRequest.getClientId())) {
-                app = appsService.get(authorizationRequest.getClientId()); 
-                WebContext.setAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP, app);
-            }
-            
+			Apps app = (Apps) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
+			// session中为空或者id不一致重新加载
+			if (app == null || !app.getId().equalsIgnoreCase(authorizationRequest.getClientId())) {
+				app = appsService.get(authorizationRequest.getClientId());
+				WebContext.setAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP, app);
+			}
+
 			// Place auth request into the model so that it is stored in the session
-			// for approveOrDeny to use. That way we make sure that auth request comes from the session,
-			// so any auth request parameters passed to approveOrDeny will be ignored and retrieved from the session.
-            momentaryService.put(currentUser.getSessionId(), "authorizationRequest", authorizationRequest);
-            
+			// for approveOrDeny to use. That way we make sure that auth request comes from
+			// the session,
+			// so any auth request parameters passed to approveOrDeny will be ignored and
+			// retrieved from the session.
+			momentaryService.put(currentUser.getSessionId(), "authorizationRequest", authorizationRequest);
+
 			return getUserApprovalPageResponse(model, authorizationRequest, (Authentication) principal);
 
-		}
-		catch (RuntimeException e) {
+		} catch (RuntimeException e) {
 			sessionStatus.setComplete();
 			throw e;
 		}
 
 	}
 
-	//approval must post
-	@RequestMapping(value  = {OAuth2Constants.ENDPOINT.ENDPOINT_AUTHORIZE+"/approval"}, 
-					params = OAuth2Constants.PARAMETER.USER_OAUTH_APPROVAL,
-					method = RequestMethod.POST)
-	public ResponseEntity<?> authorizeApproveOrDeny(
-	                @RequestParam Map<String, String> approvalParameters,
-	                @CurrentUser UserInfo currentUser,
-	                SessionStatus sessionStatus) {
-	    
-		Principal principal = (Principal)AuthorizationUtils.getAuthentication();
+	// approval must post
+	@PostMapping(value = { OAuth2Constants.ENDPOINT.ENDPOINT_AUTHORIZE + "/approval" },
+			params = OAuth2Constants.PARAMETER.USER_OAUTH_APPROVAL)
+	public ResponseEntity<?> authorizeApproveOrDeny(@RequestParam Map<String, String> approvalParameters,
+			@CurrentUser UserInfo currentUser, SessionStatus sessionStatus) {
+
+		Principal principal = (Principal) AuthorizationUtils.getAuthentication();
 		if (!(principal instanceof Authentication)) {
 			sessionStatus.setComplete();
 			throw new InsufficientAuthenticationException(
 					"User must be authenticated with Spring Security before authorizing an access token.");
 		}
 
-		AuthorizationRequest authorizationRequest = (AuthorizationRequest) momentaryService.get(currentUser.getSessionId(), "authorizationRequest");
+		AuthorizationRequest authorizationRequest =
+				(AuthorizationRequest) momentaryService.get(currentUser.getSessionId(), "authorizationRequest");
 
 		if (authorizationRequest == null) {
 			sessionStatus.setComplete();
@@ -244,8 +248,8 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 			Set<String> responseTypes = authorizationRequest.getResponseTypes();
 
 			authorizationRequest.setApprovalParameters(approvalParameters);
-			authorizationRequest = userApprovalHandler.updateAfterApproval(authorizationRequest,
-					(Authentication) principal);
+			authorizationRequest =
+					userApprovalHandler.updateAfterApproval(authorizationRequest, (Authentication) principal);
 			boolean approved = userApprovalHandler.isApproved(authorizationRequest, (Authentication) principal);
 			authorizationRequest.setApproved(approved);
 
@@ -255,24 +259,20 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 			}
 
 			if (!authorizationRequest.isApproved()) {
-				return new Message< Object>(Message.FAIL,(Object)
-						getUnsuccessfulRedirect(
-					            authorizationRequest,
-					            new UserDeniedAuthorizationException("User denied access"), 
-					            responseTypes.contains(OAuth2Constants.PARAMETER.TOKEN)
-					        )
-						).buildResponse();
+				return new Message<Object>(Message.FAIL,
+						(Object) getUnsuccessfulRedirect(authorizationRequest,
+								new UserDeniedAuthorizationException("User denied access"),
+								responseTypes.contains(OAuth2Constants.PARAMETER.TOKEN))).buildResponse();
 			}
 
 			if (responseTypes.contains(OAuth2Constants.PARAMETER.TOKEN)) {
-				return new Message< Object>((Object)
-						getImplicitGrantResponse(authorizationRequest)).buildResponse();
+				return new Message<Object>((Object) getImplicitGrantResponse(authorizationRequest)).buildResponse();
 			}
 
-			return new Message< Object>((Object)
-					getAuthorizationCodeResponse(authorizationRequest, (Authentication) principal)).buildResponse();
-		}
-		finally {
+			return new Message<Object>(
+					(Object) getAuthorizationCodeResponse(authorizationRequest, (Authentication) principal))
+							.buildResponse();
+		} finally {
 			sessionStatus.setComplete();
 		}
 
@@ -287,7 +287,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 	}
 
 	// We can grant a token and return it with implicit approval.
-	private String  getImplicitGrantResponse(AuthorizationRequest authorizationRequest) {
+	private String getImplicitGrantResponse(AuthorizationRequest authorizationRequest) {
 		try {
 			TokenRequest tokenRequest = getOAuth2RequestFactory().createTokenRequest(authorizationRequest, "implicit");
 			OAuth2Request storedOAuth2Request = getOAuth2RequestFactory().createOAuth2Request(authorizationRequest);
@@ -297,8 +297,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 				throw new UnsupportedResponseTypeException("Unsupported response type: token");
 			}
 			return appendAccessToken(authorizationRequest, accessToken);
-		}
-		catch (OAuth2Exception e) {
+		} catch (OAuth2Exception e) {
 			return getUnsuccessfulRedirect(authorizationRequest, e, true);
 		}
 	}
@@ -306,25 +305,25 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 	private OAuth2AccessToken getAccessTokenForImplicitGrant(TokenRequest tokenRequest,
 			OAuth2Request storedOAuth2Request) {
 		OAuth2AccessToken accessToken = null;
-		// These 1 method calls have to be atomic, otherwise the ImplicitGrantService can have a race condition where
-		// one thread removes the token request before another has a chance to redeem it.
+		// These 1 method calls have to be atomic, otherwise the ImplicitGrantService
+		// can have a race condition where
+		// one thread removes the token request before another has a chance to redeem
+		// it.
 		synchronized (this.implicitLock) {
-			accessToken = getTokenGranter().grant("implicit", new ImplicitTokenRequest(tokenRequest, storedOAuth2Request));
+			accessToken =
+					getTokenGranter().grant("implicit", new ImplicitTokenRequest(tokenRequest, storedOAuth2Request));
 		}
 		return accessToken;
 	}
-	
+
 	// Authorization Code Response
 	private String getAuthorizationCodeResponse(AuthorizationRequest authorizationRequest, Authentication authUser) {
 		try {
-			String  successfulRedirect = getSuccessfulRedirect(
-					authorizationRequest,
-					generateCode(authorizationRequest, authUser)
-			);
+			String successfulRedirect =
+					getSuccessfulRedirect(authorizationRequest, generateCode(authorizationRequest, authUser));
 			_logger.debug("successfulRedirect " + successfulRedirect);
 			return successfulRedirect;
-		}
-		catch (OAuth2Exception e) {
+		} catch (OAuth2Exception e) {
 			return getUnsuccessfulRedirect(authorizationRequest, e, false);
 		}
 	}
@@ -340,8 +339,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 		StringBuilder url = new StringBuilder(requestedRedirect);
 		if (requestedRedirect.contains("#")) {
 			url.append("&");
-		}
-		else {
+		} else {
 			url.append("#");
 		}
 
@@ -378,7 +376,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 		// Do not include the refresh token (even if there is one)
 		return template.expand(vars).toString();
 	}
-	
+
 	public String templateUrlVar(String parameterName) {
 		return parameterName + "={" + parameterName + "}";
 	}
@@ -395,8 +393,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 
 			return code;
 
-		}
-		catch (OAuth2Exception e) {
+		} catch (OAuth2Exception e) {
 
 			if (authorizationRequest.getState() != null) {
 				e.addAdditionalInformation(OAuth2Constants.PARAMETER.STATE, authorizationRequest.getState());
@@ -406,6 +403,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 
 		}
 	}
+
 	// Successful Redirect
 	private String getSuccessfulRedirect(AuthorizationRequest authorizationRequest, String authorizationCode) {
 
@@ -420,8 +418,8 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 		if (state != null) {
 			query.put(OAuth2Constants.PARAMETER.STATE, state);
 		}
-		
-		//this is for cas
+
+		// this is for cas
 		String service = authorizationRequest.getRequestParameters().get("service");
 		if (service != null) {
 			query.put("service", service);
@@ -469,8 +467,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 		try {
 			// assume it's encoded to start with (if it came in over the wire)
 			redirectUri = builder.build(true).toUri();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			// ... but allow client registrations to contain hard-coded non-encoded values
 			redirectUri = builder.build().toUri();
 			builder = UriComponentsBuilder.fromUri(redirectUri);
@@ -499,8 +496,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 			}
 			UriComponents encoded = template.build().expand(query).encode();
 			builder.fragment(encoded.getFragment());
-		}
-		else {
+		} else {
 			for (String key : query.keySet()) {
 				String name = key;
 				if (keys != null && keys.containsKey(key)) {
@@ -516,7 +512,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 		return builder.build().toUriString();
 
 	}
-	
+
 	public void setUserApprovalPage(String userApprovalPage) {
 		this.userApprovalPage = userApprovalPage;
 	}

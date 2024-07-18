@@ -1,7 +1,8 @@
 package com.wy.test.authz.oauth2.provider;
 
 /**
- * Exception indicating that a client registration already exists (e.g. if someone tries to create a duplicate).
+ * Exception indicating that a client registration already exists (e.g. if
+ * someone tries to create a duplicate).
  * 
  * @author Dave Syer
  * 

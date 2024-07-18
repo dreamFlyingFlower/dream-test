@@ -1,6 +1,5 @@
 package com.wy.test.authz.oauth2.common;
 
-
 import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -17,12 +16,14 @@ import com.wy.test.authz.oauth2.common.util.OAuth2Utils;
 
 /**
  * <p>
- * Provides the ability to deserialize JSON response into an {@link com.wy.test.authz.oauth2.common.OAuth2AccessToken} with jackson2 by implementing
- * {@link com.fasterxml.jackson.databind.JsonDeserializer}.
+ * Provides the ability to deserialize JSON response into an
+ * {@link com.wy.test.authz.oauth2.common.OAuth2AccessToken} with jackson2 by
+ * implementing {@link com.fasterxml.jackson.databind.JsonDeserializer}.
  * </p>
  * <p>
- * The expected format of the access token is defined by <a
- * href="http://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-5.1">Successful Response</a>.
+ * The expected format of the access token is defined by <a href=
+ * "http://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-5.1">Successful
+ * Response</a>.
  * </p>
  *
  * @author Rob Winch
@@ -37,8 +38,8 @@ public final class OAuth2AccessTokenJackson2Deserializer extends StdDeserializer
 	}
 
 	@Override
-	public OAuth2AccessToken deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException,
-			JsonProcessingException {
+	public OAuth2AccessToken deserialize(JsonParser jp, DeserializationContext ctxt)
+			throws IOException, JsonProcessingException {
 
 		String tokenValue = null;
 		String tokenType = null;
@@ -53,21 +54,17 @@ public final class OAuth2AccessTokenJackson2Deserializer extends StdDeserializer
 			jp.nextToken();
 			if (OAuth2AccessToken.ACCESS_TOKEN.equals(name)) {
 				tokenValue = jp.getText();
-			}
-			else if (OAuth2AccessToken.TOKEN_TYPE.equals(name)) {
+			} else if (OAuth2AccessToken.TOKEN_TYPE.equals(name)) {
 				tokenType = jp.getText();
-			}
-			else if (OAuth2AccessToken.REFRESH_TOKEN.equals(name)) {
+			} else if (OAuth2AccessToken.REFRESH_TOKEN.equals(name)) {
 				refreshToken = jp.getText();
-			}
-			else if (OAuth2AccessToken.EXPIRES_IN.equals(name)) {
+			} else if (OAuth2AccessToken.EXPIRES_IN.equals(name)) {
 				try {
 					expiresIn = jp.getLongValue();
 				} catch (JsonParseException e) {
 					expiresIn = Long.valueOf(jp.getText());
 				}
-			}
-			else if (OAuth2AccessToken.SCOPE.equals(name)) {
+			} else if (OAuth2AccessToken.SCOPE.equals(name)) {
 				String text = jp.getText();
 				scope = OAuth2Utils.parseParameterList(text);
 			} else {
@@ -75,7 +72,8 @@ public final class OAuth2AccessTokenJackson2Deserializer extends StdDeserializer
 			}
 		}
 
-		// What should occur if a required parameter (tokenValue or tokenType) is missing?
+		// What should occur if a required parameter (tokenValue or tokenType) is
+		// missing?
 
 		DefaultOAuth2AccessToken accessToken = new DefaultOAuth2AccessToken(tokenValue);
 		accessToken.setTokenType(tokenType);

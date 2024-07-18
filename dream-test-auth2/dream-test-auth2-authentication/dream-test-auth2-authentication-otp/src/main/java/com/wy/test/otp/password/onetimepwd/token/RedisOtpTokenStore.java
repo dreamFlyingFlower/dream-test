@@ -2,11 +2,11 @@ package com.wy.test.otp.password.onetimepwd.token;
 
 import org.joda.time.DateTime;
 
-import com.wy.test.constants.ConstsTimeInterval;
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.constants.ConstsTimeInterval;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.persistence.redis.RedisConnection;
+import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.otp.password.onetimepwd.OneTimePassword;
-import com.wy.test.persistence.redis.RedisConnection;
-import com.wy.test.persistence.redis.RedisConnectionFactory;
 
 public class RedisOtpTokenStore extends AbstractOtpTokenStore {
 

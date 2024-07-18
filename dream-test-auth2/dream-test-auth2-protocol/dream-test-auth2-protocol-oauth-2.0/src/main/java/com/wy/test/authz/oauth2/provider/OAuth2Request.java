@@ -12,8 +12,9 @@ import org.springframework.security.core.GrantedAuthority;
 import com.wy.test.authz.oauth2.common.OAuth2Constants;
 
 /**
- * Represents a stored authorization or token request. Used as part of the OAuth2Authentication object to store a
- * request's authentication information. Does not expose public setters so that clients can not mutate state if they
+ * Represents a stored authorization or token request. Used as part of the
+ * OAuth2Authentication object to store a request's authentication information.
+ * Does not expose public setters so that clients can not mutate state if they
  * respect the declared type of the request.
  * 
  * @author Amanda Anganes
@@ -30,64 +31,65 @@ public class OAuth2Request extends BaseRequest implements Serializable {
 	private Set<String> resourceIds = new HashSet<String>();
 
 	/**
-	 * Resolved granted authorities for this request. May change during request processing.
+	 * Resolved granted authorities for this request. May change during request
+	 * processing.
 	 */
 	private Collection<? extends GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
 	/**
-	 * Whether the request has been approved by the end user (or other process). This will be altered by the User
-	 * Approval Endpoint and/or the UserApprovalHandler as appropriate.
+	 * Whether the request has been approved by the end user (or other process).
+	 * This will be altered by the User Approval Endpoint and/or the
+	 * UserApprovalHandler as appropriate.
 	 */
 	private boolean approved = false;
 
 	/**
-	 * Will be non-null if the request is for a token to be refreshed (the original grant type might still be available
-	 * via {@link #getGrantType()}).
+	 * Will be non-null if the request is for a token to be refreshed (the original
+	 * grant type might still be available via {@link #getGrantType()}).
 	 */
 	private TokenRequest refresh = null;
 
 	/**
-	 * The resolved redirect URI of this request. A URI may be present in the original request, in the
-	 * authorizationParameters, or it may not be provided, in which case it will be defaulted (by processing classes) to
-	 * the Client's default registered value.
+	 * The resolved redirect URI of this request. A URI may be present in the
+	 * original request, in the authorizationParameters, or it may not be provided,
+	 * in which case it will be defaulted (by processing classes) to the Client's
+	 * default registered value.
 	 */
 	private String redirectUri;
 
 	/**
-	 * Resolved requested response types initialized (by the OAuth2RequestFactory) with the response types originally
-	 * requested.
+	 * Resolved requested response types initialized (by the OAuth2RequestFactory)
+	 * with the response types originally requested.
 	 */
 	private Set<String> responseTypes = new HashSet<String>();
-	
-	//support oauth 2.1, PKCE
-    /**
-     * A challenge derived from the code verifier that is sent in the
-     * authorization request, to be verified against later.
-     */
-    private String codeChallenge;
-    
-    /**
-     * A method that was used to derive code challenge.
-     * 
-     * plain
-     *      code_challenge = code_verifier
-     * 
-     * S256
-     *      code_challenge = BASE64URL-ENCODE(SHA256(ASCII(code_verifier)))
-     */
-    private String codeChallengeMethod = "S256";
+
+	// support oauth 2.1, PKCE
+	/**
+	 * A challenge derived from the code verifier that is sent in the authorization
+	 * request, to be verified against later.
+	 */
+	private String codeChallenge;
 
 	/**
-	 * Extension point for custom processing classes which may wish to store additional information about the OAuth2
-	 * request. Since this class is serializable, all members of this map must also be serializable.
+	 * A method that was used to derive code challenge.
+	 * 
+	 * plain code_challenge = code_verifier
+	 * 
+	 * S256 code_challenge = BASE64URL-ENCODE(SHA256(ASCII(code_verifier)))
+	 */
+	private String codeChallengeMethod = "S256";
+
+	/**
+	 * Extension point for custom processing classes which may wish to store
+	 * additional information about the OAuth2 request. Since this class is
+	 * serializable, all members of this map must also be serializable.
 	 */
 	private Map<String, Serializable> extensions = new HashMap<String, Serializable>();
 
 	public OAuth2Request(Map<String, String> requestParameters, String clientId,
 			Collection<? extends GrantedAuthority> authorities, boolean approved, Set<String> scope,
-			Set<String> resourceIds, String redirectUri, Set<String> responseTypes,
-			String codeChallenge,String codeChallengeMethod,
-			Map<String, Serializable> extensionProperties) {
+			Set<String> resourceIds, String redirectUri, Set<String> responseTypes, String codeChallenge,
+			String codeChallengeMethod, Map<String, Serializable> extensionProperties) {
 		setClientId(clientId);
 		setRequestParameters(requestParameters);
 		setScope(scope);
@@ -111,10 +113,9 @@ public class OAuth2Request extends BaseRequest implements Serializable {
 	}
 
 	protected OAuth2Request(OAuth2Request other) {
-		this(other.getRequestParameters(), other.getClientId(), other.getAuthorities(), other.isApproved(), other
-				.getScope(), other.getResourceIds(), other.getRedirectUri(), other.getResponseTypes(),
-				other.getCodeChallenge(),other.getCodeChallengeMethod(),
-				other.getExtensions());
+		this(other.getRequestParameters(), other.getClientId(), other.getAuthorities(), other.isApproved(),
+				other.getScope(), other.getResourceIds(), other.getRedirectUri(), other.getResponseTypes(),
+				other.getCodeChallenge(), other.getCodeChallengeMethod(), other.getExtensions());
 	}
 
 	protected OAuth2Request(String clientId) {
@@ -144,33 +145,34 @@ public class OAuth2Request extends BaseRequest implements Serializable {
 	public Set<String> getResourceIds() {
 		return resourceIds;
 	}
-	
 
 	public String getCodeChallenge() {
-        return codeChallenge;
-    }
+		return codeChallenge;
+	}
 
-    public String getCodeChallengeMethod() {
-        return codeChallengeMethod;
-    }
+	public String getCodeChallengeMethod() {
+		return codeChallengeMethod;
+	}
 
-    public Map<String, Serializable> getExtensions() {
+	public Map<String, Serializable> getExtensions() {
 		return extensions;
 	}
 
 	/**
-	 * Update the request parameters and return a new object with the same properties except the parameters.
+	 * Update the request parameters and return a new object with the same
+	 * properties except the parameters.
+	 * 
 	 * @param parameters new parameters replacing the existing ones
 	 * @return a new OAuth2Request
 	 */
 	public OAuth2Request createOAuth2Request(Map<String, String> parameters) {
-		return new OAuth2Request(parameters, getClientId(), authorities, approved, getScope(), resourceIds,
-				redirectUri, responseTypes,  codeChallenge, codeChallengeMethod,extensions);
+		return new OAuth2Request(parameters, getClientId(), authorities, approved, getScope(), resourceIds, redirectUri,
+				responseTypes, codeChallenge, codeChallengeMethod, extensions);
 	}
 
 	/**
-	 * Update the scope and create a new request. All the other properties are the same (including the request
-	 * parameters).
+	 * Update the scope and create a new request. All the other properties are the
+	 * same (including the request parameters).
 	 * 
 	 * @param scope the new scope
 	 * @return a new request with the narrowed scope
@@ -184,7 +186,7 @@ public class OAuth2Request extends BaseRequest implements Serializable {
 
 	public OAuth2Request refresh(TokenRequest tokenRequest) {
 		OAuth2Request request = new OAuth2Request(getRequestParameters(), getClientId(), authorities, approved,
-				getScope(), resourceIds, redirectUri, responseTypes,  codeChallenge, codeChallengeMethod,extensions);
+				getScope(), resourceIds, redirectUri, responseTypes, codeChallenge, codeChallengeMethod, extensions);
 		request.refresh = tokenRequest;
 		return request;
 	}
@@ -197,8 +199,9 @@ public class OAuth2Request extends BaseRequest implements Serializable {
 	}
 
 	/**
-	 * If this request was for an access token to be refreshed, then the {@link TokenRequest} that led to the refresh
-	 * <i>may</i> be available here if it is known.
+	 * If this request was for an access token to be refreshed, then the
+	 * {@link TokenRequest} that led to the refresh <i>may</i> be available here if
+	 * it is known.
 	 * 
 	 * @return the refresh token request (may be null)
 	 */
@@ -207,7 +210,8 @@ public class OAuth2Request extends BaseRequest implements Serializable {
 	}
 
 	/**
-	 * Tries to discover the grant type requested for the token associated with this request.
+	 * Tries to discover the grant type requested for the token associated with this
+	 * request.
 	 * 
 	 * @return the grant type if known, or null otherwise
 	 */
@@ -251,32 +255,27 @@ public class OAuth2Request extends BaseRequest implements Serializable {
 		if (authorities == null) {
 			if (other.authorities != null)
 				return false;
-		}
-		else if (!authorities.equals(other.authorities))
+		} else if (!authorities.equals(other.authorities))
 			return false;
 		if (extensions == null) {
 			if (other.extensions != null)
 				return false;
-		}
-		else if (!extensions.equals(other.extensions))
+		} else if (!extensions.equals(other.extensions))
 			return false;
 		if (redirectUri == null) {
 			if (other.redirectUri != null)
 				return false;
-		}
-		else if (!redirectUri.equals(other.redirectUri))
+		} else if (!redirectUri.equals(other.redirectUri))
 			return false;
 		if (resourceIds == null) {
 			if (other.resourceIds != null)
 				return false;
-		}
-		else if (!resourceIds.equals(other.resourceIds))
+		} else if (!resourceIds.equals(other.resourceIds))
 			return false;
 		if (responseTypes == null) {
 			if (other.responseTypes != null)
 				return false;
-		}
-		else if (!responseTypes.equals(other.responseTypes))
+		} else if (!responseTypes.equals(other.responseTypes))
 			return false;
 		return true;
 	}

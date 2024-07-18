@@ -18,17 +18,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.constants.ConstsEntryType;
-import com.wy.test.constants.ConstsOperateAction;
-import com.wy.test.constants.ConstsOperateResult;
 import com.wy.test.core.authn.annotation.CurrentUser;
+import com.wy.test.core.constants.ConstsEntryType;
+import com.wy.test.core.constants.ConstsOperateAction;
+import com.wy.test.core.constants.ConstsOperateResult;
+import com.wy.test.core.entity.Resources;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.web.component.TreeAttributes;
+import com.wy.test.core.web.component.TreeNode;
 import com.wy.test.entity.Message;
-import com.wy.test.entity.Resources;
-import com.wy.test.entity.UserInfo;
 import com.wy.test.persistence.service.HistorySystemLogsService;
 import com.wy.test.persistence.service.ResourcesService;
-import com.wy.test.web.component.TreeAttributes;
-import com.wy.test.web.component.TreeNode;
 
 @Controller
 @RequestMapping(value = { "/permissions/resources" })

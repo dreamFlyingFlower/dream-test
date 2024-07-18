@@ -9,6 +9,7 @@ import java.nio.charset.Charset;
  * Functions for Hex, Base64 and Utf8 encoding/decoding
  */
 public class Codecs {
+
 	private static Charset UTF8 = Charset.forName("UTF-8");
 
 	/**
@@ -39,10 +40,9 @@ public class Codecs {
 		return b64UrlDecode(utf8Encode(value));
 	}
 
-
 	/**
-	 * UTF-8 encoding/decoding. Using a charset rather than `String.getBytes` is less forgiving
-	 * and will raise an exception for invalid data.
+	 * UTF-8 encoding/decoding. Using a charset rather than `String.getBytes` is
+	 * less forgiving and will raise an exception for invalid data.
 	 */
 	public static byte[] utf8Encode(CharSequence string) {
 		try {
@@ -50,8 +50,7 @@ public class Codecs {
 			byte[] bytesCopy = new byte[bytes.limit()];
 			System.arraycopy(bytes.array(), 0, bytesCopy, 0, bytes.limit());
 			return bytesCopy;
-		}
-		catch (CharacterCodingException e) {
+		} catch (CharacterCodingException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -63,8 +62,7 @@ public class Codecs {
 	public static String utf8Decode(ByteBuffer bytes) {
 		try {
 			return UTF8.newDecoder().decode(bytes).toString();
-		}
-		catch (CharacterCodingException e) {
+		} catch (CharacterCodingException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -80,12 +78,12 @@ public class Codecs {
 	// Substitute for Scala's Array.concat()
 	public static byte[] concat(byte[]... arrays) {
 		int size = 0;
-		for (byte[] a: arrays) {
+		for (byte[] a : arrays) {
 			size += a.length;
 		}
 		byte[] result = new byte[size];
 		int index = 0;
-		for (byte[] a: arrays) {
+		for (byte[] a : arrays) {
 			System.arraycopy(a, 0, result, index, a.length);
 			index += a.length;
 		}
@@ -93,9 +91,9 @@ public class Codecs {
 	}
 }
 
-
 class Base64 {
-	private static byte EQUALS = (byte)'=';
+
+	private static byte EQUALS = (byte) '=';
 
 	static byte[] encode(byte[] bytes) {
 		return Base64Codec.encode(bytes);
@@ -110,8 +108,8 @@ class Base64 {
 
 		int length = b64Bytes.length;
 
-		while(b64Bytes[length - 1] == EQUALS) {
-		  length -= 1;
+		while (b64Bytes[length - 1] == EQUALS) {
+			length -= 1;
 		}
 
 		byte[] result = new byte[length];
@@ -151,7 +149,9 @@ class Base64 {
 }
 
 class Hex {
-	private static final char[] HEX = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+
+	private static final char[] HEX =
+			new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
 	static char[] encode(byte[] bytes) {
 		int nBytes = bytes.length;

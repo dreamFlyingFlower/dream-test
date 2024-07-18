@@ -53,12 +53,14 @@ public class WebServicePostEncoder extends HTTPPostEncoder {
 	}
 
 	/**
-	 * Base64 and POST encodes the outbound message and writes it to the outbound transport.
+	 * Base64 and POST encodes the outbound message and writes it to the outbound
+	 * transport.
 	 * 
 	 * @param messageContext current message context
 	 * @param endpointURL endpoint URL to encode message to
 	 * 
-	 * @throws MessageEncodingException thrown if there is a problem encoding the message
+	 * @throws MessageEncodingException thrown if there is a problem encoding the
+	 *         message
 	 */
 	@SuppressWarnings("rawtypes")
 	protected VelocityContext encodeMsgContext(SAMLMessageContext messageContext) throws MessageEncodingException {
@@ -127,8 +129,10 @@ public class WebServicePostEncoder extends HTTPPostEncoder {
 	 * 
 	 * @param signingCredential the credential used for signing
 	 * @param kiGenerator the generator for the KeyInfo
-	 * @throws MessageEncodingException thrown if there is an error generating or marshalling the KeyInfo
-	 * @return the marshalled, serialized and base64-encoded KeyInfo, or null if none was generated
+	 * @throws MessageEncodingException thrown if there is an error generating or
+	 *         marshalling the KeyInfo
+	 * @return the marshalled, serialized and base64-encoded KeyInfo, or null if
+	 *         none was generated
 	 */
 	protected String buildKeyInfo(Credential signingCredential, KeyInfoGenerator kiGenerator)
 			throws MessageEncodingException {
@@ -159,8 +163,8 @@ public class WebServicePostEncoder extends HTTPPostEncoder {
 	/**
 	 * Build the form control data string over which the signature is computed.
 	 * 
-	 * @param velocityContext the Velocity context which is already populated with the values for SAML message and relay
-	 *        state
+	 * @param velocityContext the Velocity context which is already populated with
+	 *        the values for SAML message and relay state
 	 * @param messageContext the SAML message context being processed
 	 * @param sigAlgURI the signature algorithm URI
 	 * 
@@ -225,7 +229,8 @@ public class WebServicePostEncoder extends HTTPPostEncoder {
 	}
 
 	/**
-	 * Generates the signature over the string of concatenated form control data as indicated by the SimpleSign spec.
+	 * Generates the signature over the string of concatenated form control data as
+	 * indicated by the SimpleSign spec.
 	 * 
 	 * @param signingCredential credential that will be used to sign
 	 * @param algorithmURI algorithm URI of the signing credential

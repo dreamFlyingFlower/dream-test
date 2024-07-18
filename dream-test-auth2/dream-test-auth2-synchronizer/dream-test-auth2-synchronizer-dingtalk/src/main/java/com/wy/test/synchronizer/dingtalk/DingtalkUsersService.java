@@ -14,9 +14,9 @@ import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiV2UserListRequest;
 import com.dingtalk.api.response.OapiV2UserListResponse;
 import com.dingtalk.api.response.OapiV2UserListResponse.ListUserResponse;
-import com.wy.test.constants.ConstsStatus;
-import com.wy.test.entity.SynchroRelated;
-import com.wy.test.entity.UserInfo;
+import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.entity.SynchroRelated;
+import com.wy.test.core.entity.UserInfo;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 

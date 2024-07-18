@@ -7,9 +7,9 @@ import java.util.List;
 import org.dromara.mybatis.jpa.JpaService;
 import org.springframework.stereotype.Repository;
 
-import com.wy.test.entity.Organizations;
-import com.wy.test.entity.SynchroRelated;
-import com.wy.test.entity.Synchronizers;
+import com.wy.test.core.entity.Organizations;
+import com.wy.test.core.entity.SynchroRelated;
+import com.wy.test.core.entity.Synchronizers;
 import com.wy.test.persistence.mapper.SynchroRelatedMapper;
 import com.wy.test.util.DateUtils;
 

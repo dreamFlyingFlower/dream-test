@@ -5,7 +5,7 @@ import java.time.ZonedDateTime;
 
 import org.springframework.security.core.Authentication;
 
-import com.wy.test.entity.apps.AppsCasDetails;
+import com.wy.test.core.entity.apps.AppsCasDetails;
 
 /**
  * Interface for the generic concept of a ticket.

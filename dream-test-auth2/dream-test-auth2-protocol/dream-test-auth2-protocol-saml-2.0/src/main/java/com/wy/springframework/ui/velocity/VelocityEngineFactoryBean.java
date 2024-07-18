@@ -15,13 +15,16 @@ import org.springframework.context.ResourceLoaderAware;
  * application code, e.g. for generating email content. For web views,
  * VelocityConfigurer is used to set up a VelocityEngine for views.
  *
- * <p>The simplest way to use this class is to specify a "resourceLoaderPath";
- * you do not need any further configuration then. For example, in a web
- * application context:
+ * <p>
+ * The simplest way to use this class is to specify a "resourceLoaderPath"; you
+ * do not need any further configuration then. For example, in a web application
+ * context:
  *
- * <pre class="code"> &lt;bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean"&gt;
+ * <pre class="code">
+ *  &lt;bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean"&gt;
  *   &lt;property name="resourceLoaderPath" value="/WEB-INF/velocity/"/&gt;
- * &lt;/bean&gt;</pre>
+ * &lt;/bean&gt;
+ * </pre>
  *
  * See the base class VelocityEngineFactory for configuration details.
  *
@@ -37,12 +40,10 @@ public class VelocityEngineFactoryBean extends VelocityEngineFactory
 
 	private VelocityEngine velocityEngine;
 
-
 	@Override
 	public void afterPropertiesSet() throws IOException, VelocityException {
 		this.velocityEngine = createVelocityEngine();
 	}
-
 
 	@Override
 	public VelocityEngine getObject() {

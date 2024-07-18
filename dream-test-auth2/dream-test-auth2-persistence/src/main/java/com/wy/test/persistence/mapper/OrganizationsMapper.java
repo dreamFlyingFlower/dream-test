@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.dromara.mybatis.jpa.IJpaMapper;
 
-import com.wy.test.entity.Organizations;
+import com.wy.test.core.entity.Organizations;
 
 public interface OrganizationsMapper extends IJpaMapper<Organizations> {
 

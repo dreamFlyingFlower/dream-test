@@ -18,22 +18,21 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.wy.test.authz.oauth2.jwt.crypto.sign.SignatureVerifier;
 import com.wy.test.authz.oauth2.jwt.crypto.sign.Signer;
 
-/**
- * @author Luke Taylor
- */
 public class JwtHelper {
+
 	static byte[] PERIOD = utf8Encode(".");
 
 	/**
 	 * Creates a token from an encoded token string.
 	 *
-	 * @param token the (non-null) encoded token (three Base-64 encoded strings separated by "." characters)
+	 * @param token the (non-null) encoded token (three Base-64 encoded strings
+	 *        separated by "." characters)
 	 */
 	public static Jwt decode(String token) {
 		int firstPeriod = token.indexOf('.');
 		int lastPeriod = token.lastIndexOf('.');
 
-		if (firstPeriod <=0 || lastPeriod <= firstPeriod) {
+		if (firstPeriod <= 0 || lastPeriod <= firstPeriod) {
 			throw new IllegalArgumentException("JWT must have 3 tokens");
 		}
 		CharBuffer buffer = CharBuffer.wrap(token, 0, firstPeriod);
@@ -79,13 +78,13 @@ public class JwtHelper {
  * Handles the JSON parsing and serialization.
  */
 class JwtHeaderHelper {
+
 	private static final JsonFactory f = new JsonFactory();
 
 	static JwtHeader create(String header) {
 		byte[] bytes = b64UrlDecode(header);
 		return new JwtHeader(bytes, parseParams(bytes));
 	}
-
 
 	static JwtHeader create(Signer signer) {
 		HeaderParameters p = new HeaderParameters(sigAlg(signer.algorithm()), null, null);
@@ -120,7 +119,8 @@ class JwtHeaderHelper {
 						throw new IllegalArgumentException("Duplicate 'enc' field");
 					}
 					enc = value;
-				} if ("iv".equals(fieldname)) {
+				}
+				if ("iv".equals(fieldname)) {
 					if (iv != null) {
 						throw new IllegalArgumentException("Duplicate 'iv' field");
 					}
@@ -163,8 +163,7 @@ class JwtHeaderHelper {
 			g.flush();
 
 			return baos.toByteArray();
-		}
-		catch (IOException io) {
+		} catch (IOException io) {
 			throw new RuntimeException(io);
 		} finally {
 			if (g != null) {
@@ -183,7 +182,9 @@ class JwtHeaderHelper {
  *
  */
 class JwtHeader implements BinaryFormat {
+
 	private final byte[] bytes;
+
 	final HeaderParameters parameters;
 
 	/**
@@ -195,6 +196,7 @@ class JwtHeader implements BinaryFormat {
 		this.parameters = parameters;
 	}
 
+	@Override
 	public byte[] bytes() {
 		return bytes;
 	}
@@ -206,8 +208,11 @@ class JwtHeader implements BinaryFormat {
 }
 
 class HeaderParameters {
+
 	final String alg;
+
 	final String enc;
+
 	final String iv;
 
 	HeaderParameters(String alg) {
@@ -226,14 +231,19 @@ class HeaderParameters {
 }
 
 class JwtImpl implements Jwt {
+
 	private final JwtHeader header;
+
 	private final byte[] content;
+
 	private final byte[] crypto;
+
 	private String claims;
 
 	/**
 	 * @param header the header, containing the JWS/JWE algorithm information.
-	 * @param content the base64-decoded "claims" segment (may be encrypted, depending on header information).
+	 * @param content the base64-decoded "claims" segment (may be encrypted,
+	 *        depending on header information).
 	 * @param crypto the base64-decoded "crypto" segment.
 	 */
 	JwtImpl(JwtHeader header, byte[] content, byte[] crypto) {
@@ -248,33 +258,39 @@ class JwtImpl implements Jwt {
 	 *
 	 * @param verifier the signature verifier
 	 */
+	@Override
 	public void verifySignature(SignatureVerifier verifier) {
 		verifier.verify(signingInput(), crypto);
- 	}
+	}
 
 	private byte[] signingInput() {
 		return concat(b64UrlEncode(header.bytes()), JwtHelper.PERIOD, b64UrlEncode(content));
 	}
 
-  /**
-   * Allows retrieval of the full token.
-   *
-   * @return the encoded header, claims and crypto segments concatenated with "." characters
-   */
+	/**
+	 * Allows retrieval of the full token.
+	 *
+	 * @return the encoded header, claims and crypto segments concatenated with "."
+	 *         characters
+	 */
+	@Override
 	public byte[] bytes() {
-		return concat(b64UrlEncode(header.bytes()), JwtHelper.PERIOD, b64UrlEncode(content), JwtHelper.PERIOD, b64UrlEncode(crypto));
+		return concat(b64UrlEncode(header.bytes()), JwtHelper.PERIOD, b64UrlEncode(content), JwtHelper.PERIOD,
+				b64UrlEncode(crypto));
 	}
 
+	@Override
 	public String getClaims() {
 		return utf8Decode(content);
 	}
 
+	@Override
 	public String getEncoded() {
 		return utf8Decode(bytes());
 	}
 
 	@Override
 	public String toString() {
-		return header + " " + claims + " ["+ crypto.length + " crypto bytes]";
+		return header + " " + claims + " [" + crypto.length + " crypto bytes]";
 	}
 }

@@ -9,19 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
-import com.wy.test.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.entity.Accounts;
+import com.wy.test.core.entity.ChangePassword;
+import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
+import com.wy.test.core.web.WebContext;
 import com.wy.test.crypto.password.PasswordReciprocal;
-import com.wy.test.entity.Accounts;
-import com.wy.test.entity.ChangePassword;
-import com.wy.test.entity.UserInfo;
 import com.wy.test.persistence.mapper.UserInfoMapper;
-import com.wy.test.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.provision.ProvisionAction;
 import com.wy.test.provision.ProvisionService;
 import com.wy.test.provision.ProvisionTopic;
 import com.wy.test.util.DateUtils;
 import com.wy.test.util.StringUtils;
-import com.wy.test.web.WebContext;
 
 @Repository
 public class UserInfoService extends JpaService<UserInfo> {
