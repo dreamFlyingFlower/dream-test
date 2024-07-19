@@ -23,7 +23,8 @@ import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.crypto.password.PasswordGen;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 public class PasswordPolicyValidator {
 
@@ -165,8 +166,7 @@ public class PasswordPolicyValidator {
 		}
 
 		/*
-		 * check password is Expired,Expiration is Expired date ,if Expiration equals
-		 * 0,not need check
+		 * check password is Expired,Expiration is Expired date ,if Expiration equals 0,not need check
 		 *
 		 */
 		if (passwordPolicy.getExpiration() > 0) {
@@ -196,7 +196,7 @@ public class PasswordPolicyValidator {
 	 */
 	public void lockUser(UserInfo userInfo) {
 		try {
-			if (userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
+			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				if (userInfo.getIsLocked() == ConstsStatus.ACTIVE) {
 					jdbcTemplate.update(LOCK_USER_UPDATE_STATEMENT,
 							new Object[] { ConstsStatus.LOCK, new Date(), userInfo.getId() },
@@ -216,7 +216,7 @@ public class PasswordPolicyValidator {
 	 */
 	public void unlockUser(UserInfo userInfo) {
 		try {
-			if (userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
+			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				jdbcTemplate.update(UNLOCK_USER_UPDATE_STATEMENT,
 						new Object[] { ConstsStatus.ACTIVE, new Date(), userInfo.getId() },
 						new int[] { Types.VARCHAR, Types.TIMESTAMP, Types.VARCHAR });
@@ -234,7 +234,7 @@ public class PasswordPolicyValidator {
 	 */
 	public void resetAttempts(UserInfo userInfo) {
 		try {
-			if (userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
+			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				jdbcTemplate.update(BADPASSWORDCOUNT_RESET_UPDATE_STATEMENT,
 						new Object[] { 0, ConstsStatus.ACTIVE, new Date(), userInfo.getId() },
 						new int[] { Types.INTEGER, Types.INTEGER, Types.TIMESTAMP, Types.VARCHAR });
@@ -262,7 +262,7 @@ public class PasswordPolicyValidator {
 	}
 
 	public void plusBadPasswordCount(UserInfo userInfo) {
-		if (userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
+		if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 			userInfo.setBadPasswordCount(userInfo.getBadPasswordCount() + 1);
 			setBadPasswordCount(userInfo.getId(), userInfo.getBadPasswordCount());
 			PasswordPolicy passwordPolicy = passwordPolicyRepository.getPasswordPolicy();
@@ -275,7 +275,7 @@ public class PasswordPolicyValidator {
 	}
 
 	public void resetBadPasswordCount(UserInfo userInfo) {
-		if (userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
+		if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 			if (userInfo.getBadPasswordCount() > 0) {
 				setBadPasswordCount(userInfo.getId(), 0);
 			}
@@ -294,5 +294,4 @@ public class PasswordPolicyValidator {
 	public PasswordPolicyRepository getPasswordPolicyRepository() {
 		return passwordPolicyRepository;
 	}
-
 }

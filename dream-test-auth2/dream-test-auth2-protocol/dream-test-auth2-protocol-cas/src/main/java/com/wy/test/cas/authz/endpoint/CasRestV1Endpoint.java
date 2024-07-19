@@ -31,8 +31,8 @@ import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.AppsCasDetails;
 import com.wy.test.core.web.HttpResponseConstants;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
-import com.wy.test.util.StringUtils;
 
+import dream.flying.flower.lang.StrHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -57,7 +57,7 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 			@RequestParam(value = CasConstants.PARAMETER.REST_USERNAME, required = true) String username,
 			@RequestParam(value = CasConstants.PARAMETER.REST_PASSWORD, required = true) String password) {
 		try {
-			if (StringUtils.isBlank(password)) {
+			if (StrHelper.isBlank(password)) {
 				throw new BadCredentialsException(
 						"No credentials are provided or extracted to authenticate the REST request");
 			}

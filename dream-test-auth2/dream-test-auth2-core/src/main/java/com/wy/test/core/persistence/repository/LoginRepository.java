@@ -18,7 +18,8 @@ import com.wy.test.core.constants.ConstsRoles;
 import com.wy.test.core.constants.ConstsStatus;
 import com.wy.test.core.entity.Roles;
 import com.wy.test.core.entity.UserInfo;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 public class LoginRepository {
 
@@ -108,7 +109,7 @@ public class LoginRepository {
 	 */
 	public void updateLock(UserInfo userInfo) {
 		try {
-			if (userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
+			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				jdbcTemplate.update(LOCK_USER_UPDATE_STATEMENT,
 						new Object[] { ConstsStatus.LOCK, new Date(), userInfo.getId() },
 						new int[] { Types.VARCHAR, Types.TIMESTAMP, Types.VARCHAR });
@@ -126,7 +127,7 @@ public class LoginRepository {
 	 */
 	public void updateUnlock(UserInfo userInfo) {
 		try {
-			if (userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
+			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				jdbcTemplate.update(UNLOCK_USER_UPDATE_STATEMENT,
 						new Object[] { ConstsStatus.ACTIVE, new Date(), userInfo.getId() },
 						new int[] { Types.VARCHAR, Types.TIMESTAMP, Types.VARCHAR });
@@ -144,7 +145,7 @@ public class LoginRepository {
 	 */
 	public void updateLockout(UserInfo userInfo) {
 		try {
-			if (userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
+			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				jdbcTemplate.update(BADPASSWORDCOUNT_RESET_UPDATE_STATEMENT,
 						new Object[] { 0, ConstsStatus.ACTIVE, new Date(), userInfo.getId() },
 						new int[] { Types.INTEGER, Types.INTEGER, Types.TIMESTAMP, Types.VARCHAR });
@@ -162,7 +163,7 @@ public class LoginRepository {
 	 */
 	public void updateBadPasswordCount(UserInfo userInfo) {
 		try {
-			if (userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
+			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				int badPasswordCount = userInfo.getBadPasswordCount() + 1;
 				userInfo.setBadPasswordCount(badPasswordCount);
 				jdbcTemplate.update(BADPASSWORDCOUNT_UPDATE_STATEMENT,

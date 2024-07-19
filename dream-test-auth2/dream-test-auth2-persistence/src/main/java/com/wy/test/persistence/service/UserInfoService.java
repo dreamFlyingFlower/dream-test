@@ -21,7 +21,8 @@ import com.wy.test.provision.ProvisionAction;
 import com.wy.test.provision.ProvisionService;
 import com.wy.test.provision.ProvisionTopic;
 import com.wy.test.util.DateUtils;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 @Repository
 public class UserInfoService extends JpaService<UserInfo> {
@@ -195,7 +196,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 
 	public ChangePassword passwordEncoder(UserInfo userInfo) {
 		ChangePassword changePassword = null;
-		if (StringUtils.isNotBlank(userInfo.getPassword())) {
+		if (StrHelper.isNotBlank(userInfo.getPassword())) {
 			changePassword = new ChangePassword(userInfo);
 			passwordEncoder(changePassword);
 			userInfo.setPassword(changePassword.getPassword());
@@ -210,7 +211,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 
 	public ChangePassword passwordEncoder(ChangePassword changePassword) {
 		// 密码不为空，则需要进行加密处理
-		if (StringUtils.isNotBlank(changePassword.getPassword())) {
+		if (StrHelper.isNotBlank(changePassword.getPassword())) {
 			String password = passwordEncoder.encode(changePassword.getPassword());
 			changePassword.setDecipherable(PasswordReciprocal.getInstance().encode(changePassword.getPassword()));
 			_logger.debug("decipherable : " + changePassword.getDecipherable());
@@ -238,14 +239,14 @@ public class UserInfoService extends JpaService<UserInfo> {
 			WebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT, "");
 			UserInfo userInfo = this.findByUsername(changePassword.getUsername());
 			if (changePassword.getPassword().equals(changePassword.getConfirmPassword())) {
-				if (StringUtils.isNotBlank(changePassword.getOldPassword())
+				if (StrHelper.isNotBlank(changePassword.getOldPassword())
 						&& passwordEncoder.matches(changePassword.getOldPassword(), userInfo.getPassword())) {
 					if (changePassword(changePassword, true)) {
 						return true;
 					}
 					return false;
 				} else {
-					if (StringUtils.isNotBlank(changePassword.getOldPassword())
+					if (StrHelper.isNotBlank(changePassword.getOldPassword())
 							&& passwordEncoder.matches(changePassword.getPassword(), userInfo.getPassword())) {
 						WebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT,
 								WebContext.getI18nValue("PasswordPolicy.OLD_PASSWORD_MATCH"));
@@ -302,7 +303,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 	}
 
 	public void changePasswordProvisioning(ChangePassword changePassworded) {
-		if (changePassworded != null && StringUtils.isNotBlank(changePassworded.getPassword())) {
+		if (changePassworded != null && StrHelper.isNotBlank(changePassworded.getPassword())) {
 			UserInfo loadUserInfo = findByUsername(changePassworded.getUsername());
 			ChangePassword changePassword = new ChangePassword(loadUserInfo);
 			provisionService.send(ProvisionTopic.PASSWORD_TOPIC, changePassword, ProvisionAction.PASSWORD_ACTION);
@@ -326,7 +327,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 	 */
 	public void updateLocked(UserInfo userInfo) {
 		try {
-			if (userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
+			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				userInfo.setIsLocked(ConstsStatus.LOCK);
 				getMapper().updateLocked(userInfo);
 			}
@@ -342,7 +343,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 	 */
 	public void updateLockout(UserInfo userInfo) {
 		try {
-			if (userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
+			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				userInfo.setIsLocked(ConstsStatus.START);
 				userInfo.setBadPasswordCount(0);
 				getMapper().updateLockout(userInfo);
@@ -359,7 +360,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 	 */
 	public void updateBadPasswordCount(UserInfo userInfo) {
 		try {
-			if (userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
+			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				int updateBadPWDCount = userInfo.getBadPasswordCount() + 1;
 				userInfo.setBadPasswordCount(updateBadPWDCount);
 				getMapper().updateBadPWDCount(userInfo);

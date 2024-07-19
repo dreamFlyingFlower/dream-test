@@ -13,10 +13,10 @@ import com.wy.test.core.constants.ConstsStatus;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
-import com.wy.test.util.StringUtils;
 
 import dream.flying.flower.db.JdbcHelper;
 import dream.flying.flower.db.TableMetaData;
+import dream.flying.flower.lang.StrHelper;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -33,7 +33,7 @@ public class JdbcUsersService extends AbstractSynchronizerService implements ISy
 		ResultSet rs = null;
 
 		try {
-			if (StringUtils.isNotBlank(synchronizer.getOrgFilters())) {
+			if (StrHelper.isNotBlank(synchronizer.getOrgFilters())) {
 				log.info("Sync User Filters {}", synchronizer.getOrgFilters());
 				conn = JdbcHelper.connect(synchronizer.getProviderUrl(), synchronizer.getPrincipal(),
 						synchronizer.getCredentials(), synchronizer.getDriverClass());
@@ -112,11 +112,11 @@ public class JdbcUsersService extends AbstractSynchronizerService implements ISy
 		} else {
 			// 后4位
 			String last4Char = "6666";
-			if (StringUtils.isNotBlank(user.getIdCardNo())) {
+			if (StrHelper.isNotBlank(user.getIdCardNo())) {
 				last4Char = user.getIdCardNo().substring(user.getIdCardNo().length() - 4);
-			} else if (StringUtils.isNotBlank(user.getMobile())) {
+			} else if (StrHelper.isNotBlank(user.getMobile())) {
 				last4Char = user.getMobile().substring(user.getMobile().length() - 4);
-			} else if (StringUtils.isNotBlank(user.getEmployeeNumber())) {
+			} else if (StrHelper.isNotBlank(user.getEmployeeNumber())) {
 				last4Char = user.getEmployeeNumber().substring(user.getEmployeeNumber().length() - 4);
 			}
 			user.setPassword(user.getUsername() + "@M" + last4Char);

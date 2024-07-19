@@ -29,7 +29,8 @@ import com.wy.test.entity.Message;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.persistence.service.UserInfoService;
 import com.wy.test.sms.password.sms.SmsOtpAuthnService;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 @Controller
 @RequestMapping(value = { "/signup" })
@@ -60,7 +61,7 @@ public class RegisterController {
 		_logger.debug("/signup/produceOtp Mobile {}: ", mobile);
 
 		_logger.debug("Mobile Regex matches {}", mobileRegex.matcher(mobile).matches());
-		if (StringUtils.isNotBlank(mobile) && mobileRegex.matcher(mobile).matches()) {
+		if (StrHelper.isNotBlank(mobile) && mobileRegex.matcher(mobile).matches()) {
 			UserInfo userInfo = new UserInfo();
 			userInfo.setUsername(mobile);
 			userInfo.setMobile(mobile);
@@ -94,7 +95,7 @@ public class RegisterController {
 			}
 
 			// default InstId
-			if (StringUtils.isEmpty(userInfo.getInstId())) {
+			if (StrHelper.isEmpty(userInfo.getInstId())) {
 				userInfo.setInstId("1");
 			}
 			String password = userInfo.getPassword();

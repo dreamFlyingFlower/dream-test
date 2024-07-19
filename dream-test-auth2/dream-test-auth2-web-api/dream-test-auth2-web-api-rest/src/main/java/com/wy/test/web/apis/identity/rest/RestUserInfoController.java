@@ -26,7 +26,8 @@ import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.entity.Message;
 import com.wy.test.persistence.service.UserInfoService;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 @RestController
 @RequestMapping(value = { "/api/idm/Users" })
@@ -90,7 +91,7 @@ public class RestUserInfoController {
 	@GetMapping(value = { "/.search" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
 	public ResponseEntity<?> search(@ModelAttribute UserInfo userInfo) {
-		if (StringUtils.isBlank(userInfo.getInstId())) {
+		if (StrHelper.isBlank(userInfo.getInstId())) {
 			userInfo.setInstId("1");
 		}
 		return new Message<JpaPageResults<UserInfo>>(userInfoService.fetchPageResults(userInfo)).buildResponse();

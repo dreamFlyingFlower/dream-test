@@ -15,7 +15,8 @@ import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import com.wy.test.authz.oauth2.provider.OAuth2Authentication;
 import com.wy.test.authz.oauth2.provider.token.DefaultTokenServices;
 import com.wy.test.crypto.password.PasswordReciprocal;
-import com.wy.test.util.RequestTokenUtils;
+
+import dream.flying.flower.framework.core.helper.TokenHelpers;
 
 /**
  * OAuth v2.0 accessToken认证Interceptor处理.
@@ -45,7 +46,7 @@ public class Oauth20ApiPermissionAdapter implements AsyncHandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		_logger.trace("OAuth20 API Permission Adapter pre handle");
-		String accessToken = RequestTokenUtils.resolveAccessToken(request);
+		String accessToken = TokenHelpers.resolveAccessToken(request);
 		_logger.trace("access_token {} ", accessToken);
 		try {
 			OAuth2Authentication authentication = oauth20TokenServices.loadAuthentication(accessToken);

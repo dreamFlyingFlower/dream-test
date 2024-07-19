@@ -24,8 +24,8 @@ import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.web.HttpResponseConstants;
 import com.wy.test.util.Instance;
-import com.wy.test.util.StringUtils;
 
+import dream.flying.flower.lang.StrHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -62,7 +62,7 @@ public class Cas30AuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 
 		if (storedTicket != null) {
 			SignPrincipal authentication = ((SignPrincipal) storedTicket.getAuthentication().getPrincipal());
-			if (StringUtils.isNotBlank(pgtUrl)) {
+			if (StrHelper.isNotBlank(pgtUrl)) {
 				ProxyGrantingTicketIOUImpl proxyGrantingTicketIOUImpl = new ProxyGrantingTicketIOUImpl();
 				String proxyGrantingTicketIOU = casProxyGrantingTicketServices.createTicket(proxyGrantingTicketIOUImpl);
 

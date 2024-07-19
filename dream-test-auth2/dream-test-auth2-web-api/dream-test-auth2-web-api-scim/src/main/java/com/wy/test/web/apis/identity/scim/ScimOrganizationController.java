@@ -26,11 +26,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.persistence.service.OrganizationsService;
 import com.wy.test.util.DateUtils;
-import com.wy.test.util.StringUtils;
 import com.wy.test.web.apis.identity.scim.resources.ScimMeta;
 import com.wy.test.web.apis.identity.scim.resources.ScimOrganization;
 import com.wy.test.web.apis.identity.scim.resources.ScimParameters;
 import com.wy.test.web.apis.identity.scim.resources.ScimSearchResult;
+
+import dream.flying.flower.lang.StrHelper;
 
 /**
  * This Controller is used to manage Organization
@@ -125,7 +126,7 @@ public class ScimOrganizationController {
 		scimOrg.setParentName(org.getParentName());
 
 		scimOrg.setParentName(org.getParentName());
-		if (StringUtils.isNotBlank(org.getSortOrder())) {
+		if (StrHelper.isNotBlank(org.getSortOrder())) {
 			scimOrg.setOrder(Long.parseLong(org.getSortOrder()));
 		} else {
 			scimOrg.setOrder(1);
@@ -134,10 +135,10 @@ public class ScimOrganizationController {
 
 		ScimMeta meta = new ScimMeta("Organization");
 
-		if (StringUtils.isNotBlank(org.getCreatedDate())) {
+		if (StrHelper.isNotBlank(org.getCreatedDate())) {
 			meta.setCreated(DateUtils.parse(org.getCreatedDate(), DateUtils.FORMAT_DATE_YYYY_MM_DD_HH_MM_SS));
 		}
-		if (StringUtils.isNotBlank(org.getModifiedDate())) {
+		if (StrHelper.isNotBlank(org.getModifiedDate())) {
 			meta.setLastModified(DateUtils.parse(org.getModifiedDate(), DateUtils.FORMAT_DATE_YYYY_MM_DD_HH_MM_SS));
 		}
 		scimOrg.setMeta(meta);
@@ -149,12 +150,12 @@ public class ScimOrganizationController {
 		org.setId(scimOrg.getId());
 		org.setOrgCode(scimOrg.getCode());
 		org.setFullName(scimOrg.getFullName());
-		org.setOrgName(StringUtils.isNotBlank(scimOrg.getName()) ? scimOrg.getName() : scimOrg.getDisplayName());
-		org.setParentId(StringUtils.isNotBlank(scimOrg.getParentId()) ? scimOrg.getParentId() : scimOrg.getParent());
+		org.setOrgName(StrHelper.isNotBlank(scimOrg.getName()) ? scimOrg.getName() : scimOrg.getDisplayName());
+		org.setParentId(StrHelper.isNotBlank(scimOrg.getParentId()) ? scimOrg.getParentId() : scimOrg.getParent());
 		org.setParentCode(scimOrg.getParentCode());
 		org.setParentName(scimOrg.getParentName());
 		org.setSortOrder(
-				StringUtils.isNotBlank(scimOrg.getSortOrder()) ? scimOrg.getSortOrder() : scimOrg.getOrder() + "");
+				StrHelper.isNotBlank(scimOrg.getSortOrder()) ? scimOrg.getSortOrder() : scimOrg.getOrder() + "");
 		org.setLevel(scimOrg.getLevel());
 		org.setType(scimOrg.getType());
 		org.setDivision(scimOrg.getDivision());

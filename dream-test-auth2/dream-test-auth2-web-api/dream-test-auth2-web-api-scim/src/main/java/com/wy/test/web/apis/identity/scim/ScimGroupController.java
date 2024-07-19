@@ -30,12 +30,13 @@ import com.wy.test.core.entity.UserInfo;
 import com.wy.test.persistence.service.RoleMemberService;
 import com.wy.test.persistence.service.RolesService;
 import com.wy.test.util.DateUtils;
-import com.wy.test.util.StringUtils;
 import com.wy.test.web.apis.identity.scim.resources.ScimGroup;
 import com.wy.test.web.apis.identity.scim.resources.ScimMemberRef;
 import com.wy.test.web.apis.identity.scim.resources.ScimMeta;
 import com.wy.test.web.apis.identity.scim.resources.ScimParameters;
 import com.wy.test.web.apis.identity.scim.resources.ScimSearchResult;
+
+import dream.flying.flower.lang.StrHelper;
 
 @RestController
 @RequestMapping(value = "/api/idm/SCIM/v2/Groups")
@@ -116,10 +117,10 @@ public class ScimGroupController {
 		scimGroup.setDisplayName(group.getRoleName());
 
 		ScimMeta meta = new ScimMeta("Group");
-		if (StringUtils.isNotBlank(group.getCreatedDate())) {
+		if (StrHelper.isNotBlank(group.getCreatedDate())) {
 			meta.setCreated(DateUtils.parse(group.getCreatedDate(), DateUtils.FORMAT_DATE_YYYY_MM_DD_HH_MM_SS));
 		}
-		if (StringUtils.isNotBlank(group.getModifiedDate())) {
+		if (StrHelper.isNotBlank(group.getModifiedDate())) {
 			meta.setLastModified(DateUtils.parse(group.getModifiedDate(), DateUtils.FORMAT_DATE_YYYY_MM_DD_HH_MM_SS));
 		}
 		scimGroup.setMeta(meta);

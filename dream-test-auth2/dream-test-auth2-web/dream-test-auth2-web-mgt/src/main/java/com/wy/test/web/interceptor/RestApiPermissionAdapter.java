@@ -18,9 +18,10 @@ import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import com.wy.test.authz.oauth2.provider.OAuth2Authentication;
 import com.wy.test.authz.oauth2.provider.token.DefaultTokenServices;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.util.AuthorizationHeader;
-import com.wy.test.util.AuthorizationHeaderUtils;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.framework.core.helper.TokenHeader;
+import dream.flying.flower.framework.core.helper.TokenHelpers;
+import dream.flying.flower.lang.StrHelper;
 
 /**
  * basic认证Interceptor处理
@@ -41,23 +42,21 @@ public class RestApiPermissionAdapter implements AsyncHandlerInterceptor {
 	/*
 	 * 请求前处理 (non-Javadoc)
 	 * 
-	 * @see
-	 * org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(
-	 * javax.servlet.http.HttpServletRequest,
-	 * javax.servlet.http.HttpServletResponse, java.lang.Object)
+	 * @see org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(
+	 * javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object)
 	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		_logger.trace("Rest API Permission Adapter pre handle");
-		AuthorizationHeader headerCredential = AuthorizationHeaderUtils.resolve(request);
+		TokenHeader headerCredential = TokenHelpers.resolve(request);
 
 		// 判断应用的AppId和Secret
 		if (headerCredential != null) {
 			UsernamePasswordAuthenticationToken authenticationToken = null;
 			if (headerCredential.isBasic()) {
-				if (StringUtils.isNotBlank(headerCredential.getUsername())
-						&& StringUtils.isNotBlank(headerCredential.getCredential())) {
+				if (StrHelper.isNotBlank(headerCredential.getUsername())
+						&& StrHelper.isNotBlank(headerCredential.getCredential())) {
 					UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
 							headerCredential.getUsername(), headerCredential.getCredential());
 					authenticationToken = (UsernamePasswordAuthenticationToken) oauth20ClientAuthenticationManager

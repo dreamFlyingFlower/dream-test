@@ -13,7 +13,8 @@ import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 
@@ -58,7 +59,7 @@ public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 
 		// for WsFederation Login
 		_logger.debug("WsFederation : " + wsFederationWA + " , wsFederationWResult : " + wsFederationWResult);
-		if (applicationConfig.getLoginConfig().isWsFederation() && StringUtils.isNotEmpty(wsFederationWA)
+		if (applicationConfig.getLoginConfig().isWsFederation() && StrHelper.isNotEmpty(wsFederationWA)
 				&& wsFederationWA.equalsIgnoreCase(WsFederationConstants.WSIGNIN)) {
 			_logger.debug("wresult : {}" + wsFederationWResult);
 

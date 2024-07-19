@@ -16,7 +16,8 @@ import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.util.AuthorizationHeaderUtils;
+
+import dream.flying.flower.framework.core.helper.TokenHelpers;
 
 public class AuthorizationUtils {
 
@@ -44,7 +45,7 @@ public class AuthorizationUtils {
 
 	public static void authenticate(HttpServletRequest request, AuthTokenService authTokenService,
 			SessionManager sessionManager) throws ParseException {
-		String authorization = AuthorizationHeaderUtils.resolveBearer(request);
+		String authorization = TokenHelpers.resolveBearer(request);
 		if (authorization != null) {
 			_logger.trace("Try Authorization authenticate .");
 			doJwtAuthenticate(BEARERTYPE.AUTHORIZATION, authorization, authTokenService, sessionManager);

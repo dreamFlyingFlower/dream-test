@@ -18,7 +18,8 @@ import com.wy.test.core.entity.UserInfo;
 import com.wy.test.entity.Message;
 import com.wy.test.persistence.service.FileUploadService;
 import com.wy.test.persistence.service.UserInfoService;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 @Controller
 @RequestMapping(value = { "/config/profile" })
@@ -62,7 +63,7 @@ public class ProfileController {
 		// String extraAttribute=JsonUtils.object2Json(extraAttributeMap);
 		// userInfo.setExtraAttribute(extraAttribute);
 		// }
-		if (StringUtils.isNotBlank(userInfo.getPictureId())) {
+		if (StrHelper.isNotBlank(userInfo.getPictureId())) {
 			userInfo.setPicture(fileUploadService.get(userInfo.getPictureId()).getUploaded());
 			fileUploadService.remove(userInfo.getPictureId());
 		}

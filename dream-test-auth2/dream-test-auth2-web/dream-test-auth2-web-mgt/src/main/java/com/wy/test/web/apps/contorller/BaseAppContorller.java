@@ -9,7 +9,8 @@ import com.wy.test.crypto.password.PasswordReciprocal;
 import com.wy.test.persistence.service.AppsService;
 import com.wy.test.persistence.service.FileUploadService;
 import com.wy.test.persistence.service.HistorySystemLogsService;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 public class BaseAppContorller {
 
@@ -41,7 +42,7 @@ public class BaseAppContorller {
 		/*
 		 * upload icon Bytes
 		 */
-		if (StringUtils.isNotBlank(application.getIconId())) {
+		if (StrHelper.isNotBlank(application.getIconId())) {
 			application.setIcon(fileUploadService.get(application.getIconId()).getUploaded());
 			fileUploadService.remove(application.getIconId());
 		}
@@ -49,13 +50,13 @@ public class BaseAppContorller {
 	}
 
 	protected void encodeSharedPassword(Apps application) {
-		if (StringUtils.isNotBlank(application.getSharedPassword())) {
+		if (StrHelper.isNotBlank(application.getSharedPassword())) {
 			application.setSharedPassword(PasswordReciprocal.getInstance().encode(application.getSharedPassword()));
 		}
 	}
 
 	protected void decoderSharedPassword(Apps application) {
-		if (StringUtils.isNotBlank(application.getSharedPassword())) {
+		if (StrHelper.isNotBlank(application.getSharedPassword())) {
 			application.setSharedPassword(PasswordReciprocal.getInstance().decoder(application.getSharedPassword()));
 		}
 	}
@@ -65,14 +66,14 @@ public class BaseAppContorller {
 	}
 
 	protected void encodeSecret(Apps application) {
-		if (StringUtils.isNotBlank(application.getSecret())) {
+		if (StrHelper.isNotBlank(application.getSecret())) {
 			String encodeSecret = passwordReciprocal.encode(application.getSecret());
 			application.setSecret(encodeSecret);
 		}
 	}
 
 	protected void decoderSecret(Apps application) {
-		if (StringUtils.isNotBlank(application.getSecret())) {
+		if (StrHelper.isNotBlank(application.getSecret())) {
 			String decodeSecret = passwordReciprocal.decoder(application.getSecret());
 			application.setSecret(decodeSecret);
 		}

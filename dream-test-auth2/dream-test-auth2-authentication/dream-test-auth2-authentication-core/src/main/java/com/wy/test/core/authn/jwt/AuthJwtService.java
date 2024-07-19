@@ -16,7 +16,8 @@ import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.crypto.jwt.HMAC512Service;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 public class AuthJwtService {
 
@@ -92,7 +93,7 @@ public class AuthJwtService {
 	 */
 	public boolean validateJwtToken(String authToken) {
 		try {
-			if (StringUtils.isNotBlank(authToken)) {
+			if (StrHelper.isNotBlank(authToken)) {
 				JWTClaimsSet claims = resolve(authToken);
 				boolean isExpiration = claims.getExpirationTime().after(DateTime.now().toDate());
 				boolean isVerify = hmac512Service.verify(authToken);

@@ -21,10 +21,10 @@ import com.wy.test.authz.oauth2.provider.OAuth2Authentication;
 import com.wy.test.authz.oauth2.provider.token.DefaultTokenServices;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.web.HttpResponseAdapter;
-import com.wy.test.util.AuthorizationHeader;
 import com.wy.test.util.JsonUtils;
-import com.wy.test.util.RequestTokenUtils;
 
+import dream.flying.flower.framework.core.helper.TokenHeader;
+import dream.flying.flower.framework.core.helper.TokenHelpers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -53,7 +53,7 @@ public class IntrospectEndpoint {
 	@RequestMapping(value = OAuth2Constants.ENDPOINT.ENDPOINT_BASE + "/introspect",
 			method = { RequestMethod.POST, RequestMethod.GET })
 	public void introspect(HttpServletRequest request, HttpServletResponse response) {
-		String access_token = RequestTokenUtils.resolveAccessToken(request);
+		String access_token = TokenHelpers.resolveAccessToken(request);
 		_logger.debug("access_token {}", access_token);
 
 		OAuth2Authentication oAuth2Authentication = null;
@@ -80,7 +80,7 @@ public class IntrospectEndpoint {
 		httpResponseAdapter.write(response, JsonUtils.gsonToString(introspection), "json");
 	}
 
-	public boolean clientAuthenticate(AuthorizationHeader headerCredential) {
+	public boolean clientAuthenticate(TokenHeader headerCredential) {
 		if (headerCredential != null) {
 			UsernamePasswordAuthenticationToken authenticationToken = null;
 			if (headerCredential.isBasic()) {

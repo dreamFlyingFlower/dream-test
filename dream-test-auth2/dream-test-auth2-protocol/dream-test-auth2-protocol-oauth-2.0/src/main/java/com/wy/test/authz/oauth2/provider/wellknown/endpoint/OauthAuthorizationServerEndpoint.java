@@ -21,8 +21,8 @@ import com.wy.test.authz.oauth2.provider.wellknown.OauthServerConfiguration;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.pretty.impl.JsonPretty;
-import com.wy.test.util.StringUtils;
 
+import dream.flying.flower.lang.StrHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -55,7 +55,7 @@ public class OauthAuthorizationServerEndpoint extends AbstractEndpoint {
 
 		ClientDetails clientDetails = null;
 
-		if (StringUtils.isNotBlank(client_id)) {
+		if (StrHelper.isNotBlank(client_id)) {
 			try {
 				clientDetails = getClientDetailsService().loadClientByClientId(client_id, true);
 			} catch (Exception e) {

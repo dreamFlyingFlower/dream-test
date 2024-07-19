@@ -15,8 +15,9 @@ import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 import com.wy.test.synchronizer.feishu.entity.FeishuUsers;
 import com.wy.test.synchronizer.feishu.entity.FeishuUsersResponse;
-import com.wy.test.util.AuthorizationHeaderUtils;
 import com.wy.test.util.JsonUtils;
+
+import dream.flying.flower.framework.core.helper.TokenHelpers;
 
 @Service
 public class FeishuUsersService extends AbstractSynchronizerService implements ISynchronizerService {
@@ -37,7 +38,7 @@ public class FeishuUsersService extends AbstractSynchronizerService implements I
 			for (SynchroRelated relatedOrg : synchroRelateds) {
 				HttpRequestAdapter request = new HttpRequestAdapter();
 				HashMap<String, String> headers = new HashMap<String, String>();
-				headers.put("Authorization", AuthorizationHeaderUtils.createBearer(access_token));
+				headers.put("Authorization", TokenHelpers.createBearer(access_token));
 				String responseBody = request.get(String.format(USERS_URL, relatedOrg.getOriginId()), headers);
 				FeishuUsersResponse usersResponse =
 						JsonUtils.gsonStringToObject(responseBody, FeishuUsersResponse.class);

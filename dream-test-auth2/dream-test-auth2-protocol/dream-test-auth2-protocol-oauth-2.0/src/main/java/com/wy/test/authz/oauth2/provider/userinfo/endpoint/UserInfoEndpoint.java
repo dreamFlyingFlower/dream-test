@@ -31,9 +31,9 @@ import com.wy.test.persistence.service.AppsService;
 import com.wy.test.persistence.service.UserInfoService;
 import com.wy.test.util.Instance;
 import com.wy.test.util.JsonUtils;
-import com.wy.test.util.RequestTokenUtils;
 import com.wy.test.util.StringGenerator;
 
+import dream.flying.flower.framework.core.helper.TokenHelpers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -67,7 +67,7 @@ public class UserInfoEndpoint {
 	@RequestMapping(value = OAuth2Constants.ENDPOINT.ENDPOINT_USERINFO,
 			method = { RequestMethod.POST, RequestMethod.GET })
 	public void apiV20UserInfo(HttpServletRequest request, HttpServletResponse response) {
-		String access_token = RequestTokenUtils.resolveAccessToken(request);
+		String access_token = TokenHelpers.resolveAccessToken(request);
 		_logger.debug("access_token {}", access_token);
 		if (!StringGenerator.uuidMatches(access_token)) {
 			httpResponseAdapter.write(response, JsonUtils.gsonToString(accessTokenFormatError(access_token)), "json");

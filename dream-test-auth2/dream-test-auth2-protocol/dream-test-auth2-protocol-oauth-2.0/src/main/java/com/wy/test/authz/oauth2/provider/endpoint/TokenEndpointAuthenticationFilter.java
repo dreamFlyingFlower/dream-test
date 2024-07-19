@@ -40,27 +40,25 @@ import com.wy.test.authz.oauth2.provider.OAuth2RequestFactory;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.util.AuthorizationHeader;
-import com.wy.test.util.AuthorizationHeaderUtils;
+
+import dream.flying.flower.framework.core.helper.TokenHeader;
+import dream.flying.flower.framework.core.helper.TokenHelpers;
 
 /**
  * <p>
- * An optional authentication filter for the {@link TokenEndpoint}. It sits
- * downstream of another filter (usually {@link BasicAuthenticationFilter}) for
- * the client, and creates an {@link OAuth2Authentication} for the Spring
- * {@link SecurityContext} if the request also contains user credentials, e.g.
- * as typically would be the case in a password grant. This filter is only
- * required if the TokenEndpoint (or one of it's dependencies) needs to know
- * about the authenticated user. In a vanilla password grant this <b>isn't</b>
- * normally necessary because the token granter will also authenticate the user.
+ * An optional authentication filter for the {@link TokenEndpoint}. It sits downstream of another filter (usually
+ * {@link BasicAuthenticationFilter}) for the client, and creates an {@link OAuth2Authentication} for the Spring
+ * {@link SecurityContext} if the request also contains user credentials, e.g. as typically would be the case in a
+ * password grant. This filter is only required if the TokenEndpoint (or one of it's dependencies) needs to know about
+ * the authenticated user. In a vanilla password grant this <b>isn't</b> normally necessary because the token granter
+ * will also authenticate the user.
  * </p>
  * 
  * <p>
- * If this filter is used the Spring Security context will contain an
- * OAuth2Authentication encapsulating (as the authorization request) the form
- * parameters coming into the filter and the client id from the already
- * authenticated client authentication, and the authenticated user token
- * extracted from the request and validated using the authentication manager.
+ * If this filter is used the Spring Security context will contain an OAuth2Authentication encapsulating (as the
+ * authorization request) the form parameters coming into the filter and the client id from the already authenticated
+ * client authentication, and the authenticated user token extracted from the request and validated using the
+ * authentication manager.
  * </p>
  * 
  * @author Dave Syer
@@ -88,8 +86,7 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 	}
 
 	/**
-	 * @param authenticationManager an AuthenticationManager for the incoming
-	 *        request
+	 * @param authenticationManager an AuthenticationManager for the incoming request
 	 */
 	public TokenEndpointAuthenticationFilter(AuthenticationManager authenticationManager,
 			OAuth2RequestFactory oAuth2RequestFactory) {
@@ -99,8 +96,7 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 	}
 
 	/**
-	 * A source of authentication details for requests that result in
-	 * authentication.
+	 * A source of authentication details for requests that result in authentication.
 	 * 
 	 * @param authenticationDetailsSource the authenticationDetailsSource to set
 	 */
@@ -230,7 +226,7 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 		if (clientId == null) {
 			// for header authorization basic
 			String authorization_bearer = request.getHeader("authorization");
-			AuthorizationHeader ahc = AuthorizationHeaderUtils.resolve(authorization_bearer);
+			TokenHeader ahc = TokenHelpers.resolve(authorization_bearer);
 			clientId = ahc.getUsername();
 			clientSecret = ahc.getCredential();
 		}
@@ -278,14 +274,12 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 	}
 
 	/**
-	 * If the incoming request contains user credentials in headers or parameters
-	 * then extract them here into an Authentication token that can be validated
-	 * later. This implementation only recognises password grant requests and
+	 * If the incoming request contains user credentials in headers or parameters then extract them here into an
+	 * Authentication token that can be validated later. This implementation only recognises password grant requests and
 	 * extracts the username and password.
 	 * 
 	 * @param request the incoming request, possibly with user credentials
-	 * @return an authentication for validation (or null if there is no further
-	 *         authentication)
+	 * @return an authentication for validation (or null if there is no further authentication)
 	 */
 	protected Authentication extractCredentials(HttpServletRequest request) {
 		String grantType = request.getParameter(OAuth2Constants.PARAMETER.GRANT_TYPE);

@@ -17,9 +17,9 @@ import com.wy.test.core.constants.ConstsStatus;
 import com.wy.test.core.entity.Institutions;
 import com.wy.test.core.entity.Roles;
 import com.wy.test.persistence.mapper.RolesMapper;
-import com.wy.test.util.StringUtils;
 
 import dream.flying.flower.db.SqlHelper;
+import dream.flying.flower.lang.StrHelper;
 
 @Repository
 public class RolesService extends JpaService<Roles> implements Serializable {
@@ -70,8 +70,7 @@ public class RolesService extends JpaService<Roles> implements Serializable {
 		if (dynamicRole.getCategory().equals(Roles.Category.DYNAMIC)) {
 			boolean isDynamicTimeSupport = false;
 			boolean isBetweenEffectiveTime = false;
-			if (StringUtils.isNotBlank(dynamicRole.getResumeTime())
-					&& StringUtils.isNotBlank(dynamicRole.getSuspendTime())
+			if (StrHelper.isNotBlank(dynamicRole.getResumeTime()) && StrHelper.isNotBlank(dynamicRole.getSuspendTime())
 					&& !dynamicRole.getSuspendTime().equals("00:00")) {
 				LocalTime currentTime = LocalDateTime.now().toLocalTime();
 				LocalTime resumeTime = LocalTime.parse(dynamicRole.getResumeTime());
@@ -87,11 +86,11 @@ public class RolesService extends JpaService<Roles> implements Serializable {
 
 			}
 
-			if (StringUtils.isNotBlank(dynamicRole.getOrgIdsList())) {
+			if (StrHelper.isNotBlank(dynamicRole.getOrgIdsList())) {
 				String[] orgIds = dynamicRole.getOrgIdsList().split(",");
 				StringBuffer orgIdFilters = new StringBuffer();
 				for (String orgId : orgIds) {
-					if (StringUtils.isNotBlank(orgId)) {
+					if (StrHelper.isNotBlank(orgId)) {
 						if (orgIdFilters.length() > 0) {
 							orgIdFilters.append(",");
 						}
@@ -104,7 +103,7 @@ public class RolesService extends JpaService<Roles> implements Serializable {
 			}
 
 			String filters = dynamicRole.getFilters();
-			if (StringUtils.isNotBlank(filters)) {
+			if (StrHelper.isNotBlank(filters)) {
 				if (SqlHelper.filtersSQLInjection(filters.toLowerCase())) {
 					_logger.info("filters include SQL Injection Attack Risk.");
 					return;

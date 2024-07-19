@@ -29,7 +29,6 @@ import com.wy.test.core.entity.UserInfo;
 import com.wy.test.persistence.service.RolesService;
 import com.wy.test.persistence.service.UserInfoService;
 import com.wy.test.util.DateUtils;
-import com.wy.test.util.StringUtils;
 import com.wy.test.web.apis.identity.scim.resources.ScimEnterprise;
 import com.wy.test.web.apis.identity.scim.resources.ScimFormattedName;
 import com.wy.test.web.apis.identity.scim.resources.ScimGroupRef;
@@ -42,6 +41,8 @@ import com.wy.test.web.apis.identity.scim.resources.ScimSearchResult;
 import com.wy.test.web.apis.identity.scim.resources.ScimUser;
 import com.wy.test.web.apis.identity.scim.resources.ScimUserEmail;
 import com.wy.test.web.apis.identity.scim.resources.ScimUserPhoneNumber;
+
+import dream.flying.flower.lang.StrHelper;
 
 /**
  * This Controller is used to manage User
@@ -158,13 +159,13 @@ public class ScimUserController {
 		scimUser.setActive(userInfo.getStatus() == ConstsStatus.ACTIVE);
 
 		List<ScimUserEmail> emails = new ArrayList<ScimUserEmail>();
-		if (StringUtils.isNotBlank(userInfo.getEmail())) {
+		if (StrHelper.isNotBlank(userInfo.getEmail())) {
 			emails.add(new ScimUserEmail(userInfo.getEmail(), UserEmailType.OTHER, true));
 		}
-		if (StringUtils.isNotBlank(userInfo.getWorkEmail())) {
+		if (StrHelper.isNotBlank(userInfo.getWorkEmail())) {
 			emails.add(new ScimUserEmail(userInfo.getEmail(), UserEmailType.WORK, false));
 		}
-		if (StringUtils.isNotBlank(userInfo.getHomeEmail())) {
+		if (StrHelper.isNotBlank(userInfo.getHomeEmail())) {
 			emails.add(new ScimUserEmail(userInfo.getEmail(), UserEmailType.HOME, false));
 		}
 
@@ -173,14 +174,14 @@ public class ScimUserController {
 		}
 
 		List<ScimUserPhoneNumber> phoneNumbers = new ArrayList<ScimUserPhoneNumber>();
-		if (StringUtils.isNotBlank(userInfo.getMobile())) {
+		if (StrHelper.isNotBlank(userInfo.getMobile())) {
 			phoneNumbers.add(new ScimUserPhoneNumber(userInfo.getMobile(), UserPhoneNumberType.MOBILE, true));
 		}
-		if (StringUtils.isNotBlank(userInfo.getWorkPhoneNumber())) {
+		if (StrHelper.isNotBlank(userInfo.getWorkPhoneNumber())) {
 			phoneNumbers.add(new ScimUserPhoneNumber(userInfo.getWorkPhoneNumber(), UserPhoneNumberType.WORK, false));
 		}
 
-		if (StringUtils.isNotBlank(userInfo.getHomePhoneNumber())) {
+		if (StrHelper.isNotBlank(userInfo.getHomePhoneNumber())) {
 			phoneNumbers.add(new ScimUserPhoneNumber(userInfo.getHomePhoneNumber(), UserPhoneNumberType.HOME, false));
 		}
 
@@ -189,10 +190,10 @@ public class ScimUserController {
 		}
 
 		ScimMeta meta = new ScimMeta("User");
-		if (StringUtils.isNotBlank(userInfo.getCreatedDate())) {
+		if (StrHelper.isNotBlank(userInfo.getCreatedDate())) {
 			meta.setCreated(DateUtils.parse(userInfo.getCreatedDate(), DateUtils.FORMAT_DATE_YYYY_MM_DD_HH_MM_SS));
 		}
-		if (StringUtils.isNotBlank(userInfo.getModifiedDate())) {
+		if (StrHelper.isNotBlank(userInfo.getModifiedDate())) {
 			meta.setLastModified(
 					DateUtils.parse(userInfo.getModifiedDate(), DateUtils.FORMAT_DATE_YYYY_MM_DD_HH_MM_SS));
 		}

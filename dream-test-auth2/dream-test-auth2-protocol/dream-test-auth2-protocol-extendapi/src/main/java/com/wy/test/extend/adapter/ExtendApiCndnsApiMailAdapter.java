@@ -13,14 +13,13 @@ import com.wy.test.core.entity.ExtraAttrs;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.web.HttpRequestAdapter;
 import com.wy.test.crypto.DigestUtils;
-import com.wy.test.util.HttpsTrusts;
 import com.wy.test.util.JsonUtils;
+
+import dream.flying.flower.http.HttpsTrust;
 
 /**
  * https://exmail.qq.com/qy_mng_logic/doc exmail sso
  * 
- * @author shimingxy
- *
  */
 public class ExtendApiCndnsApiMailAdapter extends AbstractAuthorizeAdapter {
 
@@ -56,7 +55,7 @@ public class ExtendApiCndnsApiMailAdapter extends AbstractAuthorizeAdapter {
 	@SuppressWarnings("unchecked")
 	@Override
 	public ModelAndView authorize(ModelAndView modelAndView) {
-		HttpsTrusts.beforeConnection();
+		HttpsTrust.beforeConnection();
 
 		Apps details = (Apps) app;
 		// extraAttrs from Applications

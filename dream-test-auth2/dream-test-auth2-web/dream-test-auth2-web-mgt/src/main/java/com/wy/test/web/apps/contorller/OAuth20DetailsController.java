@@ -24,7 +24,8 @@ import com.wy.test.core.entity.apps.AppsOAuth20Details;
 import com.wy.test.core.entity.apps.oauth2.provider.client.BaseClientDetails;
 import com.wy.test.crypto.ReciprocalUtils;
 import com.wy.test.entity.Message;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 @Controller
 @RequestMapping(value = { "/apps/oauth20" })
@@ -109,7 +110,7 @@ public class OAuth20DetailsController extends BaseAppContorller {
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
 		_logger.debug("-delete  ids : {} ", ids);
-		for (String id : StringUtils.split(ids, ",")) {
+		for (String id : StrHelper.split(ids, ",")) {
 			oauth20JdbcClientDetailsService.removeClientDetails(id);
 		}
 		if (appsService.deleteBatch(ids)) {

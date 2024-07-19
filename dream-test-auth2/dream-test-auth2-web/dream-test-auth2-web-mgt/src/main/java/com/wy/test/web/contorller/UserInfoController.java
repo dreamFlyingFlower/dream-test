@@ -52,7 +52,8 @@ import com.wy.test.persistence.service.UserInfoService;
 import com.wy.test.util.DateUtils;
 import com.wy.test.util.ExcelUtils;
 import com.wy.test.util.JsonUtils;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 @Controller
 @RequestMapping(value = { "/users" })
@@ -108,7 +109,7 @@ public class UserInfoController {
 		_logger.debug("-Add  :" + userInfo);
 		userInfo.setId(WebContext.genId());
 		userInfo.setInstId(currentUser.getInstId());
-		if (StringUtils.isNotBlank(userInfo.getPictureId())) {
+		if (StrHelper.isNotBlank(userInfo.getPictureId())) {
 			userInfo.setPicture(fileUploadService.get(userInfo.getPictureId()).getUploaded());
 			fileUploadService.remove(userInfo.getPictureId());
 		}
@@ -134,7 +135,7 @@ public class UserInfoController {
 		convertExtraAttribute(userInfo);
 		_logger.info(userInfo.getExtraAttribute());
 		userInfo.setInstId(currentUser.getInstId());
-		if (StringUtils.isNotBlank(userInfo.getPictureId())) {
+		if (StrHelper.isNotBlank(userInfo.getPictureId())) {
 			userInfo.setPicture(fileUploadService.get(userInfo.getPictureId()).getUploaded());
 			fileUploadService.remove(userInfo.getPictureId());
 		}
@@ -265,7 +266,7 @@ public class UserInfoController {
 
 			@Override
 			public void setAsText(String value) {
-				if (StringUtils.isEmpty(value)) {
+				if (StrHelper.isEmpty(value)) {
 					setValue(null);
 				} else {
 					setValue(value);

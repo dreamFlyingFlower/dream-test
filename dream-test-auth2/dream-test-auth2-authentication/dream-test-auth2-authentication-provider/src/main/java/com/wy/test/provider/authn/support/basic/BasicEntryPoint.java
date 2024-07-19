@@ -14,8 +14,9 @@ import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
-import com.wy.test.util.AuthorizationHeader;
-import com.wy.test.util.AuthorizationHeaderUtils;
+
+import dream.flying.flower.framework.core.helper.TokenHeader;
+import dream.flying.flower.framework.core.helper.TokenHelpers;
 
 public class BasicEntryPoint implements AsyncHandlerInterceptor {
 
@@ -67,7 +68,7 @@ public class BasicEntryPoint implements AsyncHandlerInterceptor {
 			_logger.info("recreate new session .");
 			request.getSession(true);
 		}
-		String basicCredential = request.getHeader(AuthorizationHeaderUtils.HEADER_Authorization);
+		String basicCredential = request.getHeader(TokenHelpers.HEADER_Authorization);
 		_logger.info("getSession.getId : " + request.getSession().getId());
 
 		_logger.info("Authorization : " + basicCredential);
@@ -77,10 +78,10 @@ public class BasicEntryPoint implements AsyncHandlerInterceptor {
 			return false;
 		}
 
-		AuthorizationHeader headerCredential = null;
+		TokenHeader headerCredential = null;
 
-		if (AuthorizationHeaderUtils.isBasic(basicCredential)) {
-			headerCredential = AuthorizationHeaderUtils.resolve(basicCredential);
+		if (TokenHelpers.isBasic(basicCredential)) {
+			headerCredential = TokenHelpers.resolve(basicCredential);
 		} else {
 			return false;
 		}

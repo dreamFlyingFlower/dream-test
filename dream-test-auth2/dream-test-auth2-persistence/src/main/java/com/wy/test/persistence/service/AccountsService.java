@@ -16,8 +16,8 @@ import com.wy.test.persistence.mapper.AccountsMapper;
 import com.wy.test.provision.ProvisionAction;
 import com.wy.test.provision.ProvisionService;
 import com.wy.test.provision.ProvisionTopic;
-import com.wy.test.util.StringUtils;
 
+import dream.flying.flower.lang.StrHelper;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -111,7 +111,7 @@ public class AccountsService extends JpaService<Accounts> {
 	}
 
 	public void refreshByStrategy(AccountsStrategy strategy) {
-		if (StringUtils.isNotBlank(strategy.getOrgIdsList())) {
+		if (StrHelper.isNotBlank(strategy.getOrgIdsList())) {
 			strategy.setOrgIdsList("'" + strategy.getOrgIdsList().replace(",", "','") + "'");
 		}
 		List<UserInfo> userList = queryUserNotInStrategy(strategy);
@@ -182,7 +182,7 @@ public class AccountsService extends JpaService<Accounts> {
 				}
 			}
 		}
-		if (StringUtils.isNotBlank(accountsStrategy.getSuffixes())) {
+		if (StrHelper.isNotBlank(accountsStrategy.getSuffixes())) {
 			accountResult = accountResult + accountsStrategy.getSuffixes();
 		}
 		return accountResult;

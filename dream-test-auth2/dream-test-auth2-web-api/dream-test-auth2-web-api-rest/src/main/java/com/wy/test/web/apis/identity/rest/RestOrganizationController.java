@@ -24,7 +24,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.entity.Message;
 import com.wy.test.persistence.service.OrganizationsService;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 @RestController
 @RequestMapping(value = { "/api/idm/Organization" })
@@ -73,7 +74,7 @@ public class RestOrganizationController {
 	@GetMapping(value = { "/.search" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
 	public ResponseEntity<?> search(@ModelAttribute Organizations org) {
-		if (StringUtils.isBlank(org.getInstId())) {
+		if (StrHelper.isBlank(org.getInstId())) {
 			org.setInstId("1");
 		}
 		return new Message<JpaPageResults<Organizations>>(organizationsService.fetchPageResults(org)).buildResponse();

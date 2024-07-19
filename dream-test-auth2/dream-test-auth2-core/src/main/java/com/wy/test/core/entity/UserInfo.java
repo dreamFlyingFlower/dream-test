@@ -14,9 +14,9 @@ import javax.persistence.Table;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.wy.test.util.StringUtils;
 
 import dream.flying.flower.helper.ImageHelper;
+import dream.flying.flower.lang.StrHelper;
 
 @Entity
 @Table(name = "MXK_USERINFO")
@@ -535,7 +535,7 @@ public class UserInfo extends JpaEntity implements Serializable {
 		if (protectedAppsMap == null) {
 			protectedAppsMap = new HashMap<String, String>();
 		}
-		if (StringUtils.isNotEmpty(protectedApps)) {
+		if (StrHelper.isNotBlank(protectedApps)) {
 			String[] apps = protectedApps.split(",");
 
 			for (String appid : apps) {

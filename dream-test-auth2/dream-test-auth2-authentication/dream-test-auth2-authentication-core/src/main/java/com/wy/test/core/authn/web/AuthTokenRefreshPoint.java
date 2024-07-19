@@ -20,7 +20,8 @@ import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.entity.Message;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 @Controller
 @RequestMapping(value = "/auth")
@@ -46,7 +47,7 @@ public class AuthTokenRefreshPoint {
 			WebContext.printRequest(request);
 		}
 		try {
-			if (StringUtils.isNotBlank(refreshToken) && refreshTokenService.validateJwtToken(refreshToken)) {
+			if (StrHelper.isNotBlank(refreshToken) && refreshTokenService.validateJwtToken(refreshToken)) {
 				String sessionId = refreshTokenService.resolveJWTID(refreshToken);
 				_logger.trace("Try to  refresh sessionId [{}]", sessionId);
 				Session session = sessionManager.refresh(sessionId);

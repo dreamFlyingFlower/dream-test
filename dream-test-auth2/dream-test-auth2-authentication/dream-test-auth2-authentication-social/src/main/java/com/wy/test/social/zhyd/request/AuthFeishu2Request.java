@@ -3,9 +3,9 @@ package com.wy.test.social.zhyd.request;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wy.test.social.zhyd.config.AuthMxkDefaultSource;
-import com.wy.test.util.StringUtils;
 import com.xkcoding.http.support.HttpHeader;
 
+import dream.flying.flower.lang.StrHelper;
 import me.zhyd.oauth.cache.AuthStateCache;
 import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.enums.AuthResponseStatus;
@@ -52,7 +52,7 @@ public class AuthFeishu2Request extends AuthDefaultRequest {
 	private String getAppAccessToken() {
 		String cacheKey = this.source.getName().concat(":app_access_token:").concat(config.getClientId());
 		String cacheAppAccessToken = this.authStateCache.get(cacheKey);
-		if (StringUtils.isNotEmpty(cacheAppAccessToken)) {
+		if (StrHelper.isNotEmpty(cacheAppAccessToken)) {
 			return cacheAppAccessToken;
 		}
 		String url = "https://open.feishu.cn/open-apis/auth/v3/app_access_token/internal/";

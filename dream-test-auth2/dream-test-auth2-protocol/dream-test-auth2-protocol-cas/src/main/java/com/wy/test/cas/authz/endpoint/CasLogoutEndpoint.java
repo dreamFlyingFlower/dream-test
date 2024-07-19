@@ -10,8 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.cas.authz.endpoint.ticket.CasConstants;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.util.StringUtils;
 
+import dream.flying.flower.lang.StrHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -39,7 +39,7 @@ public class CasLogoutEndpoint extends CasBaseAuthorizeEndpoint {
 	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = CasConstants.PARAMETER.SERVICE, required = false) String casService) {
 		StringBuffer logoutUrl = new StringBuffer("/force/logout");
-		if (StringUtils.isNotBlank(casService)) {
+		if (StrHelper.isNotBlank(casService)) {
 			logoutUrl.append("?").append("redirect_uri=").append(casService);
 		}
 		return WebContext.forward(logoutUrl.toString());

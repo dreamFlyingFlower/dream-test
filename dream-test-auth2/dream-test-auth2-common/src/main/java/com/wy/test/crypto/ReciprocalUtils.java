@@ -12,9 +12,9 @@ import org.apache.commons.logging.LogFactory;
 
 import com.wy.test.util.Instance;
 import com.wy.test.util.StringGenerator;
-import com.wy.test.util.StringUtils;
 
 import dream.flying.flower.binary.HexHelper;
+import dream.flying.flower.lang.StrHelper;
 
 /**
  * Reciprocal cipher or Symmetric-key algorithm
@@ -155,7 +155,7 @@ public final class ReciprocalUtils {
 	}
 
 	public static String decoderHex(String ciphers, String secretKey, String algorithm) {
-		if (StringUtils.isBlank(ciphers))
+		if (StrHelper.isBlank(ciphers))
 			return "";
 
 		if (keyLengthCheck(secretKey, algorithm)) {

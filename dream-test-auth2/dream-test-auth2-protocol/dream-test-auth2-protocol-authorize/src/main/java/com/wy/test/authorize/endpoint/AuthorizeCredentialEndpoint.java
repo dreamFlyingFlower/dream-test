@@ -15,7 +15,8 @@ import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.crypto.password.PasswordReciprocal;
 import com.wy.test.entity.Message;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 @RestController
 @RequestMapping(value = { "/authz/credential" })
@@ -44,8 +45,7 @@ public class AuthorizeCredentialEndpoint extends AuthorizeBaseEndpoint {
 
 	@PostMapping("/update")
 	public ResponseEntity<?> update(@RequestBody Accounts account, @CurrentUser UserInfo currentUser) {
-		if (StringUtils.isNotEmpty(account.getRelatedPassword())
-				&& StringUtils.isNotEmpty(account.getRelatedPassword())) {
+		if (StrHelper.isNotEmpty(account.getRelatedPassword()) && StrHelper.isNotEmpty(account.getRelatedPassword())) {
 			account.setInstId(currentUser.getInstId());
 			account.setRelatedPassword(PasswordReciprocal.getInstance().encode(account.getRelatedPassword()));
 			if (accountsService.get(account.getId()) == null) {

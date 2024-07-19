@@ -49,9 +49,9 @@ import com.wy.test.crypto.jwt.signer.service.impl.DefaultJwtSigningAndValidation
 import com.wy.test.persistence.service.AppsService;
 import com.wy.test.persistence.service.UserInfoService;
 import com.wy.test.util.JsonUtils;
-import com.wy.test.util.RequestTokenUtils;
 import com.wy.test.util.StringGenerator;
 
+import dream.flying.flower.framework.core.helper.TokenHelpers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -88,7 +88,7 @@ public class UserInfoOIDCEndpoint {
 			method = { RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody
 	public String connect10aUserInfo(HttpServletRequest request, HttpServletResponse response) {
-		String access_token = RequestTokenUtils.resolveAccessToken(request);
+		String access_token = TokenHelpers.resolveAccessToken(request);
 		_logger.debug("access_token {}", access_token);
 		if (!StringGenerator.uuidMatches(access_token)) {
 			return JsonUtils.gsonToString(accessTokenFormatError(access_token));

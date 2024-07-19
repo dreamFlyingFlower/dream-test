@@ -32,8 +32,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.wy.test.core.constants.ContentType;
-import com.wy.test.util.AuthorizationHeaderUtils;
 import com.wy.test.util.JsonUtils;
+
+import dream.flying.flower.framework.core.helper.TokenHelpers;
 
 @Component
 public class HttpRequestAdapter {
@@ -57,12 +58,12 @@ public class HttpRequestAdapter {
 	}
 
 	public HttpRequestAdapter addHeaderAuthorizationBearer(String token) {
-		headers.put("Authorization", AuthorizationHeaderUtils.createBearer(token));
+		headers.put("Authorization", TokenHelpers.createBearer(token));
 		return this;
 	}
 
 	public HttpRequestAdapter addHeaderAuthorizationBasic(String username, String password) {
-		headers.put("Authorization", AuthorizationHeaderUtils.createBasic(username, password));
+		headers.put("Authorization", TokenHelpers.createBasic(username, password));
 		return this;
 	}
 

@@ -16,8 +16,9 @@ import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 import com.wy.test.synchronizer.feishu.entity.FeishuDepts;
 import com.wy.test.synchronizer.feishu.entity.FeishuDeptsResponse;
-import com.wy.test.util.AuthorizationHeaderUtils;
 import com.wy.test.util.JsonUtils;
+
+import dream.flying.flower.framework.core.helper.TokenHelpers;
 
 @Service
 public class FeishuOrganizationService extends AbstractSynchronizerService implements ISynchronizerService {
@@ -84,7 +85,7 @@ public class FeishuOrganizationService extends AbstractSynchronizerService imple
 	public FeishuDeptsResponse requestDepartmentList(String access_token, String deptId) {
 		HttpRequestAdapter request = new HttpRequestAdapter();
 		HashMap<String, String> headers = new HashMap<String, String>();
-		headers.put("Authorization", AuthorizationHeaderUtils.createBearer(access_token));
+		headers.put("Authorization", TokenHelpers.createBearer(access_token));
 		String responseBody = request.get(String.format(DEPTS_URL, deptId), headers);
 		FeishuDeptsResponse deptsResponse = JsonUtils.gsonStringToObject(responseBody, FeishuDeptsResponse.class);
 
@@ -96,7 +97,7 @@ public class FeishuOrganizationService extends AbstractSynchronizerService imple
 	public FeishuDeptsResponse requestDepartment(String url, String deptId, String access_token) {
 		HttpRequestAdapter request = new HttpRequestAdapter();
 		HashMap<String, String> headers = new HashMap<String, String>();
-		headers.put("Authorization", AuthorizationHeaderUtils.createBearer(access_token));
+		headers.put("Authorization", TokenHelpers.createBearer(access_token));
 		String responseBody = request.get(String.format(url, deptId), headers);
 		FeishuDeptsResponse deptsResponse = JsonUtils.gsonStringToObject(responseBody, FeishuDeptsResponse.class);
 

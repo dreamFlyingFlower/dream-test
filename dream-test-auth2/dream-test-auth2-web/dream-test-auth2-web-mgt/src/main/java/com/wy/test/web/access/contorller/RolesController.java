@@ -26,7 +26,8 @@ import com.wy.test.core.entity.UserInfo;
 import com.wy.test.entity.Message;
 import com.wy.test.persistence.service.HistorySystemLogsService;
 import com.wy.test.persistence.service.RolesService;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 @Controller
 @RequestMapping(value = { "/access/roles" })
@@ -73,7 +74,7 @@ public class RolesController {
 		_logger.debug("-Add  :" + role);
 		role.setInstId(currentUser.getInstId());
 		role.setId(role.generateId());
-		if (StringUtils.isBlank(role.getRoleCode())) {
+		if (StrHelper.isBlank(role.getRoleCode())) {
 			role.setRoleCode(role.getId());
 		}
 		if (rolesService.insert(role)) {

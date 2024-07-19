@@ -21,11 +21,11 @@ import com.wy.test.core.entity.Roles;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.entity.Message;
-import com.wy.test.persistence.service.HistorySystemLogsService;
 import com.wy.test.persistence.service.RoleMemberService;
 import com.wy.test.persistence.service.RolesService;
 import com.wy.test.persistence.service.UserInfoService;
-import com.wy.test.util.StringUtils;
+
+import dream.flying.flower.lang.StrHelper;
 
 @Controller
 @RequestMapping(value = { "/access/rolemembers" })
@@ -43,7 +43,7 @@ public class RoleMemberController {
 	UserInfoService userInfoService;
 
 	@Autowired
-	HistorySystemLogsService systemLog;
+	// HistorySystemLogsService systemLog;
 
 	@GetMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
@@ -100,7 +100,7 @@ public class RoleMemberController {
 			String[] arrMemberIds = memberIds.split(",");
 			String[] arrMemberNames = memberNames.split(",");
 			// set default as USER
-			if (StringUtils.isBlank(roleMember.getType())) {
+			if (StrHelper.isBlank(roleMember.getType())) {
 				roleMember.setType("USER");
 			}
 			for (int i = 0; i < arrMemberIds.length; i++) {
@@ -126,7 +126,7 @@ public class RoleMemberController {
 	@PostMapping(value = { "/addMember2Roles" })
 	@ResponseBody
 	public ResponseEntity<?> addMember2Roles(@RequestBody RoleMember roleMember, @CurrentUser UserInfo currentUser) {
-		if (roleMember == null || StringUtils.isBlank(roleMember.getUsername())) {
+		if (roleMember == null || StrHelper.isBlank(roleMember.getUsername())) {
 			return new Message<RoleMember>(Message.FAIL).buildResponse();
 		}
 		UserInfo userInfo = userInfoService.findByUsername(roleMember.getUsername());
