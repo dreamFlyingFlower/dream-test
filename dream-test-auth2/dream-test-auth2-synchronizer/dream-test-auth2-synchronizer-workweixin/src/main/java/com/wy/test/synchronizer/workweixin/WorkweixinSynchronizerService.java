@@ -1,17 +1,16 @@
 package com.wy.test.synchronizer.workweixin;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.core.entity.Synchronizers;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
-@Service
-public class WorkweixinSynchronizerService implements ISynchronizerService {
+import lombok.extern.slf4j.Slf4j;
 
-	final static Logger _logger = LoggerFactory.getLogger(WorkweixinSynchronizerService.class);
+@Service
+@Slf4j
+public class WorkweixinSynchronizerService implements ISynchronizerService {
 
 	Synchronizers synchronizer;
 
@@ -29,7 +28,7 @@ public class WorkweixinSynchronizerService implements ISynchronizerService {
 
 	@Override
 	public void sync() throws Exception {
-		_logger.info("Sync ...");
+		log.info("Sync ...");
 		workweixinAccessTokenService.setCorpid(synchronizer.getPrincipal());
 		workweixinAccessTokenService.setCorpsecret(synchronizer.getCredentials());
 		String access_token = workweixinAccessTokenService.requestToken();

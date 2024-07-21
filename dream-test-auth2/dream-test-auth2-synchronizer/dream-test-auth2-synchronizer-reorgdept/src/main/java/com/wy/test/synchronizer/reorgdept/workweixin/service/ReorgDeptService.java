@@ -3,8 +3,6 @@ package com.wy.test.synchronizer.reorgdept.workweixin.service;
 import java.util.HashMap;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.core.constants.ConstsStatus;
@@ -12,16 +10,17 @@ import com.wy.test.core.entity.Organizations;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
-@Service
-public class ReorgDeptService extends AbstractSynchronizerService implements ISynchronizerService {
+import lombok.extern.slf4j.Slf4j;
 
-	final static Logger _logger = LoggerFactory.getLogger(ReorgDeptService.class);
+@Service
+@Slf4j
+public class ReorgDeptService extends AbstractSynchronizerService implements ISynchronizerService {
 
 	String rootParentOrgId = "-1";
 
 	@Override
 	public void sync() {
-		_logger.info("Sync Organizations ...");
+		log.info("Sync Organizations ...");
 
 		try {
 			long responseCount = 0;
@@ -33,7 +32,7 @@ public class ReorgDeptService extends AbstractSynchronizerService implements ISy
 			buildNamePath(orgCastMap, listOrg);
 
 			for (Organizations org : listOrg) {
-				_logger.info("Dept " + (++responseCount) + " : " + org);
+				log.info("Dept " + (++responseCount) + " : " + org);
 				org.setStatus(ConstsStatus.ACTIVE);
 				organizationsService.update(org);
 			}
@@ -76,11 +75,10 @@ public class ReorgDeptService extends AbstractSynchronizerService implements ISy
 						tempOrg.setCodePath(parentOrg.getCodePath() + "/" + tempOrg.getId());
 						tempOrg.setNamePath(parentOrg.getNamePath() + "/" + tempOrg.getOrgName());
 						orgMap.put(tempOrg.getId(), tempOrg);
-						_logger.info("reorg : " + tempOrg);
+						log.info("reorg : " + tempOrg);
 					}
 				}
 			}
 		} while (listOrg.size() > listOrg.size());
 	}
-
 }

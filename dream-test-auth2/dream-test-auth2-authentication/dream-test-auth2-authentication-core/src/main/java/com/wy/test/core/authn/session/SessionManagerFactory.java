@@ -12,11 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
+import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.constants.ConstsPersistence;
 import com.wy.test.core.entity.HistoryLogin;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
-import com.wy.test.util.DateUtils;
 
 /**
  * SessionManager Level 1 in memory,store in Caffeine Level 2 in Redis user

@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
+import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.entity.apps.AppsTokenBasedDetails;
-import com.wy.test.util.DateUtils;
 
 public class TokenBasedSimpleAdapter extends AbstractAuthorizeAdapter {
 

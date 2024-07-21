@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.constants.ContentType;
-import com.wy.test.util.JsonUtils;
 
 import dream.flying.flower.framework.core.helper.TokenHelpers;
 

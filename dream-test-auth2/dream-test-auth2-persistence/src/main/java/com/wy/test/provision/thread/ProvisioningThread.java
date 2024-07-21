@@ -7,10 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.wy.test.pretty.impl.JsonPretty;
+import com.wy.test.common.pretty.impl.JsonPretty;
+import com.wy.test.common.util.JsonUtils;
 import com.wy.test.provision.ProvisionMessage;
-import com.wy.test.util.JsonUtils;
-import com.wy.test.util.ObjectTransformer;
+
+import dream.flying.flower.lang.SerializableHelper;
 
 /**
  * Provisioning Thread for send message
@@ -35,7 +36,7 @@ public class ProvisioningThread extends Thread {
 	@Override
 	public void run() {
 		_logger.debug("send message \n{}", new JsonPretty().jacksonFormat(msg.getSourceObject()));
-		msg.setContent(ObjectTransformer.serialize((Serializable) msg.getSourceObject()));
+		msg.setContent(SerializableHelper.serializeHex((Serializable) msg.getSourceObject()));
 		Inst inst = JsonUtils.gsonStringToObject(JsonUtils.gsonToString(msg.getSourceObject()), Inst.class);
 		jdbcTemplate.update(PROVISION_INSERT_STATEMENT,
 				new Object[] { msg.getId(), msg.getTopic(), msg.getActionType(), msg.getContent(), msg.getSendTime(),

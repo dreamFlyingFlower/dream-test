@@ -3,8 +3,6 @@ package com.wy.test.synchronizer.dingtalk;
 import java.util.NoSuchElementException;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.dingtalk.api.DefaultDingTalkClient;
@@ -21,10 +19,11 @@ import com.wy.test.core.entity.SynchroRelated;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
-@Service
-public class DingtalkOrganizationService extends AbstractSynchronizerService implements ISynchronizerService {
+import lombok.extern.slf4j.Slf4j;
 
-	final static Logger _logger = LoggerFactory.getLogger(DingtalkOrganizationService.class);
+@Service
+@Slf4j
+public class DingtalkOrganizationService extends AbstractSynchronizerService implements ISynchronizerService {
 
 	static Long ROOT_DEPT_ID = 1L;
 
@@ -32,14 +31,14 @@ public class DingtalkOrganizationService extends AbstractSynchronizerService imp
 
 	@Override
 	public void sync() {
-		_logger.info("Sync Dingtalk Organizations ...");
+		log.info("Sync Dingtalk Organizations ...");
 		LinkedBlockingQueue<Long> deptsQueue = new LinkedBlockingQueue<Long>();
 		deptsQueue.add(ROOT_DEPT_ID);
 		try {
 			// root
 			Organizations rootOrganization = organizationsService.get(Organizations.ROOT_ORG_ID);
 			OapiV2DepartmentGetResponse rootDeptRsp = requestDepartment(access_token, ROOT_DEPT_ID);
-			_logger.debug("root dept   deptId {} , name {} ,  parentId {}", rootDeptRsp.getResult().getDeptId(),
+			log.debug("root dept   deptId {} , name {} ,  parentId {}", rootDeptRsp.getResult().getDeptId(),
 					rootDeptRsp.getResult().getName(), rootDeptRsp.getResult().getParentId());
 			// root
 			SynchroRelated rootSynchroRelated =
@@ -52,7 +51,7 @@ public class DingtalkOrganizationService extends AbstractSynchronizerService imp
 				OapiV2DepartmentListsubResponse rsp = requestDepartmentList(access_token, deptsQueue.poll());
 
 				for (DeptBaseResponse dept : rsp.getResult()) {
-					_logger.debug("dept  deptId {} , name {} ,  parentId {} ", dept.getDeptId(), dept.getName(),
+					log.debug("dept  deptId {} , name {} ,  parentId {} ", dept.getDeptId(), dept.getName(),
 							dept.getParentId());
 
 					deptsQueue.add(dept.getDeptId());
@@ -65,7 +64,7 @@ public class DingtalkOrganizationService extends AbstractSynchronizerService imp
 					if (synchroRelated == null) {
 						organization.setId(organization.generateId());
 						organizationsService.insert(organization);
-						_logger.debug("Organizations : " + organization);
+						log.debug("Organizations : " + organization);
 
 						synchroRelated = buildSynchroRelated(organization, dept.getDeptId() + "", dept.getName(),
 								dept.getParentId() + "");
@@ -78,13 +77,13 @@ public class DingtalkOrganizationService extends AbstractSynchronizerService imp
 					synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated,
 							Organizations.CLASS_TYPE);
 
-					_logger.debug("Organizations : " + organization);
+					log.debug("Organizations : " + organization);
 				}
 			}
 		} catch (ApiException e) {
 			e.printStackTrace();
 		} catch (NoSuchElementException e) {
-			_logger.debug("Sync Department successful .");
+			log.debug("Sync Department successful .");
 		}
 
 	}
@@ -95,7 +94,7 @@ public class DingtalkOrganizationService extends AbstractSynchronizerService imp
 		req.setDeptId(deptId);
 		req.setLanguage("zh_CN");
 		OapiV2DepartmentListsubResponse rspDepts = client.execute(req, access_token);
-		_logger.trace("response : " + rspDepts.getBody());
+		log.trace("response : " + rspDepts.getBody());
 		return rspDepts;
 	}
 
@@ -105,7 +104,7 @@ public class DingtalkOrganizationService extends AbstractSynchronizerService imp
 		req.setDeptId(deptId);
 		req.setLanguage("zh_CN");
 		OapiV2DepartmentGetResponse rspDepts = client.execute(req, access_token);
-		_logger.trace("response : " + rspDepts.getBody());
+		log.trace("response : " + rspDepts.getBody());
 		return rspDepts;
 	}
 
@@ -141,5 +140,4 @@ public class DingtalkOrganizationService extends AbstractSynchronizerService imp
 	public void setAccess_token(String access_token) {
 		this.access_token = access_token;
 	}
-
 }

@@ -6,13 +6,13 @@ import org.junit.jupiter.api.Test;
 
 import dream.flying.flower.binary.Base64Helper;
 import dream.flying.flower.binary.HexHelper;
+import dream.flying.flower.digest.DigestHelper;
 
 public class RSAUtilsTest {
 
 	@Test
 	public void test() throws Exception {
-		// RSA KeyPair
-		KeyPair keyPair = RSAUtils.genRSAKeyPair();
+		KeyPair keyPair = DigestHelper.rsaGenerateKeyPair();
 		String privateKey = HexHelper.encodeHexString(keyPair.getPrivate().getEncoded());
 		String publicKey = HexHelper.encodeHexString(keyPair.getPublic().getEncoded());
 		System.out.println("privateKey:" + privateKey);
@@ -21,13 +21,11 @@ public class RSAUtilsTest {
 		System.out.println("privateKey:");
 		System.out.println(Base64Helper.encodeUrl(keyPair.getPublic().getEncoded()));
 		System.out.println("PublicKeyPEM:");
-		System.out.println(RSAUtils.getPublicKeyPEM(keyPair.getPublic().getEncoded()));
+		System.out.println(DigestHelper.getPemPublicKey(keyPair.getPublic().getEncoded()));
 
-		byte[] encodedData = RSAUtils.encryptByPrivateKey(signString.getBytes(), privateKey);
-		System.out.println("encodedData \r\n" + new String(encodedData));
-		System.out.println("encodedData HexString \r\n" + HexHelper.encodeHexString(encodedData));
-		byte[] decodedData = RSAUtils.decryptByPublicKey(encodedData, publicKey);
-		String target = new String(decodedData);
-		System.out.println("target:" + target);
+		String encodedData = DigestHelper.rsaEncrypt(publicKey, signString.getBytes());
+		System.out.println("encodedData \r\n" + encodedData);
+		String decodedData = DigestHelper.rsaDecrypt(privateKey, encodedData);
+		System.out.println("target:" + decodedData);
 	}
 }

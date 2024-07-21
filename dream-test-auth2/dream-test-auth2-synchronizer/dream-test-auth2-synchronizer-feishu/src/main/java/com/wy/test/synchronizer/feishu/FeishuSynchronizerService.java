@@ -1,17 +1,16 @@
 package com.wy.test.synchronizer.feishu;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.core.entity.Synchronizers;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
-@Service
-public class FeishuSynchronizerService implements ISynchronizerService {
+import lombok.extern.slf4j.Slf4j;
 
-	final static Logger _logger = LoggerFactory.getLogger(FeishuSynchronizerService.class);
+@Service
+@Slf4j
+public class FeishuSynchronizerService implements ISynchronizerService {
 
 	Synchronizers synchronizer;
 
@@ -29,7 +28,7 @@ public class FeishuSynchronizerService implements ISynchronizerService {
 
 	@Override
 	public void sync() throws Exception {
-		_logger.info("Sync ...");
+		log.info("Sync ...");
 		feishuAccessTokenService.setAppId(synchronizer.getPrincipal());
 		feishuAccessTokenService.setAppSecret(synchronizer.getCredentials());
 		String access_token = feishuAccessTokenService.requestToken();

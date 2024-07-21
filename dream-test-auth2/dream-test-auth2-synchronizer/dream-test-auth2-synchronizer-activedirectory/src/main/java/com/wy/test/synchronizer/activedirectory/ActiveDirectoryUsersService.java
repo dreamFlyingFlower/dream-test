@@ -9,8 +9,6 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.core.constants.ConstsStatus;
@@ -21,20 +19,21 @@ import com.wy.test.core.entity.SynchroRelated;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.persistence.ldap.ActiveDirectoryUtils;
 import com.wy.test.core.persistence.ldap.LdapUtils;
-import com.wy.test.crypto.DigestUtils;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
-@Service
-public class ActiveDirectoryUsersService extends AbstractSynchronizerService implements ISynchronizerService {
+import dream.flying.flower.digest.DigestHelper;
+import lombok.extern.slf4j.Slf4j;
 
-	final static Logger _logger = LoggerFactory.getLogger(ActiveDirectoryUsersService.class);
+@Service
+@Slf4j
+public class ActiveDirectoryUsersService extends AbstractSynchronizerService implements ISynchronizerService {
 
 	ActiveDirectoryUtils ldapUtils;
 
 	@Override
 	public void sync() {
-		_logger.info("Sync ActiveDirectory Users...");
+		log.info("Sync ActiveDirectory Users...");
 		loadOrgsByInstId(this.synchronizer.getInstId(), Organizations.ROOT_ORG_ID);
 		try {
 			SearchControls constraints = new SearchControls();
@@ -52,28 +51,28 @@ public class ActiveDirectoryUsersService extends AbstractSynchronizerService imp
 					SearchResult sr = (SearchResult) obj;
 					if (sr.getNameInNamespace().contains("CN=Users,")
 							|| sr.getNameInNamespace().contains("OU=Domain Controllers,")) {
-						_logger.trace("Skip 'CN=Users' or 'OU=Domain Controllers' . ");
+						log.trace("Skip 'CN=Users' or 'OU=Domain Controllers' . ");
 						continue;
 					}
-					_logger.debug("Sync User {} , name [{}] , NameInNamespace [{}]", (++recordCount), sr.getName(),
+					log.debug("Sync User {} , name [{}] , NameInNamespace [{}]", (++recordCount), sr.getName(),
 							sr.getNameInNamespace());
 
 					HashMap<String, Attribute> attributeMap = new HashMap<String, Attribute>();
 					NamingEnumeration<? extends Attribute> attrs = sr.getAttributes().getAll();
 					while (null != attrs && attrs.hasMoreElements()) {
 						Attribute objAttrs = attrs.nextElement();
-						_logger.trace("attribute {} : {}", objAttrs.getID(),
+						log.trace("attribute {} : {}", objAttrs.getID(),
 								ActiveDirectoryUtils.getAttrStringValue(objAttrs));
 						attributeMap.put(objAttrs.getID().toLowerCase(), objAttrs);
 					}
 
-					String originId = DigestUtils.md5B64(sr.getNameInNamespace());
+					String originId = DigestHelper.md5Hex(sr.getNameInNamespace());
 
 					UserInfo userInfo = buildUserInfo(attributeMap, sr.getName(), sr.getNameInNamespace());
 					if (userInfo != null) {
 						userInfo.setPassword(userInfo.getUsername() + UserInfo.DEFAULT_PASSWORD_SUFFIX);
 						userInfoService.saveOrUpdate(userInfo);
-						_logger.info("userInfo " + userInfo);
+						log.info("userInfo " + userInfo);
 
 						SynchroRelated synchroRelated =
 								new SynchroRelated(userInfo.getId(), userInfo.getUsername(), userInfo.getDisplayName(),
@@ -88,9 +87,8 @@ public class ActiveDirectoryUsersService extends AbstractSynchronizerService imp
 
 			// ldapUtils.close();
 		} catch (NamingException e) {
-			_logger.error("NamingException ", e);
+			log.error("NamingException ", e);
 		}
-
 	}
 
 	public UserInfo buildUserInfo(HashMap<String, Attribute> attributeMap, String name, String nameInNamespace) {
@@ -107,7 +105,7 @@ public class ActiveDirectoryUsersService extends AbstractSynchronizerService imp
 
 		// namePah = namePah.substring(0, namePah.length());
 		String deptNamePath = namePah.substring(0, namePah.lastIndexOf("/"));
-		_logger.info("deptNamePath  " + deptNamePath);
+		log.info("deptNamePath  " + deptNamePath);
 		Organizations deptOrg = orgsNamePathMap.get(deptNamePath);
 		if (deptOrg == null) {
 			deptOrg = rootOrganization;

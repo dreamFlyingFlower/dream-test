@@ -5,7 +5,7 @@ import java.io.File;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
-import com.wy.test.util.QRCode;
+import com.wy.test.common.util.QRCode;
 
 public class RQcodeTest {
 

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.wy.test.pretty.impl.JsonPretty;
-import com.wy.test.util.JsonUtils;
+import com.wy.test.common.pretty.impl.JsonPretty;
+import com.wy.test.common.util.JsonUtils;
 import com.wy.test.web.apis.identity.scim.resources.ScimEnterprise;
 import com.wy.test.web.apis.identity.scim.resources.ScimEnterpriseUser;
 import com.wy.test.web.apis.identity.scim.resources.ScimFormattedName;

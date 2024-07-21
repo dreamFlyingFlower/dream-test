@@ -8,7 +8,9 @@ import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.entity.apps.AppsFormBasedDetails;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.crypto.DigestUtils;
+
+import dream.flying.flower.digest.DigestHelper;
+import dream.flying.flower.digest.enums.MessageDigestType;
 
 public class FormBasedRedirectAdapter extends AbstractAuthorizeAdapter {
 
@@ -25,10 +27,13 @@ public class FormBasedRedirectAdapter extends AbstractAuthorizeAdapter {
 		String password = account.getRelatedPassword();
 		if (null == details.getPasswordAlgorithm() || details.getPasswordAlgorithm().equals("")) {
 		} else if (details.getPasswordAlgorithm().indexOf("HEX") > -1) {
-			password = DigestUtils.digestHex(account.getRelatedPassword(),
-					details.getPasswordAlgorithm().substring(0, details.getPasswordAlgorithm().indexOf("HEX")));
+			password = DigestHelper.digestHex(
+					MessageDigestType.getType(
+							details.getPasswordAlgorithm().substring(0, details.getPasswordAlgorithm().indexOf("HEX"))),
+					account.getRelatedPassword());
 		} else {
-			password = DigestUtils.digestBase64(account.getRelatedPassword(), details.getPasswordAlgorithm());
+			password = DigestHelper.digestBase64(MessageDigestType.getType(details.getPasswordAlgorithm()),
+					account.getRelatedPassword());
 		}
 
 		modelAndView.addObject("id", details.getId());

@@ -14,13 +14,13 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.wy.test.authz.oauth2.provider.client.ClientDetailsUserDetailsService;
-import com.wy.test.authz.oauth2.provider.client.JdbcClientDetailsService;
-import com.wy.test.authz.oauth2.provider.token.DefaultTokenServices;
-import com.wy.test.authz.oauth2.provider.token.TokenStore;
-import com.wy.test.authz.oauth2.provider.token.store.InMemoryTokenStore;
-import com.wy.test.authz.oauth2.provider.token.store.RedisTokenStore;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
+import com.wy.test.oauth2.provider.client.ClientDetailsUserDetailsService;
+import com.wy.test.oauth2.provider.client.JdbcClientDetailsService;
+import com.wy.test.oauth2.provider.token.DefaultTokenServices;
+import com.wy.test.oauth2.provider.token.TokenStore;
+import com.wy.test.oauth2.provider.token.store.InMemoryTokenStore;
+import com.wy.test.oauth2.provider.token.store.RedisTokenStore;
 
 /**
  * like Oauth20AutoConfiguration for mgmt

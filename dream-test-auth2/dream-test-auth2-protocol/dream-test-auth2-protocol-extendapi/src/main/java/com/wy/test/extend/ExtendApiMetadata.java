@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wy.test.common.pretty.impl.JsonPretty;
 import com.wy.test.extend.adapter.netease.NeteaseRSATool;
-import com.wy.test.pretty.impl.JsonPretty;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

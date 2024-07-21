@@ -14,10 +14,10 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.wy.test.common.crypto.password.PasswordReciprocal;
 import com.wy.test.core.constants.ConstsTimeInterval;
 import com.wy.test.core.entity.SocialsProvider;
 import com.wy.test.core.entity.SocialsProviderLogin;
-import com.wy.test.crypto.password.PasswordReciprocal;
 import com.wy.test.social.authn.support.socialsignon.token.RedisTokenStore;
 import com.wy.test.social.zhyd.request.AuthFeishu2Request;
 import com.wy.test.social.zhyd.request.AuthHuaweiWeLinkRequest;

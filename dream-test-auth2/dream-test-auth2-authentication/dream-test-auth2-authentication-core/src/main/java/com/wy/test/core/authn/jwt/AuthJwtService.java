@@ -12,10 +12,10 @@ import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import com.wy.test.common.crypto.jwt.HMAC512Service;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.crypto.jwt.HMAC512Service;
 
 import dream.flying.flower.lang.StrHelper;
 

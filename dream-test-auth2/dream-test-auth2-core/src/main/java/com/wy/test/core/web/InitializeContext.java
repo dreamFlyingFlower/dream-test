@@ -28,8 +28,8 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.wy.test.common.util.PathUtils;
 import com.wy.test.core.configuration.ApplicationConfig;
-import com.wy.test.util.PathUtils;
 
 /**
  * InitApplicationContext .

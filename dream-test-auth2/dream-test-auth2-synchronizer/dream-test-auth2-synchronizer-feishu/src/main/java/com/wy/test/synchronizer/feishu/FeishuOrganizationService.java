@@ -4,10 +4,9 @@ import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.constants.ConstsStatus;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.core.entity.SynchroRelated;
@@ -16,14 +15,13 @@ import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 import com.wy.test.synchronizer.feishu.entity.FeishuDepts;
 import com.wy.test.synchronizer.feishu.entity.FeishuDeptsResponse;
-import com.wy.test.util.JsonUtils;
 
 import dream.flying.flower.framework.core.helper.TokenHelpers;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class FeishuOrganizationService extends AbstractSynchronizerService implements ISynchronizerService {
-
-	final static Logger _logger = LoggerFactory.getLogger(FeishuOrganizationService.class);
 
 	String access_token;
 
@@ -35,7 +33,7 @@ public class FeishuOrganizationService extends AbstractSynchronizerService imple
 
 	@Override
 	public void sync() {
-		_logger.info("Sync Feishu Organizations ...");
+		log.info("Sync Feishu Organizations ...");
 
 		LinkedBlockingQueue<String> deptsQueue = new LinkedBlockingQueue<String>();
 
@@ -53,7 +51,7 @@ public class FeishuOrganizationService extends AbstractSynchronizerService imple
 				FeishuDeptsResponse rsp = requestDepartmentList(access_token, deptsQueue.poll());
 				if (rsp.getCode() == 0 && rsp.getData().getItems() != null) {
 					for (FeishuDepts dept : rsp.getData().getItems()) {
-						_logger.debug("dept : id {} , Parent {} , Name {} , od {}", dept.getDepartment_id(),
+						log.debug("dept : id {} , Parent {} , Name {} , od {}", dept.getDepartment_id(),
 								dept.getParent_department_id(), dept.getName(), dept.getOpen_department_id());
 						deptsQueue.add(dept.getOpen_department_id());
 						// synchro Related
@@ -63,7 +61,7 @@ public class FeishuOrganizationService extends AbstractSynchronizerService imple
 						if (synchroRelated == null) {
 							organization.setId(organization.generateId());
 							organizationsService.insert(organization);
-							_logger.debug("Organizations : " + organization);
+							log.debug("Organizations : " + organization);
 							synchroRelated = buildSynchroRelated(organization, dept);
 
 						} else {
@@ -77,7 +75,7 @@ public class FeishuOrganizationService extends AbstractSynchronizerService imple
 				}
 			}
 		} catch (NoSuchElementException e) {
-			_logger.debug("Sync Department successful .");
+			log.debug("Sync Department successful .");
 		}
 
 	}
@@ -89,7 +87,7 @@ public class FeishuOrganizationService extends AbstractSynchronizerService imple
 		String responseBody = request.get(String.format(DEPTS_URL, deptId), headers);
 		FeishuDeptsResponse deptsResponse = JsonUtils.gsonStringToObject(responseBody, FeishuDeptsResponse.class);
 
-		_logger.trace("response : " + responseBody);
+		log.trace("response : " + responseBody);
 
 		return deptsResponse;
 	}
@@ -101,7 +99,7 @@ public class FeishuOrganizationService extends AbstractSynchronizerService imple
 		String responseBody = request.get(String.format(url, deptId), headers);
 		FeishuDeptsResponse deptsResponse = JsonUtils.gsonStringToObject(responseBody, FeishuDeptsResponse.class);
 
-		_logger.trace("response : " + responseBody);
+		log.trace("response : " + responseBody);
 
 		return deptsResponse;
 	}

@@ -27,10 +27,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import com.wy.test.common.util.DateUtils;
+import com.wy.test.common.util.IdGenerator;
 import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.entity.Institutions;
-import com.wy.test.util.DateUtils;
-import com.wy.test.util.IdGenerator;
 
 /**
  * Application is common class for Web Application Context.

@@ -1,5 +1,8 @@
 package com.wy.test.crypto.password;
 
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
+
+@SuppressWarnings("deprecation")
 public class StandardPasswordEncoderTest {
 
 	public static void main(String[] args) {

@@ -67,7 +67,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.wy.test.authz.saml.common.TrustResolver;
-import com.wy.test.crypto.keystore.KeyStoreLoader;
+import com.wy.test.common.crypto.keystore.KeyStoreLoader;
 
 import org.opensaml.DefaultBootstrap;
 

@@ -51,11 +51,11 @@ import com.wy.test.authz.saml20.consumer.spring.IdentityProviderAuthenticationEx
 import com.wy.test.authz.saml20.consumer.spring.ServiceProviderAuthenticationException;
 import com.wy.test.authz.saml20.provider.xml.AuthnResponseGenerator;
 import com.wy.test.authz.saml20.xml.SAML2ValidatorSuite;
+import com.wy.test.common.crypto.keystore.KeyStoreLoader;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.entity.apps.AppsSAML20Details;
-import com.wy.test.crypto.keystore.KeyStoreLoader;
 import com.wy.test.persistence.service.AppsSaml20DetailsService;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 

@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.junit.jupiter.api.Test;
 
-import com.wy.test.crypto.password.PasswordReciprocal;
+import com.wy.test.common.crypto.password.PasswordReciprocal;
 
 public class ReciprocalUtilsTest {
 

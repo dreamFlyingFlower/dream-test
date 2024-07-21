@@ -3,10 +3,9 @@ package com.wy.test.synchronizer.feishu;
 import java.util.HashMap;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.constants.ConstsStatus;
 import com.wy.test.core.entity.SynchroRelated;
 import com.wy.test.core.entity.UserInfo;
@@ -15,14 +14,13 @@ import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 import com.wy.test.synchronizer.feishu.entity.FeishuUsers;
 import com.wy.test.synchronizer.feishu.entity.FeishuUsersResponse;
-import com.wy.test.util.JsonUtils;
 
 import dream.flying.flower.framework.core.helper.TokenHelpers;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class FeishuUsersService extends AbstractSynchronizerService implements ISynchronizerService {
-
-	final static Logger _logger = LoggerFactory.getLogger(FeishuUsersService.class);
 
 	String access_token;
 
@@ -31,7 +29,7 @@ public class FeishuUsersService extends AbstractSynchronizerService implements I
 
 	@Override
 	public void sync() {
-		_logger.info("Sync Feishu Users...");
+		log.info("Sync Feishu Users...");
 		try {
 			List<SynchroRelated> synchroRelateds = synchroRelatedService.findOrgs(this.synchronizer);
 
@@ -42,11 +40,11 @@ public class FeishuUsersService extends AbstractSynchronizerService implements I
 				String responseBody = request.get(String.format(USERS_URL, relatedOrg.getOriginId()), headers);
 				FeishuUsersResponse usersResponse =
 						JsonUtils.gsonStringToObject(responseBody, FeishuUsersResponse.class);
-				_logger.trace("response : " + responseBody);
+				log.trace("response : " + responseBody);
 				if (usersResponse.getCode() == 0 && usersResponse.getData().getItems() != null) {
 					for (FeishuUsers feiShuUser : usersResponse.getData().getItems()) {
 						UserInfo userInfo = buildUserInfo(feiShuUser, relatedOrg);
-						_logger.debug("userInfo : " + userInfo);
+						log.debug("userInfo : " + userInfo);
 						userInfo.setPassword(userInfo.getUsername() + UserInfo.DEFAULT_PASSWORD_SUFFIX);
 						userInfoService.saveOrUpdate(userInfo);
 

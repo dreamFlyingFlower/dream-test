@@ -33,8 +33,8 @@ import com.wy.test.authz.saml20.binding.impl.PostBindingAdapter;
 import com.wy.test.authz.saml20.binding.impl.PostSimpleSignBindingAdapter;
 import com.wy.test.authz.saml20.provider.xml.AuthnResponseGenerator;
 import com.wy.test.authz.saml20.xml.SAML2ValidatorSuite;
+import com.wy.test.common.crypto.keystore.KeyStoreLoader;
 import com.wy.test.core.entity.Saml20Metadata;
-import com.wy.test.crypto.keystore.KeyStoreLoader;
 
 // import org.dromara.maxkey.authz.saml20.binding.decoder.OpenHTTPPostDecoder;
 // import

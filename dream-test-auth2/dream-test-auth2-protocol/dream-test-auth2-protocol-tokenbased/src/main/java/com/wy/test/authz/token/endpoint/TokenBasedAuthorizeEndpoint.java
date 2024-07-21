@@ -1,5 +1,7 @@
 package com.wy.test.authz.token.endpoint;
 
+import java.lang.reflect.InvocationTargetException;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,8 +26,8 @@ import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.entity.apps.AppsTokenBasedDetails;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.AppsTokenBasedDetailsService;
-import com.wy.test.util.Instance;
 
+import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -44,7 +46,9 @@ public class TokenBasedAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 	@Operation(summary = "TokenBased认证接口", description = "传递参数应用ID", method = "GET")
 	@GetMapping("/authz/tokenbased/{id}")
 	public ModelAndView authorize(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable("id") String id, @CurrentUser UserInfo currentUser) {
+			@PathVariable("id") String id, @CurrentUser UserInfo currentUser)
+			throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		ModelAndView modelAndView = new ModelAndView();
 
 		AppsTokenBasedDetails tokenBasedDetails = null;
@@ -57,7 +61,7 @@ public class TokenBasedAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 
 		AbstractAuthorizeAdapter adapter;
 		if (ConstsBoolean.isTrue(tokenBasedDetails.getIsAdapter())) {
-			adapter = (AbstractAuthorizeAdapter) Instance.newInstance(tokenBasedDetails.getAdapter());
+			adapter = (AbstractAuthorizeAdapter) ReflectHelper.newInstance(tokenBasedDetails.getAdapter());
 		} else {
 			adapter = (AbstractAuthorizeAdapter) new TokenBasedDefaultAdapter();
 		}

@@ -2,7 +2,7 @@ package com.wy.test.util;
 
 import org.junit.jupiter.api.Test;
 
-import com.wy.test.pretty.PrettyFactory;
+import com.wy.test.common.pretty.PrettyFactory;
 
 public class SqlPrettyTest {
 

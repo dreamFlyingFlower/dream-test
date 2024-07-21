@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.wy.test.common.crypto.password.PasswordReciprocal;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.crypto.password.PasswordReciprocal;
 
 @Controller
 public class AuthorizeProtectedEndpoint {

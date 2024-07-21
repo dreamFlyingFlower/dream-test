@@ -1,5 +1,7 @@
 package com.wy.test.crypto.password;
 
+import com.wy.test.common.crypto.password.SM3PasswordEncoder;
+
 public class SM3PasswordEncoderTest {
 
 	public static void main(String[] args) {

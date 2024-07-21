@@ -4,7 +4,9 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import com.wy.test.crypto.KeyPairUtil;
+import com.wy.test.common.crypto.signature.DsaSigner;
+
+import dream.flying.flower.framework.core.crypto.KeyPairHelpers;
 
 public final class DsaSignerTest {
 
@@ -13,10 +15,10 @@ public final class DsaSignerTest {
 
 		DsaSigner dsaSigner = new DsaSigner();
 		// genKeyPair
-		Map<String, Object> keyMap = KeyPairUtil.genKeyPairMap(DsaSigner.KEY_ALGORITHM);
+		Map<String, Object> keyMap = KeyPairHelpers.genKeyPairMap(DsaSigner.KEY_ALGORITHM);
 
-		String publicKey = KeyPairUtil.getPublicKey(keyMap);
-		String privateKey = KeyPairUtil.getPrivateKey(keyMap);
+		String publicKey = KeyPairHelpers.getPublicKey(keyMap);
+		String privateKey = KeyPairHelpers.getPrivateKey(keyMap);
 		System.out.println("privateKey:" + privateKey);
 		System.out.println("privateKey:" + privateKey.length());
 		System.out.println("publicKey:" + publicKey);

@@ -1,7 +1,5 @@
 package com.wy.test.synchronizer.ldap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,10 +7,11 @@ import com.wy.test.core.entity.Synchronizers;
 import com.wy.test.core.persistence.ldap.LdapUtils;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
-@Service
-public class LdapSynchronizerService implements ISynchronizerService {
+import lombok.extern.slf4j.Slf4j;
 
-	final static Logger _logger = LoggerFactory.getLogger(LdapSynchronizerService.class);
+@Service
+@Slf4j
+public class LdapSynchronizerService implements ISynchronizerService {
 
 	Synchronizers synchronizer;
 
@@ -28,7 +27,7 @@ public class LdapSynchronizerService implements ISynchronizerService {
 
 	@Override
 	public void sync() {
-		_logger.info("Sync ...");
+		log.info("Sync ...");
 		LdapUtils ldapUtils = new LdapUtils(synchronizer.getProviderUrl(), synchronizer.getPrincipal(),
 				synchronizer.getCredentials(), synchronizer.getUserBasedn());
 		ldapUtils.openConnection();

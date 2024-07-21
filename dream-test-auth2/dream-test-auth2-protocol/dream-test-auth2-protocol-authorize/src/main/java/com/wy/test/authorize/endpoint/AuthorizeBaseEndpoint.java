@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
+import com.wy.test.common.crypto.password.PasswordReciprocal;
 import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.crypto.password.PasswordReciprocal;
 import com.wy.test.persistence.service.AccountsService;
 import com.wy.test.persistence.service.AppsService;
 

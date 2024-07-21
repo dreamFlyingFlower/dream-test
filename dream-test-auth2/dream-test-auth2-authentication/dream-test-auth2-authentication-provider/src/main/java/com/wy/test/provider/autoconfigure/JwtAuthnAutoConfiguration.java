@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 
 import com.nimbusds.jose.JOSEException;
-import com.wy.test.crypto.jose.keystore.JWKSetKeyStore;
-import com.wy.test.crypto.jwt.signer.service.impl.DefaultJwtSigningAndValidationService;
+import com.wy.test.common.crypto.jose.keystore.JWKSetKeyStore;
+import com.wy.test.common.crypto.jwt.signer.service.impl.DefaultJwtSigningAndValidationService;
 import com.wy.test.provider.authn.support.jwt.JwtLoginService;
 
 @AutoConfiguration

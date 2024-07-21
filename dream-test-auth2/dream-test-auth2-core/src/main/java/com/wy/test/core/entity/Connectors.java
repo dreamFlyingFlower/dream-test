@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 
-import com.wy.test.pretty.impl.JsonPretty;
+import com.wy.test.common.pretty.impl.JsonPretty;
 
 @Entity
 @Table(name = "MXK_CONNECTORS")

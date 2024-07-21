@@ -10,7 +10,9 @@ import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.ExtraAttrs;
 import com.wy.test.core.entity.apps.Apps;
-import com.wy.test.crypto.DigestUtils;
+
+import dream.flying.flower.digest.DigestHelper;
+import dream.flying.flower.digest.enums.MessageDigestType;
 
 /**
  * 
@@ -46,23 +48,23 @@ public class ExtendApiTimestampSignAdapter extends AbstractAuthorizeAdapter {
 		String code = details.getPrincipal();
 		String key = details.getCredentials();
 		String timestamp = "" + Instant.now().getEpochSecond();
-		String token = DigestUtils.md5Hex(code + key + timestamp);
+		String token = DigestHelper.md5Hex(code + key + timestamp);
 
 		// extraAttrs from Applications
 		ExtraAttrs extraAttrs = null;
 		if (details.getIsExtendAttr() == 1) {
 			extraAttrs = new ExtraAttrs(details.getExtendAttr());
 			if (extraAttrs.get("sign") == null || extraAttrs.get("sign").equalsIgnoreCase("md5")) {
-
+				token = DigestHelper.md5Hex(code + key + timestamp);
 			} else if (extraAttrs.get("sign").equalsIgnoreCase("sha")
 					|| extraAttrs.get("sign").equalsIgnoreCase("sha1")) {
-				token = DigestUtils.shaHex(code + key + timestamp);
+				token = DigestHelper.digestHex(MessageDigestType.SHA_1, code + key + timestamp);
 			} else if (extraAttrs.get("sign").equalsIgnoreCase("sha256")) {
-				token = DigestUtils.sha256Hex(code + key + timestamp);
+				token = DigestHelper.digestHex(MessageDigestType.SHA_256, code + key + timestamp);
 			} else if (extraAttrs.get("sign").equalsIgnoreCase("sha384")) {
-				token = DigestUtils.sha384Hex(code + key + timestamp);
+				token = DigestHelper.digestHex(MessageDigestType.SHA_384, code + key + timestamp);
 			} else if (extraAttrs.get("sign").equalsIgnoreCase("sha512")) {
-				token = DigestUtils.sha512Hex(code + key + timestamp);
+				token = DigestHelper.digestHex(MessageDigestType.SHA_512, code + key + timestamp);
 			}
 		}
 
@@ -76,7 +78,5 @@ public class ExtendApiTimestampSignAdapter extends AbstractAuthorizeAdapter {
 		modelAndView.addObject("redirect_uri", redirect_uri);
 
 		return modelAndView;
-
 	}
-
 }

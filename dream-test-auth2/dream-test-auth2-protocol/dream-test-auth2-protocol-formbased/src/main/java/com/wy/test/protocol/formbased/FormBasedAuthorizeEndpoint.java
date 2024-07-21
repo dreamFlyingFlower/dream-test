@@ -1,5 +1,7 @@
 package com.wy.test.protocol.formbased;
 
+import java.lang.reflect.InvocationTargetException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -21,8 +23,8 @@ import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.entity.apps.AppsFormBasedDetails;
 import com.wy.test.persistence.service.AppsFormBasedDetailsService;
 import com.wy.test.protocol.formbased.adapter.FormBasedDefaultAdapter;
-import com.wy.test.util.Instance;
 
+import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -40,7 +42,8 @@ public class FormBasedAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 	@Operation(summary = "FormBased认证地址接口", description = "参数应用ID", method = "GET")
 	@GetMapping("/authz/formbased/{id}")
 	public ModelAndView authorize(HttpServletRequest request, @PathVariable("id") String id,
-			@CurrentUser UserInfo currentUser) {
+			@CurrentUser UserInfo currentUser) throws ClassNotFoundException, NoSuchMethodException, SecurityException,
+			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
 		AppsFormBasedDetails formBasedDetails = formBasedDetailsService.getAppDetails(id, true);
 		_logger.debug("formBasedDetails {}", formBasedDetails);
@@ -60,7 +63,7 @@ public class FormBasedAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 			AbstractAuthorizeAdapter adapter;
 
 			if (ConstsBoolean.isTrue(formBasedDetails.getIsAdapter())) {
-				Object formBasedAdapter = Instance.newInstance(formBasedDetails.getAdapter());
+				Object formBasedAdapter = ReflectHelper.newInstance(formBasedDetails.getAdapter());
 				adapter = (AbstractAuthorizeAdapter) formBasedAdapter;
 			} else {
 				FormBasedDefaultAdapter formBasedDefaultAdapter = new FormBasedDefaultAdapter();

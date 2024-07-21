@@ -6,9 +6,9 @@ import java.util.regex.Pattern;
 import org.joda.time.DateTime;
 import org.joda.time.chrono.ISOChronology;
 
+import com.wy.test.common.util.DateUtils;
+import com.wy.test.common.util.JsonUtils;
 import com.wy.test.provider.authn.support.kerberos.KerberosToken;
-import com.wy.test.util.DateUtils;
-import com.wy.test.util.JsonUtils;
 
 public class KerberosPrincipal {
 

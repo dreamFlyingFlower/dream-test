@@ -10,7 +10,8 @@ import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.ExtraAttrs;
 import com.wy.test.core.entity.apps.Apps;
-import com.wy.test.crypto.DigestUtils;
+
+import dream.flying.flower.digest.DigestHelper;
 
 /**
  * https://www.zentao.net/book/zentaopmshelp/344.html
@@ -55,7 +56,7 @@ public class ExtendApiZentaoAdapter extends AbstractAuthorizeAdapter {
 		String key = details.getCredentials();
 		String time = "" + Instant.now().getEpochSecond();
 
-		String token = DigestUtils.md5Hex(code + key + time);
+		String token = DigestHelper.md5Hex(code + key + time);
 
 		_logger.debug("" + token);
 		String account = userInfo.getUsername();

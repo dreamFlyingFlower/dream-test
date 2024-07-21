@@ -3,7 +3,6 @@ package com.wy.test.web.web.access.contorller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.entity.HistoryLogin;
 import com.wy.test.core.entity.UserInfo;
-import com.wy.test.entity.Message;
 import com.wy.test.persistence.service.HistoryLoginService;
-import com.wy.test.util.DateUtils;
 
 import dream.flying.flower.lang.StrHelper;
+import dream.flying.flower.result.Result;
 
 /**
  * 登录会话管理.
@@ -44,7 +43,7 @@ public class LoginSessionController {
 	SessionManager sessionManager;
 
 	/**
-	 * 查询登录日志.
+	 * 查询登录日志
 	 * 
 	 * @param logsAuth
 	 * @return
@@ -55,8 +54,7 @@ public class LoginSessionController {
 		_logger.debug("history/session/fetch {}", historyLogin);
 		historyLogin.setUserId(currentUser.getId());
 		historyLogin.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<HistoryLogin>>(historyLoginService.queryOnlineSession(historyLogin))
-				.buildResponse();
+		return ResponseEntity.ok(Result.ok(historyLoginService.queryOnlineSession(historyLogin)));
 	}
 
 	@GetMapping(value = "/terminate")
@@ -78,9 +76,9 @@ public class LoginSessionController {
 		}
 
 		if (isTerminated) {
-			return new Message<HistoryLogin>(Message.SUCCESS).buildResponse();
+			return ResponseEntity.ok(Result.ok());
 		} else {
-			return new Message<HistoryLogin>(Message.ERROR).buildResponse();
+			return ResponseEntity.ok(Result.error());
 		}
 	}
 

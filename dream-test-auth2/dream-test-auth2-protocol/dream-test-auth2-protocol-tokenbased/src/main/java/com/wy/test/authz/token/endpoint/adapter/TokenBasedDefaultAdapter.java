@@ -9,11 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
+import com.wy.test.common.util.DateUtils;
+import com.wy.test.common.util.JsonUtils;
+import com.wy.test.common.util.StringGenerator;
 import com.wy.test.core.entity.apps.AppsTokenBasedDetails;
 import com.wy.test.core.web.WebConstants;
-import com.wy.test.util.DateUtils;
-import com.wy.test.util.JsonUtils;
-import com.wy.test.util.StringGenerator;
 
 public class TokenBasedDefaultAdapter extends AbstractAuthorizeAdapter {
 

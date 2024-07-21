@@ -1,7 +1,5 @@
 package com.wy.test.synchronizer.activedirectory;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,10 +7,11 @@ import com.wy.test.core.entity.Synchronizers;
 import com.wy.test.core.persistence.ldap.ActiveDirectoryUtils;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
-@Service
-public class ActiveDirectorySynchronizerService implements ISynchronizerService {
+import lombok.extern.slf4j.Slf4j;
 
-	final static Logger _logger = LoggerFactory.getLogger(ActiveDirectorySynchronizerService.class);
+@Service
+@Slf4j
+public class ActiveDirectorySynchronizerService implements ISynchronizerService {
 
 	Synchronizers synchronizer;
 
@@ -28,7 +27,7 @@ public class ActiveDirectorySynchronizerService implements ISynchronizerService 
 
 	@Override
 	public void sync() {
-		_logger.info("Sync ...");
+		log.info("Sync ...");
 		ActiveDirectoryUtils ldapUtils =
 				new ActiveDirectoryUtils(synchronizer.getProviderUrl(), synchronizer.getPrincipal(),
 						synchronizer.getCredentials(), synchronizer.getUserBasedn(), synchronizer.getMsadDomain());

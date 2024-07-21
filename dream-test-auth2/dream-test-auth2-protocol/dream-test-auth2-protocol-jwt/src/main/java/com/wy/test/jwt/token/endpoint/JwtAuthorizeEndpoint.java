@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.AuthorizeBaseEndpoint;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
+import com.wy.test.common.crypto.jose.keystore.JWKSetKeyStore;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.configuration.ApplicationConfig;
@@ -30,11 +31,10 @@ import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.entity.apps.AppsJwtDetails;
 import com.wy.test.core.web.WebConstants;
-import com.wy.test.crypto.jose.keystore.JWKSetKeyStore;
 import com.wy.test.jwt.jwt.endpoint.adapter.JwtAdapter;
 import com.wy.test.persistence.service.AppsJwtDetailsService;
-import com.wy.test.util.Instance;
 
+import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -53,7 +53,9 @@ public class JwtAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 	@Operation(summary = "JWT应用ID认证接口", description = "应用ID", method = "GET")
 	@GetMapping("/authz/jwt/{id}")
 	public ModelAndView authorize(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable("id") String id, @CurrentUser UserInfo currentUser) {
+			@PathVariable("id") String id, @CurrentUser UserInfo currentUser)
+			throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		ModelAndView modelAndView = new ModelAndView();
 		Apps application = getApp(id);
 		AppsJwtDetails jwtDetails = jwtDetailsService.getAppDetails(application.getId(), true);
@@ -63,7 +65,7 @@ public class JwtAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 
 		AbstractAuthorizeAdapter adapter;
 		if (ConstsBoolean.isTrue(jwtDetails.getIsAdapter())) {
-			Object jwtAdapter = Instance.newInstance(jwtDetails.getAdapter());
+			Object jwtAdapter = ReflectHelper.newInstance(jwtDetails.getAdapter());
 			try {
 				BeanUtils.setProperty(jwtAdapter, "jwtDetails", jwtDetails);
 			} catch (IllegalAccessException | InvocationTargetException e) {

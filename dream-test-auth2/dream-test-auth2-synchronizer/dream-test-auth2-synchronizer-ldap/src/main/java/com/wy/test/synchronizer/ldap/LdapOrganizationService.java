@@ -10,8 +10,6 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.core.constants.ConstsStatus;
@@ -23,16 +21,17 @@ import com.wy.test.core.persistence.ldap.LdapUtils;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
-@Service
-public class LdapOrganizationService extends AbstractSynchronizerService implements ISynchronizerService {
+import lombok.extern.slf4j.Slf4j;
 
-	final static Logger _logger = LoggerFactory.getLogger(LdapOrganizationService.class);
+@Service
+@Slf4j
+public class LdapOrganizationService extends AbstractSynchronizerService implements ISynchronizerService {
 
 	LdapUtils ldapUtils;
 
 	@Override
 	public void sync() {
-		_logger.info("Sync Ldap Organizations ...");
+		log.info("Sync Ldap Organizations ...");
 		loadOrgsByInstId(this.synchronizer.getInstId(), Organizations.ROOT_ORG_ID);
 		try {
 			ArrayList<Organizations> orgsList = queryLdap();
@@ -48,7 +47,7 @@ public class LdapOrganizationService extends AbstractSynchronizerService impleme
 								organization.getNamePath().substring(0, organization.getNamePath().lastIndexOf("/"));
 
 						if (orgsNamePathMap.get(organization.getNamePath()) != null) {
-							_logger.info("org  " + orgsNamePathMap.get(organization.getNamePath()).getNamePath()
+							log.info("org  " + orgsNamePathMap.get(organization.getNamePath()).getNamePath()
 									+ " exists.");
 							continue;
 						}
@@ -60,7 +59,7 @@ public class LdapOrganizationService extends AbstractSynchronizerService impleme
 						organization.setParentId(parentOrg.getId());
 						organization.setParentName(parentOrg.getOrgName());
 						organization.setCodePath(parentOrg.getCodePath() + "/" + organization.getId());
-						_logger.info("parentNamePath " + parentNamePath + " , namePah " + organization.getNamePath());
+						log.info("parentNamePath " + parentNamePath + " , namePah " + organization.getNamePath());
 
 						// synchro Related
 						SynchroRelated synchroRelated = synchroRelatedService.findByOriginId(this.synchronizer,
@@ -68,7 +67,7 @@ public class LdapOrganizationService extends AbstractSynchronizerService impleme
 						if (synchroRelated == null) {
 							organization.setId(organization.generateId());
 							organizationsService.insert(organization);
-							_logger.debug("Organizations : " + organization);
+							log.debug("Organizations : " + organization);
 
 							synchroRelated = buildSynchroRelated(organization, organization.getLdapDn(),
 									organization.getOrgName());
@@ -82,7 +81,7 @@ public class LdapOrganizationService extends AbstractSynchronizerService impleme
 
 						orgsNamePathMap.put(organization.getNamePath(), organization);
 
-						_logger.info("Organizations " + organization);
+						log.info("Organizations " + organization);
 						HistorySynchronizer historySynchronizer = new HistorySynchronizer();
 						historySynchronizer.setId(historySynchronizer.generateId());
 						historySynchronizer.setSyncId(this.synchronizer.getId());
@@ -120,14 +119,14 @@ public class LdapOrganizationService extends AbstractSynchronizerService impleme
 			Object obj = results.nextElement();
 			if (obj instanceof SearchResult) {
 				SearchResult sr = (SearchResult) obj;
-				_logger.debug("Sync OrganizationalUnit {} , name [{}] , NameInNamespace [{}]", (++recordCount),
+				log.debug("Sync OrganizationalUnit {} , name [{}] , NameInNamespace [{}]", (++recordCount),
 						sr.getName(), sr.getNameInNamespace());
 
 				HashMap<String, Attribute> attributeMap = new HashMap<String, Attribute>();
 				NamingEnumeration<? extends Attribute> attrs = sr.getAttributes().getAll();
 				while (null != attrs && attrs.hasMoreElements()) {
 					Attribute objAttrs = attrs.nextElement();
-					_logger.trace("attribute {} : {}", objAttrs.getID(), LdapUtils.getAttrStringValue(objAttrs));
+					log.trace("attribute {} : {}", objAttrs.getID(), LdapUtils.getAttrStringValue(objAttrs));
 					attributeMap.put(objAttrs.getID().toLowerCase(), objAttrs);
 				}
 
@@ -179,10 +178,10 @@ public class LdapOrganizationService extends AbstractSynchronizerService impleme
 			org.setDescription(LdapUtils.getAttributeStringValue(OrganizationalUnit.DESCRIPTION, attributeMap));
 			org.setInstId(this.synchronizer.getInstId());
 			org.setStatus(ConstsStatus.ACTIVE);
-			_logger.info("org " + org);
+			log.info("org " + org);
 			return org;
 		} catch (NamingException e) {
-			_logger.error("NamingException ", e);
+			log.error("NamingException ", e);
 		}
 		return null;
 	}

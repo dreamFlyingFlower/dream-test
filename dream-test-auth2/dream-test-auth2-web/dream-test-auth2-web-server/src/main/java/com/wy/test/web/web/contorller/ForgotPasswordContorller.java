@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wy.test.common.entity.Message;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.configuration.EmailConfig;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.PasswordPolicy;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.entity.Message;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.MailOtpAuthnService;
 import com.wy.test.persistence.service.PasswordPolicyService;

@@ -9,10 +9,10 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.entity.HistoryLogin;
-import com.wy.test.util.DateUtils;
 
 public class SessionListenerAdapter extends ListenerAdapter implements Job, Serializable {
 

@@ -15,9 +15,9 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
-import com.wy.test.authz.oauth2.provider.OAuth2Authentication;
-import com.wy.test.authz.oauth2.provider.token.DefaultTokenServices;
 import com.wy.test.core.authn.web.AuthorizationUtils;
+import com.wy.test.oauth2.provider.OAuth2Authentication;
+import com.wy.test.oauth2.provider.token.DefaultTokenServices;
 
 import dream.flying.flower.framework.core.helper.TokenHeader;
 import dream.flying.flower.framework.core.helper.TokenHelpers;

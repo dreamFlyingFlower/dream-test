@@ -3,17 +3,15 @@ package com.wy.test.synchronizer.feishu;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.constants.ContentType;
 import com.wy.test.core.web.HttpRequestAdapter;
 import com.wy.test.synchronizer.core.synchronizer.entity.AccessToken;
-import com.wy.test.util.JsonUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class FeishuAccessTokenService {
-
-	final static Logger _logger = LoggerFactory.getLogger(FeishuAccessTokenService.class);
 
 	String appId;
 
@@ -38,7 +36,7 @@ public class FeishuAccessTokenService {
 		String responseBody = request.post(TOKEN_URL, parameterMap, null);
 
 		AccessToken accessToken = JsonUtils.gsonStringToObject(responseBody, AccessToken.class);
-		_logger.debug("accessToken " + accessToken);
+		log.debug("accessToken " + accessToken);
 		if (accessToken.getErrcode() == 0) {
 			return accessToken.getTenant_access_token();
 		}

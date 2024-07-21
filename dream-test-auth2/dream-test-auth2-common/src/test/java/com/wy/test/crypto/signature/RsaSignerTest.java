@@ -4,7 +4,9 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import com.wy.test.crypto.KeyPairUtil;
+import com.wy.test.common.crypto.signature.RsaSigner;
+
+import dream.flying.flower.framework.core.crypto.KeyPairHelpers;
 
 public final class RsaSignerTest {
 
@@ -12,9 +14,9 @@ public final class RsaSignerTest {
 	public void test() throws Exception {
 
 		RsaSigner rsaSigner = new RsaSigner();
-		Map<String, Object> key = KeyPairUtil.genKeyPairMap(RsaSigner.KEY_ALGORTHM);
-		String privateKey = KeyPairUtil.getPrivateKey(key);
-		String publicKey = KeyPairUtil.getPublicKey(key);
+		Map<String, Object> key = KeyPairHelpers.genKeyPairMap(RsaSigner.KEY_ALGORTHM);
+		String privateKey = KeyPairHelpers.getPrivateKey(key);
+		String publicKey = KeyPairHelpers.getPublicKey(key);
 		System.out.println("privateKey:" + privateKey);
 		System.out.println("privateKey:" + privateKey.length());
 		System.out.println("publicKey:" + publicKey);
@@ -28,5 +30,4 @@ public final class RsaSignerTest {
 		System.out.println("isSigneduuid:" + isSigneduuid);
 
 	}
-
 }

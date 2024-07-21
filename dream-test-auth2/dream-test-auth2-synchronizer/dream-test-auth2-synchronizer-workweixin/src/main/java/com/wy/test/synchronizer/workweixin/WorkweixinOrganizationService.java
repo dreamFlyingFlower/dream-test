@@ -1,9 +1,8 @@
 package com.wy.test.synchronizer.workweixin;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.constants.ConstsStatus;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.core.entity.SynchroRelated;
@@ -12,12 +11,12 @@ import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 import com.wy.test.synchronizer.workweixin.entity.WorkWeixinDepts;
 import com.wy.test.synchronizer.workweixin.entity.WorkWeixinDeptsResponse;
-import com.wy.test.util.JsonUtils;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class WorkweixinOrganizationService extends AbstractSynchronizerService implements ISynchronizerService {
-
-	final static Logger _logger = LoggerFactory.getLogger(WorkweixinOrganizationService.class);
 
 	String access_token;
 
@@ -27,13 +26,13 @@ public class WorkweixinOrganizationService extends AbstractSynchronizerService i
 
 	@Override
 	public void sync() {
-		_logger.info("Sync Workweixin Organizations ...");
+		log.info("Sync Workweixin Organizations ...");
 
 		try {
 			WorkWeixinDeptsResponse rsp = requestDepartmentList(access_token);
 
 			for (WorkWeixinDepts dept : rsp.getDepartment()) {
-				_logger.debug("dept : " + dept.getId() + " " + dept.getName() + " " + dept.getParentid());
+				log.debug("dept : " + dept.getId() + " " + dept.getName() + " " + dept.getParentid());
 				// root
 				if (dept.getId() == ROOT_DEPT_ID) {
 					Organizations rootOrganization = organizationsService.get(Organizations.ROOT_ORG_ID);
@@ -49,7 +48,7 @@ public class WorkweixinOrganizationService extends AbstractSynchronizerService i
 					if (synchroRelated == null) {
 						organization.setId(organization.generateId());
 						organizationsService.insert(organization);
-						_logger.debug("Organizations : " + organization);
+						log.debug("Organizations : " + organization);
 
 						synchroRelated = buildSynchroRelated(organization, dept);
 					} else {
@@ -80,9 +79,9 @@ public class WorkweixinOrganizationService extends AbstractSynchronizerService i
 		WorkWeixinDeptsResponse deptsResponse =
 				JsonUtils.gsonStringToObject(responseBody, WorkWeixinDeptsResponse.class);
 
-		_logger.trace("response : " + responseBody);
+		log.trace("response : " + responseBody);
 		for (WorkWeixinDepts dept : deptsResponse.getDepartment()) {
-			_logger.debug("WorkWeixinDepts : " + dept);
+			log.debug("WorkWeixinDepts : " + dept);
 		}
 		return deptsResponse;
 	}

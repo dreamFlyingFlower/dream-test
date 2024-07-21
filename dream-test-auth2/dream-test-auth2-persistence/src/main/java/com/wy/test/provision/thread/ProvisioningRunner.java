@@ -10,21 +10,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
+import com.wy.test.common.crypto.password.PasswordReciprocal;
+import com.wy.test.common.util.DateUtils;
+import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.Connectors;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.web.HttpRequestAdapter;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.crypto.password.PasswordReciprocal;
-import com.wy.test.entity.Message;
 import com.wy.test.persistence.service.ConnectorsService;
 import com.wy.test.provision.ProvisionAction;
 import com.wy.test.provision.ProvisionMessage;
 import com.wy.test.provision.ProvisionTopic;
-import com.wy.test.util.DateUtils;
-import com.wy.test.util.JsonUtils;
-import com.wy.test.util.ObjectTransformer;
+
+import dream.flying.flower.lang.SerializableHelper;
+import dream.flying.flower.result.Result;
 
 public class ProvisioningRunner {
 
@@ -75,7 +76,7 @@ public class ProvisioningRunner {
 			String objectId = "";
 			String objectName = "";
 			if (provisionMessage.getTopic().equalsIgnoreCase(ProvisionTopic.USERINFO_TOPIC)) {
-				UserInfo user = (UserInfo) ObjectTransformer.deserialize(provisionMessage.getContent());
+				UserInfo user = (UserInfo) SerializableHelper.deserializeHex(provisionMessage.getContent());
 				user.setPassword(null);
 				user.setDecipherable(null);
 				objectId = user.getId();
@@ -85,7 +86,7 @@ public class ProvisioningRunner {
 						resultMessage, provisionMessage.getInstId());
 			} else if (provisionMessage.getTopic().equalsIgnoreCase(ProvisionTopic.PASSWORD_TOPIC)) {
 				ChangePassword changePassword =
-						(ChangePassword) ObjectTransformer.deserialize(provisionMessage.getContent());
+						(ChangePassword) SerializableHelper.deserializeHex(provisionMessage.getContent());
 				objectId = changePassword.getUserId();
 				objectName = changePassword.getDisplayName() + "(" + changePassword.getUsername() + ")";
 				resultMessage =
@@ -94,7 +95,7 @@ public class ProvisioningRunner {
 						objectName, resultMessage, provisionMessage.getInstId());
 			} else if (provisionMessage.getTopic().equalsIgnoreCase(ProvisionTopic.ORG_TOPIC)) {
 				Organizations organization =
-						(Organizations) ObjectTransformer.deserialize(provisionMessage.getContent());
+						(Organizations) SerializableHelper.deserializeHex(provisionMessage.getContent());
 				objectId = organization.getId();
 				objectName = organization.getOrgName();
 				resultMessage = provisionOrganization(organization, url, provisionMessage.getActionType(), connector);
@@ -108,11 +109,11 @@ public class ProvisioningRunner {
 
 	public void provisionLog(String conName, String topic, String actionType, String sourceId, String sourceName,
 			String resultMessage, int instid) {
-		Message<?> resultMsg = null;
+		Result<?> resultMsg = null;
 		String result = "success";
 
 		if (resultMessage != null) {
-			resultMsg = JsonUtils.stringToObject(resultMessage, Message.class);
+			resultMsg = JsonUtils.stringToObject(resultMessage, Result.class);
 		}
 
 		if (resultMsg == null || resultMsg.getCode() != 0) {

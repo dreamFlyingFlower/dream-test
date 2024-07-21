@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.HistorySystemLogs;
@@ -18,7 +19,6 @@ import com.wy.test.core.entity.SocialsProvider;
 import com.wy.test.core.entity.Synchronizers;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.persistence.mapper.HistorySystemLogsMapper;
-import com.wy.test.util.JsonUtils;
 
 @Repository
 public class HistorySystemLogsService extends JpaService<HistorySystemLogs> {

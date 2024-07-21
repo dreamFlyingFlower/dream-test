@@ -5,8 +5,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.dingtalk.api.DefaultDingTalkClient;
@@ -20,23 +18,24 @@ import com.wy.test.core.entity.UserInfo;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
-@Service
-public class DingtalkUsersService extends AbstractSynchronizerService implements ISynchronizerService {
+import lombok.extern.slf4j.Slf4j;
 
-	final static Logger _logger = LoggerFactory.getLogger(DingtalkUsersService.class);
+@Service
+@Slf4j
+public class DingtalkUsersService extends AbstractSynchronizerService implements ISynchronizerService {
 
 	String access_token;
 
 	@Override
 	public void sync() {
-		_logger.info("Sync Dingtalk Users...");
+		log.info("Sync Dingtalk Users...");
 		try {
 			List<SynchroRelated> synchroRelateds = synchroRelatedService.findOrgs(this.synchronizer);
 
 			for (SynchroRelated relatedOrg : synchroRelateds) {
 				DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/v2/user/list");
 				OapiV2UserListRequest req = new OapiV2UserListRequest();
-				_logger.debug("DingTalk deptId : {}", relatedOrg.getOriginId());
+				log.debug("DingTalk deptId : {}", relatedOrg.getOriginId());
 				req.setDeptId(Long.parseLong(relatedOrg.getOriginId()));
 				req.setCursor(0L);
 				req.setSize(100L);
@@ -44,14 +43,14 @@ public class DingtalkUsersService extends AbstractSynchronizerService implements
 				req.setContainAccessLimit(true);
 				req.setLanguage("zh_CN");
 				OapiV2UserListResponse rsp = client.execute(req, access_token);
-				_logger.trace("response : {}", rsp.getBody());
+				log.trace("response : {}", rsp.getBody());
 
 				if (rsp.getErrcode() == 0) {
 					for (ListUserResponse user : rsp.getResult().getList()) {
-						_logger.debug("name : {} , {} , {}", user.getName(), user.getLoginId(), user.getUserid());
+						log.debug("name : {} , {} , {}", user.getName(), user.getLoginId(), user.getUserid());
 
 						UserInfo userInfo = buildUserInfo(user, relatedOrg);
-						_logger.trace("userInfo {}", userInfo);
+						log.trace("userInfo {}", userInfo);
 						userInfo.setPassword(userInfo.getUsername() + UserInfo.DEFAULT_PASSWORD_SUFFIX);
 						userInfoService.saveOrUpdate(userInfo);
 

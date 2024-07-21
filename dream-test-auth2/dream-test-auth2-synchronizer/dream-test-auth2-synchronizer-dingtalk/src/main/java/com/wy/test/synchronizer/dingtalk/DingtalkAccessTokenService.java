@@ -1,17 +1,15 @@
 package com.wy.test.synchronizer.dingtalk;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiGettokenRequest;
 import com.dingtalk.api.response.OapiGettokenResponse;
 import com.taobao.api.ApiException;
 
-public class DingtalkAccessTokenService {
+import lombok.extern.slf4j.Slf4j;
 
-	final static Logger _logger = LoggerFactory.getLogger(DingtalkAccessTokenService.class);
+@Slf4j
+public class DingtalkAccessTokenService {
 
 	String appkey;
 
@@ -34,7 +32,7 @@ public class DingtalkAccessTokenService {
 		request.setAppsecret(appsecret);
 		request.setHttpMethod("GET");
 		OapiGettokenResponse response = client.execute(request);
-		_logger.info("response : " + response.getBody());
+		log.info("response : " + response.getBody());
 
 		if (response.getErrcode() == 0) {
 			return response.getAccessToken();

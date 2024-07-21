@@ -16,8 +16,8 @@ import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.PlainJWT;
 import com.nimbusds.jwt.SignedJWT;
+import com.wy.test.common.crypto.jwt.signer.service.impl.DefaultJwtSigningAndValidationService;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.crypto.jwt.signer.service.impl.DefaultJwtSigningAndValidationService;
 
 public class JwtLoginService {
 

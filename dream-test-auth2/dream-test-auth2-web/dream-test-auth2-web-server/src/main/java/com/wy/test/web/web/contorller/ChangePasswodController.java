@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wy.test.common.entity.Message;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstsEntryType;
 import com.wy.test.core.constants.ConstsOperateAction;
@@ -20,7 +21,6 @@ import com.wy.test.core.entity.PasswordPolicy;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.entity.Message;
 import com.wy.test.persistence.service.HistorySystemLogsService;
 import com.wy.test.persistence.service.PasswordPolicyService;
 import com.wy.test.persistence.service.UserInfoService;

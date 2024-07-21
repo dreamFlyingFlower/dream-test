@@ -8,7 +8,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.entity.apps.AppsFormBasedDetails;
-import com.wy.test.crypto.DigestUtils;
+
+import dream.flying.flower.digest.DigestHelper;
+import dream.flying.flower.digest.enums.MessageDigestType;
 
 public class FormBasedDefaultAdapter extends AbstractAuthorizeAdapter {
 
@@ -31,9 +33,11 @@ public class FormBasedDefaultAdapter extends AbstractAuthorizeAdapter {
 			// do nothing
 		} else if (passwordAlgorithm.indexOf(_HEX) > -1) {
 			passwordAlgorithm = passwordAlgorithm.substring(0, passwordAlgorithm.indexOf(_HEX));
-			password = DigestUtils.digestHex(account.getRelatedPassword(), passwordAlgorithm);
+			password =
+					DigestHelper.digestHex(MessageDigestType.getType(passwordAlgorithm), account.getRelatedPassword());
 		} else {
-			password = DigestUtils.digestBase64(account.getRelatedPassword(), passwordAlgorithm);
+			password = DigestHelper.digestBase64(MessageDigestType.getType(passwordAlgorithm),
+					account.getRelatedPassword());
 		}
 
 		modelAndView.addObject("id", details.getId());

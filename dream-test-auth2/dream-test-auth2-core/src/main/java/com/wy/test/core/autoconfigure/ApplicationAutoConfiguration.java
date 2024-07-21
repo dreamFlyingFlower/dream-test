@@ -5,8 +5,6 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -20,9 +18,15 @@ import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 import com.nimbusds.jose.JOSEException;
+import com.wy.test.common.crypto.keystore.KeyStoreLoader;
+import com.wy.test.common.crypto.password.PasswordReciprocal;
+import com.wy.test.common.crypto.password.SM3PasswordEncoder;
+import com.wy.test.common.util.IdGenerator;
+import com.wy.test.common.util.SnowFlakeId;
 import com.wy.test.core.constants.ConstsPersistence;
 import com.wy.test.core.persistence.cache.InMemoryMomentaryService;
 import com.wy.test.core.persistence.cache.MomentaryService;
@@ -31,19 +35,13 @@ import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.core.persistence.repository.InstitutionsRepository;
 import com.wy.test.core.persistence.repository.LocalizationRepository;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.crypto.keystore.KeyStoreLoader;
-import com.wy.test.crypto.password.PasswordReciprocal;
-import com.wy.test.crypto.password.SM3PasswordEncoder;
-import com.wy.test.crypto.password.StandardPasswordEncoder;
-import com.wy.test.util.IdGenerator;
-import com.wy.test.util.SnowFlakeId;
 
+import lombok.extern.slf4j.Slf4j;
 
 @SuppressWarnings("deprecation")
 @AutoConfiguration
+@Slf4j
 public class ApplicationAutoConfiguration implements InitializingBean {
-
-	private static final Logger _logger = LoggerFactory.getLogger(ApplicationAutoConfiguration.class);
 
 	@Bean
 	PasswordReciprocal passwordReciprocal() {
@@ -79,10 +77,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 		encoders.put("bcrypt", new BCryptPasswordEncoder());
 		encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
 		encoders.put("scrypt", new SCryptPasswordEncoder());
-		encoders.put("sha1", new StandardPasswordEncoder("SHA-1", ""));
 		encoders.put("sha256", new StandardPasswordEncoder());
-		encoders.put("sha384", new StandardPasswordEncoder("SHA-384", ""));
-		encoders.put("sha512", new StandardPasswordEncoder("SHA-512", ""));
 
 		encoders.put("sm3", new SM3PasswordEncoder());
 
@@ -91,13 +86,13 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 		// idForEncode is default for encoder
 		PasswordEncoder passwordEncoder = new DelegatingPasswordEncoder(idForEncode, encoders);
 
-		if (_logger.isTraceEnabled()) {
-			_logger.trace("Password Encoders :");
+		if (log.isTraceEnabled()) {
+			log.trace("Password Encoders :");
 			for (String key : encoders.keySet()) {
-				_logger.trace("{}= {}", String.format("%-10s", key), encoders.get(key).getClass().getName());
+				log.trace("{}= {}", String.format("%-10s", key), encoders.get(key).getClass().getName());
 			}
 		}
-		_logger.debug("{} is default encoder", idForEncode);
+		log.debug("{} is default encoder", idForEncode);
 		return passwordEncoder;
 	}
 

@@ -1,7 +1,7 @@
 package com.wy.test.crypto.signature;
 
 import com.nimbusds.jose.JOSEException;
-import com.wy.test.crypto.jwt.HMAC512Service;
+import com.wy.test.common.crypto.jwt.HMAC512Service;
 
 public class HMAC512ServiceTest {
 

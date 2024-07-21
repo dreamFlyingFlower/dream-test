@@ -3,6 +3,8 @@ package com.wy.test.util;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 
+import com.wy.test.common.util.SnowFlakeId;
+
 public class SonwFlakeIdTest {
 
 	@Test

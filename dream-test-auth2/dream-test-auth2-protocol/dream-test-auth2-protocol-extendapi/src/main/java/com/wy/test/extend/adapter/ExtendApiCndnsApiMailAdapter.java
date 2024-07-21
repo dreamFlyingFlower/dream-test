@@ -8,13 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
+import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.ExtraAttrs;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.web.HttpRequestAdapter;
-import com.wy.test.crypto.DigestUtils;
-import com.wy.test.util.JsonUtils;
 
+import dream.flying.flower.digest.DigestHelper;
 import dream.flying.flower.http.HttpsTrust;
 
 /**
@@ -74,11 +74,11 @@ public class ExtendApiCndnsApiMailAdapter extends AbstractAuthorizeAdapter {
 
 		String timestamp = "" + Instant.now().getEpochSecond();
 
-		String tokenMd5 = DigestUtils.md5Hex(details.getCredentials());
+		String tokenMd5 = DigestHelper.md5Hex(details.getCredentials());
 		HashMap<String, Object> requestParamenter = new HashMap<String, Object>();
 		String redirect_uri = "";
 		if (action.equalsIgnoreCase("getDomailUrl")) {
-			String sign = DigestUtils.md5Hex(String.format(SIGN_STRING, details.getPrincipal(), timestamp, tokenMd5));
+			String sign = DigestHelper.md5Hex(String.format(SIGN_STRING, details.getPrincipal(), timestamp, tokenMd5));
 			requestParamenter.put("domain", domain);
 			String responseBody = new HttpRequestAdapter()
 					.post(String.format(ADMIN_AUTHKEY_URI, details.getPrincipal(), sign, timestamp), requestParamenter);
@@ -87,7 +87,7 @@ public class ExtendApiCndnsApiMailAdapter extends AbstractAuthorizeAdapter {
 			redirect_uri = authKey.get("adminUrl");
 
 		} else {
-			String sign = DigestUtils.md5Hex(
+			String sign = DigestHelper.md5Hex(
 					String.format(SIGN_EMAIL_STRING, details.getPrincipal(), userInfo.getEmail(), timestamp, tokenMd5));
 			requestParamenter.put("email", userInfo.getWorkEmail());
 			String responseBody = new HttpRequestAdapter()

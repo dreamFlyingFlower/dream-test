@@ -2,6 +2,8 @@ package com.wy.test.util;
 
 import java.util.Date;
 
+import com.wy.test.common.util.DateUtils;
+
 public class DateUtilsTest {
 
 	/**

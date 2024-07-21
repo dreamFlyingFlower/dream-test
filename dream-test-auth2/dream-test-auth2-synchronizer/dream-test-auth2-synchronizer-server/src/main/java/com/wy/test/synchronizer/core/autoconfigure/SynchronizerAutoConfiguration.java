@@ -13,8 +13,6 @@ import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.TriggerBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -23,14 +21,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
+import com.wy.test.common.crypto.password.PasswordReciprocal;
 import com.wy.test.core.entity.Synchronizers;
-import com.wy.test.crypto.password.PasswordReciprocal;
 import com.wy.test.synchronizer.core.synchronizer.SynchronizerJob;
 
-@AutoConfiguration
-public class SynchronizerAutoConfiguration implements InitializingBean {
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Logger _logger = LoggerFactory.getLogger(SynchronizerAutoConfiguration.class);
+@AutoConfiguration
+@Slf4j
+public class SynchronizerAutoConfiguration implements InitializingBean {
 
 	public static final String SYNCHRONIZERS_SELECT_STATEMENT = "select * from mxk_synchronizers where status ='1'";
 
@@ -44,7 +43,7 @@ public class SynchronizerAutoConfiguration implements InitializingBean {
 			for (Synchronizers synchronizer : synchronizerList) {
 				if (synchronizer.getScheduler() != null && !synchronizer.getScheduler().equals("")
 						&& CronExpression.isValidExpression(synchronizer.getScheduler())) {
-					_logger.debug("synchronizer details : " + synchronizer);
+					log.debug("synchronizer details : " + synchronizer);
 					buildJob(scheduler, synchronizer);
 				}
 			}
@@ -58,10 +57,10 @@ public class SynchronizerAutoConfiguration implements InitializingBean {
 
 		JobDataMap jobDataMap = new JobDataMap();
 		jobDataMap.put("synchronizer", synchronizer);
-		_logger.debug("synchronizer : " + synchronizer.getName() + "(" + synchronizer.getId() + "_"
+		log.debug("synchronizer : " + synchronizer.getName() + "(" + synchronizer.getId() + "_"
 				+ synchronizer.getSourceType() + ")");
-		_logger.debug("synchronizer service : " + synchronizer.getService());
-		_logger.debug("synchronizer Scheduler : " + synchronizer.getScheduler());
+		log.debug("synchronizer service : " + synchronizer.getService());
+		log.debug("synchronizer Scheduler : " + synchronizer.getScheduler());
 		CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(synchronizer.getScheduler());
 		CronTrigger cronTrigger =
 				TriggerBuilder.newTrigger().withIdentity("trigger" + synchronizer.getService(), "SynchronizerGroups")

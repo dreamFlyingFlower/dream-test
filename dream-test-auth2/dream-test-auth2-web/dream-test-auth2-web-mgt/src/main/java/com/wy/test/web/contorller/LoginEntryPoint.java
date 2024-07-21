@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.wy.test.common.entity.Message;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthJwt;
 import com.wy.test.core.authn.jwt.AuthTokenService;
@@ -21,7 +22,6 @@ import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.entity.Institutions;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.entity.Message;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
 @Controller

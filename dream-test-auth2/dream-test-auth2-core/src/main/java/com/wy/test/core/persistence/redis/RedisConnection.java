@@ -6,8 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.util.ObjectTransformer;
-
+import dream.flying.flower.lang.SerializableHelper;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Pipeline;
 
@@ -44,7 +43,7 @@ public class RedisConnection {
 	 */
 	public void setObject(String key, Object value) {
 		if (value instanceof Serializable) {
-			set(key, ObjectTransformer.serialize((Serializable) value));
+			set(key, SerializableHelper.serializeHex((Serializable) value));
 		} else {
 			_logger.error("value must implements of Serializable .");
 		}
@@ -52,7 +51,7 @@ public class RedisConnection {
 
 	public void setexObject(String key, int seconds, Object value) {
 		if (value instanceof Serializable) {
-			setex(key, seconds, ObjectTransformer.serialize((Serializable) value));
+			setex(key, seconds, SerializableHelper.serializeHex((Serializable) value));
 		} else {
 			_logger.error("value must implements of Serializable .");
 		}
@@ -95,7 +94,7 @@ public class RedisConnection {
 		if (key != null) {
 			value = get(key);
 			if (value != null) {
-				return ObjectTransformer.deserialize(value);
+				return SerializableHelper.deserializeHex(value);
 			}
 		}
 		return null;
@@ -112,7 +111,7 @@ public class RedisConnection {
 	}
 
 	public void rPush(String key, Serializable object) {
-		conn.rpush(key, ObjectTransformer.serialize(object));
+		conn.rpush(key, SerializableHelper.serializeHex(object));
 	}
 
 	public long lRem(String key, int count, String value) {

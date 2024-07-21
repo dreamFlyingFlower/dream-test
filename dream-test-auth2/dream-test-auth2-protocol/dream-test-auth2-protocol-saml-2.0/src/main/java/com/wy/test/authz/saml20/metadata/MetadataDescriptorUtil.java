@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.wy.test.crypto.cert.StringUtil;
+import com.wy.test.common.crypto.cert.StringUtil;
 
 public class MetadataDescriptorUtil {
 

@@ -32,9 +32,9 @@ import com.wy.test.authz.saml.common.AuthnRequestInfo;
 import com.wy.test.authz.saml.common.TrustResolver;
 import com.wy.test.authz.saml20.binding.BindingAdapter;
 import com.wy.test.authz.saml20.binding.ExtractBindingAdapter;
+import com.wy.test.common.crypto.keystore.KeyStoreLoader;
+import com.wy.test.common.crypto.keystore.KeyStoreUtil;
 import com.wy.test.core.entity.apps.AppsSAML20Details;
-import com.wy.test.crypto.keystore.KeyStoreLoader;
-import com.wy.test.crypto.keystore.KeyStoreUtil;
 
 public class PostBindingAdapter implements BindingAdapter, InitializingBean {
 

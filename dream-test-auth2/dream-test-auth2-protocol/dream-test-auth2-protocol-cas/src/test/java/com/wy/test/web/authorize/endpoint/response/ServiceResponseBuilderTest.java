@@ -2,8 +2,8 @@ package com.wy.test.web.authorize.endpoint.response;
 
 import com.wy.test.cas.authz.endpoint.response.ProxyServiceResponseBuilder;
 import com.wy.test.cas.authz.endpoint.response.ServiceResponseBuilder;
-import com.wy.test.pretty.impl.JsonPretty;
-import com.wy.test.pretty.impl.XmlPretty;
+import com.wy.test.common.pretty.impl.JsonPretty;
+import com.wy.test.common.pretty.impl.XmlPretty;
 
 
 public class ServiceResponseBuilderTest {

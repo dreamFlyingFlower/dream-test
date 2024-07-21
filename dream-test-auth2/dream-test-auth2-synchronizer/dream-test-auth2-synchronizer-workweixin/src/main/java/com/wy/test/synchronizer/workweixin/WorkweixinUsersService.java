@@ -2,10 +2,9 @@ package com.wy.test.synchronizer.workweixin;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.constants.ConstsStatus;
 import com.wy.test.core.entity.SynchroRelated;
 import com.wy.test.core.entity.UserInfo;
@@ -14,12 +13,12 @@ import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 import com.wy.test.synchronizer.workweixin.entity.WorkWeixinUsers;
 import com.wy.test.synchronizer.workweixin.entity.WorkWeixinUsersResponse;
-import com.wy.test.util.JsonUtils;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class WorkweixinUsersService extends AbstractSynchronizerService implements ISynchronizerService {
-
-	final static Logger _logger = LoggerFactory.getLogger(WorkweixinUsersService.class);
 
 	String access_token;
 
@@ -28,7 +27,7 @@ public class WorkweixinUsersService extends AbstractSynchronizerService implemen
 
 	@Override
 	public void sync() {
-		_logger.info("Sync Workweixin Users...");
+		log.info("Sync Workweixin Users...");
 		try {
 			List<SynchroRelated> synchroRelateds = synchroRelatedService.findOrgs(this.synchronizer);
 
@@ -37,11 +36,11 @@ public class WorkweixinUsersService extends AbstractSynchronizerService implemen
 				String responseBody = request.get(String.format(USERS_URL, access_token, relatedOrg.getOriginId()));
 				WorkWeixinUsersResponse usersResponse =
 						JsonUtils.gsonStringToObject(responseBody, WorkWeixinUsersResponse.class);
-				_logger.trace("response : " + responseBody);
+				log.trace("response : " + responseBody);
 
 				for (WorkWeixinUsers user : usersResponse.getUserlist()) {
 					UserInfo userInfo = buildUserInfo(user);
-					_logger.debug("userInfo : " + userInfo);
+					log.debug("userInfo : " + userInfo);
 					userInfo.setPassword(userInfo.getUsername() + UserInfo.DEFAULT_PASSWORD_SUFFIX);
 					userInfoService.saveOrUpdate(userInfo);
 

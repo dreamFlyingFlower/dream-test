@@ -10,6 +10,8 @@ import java.util.Date;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 
+import com.wy.test.common.crypto.cert.X509V3CertGen;
+
 public class X509V3CertGenTest {
 
 	@Test

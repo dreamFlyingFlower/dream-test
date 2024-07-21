@@ -9,8 +9,6 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.core.constants.ldap.InetOrgPerson;
@@ -19,20 +17,21 @@ import com.wy.test.core.entity.Organizations;
 import com.wy.test.core.entity.SynchroRelated;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.persistence.ldap.LdapUtils;
-import com.wy.test.crypto.DigestUtils;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
-@Service
-public class LdapUsersService extends AbstractSynchronizerService implements ISynchronizerService {
+import dream.flying.flower.digest.DigestHelper;
+import lombok.extern.slf4j.Slf4j;
 
-	final static Logger _logger = LoggerFactory.getLogger(LdapUsersService.class);
+@Service
+@Slf4j
+public class LdapUsersService extends AbstractSynchronizerService implements ISynchronizerService {
 
 	LdapUtils ldapUtils;
 
 	@Override
 	public void sync() {
-		_logger.info("Sync Ldap Users ...");
+		log.info("Sync Ldap Users ...");
 		loadOrgsByInstId(this.synchronizer.getInstId(), Organizations.ROOT_ORG_ID);
 		try {
 			SearchControls constraints = new SearchControls();
@@ -40,7 +39,7 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 			String filter =
 					StringUtils.isNotBlank(this.getSynchronizer().getUserFilters()) ? getSynchronizer().getUserFilters()
 							: "(&(objectClass=inetOrgPerson))";
-			_logger.debug(" User filter {} ", filter);
+			log.debug(" User filter {} ", filter);
 			NamingEnumeration<SearchResult> results =
 					ldapUtils.getConnection().search(ldapUtils.getBaseDN(), filter, constraints);
 
@@ -49,17 +48,17 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 				Object obj = results.nextElement();
 				if (obj instanceof SearchResult) {
 					SearchResult sr = (SearchResult) obj;
-					_logger.debug("Sync User {} , name [{}] , NameInNamespace [{}]", (++recordCount), sr.getName(),
+					log.debug("Sync User {} , name [{}] , NameInNamespace [{}]", (++recordCount), sr.getName(),
 							sr.getNameInNamespace());
 
 					HashMap<String, Attribute> attributeMap = new HashMap<String, Attribute>();
 					NamingEnumeration<? extends Attribute> attrs = sr.getAttributes().getAll();
 					while (null != attrs && attrs.hasMoreElements()) {
 						Attribute objAttrs = attrs.nextElement();
-						_logger.trace("attribute {} : {}", objAttrs.getID(), LdapUtils.getAttrStringValue(objAttrs));
+						log.trace("attribute {} : {}", objAttrs.getID(), LdapUtils.getAttrStringValue(objAttrs));
 						attributeMap.put(objAttrs.getID(), objAttrs);
 					}
-					String originId = DigestUtils.md5B64(sr.getNameInNamespace());
+					String originId = DigestHelper.md5Hex(sr.getNameInNamespace());
 					UserInfo userInfo = buildUserInfo(attributeMap, sr.getName(), sr.getNameInNamespace());
 					userInfo.setPassword(userInfo.getUsername() + UserInfo.DEFAULT_PASSWORD_SUFFIX);
 					userInfoService.saveOrUpdate(userInfo);
@@ -69,7 +68,7 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 									userInfo.getDisplayName(), "", "", synchronizer.getInstId());
 
 					synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated, UserInfo.CLASS_TYPE);
-					_logger.info("userInfo " + userInfo);
+					log.info("userInfo " + userInfo);
 				}
 			}
 
@@ -96,7 +95,7 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 
 		// namePah = namePah.substring(0, namePah.length());
 		String deptNamePath = namePah.substring(0, namePah.lastIndexOf("/"));
-		_logger.info("deptNamePath  " + deptNamePath);
+		log.info("deptNamePath  " + deptNamePath);
 		Organizations deptOrg = orgsNamePathMap.get(deptNamePath);
 		userInfo.setDepartment(deptOrg.getOrgName());
 		userInfo.setDepartmentId(deptOrg.getId());

@@ -2,7 +2,7 @@ package com.wy.test.util;
 
 import org.junit.jupiter.api.Test;
 
-import com.wy.test.pretty.impl.XMLHelper;
+import com.wy.test.common.pretty.impl.XMLHelper;
 
 public class XMLHelperTest {
 

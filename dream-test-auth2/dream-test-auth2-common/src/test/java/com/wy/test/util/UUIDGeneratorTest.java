@@ -5,7 +5,8 @@ import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 
-import com.wy.test.uuid.UUID;
+import com.wy.test.common.util.UUIDGenerator;
+import com.wy.test.common.uuid.UUID;
 
 public class UUIDGeneratorTest {
 

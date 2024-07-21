@@ -12,13 +12,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 
 import com.nimbusds.jwt.JWTClaimsSet;
+import com.wy.test.common.crypto.jwt.HMAC512Service;
+import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.crypto.jwt.HMAC512Service;
-import com.wy.test.util.DateUtils;
 
 public abstract class AbstractRemeberMeManager {
 

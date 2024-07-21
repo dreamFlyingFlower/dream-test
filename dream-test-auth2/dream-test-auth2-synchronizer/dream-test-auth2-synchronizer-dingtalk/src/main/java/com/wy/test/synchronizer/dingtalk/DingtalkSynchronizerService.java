@@ -1,7 +1,5 @@
 package com.wy.test.synchronizer.dingtalk;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,10 +7,11 @@ import com.taobao.api.ApiException;
 import com.wy.test.core.entity.Synchronizers;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
-@Service
-public class DingtalkSynchronizerService implements ISynchronizerService {
+import lombok.extern.slf4j.Slf4j;
 
-	final static Logger _logger = LoggerFactory.getLogger(DingtalkSynchronizerService.class);
+@Service
+@Slf4j
+public class DingtalkSynchronizerService implements ISynchronizerService {
 
 	Synchronizers synchronizer;
 
@@ -30,7 +29,7 @@ public class DingtalkSynchronizerService implements ISynchronizerService {
 
 	@Override
 	public void sync() throws ApiException {
-		_logger.info("Sync ...");
+		log.info("Sync ...");
 		dingtalkAccessTokenService.setAppkey(synchronizer.getPrincipal());
 		dingtalkAccessTokenService.setAppsecret(synchronizer.getCredentials());
 		String access_token = dingtalkAccessTokenService.requestToken();

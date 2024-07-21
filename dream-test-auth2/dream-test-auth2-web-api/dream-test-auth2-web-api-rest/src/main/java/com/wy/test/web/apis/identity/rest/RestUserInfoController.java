@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.wy.test.common.entity.Message;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.UserInfo;
-import com.wy.test.entity.Message;
 import com.wy.test.persistence.service.UserInfoService;
 
 import dream.flying.flower.lang.StrHelper;

@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wy.test.common.crypto.password.PasswordReciprocal;
+import com.wy.test.common.entity.Message;
+import com.wy.test.common.util.RQCodeUtils;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.entity.UserInfo;
-import com.wy.test.crypto.password.PasswordReciprocal;
-import com.wy.test.entity.Message;
 import com.wy.test.otp.password.onetimepwd.algorithm.OtpKeyUriFormat;
 import com.wy.test.otp.password.onetimepwd.algorithm.OtpSecret;
 import com.wy.test.otp.password.onetimepwd.impl.TimeBasedOtpAuthn;
 import com.wy.test.persistence.service.UserInfoService;
-import com.wy.test.util.RQCodeUtils;
 
 import dream.flying.flower.framework.core.crypto.Base32Helpers;
 import dream.flying.flower.helper.ImageHelper;

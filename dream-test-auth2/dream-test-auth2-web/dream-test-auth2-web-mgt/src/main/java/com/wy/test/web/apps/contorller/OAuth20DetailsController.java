@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authz.oauth2.common.OAuth2Constants;
-import com.wy.test.authz.oauth2.provider.client.JdbcClientDetailsService;
+import com.wy.test.common.crypto.ReciprocalUtils;
+import com.wy.test.common.entity.Message;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstsProtocols;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.entity.apps.AppsOAuth20Details;
 import com.wy.test.core.entity.apps.oauth2.provider.client.BaseClientDetails;
-import com.wy.test.crypto.ReciprocalUtils;
-import com.wy.test.entity.Message;
+import com.wy.test.oauth2.common.OAuth2Constants;
+import com.wy.test.oauth2.provider.client.JdbcClientDetailsService;
 
 import dream.flying.flower.lang.StrHelper;
 

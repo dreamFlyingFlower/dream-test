@@ -7,11 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.common.util.OAuth2Utils;
 import org.springframework.security.web.util.UrlUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
-import com.wy.test.authz.oauth2.common.OAuth2Constants;
 import com.wy.test.cas.authz.endpoint.ticket.CasConstants;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.jwt.AuthTokenService;
@@ -85,7 +85,7 @@ public class SingleSignOnInterceptor implements AsyncHandlerInterceptor {
 					_logger.debug("appId {}", appId);
 					app = appsService.get(appId, true);
 				} else if (requestURI.contains("/authz/oauth/v20/authorize")) {// oauth
-					app = appsService.get(request.getParameter(OAuth2Constants.PARAMETER.CLIENT_ID), true);
+					app = appsService.get(request.getParameter(OAuth2Utils.CLIENT_ID), true);
 				}
 			}
 

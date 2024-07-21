@@ -16,10 +16,10 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.wy.test.common.util.JsonUtils;
+import com.wy.test.common.util.StringGenerator;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.sms.password.sms.SmsOtpAuthn;
-import com.wy.test.util.JsonUtils;
-import com.wy.test.util.StringGenerator;
 
 /**
  * 网易云信短信验证.

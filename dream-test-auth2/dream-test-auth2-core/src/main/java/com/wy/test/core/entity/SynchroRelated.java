@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 
-import com.wy.test.util.DateUtils;
+import com.wy.test.common.util.DateUtils;
 
 @Entity
 @Table(name = "MXK_SYNCHRO_RELATED")

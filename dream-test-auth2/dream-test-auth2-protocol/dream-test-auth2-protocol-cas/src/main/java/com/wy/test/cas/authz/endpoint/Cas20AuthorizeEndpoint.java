@@ -25,9 +25,9 @@ import com.wy.test.cas.authz.endpoint.ticket.Ticket;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.web.HttpResponseConstants;
-import com.wy.test.util.Instance;
 
 import dream.flying.flower.lang.StrHelper;
+import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -209,18 +209,18 @@ public class Cas20AuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 			}
 
 			if (ConstsBoolean.isTrue(storedTicket.getCasDetails().getIsAdapter())) {
-
-				Object samlAdapter = Instance.newInstance(storedTicket.getCasDetails().getAdapter());
 				try {
+					Object samlAdapter = ReflectHelper.newInstance(storedTicket.getCasDetails().getAdapter());
 					BeanUtils.setProperty(samlAdapter, "serviceResponseBuilder", serviceResponseBuilder);
-				} catch (IllegalAccessException | InvocationTargetException e) {
+					AbstractAuthorizeAdapter adapter = (AbstractAuthorizeAdapter) samlAdapter;
+					adapter.setPrincipal(authentication);
+					adapter.setApp(storedTicket.getCasDetails());
+					adapter.generateInfo();
+				} catch (IllegalAccessException | InvocationTargetException | ClassNotFoundException
+						| NoSuchMethodException | SecurityException | InstantiationException
+						| IllegalArgumentException e) {
 					_logger.error("setProperty error . ", e);
 				}
-
-				AbstractAuthorizeAdapter adapter = (AbstractAuthorizeAdapter) samlAdapter;
-				adapter.setPrincipal(authentication);
-				adapter.setApp(storedTicket.getCasDetails());
-				adapter.generateInfo();
 			}
 		} else {
 			serviceResponseBuilder.failure().setCode(CasConstants.ERROR_CODE.INVALID_TICKET)
@@ -310,17 +310,18 @@ public class Cas20AuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 		if (storedTicket != null) {
 			SignPrincipal authentication = ((SignPrincipal) storedTicket.getAuthentication().getPrincipal());
 			if (ConstsBoolean.isTrue(storedTicket.getCasDetails().getIsAdapter())) {
-				Object samlAdapter = Instance.newInstance(storedTicket.getCasDetails().getAdapter());
 				try {
+					Object samlAdapter = ReflectHelper.newInstance(storedTicket.getCasDetails().getAdapter());
 					BeanUtils.setProperty(samlAdapter, "serviceResponseBuilder", serviceResponseBuilder);
-				} catch (IllegalAccessException | InvocationTargetException e) {
+					AbstractAuthorizeAdapter adapter = (AbstractAuthorizeAdapter) samlAdapter;
+					adapter.setPrincipal(authentication);
+					adapter.setApp(storedTicket.getCasDetails());
+					adapter.generateInfo();
+				} catch (IllegalAccessException | InvocationTargetException | ClassNotFoundException
+						| NoSuchMethodException | SecurityException | InstantiationException
+						| IllegalArgumentException e) {
 					_logger.error("setProperty error . ", e);
 				}
-
-				AbstractAuthorizeAdapter adapter = (AbstractAuthorizeAdapter) samlAdapter;
-				adapter.setPrincipal(authentication);
-				adapter.setApp(storedTicket.getCasDetails());
-				adapter.generateInfo();
 			}
 		} else {
 			serviceResponseBuilder.failure().setCode(CasConstants.ERROR_CODE.INVALID_TICKET)

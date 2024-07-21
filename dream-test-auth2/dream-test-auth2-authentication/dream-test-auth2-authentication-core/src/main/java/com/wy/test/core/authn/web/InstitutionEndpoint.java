@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.wy.test.common.entity.Message;
 import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.entity.Institutions;
 import com.wy.test.core.persistence.repository.InstitutionsRepository;
-import com.wy.test.entity.Message;
 
 @Controller
 @RequestMapping(value = "/inst")

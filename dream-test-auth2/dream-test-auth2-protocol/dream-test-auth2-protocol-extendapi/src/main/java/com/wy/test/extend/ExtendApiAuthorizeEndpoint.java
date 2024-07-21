@@ -1,5 +1,7 @@
 package com.wy.test.extend;
 
+import java.lang.reflect.InvocationTargetException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -17,8 +19,8 @@ import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
-import com.wy.test.util.Instance;
 
+import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -41,22 +43,28 @@ public class ExtendApiAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 		_logger.debug("" + apps);
 		if (ConstsBoolean.isTrue(apps.getIsAdapter())) {
 			_logger.debug("Adapter {}", apps.getAdapter());
-			AbstractAuthorizeAdapter adapter = (AbstractAuthorizeAdapter) Instance.newInstance(apps.getAdapter());
-			Accounts account = getAccounts(apps, currentUser);
-			if (apps.getCredential().equalsIgnoreCase(Apps.CREDENTIALS.USER_DEFINED) && account == null) {
-				return initCredentialView(id, "/authorize/api/" + id);
+			try {
+				AbstractAuthorizeAdapter adapter =
+						(AbstractAuthorizeAdapter) ReflectHelper.newInstance(apps.getAdapter());
+				Accounts account = getAccounts(apps, currentUser);
+				if (apps.getCredential().equalsIgnoreCase(Apps.CREDENTIALS.USER_DEFINED) && account == null) {
+					return initCredentialView(id, "/authorize/api/" + id);
+				}
+
+				adapter.setPrincipal(AuthorizationUtils.getPrincipal());
+				adapter.setApp(apps);
+				adapter.setAccount(account);
+
+				return adapter.authorize(modelAndView);
+			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
+					| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
 			}
-
-			adapter.setPrincipal(AuthorizationUtils.getPrincipal());
-			adapter.setApp(apps);
-			adapter.setAccount(account);
-
-			return adapter.authorize(modelAndView);
+			return null;
 		} else {
 			_logger.debug("redirect_uri {}", apps.getLoginUrl());
 			modelAndView.addObject("redirect_uri", apps.getLoginUrl());
 			return modelAndView;
 		}
-
 	}
 }

@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
+import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.entity.HistoryLogin;
 import com.wy.test.core.entity.Roles;
@@ -21,7 +22,6 @@ import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.UserInfoService;
 import com.wy.test.provider.authn.realm.ldap.LdapAuthenticationRealmService;
-import com.wy.test.util.DateUtils;
 
 /**
  * AbstractAuthenticationRealm.
