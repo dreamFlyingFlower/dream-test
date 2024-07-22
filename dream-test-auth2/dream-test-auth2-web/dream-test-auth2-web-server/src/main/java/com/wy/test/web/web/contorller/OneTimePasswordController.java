@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.common.crypto.password.PasswordReciprocal;
 import com.wy.test.common.entity.Message;
-import com.wy.test.common.util.RQCodeUtils;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.otp.password.onetimepwd.algorithm.OtpKeyUriFormat;
@@ -27,6 +26,7 @@ import com.wy.test.otp.password.onetimepwd.impl.TimeBasedOtpAuthn;
 import com.wy.test.persistence.service.UserInfoService;
 
 import dream.flying.flower.framework.core.crypto.Base32Helpers;
+import dream.flying.flower.framework.core.qrcode.QrCodeHelpers;
 import dream.flying.flower.helper.ImageHelper;
 
 @Controller
@@ -57,7 +57,7 @@ public class OneTimePasswordController {
 		String otpauth = otpKeyUriFormat.format(currentUser.getUsername());
 		byte[] byteSharedSecret = Base32Helpers.decode(sharedSecret);
 		String hexSharedSecret = Hex.encodeHexString(byteSharedSecret);
-		BufferedImage bufferedImage = RQCodeUtils.write2BufferedImage(otpauth, "gif", 300, 300);
+		BufferedImage bufferedImage = QrCodeHelpers.write2BufferedImage(otpauth, "gif", 300, 300);
 		String rqCode = ImageHelper.encodeImage(bufferedImage);
 
 		timebased.put("displayName", currentUser.getDisplayName());

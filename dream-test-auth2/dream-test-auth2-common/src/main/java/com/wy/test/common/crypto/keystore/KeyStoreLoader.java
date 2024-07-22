@@ -3,16 +3,14 @@ package com.wy.test.common.crypto.keystore;
 import java.security.KeyStore;
 import java.util.Enumeration;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 
 import dream.flying.flower.digest.enums.KeyStoreType;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class KeyStoreLoader implements InitializingBean {
-
-	private static final Logger _logger = LoggerFactory.getLogger(KeyStoreLoader.class);
 
 	private KeyStore keyStore;
 
@@ -62,14 +60,14 @@ public class KeyStoreLoader implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		_logger.debug("Load KeyStore from file " + keystoreFile.getURL());
+		log.debug("Load KeyStore from file " + keystoreFile.getURL());
 		keyStore = KeyStoreUtil.loadKeyStore(keystoreFile, keystorePassword.toCharArray(), KeyStoreType.JKS);
-		_logger.debug("Load KeyStore success . ");
+		log.debug("Load KeyStore success . ");
 
 		Enumeration<String> temp = keyStore.aliases();
 		int i = 0;
 		while (temp.hasMoreElements()) {
-			_logger.debug("KeyStore alias name " + (i++) + " : " + temp.nextElement());
+			log.debug("KeyStore alias name " + (i++) + " : " + temp.nextElement());
 		}
 	}
 

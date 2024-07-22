@@ -5,7 +5,8 @@ import java.io.File;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
-import com.wy.test.common.util.QRCode;
+
+import dream.flying.flower.framework.core.qrcode.QrCodeHelpers;
 
 public class RQcodeTest {
 
@@ -51,7 +52,7 @@ public class RQcodeTest {
 					BarcodeFormat.QR_CODE, 300, 300);
 			File file = new File(path);
 
-			QRCode.writeToPath(byteMatrix, "png", file);
+			QrCodeHelpers.writeToPath(byteMatrix, "png", file);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
