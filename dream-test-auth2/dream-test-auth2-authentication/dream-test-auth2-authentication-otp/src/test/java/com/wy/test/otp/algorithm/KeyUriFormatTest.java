@@ -21,8 +21,7 @@ public class KeyUriFormatTest {
 			byteMatrix = new MultiFormatWriter().encode(new String(kuf.format("shiming").getBytes("GBK"), "iso-8859-1"),
 					BarcodeFormat.QR_CODE, 300, 300);
 			File file = new File(path);
-
-			QrCodeHelpers.writeToPath(byteMatrix, "png", file);
+			QrCodeHelpers.toFile(byteMatrix, file, "png");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

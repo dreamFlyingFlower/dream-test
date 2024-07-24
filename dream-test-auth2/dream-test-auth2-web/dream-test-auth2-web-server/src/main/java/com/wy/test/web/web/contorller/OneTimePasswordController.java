@@ -28,6 +28,7 @@ import com.wy.test.persistence.service.UserInfoService;
 import dream.flying.flower.framework.core.crypto.Base32Helpers;
 import dream.flying.flower.framework.core.qrcode.QrCodeHelpers;
 import dream.flying.flower.helper.ImageHelper;
+import lombok.SneakyThrows;
 
 @Controller
 @RequestMapping(value = { "/config" })
@@ -46,6 +47,7 @@ public class OneTimePasswordController {
 
 	@GetMapping(value = { "/timebased" })
 	@ResponseBody
+	@SneakyThrows
 	public ResponseEntity<?> timebased(@RequestParam String generate, @CurrentUser UserInfo currentUser) {
 		HashMap<String, Object> timebased = new HashMap<String, Object>();
 
@@ -57,7 +59,7 @@ public class OneTimePasswordController {
 		String otpauth = otpKeyUriFormat.format(currentUser.getUsername());
 		byte[] byteSharedSecret = Base32Helpers.decode(sharedSecret);
 		String hexSharedSecret = Hex.encodeHexString(byteSharedSecret);
-		BufferedImage bufferedImage = QrCodeHelpers.write2BufferedImage(otpauth, "gif", 300, 300);
+		BufferedImage bufferedImage = QrCodeHelpers.toBufferedImage(otpauth, "gif", 300, 300);
 		String rqCode = ImageHelper.encodeImage(bufferedImage);
 
 		timebased.put("displayName", currentUser.getDisplayName());
