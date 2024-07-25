@@ -59,7 +59,7 @@ public class OneTimePasswordController {
 		String otpauth = otpKeyUriFormat.format(currentUser.getUsername());
 		byte[] byteSharedSecret = Base32Helpers.decode(sharedSecret);
 		String hexSharedSecret = Hex.encodeHexString(byteSharedSecret);
-		BufferedImage bufferedImage = QrCodeHelpers.toBufferedImage(otpauth, "gif", 300, 300);
+		BufferedImage bufferedImage = QrCodeHelpers.createImage(otpauth, 300, 300, "gif");
 		String rqCode = ImageHelper.encodeImage(bufferedImage);
 
 		timebased.put("displayName", currentUser.getDisplayName());
