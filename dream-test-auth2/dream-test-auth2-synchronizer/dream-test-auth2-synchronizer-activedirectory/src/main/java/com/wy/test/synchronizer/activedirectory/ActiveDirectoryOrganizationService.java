@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.constants.ConstsStatus;
 import com.wy.test.core.constants.ldap.OrganizationalUnit;
 import com.wy.test.core.entity.HistorySynchronizer;
@@ -24,6 +23,8 @@ import com.wy.test.core.persistence.ldap.ActiveDirectoryUtils;
 import com.wy.test.core.persistence.ldap.LdapUtils;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
+
+import dream.flying.flower.helper.DateTimeHelper;
 
 @Service
 public class ActiveDirectoryOrganizationService extends AbstractSynchronizerService implements ISynchronizerService {
@@ -87,7 +88,7 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 						HistorySynchronizer historySynchronizer = new HistorySynchronizer(synchronizer.generateId(),
 								this.synchronizer.getId(), this.synchronizer.getName(), organization.getId(),
 								organization.getOrgName(), Organizations.class.getSimpleName(),
-								DateUtils.getCurrentDateAsString(), "success", synchronizer.getInstId());
+								DateTimeHelper.formatDate(), "success", synchronizer.getInstId());
 						this.historySynchronizerService.insert(historySynchronizer);
 					}
 				}

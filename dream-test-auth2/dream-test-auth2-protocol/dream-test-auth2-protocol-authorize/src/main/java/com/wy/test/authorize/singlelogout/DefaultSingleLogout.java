@@ -5,9 +5,11 @@ import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
 
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.entity.apps.Apps;
+
+import dream.flying.flower.ConstDate;
+import dream.flying.flower.helper.DateTimeHelper;
 
 public class DefaultSingleLogout extends SingleLogout {
 
@@ -17,10 +19,8 @@ public class DefaultSingleLogout extends SingleLogout {
 		logoutParameters.put("id", UUID.randomUUID().toString());
 		logoutParameters.put("principal", authentication.getName());
 		logoutParameters.put("request", "logoutRequest");
-		logoutParameters.put("issueInstant", DateUtils.getCurrentDateAsString(DateUtils.FORMAT_DATE_ISO_TIMESTAMP));
+		logoutParameters.put("issueInstant", DateTimeHelper.format(ConstDate.DATETIME_ISO));
 		logoutParameters.put("ticket", ((SignPrincipal) authentication.getPrincipal()).getSession().getFormattedId());
 		postMessage(logoutApp.getLogoutUrl(), logoutParameters);
-
 	}
-
 }

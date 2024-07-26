@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.persistence.service.OrganizationsService;
 import com.wy.test.web.apis.identity.scim.resources.ScimMeta;
@@ -31,6 +30,7 @@ import com.wy.test.web.apis.identity.scim.resources.ScimOrganization;
 import com.wy.test.web.apis.identity.scim.resources.ScimParameters;
 import com.wy.test.web.apis.identity.scim.resources.ScimSearchResult;
 
+import dream.flying.flower.helper.DateTimeHelper;
 import dream.flying.flower.lang.StrHelper;
 
 /**
@@ -136,10 +136,10 @@ public class ScimOrganizationController {
 		ScimMeta meta = new ScimMeta("Organization");
 
 		if (StrHelper.isNotBlank(org.getCreatedDate())) {
-			meta.setCreated(DateUtils.parse(org.getCreatedDate(), DateUtils.FORMAT_DATE_YYYY_MM_DD_HH_MM_SS));
+			meta.setCreated(DateTimeHelper.parseDateTime(org.getCreatedDate()));
 		}
 		if (StrHelper.isNotBlank(org.getModifiedDate())) {
-			meta.setLastModified(DateUtils.parse(org.getModifiedDate(), DateUtils.FORMAT_DATE_YYYY_MM_DD_HH_MM_SS));
+			meta.setLastModified(DateTimeHelper.parseDateTime(org.getModifiedDate()));
 		}
 		scimOrg.setMeta(meta);
 		return scimOrg;

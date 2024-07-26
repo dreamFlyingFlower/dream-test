@@ -1,4 +1,4 @@
-package com.wy.test.provision.thread;
+package com.wy.test.persistence.provision.thread;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

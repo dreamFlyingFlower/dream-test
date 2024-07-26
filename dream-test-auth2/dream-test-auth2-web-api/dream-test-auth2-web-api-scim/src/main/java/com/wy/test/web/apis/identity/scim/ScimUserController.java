@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.constants.ConstsStatus;
 import com.wy.test.core.entity.Roles;
 import com.wy.test.core.entity.UserInfo;
@@ -42,6 +41,7 @@ import com.wy.test.web.apis.identity.scim.resources.ScimUser;
 import com.wy.test.web.apis.identity.scim.resources.ScimUserEmail;
 import com.wy.test.web.apis.identity.scim.resources.ScimUserPhoneNumber;
 
+import dream.flying.flower.helper.DateTimeHelper;
 import dream.flying.flower.lang.StrHelper;
 
 /**
@@ -191,11 +191,10 @@ public class ScimUserController {
 
 		ScimMeta meta = new ScimMeta("User");
 		if (StrHelper.isNotBlank(userInfo.getCreatedDate())) {
-			meta.setCreated(DateUtils.parse(userInfo.getCreatedDate(), DateUtils.FORMAT_DATE_YYYY_MM_DD_HH_MM_SS));
+			meta.setCreated(DateTimeHelper.parseDateTime(userInfo.getCreatedDate()));
 		}
 		if (StrHelper.isNotBlank(userInfo.getModifiedDate())) {
-			meta.setLastModified(
-					DateUtils.parse(userInfo.getModifiedDate(), DateUtils.FORMAT_DATE_YYYY_MM_DD_HH_MM_SS));
+			meta.setLastModified(DateTimeHelper.parseDateTime(userInfo.getModifiedDate()));
 		}
 		scimUser.setMeta(meta);
 		return scimUser;

@@ -11,9 +11,9 @@ import org.springframework.stereotype.Repository;
 
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.persistence.mapper.OrganizationsMapper;
-import com.wy.test.provision.ProvisionAction;
-import com.wy.test.provision.ProvisionService;
-import com.wy.test.provision.ProvisionTopic;
+import com.wy.test.persistence.provision.ProvisionAction;
+import com.wy.test.persistence.provision.ProvisionService;
+import com.wy.test.persistence.provision.ProvisionTopic;
 
 @Repository
 public class OrganizationsService extends JpaService<Organizations> {

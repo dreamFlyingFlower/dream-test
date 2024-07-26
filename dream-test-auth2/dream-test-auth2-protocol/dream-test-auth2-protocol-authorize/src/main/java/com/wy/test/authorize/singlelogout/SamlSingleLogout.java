@@ -5,12 +5,13 @@ import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
 
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.entity.apps.Apps;
 
+import dream.flying.flower.ConstDate;
+import dream.flying.flower.helper.DateTimeHelper;
+
 /**
- * SamlSingleLogout
- * https://apereo.github.io/cas/6.5.x/installation/Logout-Single-Signout.html
+ * SamlSingleLogout https://apereo.github.io/cas/6.5.x/installation/Logout-Single-Signout.html
  */
 public class SamlSingleLogout extends SingleLogout {
 
@@ -27,8 +28,7 @@ public class SamlSingleLogout extends SingleLogout {
 	@Override
 	public void sendRequest(Authentication authentication, Apps logoutApp) {
 		String requestMessage = String.format(logoutRequestMessage, UUID.randomUUID().toString(),
-				DateUtils.getCurrentDateAsString(DateUtils.FORMAT_DATE_ISO_TIMESTAMP), authentication.getName(),
-				logoutApp.getOnlineTicket());
+				DateTimeHelper.format(ConstDate.DATETIME_ISO), authentication.getName(), logoutApp.getOnlineTicket());
 
 		HashMap<String, Object> logoutParameters = new HashMap<String, Object>();
 		logoutParameters.put(LOGOUT_REQUEST_PARAMETER, requestMessage);

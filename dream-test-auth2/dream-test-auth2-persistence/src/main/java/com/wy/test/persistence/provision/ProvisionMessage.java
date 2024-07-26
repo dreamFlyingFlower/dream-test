@@ -1,4 +1,4 @@
-package com.wy.test.provision;
+package com.wy.test.persistence.provision;
 
 public class ProvisionMessage {
 

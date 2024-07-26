@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.wy.test.common.crypto.password.PasswordReciprocal;
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.constants.ConstsStatus;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.ChangePassword;
@@ -18,10 +17,11 @@ import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.mapper.UserInfoMapper;
-import com.wy.test.provision.ProvisionAction;
-import com.wy.test.provision.ProvisionService;
-import com.wy.test.provision.ProvisionTopic;
+import com.wy.test.persistence.provision.ProvisionAction;
+import com.wy.test.persistence.provision.ProvisionService;
+import com.wy.test.persistence.provision.ProvisionTopic;
 
+import dream.flying.flower.helper.DateTimeHelper;
 import dream.flying.flower.lang.StrHelper;
 
 @Repository
@@ -167,7 +167,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 
 	public boolean updateProtectedApps(UserInfo userinfo) {
 		try {
-			userinfo.setModifiedDate(DateUtils.getCurrentDateTimeAsString());
+			userinfo.setModifiedDate(DateTimeHelper.formatDateTime());
 			return getMapper().updateProtectedApps(userinfo) > 0;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -216,7 +216,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 			changePassword.setDecipherable(PasswordReciprocal.getInstance().encode(changePassword.getPassword()));
 			_logger.debug("decipherable : " + changePassword.getDecipherable());
 			changePassword.setPassword(password);
-			changePassword.setPasswordLastSetTime(DateUtils.getCurrentDateTimeAsString());
+			changePassword.setPasswordLastSetTime(DateTimeHelper.formatDateTime());
 
 		} else {
 			changePassword.setPassword(null);
@@ -312,7 +312,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 
 	public boolean updateAppLoginPassword(UserInfo userinfo) {
 		try {
-			userinfo.setModifiedDate(DateUtils.getCurrentDateTimeAsString());
+			userinfo.setModifiedDate(DateTimeHelper.formatDateTime());
 			return getMapper().updateAppLoginPassword(userinfo) > 0;
 		} catch (Exception e) {
 			e.printStackTrace();

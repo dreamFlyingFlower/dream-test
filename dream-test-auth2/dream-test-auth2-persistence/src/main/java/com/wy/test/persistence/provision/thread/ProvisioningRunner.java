@@ -1,4 +1,4 @@
-package com.wy.test.provision.thread;
+package com.wy.test.persistence.provision.thread;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,7 +11,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.wy.test.common.crypto.password.PasswordReciprocal;
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.Connectors;
@@ -19,11 +18,12 @@ import com.wy.test.core.entity.Organizations;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.web.HttpRequestAdapter;
 import com.wy.test.core.web.WebContext;
+import com.wy.test.persistence.provision.ProvisionAction;
+import com.wy.test.persistence.provision.ProvisionMessage;
+import com.wy.test.persistence.provision.ProvisionTopic;
 import com.wy.test.persistence.service.ConnectorsService;
-import com.wy.test.provision.ProvisionAction;
-import com.wy.test.provision.ProvisionMessage;
-import com.wy.test.provision.ProvisionTopic;
 
+import dream.flying.flower.helper.DateTimeHelper;
 import dream.flying.flower.lang.SerializableHelper;
 import dream.flying.flower.result.Result;
 
@@ -121,8 +121,8 @@ public class ProvisioningRunner {
 		}
 
 		jdbcTemplate.update(PROVISION_LOG_INSERT_STATEMENT, WebContext.genId(), conName, topic,
-				actionType.replace("_ACTION", "").toLowerCase(), sourceId, sourceName,
-				DateUtils.getCurrentDateTimeAsString(), result, instid);
+				actionType.replace("_ACTION", "").toLowerCase(), sourceId, sourceName, DateTimeHelper.formatDateTime(),
+				result, instid);
 	}
 
 	public String getActionType(String actionType) {

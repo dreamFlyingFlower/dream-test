@@ -1,4 +1,4 @@
-package com.wy.test.provision.thread;
+package com.wy.test.persistence.provision.thread;
 
 import java.io.Serializable;
 import java.sql.Types;
@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.wy.test.common.pretty.impl.JsonPretty;
 import com.wy.test.common.util.JsonUtils;
-import com.wy.test.provision.ProvisionMessage;
+import com.wy.test.persistence.provision.ProvisionMessage;
 
 import dream.flying.flower.lang.SerializableHelper;
 

@@ -1,7 +1,6 @@
 package com.wy.test.core.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +11,7 @@ import javax.persistence.Table;
 
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 
-import com.wy.test.common.util.DateUtils;
+import dream.flying.flower.helper.DateTimeHelper;
 
 @Entity
 @Table(name = "MXK_SYNCHRO_RELATED")
@@ -82,7 +81,7 @@ public class SynchroRelated extends JpaEntity implements Serializable {
 		this.originId2 = originId2;
 		this.originId3 = originId3;
 		this.instId = instId;
-		this.syncTime = DateUtils.formatDateTime(new Date());
+		this.syncTime = DateTimeHelper.formatDateTime();
 	}
 
 	public String getId() {

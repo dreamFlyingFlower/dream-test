@@ -1,17 +1,17 @@
 package com.wy.test.persistence.service;
 
 import java.sql.Types;
-import java.util.Date;
 import java.util.List;
 
 import org.dromara.mybatis.jpa.JpaService;
 import org.springframework.stereotype.Repository;
 
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.core.entity.SynchroRelated;
 import com.wy.test.core.entity.Synchronizers;
 import com.wy.test.persistence.mapper.SynchroRelatedMapper;
+
+import dream.flying.flower.helper.DateTimeHelper;
 
 @Repository
 public class SynchroRelatedService extends JpaService<SynchroRelated> {
@@ -52,7 +52,7 @@ public class SynchroRelatedService extends JpaService<SynchroRelated> {
 			insert(synchroRelated);
 		} else {
 			synchroRelated.setId(loadSynchroRelated.getId());
-			synchroRelated.setSyncTime(DateUtils.formatDateTime(new Date()));
+			synchroRelated.setSyncTime(DateTimeHelper.formatDateTime());
 			updateSyncTime(synchroRelated);
 		}
 	}

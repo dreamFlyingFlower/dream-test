@@ -27,10 +27,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.common.util.IdGenerator;
 import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.entity.Institutions;
+
+import dream.flying.flower.helper.DateTimeHelper;
 
 /**
  * Application is common class for Web Application Context.
@@ -142,8 +143,7 @@ public final class WebContext {
 	/**
 	 * get Http Context full Path,if port equals 80 or 443 is omitted.
 	 * 
-	 * @return String eg:http://192.168.1.20:9080/webcontext or
-	 *         http://www.website.com/webcontext
+	 * @return String eg:http://192.168.1.20:9080/webcontext or http://www.website.com/webcontext
 	 */
 	public static String getContextPath(HttpServletRequest request, boolean isContextPath) {
 		String fullRequestUrl = UrlUtils.buildFullRequestUrl(request);
@@ -259,8 +259,8 @@ public final class WebContext {
 	}
 
 	/**
-	 * get locale from Spring Resolver,if locale is null,get locale from Spring.
-	 * SessionLocaleResolver this is from internationalization
+	 * get locale from Spring Resolver,if locale is null,get locale from Spring. SessionLocaleResolver this is from
+	 * internationalization
 	 * 
 	 * @return Locale
 	 */
@@ -373,7 +373,7 @@ public final class WebContext {
 	 * @return String
 	 */
 	public static String getCurrentDate() {
-		return DateUtils.getCurrentDateAsString(DateUtils.FORMAT_DATE_YYYY_MM_DD);
+		return DateTimeHelper.formatDate();
 	}
 
 	/**

@@ -13,9 +13,9 @@ import com.wy.test.core.entity.AccountsStrategy;
 import com.wy.test.core.entity.OrganizationsCast;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.persistence.mapper.AccountsMapper;
-import com.wy.test.provision.ProvisionAction;
-import com.wy.test.provision.ProvisionService;
-import com.wy.test.provision.ProvisionTopic;
+import com.wy.test.persistence.provision.ProvisionAction;
+import com.wy.test.persistence.provision.ProvisionService;
+import com.wy.test.persistence.provision.ProvisionTopic;
 
 import dream.flying.flower.lang.StrHelper;
 import net.sourceforge.pinyin4j.PinyinHelper;

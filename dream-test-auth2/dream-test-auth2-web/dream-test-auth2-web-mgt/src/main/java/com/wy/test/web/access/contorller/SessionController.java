@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.common.entity.Message;
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.entity.HistoryLogin;
@@ -27,6 +26,7 @@ import com.wy.test.core.entity.UserInfo;
 import com.wy.test.persistence.service.HistoryLoginService;
 import com.wy.test.persistence.service.HistorySystemLogsService;
 
+import dream.flying.flower.ConstDate;
 import dream.flying.flower.lang.StrHelper;
 
 /**
@@ -91,7 +91,7 @@ public class SessionController {
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat(DateUtils.FORMAT_DATE_HH_MM_SS);
+		SimpleDateFormat dateFormat = new SimpleDateFormat(ConstDate.TIME);
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
 	}

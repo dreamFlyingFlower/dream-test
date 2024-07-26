@@ -16,10 +16,10 @@ import com.wy.test.listener.DynamicRolesListenerAdapter;
 import com.wy.test.listener.ListenerAdapter;
 import com.wy.test.listener.ListenerParameter;
 import com.wy.test.listener.SessionListenerAdapter;
+import com.wy.test.persistence.provision.thread.ProvisioningRunner;
+import com.wy.test.persistence.provision.thread.ProvisioningRunnerThread;
 import com.wy.test.persistence.service.ConnectorsService;
 import com.wy.test.persistence.service.RolesService;
-import com.wy.test.provision.thread.ProvisioningRunner;
-import com.wy.test.provision.thread.ProvisioningRunnerThread;
 
 @AutoConfiguration
 public class MaxKeyMgtListenerConfig implements InitializingBean {

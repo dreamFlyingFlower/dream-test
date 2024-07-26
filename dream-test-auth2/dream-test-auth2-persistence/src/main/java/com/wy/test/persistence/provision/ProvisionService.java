@@ -1,4 +1,4 @@
-package com.wy.test.provision;
+package com.wy.test.persistence.provision;
 
 import java.util.UUID;
 
@@ -8,9 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.configuration.ApplicationConfig;
-import com.wy.test.provision.thread.ProvisioningThread;
+import com.wy.test.persistence.provision.thread.ProvisioningThread;
+
+import dream.flying.flower.helper.DateTimeHelper;
 
 @Component
 public class ProvisionService {
@@ -36,7 +37,7 @@ public class ProvisionService {
 			ProvisionMessage message = new ProvisionMessage(UUID.randomUUID().toString(), // message id as uuid
 					topic, // TOPIC
 					actionType, // action of content
-					DateUtils.getCurrentDateTimeAsString(), // send time
+					DateTimeHelper.formatDateTime(), // send time
 					null, // content Object to json message content
 					content);
 			// sand msg to provision topic

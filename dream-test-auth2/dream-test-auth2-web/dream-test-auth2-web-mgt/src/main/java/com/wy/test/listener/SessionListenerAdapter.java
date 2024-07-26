@@ -1,7 +1,6 @@
 package com.wy.test.listener;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -9,10 +8,11 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.entity.HistoryLogin;
+
+import dream.flying.flower.helper.DateTimeHelper;
 
 public class SessionListenerAdapter extends ListenerAdapter implements Job, Serializable {
 
@@ -38,7 +38,7 @@ public class SessionListenerAdapter extends ListenerAdapter implements Job, Seri
 					Session session = sessionManager.get(login.getSessionId());
 					if (session == null) {
 						_logger.debug("user {} session {}  Login at {} and TimeOut at {} .", login.getUsername(),
-								login.getId(), login.getLoginTime(), DateUtils.formatDateTime(new Date()));
+								login.getId(), login.getLoginTime(), DateTimeHelper.formatDateTime());
 						sessionManager.terminate(login.getSessionId(), login.getUserId(), login.getUsername());
 					} else {
 						_logger.debug("user {} session {} Login at {} , Last Access at {} will Expired at {}.",
