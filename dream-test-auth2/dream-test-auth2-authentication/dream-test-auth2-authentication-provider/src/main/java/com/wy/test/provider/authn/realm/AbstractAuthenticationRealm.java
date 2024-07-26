@@ -1,7 +1,6 @@
 package com.wy.test.provider.authn.realm;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,7 +9,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.entity.HistoryLogin;
 import com.wy.test.core.entity.Roles;
@@ -22,6 +20,8 @@ import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.UserInfoService;
 import com.wy.test.provider.authn.realm.ldap.LdapAuthenticationRealmService;
+
+import dream.flying.flower.helper.DateTimeHelper;
 
 /**
  * AbstractAuthenticationRealm.
@@ -113,7 +113,7 @@ public abstract class AbstractAuthenticationRealm {
 
 		_logger.debug("user session id is {} . ", historyLogin.getSessionId());
 
-		userInfo.setLastLoginTime(DateUtils.formatDateTime(new Date()));
+		userInfo.setLastLoginTime(DateTimeHelper.formatDateTime());
 		userInfo.setLastLoginIp(WebContext.getRequestIpAddress());
 
 		Browser browser = resolveBrowser();

@@ -3,6 +3,8 @@ package com.wy.test.common.util;
 import java.util.Calendar;
 import java.util.Date;
 
+import dream.flying.flower.helper.DateTimeHelper;
+
 /**
  * 描述: Twitter的分布式自增ID雪花算法snowflake (Java版)
  *
@@ -68,7 +70,7 @@ public class SnowFlakeId {
 		this.machineId = machineId;
 		this.sequence = sequence;
 		this.lastStmp = lastStmp;
-		dateTime = DateUtils.toUtc(fromatTime(lastStmp));
+		dateTime = DateTimeHelper.formatUtcDateTime(fromatTime(lastStmp));
 	}
 
 	/**

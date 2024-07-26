@@ -1,9 +1,5 @@
 package com.wy.test.util;
 
-import java.util.Date;
-
-import com.wy.test.common.util.DateUtils;
-
 public class DateUtilsTest {
 
 	/**
@@ -53,18 +49,5 @@ public class DateUtilsTest {
 		// Date lockoutDate = DateUtils.addDate(new Date(), 0, 30, 0); //解锁时间
 		// System.out.println(DateUtils.format(lockoutDate,
 		// DateUtils.FORMAT_DATE_YYYY_MM_DD_HH_MM_SS));
-		Date date = new Date();
-		System.out.println(
-				DateUtils.format(DateUtils.addDate(date, 0, 0, 1, 0, 0, 0), DateUtils.FORMAT_DATE_YYYY_MM_DD_HH_MM_SS));
-
-		System.out.println(DateUtils.format(DateUtils.addMinutes(new Date(), Integer.parseInt("2") * 1000),
-				DateUtils.FORMAT_DATE_ISO_TIMESTAMP));
-		System.out.println(DateUtils.toUtc(date));
-
-		System.out.println(DateUtils.toUtcLocal("2015-11-04T16:00:22.875Z"));
-		System.out.println(DateUtils.toUtcLocal("2015-11-04T23:58:14.286+08:00"));
-
-		System.out.println(DateUtils.formatDateTime(new Date()));
-
 	}
 }

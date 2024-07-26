@@ -1,7 +1,5 @@
 package com.wy.test.core.authn.web;
 
-import java.util.Date;
-
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
@@ -12,9 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.web.WebConstants;
+
+import dream.flying.flower.helper.DateTimeHelper;
 
 @WebListener
 public class HttpSessionListenerAdapter implements HttpSessionListener {
@@ -47,18 +46,18 @@ public class HttpSessionListenerAdapter implements HttpSessionListener {
 			if (principal instanceof SignPrincipal && ((SignPrincipal) principal).getUserInfo() != null) {
 				SignPrincipal signPrincipal = (SignPrincipal) principal;
 				_logger.trace("{} HttpSession Id  {} for userId  {} , username {} @Ticket {} Destroyed",
-						DateUtils.formatDateTime(new Date()), session.getId(), signPrincipal.getUserInfo().getId(),
+						DateTimeHelper.formatDateTime(), session.getId(), signPrincipal.getUserInfo().getId(),
 						signPrincipal.getUserInfo().getUsername(), signPrincipal.getSession().getId());
 			} else if (principal instanceof User) {
 				User user = (User) principal;
 				_logger.trace("{} HttpSession Id  {} for username {} password {} Destroyed",
-						DateUtils.formatDateTime(new Date()), session.getId(), user.getUsername(), user.getPassword());
+						DateTimeHelper.formatDateTime(), session.getId(), user.getUsername(), user.getPassword());
 			} else {
-				_logger.trace("{} HttpSession Id  {} for principal {} Destroyed", DateUtils.formatDateTime(new Date()),
+				_logger.trace("{} HttpSession Id  {} for principal {} Destroyed", DateTimeHelper.formatDateTime(),
 						session.getId(), principal);
 			}
 		} else {
-			_logger.trace("{} HttpSession Id  {} Destroyed", DateUtils.formatDateTime(new Date()), session.getId());
+			_logger.trace("{} HttpSession Id  {} Destroyed", DateTimeHelper.formatDateTime(), session.getId());
 		}
 	}
 

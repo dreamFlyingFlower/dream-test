@@ -1,9 +1,8 @@
 package com.wy.test.authz.token.endpoint.adapter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,6 +12,8 @@ import com.wy.test.common.util.JsonUtils;
 import com.wy.test.common.util.StringGenerator;
 import com.wy.test.core.entity.apps.AppsTokenBasedDetails;
 import com.wy.test.core.web.WebConstants;
+
+import dream.flying.flower.helper.DateTimeHelper;
 
 public class TokenBasedDefaultAdapter extends AbstractAuthorizeAdapter {
 
@@ -63,16 +64,9 @@ public class TokenBasedDefaultAdapter extends AbstractAuthorizeAdapter {
 		/*
 		 * use UTC date time format current date plus expires minute
 		 */
-		DateTime currentDateTime = DateTime.now();
-		Date expirationTime = currentDateTime.plusSeconds(details.getExpires()).toDate();
-		String expiresString = DateUtils.toUtc(expirationTime);
-		_logger.debug("UTC Local current date : " + DateUtils.toUtcLocal(currentDateTime.toDate()));
-		_logger.debug("UTC  current Date : " + DateUtils.toUtc(currentDateTime));
-		_logger.debug("UTC  expires Date : " + DateUtils.toUtc(currentDateTime));
-
-		beanMap.put("at", DateUtils.toUtc(currentDateTime));
-
-		beanMap.put("expires", expiresString);
+		LocalDateTime localDateTime = LocalDateTime.now();
+		beanMap.put("at", DateTimeHelper.formatUtcDateTime(localDateTime));
+		beanMap.put("expires", DateTimeHelper.formatUtcDateTime(localDateTime.plusSeconds(details.getExpires())));
 
 		token = JsonUtils.toString(beanMap);
 		_logger.debug("Token : {}", token);

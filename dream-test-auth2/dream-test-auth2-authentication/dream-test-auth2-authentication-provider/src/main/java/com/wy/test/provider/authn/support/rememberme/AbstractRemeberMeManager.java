@@ -13,7 +13,6 @@ import org.springframework.security.core.Authentication;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.wy.test.common.crypto.jwt.HMAC512Service;
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.configuration.ApplicationConfig;
@@ -50,7 +49,7 @@ public abstract class AbstractRemeberMeManager {
 			remeberMe.setId(WebContext.genId());
 			remeberMe.setUserId(userInfo.getId());
 			remeberMe.setUsername(userInfo.getUsername());
-			remeberMe.setLastLoginTime(DateUtils.getCurrentDate());
+			remeberMe.setLastLoginTime(new Date());
 			remeberMe.setExpirationTime(DateTime.now().plusDays(validity).toDate());
 			save(remeberMe);
 			_logger.debug("Remeber Me " + remeberMe);

@@ -1,14 +1,13 @@
 package com.wy.test.authz.token.endpoint.adapter;
 
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.entity.apps.AppsTokenBasedDetails;
+
+import dream.flying.flower.helper.DateTimeHelper;
 
 public class TokenBasedSimpleAdapter extends AbstractAuthorizeAdapter {
 
@@ -43,13 +42,7 @@ public class TokenBasedSimpleAdapter extends AbstractAuthorizeAdapter {
 		/*
 		 * use UTC date time format
 		 */
-		Date currentDate = new Date();
-		_logger.debug("UTC Local current date : " + DateUtils.toUtcLocal(currentDate));
-		_logger.debug("UTC  current Date : " + DateUtils.toUtc(currentDate));
-
-		token = tokenUsername + "@@" + DateUtils.toUtc(currentDate);
-		_logger.debug("Token : {}", token);
-
+		token = tokenUsername + "@@" + DateTimeHelper.formatUtcDateTime();
 		return token;
 	}
 

@@ -1,15 +1,15 @@
 package com.wy.test.provider.authn.support.kerberos;
 
+import java.time.LocalDateTime;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
 import com.wy.test.common.crypto.ReciprocalUtils;
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.web.AuthorizationUtils;
@@ -17,6 +17,8 @@ import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
+
+import dream.flying.flower.helper.DateTimeHelper;
 
 public class HttpKerberosEntryPoint implements AsyncHandlerInterceptor {
 
@@ -75,10 +77,10 @@ public class HttpKerberosEntryPoint implements AsyncHandlerInterceptor {
 		kerberosToken = (KerberosToken) JsonUtils.stringToObject(decoderKerberosToken, kerberosToken);
 		_logger.debug("Kerberos Token " + kerberosToken);
 
-		DateTime notOnOrAfter = DateUtils.toUtcDate(kerberosToken.getNotOnOrAfter());
-		_logger.debug("Kerberos Token is After Now  " + notOnOrAfter.isAfterNow());
+		LocalDateTime localDateTime = DateTimeHelper.toUtcDateTime(kerberosToken.getNotOnOrAfter());
+		_logger.debug("Kerberos Token is After Now  " + localDateTime.isAfter(LocalDateTime.now()));
 
-		if (notOnOrAfter.isAfterNow()) {
+		if (localDateTime.isAfter(LocalDateTime.now())) {
 			LoginCredential loginCredential =
 					new LoginCredential(kerberosToken.getPrincipal(), "", ConstsLoginType.KERBEROS);
 			loginCredential.setProvider(kerberosUserDomain);

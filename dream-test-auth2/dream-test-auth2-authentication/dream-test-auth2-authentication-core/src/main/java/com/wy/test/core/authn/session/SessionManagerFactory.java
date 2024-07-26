@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -12,11 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import com.wy.test.common.util.DateUtils;
 import com.wy.test.core.constants.ConstsPersistence;
 import com.wy.test.core.entity.HistoryLogin;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
+
+import dream.flying.flower.helper.DateTimeHelper;
 
 /**
  * SessionManager Level 1 in memory,store in Caffeine Level 2 in Redis user
@@ -142,7 +142,7 @@ public class SessionManagerFactory implements SessionManager {
 
 	@Override
 	public void terminate(String sessionId, String userId, String username) {
-		String lastLogoffTime = DateUtils.formatDateTime(new Date());
+		String lastLogoffTime = DateTimeHelper.formatDateTime();
 		_logger.trace("{} user {} terminate session {} .", lastLogoffTime, username, sessionId);
 		this.profileLastLogoffTime(userId, lastLogoffTime);
 		this.sessionLogoff(sessionId, lastLogoffTime);
