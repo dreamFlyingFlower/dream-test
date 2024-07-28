@@ -31,8 +31,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wy.test.authz.saml20.metadata.MetadataDescriptorUtil;
 import com.wy.test.common.crypto.ReciprocalUtils;
 import com.wy.test.common.crypto.cert.X509CertUtils;
-import com.wy.test.common.crypto.keystore.KeyStoreLoader;
-import com.wy.test.common.crypto.keystore.KeyStoreUtil;
 import com.wy.test.common.entity.Message;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.configuration.ApplicationConfig;
@@ -40,6 +38,9 @@ import com.wy.test.core.constants.ConstsProtocols;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.AppsSAML20Details;
 import com.wy.test.persistence.service.AppsSaml20DetailsService;
+
+import dream.flying.flower.framework.core.crypto.keystore.KeyStoreHelpers;
+import dream.flying.flower.framework.core.crypto.keystore.KeyStoreLoader;
 
 @Controller
 @RequestMapping(value = { "/apps/saml20" })
@@ -162,17 +163,17 @@ public class SAML20DetailsController extends BaseAppContorller {
 
 			samlDetails.setCertIssuer(X509CertUtils.getCommonName(samlDetails.getTrustCert().getIssuerX500Principal()));
 
-			KeyStore keyStore = KeyStoreUtil.clone(keyStoreLoader.getKeyStore(), keyStoreLoader.getKeystorePassword());
+			KeyStore keyStore = KeyStoreHelpers.clone(keyStoreLoader.getKeyStore(), keyStoreLoader.getKeystorePassword());
 
 			KeyStore trustKeyStore = null;
 			if (!samlDetails.getEntityId().equals("")) {
-				trustKeyStore = KeyStoreUtil.importTrustCertificate(keyStore, samlDetails.getTrustCert(),
+				trustKeyStore = KeyStoreHelpers.importTrustCertificate(keyStore, samlDetails.getTrustCert(),
 						samlDetails.getEntityId());
 			} else {
-				trustKeyStore = KeyStoreUtil.importTrustCertificate(keyStore, samlDetails.getTrustCert());
+				trustKeyStore = KeyStoreHelpers.importTrustCertificate(keyStore, samlDetails.getTrustCert());
 			}
 
-			byte[] keyStoreByte = KeyStoreUtil.keyStore2Bytes(trustKeyStore, keyStoreLoader.getKeystorePassword());
+			byte[] keyStoreByte = KeyStoreHelpers.keyStore2Bytes(trustKeyStore, keyStoreLoader.getKeystorePassword());
 
 			// store KeyStore content
 			samlDetails.setKeyStore(keyStoreByte);

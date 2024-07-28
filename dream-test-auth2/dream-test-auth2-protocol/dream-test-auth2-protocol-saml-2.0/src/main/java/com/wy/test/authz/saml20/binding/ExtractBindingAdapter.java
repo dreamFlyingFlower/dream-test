@@ -10,8 +10,9 @@ import org.opensaml.ws.security.SecurityPolicyResolver;
 import org.opensaml.xml.security.SecurityException;
 import org.opensaml.xml.security.credential.CredentialResolver;
 
-import com.wy.test.common.crypto.keystore.KeyStoreLoader;
 import com.wy.test.core.entity.apps.AppsSAML20Details;
+
+import dream.flying.flower.framework.core.crypto.keystore.KeyStoreLoader;
 
 /**
  * 

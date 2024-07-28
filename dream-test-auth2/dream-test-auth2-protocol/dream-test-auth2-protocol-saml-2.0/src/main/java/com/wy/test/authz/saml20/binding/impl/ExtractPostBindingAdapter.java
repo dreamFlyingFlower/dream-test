@@ -21,8 +21,9 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.wy.test.authz.saml.common.TrustResolver;
 import com.wy.test.authz.saml20.binding.ExtractBindingAdapter;
-import com.wy.test.common.crypto.keystore.KeyStoreLoader;
 import com.wy.test.core.entity.apps.AppsSAML20Details;
+
+import dream.flying.flower.framework.core.crypto.keystore.KeyStoreLoader;
 
 public class ExtractPostBindingAdapter implements ExtractBindingAdapter, InitializingBean {
 

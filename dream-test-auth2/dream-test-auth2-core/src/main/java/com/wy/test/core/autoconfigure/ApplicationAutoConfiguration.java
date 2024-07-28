@@ -22,7 +22,6 @@ import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 import com.nimbusds.jose.JOSEException;
-import com.wy.test.common.crypto.keystore.KeyStoreLoader;
 import com.wy.test.common.crypto.password.PasswordReciprocal;
 import com.wy.test.common.crypto.password.SM3PasswordEncoder;
 import com.wy.test.core.constants.ConstsPersistence;
@@ -34,6 +33,7 @@ import com.wy.test.core.persistence.repository.InstitutionsRepository;
 import com.wy.test.core.persistence.repository.LocalizationRepository;
 import com.wy.test.core.web.WebContext;
 
+import dream.flying.flower.framework.core.crypto.keystore.KeyStoreLoader;
 import dream.flying.flower.generator.GeneratorStrategyContext;
 import dream.flying.flower.generator.SnowFlakeGenerator;
 import lombok.extern.slf4j.Slf4j;

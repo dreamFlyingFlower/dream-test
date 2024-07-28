@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
 import com.wy.test.common.entity.Message;
-import com.wy.test.common.util.ExcelUtils;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstsEntryType;
 import com.wy.test.core.constants.ConstsOperateAction;
@@ -51,6 +50,7 @@ import com.wy.test.persistence.service.FileUploadService;
 import com.wy.test.persistence.service.HistorySystemLogsService;
 import com.wy.test.persistence.service.UserInfoService;
 
+import dream.flying.flower.framework.core.excel.ExcelContentHelpers;
 import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.helper.DateTimeHelper;
 import dream.flying.flower.lang.StrHelper;
@@ -283,104 +283,103 @@ public class UserInfoController {
 		UserInfo userInfo = new UserInfo();
 		userInfo.setCreatedDate(DateTimeHelper.formatDateTime());
 		// 登录账号
-		userInfo.setUsername(ExcelUtils.getValue(row, 0));
+		userInfo.setUsername(ExcelContentHelpers.getValueString(row, 0));
 		// 密码
-		userInfo.setPassword(ExcelUtils.getValue(row, 1));
+		userInfo.setPassword(ExcelContentHelpers.getValueString(row, 1));
 		// 用户显示
-		userInfo.setDisplayName(ExcelUtils.getValue(row, 2));
+		userInfo.setDisplayName(ExcelContentHelpers.getValueString(row, 2));
 		// 姓
-		userInfo.setFamilyName(ExcelUtils.getValue(row, 3));
+		userInfo.setFamilyName(ExcelContentHelpers.getValueString(row, 3));
 		// 名
-		userInfo.setGivenName(ExcelUtils.getValue(row, 4));
+		userInfo.setGivenName(ExcelContentHelpers.getValueString(row, 4));
 		// 中间名
-		userInfo.setMiddleName(ExcelUtils.getValue(row, 5));
+		userInfo.setMiddleName(ExcelContentHelpers.getValueString(row, 5));
 		// 昵称
-		userInfo.setNickName(ExcelUtils.getValue(row, 6));
+		userInfo.setNickName(ExcelContentHelpers.getValueString(row, 6));
 		// 性别
-		String gender = ExcelUtils.getValue(row, 7);
+		String gender = ExcelContentHelpers.getValueString(row, 7);
 		userInfo.setGender(gender.equals("") ? 1 : Integer.valueOf(gender));
 		// 语言偏好
-		userInfo.setPreferredLanguage(ExcelUtils.getValue(row, 8));
+		userInfo.setPreferredLanguage(ExcelContentHelpers.getValueString(row, 8));
 		// 时区
-		userInfo.setTimeZone(ExcelUtils.getValue(row, 9));
+		userInfo.setTimeZone(ExcelContentHelpers.getValueString(row, 9));
 		// 用户类型
-		userInfo.setUserType(ExcelUtils.getValue(row, 10));
+		userInfo.setUserType(ExcelContentHelpers.getValueString(row, 10));
 		// 员工编码
-		userInfo.setEmployeeNumber(ExcelUtils.getValue(row, 11));
+		userInfo.setEmployeeNumber(ExcelContentHelpers.getValueString(row, 11));
 		// AD域账号
-		userInfo.setWindowsAccount(ExcelUtils.getValue(row, 12));
+		userInfo.setWindowsAccount(ExcelContentHelpers.getValueString(row, 12));
 		// 所属机构
-		userInfo.setOrganization(ExcelUtils.getValue(row, 13));
+		userInfo.setOrganization(ExcelContentHelpers.getValueString(row, 13));
 		// 分支机构
-		userInfo.setDivision(ExcelUtils.getValue(row, 14));
+		userInfo.setDivision(ExcelContentHelpers.getValueString(row, 14));
 		// 部门编号
-		userInfo.setDepartmentId(ExcelUtils.getValue(row, 15));
+		userInfo.setDepartmentId(ExcelContentHelpers.getValueString(row, 15));
 		// 部门名称
-		userInfo.setDepartment(ExcelUtils.getValue(row, 16));
+		userInfo.setDepartment(ExcelContentHelpers.getValueString(row, 16));
 		// 成本中心
-		userInfo.setCostCenter(ExcelUtils.getValue(row, 17));
+		userInfo.setCostCenter(ExcelContentHelpers.getValueString(row, 17));
 		// 职位
-		userInfo.setJobTitle(ExcelUtils.getValue(row, 18));
+		userInfo.setJobTitle(ExcelContentHelpers.getValueString(row, 18));
 		// 级别
-		userInfo.setJobLevel(ExcelUtils.getValue(row, 19));
+		userInfo.setJobLevel(ExcelContentHelpers.getValueString(row, 19));
 		// 上级经理
-		userInfo.setManager(ExcelUtils.getValue(row, 20));
+		userInfo.setManager(ExcelContentHelpers.getValueString(row, 20));
 		// 助理
-		userInfo.setAssistant(ExcelUtils.getValue(row, 21));
+		userInfo.setAssistant(ExcelContentHelpers.getValueString(row, 21));
 		// 入职时间
-		userInfo.setEntryDate(ExcelUtils.getValue(row, 22));
+		userInfo.setEntryDate(ExcelContentHelpers.getValueString(row, 22));
 		// 离职时间
-		userInfo.setQuitDate(ExcelUtils.getValue(row, 23));
+		userInfo.setQuitDate(ExcelContentHelpers.getValueString(row, 23));
 		// 工作-国家
-		userInfo.setWorkCountry(ExcelUtils.getValue(row, 24));
+		userInfo.setWorkCountry(ExcelContentHelpers.getValueString(row, 24));
 		// 工作-省
-		userInfo.setWorkRegion(ExcelUtils.getValue(row, 25));
+		userInfo.setWorkRegion(ExcelContentHelpers.getValueString(row, 25));
 		// 工作-城市
-		userInfo.setTimeZone(ExcelUtils.getValue(row, 26));
+		userInfo.setTimeZone(ExcelContentHelpers.getValueString(row, 26));
 		// 工作-地址
-		userInfo.setWorkLocality(ExcelUtils.getValue(row, 27));
+		userInfo.setWorkLocality(ExcelContentHelpers.getValueString(row, 27));
 		// 邮编
-		userInfo.setWorkPostalCode(ExcelUtils.getValue(row, 28));
+		userInfo.setWorkPostalCode(ExcelContentHelpers.getValueString(row, 28));
 		// 传真
-		userInfo.setWorkFax(ExcelUtils.getValue(row, 29));
+		userInfo.setWorkFax(ExcelContentHelpers.getValueString(row, 29));
 		// 工作电话
-		userInfo.setWorkPhoneNumber(ExcelUtils.getValue(row, 30));
+		userInfo.setWorkPhoneNumber(ExcelContentHelpers.getValueString(row, 30));
 		// 工作邮件
-		userInfo.setWorkEmail(ExcelUtils.getValue(row, 31));
+		userInfo.setWorkEmail(ExcelContentHelpers.getValueString(row, 31));
 		// 证件类型 todo 现在数据库中存储的是tinyint
 		// userInfo.setIdType(ExcelUtils.getValue(row, 32));
 		// 证件号码
-		userInfo.setIdCardNo(ExcelUtils.getValue(row, 33));
+		userInfo.setIdCardNo(ExcelContentHelpers.getValueString(row, 33));
 		// 出生日期
-		userInfo.setBirthDate(ExcelUtils.getValue(row, 34));
+		userInfo.setBirthDate(ExcelContentHelpers.getValueString(row, 34));
 		// 婚姻状态 todo 现在数据字段类型是 tinyint
 		// userInfo.setMarried(ExcelUtils.getValue(row, 35));
 		// 开始工作时间
-		userInfo.setStartWorkDate(ExcelUtils.getValue(row, 36));
+		userInfo.setStartWorkDate(ExcelContentHelpers.getValueString(row, 36));
 		// 个人主页
-		userInfo.setWebSite(ExcelUtils.getValue(row, 37));
+		userInfo.setWebSite(ExcelContentHelpers.getValueString(row, 37));
 		// 即时通讯
-		userInfo.setDefineIm(ExcelUtils.getValue(row, 38));
+		userInfo.setDefineIm(ExcelContentHelpers.getValueString(row, 38));
 		// 国家
-		userInfo.setHomeCountry(ExcelUtils.getValue(row, 39));
+		userInfo.setHomeCountry(ExcelContentHelpers.getValueString(row, 39));
 		// 省
-		userInfo.setHomeRegion(ExcelUtils.getValue(row, 40));
+		userInfo.setHomeRegion(ExcelContentHelpers.getValueString(row, 40));
 		// 城市
-		userInfo.setHomeLocality(ExcelUtils.getValue(row, 41));
+		userInfo.setHomeLocality(ExcelContentHelpers.getValueString(row, 41));
 		// 家庭地址
-		userInfo.setHomeStreetAddress(ExcelUtils.getValue(row, 42));
+		userInfo.setHomeStreetAddress(ExcelContentHelpers.getValueString(row, 42));
 		// 家庭邮编
-		userInfo.setHomePostalCode(ExcelUtils.getValue(row, 43));
+		userInfo.setHomePostalCode(ExcelContentHelpers.getValueString(row, 43));
 		// 家庭传真
-		userInfo.setHomeFax(ExcelUtils.getValue(row, 44));
+		userInfo.setHomeFax(ExcelContentHelpers.getValueString(row, 44));
 		// 家庭电话
-		userInfo.setHomePhoneNumber(ExcelUtils.getValue(row, 45));
+		userInfo.setHomePhoneNumber(ExcelContentHelpers.getValueString(row, 45));
 		// 家庭邮箱
-		userInfo.setHomeEmail(ExcelUtils.getValue(row, 46));
+		userInfo.setHomeEmail(ExcelContentHelpers.getValueString(row, 46));
 		userInfoService.passwordEncoder(userInfo);
 		userInfo.setStatus(1);
 		userInfo.setInstId(currentUser.getInstId());
 		return userInfo;
 	}
-
 }

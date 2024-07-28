@@ -30,12 +30,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.authz.saml.common.TrustResolver;
 import com.wy.test.authz.saml20.metadata.MetadataGenerator;
-import com.wy.test.common.crypto.keystore.KeyStoreLoader;
 import com.wy.test.core.constants.ContentType;
 import com.wy.test.core.entity.Saml20Metadata;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 
+import dream.flying.flower.framework.core.crypto.keystore.KeyStoreLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 

@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.common.crypto.ReciprocalUtils;
 import com.wy.test.common.crypto.cert.CertSigner;
-import com.wy.test.common.crypto.keystore.KeyStoreLoader;
 import com.wy.test.common.crypto.password.PasswordReciprocal;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.constants.ConstsBoolean;
@@ -20,6 +19,7 @@ import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.binary.Base64Helper;
+import dream.flying.flower.framework.core.crypto.keystore.KeyStoreLoader;
 
 public abstract class AbstractAuthorizeAdapter {
 

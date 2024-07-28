@@ -17,13 +17,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.wy.test.authz.saml.common.AuthnRequestInfo;
 import com.wy.test.authz.saml20.binding.BindingAdapter;
 import com.wy.test.authz.saml20.binding.ExtractBindingAdapter;
-import com.wy.test.common.crypto.keystore.KeyStoreLoader;
-import com.wy.test.common.crypto.keystore.KeyStoreUtil;
 import com.wy.test.core.entity.apps.AppsSAML20Details;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.AppsSaml20DetailsService;
 
+import dream.flying.flower.framework.core.crypto.keystore.KeyStoreHelpers;
+import dream.flying.flower.framework.core.crypto.keystore.KeyStoreLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -84,7 +84,7 @@ public class IdpInitEndpoint {
 			throw new Exception();
 		}
 
-		KeyStore trustKeyStore = KeyStoreUtil.bytes2KeyStore(saml20Details.getKeyStore(),
+		KeyStore trustKeyStore = KeyStoreHelpers.bytes2KeyStore(saml20Details.getKeyStore(),
 				keyStoreLoader.getKeyStore().getType(), keyStoreLoader.getKeystorePassword());
 
 		extractRedirectBindingAdapter.setSaml20Detail(saml20Details);
