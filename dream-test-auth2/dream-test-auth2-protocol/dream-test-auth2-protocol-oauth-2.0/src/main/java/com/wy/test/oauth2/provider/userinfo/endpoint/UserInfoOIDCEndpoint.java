@@ -36,8 +36,6 @@ import com.nimbusds.jwt.SignedJWT;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.common.crypto.jwt.encryption.service.impl.DefaultJwtEncryptionAndDecryptionService;
 import com.wy.test.common.crypto.jwt.signer.service.impl.DefaultJwtSigningAndValidationService;
-import com.wy.test.common.util.JsonUtils;
-import com.wy.test.common.util.StringGenerator;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.constants.ContentType;
 import com.wy.test.core.entity.UserInfo;
@@ -52,6 +50,8 @@ import com.wy.test.persistence.service.AppsService;
 import com.wy.test.persistence.service.UserInfoService;
 
 import dream.flying.flower.framework.core.helper.TokenHelpers;
+import dream.flying.flower.framework.core.json.JsonHelpers;
+import dream.flying.flower.generator.StringGenerator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -91,7 +91,7 @@ public class UserInfoOIDCEndpoint {
 		String access_token = TokenHelpers.resolveAccessToken(request);
 		_logger.debug("access_token {}", access_token);
 		if (!StringGenerator.uuidMatches(access_token)) {
-			return JsonUtils.gsonToString(accessTokenFormatError(access_token));
+			return JsonHelpers.toString(accessTokenFormatError(access_token));
 		}
 
 		String principal = "";
@@ -253,7 +253,7 @@ public class UserInfoOIDCEndpoint {
 			HashMap<String, Object> authzException = new HashMap<String, Object>();
 			authzException.put(OAuth2Exception.ERROR, e.getOAuth2ErrorCode());
 			authzException.put(OAuth2Exception.DESCRIPTION, e.getMessage());
-			return JsonUtils.toString(authzException);
+			return JsonHelpers.toString(authzException);
 		}
 	}
 

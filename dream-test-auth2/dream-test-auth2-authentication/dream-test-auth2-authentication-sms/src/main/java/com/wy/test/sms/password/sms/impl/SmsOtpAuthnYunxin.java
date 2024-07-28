@@ -13,13 +13,15 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.apache.logging.log4j.core.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.common.util.JsonUtils;
-import com.wy.test.common.util.StringGenerator;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.sms.password.sms.SmsOtpAuthn;
+
+import dream.flying.flower.framework.core.json.JsonHelpers;
+import dream.flying.flower.generator.StringGenerator;
 
 /**
  * 网易云信短信验证.
@@ -81,8 +83,8 @@ public class SmsOtpAuthnYunxin extends SmsOtpAuthn {
 				// 设置请求的的参数，requestBody参数
 				List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 				/*
-				 * 1.如果是模板短信，请注意参数mobile是有s的，详细参数配置请参考“发送模板短信文档” 2.参数格式是jsonArray的格式，例如
-				 * "['13888888888','13666666666']" 3.params是根据你模板里面有几个参数，那里面的参数也是jsonArray格式
+				 * 1.如果是模板短信，请注意参数mobile是有s的，详细参数配置请参考“发送模板短信文档” 2.参数格式是jsonArray的格式，例如 "['13888888888','13666666666']"
+				 * 3.params是根据你模板里面有几个参数，那里面的参数也是jsonArray格式
 				 */
 				// https://api.netease.im/sms/sendcode.action
 				nvps.add(new BasicNameValuePair("templateid", templateId));
@@ -104,7 +106,7 @@ public class SmsOtpAuthnYunxin extends SmsOtpAuthn {
 				String responseString = EntityUtils.toString(response.getEntity(), "utf-8");
 				// String responseString = "{\"code\":200,\"msg\":\"1\",\"obj\":\"740673\"}";
 				logger.debug("responseString " + responseString);
-				YunxinSms yunxinSms = JsonUtils.gsonStringToObject(responseString, YunxinSms.class);
+				YunxinSms yunxinSms = JsonHelpers.read(responseString, YunxinSms.class);
 				logger.debug("responseEntity code " + yunxinSms.getObj());
 				nonce = yunxinSms.getObj() == null ? nonce : yunxinSms.getObj();
 				logger.debug("nonce " + nonce);
@@ -197,7 +199,7 @@ public class SmsOtpAuthnYunxin extends SmsOtpAuthn {
 		String nonce = new StringGenerator(StringGenerator.DEFAULT_CODE_NUMBER, 6).randomGenerate();
 		System.out.println(nonce);
 		String mapJson = "{\"code\":200,\"msg\":\"1\",\"obj\":\"740673\"}";
-		YunxinSms yunxinSms = JsonUtils.gsonStringToObject(mapJson, YunxinSms.class);
+		YunxinSms yunxinSms = JsonHelpers.read(mapJson, YunxinSms.class);
 		System.out.println("code " + yunxinSms.getObj());
 	}
 

@@ -2,7 +2,6 @@ package com.wy.test.synchronizer.workweixin;
 
 import org.springframework.stereotype.Service;
 
-import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.constants.ConstsStatus;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.core.entity.SynchroRelated;
@@ -12,6 +11,7 @@ import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 import com.wy.test.synchronizer.workweixin.entity.WorkWeixinDepts;
 import com.wy.test.synchronizer.workweixin.entity.WorkWeixinDeptsResponse;
 
+import dream.flying.flower.framework.core.json.JsonHelpers;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -76,8 +76,7 @@ public class WorkweixinOrganizationService extends AbstractSynchronizerService i
 	public WorkWeixinDeptsResponse requestDepartmentList(String access_token) {
 		HttpRequestAdapter request = new HttpRequestAdapter();
 		String responseBody = request.get(String.format(DEPTS_URL, access_token));
-		WorkWeixinDeptsResponse deptsResponse =
-				JsonUtils.gsonStringToObject(responseBody, WorkWeixinDeptsResponse.class);
+		WorkWeixinDeptsResponse deptsResponse = JsonHelpers.read(responseBody, WorkWeixinDeptsResponse.class);
 
 		log.trace("response : " + responseBody);
 		for (WorkWeixinDepts dept : deptsResponse.getDepartment()) {

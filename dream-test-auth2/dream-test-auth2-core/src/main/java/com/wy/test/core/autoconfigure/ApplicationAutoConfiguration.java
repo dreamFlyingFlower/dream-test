@@ -25,8 +25,6 @@ import com.nimbusds.jose.JOSEException;
 import com.wy.test.common.crypto.keystore.KeyStoreLoader;
 import com.wy.test.common.crypto.password.PasswordReciprocal;
 import com.wy.test.common.crypto.password.SM3PasswordEncoder;
-import com.wy.test.common.util.IdGenerator;
-import com.wy.test.common.util.SnowFlakeId;
 import com.wy.test.core.constants.ConstsPersistence;
 import com.wy.test.core.persistence.cache.InMemoryMomentaryService;
 import com.wy.test.core.persistence.cache.MomentaryService;
@@ -36,6 +34,8 @@ import com.wy.test.core.persistence.repository.InstitutionsRepository;
 import com.wy.test.core.persistence.repository.LocalizationRepository;
 import com.wy.test.core.web.WebContext;
 
+import dream.flying.flower.generator.GeneratorStrategyContext;
+import dream.flying.flower.generator.SnowFlakeGenerator;
 import lombok.extern.slf4j.Slf4j;
 
 @SuppressWarnings("deprecation")
@@ -144,11 +144,12 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	IdGenerator idGenerator(@Value("${maxkey.id.strategy:SnowFlake}") String strategy,
+	GeneratorStrategyContext idGenerator(@Value("${maxkey.id.strategy:SnowFlake}") String strategy,
 			@Value("${maxkey.id.datacenterId:0}") int datacenterId, @Value("${maxkey.id.machineId:0}") int machineId) {
-		IdGenerator idGenerator = new IdGenerator(strategy);
-		SnowFlakeId SnowFlakeId = new SnowFlakeId(datacenterId, machineId);
-		idGenerator.setSnowFlakeId(SnowFlakeId);
+		GeneratorStrategyContext idGenerator = new GeneratorStrategyContext();
+		idGenerator.setStrategy(strategy);
+		SnowFlakeGenerator SnowFlakeId = new SnowFlakeGenerator(datacenterId, machineId);
+		idGenerator.setSnowFlakeGenerator(SnowFlakeId);
 		WebContext.idGenerator = idGenerator;
 		return idGenerator;
 	}

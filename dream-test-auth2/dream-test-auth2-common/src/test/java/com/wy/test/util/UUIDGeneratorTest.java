@@ -5,8 +5,9 @@ import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 
-import com.wy.test.common.util.UUIDGenerator;
 import com.wy.test.common.uuid.UUID;
+
+import dream.flying.flower.generator.UuidGenerator;
 
 public class UUIDGeneratorTest {
 
@@ -15,7 +16,7 @@ public class UUIDGeneratorTest {
 		Date sd = new Date();
 
 		// for(int i=0;i<100000;i++){
-		UUIDGenerator generated = new UUIDGenerator();
+		UuidGenerator generated = new UuidGenerator();
 		generated.toString();
 		// System.out.println(generated.toString());
 
@@ -35,8 +36,6 @@ public class UUIDGeneratorTest {
 		Date sed = new Date();
 		System.out.println("usertime " + (sed.getTime() - ssd.getTime()));
 
-		UUIDGenerator.version(new UUIDGenerator(UUID.generate().toString()));
-
+		UuidGenerator.version(new UuidGenerator(UUID.generate().toString()));
 	}
-
 }

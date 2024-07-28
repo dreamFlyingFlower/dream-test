@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.common.util.JsonUtils;
-import com.wy.test.common.util.StringGenerator;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.entity.UserInfo;
@@ -33,6 +31,8 @@ import com.wy.test.persistence.service.AppsService;
 import com.wy.test.persistence.service.UserInfoService;
 
 import dream.flying.flower.framework.core.helper.TokenHelpers;
+import dream.flying.flower.framework.core.json.JsonHelpers;
+import dream.flying.flower.generator.StringGenerator;
 import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -72,7 +72,7 @@ public class UserInfoEndpoint {
 		String access_token = TokenHelpers.resolveAccessToken(request);
 		_logger.debug("access_token {}", access_token);
 		if (!StringGenerator.uuidMatches(access_token)) {
-			httpResponseAdapter.write(response, JsonUtils.gsonToString(accessTokenFormatError(access_token)), "json");
+			httpResponseAdapter.write(response, JsonHelpers.toString(accessTokenFormatError(access_token)), "json");
 		}
 
 		OAuth2Authentication oAuth2Authentication = null;
@@ -104,7 +104,7 @@ public class UserInfoEndpoint {
 			HashMap<String, Object> authzException = new HashMap<String, Object>();
 			authzException.put(OAuth2Exception.ERROR, e.getOAuth2ErrorCode());
 			authzException.put(OAuth2Exception.DESCRIPTION, e.getMessage());
-			httpResponseAdapter.write(response, JsonUtils.gsonToString(authzException), "json");
+			httpResponseAdapter.write(response, JsonHelpers.toString(authzException), "json");
 		}
 	}
 

@@ -1,6 +1,6 @@
 package com.wy.test.util;
 
-import com.wy.test.common.util.EthernetAddress;
+import dream.flying.flower.http.EthernetAddress;
 
 public class EthernetAddressTest {
 

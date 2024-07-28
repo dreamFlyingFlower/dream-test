@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.HistorySystemLogs;
@@ -19,6 +18,8 @@ import com.wy.test.core.entity.SocialsProvider;
 import com.wy.test.core.entity.Synchronizers;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.persistence.mapper.HistorySystemLogsMapper;
+
+import dream.flying.flower.framework.core.json.JsonHelpers;
 
 @Repository
 public class HistorySystemLogsService extends JpaService<HistorySystemLogs> {
@@ -85,7 +86,7 @@ public class HistorySystemLogsService extends JpaService<HistorySystemLogs> {
 		systemLog.setUsername(operator.getUsername());
 		systemLog.setDisplayName(operator.getDisplayName());
 		systemLog.setInstId(operator.getInstId());
-		systemLog.setJsonCotent(JsonUtils.gsonToString(entity));
+		systemLog.setJsonCotent(JsonHelpers.toString(entity));
 		_logger.trace("System Log {}", systemLog);
 		getMapper().insert(systemLog);
 	}

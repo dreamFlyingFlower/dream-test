@@ -8,13 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.ExtraAttrs;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.web.HttpRequestAdapter;
 
 import dream.flying.flower.digest.DigestHelper;
+import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.http.HttpsTrust;
 
 /**
@@ -83,7 +83,7 @@ public class ExtendApiCndnsApiMailAdapter extends AbstractAuthorizeAdapter {
 			String responseBody = new HttpRequestAdapter()
 					.post(String.format(ADMIN_AUTHKEY_URI, details.getPrincipal(), sign, timestamp), requestParamenter);
 
-			HashMap<String, String> authKey = JsonUtils.gsonStringToObject(responseBody, HashMap.class);
+			HashMap<String, String> authKey = JsonHelpers.read(responseBody, HashMap.class);
 			redirect_uri = authKey.get("adminUrl");
 
 		} else {
@@ -93,7 +93,7 @@ public class ExtendApiCndnsApiMailAdapter extends AbstractAuthorizeAdapter {
 			String responseBody = new HttpRequestAdapter()
 					.post(String.format(AUTHKEY_URI, details.getPrincipal(), sign, timestamp), requestParamenter);
 
-			HashMap<String, String> authKey = JsonUtils.gsonStringToObject(responseBody, HashMap.class);
+			HashMap<String, String> authKey = JsonHelpers.read(responseBody, HashMap.class);
 			redirect_uri = authKey.get("webmailUrl");
 		}
 

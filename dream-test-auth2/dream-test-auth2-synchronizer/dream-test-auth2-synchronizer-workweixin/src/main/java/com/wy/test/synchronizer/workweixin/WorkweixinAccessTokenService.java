@@ -1,9 +1,9 @@
 package com.wy.test.synchronizer.workweixin;
 
-import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.web.HttpRequestAdapter;
 import com.wy.test.synchronizer.core.synchronizer.entity.AccessToken;
 
+import dream.flying.flower.framework.core.json.JsonHelpers;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,7 +28,7 @@ public class WorkweixinAccessTokenService {
 		HttpRequestAdapter request = new HttpRequestAdapter();
 		String responseBody = request.get(String.format(TOKEN_URL, corpid, corpsecret));
 
-		AccessToken accessToken = JsonUtils.gsonStringToObject(responseBody, AccessToken.class);
+		AccessToken accessToken = JsonHelpers.read(responseBody, AccessToken.class);
 		log.debug("accessToken " + accessToken);
 		if (accessToken.getErrcode() == 0) {
 			return accessToken.getAccess_token();

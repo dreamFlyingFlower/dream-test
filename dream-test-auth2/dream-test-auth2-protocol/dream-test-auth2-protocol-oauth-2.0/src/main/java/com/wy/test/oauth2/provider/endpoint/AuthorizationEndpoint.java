@@ -38,7 +38,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import com.wy.test.common.entity.Message;
-import com.wy.test.common.util.HttpEncoder;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.entity.UserInfo;
@@ -59,23 +58,21 @@ import com.wy.test.oauth2.provider.code.AuthorizationCodeServices;
 import com.wy.test.oauth2.provider.implicit.ImplicitTokenRequest;
 import com.wy.test.oauth2.provider.request.DefaultOAuth2RequestValidator;
 
+import dream.flying.flower.helper.UrlHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * <p>
- * Implementation of the Authorization Endpoint from the OAuth2 specification.
- * Accepts authorization requests, and handles user approval if the grant type
- * is authorization code. The tokens themselves are obtained from the
- * {@link TokenEndpoint Token Endpoint}, except in the implicit grant type
- * (where they come from the Authorization Endpoint via
- * <code>response_type=token</code>.
+ * Implementation of the Authorization Endpoint from the OAuth2 specification. Accepts authorization requests, and
+ * handles user approval if the grant type is authorization code. The tokens themselves are obtained from the
+ * {@link TokenEndpoint Token Endpoint}, except in the implicit grant type (where they come from the Authorization
+ * Endpoint via <code>response_type=token</code>.
  * </p>
  * 
  * <p>
- * This endpoint should be secured so that it is only accessible to fully
- * authenticated users (as a minimum requirement) since it represents a request
- * from a valid user to act on his or her behalf.
+ * This endpoint should be secured so that it is only accessible to fully authenticated users (as a minimum requirement)
+ * since it represents a request from a valid user to act on his or her behalf.
  * </p>
  * 
  */
@@ -114,7 +111,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 		String authorizationUrl = "";
 		try {
 			authorizationUrl = String.format(OAUTH_V20_AUTHORIZATION_URL, clientDetails.getClientId(),
-					HttpEncoder.encode(clientDetails.getRegisteredRedirectUri().toArray()[0].toString()));
+					UrlHelper.encode(clientDetails.getRegisteredRedirectUri().toArray()[0].toString()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -163,8 +160,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 			// The resolved redirect URI is either the redirect_uri from the parameters or
 			// the one from
 			// clientDetails. Either way we need to store it on the AuthorizationRequest.
-			String redirectUriParameter =
-					authorizationRequest.getRequestParameters().get(OAuth2Utils.REDIRECT_URI);
+			String redirectUriParameter = authorizationRequest.getRequestParameters().get(OAuth2Utils.REDIRECT_URI);
 			String resolvedRedirect = redirectResolver.resolveRedirect(redirectUriParameter, client);
 			if (!StringUtils.hasText(resolvedRedirect)) {
 				logger.info("Client redirectUri " + resolvedRedirect);

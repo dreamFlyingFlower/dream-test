@@ -11,7 +11,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.wy.test.common.crypto.password.PasswordReciprocal;
-import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.Connectors;
 import com.wy.test.core.entity.Organizations;
@@ -23,6 +22,7 @@ import com.wy.test.persistence.provision.ProvisionMessage;
 import com.wy.test.persistence.provision.ProvisionTopic;
 import com.wy.test.persistence.service.ConnectorsService;
 
+import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.helper.DateTimeHelper;
 import dream.flying.flower.lang.SerializableHelper;
 import dream.flying.flower.result.Result;
@@ -113,7 +113,7 @@ public class ProvisioningRunner {
 		String result = "success";
 
 		if (resultMessage != null) {
-			resultMsg = JsonUtils.stringToObject(resultMessage, Result.class);
+			resultMsg = JsonHelpers.read(resultMessage, Result.class);
 		}
 
 		if (resultMsg == null || resultMsg.getCode() != 0) {

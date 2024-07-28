@@ -11,12 +11,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.ExtraAttrs;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.web.HttpRequestAdapter;
 
+import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.http.HttpsTrust;
 
 /**
@@ -80,7 +80,7 @@ public class ExtendApiQQExmailAdapter extends AbstractAuthorizeAdapter {
 			_logger.debug("get token url {}", String.format(TOKEN_URI, corpid, corpsecret));
 			String responseBody = new HttpRequestAdapter().get(String.format(TOKEN_URI, corpid, corpsecret), null);
 			_logger.debug("Response Body {}", responseBody);
-			Token token = JsonUtils.gsonStringToObject(responseBody, Token.class);
+			Token token = JsonHelpers.read(responseBody, Token.class);
 			if (token.getErrcode() == 0) {
 				_logger.debug("access_token {}", token);
 				accessToken = token.getAccess_token();
@@ -98,7 +98,7 @@ public class ExtendApiQQExmailAdapter extends AbstractAuthorizeAdapter {
 			_logger.debug("userId {}", userId);
 			String authKeyBody = new HttpRequestAdapter().get(String.format(AUTHKEY_URI, accessToken, userId), null);
 
-			ExMailLoginUrl exMailLoginUrl = JsonUtils.gsonStringToObject(authKeyBody, ExMailLoginUrl.class);
+			ExMailLoginUrl exMailLoginUrl = JsonHelpers.read(authKeyBody, ExMailLoginUrl.class);
 			_logger.debug("LoginUrl {} ", exMailLoginUrl);
 			return exMailLoginUrl;
 		}

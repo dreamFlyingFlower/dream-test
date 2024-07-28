@@ -10,9 +10,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.logging.LogFactory;
 
-import com.wy.test.common.util.StringGenerator;
-
 import dream.flying.flower.binary.HexHelper;
+import dream.flying.flower.generator.StringGenerator;
 import dream.flying.flower.lang.StrHelper;
 import dream.flying.flower.reflect.ReflectHelper;
 

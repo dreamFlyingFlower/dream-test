@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.wy.test.common.pretty.impl.JsonPretty;
-import com.wy.test.common.util.JsonUtils;
 import com.wy.test.persistence.provision.ProvisionMessage;
 
+import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.lang.SerializableHelper;
 
 /**
@@ -37,7 +37,7 @@ public class ProvisioningThread extends Thread {
 	public void run() {
 		_logger.debug("send message \n{}", new JsonPretty().jacksonFormat(msg.getSourceObject()));
 		msg.setContent(SerializableHelper.serializeHex((Serializable) msg.getSourceObject()));
-		Inst inst = JsonUtils.gsonStringToObject(JsonUtils.gsonToString(msg.getSourceObject()), Inst.class);
+		Inst inst = JsonHelpers.read(JsonHelpers.toString(msg.getSourceObject()), Inst.class);
 		jdbcTemplate.update(PROVISION_INSERT_STATEMENT,
 				new Object[] { msg.getId(), msg.getTopic(), msg.getActionType(), msg.getContent(), msg.getSendTime(),
 						msg.getConnected(), inst.getInstId() },

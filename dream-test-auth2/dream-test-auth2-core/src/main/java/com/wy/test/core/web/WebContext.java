@@ -27,10 +27,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.wy.test.common.util.IdGenerator;
 import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.entity.Institutions;
 
+import dream.flying.flower.generator.GeneratorStrategyContext;
 import dream.flying.flower.helper.DateTimeHelper;
 
 /**
@@ -50,7 +50,7 @@ public final class WebContext {
 
 	public static ArrayList<String> logoutAttributeNameList = new ArrayList<String>();
 
-	public static IdGenerator idGenerator;
+	public static GeneratorStrategyContext idGenerator;
 
 	static {
 		sessionAttributeNameList.add(WebConstants.AUTHENTICATION);
@@ -480,7 +480,7 @@ public final class WebContext {
 	 */
 	public static String genId() {
 		if (idGenerator == null) {
-			idGenerator = new IdGenerator();
+			idGenerator = new GeneratorStrategyContext();
 		}
 		return idGenerator.generate();
 	}

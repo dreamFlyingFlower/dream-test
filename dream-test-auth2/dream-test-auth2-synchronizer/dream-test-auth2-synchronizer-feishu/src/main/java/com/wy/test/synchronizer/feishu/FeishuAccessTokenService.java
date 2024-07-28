@@ -3,11 +3,11 @@ package com.wy.test.synchronizer.feishu;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.constants.ContentType;
 import com.wy.test.core.web.HttpRequestAdapter;
 import com.wy.test.synchronizer.core.synchronizer.entity.AccessToken;
 
+import dream.flying.flower.framework.core.json.JsonHelpers;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -35,7 +35,7 @@ public class FeishuAccessTokenService {
 		parameterMap.put("app_secret", appSecret);
 		String responseBody = request.post(TOKEN_URL, parameterMap, null);
 
-		AccessToken accessToken = JsonUtils.gsonStringToObject(responseBody, AccessToken.class);
+		AccessToken accessToken = JsonHelpers.read(responseBody, AccessToken.class);
 		log.debug("accessToken " + accessToken);
 		if (accessToken.getErrcode() == 0) {
 			return accessToken.getTenant_access_token();

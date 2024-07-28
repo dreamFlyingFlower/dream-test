@@ -5,13 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 import com.wy.test.common.pretty.impl.JsonPretty;
-import com.wy.test.common.util.JsonUtils;
 import com.wy.test.web.apis.identity.scim.resources.ScimEnterprise;
 import com.wy.test.web.apis.identity.scim.resources.ScimEnterpriseUser;
 import com.wy.test.web.apis.identity.scim.resources.ScimFormattedName;
 import com.wy.test.web.apis.identity.scim.resources.ScimMeta;
 import com.wy.test.web.apis.identity.scim.resources.ScimUserEmail;
 import com.wy.test.web.apis.identity.scim.resources.ScimUserPhoneNumber;
+
+import dream.flying.flower.framework.core.json.JsonHelpers;
 
 public class ScimEnterpriseUserJsonTest {
 
@@ -66,7 +67,7 @@ public class ScimEnterpriseUserJsonTest {
 		ent.setEmployeeNumber("k200908");
 		u.setEnterprise(ent);
 
-		System.out.println((new JsonPretty()).format(JsonUtils.toString(u)));
+		System.out.println((new JsonPretty()).format(JsonHelpers.toString(u)));
 	}
 
 }

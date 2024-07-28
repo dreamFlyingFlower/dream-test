@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.constants.ConstsStatus;
 import com.wy.test.core.entity.SynchroRelated;
 import com.wy.test.core.entity.UserInfo;
@@ -14,6 +13,7 @@ import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 import com.wy.test.synchronizer.workweixin.entity.WorkWeixinUsers;
 import com.wy.test.synchronizer.workweixin.entity.WorkWeixinUsersResponse;
 
+import dream.flying.flower.framework.core.json.JsonHelpers;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -34,8 +34,7 @@ public class WorkweixinUsersService extends AbstractSynchronizerService implemen
 			for (SynchroRelated relatedOrg : synchroRelateds) {
 				HttpRequestAdapter request = new HttpRequestAdapter();
 				String responseBody = request.get(String.format(USERS_URL, access_token, relatedOrg.getOriginId()));
-				WorkWeixinUsersResponse usersResponse =
-						JsonUtils.gsonStringToObject(responseBody, WorkWeixinUsersResponse.class);
+				WorkWeixinUsersResponse usersResponse = JsonHelpers.read(responseBody, WorkWeixinUsersResponse.class);
 				log.trace("response : " + responseBody);
 
 				for (WorkWeixinUsers user : usersResponse.getUserlist()) {

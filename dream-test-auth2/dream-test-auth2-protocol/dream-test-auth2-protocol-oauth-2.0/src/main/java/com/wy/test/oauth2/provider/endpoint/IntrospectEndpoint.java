@@ -15,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.web.HttpResponseAdapter;
 import com.wy.test.oauth2.common.OAuth2Constants;
@@ -25,6 +24,7 @@ import com.wy.test.oauth2.provider.token.DefaultTokenServices;
 
 import dream.flying.flower.framework.core.helper.TokenHeader;
 import dream.flying.flower.framework.core.helper.TokenHelpers;
+import dream.flying.flower.framework.core.json.JsonHelpers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -77,7 +77,7 @@ public class IntrospectEndpoint {
 			_logger.error("OAuth2Exception ", e);
 		}
 
-		httpResponseAdapter.write(response, JsonUtils.gsonToString(introspection), "json");
+		httpResponseAdapter.write(response, JsonHelpers.toString(introspection), "json");
 	}
 
 	public boolean clientAuthenticate(TokenHeader headerCredential) {

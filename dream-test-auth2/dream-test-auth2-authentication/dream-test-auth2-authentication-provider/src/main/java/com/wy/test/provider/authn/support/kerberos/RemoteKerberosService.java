@@ -8,7 +8,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.common.util.JsonUtils;
+import dream.flying.flower.framework.core.json.JsonHelpers;
 
 public class RemoteKerberosService implements KerberosService {
 
@@ -35,7 +35,7 @@ public class RemoteKerberosService implements KerberosService {
 			userDomainUrlList.add(userDomainUrl);
 		}
 		_logger.debug("" + userDomainUrlList);
-		String userDomainUrlJson = JsonUtils.toString(userDomainUrlList);
+		String userDomainUrlJson = JsonHelpers.toString(userDomainUrlList);
 		_logger.debug("userDomain Url Json " + userDomainUrlJson);
 		return userDomainUrlJson;
 	}

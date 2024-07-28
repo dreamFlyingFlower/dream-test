@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.wy.test.common.util.StringGenerator;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
@@ -38,6 +37,7 @@ import com.wy.test.oauth2.provider.OAuth2RequestValidator;
 import com.wy.test.oauth2.provider.TokenRequest;
 import com.wy.test.oauth2.provider.request.DefaultOAuth2RequestValidator;
 
+import dream.flying.flower.generator.StringGenerator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 

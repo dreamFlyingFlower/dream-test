@@ -6,10 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.common.util.JsonUtils;
-import com.wy.test.common.util.StringGenerator;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 import com.wy.test.core.web.WebConstants;
+
+import dream.flying.flower.framework.core.json.JsonHelpers;
+import dream.flying.flower.generator.StringGenerator;
 
 public class OAuthDefaultUserInfoAdapter extends AbstractAuthorizeAdapter {
 
@@ -52,7 +53,7 @@ public class OAuthDefaultUserInfoAdapter extends AbstractAuthorizeAdapter {
 		beanMap.put("institution", userInfo.getInstId());
 		beanMap.put(WebConstants.ONLINE_TICKET_NAME, principal.getSession().getFormattedId());
 
-		String info = JsonUtils.toString(beanMap);
+		String info = JsonHelpers.toString(beanMap);
 
 		return info;
 	}

@@ -31,10 +31,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.constants.ContentType;
 
 import dream.flying.flower.framework.core.helper.TokenHelpers;
+import dream.flying.flower.framework.core.json.JsonHelpers;
 
 @Component
 public class HttpRequestAdapter {
@@ -98,7 +98,7 @@ public class HttpRequestAdapter {
 					e.printStackTrace();
 				}
 			} else if (mediaType.equals(ContentType.APPLICATION_JSON)) {
-				String jsonString = JsonUtils.gsonToString(parameterMap);
+				String jsonString = JsonHelpers.toString(parameterMap);
 				StringEntity stringEntity = new StringEntity(jsonString, "UTF-8");
 				stringEntity.setContentType(ContentType.APPLICATION_JSON);
 				httpMethod.setEntity(stringEntity);
@@ -131,7 +131,7 @@ public class HttpRequestAdapter {
 		buildHeader(httpMethod, headers);
 
 		// 封装put请求参数
-		String jsonString = JsonUtils.gsonToString(data);
+		String jsonString = JsonHelpers.toString(data);
 		StringEntity stringEntity = new StringEntity(jsonString, "UTF-8");
 		stringEntity.setContentType(ContentType.APPLICATION_JSON);
 		httpMethod.setEntity(stringEntity);
@@ -162,7 +162,7 @@ public class HttpRequestAdapter {
 		buildHeader(httpMethod, headers);
 
 		// 封装put请求参数
-		String jsonString = JsonUtils.gsonToString(data);
+		String jsonString = JsonHelpers.toString(data);
 		StringEntity stringEntity = new StringEntity(jsonString, "UTF-8");
 		stringEntity.setContentType(ContentType.APPLICATION_JSON);
 		httpMethod.setEntity(stringEntity);

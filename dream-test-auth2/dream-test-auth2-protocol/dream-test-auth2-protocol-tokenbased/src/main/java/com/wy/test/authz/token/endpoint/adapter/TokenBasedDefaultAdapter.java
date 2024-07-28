@@ -8,11 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.common.util.JsonUtils;
-import com.wy.test.common.util.StringGenerator;
 import com.wy.test.core.entity.apps.AppsTokenBasedDetails;
 import com.wy.test.core.web.WebConstants;
 
+import dream.flying.flower.framework.core.json.JsonHelpers;
+import dream.flying.flower.generator.StringGenerator;
 import dream.flying.flower.helper.DateTimeHelper;
 
 public class TokenBasedDefaultAdapter extends AbstractAuthorizeAdapter {
@@ -68,7 +68,7 @@ public class TokenBasedDefaultAdapter extends AbstractAuthorizeAdapter {
 		beanMap.put("at", DateTimeHelper.formatUtcDateTime(localDateTime));
 		beanMap.put("expires", DateTimeHelper.formatUtcDateTime(localDateTime.plusSeconds(details.getExpires())));
 
-		token = JsonUtils.toString(beanMap);
+		token = JsonHelpers.toString(beanMap);
 		_logger.debug("Token : {}", token);
 
 		return token;

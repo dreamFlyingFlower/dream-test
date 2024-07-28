@@ -3,10 +3,11 @@ package com.wy.test.otp.password.onetimepwd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.common.util.StringGenerator;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.otp.password.onetimepwd.token.AbstractOtpTokenStore;
 import com.wy.test.otp.password.onetimepwd.token.InMemoryOtpTokenStore;
+
+import dream.flying.flower.generator.StringGenerator;
 
 /**
  * AbstractOTPAuthn.

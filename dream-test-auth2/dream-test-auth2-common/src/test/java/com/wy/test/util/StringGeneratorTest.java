@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
-import com.wy.test.common.util.StringGenerator;
+import dream.flying.flower.generator.StringGenerator;
 
 public class StringGeneratorTest {
 

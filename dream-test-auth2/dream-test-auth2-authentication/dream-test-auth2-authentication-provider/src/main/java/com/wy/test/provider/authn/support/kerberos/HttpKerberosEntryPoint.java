@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
 import com.wy.test.common.crypto.ReciprocalUtils;
-import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.configuration.ApplicationConfig;
@@ -18,6 +17,7 @@ import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
+import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.helper.DateTimeHelper;
 
 public class HttpKerberosEntryPoint implements AsyncHandlerInterceptor {
@@ -74,7 +74,7 @@ public class HttpKerberosEntryPoint implements AsyncHandlerInterceptor {
 		}
 		_logger.debug("decoder Kerberos Token " + decoderKerberosToken);
 		KerberosToken kerberosToken = new KerberosToken();
-		kerberosToken = (KerberosToken) JsonUtils.stringToObject(decoderKerberosToken, kerberosToken);
+		kerberosToken = (KerberosToken) JsonHelpers.read(decoderKerberosToken, kerberosToken.getClass());
 		_logger.debug("Kerberos Token " + kerberosToken);
 
 		LocalDateTime localDateTime = DateTimeHelper.toUtcDateTime(kerberosToken.getNotOnOrAfter());

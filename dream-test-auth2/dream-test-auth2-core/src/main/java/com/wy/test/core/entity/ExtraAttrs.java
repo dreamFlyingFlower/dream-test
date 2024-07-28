@@ -7,7 +7,7 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.common.util.JsonUtils;
+import dream.flying.flower.framework.core.json.JsonHelpers;
 
 public class ExtraAttrs {
 
@@ -25,7 +25,7 @@ public class ExtraAttrs {
 	public ExtraAttrs(String arrayJsonString) {
 		String extraAttrsJsonString = "{\"extraAttrs\":" + arrayJsonString + "}";
 		_logger.debug("Extra Attrs Json String " + extraAttrsJsonString);
-		ExtraAttrs extraAttrs = JsonUtils.gsonStringToObject(extraAttrsJsonString, ExtraAttrs.class);
+		ExtraAttrs extraAttrs = JsonHelpers.read(extraAttrsJsonString, ExtraAttrs.class);
 		this.extraAttrs = extraAttrs.getExtraAttrs();
 	}
 
@@ -56,7 +56,7 @@ public class ExtraAttrs {
 	}
 
 	public String toJsonString() {
-		String jsonString = JsonUtils.gsonToString(extraAttrs);
+		String jsonString = JsonHelpers.toString(extraAttrs);
 		_logger.debug("jsonString " + jsonString);
 		return jsonString;
 	}

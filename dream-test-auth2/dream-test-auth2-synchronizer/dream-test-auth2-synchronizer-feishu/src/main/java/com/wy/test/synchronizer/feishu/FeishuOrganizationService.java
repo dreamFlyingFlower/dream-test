@@ -6,7 +6,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.springframework.stereotype.Service;
 
-import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.constants.ConstsStatus;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.core.entity.SynchroRelated;
@@ -17,6 +16,7 @@ import com.wy.test.synchronizer.feishu.entity.FeishuDepts;
 import com.wy.test.synchronizer.feishu.entity.FeishuDeptsResponse;
 
 import dream.flying.flower.framework.core.helper.TokenHelpers;
+import dream.flying.flower.framework.core.json.JsonHelpers;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -85,7 +85,7 @@ public class FeishuOrganizationService extends AbstractSynchronizerService imple
 		HashMap<String, String> headers = new HashMap<String, String>();
 		headers.put("Authorization", TokenHelpers.createBearer(access_token));
 		String responseBody = request.get(String.format(DEPTS_URL, deptId), headers);
-		FeishuDeptsResponse deptsResponse = JsonUtils.gsonStringToObject(responseBody, FeishuDeptsResponse.class);
+		FeishuDeptsResponse deptsResponse = JsonHelpers.read(responseBody, FeishuDeptsResponse.class);
 
 		log.trace("response : " + responseBody);
 
@@ -97,7 +97,7 @@ public class FeishuOrganizationService extends AbstractSynchronizerService imple
 		HashMap<String, String> headers = new HashMap<String, String>();
 		headers.put("Authorization", TokenHelpers.createBearer(access_token));
 		String responseBody = request.get(String.format(url, deptId), headers);
-		FeishuDeptsResponse deptsResponse = JsonUtils.gsonStringToObject(responseBody, FeishuDeptsResponse.class);
+		FeishuDeptsResponse deptsResponse = JsonHelpers.read(responseBody, FeishuDeptsResponse.class);
 
 		log.trace("response : " + responseBody);
 

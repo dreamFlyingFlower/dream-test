@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.constants.ConstsStatus;
 import com.wy.test.core.entity.SynchroRelated;
 import com.wy.test.core.entity.UserInfo;
@@ -16,6 +15,7 @@ import com.wy.test.synchronizer.feishu.entity.FeishuUsers;
 import com.wy.test.synchronizer.feishu.entity.FeishuUsersResponse;
 
 import dream.flying.flower.framework.core.helper.TokenHelpers;
+import dream.flying.flower.framework.core.json.JsonHelpers;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -39,7 +39,7 @@ public class FeishuUsersService extends AbstractSynchronizerService implements I
 				headers.put("Authorization", TokenHelpers.createBearer(access_token));
 				String responseBody = request.get(String.format(USERS_URL, relatedOrg.getOriginId()), headers);
 				FeishuUsersResponse usersResponse =
-						JsonUtils.gsonStringToObject(responseBody, FeishuUsersResponse.class);
+						JsonHelpers.read(responseBody, FeishuUsersResponse.class);
 				log.trace("response : " + responseBody);
 				if (usersResponse.getCode() == 0 && usersResponse.getData().getItems() != null) {
 					for (FeishuUsers feiShuUser : usersResponse.getData().getItems()) {

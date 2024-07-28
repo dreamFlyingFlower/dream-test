@@ -38,7 +38,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.common.collect.Lists;
 import com.wy.test.common.entity.Message;
 import com.wy.test.common.util.ExcelUtils;
-import com.wy.test.common.util.JsonUtils;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstsEntryType;
 import com.wy.test.core.constants.ConstsOperateAction;
@@ -52,6 +51,7 @@ import com.wy.test.persistence.service.FileUploadService;
 import com.wy.test.persistence.service.HistorySystemLogsService;
 import com.wy.test.persistence.service.UserInfoService;
 
+import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.helper.DateTimeHelper;
 import dream.flying.flower.lang.StrHelper;
 
@@ -176,7 +176,7 @@ public class UserInfoController {
 			for (int i = 0; i < extraAttributeLabel.length; i++) {
 				extraAttributeMap.put(extraAttributeLabel[i], extraAttributeValue[i]);
 			}
-			String extraAttribute = JsonUtils.toString(extraAttributeMap);
+			String extraAttribute = JsonHelpers.toString(extraAttributeMap);
 			userInfo.setExtraAttribute(extraAttribute);
 		}
 	}
