@@ -21,7 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.AuthorizeBaseEndpoint;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.common.crypto.jose.keystore.JWKSetKeyStore;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.configuration.ApplicationConfig;
@@ -34,6 +33,7 @@ import com.wy.test.core.web.WebConstants;
 import com.wy.test.jwt.jwt.endpoint.adapter.JwtAdapter;
 import com.wy.test.persistence.service.AppsJwtDetailsService;
 
+import dream.flying.flower.framework.web.crypto.jose.keystore.JWKSetKeyStore;
 import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

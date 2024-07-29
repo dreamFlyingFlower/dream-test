@@ -23,9 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWEAlgorithm;
-import com.wy.test.common.crypto.jose.keystore.JWKSetKeyStore;
-import com.wy.test.common.crypto.jwt.encryption.service.impl.DefaultJwtEncryptionAndDecryptionService;
-import com.wy.test.common.crypto.jwt.signer.service.impl.DefaultJwtSigningAndValidationService;
 import com.wy.test.core.configuration.oidc.OIDCProviderMetadataDetails;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.core.persistence.repository.LoginRepository;
@@ -45,6 +42,10 @@ import com.wy.test.oauth2.provider.token.DefaultTokenServices;
 import com.wy.test.oauth2.provider.token.TokenStore;
 import com.wy.test.oauth2.provider.token.store.JwtAccessTokenConverter;
 import com.wy.test.oauth2.provider.token.store.TokenStoreFactory;
+
+import dream.flying.flower.framework.web.crypto.jose.keystore.JWKSetKeyStore;
+import dream.flying.flower.framework.web.crypto.jwt.encryption.DefaultJwtEncryptionAndDecryptionHandler;
+import dream.flying.flower.framework.web.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
 
 @AutoConfiguration
 @ComponentScan(basePackages = { "org.maxkey.authz.oauth2.provider.endpoint",
@@ -107,10 +108,10 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 	 * @throws NoSuchAlgorithmException
 	 */
 	@Bean(name = "jwtSignerValidationService")
-	DefaultJwtSigningAndValidationService jwtSignerValidationService(JWKSetKeyStore jwkSetKeyStore)
+	DefaultJwtSigningAndValidationHandler jwtSignerValidationService(JWKSetKeyStore jwkSetKeyStore)
 			throws NoSuchAlgorithmException, InvalidKeySpecException, JOSEException {
-		DefaultJwtSigningAndValidationService jwtSignerValidationService =
-				new DefaultJwtSigningAndValidationService(jwkSetKeyStore);
+		DefaultJwtSigningAndValidationHandler jwtSignerValidationService =
+				new DefaultJwtSigningAndValidationHandler(jwkSetKeyStore);
 		jwtSignerValidationService.setDefaultSignerKeyId("maxkey_rsa");
 		jwtSignerValidationService.setDefaultSigningAlgorithmName("RS256");
 		_logger.debug("JWT Signer and Validation Service init.");
@@ -126,10 +127,10 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 	 * @throws NoSuchAlgorithmException
 	 */
 	@Bean(name = "jwtEncryptionService")
-	DefaultJwtEncryptionAndDecryptionService jwtEncryptionService(JWKSetKeyStore jwkSetKeyStore)
+	DefaultJwtEncryptionAndDecryptionHandler jwtEncryptionService(JWKSetKeyStore jwkSetKeyStore)
 			throws NoSuchAlgorithmException, InvalidKeySpecException, JOSEException {
-		DefaultJwtEncryptionAndDecryptionService jwtEncryptionService =
-				new DefaultJwtEncryptionAndDecryptionService(jwkSetKeyStore);
+		DefaultJwtEncryptionAndDecryptionHandler jwtEncryptionService =
+				new DefaultJwtEncryptionAndDecryptionHandler(jwkSetKeyStore);
 		jwtEncryptionService.setDefaultAlgorithm(JWEAlgorithm.RSA_OAEP_256);// RSA1_5
 		jwtEncryptionService.setDefaultDecryptionKeyId("maxkey_rsa");
 		jwtEncryptionService.setDefaultEncryptionKeyId("maxkey_rsa");

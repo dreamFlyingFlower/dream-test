@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wy.test.common.entity.Message;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstsEntryType;
 import com.wy.test.core.constants.ConstsOperateAction;
 import com.wy.test.core.constants.ConstsOperateResult;
 import com.wy.test.core.constants.ConstsPasswordSetType;
 import com.wy.test.core.entity.ChangePassword;
+import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.PasswordPolicy;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;

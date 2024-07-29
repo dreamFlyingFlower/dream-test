@@ -12,7 +12,7 @@ import org.opensaml.xml.security.credential.CredentialResolver;
 
 import com.wy.test.core.entity.apps.AppsSAML20Details;
 
-import dream.flying.flower.framework.core.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
 
 /**
  * 

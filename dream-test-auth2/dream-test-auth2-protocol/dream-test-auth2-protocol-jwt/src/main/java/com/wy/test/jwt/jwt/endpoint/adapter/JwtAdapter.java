@@ -21,10 +21,11 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.PlainJWT;
 import com.nimbusds.jwt.SignedJWT;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.common.crypto.jwt.encryption.service.impl.DefaultJwtEncryptionAndDecryptionService;
-import com.wy.test.common.crypto.jwt.signer.service.impl.DefaultJwtSigningAndValidationService;
 import com.wy.test.core.entity.apps.AppsJwtDetails;
 import com.wy.test.core.web.WebConstants;
+
+import dream.flying.flower.framework.web.crypto.jwt.encryption.DefaultJwtEncryptionAndDecryptionHandler;
+import dream.flying.flower.framework.web.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
 
 public class JwtAdapter extends AbstractAuthorizeAdapter {
 
@@ -74,7 +75,7 @@ public class JwtAdapter extends AbstractAuthorizeAdapter {
 	public Object sign(Object data, String signatureKey, String signature) {
 		if (!jwtDetails.getSignature().equalsIgnoreCase("none")) {
 			try {
-				DefaultJwtSigningAndValidationService jwtSignerService = new DefaultJwtSigningAndValidationService(
+				DefaultJwtSigningAndValidationHandler jwtSignerService = new DefaultJwtSigningAndValidationHandler(
 						jwtDetails.getSignatureKey(), jwtDetails.getId() + "_sig", jwtDetails.getSignature());
 
 				jwtToken = new SignedJWT(new JWSHeader(jwtSignerService.getDefaultSigningAlgorithm()), jwtClaims);
@@ -96,8 +97,8 @@ public class JwtAdapter extends AbstractAuthorizeAdapter {
 	public Object encrypt(Object data, String algorithmKey, String algorithm) {
 		if (!jwtDetails.getAlgorithm().equalsIgnoreCase("none")) {
 			try {
-				DefaultJwtEncryptionAndDecryptionService jwtEncryptionService =
-						new DefaultJwtEncryptionAndDecryptionService(jwtDetails.getAlgorithmKey(),
+				DefaultJwtEncryptionAndDecryptionHandler jwtEncryptionService =
+						new DefaultJwtEncryptionAndDecryptionHandler(jwtDetails.getAlgorithmKey(),
 								jwtDetails.getId() + "_enc", jwtDetails.getAlgorithm());
 
 				Payload payload;

@@ -3,8 +3,6 @@ package com.wy.test.web.web.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.common.util.OAuth2Utils;
@@ -25,11 +23,11 @@ import com.wy.test.persistence.service.AppsCasDetailsService;
 import com.wy.test.persistence.service.AppsService;
 
 import dream.flying.flower.binary.Base64Helper;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class SingleSignOnInterceptor implements AsyncHandlerInterceptor {
-
-	private static final Logger _logger = LoggerFactory.getLogger(SingleSignOnInterceptor.class);
 
 	@Autowired
 	ApplicationConfig applicationConfig;
@@ -49,7 +47,7 @@ public class SingleSignOnInterceptor implements AsyncHandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		_logger.trace("Single Sign On Interceptor");
+		log.trace("Single Sign On Interceptor");
 
 		AuthorizationUtils.authenticateWithCookie(request, authTokenService, sessionManager);
 
@@ -57,15 +55,15 @@ public class SingleSignOnInterceptor implements AsyncHandlerInterceptor {
 			String loginUrl = applicationConfig.getFrontendUri() + "/#/passport/login?redirect_uri=%s";
 			String redirect_uri = UrlUtils.buildFullRequestUrl(request);
 			String base64RequestUrl = Base64Helper.encodeUrlString(redirect_uri.getBytes());
-			_logger.debug("No Authentication ... Redirect to /passport/login , redirect_uri {} , base64 {}",
-					redirect_uri, base64RequestUrl);
+			log.debug("No Authentication ... Redirect to /passport/login , redirect_uri {} , base64 {}", redirect_uri,
+					base64RequestUrl);
 			response.sendRedirect(String.format(loginUrl, base64RequestUrl));
 			return false;
 		}
 
 		// 判断应用访问权限
 		if (AuthorizationUtils.isAuthenticated()) {
-			_logger.debug("preHandle {}", request.getRequestURI());
+			log.debug("preHandle {}", request.getRequestURI());
 			Apps app = (Apps) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
 			if (app == null) {
 
@@ -82,7 +80,7 @@ public class SingleSignOnInterceptor implements AsyncHandlerInterceptor {
 																													// URL
 					String[] requestURIs = requestURI.split("/");
 					String appId = requestURIs[requestURIs.length - 1];
-					_logger.debug("appId {}", appId);
+					log.debug("appId {}", appId);
 					app = appsService.get(appId, true);
 				} else if (requestURI.contains("/authz/oauth/v20/authorize")) {// oauth
 					app = appsService.get(request.getParameter(OAuth2Utils.CLIENT_ID), true);
@@ -90,22 +88,21 @@ public class SingleSignOnInterceptor implements AsyncHandlerInterceptor {
 			}
 
 			if (app == null) {
-				_logger.debug("preHandle app is not exist . ");
+				log.debug("preHandle app is not exist . ");
 				return true;
 			}
 
 			SignPrincipal principal = AuthorizationUtils.getPrincipal();
 			if (principal != null && app != null) {
 				if (principal.getGrantedAuthorityApps().contains(new SimpleGrantedAuthority(app.getId()))) {
-					_logger.trace("preHandle have authority access {}", app);
+					log.trace("preHandle have authority access {}", app);
 					return true;
 				}
 			}
-			_logger.debug("preHandle not have authority access " + app);
+			log.debug("preHandle not have authority access " + app);
 			response.sendRedirect(request.getContextPath() + "/authz/refused");
 			return false;
 		}
 		return true;
 	}
-
 }

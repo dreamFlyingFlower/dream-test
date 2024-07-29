@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import com.wy.test.common.crypto.password.PasswordReciprocal;
+import com.wy.test.core.crypto.password.PasswordReciprocal;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.Connectors;
 import com.wy.test.core.entity.Organizations;

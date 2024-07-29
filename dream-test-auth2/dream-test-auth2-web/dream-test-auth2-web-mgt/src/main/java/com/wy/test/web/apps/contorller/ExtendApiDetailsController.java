@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.common.crypto.ReciprocalUtils;
-import com.wy.test.common.entity.Message;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.entity.apps.AppsExtendApiDetails;
+
+import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
 
 @Controller
 @RequestMapping(value = { "/apps/extendapi" })
@@ -33,7 +34,7 @@ public class ExtendApiDetailsController extends BaseAppContorller {
 		AppsExtendApiDetails extendApiDetails = new AppsExtendApiDetails();
 		extendApiDetails.setId(extendApiDetails.generateId());
 		extendApiDetails.setProtocol(ConstsProtocols.EXTEND_API);
-		extendApiDetails.setSecret(ReciprocalUtils.generateKey(""));
+		extendApiDetails.setSecret(ReciprocalHelpers.generateKey(""));
 		return new Message<AppsExtendApiDetails>(extendApiDetails).buildResponse();
 	}
 

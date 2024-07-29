@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.wy.test.common.entity.Message;
 import com.wy.test.core.authn.jwt.AuthJwt;
 import com.wy.test.core.authn.jwt.AuthRefreshTokenService;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
+import com.wy.test.core.entity.Message;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.lang.StrHelper;

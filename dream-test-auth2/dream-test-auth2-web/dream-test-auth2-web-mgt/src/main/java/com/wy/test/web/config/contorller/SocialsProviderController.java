@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.common.crypto.password.PasswordReciprocal;
-import com.wy.test.common.entity.Message;
 import com.wy.test.core.authn.annotation.CurrentUser;
+import com.wy.test.core.crypto.password.PasswordReciprocal;
+import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.SocialsProvider;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.persistence.service.SocialsProviderService;

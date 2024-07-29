@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.common.crypto.jose.keystore.JWKSetKeyStore;
 import com.wy.test.core.constants.ContentType;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.oauth2.common.OAuth2Constants;
 
+import dream.flying.flower.framework.web.crypto.jose.keystore.JWKSetKeyStore;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 

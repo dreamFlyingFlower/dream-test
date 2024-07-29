@@ -5,8 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 
 import com.nimbusds.jose.JOSEException;
-import com.wy.test.common.crypto.jwt.HMAC512Service;
 import com.wy.test.core.configuration.AuthJwkConfig;
+
+import dream.flying.flower.framework.web.crypto.jwt.HMAC512Service;
 
 public class AuthRefreshTokenService extends AuthJwtService {
 

@@ -35,7 +35,7 @@ import com.wy.test.core.entity.Saml20Metadata;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 
-import dream.flying.flower.framework.core.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 

@@ -7,10 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.wy.test.common.pretty.impl.JsonPretty;
 import com.wy.test.persistence.provision.ProvisionMessage;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
+import dream.flying.flower.framework.core.pretty.strategy.JsonPretty;
 import dream.flying.flower.lang.SerializableHelper;
 
 /**

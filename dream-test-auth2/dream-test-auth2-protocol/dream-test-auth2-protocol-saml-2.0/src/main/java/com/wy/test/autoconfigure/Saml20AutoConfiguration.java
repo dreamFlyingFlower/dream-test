@@ -35,7 +35,7 @@ import com.wy.test.authz.saml20.provider.xml.AuthnResponseGenerator;
 import com.wy.test.authz.saml20.xml.SAML2ValidatorSuite;
 import com.wy.test.core.entity.Saml20Metadata;
 
-import dream.flying.flower.framework.core.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
 
 // import org.dromara.maxkey.authz.saml20.binding.decoder.OpenHTTPPostDecoder;
 // import

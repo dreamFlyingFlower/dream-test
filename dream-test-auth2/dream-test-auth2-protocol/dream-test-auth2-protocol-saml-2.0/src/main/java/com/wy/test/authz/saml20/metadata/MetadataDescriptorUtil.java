@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.wy.test.common.crypto.cert.StringUtil;
+import dream.flying.flower.io.IOHelper;
 
 public class MetadataDescriptorUtil {
 
@@ -106,7 +106,7 @@ public class MetadataDescriptorUtil {
 	}
 
 	public EntityDescriptor getEntityDescriptor(String strMetadata) throws Exception {
-		InputStream inputStream = StringUtil.String2InputStream(strMetadata);
+		InputStream inputStream = IOHelper.toInputStream(strMetadata);
 		return getEntityDescriptor(inputStream);
 	}
 

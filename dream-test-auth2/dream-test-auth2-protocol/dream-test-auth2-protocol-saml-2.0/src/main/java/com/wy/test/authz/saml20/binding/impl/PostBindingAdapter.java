@@ -34,8 +34,8 @@ import com.wy.test.authz.saml20.binding.BindingAdapter;
 import com.wy.test.authz.saml20.binding.ExtractBindingAdapter;
 import com.wy.test.core.entity.apps.AppsSAML20Details;
 
-import dream.flying.flower.framework.core.crypto.keystore.KeyStoreHelpers;
-import dream.flying.flower.framework.core.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.web.crypto.keystore.KeyStoreHelpers;
+import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
 
 public class PostBindingAdapter implements BindingAdapter, InitializingBean {
 

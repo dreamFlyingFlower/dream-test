@@ -8,18 +8,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.common.crypto.ReciprocalUtils;
-import com.wy.test.common.crypto.cert.CertSigner;
-import com.wy.test.common.crypto.password.PasswordReciprocal;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.constants.ConstsBoolean;
+import com.wy.test.core.crypto.password.PasswordReciprocal;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.binary.Base64Helper;
-import dream.flying.flower.framework.core.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
+import dream.flying.flower.framework.web.crypto.cert.CertSigner;
+import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
 
 public abstract class AbstractAuthorizeAdapter {
 
@@ -76,7 +76,7 @@ public abstract class AbstractAuthorizeAdapter {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		byte[] encodeData = ReciprocalUtils.encode(data.toString(), algorithmKey, algorithm);
+		byte[] encodeData = ReciprocalHelpers.encode(data.toString(), algorithmKey, algorithm);
 		String tokenString = Base64Helper.encodeUrlString(encodeData);
 		_logger.trace("Reciprocal then HEX  Token : " + tokenString);
 

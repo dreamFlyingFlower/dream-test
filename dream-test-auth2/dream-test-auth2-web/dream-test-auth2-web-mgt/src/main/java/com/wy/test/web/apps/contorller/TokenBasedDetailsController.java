@@ -14,14 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.common.crypto.ReciprocalUtils;
-import com.wy.test.common.entity.Message;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.AppsJwtDetails;
 import com.wy.test.core.entity.apps.AppsTokenBasedDetails;
 import com.wy.test.persistence.service.AppsTokenBasedDetailsService;
+
+import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
 
 @Controller
 @RequestMapping(value = { "/apps/tokenbased" })
@@ -37,7 +38,7 @@ public class TokenBasedDetailsController extends BaseAppContorller {
 		AppsTokenBasedDetails tokenBasedDetails = new AppsTokenBasedDetails();
 		tokenBasedDetails.setId(tokenBasedDetails.generateId());
 		tokenBasedDetails.setProtocol(ConstsProtocols.TOKENBASED);
-		tokenBasedDetails.setSecret(ReciprocalUtils.generateKey(ReciprocalUtils.Algorithm.AES));
+		tokenBasedDetails.setSecret(ReciprocalHelpers.generateKey(ReciprocalHelpers.Algorithm.AES));
 		tokenBasedDetails.setAlgorithmKey(tokenBasedDetails.getSecret());
 		tokenBasedDetails.setUserPropertys("userPropertys");
 		return new Message<AppsTokenBasedDetails>(tokenBasedDetails).buildResponse();

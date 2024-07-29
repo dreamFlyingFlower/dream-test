@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.common.crypto.ReciprocalUtils;
-import com.wy.test.common.entity.Message;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.AppsFormBasedDetails;
 import com.wy.test.persistence.service.AppsFormBasedDetailsService;
+
+import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
 
 @Controller
 @RequestMapping(value = { "/apps/formbased" })
@@ -36,7 +37,7 @@ public class FormBasedDetailsController extends BaseAppContorller {
 		AppsFormBasedDetails formBasedDetails = new AppsFormBasedDetails();
 		formBasedDetails.setId(formBasedDetails.generateId());
 		formBasedDetails.setProtocol(ConstsProtocols.FORMBASED);
-		formBasedDetails.setSecret(ReciprocalUtils.generateKey(""));
+		formBasedDetails.setSecret(ReciprocalHelpers.generateKey(""));
 		return new Message<AppsFormBasedDetails>(formBasedDetails).buildResponse();
 	}
 

@@ -34,8 +34,6 @@ import com.nimbusds.jwt.JWTClaimsSet.Builder;
 import com.nimbusds.jwt.PlainJWT;
 import com.nimbusds.jwt.SignedJWT;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.common.crypto.jwt.encryption.service.impl.DefaultJwtEncryptionAndDecryptionService;
-import com.wy.test.common.crypto.jwt.signer.service.impl.DefaultJwtSigningAndValidationService;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.constants.ContentType;
 import com.wy.test.core.entity.UserInfo;
@@ -51,6 +49,8 @@ import com.wy.test.persistence.service.UserInfoService;
 
 import dream.flying.flower.framework.core.helper.TokenHelpers;
 import dream.flying.flower.framework.core.json.JsonHelpers;
+import dream.flying.flower.framework.web.crypto.jwt.encryption.DefaultJwtEncryptionAndDecryptionHandler;
+import dream.flying.flower.framework.web.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
 import dream.flying.flower.generator.StringGenerator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -193,9 +193,9 @@ public class UserInfoOIDCEndpoint {
 					&& !clientDetails.getSignature().equalsIgnoreCase("none")
 					&& clientDetails.getUserInfoResponse().equalsIgnoreCase("ENCRYPTION")) {
 				// 需要签名 signed ID token
-				DefaultJwtSigningAndValidationService jwtSignerService = null;
+				DefaultJwtSigningAndValidationHandler jwtSignerService = null;
 				try {
-					jwtSignerService = new DefaultJwtSigningAndValidationService(clientDetails.getSignatureKey(),
+					jwtSignerService = new DefaultJwtSigningAndValidationHandler(clientDetails.getSignatureKey(),
 							clientDetails.getClientId() + "_sig", clientDetails.getSignature());
 				} catch (Exception e) {
 					_logger.error("Couldn't create Jwt Signing Service", e);
@@ -215,8 +215,8 @@ public class UserInfoOIDCEndpoint {
 					&& clientDetails.getUserInfoResponse().equalsIgnoreCase("SIGNING")) {
 				// 需要加密
 				try {
-					DefaultJwtEncryptionAndDecryptionService jwtEncryptionService =
-							new DefaultJwtEncryptionAndDecryptionService(clientDetails.getAlgorithmKey(),
+					DefaultJwtEncryptionAndDecryptionHandler jwtEncryptionService =
+							new DefaultJwtEncryptionAndDecryptionHandler(clientDetails.getAlgorithmKey(),
 									clientDetails.getClientId() + "_enc", clientDetails.getAlgorithm());
 
 					Payload payload = userInfoJWTClaims.toPayload();

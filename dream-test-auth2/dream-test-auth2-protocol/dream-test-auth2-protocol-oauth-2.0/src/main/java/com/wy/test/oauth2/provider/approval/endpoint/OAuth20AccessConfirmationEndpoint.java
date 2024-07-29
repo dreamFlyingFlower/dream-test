@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.common.entity.Message;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;

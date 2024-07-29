@@ -21,7 +21,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
-import com.wy.test.common.crypto.password.PasswordReciprocal;
+import com.wy.test.core.crypto.password.PasswordReciprocal;
 import com.wy.test.core.entity.Synchronizers;
 import com.wy.test.synchronizer.core.synchronizer.SynchronizerJob;
 

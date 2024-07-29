@@ -1,9 +1,9 @@
 package com.wy.test.web.api.identity.scim.resources;
 
-import com.wy.test.common.pretty.impl.JsonPretty;
 import com.wy.test.web.apis.identity.scim.resources.ScimEnterpriseUser;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
+import dream.flying.flower.framework.core.pretty.strategy.JsonPretty;
 
 public class ScimEnterpriseUserJsonString2ObjectTest {
 

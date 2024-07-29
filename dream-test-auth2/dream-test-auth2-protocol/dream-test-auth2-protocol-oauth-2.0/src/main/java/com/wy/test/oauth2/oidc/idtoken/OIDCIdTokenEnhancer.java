@@ -24,8 +24,6 @@ import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import com.wy.test.common.crypto.jwt.encryption.service.impl.DefaultJwtEncryptionAndDecryptionService;
-import com.wy.test.common.crypto.jwt.signer.service.impl.DefaultJwtSigningAndValidationService;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.configuration.oidc.OIDCProviderMetadata;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
@@ -35,6 +33,9 @@ import com.wy.test.oauth2.provider.ClientDetailsService;
 import com.wy.test.oauth2.provider.OAuth2Authentication;
 import com.wy.test.oauth2.provider.OAuth2Request;
 import com.wy.test.oauth2.provider.token.TokenEnhancer;
+
+import dream.flying.flower.framework.web.crypto.jwt.encryption.DefaultJwtEncryptionAndDecryptionHandler;
+import dream.flying.flower.framework.web.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
 
 public class OIDCIdTokenEnhancer implements TokenEnhancer {
 
@@ -62,12 +63,12 @@ public class OIDCIdTokenEnhancer implements TokenEnhancer {
 			ClientDetails clientDetails =
 					clientDetailsService.loadClientByClientId(authentication.getOAuth2Request().getClientId(), true);
 
-			DefaultJwtSigningAndValidationService jwtSignerService = null;
+			DefaultJwtSigningAndValidationHandler jwtSignerService = null;
 			JWSAlgorithm signingAlg = null;
 			try {// jwtSignerService
 				if (StringUtils.isNotBlank(clientDetails.getSignature())
 						&& !clientDetails.getSignature().equalsIgnoreCase("none")) {
-					jwtSignerService = new DefaultJwtSigningAndValidationService(clientDetails.getSignatureKey(),
+					jwtSignerService = new DefaultJwtSigningAndValidationHandler(clientDetails.getSignatureKey(),
 							clientDetails.getClientId() + "_sig", clientDetails.getSignature());
 
 					signingAlg = jwtSignerService.getDefaultSigningAlgorithm();
@@ -150,8 +151,8 @@ public class OIDCIdTokenEnhancer implements TokenEnhancer {
 			} else if (StringUtils.isNotBlank(clientDetails.getAlgorithm())
 					&& !clientDetails.getAlgorithm().equalsIgnoreCase("none")) {
 				try {
-					DefaultJwtEncryptionAndDecryptionService jwtEncryptionService =
-							new DefaultJwtEncryptionAndDecryptionService(clientDetails.getAlgorithmKey(),
+					DefaultJwtEncryptionAndDecryptionHandler jwtEncryptionService =
+							new DefaultJwtEncryptionAndDecryptionHandler(clientDetails.getAlgorithmKey(),
 									clientDetails.getClientId() + "_enc", clientDetails.getAlgorithm());
 					Payload payload = builder.build().toPayload();
 					// Example Request JWT encrypted with RSA-OAEP-256 and 128-bit AES/GCM

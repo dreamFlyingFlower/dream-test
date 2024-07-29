@@ -74,7 +74,7 @@ import org.w3c.dom.Element;
 
 import com.wy.test.authz.saml.common.TrustResolver;
 
-import dream.flying.flower.framework.core.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
 
 public class MetadataGenerator {
 

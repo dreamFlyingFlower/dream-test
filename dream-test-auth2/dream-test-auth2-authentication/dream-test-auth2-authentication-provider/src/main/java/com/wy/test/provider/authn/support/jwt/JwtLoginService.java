@@ -16,8 +16,9 @@ import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.PlainJWT;
 import com.nimbusds.jwt.SignedJWT;
-import com.wy.test.common.crypto.jwt.signer.service.impl.DefaultJwtSigningAndValidationService;
 import com.wy.test.core.web.WebContext;
+
+import dream.flying.flower.framework.web.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
 
 public class JwtLoginService {
 
@@ -25,9 +26,9 @@ public class JwtLoginService {
 
 	String issuer;
 
-	DefaultJwtSigningAndValidationService jwtSignerValidationService;
+	DefaultJwtSigningAndValidationHandler jwtSignerValidationService;
 
-	public JwtLoginService(DefaultJwtSigningAndValidationService jwtSignerValidationService, String issuer) {
+	public JwtLoginService(DefaultJwtSigningAndValidationHandler jwtSignerValidationService, String issuer) {
 		this.jwtSignerValidationService = jwtSignerValidationService;
 		this.issuer = issuer;
 	}
@@ -92,11 +93,11 @@ public class JwtLoginService {
 		return null;
 	}
 
-	public void setJwtSignerValidationService(DefaultJwtSigningAndValidationService jwtSignerValidationService) {
+	public void setJwtSignerValidationService(DefaultJwtSigningAndValidationHandler jwtSignerValidationService) {
 		this.jwtSignerValidationService = jwtSignerValidationService;
 	}
 
-	public DefaultJwtSigningAndValidationService getJwtSignerValidationService() {
+	public DefaultJwtSigningAndValidationHandler getJwtSignerValidationService() {
 		return jwtSignerValidationService;
 	}
 

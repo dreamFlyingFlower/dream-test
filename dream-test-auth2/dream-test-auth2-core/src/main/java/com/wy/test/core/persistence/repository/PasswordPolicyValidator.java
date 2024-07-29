@@ -15,9 +15,9 @@ import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 
-import com.wy.test.common.crypto.password.PasswordGen;
 import com.wy.test.core.constants.ConstsPasswordSetType;
 import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.crypto.password.PasswordGen;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.PasswordPolicy;
 import com.wy.test.core.entity.UserInfo;

@@ -29,18 +29,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.authz.saml20.metadata.MetadataDescriptorUtil;
-import com.wy.test.common.crypto.ReciprocalUtils;
-import com.wy.test.common.crypto.cert.X509CertUtils;
-import com.wy.test.common.entity.Message;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.AppsSAML20Details;
 import com.wy.test.persistence.service.AppsSaml20DetailsService;
 
-import dream.flying.flower.framework.core.crypto.keystore.KeyStoreHelpers;
-import dream.flying.flower.framework.core.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
+import dream.flying.flower.framework.web.crypto.cert.X509CertHelpers;
+import dream.flying.flower.framework.web.crypto.keystore.KeyStoreHelpers;
+import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
 
 @Controller
 @RequestMapping(value = { "/apps/saml20" })
@@ -60,7 +60,7 @@ public class SAML20DetailsController extends BaseAppContorller {
 	@GetMapping(value = { "/init" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> init() {
 		AppsSAML20Details saml20Details = new AppsSAML20Details();
-		saml20Details.setSecret(ReciprocalUtils.generateKey(""));
+		saml20Details.setSecret(ReciprocalHelpers.generateKey(""));
 		saml20Details.setProtocol(ConstsProtocols.SAML20);
 		saml20Details.setId(saml20Details.generateId());
 		return new Message<AppsSAML20Details>(saml20Details).buildResponse();
@@ -136,7 +136,7 @@ public class SAML20DetailsController extends BaseAppContorller {
 			if (samlDetails.getFileType().equals("certificate")) {// certificate file
 				try {
 					if (bArrayInputStream != null) {
-						samlDetails.setTrustCert(X509CertUtils.loadCertFromInputStream(bArrayInputStream));
+						samlDetails.setTrustCert(X509CertHelpers.loadCertFromInputStream(bArrayInputStream));
 					}
 				} catch (IOException e) {
 					_logger.error("read certificate file error .", e);
@@ -161,7 +161,7 @@ public class SAML20DetailsController extends BaseAppContorller {
 			samlDetails.setCertSubject(samlDetails.getTrustCert().getSubjectDN().getName());
 			samlDetails.setCertExpiration(samlDetails.getTrustCert().getNotAfter().toString());
 
-			samlDetails.setCertIssuer(X509CertUtils.getCommonName(samlDetails.getTrustCert().getIssuerX500Principal()));
+			samlDetails.setCertIssuer(X509CertHelpers.getCommonName(samlDetails.getTrustCert().getIssuerX500Principal()));
 
 			KeyStore keyStore = KeyStoreHelpers.clone(keyStoreLoader.getKeyStore(), keyStoreLoader.getKeystorePassword());
 
@@ -194,7 +194,7 @@ public class SAML20DetailsController extends BaseAppContorller {
 		String b64Encoder = sPSSODescriptor.getKeyDescriptors().get(0).getKeyInfo().getX509Datas().get(0)
 				.getX509Certificates().get(0).getValue();
 
-		trustCert = X509CertUtils.loadCertFromB64Encoded(b64Encoder);
+		trustCert = X509CertHelpers.loadCertFromB64Encoded(b64Encoder);
 
 		samlDetails.setTrustCert(trustCert);
 		samlDetails.setSpAcsUrl(sPSSODescriptor.getAssertionConsumerServices().get(0).getLocation());

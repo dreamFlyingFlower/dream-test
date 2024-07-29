@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 
-import com.wy.test.common.pretty.impl.JsonPretty;
+import dream.flying.flower.framework.core.pretty.strategy.JsonPretty;
 
 @Entity
 @Table(name = "MXK_CONNECTORS")
@@ -207,5 +207,4 @@ public class Connectors extends JpaEntity implements Serializable {
 	public String toString() {
 		return new JsonPretty().format(this);
 	}
-
 }

@@ -4,12 +4,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.wy.test.common.pretty.impl.JsonPretty;
 import com.wy.test.web.apis.identity.scim.resources.ScimGroup;
 import com.wy.test.web.apis.identity.scim.resources.ScimMemberRef;
 import com.wy.test.web.apis.identity.scim.resources.ScimMeta;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
+import dream.flying.flower.framework.core.pretty.strategy.JsonPretty;
 
 public class ScimGroupJsonTest {
 

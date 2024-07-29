@@ -28,12 +28,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
-import com.wy.test.common.entity.Message;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstsEntryType;
 import com.wy.test.core.constants.ConstsOperateAction;
 import com.wy.test.core.constants.ConstsOperateResult;
 import com.wy.test.core.entity.ExcelImport;
+import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.web.component.TreeAttributes;

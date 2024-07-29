@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
-import com.wy.test.common.crypto.ReciprocalUtils;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.configuration.ApplicationConfig;
@@ -18,6 +17,7 @@ import com.wy.test.core.web.WebConstants;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
+import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
 import dream.flying.flower.helper.DateTimeHelper;
 
 public class HttpKerberosEntryPoint implements AsyncHandlerInterceptor {
@@ -68,7 +68,7 @@ public class HttpKerberosEntryPoint implements AsyncHandlerInterceptor {
 		String decoderKerberosToken = null;
 		for (KerberosProxy kerberosProxy : kerberosService.getKerberosProxys()) {
 			if (kerberosProxy.getUserdomain().equalsIgnoreCase(kerberosUserDomain)) {
-				decoderKerberosToken = ReciprocalUtils.aesDecoder(kerberosTokenString, kerberosProxy.getCrypto());
+				decoderKerberosToken = ReciprocalHelpers.aesDecoder(kerberosTokenString, kerberosProxy.getCrypto());
 				break;
 			}
 		}

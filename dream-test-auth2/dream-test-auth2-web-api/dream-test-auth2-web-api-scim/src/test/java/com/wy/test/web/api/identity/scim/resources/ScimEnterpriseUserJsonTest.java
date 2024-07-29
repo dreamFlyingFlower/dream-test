@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.wy.test.common.pretty.impl.JsonPretty;
 import com.wy.test.web.apis.identity.scim.resources.ScimEnterprise;
 import com.wy.test.web.apis.identity.scim.resources.ScimEnterpriseUser;
 import com.wy.test.web.apis.identity.scim.resources.ScimFormattedName;
@@ -13,6 +12,7 @@ import com.wy.test.web.apis.identity.scim.resources.ScimUserEmail;
 import com.wy.test.web.apis.identity.scim.resources.ScimUserPhoneNumber;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
+import dream.flying.flower.framework.core.pretty.strategy.JsonPretty;
 
 public class ScimEnterpriseUserJsonTest {
 

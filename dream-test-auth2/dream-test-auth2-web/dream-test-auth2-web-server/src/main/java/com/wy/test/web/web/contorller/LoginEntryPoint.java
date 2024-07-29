@@ -22,13 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wy.test.common.entity.Message;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthJwt;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.entity.Institutions;
+import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.SocialsAssociate;
 import com.wy.test.core.entity.SocialsProvider;
 import com.wy.test.core.entity.UserInfo;

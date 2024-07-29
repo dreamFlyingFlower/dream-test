@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.common.pretty.impl.JsonPretty;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.oauth2.common.OAuth2Constants;
 import com.wy.test.oauth2.provider.endpoint.AbstractEndpoint;
 import com.wy.test.oauth2.provider.wellknown.OauthServerConfiguration;
 
+import dream.flying.flower.framework.core.pretty.strategy.JsonPretty;
 import dream.flying.flower.lang.StrHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

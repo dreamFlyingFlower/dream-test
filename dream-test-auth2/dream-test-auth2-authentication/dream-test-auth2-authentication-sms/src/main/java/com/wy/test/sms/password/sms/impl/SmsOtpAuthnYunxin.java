@@ -13,25 +13,19 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.apache.logging.log4j.core.util.JsonUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.sms.password.sms.SmsOtpAuthn;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.generator.StringGenerator;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * 网易云信短信验证.
- * 
- * @author shimingxy
- *
+ * 网易云信短信验证
  */
+@Slf4j
 public class SmsOtpAuthnYunxin extends SmsOtpAuthn {
-
-	private static final Logger logger = LoggerFactory.getLogger(SmsOtpAuthnYunxin.class);
 
 	public SmsOtpAuthnYunxin() {
 		otpType = OtpTypes.SMS;
@@ -71,8 +65,7 @@ public class SmsOtpAuthnYunxin extends SmsOtpAuthn {
 				// 随机数
 				String nonce = new StringGenerator(StringGenerator.DEFAULT_CODE_NUMBER, 6).randomGenerate();
 				String checkSum = SmsOtpAuthnYunxinCheckSumBuilder.getCheckSum(appSecret, nonce, curTime);
-				logger.debug(
-						"AppKey " + appKey + " ,Nonce " + nonce + ", CurTime " + curTime + " ,checkSum " + checkSum);
+				log.debug("AppKey " + appKey + " ,Nonce " + nonce + ", CurTime " + curTime + " ,checkSum " + checkSum);
 				// 设置请求的header
 				httpPost.addHeader("AppKey", appKey);
 				httpPost.addHeader("Nonce", nonce);
@@ -105,15 +98,15 @@ public class SmsOtpAuthnYunxin extends SmsOtpAuthn {
 				// {"code":200,"msg":"1","obj":"740673"}
 				String responseString = EntityUtils.toString(response.getEntity(), "utf-8");
 				// String responseString = "{\"code\":200,\"msg\":\"1\",\"obj\":\"740673\"}";
-				logger.debug("responseString " + responseString);
+				log.debug("responseString " + responseString);
 				YunxinSms yunxinSms = JsonHelpers.read(responseString, YunxinSms.class);
-				logger.debug("responseEntity code " + yunxinSms.getObj());
+				log.debug("responseEntity code " + yunxinSms.getObj());
 				nonce = yunxinSms.getObj() == null ? nonce : yunxinSms.getObj();
-				logger.debug("nonce " + nonce);
+				log.debug("nonce " + nonce);
 				this.optTokenStore.store(userInfo, nonce, userInfo.getMobile(), OtpTypes.SMS);
 				return true;
 			} catch (Exception e) {
-				logger.error(" produce code error ", e);
+				log.error(" produce code error ", e);
 			} finally {
 				if (httpPost != null) {
 					httpPost.releaseConnection();

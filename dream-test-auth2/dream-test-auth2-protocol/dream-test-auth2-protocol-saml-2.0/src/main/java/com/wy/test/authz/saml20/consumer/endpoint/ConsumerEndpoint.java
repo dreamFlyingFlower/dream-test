@@ -58,7 +58,7 @@ import com.wy.test.core.entity.apps.AppsSAML20Details;
 import com.wy.test.persistence.service.AppsSaml20DetailsService;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
-import dream.flying.flower.framework.core.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
 
 @Controller
 public class ConsumerEndpoint {

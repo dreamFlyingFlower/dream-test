@@ -22,8 +22,8 @@ import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.AppsSaml20DetailsService;
 
-import dream.flying.flower.framework.core.crypto.keystore.KeyStoreHelpers;
-import dream.flying.flower.framework.core.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.web.crypto.keystore.KeyStoreHelpers;
+import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 

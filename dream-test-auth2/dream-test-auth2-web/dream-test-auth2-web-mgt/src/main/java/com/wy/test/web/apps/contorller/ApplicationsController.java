@@ -25,12 +25,13 @@ import com.nimbusds.jose.jwk.OctetSequenceKey;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.gen.OctetSequenceKeyGenerator;
 import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
-import com.wy.test.common.crypto.ReciprocalUtils;
-import com.wy.test.common.entity.Message;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
+
+import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
 
 @Controller
 @RequestMapping(value = { "/apps" })
@@ -43,7 +44,7 @@ public class ApplicationsController extends BaseAppContorller {
 		Apps app = new Apps();
 		app.setId(app.generateId());
 		app.setProtocol(ConstsProtocols.BASIC);
-		app.setSecret(ReciprocalUtils.generateKey(""));
+		app.setSecret(ReciprocalHelpers.generateKey(""));
 		return new Message<Apps>(app).buildResponse();
 	}
 
@@ -135,13 +136,13 @@ public class ApplicationsController extends BaseAppContorller {
 		String secret = "";
 		type = type.toLowerCase();
 		if (type.equals("des")) {
-			secret = ReciprocalUtils.generateKey(ReciprocalUtils.Algorithm.DES);
+			secret = ReciprocalHelpers.generateKey(ReciprocalHelpers.Algorithm.DES);
 		} else if (type.equals("desede")) {
-			secret = ReciprocalUtils.generateKey(ReciprocalUtils.Algorithm.DESede);
+			secret = ReciprocalHelpers.generateKey(ReciprocalHelpers.Algorithm.DESede);
 		} else if (type.equals("aes")) {
-			secret = ReciprocalUtils.generateKey(ReciprocalUtils.Algorithm.AES);
+			secret = ReciprocalHelpers.generateKey(ReciprocalHelpers.Algorithm.AES);
 		} else if (type.equals("blowfish")) {
-			secret = ReciprocalUtils.generateKey(ReciprocalUtils.Algorithm.Blowfish);
+			secret = ReciprocalHelpers.generateKey(ReciprocalHelpers.Algorithm.Blowfish);
 		} else if (type.equalsIgnoreCase("RS256") || type.equalsIgnoreCase("RS384") || type.equalsIgnoreCase("RS512")) {
 			RSAKey rsaJWK = new RSAKeyGenerator(2048).keyID(id + "_sig").keyUse(KeyUse.SIGNATURE)
 					.algorithm(new JWSAlgorithm(type.toUpperCase(), Requirement.OPTIONAL)).generate();
@@ -164,10 +165,9 @@ public class ApplicationsController extends BaseAppContorller {
 							.algorithm(new JWEAlgorithm(type.toUpperCase(), Requirement.OPTIONAL)).generate();
 			secret = octKey.toJSONString();
 		} else {
-			secret = ReciprocalUtils.generateKey("");
+			secret = ReciprocalHelpers.generateKey("");
 		}
 
 		return new Message<Object>(Message.SUCCESS, (Object) secret).buildResponse();
 	}
-
 }
