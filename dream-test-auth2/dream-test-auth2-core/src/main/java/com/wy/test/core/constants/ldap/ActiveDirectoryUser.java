@@ -154,12 +154,12 @@ public class ActiveDirectoryUser {
 	public static final String HOMEPHONE = "homePhone";
 
 	/**
-	 * admin@maxkey.top
+	 * admin@dream.top
 	 */
 	public static final String USERPRINCIPALNAME = "userPrincipalName";
 
 	/**
-	 * maxkey\admin
+	 * dream\admin
 	 */
 	public static final String SAMACCOUNTNAME = "sAMAccountname";
 
@@ -215,7 +215,7 @@ public class ActiveDirectoryUser {
 
 	public static final String DISTINGUISHEDNAME = "distinguishedname";
 
-	// MaxKey EXTEND
+	// dream EXTEND
 	/**
 	 * EXTEND managerName
 	 */

@@ -49,7 +49,7 @@ public class JwtAuthnAutoConfiguration implements InitializingBean {
 			throws NoSuchAlgorithmException, InvalidKeySpecException, JOSEException {
 		DefaultJwtSigningAndValidationHandler jwtSignerValidationService =
 				new DefaultJwtSigningAndValidationHandler(jwtLoginJwkSetKeyStore);
-		jwtSignerValidationService.setDefaultSignerKeyId("maxkey_rsa");
+		jwtSignerValidationService.setDefaultSignerKeyId("dream_rsa");
 		jwtSignerValidationService.setDefaultSigningAlgorithmName("RS256");
 		_logger.debug("JWT Login Signing and Validation init.");
 		return jwtSignerValidationService;
@@ -61,7 +61,7 @@ public class JwtAuthnAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	JwtLoginService jwtLoginService(@Value("${maxkey.login.jwt.issuer}") String issuer,
+	JwtLoginService jwtLoginService(@Value("${dream.login.jwt.issuer}") String issuer,
 			DefaultJwtSigningAndValidationHandler jwtLoginValidationService) {
 		JwtLoginService jwtLoginService = new JwtLoginService(jwtLoginValidationService, issuer);
 		_logger.debug("JWT Login Service init.");

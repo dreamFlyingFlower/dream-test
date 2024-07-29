@@ -21,7 +21,7 @@ import com.wy.test.core.entity.SocialsProviderLogin;
 import com.wy.test.social.authn.support.socialsignon.token.RedisTokenStore;
 import com.wy.test.social.zhyd.request.AuthFeishu2Request;
 import com.wy.test.social.zhyd.request.AuthHuaweiWeLinkRequest;
-import com.wy.test.social.zhyd.request.AuthMaxkeyRequest;
+import com.wy.test.social.zhyd.request.AuthDreamRequest;
 import com.wy.test.social.zhyd.request.AuthWeChatEnterpriseWebRequestCost;
 
 import me.zhyd.oauth.config.AuthConfig;
@@ -152,8 +152,8 @@ public class SocialSignOnProviderService {
 			authRequest = new AuthWeChatEnterpriseWebRequestCost(authConfig);
 		} else if (provider.equalsIgnoreCase("welink")) {
 			authRequest = new AuthHuaweiWeLinkRequest(authConfig);
-		} else if (provider.equalsIgnoreCase("maxkey")) {
-			authRequest = new AuthMaxkeyRequest(authConfig);
+		} else if (provider.equalsIgnoreCase("dream")) {
+			authRequest = new AuthDreamRequest(authConfig);
 		}
 
 		return authRequest;

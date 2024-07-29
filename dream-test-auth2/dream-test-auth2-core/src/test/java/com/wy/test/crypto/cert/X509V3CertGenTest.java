@@ -18,14 +18,14 @@ public class X509V3CertGenTest {
 	public void generateV3() throws Exception {
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 		KeyPair keyPair = X509V3CertGen.genRSAKeyPair();
-		String issuer = "CN=maxkey.top,O=maxkey,L=SH,ST=SH,C=CN";
+		String issuer = "CN=dream.top,O=dream,L=SH,ST=SH,C=CN";
 		Date startDate = DateTime.now().toDate();
 		Date endDate = DateTime.now().plusMonths(10).toDate();
 		System.out.println("Private : " + keyPair.getPrivate().toString());
 
 		System.out.println("Public : " + keyPair.getPublic().toString());
 		X509Certificate cert = X509V3CertGen.genV3Certificate(issuer, issuer, startDate, endDate, keyPair);
-		String certFileString = "D:\\MaxKey\\Workspaces\\maxkey\\Cert345.cer";
+		String certFileString = "D:\\dream\\Workspaces\\dream\\Cert345.cer";
 		File certFile = new File(certFileString);
 		if (certFile.exists()) {
 			certFile.deleteOnExit();

@@ -26,7 +26,7 @@ public class UserInfo extends JpaEntity implements Serializable {
 
 	public static final String CLASS_TYPE = "UserInfo";
 
-	public static final String DEFAULT_PASSWORD_SUFFIX = "MaxKey@888";
+	public static final String DEFAULT_PASSWORD_SUFFIX = "dream@888";
 
 	String sessionId;
 

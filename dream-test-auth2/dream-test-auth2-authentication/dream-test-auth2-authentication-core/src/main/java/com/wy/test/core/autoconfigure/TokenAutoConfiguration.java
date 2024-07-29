@@ -26,7 +26,7 @@ public class TokenAutoConfiguration implements InitializingBean {
 	@Bean
 	AuthTokenService authTokenService(AuthJwkConfig authJwkConfig, RedisConnectionFactory redisConnFactory,
 			MomentaryService momentaryService, AuthRefreshTokenService refreshTokenService,
-			@Value("${maxkey.server.persistence}") int persistence) throws JOSEException {
+			@Value("${dream.server.persistence}") int persistence) throws JOSEException {
 		CongressService congressService;
 		_logger.debug("cache persistence {}", persistence);
 		if (persistence == ConstsPersistence.REDIS) {

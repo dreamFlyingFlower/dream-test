@@ -1,28 +1,28 @@
 #端口号
 application:
-  name: maxkey-gateway-server
+  name: dream-gateway-server
   formatted-version: v3.5.15 GA
 server:
   port: 9000
 spring:
   application:
-    name: maxkey-gateway
+    name: dream-gateway
   cloud:
     gateway:
       routes:
 #nacos健康检查端口8080
-        - id: maxkeys_route
-          uri: lb://maxkey
+        - id: dreams_route
+          uri: lb://dream
           filters:
             - PrefixPath=/
           predicates:
             - Path=/sign/**
-        - id: maxkey_mgts_route
-          uri: lb://maxkey-mgt
+        - id: dream_mgts_route
+          uri: lb://dream-mgt
           filters:
             - PrefixPath=/
           predicates:
-            - Path=/maxkey-mgt-api/**
+            - Path=/dream-mgt-api/**
 #      default-filters:
 #       - name: Hystrix
 #          args:

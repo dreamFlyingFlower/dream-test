@@ -157,7 +157,7 @@ public class LoginEntryPoint {
 		String code = credential.getCode();
 		// 映射社交服务的账号
 		String username = credential.getUsername();
-		// maxkey存储的手机号
+		// dream存储的手机号
 		String mobile = credential.getMobile();
 		// 社交服务类型
 		String authType = credential.getAuthType();
@@ -172,7 +172,7 @@ public class LoginEntryPoint {
 			socialsAssociate.setProvider(authType);
 			socialsAssociate.setSocialUserId(username);
 			socialsAssociate.setInstId(userInfo.getInstId());
-			// 插入Maxkey和社交服务的用户映射表
+			// 插入dream和社交服务的用户映射表
 			socialsAssociatesService.insert(socialsAssociate);
 
 			// 设置完成后，进行登录认证

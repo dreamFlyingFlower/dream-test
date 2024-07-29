@@ -1,4 +1,4 @@
-package com.wy.test.autoconfigure;
+package com.wy.test.openapi.autoconfigure;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +17,11 @@ import com.wy.test.persistence.service.UserInfoService;
 import com.wy.test.provider.authn.realm.jdbc.JdbcAuthenticationRealm;
 
 @AutoConfiguration
-public class MaxKeyMgtConfig implements InitializingBean {
+public class DreamOpenApiConfig implements InitializingBean {
 
-	private static final Logger _logger = LoggerFactory.getLogger(MaxKeyMgtConfig.class);
+	private static final Logger _logger = LoggerFactory.getLogger(DreamOpenApiConfig.class);
 
-	// authenticationRealm for MaxKeyMgtApplication
+	// authenticationRealm for DreamMgtApplication
 	@Bean
 	JdbcAuthenticationRealm authenticationRealm(PasswordEncoder passwordEncoder,
 			PasswordPolicyValidator passwordPolicyValidator, LoginRepository loginRepository,

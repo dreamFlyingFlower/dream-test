@@ -86,8 +86,8 @@ public class AuthnProviderAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	AbstractRemeberMeManager remeberMeManager(@Value("${maxkey.server.persistence}") int persistence,
-			@Value("${maxkey.login.remeberme.validity}") int validity, ApplicationConfig applicationConfig,
+	AbstractRemeberMeManager remeberMeManager(@Value("${dream.server.persistence}") int persistence,
+			@Value("${dream.login.remeberme.validity}") int validity, ApplicationConfig applicationConfig,
 			AuthTokenService authTokenService, JdbcTemplate jdbcTemplate) {
 		_logger.trace("init RemeberMeManager , validity {}.", validity);
 		return new JdbcRemeberMeManager(jdbcTemplate, applicationConfig, authTokenService, validity);

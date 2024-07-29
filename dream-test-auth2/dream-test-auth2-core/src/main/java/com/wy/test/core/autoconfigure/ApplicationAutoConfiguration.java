@@ -72,7 +72,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	PasswordEncoder passwordEncoder(@Value("${maxkey.crypto.password.encoder:bcrypt}") String idForEncode) {
+	PasswordEncoder passwordEncoder(@Value("${dream.crypto.password.encoder:bcrypt}") String idForEncode) {
 		Map<String, PasswordEncoder> encoders = new HashMap<String, PasswordEncoder>();
 		encoders.put("bcrypt", new BCryptPasswordEncoder());
 		encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
@@ -102,9 +102,9 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	KeyStoreLoader keyStoreLoader(@Value("${maxkey.saml.v20.idp.issuing.entity.id}") String entityName,
-			@Value("${maxkey.saml.v20.idp.keystore.password}") String keystorePassword,
-			@Value("${maxkey.saml.v20.idp.keystore}") Resource keystoreFile) {
+	KeyStoreLoader keyStoreLoader(@Value("${dream.saml.v20.idp.issuing.entity.id}") String entityName,
+			@Value("${dream.saml.v20.idp.keystore.password}") String keystorePassword,
+			@Value("${dream.saml.v20.idp.keystore}") Resource keystoreFile) {
 		KeyStoreLoader keyStoreLoader = new KeyStoreLoader();
 		keyStoreLoader.setEntityName(entityName);
 		keyStoreLoader.setKeystorePassword(keystorePassword);
@@ -118,9 +118,9 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	KeyStoreLoader spKeyStoreLoader(@Value("${maxkey.saml.v20.sp.issuing.entity.id}") String entityName,
-			@Value("${maxkey.saml.v20.sp.keystore.password}") String keystorePassword,
-			@Value("${maxkey.saml.v20.sp.keystore}") Resource keystoreFile) {
+	KeyStoreLoader spKeyStoreLoader(@Value("${dream.saml.v20.sp.issuing.entity.id}") String entityName,
+			@Value("${dream.saml.v20.sp.keystore.password}") String keystorePassword,
+			@Value("${dream.saml.v20.sp.keystore}") Resource keystoreFile) {
 		KeyStoreLoader keyStoreLoader = new KeyStoreLoader();
 		keyStoreLoader.setEntityName(entityName);
 		keyStoreLoader.setKeystorePassword(keystorePassword);
@@ -134,7 +134,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	String spIssuingEntityName(@Value("${maxkey.saml.v20.sp.issuing.entity.id}") String spIssuingEntityName) {
+	String spIssuingEntityName(@Value("${dream.saml.v20.sp.issuing.entity.id}") String spIssuingEntityName) {
 		return spIssuingEntityName;
 	}
 
@@ -144,8 +144,8 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	GeneratorStrategyContext idGenerator(@Value("${maxkey.id.strategy:SnowFlake}") String strategy,
-			@Value("${maxkey.id.datacenterId:0}") int datacenterId, @Value("${maxkey.id.machineId:0}") int machineId) {
+	GeneratorStrategyContext idGenerator(@Value("${dream.id.strategy:SnowFlake}") String strategy,
+			@Value("${dream.id.datacenterId:0}") int datacenterId, @Value("${dream.id.machineId:0}") int machineId) {
 		GeneratorStrategyContext idGenerator = new GeneratorStrategyContext();
 		idGenerator.setStrategy(strategy);
 		SnowFlakeGenerator SnowFlakeId = new SnowFlakeGenerator(datacenterId, machineId);
@@ -156,7 +156,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 
 	@Bean
 	MomentaryService momentaryService(RedisConnectionFactory redisConnFactory,
-			@Value("${maxkey.server.persistence}") int persistence) throws JOSEException {
+			@Value("${dream.server.persistence}") int persistence) throws JOSEException {
 		MomentaryService momentaryService;
 		if (persistence == ConstsPersistence.REDIS) {
 			momentaryService = new RedisMomentaryService(redisConnFactory);

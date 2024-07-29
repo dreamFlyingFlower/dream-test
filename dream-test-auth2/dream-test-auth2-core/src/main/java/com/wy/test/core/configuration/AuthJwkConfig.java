@@ -8,19 +8,19 @@ import org.springframework.stereotype.Component;
 @Configuration
 public class AuthJwkConfig {
 
-	@Value("${maxkey.auth.jwt.expires:86400}")
+	@Value("${dream.auth.jwt.expires:86400}")
 	int expires;
 
-	@Value("${maxkey.auth.jwt.secret}")
+	@Value("${dream.auth.jwt.secret}")
 	String secret;
 
-	@Value("${maxkey.session.timeout}")
+	@Value("${dream.session.timeout}")
 	int refreshExpires;
 
-	@Value("${maxkey.auth.jwt.refresh.secret}")
+	@Value("${dream.auth.jwt.refresh.secret}")
 	String refreshSecret;
 
-	@Value("${maxkey.auth.jwt.issuer:https://sso.maxkey.top/}")
+	@Value("${dream.auth.jwt.issuer:https://sso.dream.top/}")
 	String issuer;
 
 	public AuthJwkConfig() {

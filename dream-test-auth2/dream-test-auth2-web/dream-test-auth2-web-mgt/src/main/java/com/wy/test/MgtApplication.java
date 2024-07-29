@@ -16,21 +16,21 @@ import org.springframework.context.annotation.ComponentScan;
 import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.web.InitializeContext;
 
-@ComponentScan(basePackages = { "org.maxkey.authn", "org.maxkey.configuration", "org.maxkey.entity",
-		"org.maxkey.entity.apps", "org.maxkey.entity.userinfo", "org.maxkey.web.apis.identity.kafka",
-		"org.maxkey.web.apis.identity.rest", "org.maxkey.web.apis.identity.scim", "org.maxkey.persistence",
-		"org.maxkey.provision", "org.maxkey.synchronizer", "org.maxkey.web", "org.maxkey.web.access.contorller",
-		"org.maxkey.web.api.endpoint", "org.maxkey.web.apps.contorller", "org.maxkey.web.contorller",
-		"org.maxkey.web.endpoint", "org.maxkey.web.interceptor", "org.maxkey.web.permissions.contorller",
-		"org.maxkey.web.tag" })
-@MapperScan("org.maxkey.persistence.mapper,")
+@ComponentScan(basePackages = { "com.wy.test.authn", "com.wy.test.configuration", "com.wy.test.entity",
+		"com.wy.test.entity.apps", "com.wy.test.entity.userinfo", "com.wy.test.web.apis.identity.kafka",
+		"com.wy.test.web.apis.identity.rest", "com.wy.test.web.apis.identity.scim", "com.wy.test.persistence",
+		"com.wy.test.provision", "com.wy.test.synchronizer", "com.wy.test.web", "com.wy.test.web.access.contorller",
+		"com.wy.test.web.api.endpoint", "com.wy.test.web.apps.contorller", "com.wy.test.web.contorller",
+		"com.wy.test.web.endpoint", "com.wy.test.web.interceptor", "com.wy.test.web.permissions.contorller",
+		"com.wy.test.web.tag" })
+@MapperScan("com.wy.test.persistence.mapper,")
 @SpringBootApplication
 public class MgtApplication extends SpringBootServletInitializer {
 
 	private static final Logger _logger = LoggerFactory.getLogger(MgtApplication.class);
 
 	public static void main(String[] args) {
-		_logger.info("Start MaxKeyMgt Application ...");
+		_logger.info("Start Mgt Application ...");
 
 		ConfigurableApplicationContext applicationContext = SpringApplication.run(MgtApplication.class, args);
 		InitializeContext initWebContext = new InitializeContext(applicationContext);
@@ -40,9 +40,9 @@ public class MgtApplication extends SpringBootServletInitializer {
 		} catch (ServletException e) {
 			_logger.error("Exception ", e);
 		}
-		_logger.info("MaxKeyMgt at {}", new DateTime());
-		_logger.info("MaxKeyMgt Server Port {}", applicationContext.getBean(ApplicationConfig.class).getPort());
-		_logger.info("MaxKeyMgt started.");
+		_logger.info("Mgt at {}", new DateTime());
+		_logger.info("Mgt Server Port {}", applicationContext.getBean(ApplicationConfig.class).getPort());
+		_logger.info("Mgt started.");
 
 	}
 

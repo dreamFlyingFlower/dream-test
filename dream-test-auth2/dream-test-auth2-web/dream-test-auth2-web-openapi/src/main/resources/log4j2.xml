@@ -6,7 +6,7 @@
         </Console>
         
 		<!-- 输出到文件，按天或者超过128MB分割 -->
-		<RollingFile name="RollingFile" fileName="logs/maxkey_openapi.log"    filePattern="logs/$${date:yyyyMMdd}/maxkey-openapi-%d{yyyy-MM-dd}-%i.log.gz">
+		<RollingFile name="RollingFile" fileName="logs/dream_openapi.log"    filePattern="logs/$${date:yyyyMMdd}/dream-openapi-%d{yyyy-MM-dd}-%i.log.gz">
 		    <!-- 需要记录的级别 -->
 		 	<!-- <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY" /> -->
 		     <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5level [%t] (%logger{36}:%L) - %msg%n" />
@@ -22,7 +22,7 @@
     <Loggers>  
     	<Logger level="INFO" 	name="org.springframework" ></Logger>
     	<Logger level="INFO" 	name="org.apache.logging" ></Logger>
-    	<Logger level="DEBUG" 	name="org.maxkey" ></Logger>
+    	<Logger level="DEBUG" 	name="org.dream" ></Logger>
     	<Logger level="DEBUG"	name="org.apache.mybatis.jpa" ></Logger>
     	<Logger level="ERROR"	name="org.reflections.Reflections" ></Logger>
     	<Logger level="ERROR"   name="RocketmqRemoting" ></Logger>

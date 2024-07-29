@@ -21,10 +21,10 @@ import org.springframework.mock.web.MockHttpServletResponse;
 public class RestTestClient {
 
     public static void main(String[] args ) throws HttpAction {
-        final String casUrlPrefix = "http://sso.maxkey.top/maxkey/authz/cas/";
+        final String casUrlPrefix = "http://sso.dream.top/dream/authz/cas/";
         String username ="admin";
-        String password ="maxkey";
-        String serviceUrl = "http://cas.demo.maxkey.top:9521/demo-cas/";
+        String password ="dream";
+        String serviceUrl = "http://cas.demo.dream.top:9521/demo-cas/";
         CasConfiguration casConfiguration = new CasConfiguration(casUrlPrefix);
         final CasRestFormClient client = new CasRestFormClient(casConfiguration,"username","password");
         final MockHttpServletRequest request = new MockHttpServletRequest();

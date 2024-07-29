@@ -43,7 +43,7 @@ public class SmsOtpAuthnAliyun extends SmsOtpAuthn {
 	// 短信模板ID
 	private String templateCode = "SMS_187590021";
 
-	private String signName = "MaxKey";
+	private String signName = "dream";
 
 	@Override
 	public boolean produce(UserInfo userInfo) {

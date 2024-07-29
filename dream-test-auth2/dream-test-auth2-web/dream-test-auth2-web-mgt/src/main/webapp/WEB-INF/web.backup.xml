@@ -7,16 +7,16 @@
 		 xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" 
 		 version="2.4">
 		 
-   <display-name>MaxKey Management</display-name>
+   <display-name>dream Management</display-name>
    <!-- webAppRootKey -->
    <context-param>
       <param-name>webAppRootKey</param-name>
-      <param-value>org.maxkey.management.root</param-value>
+      <param-value>org.dream.management.root</param-value>
    </context-param>
    
    <servlet>
     <servlet-name>InitWebContext</servlet-name>
-    <servlet-class>org.maxkey.web.InitWebContext</servlet-class>
+    <servlet-class>org.dream.web.InitWebContext</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <!-- 
@@ -28,7 +28,7 @@
    <!-- contextConfigLocation -->
    <context-param>
       <param-name>contextConfigLocation</param-name>
-      <param-value>/WEB-INF/spring/maxkey-mgt.xml</param-value>
+      <param-value>/WEB-INF/spring/dream-mgt.xml</param-value>
    </context-param>
    
    <!-- log4jConfigLocation
@@ -102,12 +102,12 @@
 
     <!-- DispatcherServlet Spring MVC -->
    <servlet>
-      <servlet-name>maxkey-mgt</servlet-name>
+      <servlet-name>dream-mgt</servlet-name>
       <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
       <load-on-startup>1</load-on-startup>
    </servlet>
    <servlet-mapping>
-      <servlet-name>maxkey-mgt</servlet-name>
+      <servlet-name>dream-mgt</servlet-name>
       <url-pattern>/</url-pattern>
    </servlet-mapping>
 	<filter>
@@ -116,7 +116,7 @@
 	</filter>
 	<filter-mapping>
 	   <filter-name>HiddenHttpMethodFilter</filter-name>
-	   <servlet-name>maxkey-mgt</servlet-name>
+	   <servlet-name>dream-mgt</servlet-name>
 	</filter-mapping>
 
    <!-- default session timeout  30 minutes -->
@@ -158,8 +158,8 @@
   	<!--used jsp Tag -->
    <jsp-config>
       <taglib>
-         <taglib-uri>http://sso.maxkey.org/tags</taglib-uri>
-         <taglib-location>/WEB-INF/tags/maxkeyTag.tld</taglib-location>
+         <taglib-uri>http://sso.dream.org/tags</taglib-uri>
+         <taglib-location>/WEB-INF/tags/dreamTag.tld</taglib-location>
       </taglib>
       <taglib>
          <taglib-uri>http://java.sun.com/jsp/jstl/core</taglib-uri>

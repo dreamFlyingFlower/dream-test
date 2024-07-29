@@ -17,28 +17,28 @@ import org.springframework.stereotype.Component;
 @Configuration
 public class ApplicationConfig {
 
-	@Value("${maxkey.server.basedomain}")
+	@Value("${dream.server.basedomain}")
 	String baseDomainName;
 
-	@Value("${maxkey.server.domain}")
+	@Value("${dream.server.domain}")
 	String domainName;
 
-	@Value("${maxkey.server.name}")
+	@Value("${dream.server.name}")
 	String serverName;
 
-	@Value("${maxkey.server.uri}")
+	@Value("${dream.server.uri}")
 	String serverPrefix;
 
-	@Value("${maxkey.server.default.uri}")
+	@Value("${dream.server.default.uri}")
 	String defaultUri;
 
-	@Value("${maxkey.server.mgt.uri}")
+	@Value("${dream.server.mgt.uri}")
 	String mgtUri;
 
-	@Value("${maxkey.server.authz.uri}")
+	@Value("${dream.server.authz.uri}")
 	private String authzUri;
 
-	@Value("${maxkey.server.frontend.uri:http://sso.maxkey.top:4200}")
+	@Value("${dream.server.frontend.uri:http://sso.dream.top:4200}")
 	private String frontendUri;
 
 	@Value("${server.port:8080}")
@@ -47,10 +47,10 @@ public class ApplicationConfig {
 	@Value("${server.servlet.session.timeout:1800}")
 	private int sessionTimeout;
 
-	@Value("${maxkey.server.provision:false}")
+	@Value("${dream.server.provision:false}")
 	private boolean provision;
 
-	@Value("${maxkey.notices.visible:false}")
+	@Value("${dream.notices.visible:false}")
 	private boolean noticesVisible;
 
 	public static String databaseProduct = "MySQL";
@@ -239,7 +239,7 @@ public class ApplicationConfig {
 		builder.append(port);
 		builder.append(", provision=");
 		builder.append(provision);
-		builder.append(", maxKeyUri=");
+		builder.append(", dreamUri=");
 		builder.append(authzUri);
 		builder.append("]");
 		return builder.toString();

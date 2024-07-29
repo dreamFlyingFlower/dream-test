@@ -15,7 +15,7 @@ import com.wy.test.persistence.mapper.AppsMapper;
 @Repository
 public class AppsService extends JpaService<Apps> {
 
-	// maxkey-mgt
+	// dream-mgt
 	public final static String MGT_APP_ID = "622076759805923328";
 
 	public final static String DETAIL_SUFFIX = "_detail";
@@ -59,7 +59,7 @@ public class AppsService extends JpaService<Apps> {
 	}
 
 	public Apps get(String appId, boolean cached) {
-		appId = appId.equalsIgnoreCase("maxkey_mgt") ? MGT_APP_ID : appId;
+		appId = appId.equalsIgnoreCase("dream_mgt") ? MGT_APP_ID : appId;
 		Apps appDetails = null;
 		if (cached) {
 			appDetails = detailsCacheStore.getIfPresent(appId + DETAIL_SUFFIX);

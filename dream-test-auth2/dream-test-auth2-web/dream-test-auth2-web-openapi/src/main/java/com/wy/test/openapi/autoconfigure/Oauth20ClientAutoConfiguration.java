@@ -46,7 +46,7 @@ public class Oauth20ClientAutoConfiguration implements InitializingBean {
 	 * @return oauth20TokenStore
 	 */
 	@Bean
-	TokenStore oauth20TokenStore(@Value("${maxkey.server.persistence}") int persistence, JdbcTemplate jdbcTemplate,
+	TokenStore oauth20TokenStore(@Value("${dream.server.persistence}") int persistence, JdbcTemplate jdbcTemplate,
 			RedisConnectionFactory jedisConnectionFactory) {
 		TokenStore tokenStore = null;
 		if (persistence == 2) {

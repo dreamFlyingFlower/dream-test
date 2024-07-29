@@ -6,19 +6,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class LoginConfig {
 
-	@Value("${maxkey.login.captcha}")
+	@Value("${dream.login.captcha}")
 	boolean captcha;
 
-	@Value("${maxkey.login.mfa}")
+	@Value("${dream.login.mfa}")
 	boolean mfa;
 
-	@Value("${maxkey.login.kerberos}")
+	@Value("${dream.login.kerberos}")
 	boolean kerberos;
 
-	@Value("${maxkey.login.remeberme}")
+	@Value("${dream.login.remeberme}")
 	boolean remeberMe;
 
-	@Value("${maxkey.login.wsfederation}")
+	@Value("${dream.login.wsfederation}")
 	boolean wsFederation;
 
 	/**

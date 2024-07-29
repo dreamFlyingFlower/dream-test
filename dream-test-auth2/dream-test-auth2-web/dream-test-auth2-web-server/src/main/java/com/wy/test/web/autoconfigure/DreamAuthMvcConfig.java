@@ -31,13 +31,13 @@ public class DreamAuthMvcConfig implements WebMvcConfigurer {
 
 	private static final Logger _logger = LoggerFactory.getLogger(DreamAuthMvcConfig.class);
 
-	@Value("${maxkey.login.basic.enable:false}")
+	@Value("${dream.login.basic.enable:false}")
 	private boolean basicEnable;
 
-	@Value("${maxkey.login.httpheader.enable:false}")
+	@Value("${dream.login.httpheader.enable:false}")
 	private boolean httpHeaderEnable;
 
-	@Value("${maxkey.login.httpheader.headername:iv-user}")
+	@Value("${dream.login.httpheader.headername:iv-user}")
 	private String httpHeaderName;
 
 	@Autowired

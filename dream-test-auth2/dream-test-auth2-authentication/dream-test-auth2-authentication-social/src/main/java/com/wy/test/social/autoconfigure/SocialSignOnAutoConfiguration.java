@@ -26,7 +26,7 @@ public class SocialSignOnAutoConfiguration implements InitializingBean {
 
 	@Bean(name = "socialSignOnProviderService")
 	@ConditionalOnClass(SocialsProvider.class)
-	SocialSignOnProviderService socialSignOnProviderService(@Value("${maxkey.server.persistence}") int persistence,
+	SocialSignOnProviderService socialSignOnProviderService(@Value("${dream.server.persistence}") int persistence,
 			JdbcTemplate jdbcTemplate, RedisConnectionFactory redisConnFactory) throws IOException {
 		SocialSignOnProviderService socialSignOnProviderService = new SocialSignOnProviderService(jdbcTemplate);
 		// load default Social Providers from database

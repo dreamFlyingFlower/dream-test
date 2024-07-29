@@ -28,7 +28,7 @@ import me.zhyd.oauth.utils.UrlBuilder;
  *
  * @author beacon
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com) 重构业务逻辑 20210101
- * @author maxkey 重构业务逻辑 20220216
+ * @author dream 重构业务逻辑 20220216
  * @since 1.15.9
  */
 public class AuthFeishu2Request extends AuthDefaultRequest {

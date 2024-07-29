@@ -32,7 +32,7 @@ public class ProvisionService {
 	 * @param actionType CREATE UPDATE DELETE
 	 */
 	public void send(String topic, Object content, String actionType) {
-		// maxkey.server.message.queue , if not none
+		// dream.server.message.queue , if not none
 		if (applicationConfig.isProvisionSupport()) {
 			ProvisionMessage message = new ProvisionMessage(UUID.randomUUID().toString(), // message id as uuid
 					topic, // TOPIC

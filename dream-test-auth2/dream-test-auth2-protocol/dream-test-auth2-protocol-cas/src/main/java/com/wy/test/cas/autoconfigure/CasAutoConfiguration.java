@@ -16,7 +16,7 @@ import com.wy.test.cas.authz.endpoint.ticket.tgt.TicketGrantingTicketServicesFac
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 
 @AutoConfiguration
-@ComponentScan(basePackages = { "org.maxkey.authz.cas.endpoint" })
+@ComponentScan(basePackages = { "org.dream.authz.cas.endpoint" })
 public class CasAutoConfiguration implements InitializingBean {
 
 	private static final Logger _logger = LoggerFactory.getLogger(CasAutoConfiguration.class);
@@ -29,8 +29,8 @@ public class CasAutoConfiguration implements InitializingBean {
 	 * @return casTicketServices
 	 */
 	@Bean(name = "casTicketServices")
-	TicketServices casTicketServices(@Value("${maxkey.server.persistence}") int persistence,
-			@Value("${maxkey.login.remeberme.validity}") int validity, JdbcTemplate jdbcTemplate,
+	TicketServices casTicketServices(@Value("${dreamserver.persistence}") int persistence,
+			@Value("${dream.login.remeberme.validity}") int validity, JdbcTemplate jdbcTemplate,
 			RedisConnectionFactory redisConnFactory) {
 		_logger.debug("init casTicketServices.");
 		return new TicketServicesFactory().getService(persistence, jdbcTemplate, redisConnFactory);
@@ -44,16 +44,16 @@ public class CasAutoConfiguration implements InitializingBean {
 	 * @return casTicketServices
 	 */
 	@Bean(name = "casTicketGrantingTicketServices")
-	TicketServices casTicketGrantingTicketServices(@Value("${maxkey.server.persistence}") int persistence,
-			@Value("${maxkey.login.remeberme.validity}") int validity, JdbcTemplate jdbcTemplate,
+	TicketServices casTicketGrantingTicketServices(@Value("${dream.server.persistence}") int persistence,
+			@Value("${dream.login.remeberme.validity}") int validity, JdbcTemplate jdbcTemplate,
 			RedisConnectionFactory redisConnFactory) {
 		_logger.debug("init casTicketGrantingTicketServices.");
 		return new TicketGrantingTicketServicesFactory().getService(persistence, jdbcTemplate, redisConnFactory);
 	}
 
 	@Bean(name = "casProxyGrantingTicketServices")
-	TicketServices casProxyGrantingTicketServices(@Value("${maxkey.server.persistence}") int persistence,
-			@Value("${maxkey.login.remeberme.validity}") int validity, JdbcTemplate jdbcTemplate,
+	TicketServices casProxyGrantingTicketServices(@Value("${dream.server.persistence}") int persistence,
+			@Value("${dream.login.remeberme.validity}") int validity, JdbcTemplate jdbcTemplate,
 			RedisConnectionFactory redisConnFactory) {
 		_logger.debug("init casTicketGrantingTicketServices.");
 		return new ProxyGrantingTicketServicesFactory().getService(persistence, jdbcTemplate, redisConnFactory);

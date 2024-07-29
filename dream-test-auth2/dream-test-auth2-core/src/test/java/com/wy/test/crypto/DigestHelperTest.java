@@ -45,7 +45,7 @@ public class DigestHelperTest {
 		// String
 		// zentaoLogin="http://127.0.0.1/biz/api.php?m=user&f=apilogin&account=%s&code=%s&time=%s&token=%s";
 		String zentaoLogin = "http://127.0.0.1/zentao/api.php?m=user&f=apilogin&account=%s&code=%s&time=%s&token=%s";
-		String code = "maxkey";
+		String code = "dream";
 		// String key = "430ba509ba95094e580b925fc4839459";
 		String key = "f71792dfebf23d62bc4d65d1513087e3";
 		// String time = ""+System.currentTimeMillis();

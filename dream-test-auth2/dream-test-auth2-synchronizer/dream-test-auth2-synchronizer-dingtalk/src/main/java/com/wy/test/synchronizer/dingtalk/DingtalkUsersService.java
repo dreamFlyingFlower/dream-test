@@ -80,7 +80,7 @@ public class DingtalkUsersService extends AbstractSynchronizerService implements
 		userInfo.setDisplayName(user.getName());
 		userInfo.setFormattedName(user.getName());
 
-		userInfo.setEmail(StringUtils.isBlank(user.getEmail()) ? user.getUserid() + "@maxkey.top" : user.getEmail());
+		userInfo.setEmail(StringUtils.isBlank(user.getEmail()) ? user.getUserid() + "@dream.top" : user.getEmail());
 		userInfo.setEntryDate(new DateTime(user.getHiredDate()).toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
 		userInfo.setMobile(user.getMobile());
 

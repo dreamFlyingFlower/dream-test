@@ -27,7 +27,7 @@ import com.wy.test.core.entity.SocialsProvider;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.uuid.UUID;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.social.zhyd.request.AuthMaxkeyRequest;
+import com.wy.test.social.zhyd.request.AuthDreamRequest;
 
 import me.zhyd.oauth.request.AuthRequest;
 
@@ -70,7 +70,7 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 		scanQrProvider.setRedirectUri(
 				socialSignOnProviderService.getRedirectUri(originURL + applicationConfig.getFrontendUri(), provider));
 		// 缓存state票据在缓存或者是redis中五分钟过期
-		if (provider.equalsIgnoreCase(AuthMaxkeyRequest.KEY)) {
+		if (provider.equalsIgnoreCase(AuthDreamRequest.KEY)) {
 			socialSignOnProviderService.setToken(state);
 		}
 
@@ -177,7 +177,7 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 	}
 
 	/**
-	 * maxkey 监听扫码回调
+	 * 监听扫码回调
 	 * 
 	 * @param provider
 	 * @param state
@@ -188,8 +188,8 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 	public ResponseEntity<?> qrcallback(@PathVariable String provider, @PathVariable String state,
 			HttpServletRequest request) {
 		try {
-			// 判断只有maxkey扫码
-			if (!provider.equalsIgnoreCase(AuthMaxkeyRequest.KEY)) {
+			// 判断只有dream扫码
+			if (!provider.equalsIgnoreCase(AuthDreamRequest.KEY)) {
 				return new Message<AuthJwt>(Message.ERROR).buildResponse();
 			}
 

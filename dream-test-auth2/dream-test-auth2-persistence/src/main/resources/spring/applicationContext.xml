@@ -39,17 +39,17 @@
  	<!-- Authentication Password Encoder Config -->
 	<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>   
 	
-	<bean id="passwordReciprocal" class="org.maxkey.crypto.password.PasswordReciprocal"></bean>
+	<bean id="passwordReciprocal" class="com.wy.crypto.password.PasswordReciprocal"></bean>
  
- 	<bean id="kafkaPersistService" class="org.maxkey.persistence.kafka.KafkaPersistService"></bean>
+ 	<bean id="kafkaPersistService" class="com.wy.persistence.kafka.KafkaPersistService"></bean>
 	
-	<bean id="applicationConfig" class="org.maxkey.configuration.ApplicationConfig"></bean>
+	<bean id="applicationConfig" class="com.wy.configuration.ApplicationConfig"></bean>
 	
-	<bean id="emailConfig" class="org.maxkey.configuration.EmailConfig"></bean>
- 	<bean id="characterEncodingConfig" class="org.maxkey.configuration.CharacterEncodingConfig"></bean>
- 	<bean id="loginConfig" class="org.maxkey.configuration.LoginConfig"></bean>
+	<bean id="emailConfig" class="com.wy.configuration.EmailConfig"></bean>
+ 	<bean id="characterEncodingConfig" class="com.wy.configuration.CharacterEncodingConfig"></bean>
+ 	<bean id="loginConfig" class="com.wy.configuration.LoginConfig"></bean>
  	
- 	<bean id="passwordPolicyValidator" class="org.maxkey.persistence.db.PasswordPolicyValidator">
+ 	<bean id="passwordPolicyValidator" class="com.wy.persistence.db.PasswordPolicyValidator">
  		
  	</bean>
  	
@@ -108,11 +108,11 @@
     <bean id="sqlSessionFactory" class="org.apache.mybatis.jpa.MyBatisSessionFactoryBean">
         <property name="timeout" value="30" />
         <property name="dataSource" ref="dataSource" />
-        <property name="mapperLocations" value="classpath*:/org/maxkey/persistence/mapper/xml/mysql/*.xml" />
+        <property name="mapperLocations" value="classpath*:/com/wy/persistence/mapper/xml/mysql/*.xml" />
         <property name="typeAliasesPackage" 
                   value="
-                        org.maxkey.entity,
-                        org.maxkey.entity.apps,
+                        com.wy.entity,
+                        com.wy.entity.apps,
                     " />
         <property name="transactionFactory">
             <bean class="org.apache.ibatis.transaction.managed.ManagedTransactionFactory" />
@@ -130,13 +130,13 @@
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" 
                   value="
-                        org.maxkey.persistence.mapper,
+                        com.wy.persistence.mapper,
                         " />
       
     </bean>
 
     <!-- enable component scanning (beware that this does not enable mapper scanning!) -->    
-    <context:component-scan base-package="org.maxkey.persistence.service" />
+    <context:component-scan base-package="com.wy.persistence.service" />
     
     <bean class ="org.apache.mybatis.jpa.id.IdentifierGeneratorFactory">
     <!-- 

@@ -156,7 +156,7 @@ public class OpenidConfigurationEndpoint extends AbstractEndpoint {
 			openidConfig
 					.setIntrospection_endpoint_auth_methods_supported(introspection_endpoint_auth_methods_supported);
 
-			openidConfig.setIssuer(baseUrl + "/maxkey");
+			openidConfig.setIssuer(baseUrl + "/dream");
 			Set<String> response_types_supported = new HashSet<String>();
 			response_types_supported.add("code");
 			response_types_supported.add("code id_token");

@@ -159,7 +159,7 @@ public class OauthAuthorizationServerEndpoint extends AbstractEndpoint {
 			introspection_endpoint_auth_methods_supported.add("client_secret_basic");
 			oauthConfig.setIntrospection_endpoint_auth_methods_supported(introspection_endpoint_auth_methods_supported);
 
-			oauthConfig.setIssuer(baseUrl + "/maxkey");
+			oauthConfig.setIssuer(baseUrl + "/dream");
 			Set<String> response_types_supported = new HashSet<String>();
 			response_types_supported.add("code");
 			response_types_supported.add("code id_token");

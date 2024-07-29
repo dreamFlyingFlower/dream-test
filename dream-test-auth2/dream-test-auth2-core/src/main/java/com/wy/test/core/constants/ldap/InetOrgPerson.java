@@ -157,7 +157,7 @@ public class InetOrgPerson {
 
 	public static final String MANAGER = "manager";
 
-	// MaxKey EXTEND
+	// dream EXTEND
 	/**
 	 * EXTEND department
 	 */

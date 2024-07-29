@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SmsAutoConfiguration implements InitializingBean {
 
 	@Bean(name = "smsOtpAuthnService")
-	SmsOtpAuthnService smsOtpAuthnService(@Value("${maxkey.server.persistence}") int persistence,
+	SmsOtpAuthnService smsOtpAuthnService(@Value("${dream.server.persistence}") int persistence,
 			SmsProviderService smsProviderService, EmailSendersService emailSendersService,
 			RedisConnectionFactory redisConnFactory) {
 		SmsOtpAuthnService smsOtpAuthnService = new SmsOtpAuthnService(smsProviderService, emailSendersService);

@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
  * {@link com.wy.test.oauth2.common.OAuth2AccessToken} with jackson2 by
  * implementing {@link com.fasterxml.jackson.databind.JsonDeserializer}. Refer
  * to
- * {@link org.maxkey.authz.oauth2.common.OAuth2AccessTokenJackson1Deserializer}
+ * {@link com.wy.authz.oauth2.common.OAuth2AccessTokenJackson1Deserializer}
  * to learn more about the JSON format that is used.
  *
  * @author Rob Winch

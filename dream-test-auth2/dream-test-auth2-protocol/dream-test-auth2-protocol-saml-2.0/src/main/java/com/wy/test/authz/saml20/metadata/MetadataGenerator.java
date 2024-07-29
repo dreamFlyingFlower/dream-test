@@ -145,12 +145,12 @@ public class MetadataGenerator {
 
 			IDPSSODescriptor descriptor = buildIDPSSODescriptor();
 
-			descriptor.getSingleSignOnServices().add(getSingleSignOnService("http://sso.maxkey.org/sso", null));
+			descriptor.getSingleSignOnServices().add(getSingleSignOnService("http://sso.dream.org/sso", null));
 
-			descriptor.getSingleSignOnServices().add(getSingleSignOnService("http://sso.maxkey.org/sso",
+			descriptor.getSingleSignOnServices().add(getSingleSignOnService("http://sso.dream.org/sso",
 					SAMLConstants.SAML2_POST_SIMPLE_SIGN_BINDING_URI));
 
-			descriptor.getSingleLogoutServices().add(getSingleLogoutService("http://sso.maxkey.org/slo", null));
+			descriptor.getSingleLogoutServices().add(getSingleLogoutService("http://sso.dream.org/slo", null));
 
 			descriptor.getKeyDescriptors().add(generateEncryptionKeyDescriptor(signingCredential));
 
@@ -162,9 +162,9 @@ public class MetadataGenerator {
 			descriptor.getNameIDFormats().add(generateNameIDFormat(NameIDType.ENTITY));
 
 			descriptor.getContactPersons()
-					.add(getContactPerson("maxkey", "shi", "ming", "shimingxy@163.com", "18724229876", null));
+					.add(getContactPerson("dream", "shi", "ming", "shimingxy@163.com", "18724229876", null));
 
-			descriptor.setOrganization(getOrganization("maxkey", "maxkey", "http://sso.maxkey.org"));
+			descriptor.setOrganization(getOrganization("dream", "dream", "http://sso.dream.org"));
 
 			String entityId = "http://www.test.com";
 

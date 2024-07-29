@@ -21,9 +21,9 @@ import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
 @EnableWebMvc
 @AutoConfiguration
-public class MaxKeyOpenApiMvcConfig implements WebMvcConfigurer {
+public class DreamOpenApiMvcConfig implements WebMvcConfigurer {
 
-	private static final Logger _logger = LoggerFactory.getLogger(MaxKeyOpenApiMvcConfig.class);
+	private static final Logger _logger = LoggerFactory.getLogger(DreamOpenApiMvcConfig.class);
 
 	@Autowired
 	ApplicationConfig applicationConfig;

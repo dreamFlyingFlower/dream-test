@@ -7,16 +7,16 @@
 		 xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" 
 		 version="2.4">
 		 
-   <display-name>MaxKey Single Sign On</display-name>
+   <display-name>dream Single Sign On</display-name>
    <!-- webAppRootKey -->
    <context-param>
       <param-name>webAppRootKey</param-name>
-      <param-value>org.maxkey.root</param-value>
+      <param-value>org.dream.root</param-value>
    </context-param>
    
    <servlet>
     <servlet-name>InitApplicationContext</servlet-name>
-    <servlet-class>org.maxkey.web.InitApplicationContext</servlet-class>
+    <servlet-class>org.dream.web.InitApplicationContext</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <!-- 
@@ -28,7 +28,7 @@
    <!-- contextConfigLocation -->
    <context-param>
       <param-name>contextConfigLocation</param-name>
-      <param-value>classpath:spring/maxkey.xml</param-value>
+      <param-value>classpath:spring/dream.xml</param-value>
    </context-param>
    
    <!-- log4jConfigLocation
@@ -103,7 +103,7 @@
     <!-- IpAddressFilter -->
 	<filter>  
 		<filter-name>ipAddressFilter</filter-name>  
-    	<filter-class>org.maxkey.web.filter.IpAddressFilter</filter-class>   
+    	<filter-class>org.dream.web.filter.IpAddressFilter</filter-class>   
 	</filter>  
 	<filter-mapping>  
 	    <filter-name>ipAddressFilter</filter-name>  
@@ -113,7 +113,7 @@
 	
 	<filter>  
 		<filter-name>OAuth20TokenEndpointAuthenticationFilter</filter-name>  
-    	<filter-class>org.maxkey.authz.oauth2.provider.endpoint.TokenEndpointAuthenticationFilter</filter-class>   
+    	<filter-class>org.dream.authz.oauth2.provider.endpoint.TokenEndpointAuthenticationFilter</filter-class>   
 	</filter>  
 	<filter-mapping>  
 	    <filter-name>OAuth20TokenEndpointAuthenticationFilter</filter-name>  
@@ -122,12 +122,12 @@
 		
     <!-- DispatcherServlet Spring MVC -->
    <servlet>
-      <servlet-name>maxkey</servlet-name>
+      <servlet-name>dream</servlet-name>
       <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
       <load-on-startup>1</load-on-startup>
    </servlet>
    <servlet-mapping>
-      <servlet-name>maxkey</servlet-name>
+      <servlet-name>dream</servlet-name>
       <url-pattern>/</url-pattern>
    </servlet-mapping>
 	<filter>
@@ -136,7 +136,7 @@
 	</filter>
 	<filter-mapping>
 	   <filter-name>HiddenHttpMethodFilter</filter-name>
-	   <servlet-name>maxkey</servlet-name>
+	   <servlet-name>dream</servlet-name>
 	</filter-mapping>
 
    <!-- default session timeout  30 minutes -->

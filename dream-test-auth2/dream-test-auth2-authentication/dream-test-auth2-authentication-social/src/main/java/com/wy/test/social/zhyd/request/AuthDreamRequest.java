@@ -7,16 +7,16 @@ import me.zhyd.oauth.model.AuthToken;
 import me.zhyd.oauth.model.AuthUser;
 import me.zhyd.oauth.request.AuthDefaultRequest;
 
-public class AuthMaxkeyRequest extends AuthDefaultRequest {
+public class AuthDreamRequest extends AuthDefaultRequest {
 
-	public static final String KEY = "maxkey";
+	public static final String KEY = "dream";
 
-	public AuthMaxkeyRequest(AuthConfig config) {
+	public AuthDreamRequest(AuthConfig config) {
 		super(config, WeLinkAuthDefaultSource.HUAWEI_WELINK);
 	}
 
-	public AuthMaxkeyRequest(AuthConfig config, AuthStateCache authStateCache) {
-		super(config, MaxkeyAuthDefaultSource.MAXKEY, authStateCache);
+	public AuthDreamRequest(AuthConfig config, AuthStateCache authStateCache) {
+		super(config, DreamAuthDefaultSource.DREAM, authStateCache);
 	}
 
 	@Override

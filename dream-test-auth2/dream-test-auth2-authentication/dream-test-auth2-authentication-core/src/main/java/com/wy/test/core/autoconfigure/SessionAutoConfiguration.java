@@ -25,8 +25,8 @@ public class SessionAutoConfiguration implements InitializingBean {
 	}
 
 	@Bean
-	SessionManager sessionManager(@Value("${maxkey.server.persistence}") int persistence, JdbcTemplate jdbcTemplate,
-			RedisConnectionFactory redisConnFactory, @Value("${maxkey.session.timeout:1800}") int timeout) {
+	SessionManager sessionManager(@Value("${dream.server.persistence}") int persistence, JdbcTemplate jdbcTemplate,
+			RedisConnectionFactory redisConnFactory, @Value("${dream.session.timeout:1800}") int timeout) {
 		_logger.debug("session timeout " + timeout);
 		SessionManager sessionManager = new SessionManagerFactory(persistence, jdbcTemplate, redisConnFactory, timeout);
 		return sessionManager;

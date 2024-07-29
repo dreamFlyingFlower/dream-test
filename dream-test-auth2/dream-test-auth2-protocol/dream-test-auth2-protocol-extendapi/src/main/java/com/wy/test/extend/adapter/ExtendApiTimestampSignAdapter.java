@@ -16,10 +16,10 @@ import dream.flying.flower.digest.enums.MessageDigestType;
 
 /**
  * 
- * http://target.maxkey.org/demo/login?code=maxkey&time=timestamp&token=token
- * login url http://target.maxkey.org/demo/login?code=%s&timestamp=%s&token=%s
+ * http://target.dream.org/demo/login?code=dream&time=timestamp&token=token
+ * login url http://target.dream.org/demo/login?code=%s&timestamp=%s&token=%s
  * 
- * $code = 'maxkey'; $key = 'a5246932b0f371263c252384076cd3f0'; $timestamp =
+ * $code = 'dream'; $key = 'a5246932b0f371263c252384076cd3f0'; $timestamp =
  * '1557034496'; $token = md5($code . $key . $time);
  * 
  * @author shimingxy

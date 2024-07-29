@@ -35,7 +35,7 @@ public class SynchronizerAutoConfiguration implements InitializingBean {
 
 	@Bean(name = "schedulerSynchronizerJobs")
 	String schedulerSynchronizerJobs(JdbcTemplate jdbcTemplate, SchedulerFactoryBean schedulerFactoryBean,
-			@Value("${maxkey.job.cron.enable}") boolean jobCronEnable) throws SchedulerException {
+			@Value("${dream.job.cron.enable}") boolean jobCronEnable) throws SchedulerException {
 
 		Scheduler scheduler = schedulerFactoryBean.getScheduler();
 		if (jobCronEnable) {

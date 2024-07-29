@@ -45,7 +45,7 @@ public class SwaggerConfig {
 				"/metadata/saml20/**", "/onlineticket/validate/**", "/api/connect/v10/userinfo", "/api/oauth/v20/me"
 
 		};
-		String[] packagedToMatch = { "org.maxkey.authz" };
+		String[] packagedToMatch = { "org.dream.authz" };
 		return GroupedOpenApi.builder().group(dreamSwaggerProperties.getTitle()).pathsToMatch(paths)
 				.packagesToScan(packagedToMatch).build();
 	}

@@ -3,9 +3,9 @@ package com.wy.test.social.zhyd.request;
 import me.zhyd.oauth.config.AuthSource;
 import me.zhyd.oauth.request.AuthDefaultRequest;
 
-public enum MaxkeyAuthDefaultSource implements AuthSource {
+public enum DreamAuthDefaultSource implements AuthSource {
 
-	MAXKEY {
+	DREAM {
 
 		@Override
 		public String authorize() {

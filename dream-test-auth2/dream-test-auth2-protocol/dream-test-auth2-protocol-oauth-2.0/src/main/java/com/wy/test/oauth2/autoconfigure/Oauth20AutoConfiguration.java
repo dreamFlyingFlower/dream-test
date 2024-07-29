@@ -48,9 +48,9 @@ import dream.flying.flower.framework.web.crypto.jwt.encryption.DefaultJwtEncrypt
 import dream.flying.flower.framework.web.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
 
 @AutoConfiguration
-@ComponentScan(basePackages = { "org.maxkey.authz.oauth2.provider.endpoint",
-		"org.maxkey.authz.oauth2.provider.userinfo.endpoint", "org.maxkey.authz.oauth2.provider.approval.controller",
-		"org.maxkey.authz.oauth2.provider.wellknown.endpoint" })
+@ComponentScan(basePackages = { "com.wy.authz.oauth2.provider.endpoint",
+		"com.wy.authz.oauth2.provider.userinfo.endpoint", "com.wy.authz.oauth2.provider.approval.controller",
+		"com.wy.authz.oauth2.provider.wellknown.endpoint" })
 public class Oauth20AutoConfiguration implements InitializingBean {
 
 	private static final Logger _logger = LoggerFactory.getLogger(Oauth20AutoConfiguration.class);
@@ -72,10 +72,10 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 	 * http://openid.net/specs/openid-connect-core-1_0.html#SelfIssued
 	 */
 	@Bean(name = "oidcProviderMetadata")
-	OIDCProviderMetadataDetails OIDCProviderMetadataDetails(@Value("${maxkey.oidc.metadata.issuer}") String issuer,
-			@Value("${maxkey.oidc.metadata.authorizationEndpoint}") URI authorizationEndpoint,
-			@Value("${maxkey.oidc.metadata.tokenEndpoint}") URI tokenEndpoint,
-			@Value("${maxkey.oidc.metadata.userinfoEndpoint}") URI userinfoEndpoint) {
+	OIDCProviderMetadataDetails OIDCProviderMetadataDetails(@Value("${dream.oidc.metadata.issuer}") String issuer,
+			@Value("${dream.oidc.metadata.authorizationEndpoint}") URI authorizationEndpoint,
+			@Value("${dream.oidc.metadata.tokenEndpoint}") URI tokenEndpoint,
+			@Value("${dream.oidc.metadata.userinfoEndpoint}") URI userinfoEndpoint) {
 		_logger.debug("OIDC Provider Metadata Details init .");
 		OIDCProviderMetadataDetails oidcProviderMetadata = new OIDCProviderMetadataDetails();
 		oidcProviderMetadata.setIssuer(issuer);
@@ -112,7 +112,7 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 			throws NoSuchAlgorithmException, InvalidKeySpecException, JOSEException {
 		DefaultJwtSigningAndValidationHandler jwtSignerValidationService =
 				new DefaultJwtSigningAndValidationHandler(jwkSetKeyStore);
-		jwtSignerValidationService.setDefaultSignerKeyId("maxkey_rsa");
+		jwtSignerValidationService.setDefaultSignerKeyId("dream_rsa");
 		jwtSignerValidationService.setDefaultSigningAlgorithmName("RS256");
 		_logger.debug("JWT Signer and Validation Service init.");
 		return jwtSignerValidationService;
@@ -132,8 +132,8 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 		DefaultJwtEncryptionAndDecryptionHandler jwtEncryptionService =
 				new DefaultJwtEncryptionAndDecryptionHandler(jwkSetKeyStore);
 		jwtEncryptionService.setDefaultAlgorithm(JWEAlgorithm.RSA_OAEP_256);// RSA1_5
-		jwtEncryptionService.setDefaultDecryptionKeyId("maxkey_rsa");
-		jwtEncryptionService.setDefaultEncryptionKeyId("maxkey_rsa");
+		jwtEncryptionService.setDefaultDecryptionKeyId("dream_rsa");
+		jwtEncryptionService.setDefaultEncryptionKeyId("dream_rsa");
 		_logger.debug("JWT Encryption and Decryption Service init.");
 		return jwtEncryptionService;
 	}
@@ -161,7 +161,7 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 	 * @return oauth20AuthorizationCodeServices
 	 */
 	@Bean(name = "oauth20AuthorizationCodeServices")
-	AuthorizationCodeServices oauth20AuthorizationCodeServices(@Value("${maxkey.server.persistence}") int persistence,
+	AuthorizationCodeServices oauth20AuthorizationCodeServices(@Value("${dream.server.persistence}") int persistence,
 			JdbcTemplate jdbcTemplate, RedisConnectionFactory redisConnFactory) {
 		_logger.debug("OAuth 2 Authorization Code Services init.");
 		return new AuthorizationCodeServicesFactory().getService(persistence, jdbcTemplate, redisConnFactory);
@@ -174,7 +174,7 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 	 * @return oauth20TokenStore
 	 */
 	@Bean(name = "oauth20TokenStore")
-	TokenStore oauth20TokenStore(@Value("${maxkey.server.persistence}") int persistence, JdbcTemplate jdbcTemplate,
+	TokenStore oauth20TokenStore(@Value("${dream.server.persistence}") int persistence, JdbcTemplate jdbcTemplate,
 			RedisConnectionFactory redisConnFactory) {
 		_logger.debug("OAuth 2 TokenStore init.");
 		return new TokenStoreFactory().getTokenStore(persistence, jdbcTemplate, redisConnFactory);

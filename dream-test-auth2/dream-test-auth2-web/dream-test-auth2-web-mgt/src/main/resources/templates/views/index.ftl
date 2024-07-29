@@ -4,12 +4,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="shortcut icon" type="image/x-icon" href="<@base />/static/favicon.ico"/>
     <base href="<@base />"/>
-    <title>MaxKey Single Sign-On</title>
+    <title>Dream Single Sign-On</title>
 </head>
 <body>
     <center>
         <hr>
-        Maxkey Community  Edition <br>
+        Dream Community  Edition <br>
         Single   Sign  On ( SSO ) <br>
         Version ${appVersion}<br>
         <br>

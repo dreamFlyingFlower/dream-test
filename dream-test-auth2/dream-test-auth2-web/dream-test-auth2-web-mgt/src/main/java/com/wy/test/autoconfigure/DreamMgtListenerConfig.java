@@ -22,9 +22,9 @@ import com.wy.test.persistence.service.ConnectorsService;
 import com.wy.test.persistence.service.RolesService;
 
 @AutoConfiguration
-public class MaxKeyMgtListenerConfig implements InitializingBean {
+public class DreamMgtListenerConfig implements InitializingBean {
 
-	private static final Logger _logger = LoggerFactory.getLogger(MaxKeyMgtListenerConfig.class);
+	private static final Logger _logger = LoggerFactory.getLogger(DreamMgtListenerConfig.class);
 
 	@Bean
 	String sessionListenerAdapter(Scheduler scheduler, SessionManager sessionManager) throws SchedulerException {
@@ -37,7 +37,7 @@ public class MaxKeyMgtListenerConfig implements InitializingBean {
 
 	@Bean
 	String dynamicRolesListenerAdapter(Scheduler scheduler, RolesService rolesService,
-			@Value("${maxkey.job.cron.schedule}") String cronSchedule) throws SchedulerException {
+			@Value("${dream.job.cron.schedule}") String cronSchedule) throws SchedulerException {
 
 		ListenerAdapter.addListener(DynamicRolesListenerAdapter.class, scheduler,
 				new ListenerParameter().add("rolesService", rolesService).build(), cronSchedule,

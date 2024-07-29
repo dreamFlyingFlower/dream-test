@@ -19,7 +19,7 @@ import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 
 /**
  * Base implementation of
- * {@link org.maxkey.entity.apps.oauth2.provider.ClientDetails}.
+ * {@link org.dream.entity.apps.oauth2.provider.ClientDetails}.
  * 
  */
 @SuppressWarnings("serial")

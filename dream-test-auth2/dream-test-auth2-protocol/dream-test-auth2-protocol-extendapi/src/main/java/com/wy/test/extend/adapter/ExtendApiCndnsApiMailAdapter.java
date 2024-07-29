@@ -27,7 +27,7 @@ public class ExtendApiCndnsApiMailAdapter extends AbstractAuthorizeAdapter {
 	// sign no parameter
 	// sign=md5(action=getDomainInfo&appid=***&time=1579736456 + md5(token))
 	// sign with parameter
-	// sign=md5(action=getUserInfo&appid=***&email=admin@maxkey.org&time=1579736456
+	// sign=md5(action=getUserInfo&appid=***&email=admin@dream.org&time=1579736456
 	// + md5(token))
 
 	Accounts account;

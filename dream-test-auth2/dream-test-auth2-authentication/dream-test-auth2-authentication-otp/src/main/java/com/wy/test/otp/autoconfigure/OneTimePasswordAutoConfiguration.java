@@ -19,7 +19,7 @@ public class OneTimePasswordAutoConfiguration implements InitializingBean {
 	private static final Logger _logger = LoggerFactory.getLogger(OneTimePasswordAutoConfiguration.class);
 
 	@Bean(name = "mailOtpAuthnService")
-	MailOtpAuthnService mailOtpAuthnService(@Value("${maxkey.server.persistence}") int persistence,
+	MailOtpAuthnService mailOtpAuthnService(@Value("${dream.server.persistence}") int persistence,
 			EmailSendersService emailSendersService, RedisConnectionFactory redisConnFactory) {
 		MailOtpAuthnService otpAuthnService = new MailOtpAuthnService(emailSendersService);
 

@@ -27,7 +27,7 @@ public class DreamTestApplication extends SpringBootServletInitializer {
 	 * @param args start parameter
 	 */
 	public static void main(String[] args) {
-		_logger.info("Start MaxKey Application ...");
+		_logger.info("Start dream Application ...");
 
 		VFS.addImplClass(SpringBootVFS.class);
 		ConfigurableApplicationContext applicationContext = SpringApplication.run(DreamTestApplication.class, args);
@@ -37,9 +37,9 @@ public class DreamTestApplication extends SpringBootServletInitializer {
 		} catch (ServletException e) {
 			_logger.error("ServletException", e);
 		}
-		_logger.info("MaxKey at {}", new DateTime());
-		_logger.info("MaxKey Server Port {}", applicationContext.getBean(ApplicationConfig.class).getPort());
-		_logger.info("MaxKey started.");
+		_logger.info("dream at {}", new DateTime());
+		_logger.info("dream Server Port {}", applicationContext.getBean(ApplicationConfig.class).getPort());
+		_logger.info("dream started.");
 	}
 
 	@Override

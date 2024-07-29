@@ -164,7 +164,7 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 	 */
 
 	@Bean(name = "cookieLocaleResolver")
-	LocaleResolver cookieLocaleResolver(@Value("${maxkey.server.domain:maxkey.top}") String domainName) {
+	LocaleResolver cookieLocaleResolver(@Value("${dream.server.domain:dream.top}") String domainName) {
 		_logger.debug("DomainName " + domainName);
 		CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
 		cookieLocaleResolver.setCookieName("mxk_locale");

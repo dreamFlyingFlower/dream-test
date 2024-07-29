@@ -13,15 +13,15 @@ plugins {
 
 apply plugin: 'com.google.cloud.tools.jib'
 
-description = "maxkey-web-mgt"
+description = "dream-web-mgt"
 
 jib {
 	from {
 		image = "${jibFromImage}"
 	}
 	to {
-		//https://registry.hub.docker.com/repository/docker/maxkeytop/maxkey-mgt
-		image = "${jibToImage}/maxkey-mgt"
+		//https://registry.hub.docker.com/repository/docker/dreamtop/dream-mgt
+		image = "${jibToImage}/dream-mgt"
 		tags = ["${project.version}".toString(), 'latest']
 		auth {
 			username = "${jibToAuthUsername}"
@@ -30,7 +30,7 @@ jib {
 		
 	}
 	container {
-		mainClass 	= "org.maxkey.MaxKeyMgtApplication"
+		mainClass 	= "org.dream.DreamMgtApplication"
 		jvmFlags 	= ['-Dfile.encoding=utf-8', '-Dserver.port=9526','-Duser.timezone=Asia/Shanghai']
 		ports	 	= ['9526']
 	}
@@ -39,31 +39,31 @@ jib {
 //build.configure { finalizedBy jib }
 
 dependencies {
-	implementation project(":maxkey-common")
-	implementation project(":maxkey-core")
-	implementation project(":maxkey-persistence")
+	implementation project(":dream-common")
+	implementation project(":dream-core")
+	implementation project(":dream-persistence")
 	
-	implementation project(":maxkey-authentications:maxkey-authentication-core")
-	implementation project(":maxkey-authentications:maxkey-authentication-captcha")
-	implementation project(":maxkey-authentications:maxkey-authentication-otp")
-	implementation project(":maxkey-authentications:maxkey-authentication-provider")
-	implementation project(":maxkey-authentications:maxkey-authentication-sms")
+	implementation project(":dream-authentications:dream-authentication-core")
+	implementation project(":dream-authentications:dream-authentication-captcha")
+	implementation project(":dream-authentications:dream-authentication-otp")
+	implementation project(":dream-authentications:dream-authentication-provider")
+	implementation project(":dream-authentications:dream-authentication-sms")
 	
-   	implementation project(":maxkey-protocols:maxkey-protocol-oauth-2.0")
-   	implementation project(":maxkey-protocols:maxkey-protocol-saml-2.0")   
+   	implementation project(":dream-protocols:dream-protocol-oauth-2.0")
+   	implementation project(":dream-protocols:dream-protocol-saml-2.0")   
    	
    	//webapis
-   	implementation project(":maxkey-web-apis:maxkey-web-api-scim")   
-   	implementation project(":maxkey-web-apis:maxkey-web-api-rest")	
+   	implementation project(":dream-web-apis:dream-web-api-scim")   
+   	implementation project(":dream-web-apis:dream-web-api-rest")	
 	
 	//synchronizers
-   	implementation project(":maxkey-synchronizers:maxkey-synchronizer")
-   	implementation project(":maxkey-synchronizers:maxkey-synchronizer-activedirectory")
-   	implementation project(":maxkey-synchronizers:maxkey-synchronizer-feishu")
-   	implementation project(":maxkey-synchronizers:maxkey-synchronizer-jdbc")
-   	implementation project(":maxkey-synchronizers:maxkey-synchronizer-ldap")
-   	implementation project(":maxkey-synchronizers:maxkey-synchronizer-workweixin")
-   	implementation project(":maxkey-synchronizers:maxkey-synchronizer-dingtalk")
+   	implementation project(":dream-synchronizers:dream-synchronizer")
+   	implementation project(":dream-synchronizers:dream-synchronizer-activedirectory")
+   	implementation project(":dream-synchronizers:dream-synchronizer-feishu")
+   	implementation project(":dream-synchronizers:dream-synchronizer-jdbc")
+   	implementation project(":dream-synchronizers:dream-synchronizer-ldap")
+   	implementation project(":dream-synchronizers:dream-synchronizer-workweixin")
+   	implementation project(":dream-synchronizers:dream-synchronizer-dingtalk")
    	
    	
 }
