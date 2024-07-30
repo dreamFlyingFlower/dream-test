@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.wy.test.core.entity.Institutions;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.persistence.repository.InstitutionsRepository;
-import com.wy.test.core.properties.DreamServerProperties;
+import com.wy.test.core.properties.DreamAuthServerProperties;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +31,7 @@ public class InstitutionEndpoint {
 	InstitutionsRepository institutionsRepository;
 
 	@Autowired
-	DreamServerProperties dreamServerProperties;
+	DreamAuthServerProperties dreamServerProperties;
 
 	@GetMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(HttpServletRequest request,

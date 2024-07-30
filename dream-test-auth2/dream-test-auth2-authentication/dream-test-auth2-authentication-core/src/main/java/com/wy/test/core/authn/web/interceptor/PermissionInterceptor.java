@@ -14,7 +14,7 @@ import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.properties.DreamServerProperties;
+import com.wy.test.core.properties.DreamAuthServerProperties;
 
 /**
  * 权限Interceptor处理
@@ -26,7 +26,7 @@ public class PermissionInterceptor implements AsyncHandlerInterceptor {
 
 	// 无需Interceptor url
 	@Autowired
-	DreamServerProperties dreamServerProperties;
+	DreamAuthServerProperties dreamServerProperties;
 
 	@Autowired
 	SessionManager sessionManager;

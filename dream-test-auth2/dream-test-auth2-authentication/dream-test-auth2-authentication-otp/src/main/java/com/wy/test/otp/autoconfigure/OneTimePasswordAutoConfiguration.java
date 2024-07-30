@@ -1,34 +1,34 @@
 package com.wy.test.otp.autoconfigure;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
-import com.wy.test.core.constants.ConstsPersistence;
+import com.wy.test.core.enums.StoreType;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.properties.DreamAuthStoreProperties;
 import com.wy.test.otp.password.onetimepwd.MailOtpAuthnService;
 import com.wy.test.otp.password.onetimepwd.token.RedisOtpTokenStore;
 import com.wy.test.persistence.service.EmailSendersService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @AutoConfiguration
+@Slf4j
 public class OneTimePasswordAutoConfiguration implements InitializingBean {
 
-	private static final Logger _logger = LoggerFactory.getLogger(OneTimePasswordAutoConfiguration.class);
-
 	@Bean(name = "mailOtpAuthnService")
-	MailOtpAuthnService mailOtpAuthnService(@Value("${dream.server.persistence}") int persistence,
+	MailOtpAuthnService mailOtpAuthnService(DreamAuthStoreProperties dreamAuthStoreProperties,
 			EmailSendersService emailSendersService, RedisConnectionFactory redisConnFactory) {
 		MailOtpAuthnService otpAuthnService = new MailOtpAuthnService(emailSendersService);
 
-		if (persistence == ConstsPersistence.REDIS) {
+		if (StoreType.REDIS == dreamAuthStoreProperties.getStoreType()) {
 			RedisOtpTokenStore redisOptTokenStore = new RedisOtpTokenStore(redisConnFactory);
 			otpAuthnService.setRedisOptTokenStore(redisOptTokenStore);
 		}
 
-		_logger.debug("MailOtpAuthnService {} inited.", persistence == ConstsPersistence.REDIS ? "Redis" : "InMemory");
+		log.debug("MailOtpAuthnService {} inited.",
+				StoreType.REDIS == dreamAuthStoreProperties.getStoreType() ? "Redis" : "InMemory");
 		return otpAuthnService;
 	}
 

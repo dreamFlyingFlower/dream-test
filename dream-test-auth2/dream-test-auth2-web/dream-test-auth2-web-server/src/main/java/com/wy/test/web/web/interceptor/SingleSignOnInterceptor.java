@@ -16,7 +16,7 @@ import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.entity.apps.Apps;
-import com.wy.test.core.properties.DreamServerProperties;
+import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.AppsCasDetailsService;
@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SingleSignOnInterceptor implements AsyncHandlerInterceptor {
 
 	@Autowired
-	DreamServerProperties dreamServerProperties;
+	DreamAuthServerProperties dreamServerProperties;
 
 	@Autowired
 	SessionManager sessionManager;

@@ -12,7 +12,7 @@ import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.constants.ConstsLoginType;
-import com.wy.test.core.properties.DreamServerProperties;
+import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
@@ -26,7 +26,7 @@ public class HttpKerberosEntryPoint implements AsyncHandlerInterceptor {
 
 	boolean enable;
 
-	DreamServerProperties dreamServerProperties;
+	DreamAuthServerProperties dreamServerProperties;
 
 	AbstractAuthenticationProvider authenticationProvider;
 
@@ -101,7 +101,7 @@ public class HttpKerberosEntryPoint implements AsyncHandlerInterceptor {
 	}
 
 	public HttpKerberosEntryPoint(AbstractAuthenticationProvider authenticationProvider,
-			KerberosService kerberosService, DreamServerProperties dreamServerProperties, boolean enable) {
+			KerberosService kerberosService, DreamAuthServerProperties dreamServerProperties, boolean enable) {
 		super();
 		this.authenticationProvider = authenticationProvider;
 		this.kerberosService = kerberosService;
@@ -117,7 +117,7 @@ public class HttpKerberosEntryPoint implements AsyncHandlerInterceptor {
 		this.enable = enable;
 	}
 
-	public void setApplicationConfig(DreamServerProperties dreamServerProperties) {
+	public void setApplicationConfig(DreamAuthServerProperties dreamServerProperties) {
 		this.dreamServerProperties = dreamServerProperties;
 	}
 

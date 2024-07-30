@@ -6,16 +6,19 @@ import org.springframework.context.annotation.Configuration;
 import lombok.Data;
 
 /**
- * 通知配置
+ * SAML配置
  *
  * @author 飞花梦影
  * @date 2024-07-30 09:14:00
  * @git {@link https://github.com/dreamFlyingFlower}
  */
 @Data
-@ConfigurationProperties("dream.auth.notice")
+@ConfigurationProperties("dream.auth.crypto")
 @Configuration
-public class DreamNoticeProperties {
+public class DreamAuthCryptoProperties {
 
-	private boolean visible = false;
+	/**
+	 * 加密类型,见com.wy.test.core.autoconfigure.ApplicationAutoConfiguration.passwordEncoder(String)
+	 */
+	private String passwordType = "bcrypt";
 }

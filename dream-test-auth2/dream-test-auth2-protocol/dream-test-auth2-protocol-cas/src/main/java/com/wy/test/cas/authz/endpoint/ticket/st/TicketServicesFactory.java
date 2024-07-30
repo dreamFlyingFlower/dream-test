@@ -1,29 +1,28 @@
 package com.wy.test.cas.authz.endpoint.ticket.st;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.wy.test.cas.authz.endpoint.ticket.TicketServices;
-import com.wy.test.core.constants.ConstsPersistence;
+import com.wy.test.core.enums.StoreType;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class TicketServicesFactory {
 
-	private static final Logger _logger = LoggerFactory.getLogger(TicketServicesFactory.class);
-
-	public TicketServices getService(int persistence, JdbcTemplate jdbcTemplate,
+	public TicketServices getService(StoreType storeType, JdbcTemplate jdbcTemplate,
 			RedisConnectionFactory redisConnFactory) {
 		TicketServices casTicketServices = null;
-		if (persistence == ConstsPersistence.INMEMORY) {
+		if (StoreType.INMEMORY == storeType) {
 			casTicketServices = new InMemoryTicketServices();
-			_logger.debug("InMemoryTicketServices");
-		} else if (persistence == ConstsPersistence.JDBC) {
+			log.debug("InMemoryTicketServices");
+		} else if (StoreType.JDBC == storeType) {
 			// casTicketServices = new JdbcTicketServices(jdbcTemplate);
-			_logger.debug("JdbcTicketServices not support ");
-		} else if (persistence == ConstsPersistence.REDIS) {
+			log.debug("JdbcTicketServices not support ");
+		} else if (StoreType.REDIS == storeType) {
 			casTicketServices = new RedisTicketServices(redisConnFactory);
-			_logger.debug("RedisTicketServices");
+			log.debug("RedisTicketServices");
 		}
 		return casTicketServices;
 	}

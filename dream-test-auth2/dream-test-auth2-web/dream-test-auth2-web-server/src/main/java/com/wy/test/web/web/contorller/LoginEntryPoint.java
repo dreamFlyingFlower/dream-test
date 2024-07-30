@@ -28,7 +28,7 @@ import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.SocialsAssociate;
 import com.wy.test.core.entity.SocialsProvider;
 import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.properties.DreamLoginProperties;
+import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
@@ -57,7 +57,7 @@ public class LoginEntryPoint {
 
 	private final AuthTokenService authTokenService;
 
-	private final DreamLoginProperties dreamLoginProperties;
+	private final DreamAuthLoginProperties dreamLoginProperties;
 
 	private final AbstractAuthenticationProvider authenticationProvider;
 
@@ -104,14 +104,14 @@ public class LoginEntryPoint {
 		}
 		// for normal login
 		HashMap<String, Object> model = new HashMap<String, Object>();
-		model.put("isRemeberMe", dreamLoginProperties.isRemeberMe());
-		model.put("isKerberos", dreamLoginProperties.isKerberos());
+		model.put("isRemeberMe", dreamLoginProperties.isRememberMe());
+		model.put("isKerberos", dreamLoginProperties.getKerberos().isEnabled());
 		if (dreamLoginProperties.isMfa()) {
 			model.put("otpType", tfaOtpAuthn.getOtpType());
 			model.put("otpInterval", tfaOtpAuthn.getInterval());
 		}
 
-		if (dreamLoginProperties.isKerberos()) {
+		if (dreamLoginProperties.getKerberos().isEnabled()) {
 			model.put("userDomainUrlJson", kerberosService.buildKerberosProxys());
 		}
 

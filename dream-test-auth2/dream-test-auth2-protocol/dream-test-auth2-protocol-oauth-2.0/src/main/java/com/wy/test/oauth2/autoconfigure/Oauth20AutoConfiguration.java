@@ -1,16 +1,12 @@
 package com.wy.test.oauth2.autoconfigure;
 
-import java.net.URI;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 import javax.servlet.Filter;
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +22,8 @@ import com.nimbusds.jose.JWEAlgorithm;
 import com.wy.test.core.configuration.oidc.OIDCProviderMetadataDetails;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.core.persistence.repository.LoginRepository;
+import com.wy.test.core.properties.DreamAuthOidcProperties;
+import com.wy.test.core.properties.DreamAuthStoreProperties;
 import com.wy.test.oauth2.common.OAuth2Constants;
 import com.wy.test.oauth2.oidc.idtoken.OIDCIdTokenEnhancer;
 import com.wy.test.oauth2.provider.ClientDetailsService;
@@ -46,18 +44,18 @@ import com.wy.test.oauth2.provider.token.store.TokenStoreFactory;
 import dream.flying.flower.framework.web.crypto.jose.keystore.JWKSetKeyStore;
 import dream.flying.flower.framework.web.crypto.jwt.encryption.DefaultJwtEncryptionAndDecryptionHandler;
 import dream.flying.flower.framework.web.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
+import lombok.extern.slf4j.Slf4j;
 
 @AutoConfiguration
-@ComponentScan(basePackages = { "com.wy.authz.oauth2.provider.endpoint",
-		"com.wy.authz.oauth2.provider.userinfo.endpoint", "com.wy.authz.oauth2.provider.approval.controller",
-		"com.wy.authz.oauth2.provider.wellknown.endpoint" })
+@ComponentScan(
+		basePackages = { "com.wy.authz.oauth2.provider.endpoint", "com.wy.authz.oauth2.provider.userinfo.endpoint",
+				"com.wy.authz.oauth2.provider.approval.controller", "com.wy.authz.oauth2.provider.wellknown.endpoint" })
+@Slf4j
 public class Oauth20AutoConfiguration implements InitializingBean {
-
-	private static final Logger _logger = LoggerFactory.getLogger(Oauth20AutoConfiguration.class);
 
 	@Bean
 	FilterRegistrationBean<Filter> TokenEndpointAuthenticationFilter() {
-		_logger.debug("TokenEndpointAuthenticationFilter init ");
+		log.debug("TokenEndpointAuthenticationFilter init ");
 		FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<Filter>();
 		registration.setFilter(new TokenEndpointAuthenticationFilter());
 		registration.addUrlPatterns(OAuth2Constants.ENDPOINT.ENDPOINT_TOKEN + "/*",
@@ -72,16 +70,13 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 	 * http://openid.net/specs/openid-connect-core-1_0.html#SelfIssued
 	 */
 	@Bean(name = "oidcProviderMetadata")
-	OIDCProviderMetadataDetails OIDCProviderMetadataDetails(@Value("${dream.oidc.metadata.issuer}") String issuer,
-			@Value("${dream.oidc.metadata.authorizationEndpoint}") URI authorizationEndpoint,
-			@Value("${dream.oidc.metadata.tokenEndpoint}") URI tokenEndpoint,
-			@Value("${dream.oidc.metadata.userinfoEndpoint}") URI userinfoEndpoint) {
-		_logger.debug("OIDC Provider Metadata Details init .");
+	OIDCProviderMetadataDetails OIDCProviderMetadataDetails(DreamAuthOidcProperties dreamAuthOidcProperties) {
+		log.debug("OIDC Provider Metadata Details init .");
 		OIDCProviderMetadataDetails oidcProviderMetadata = new OIDCProviderMetadataDetails();
-		oidcProviderMetadata.setIssuer(issuer);
-		oidcProviderMetadata.setAuthorizationEndpoint(authorizationEndpoint);
-		oidcProviderMetadata.setTokenEndpoint(tokenEndpoint);
-		oidcProviderMetadata.setUserinfoEndpoint(userinfoEndpoint);
+		oidcProviderMetadata.setIssuer(dreamAuthOidcProperties.getMetadata().getIssuer());
+		oidcProviderMetadata.setAuthorizationEndpoint(dreamAuthOidcProperties.getMetadata().getAuthorizationEndpoint());
+		oidcProviderMetadata.setTokenEndpoint(dreamAuthOidcProperties.getMetadata().getTokenEndpoint());
+		oidcProviderMetadata.setUserinfoEndpoint(dreamAuthOidcProperties.getMetadata().getUserinfoEndpoint());
 		return oidcProviderMetadata;
 	}
 
@@ -95,7 +90,7 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 		JWKSetKeyStore jwkSetKeyStore = new JWKSetKeyStore();
 		ClassPathResource classPathResource = new ClassPathResource("/config/keystore.jwks");
 		jwkSetKeyStore.setLocation(classPathResource);
-		_logger.debug("JWKSet KeyStore init.");
+		log.debug("JWKSet KeyStore init.");
 		return jwkSetKeyStore;
 	}
 
@@ -114,7 +109,7 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 				new DefaultJwtSigningAndValidationHandler(jwkSetKeyStore);
 		jwtSignerValidationService.setDefaultSignerKeyId("dream_rsa");
 		jwtSignerValidationService.setDefaultSigningAlgorithmName("RS256");
-		_logger.debug("JWT Signer and Validation Service init.");
+		log.debug("JWT Signer and Validation Service init.");
 		return jwtSignerValidationService;
 	}
 
@@ -134,7 +129,7 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 		jwtEncryptionService.setDefaultAlgorithm(JWEAlgorithm.RSA_OAEP_256);// RSA1_5
 		jwtEncryptionService.setDefaultDecryptionKeyId("dream_rsa");
 		jwtEncryptionService.setDefaultEncryptionKeyId("dream_rsa");
-		_logger.debug("JWT Encryption and Decryption Service init.");
+		log.debug("JWT Encryption and Decryption Service init.");
 		return jwtEncryptionService;
 	}
 
@@ -149,7 +144,7 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 		OIDCIdTokenEnhancer tokenEnhancer = new OIDCIdTokenEnhancer();
 		tokenEnhancer.setClientDetailsService(oauth20JdbcClientDetailsService);
 		tokenEnhancer.setProviderMetadata(oidcProviderMetadata);
-		_logger.debug("OIDC IdToken Enhancer init.");
+		log.debug("OIDC IdToken Enhancer init.");
 		return tokenEnhancer;
 	}
 	// 以上部分为了支持OpenID Connect 1.0
@@ -161,10 +156,11 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 	 * @return oauth20AuthorizationCodeServices
 	 */
 	@Bean(name = "oauth20AuthorizationCodeServices")
-	AuthorizationCodeServices oauth20AuthorizationCodeServices(@Value("${dream.server.persistence}") int persistence,
+	AuthorizationCodeServices oauth20AuthorizationCodeServices(DreamAuthStoreProperties dreamAuthStoreProperties,
 			JdbcTemplate jdbcTemplate, RedisConnectionFactory redisConnFactory) {
-		_logger.debug("OAuth 2 Authorization Code Services init.");
-		return new AuthorizationCodeServicesFactory().getService(persistence, jdbcTemplate, redisConnFactory);
+		log.debug("OAuth 2 Authorization Code Services init.");
+		return new AuthorizationCodeServicesFactory().getService(dreamAuthStoreProperties.getStoreType(), jdbcTemplate,
+				redisConnFactory);
 	}
 
 	/**
@@ -174,10 +170,11 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 	 * @return oauth20TokenStore
 	 */
 	@Bean(name = "oauth20TokenStore")
-	TokenStore oauth20TokenStore(@Value("${dream.server.persistence}") int persistence, JdbcTemplate jdbcTemplate,
+	TokenStore oauth20TokenStore(DreamAuthStoreProperties dreamAuthStoreProperties, JdbcTemplate jdbcTemplate,
 			RedisConnectionFactory redisConnFactory) {
-		_logger.debug("OAuth 2 TokenStore init.");
-		return new TokenStoreFactory().getTokenStore(persistence, jdbcTemplate, redisConnFactory);
+		log.debug("OAuth 2 TokenStore init.");
+		return new TokenStoreFactory().getTokenStore(dreamAuthStoreProperties.getStoreType(), jdbcTemplate,
+				redisConnFactory);
 	}
 
 	/**
@@ -188,7 +185,7 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 	@Bean(name = "converter")
 	JwtAccessTokenConverter jwtAccessTokenConverter() {
 		JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-		_logger.debug("OAuth 2 Jwt AccessToken Converter init.");
+		log.debug("OAuth 2 Jwt AccessToken Converter init.");
 		return jwtAccessTokenConverter;
 	}
 
@@ -201,7 +198,7 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 	JdbcClientDetailsService jdbcClientDetailsService(DataSource dataSource, PasswordEncoder passwordReciprocal) {
 		JdbcClientDetailsService clientDetailsService = new JdbcClientDetailsService(dataSource);
 		// clientDetailsService.setPasswordEncoder(passwordReciprocal);
-		_logger.debug("OAuth 2 Jdbc ClientDetails Service init.");
+		log.debug("OAuth 2 Jdbc ClientDetails Service init.");
 		return clientDetailsService;
 	}
 
@@ -218,7 +215,7 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 		tokenServices.setTokenEnhancer(tokenEnhancer);
 		tokenServices.setTokenStore(oauth20TokenStore);
 		tokenServices.setSupportRefreshToken(true);
-		_logger.debug("OAuth 2 Token Services init.");
+		log.debug("OAuth 2 Token Services init.");
 		return tokenServices;
 	}
 
@@ -231,7 +228,7 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 	TokenApprovalStore tokenApprovalStore(TokenStore oauth20TokenStore) {
 		TokenApprovalStore tokenApprovalStore = new TokenApprovalStore();
 		tokenApprovalStore.setTokenStore(oauth20TokenStore);
-		_logger.debug("OAuth 2 Approval Store init.");
+		log.debug("OAuth 2 Approval Store init.");
 		return tokenApprovalStore;
 	}
 
@@ -244,7 +241,7 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 	DefaultOAuth2RequestFactory oauth2RequestFactory(JdbcClientDetailsService oauth20JdbcClientDetailsService) {
 		DefaultOAuth2RequestFactory oauth2RequestFactory =
 				new DefaultOAuth2RequestFactory(oauth20JdbcClientDetailsService);
-		_logger.debug("OAuth 2 Request Factory init.");
+		log.debug("OAuth 2 Request Factory init.");
 		return oauth2RequestFactory;
 	}
 
@@ -260,7 +257,7 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 		userApprovalHandler.setApprovalStore(oauth20ApprovalStore);
 		userApprovalHandler.setRequestFactory(oAuth2RequestFactory);
 		userApprovalHandler.setClientDetailsService(oauth20JdbcClientDetailsService);
-		_logger.debug("OAuth 2 User Approval Handler init.");
+		log.debug("OAuth 2 User Approval Handler init.");
 		return userApprovalHandler;
 	}
 
@@ -279,7 +276,7 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
 		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
 		ProviderManager authenticationManager = new ProviderManager(daoAuthenticationProvider);
-		_logger.debug("OAuth 2 User Authentication Manager init.");
+		log.debug("OAuth 2 User Authentication Manager init.");
 		return authenticationManager;
 	}
 
@@ -299,7 +296,7 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 		daoAuthenticationProvider.setPasswordEncoder(passwordReciprocal);
 		daoAuthenticationProvider.setUserDetailsService(cientDetailsUserDetailsService);
 		ProviderManager authenticationManager = new ProviderManager(daoAuthenticationProvider);
-		_logger.debug("OAuth 2 Client Authentication Manager init.");
+		log.debug("OAuth 2 Client Authentication Manager init.");
 		return authenticationManager;
 	}
 

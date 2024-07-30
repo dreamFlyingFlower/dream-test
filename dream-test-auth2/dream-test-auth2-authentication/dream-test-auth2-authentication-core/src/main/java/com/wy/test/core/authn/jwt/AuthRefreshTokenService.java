@@ -3,7 +3,7 @@ package com.wy.test.core.authn.jwt;
 import org.springframework.security.core.Authentication;
 
 import com.nimbusds.jose.JOSEException;
-import com.wy.test.core.properties.DreamJwkProperties;
+import com.wy.test.core.properties.DreamAuthJwkProperties;
 
 import dream.flying.flower.framework.web.crypto.jwt.HMAC512Service;
 import lombok.extern.slf4j.Slf4j;
@@ -11,9 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AuthRefreshTokenService extends AuthJwtService {
 
-	DreamJwkProperties dreamJwkProperties;
+	DreamAuthJwkProperties dreamJwkProperties;
 
-	public AuthRefreshTokenService(DreamJwkProperties dreamJwkProperties) throws JOSEException {
+	public AuthRefreshTokenService(DreamAuthJwkProperties dreamJwkProperties) throws JOSEException {
 		this.dreamJwkProperties = dreamJwkProperties;
 		this.hmac512Service = new HMAC512Service(dreamJwkProperties.getRefreshSecret());
 	}

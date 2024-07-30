@@ -12,10 +12,7 @@ import org.opensaml.util.storage.ReplayCache;
 import org.opensaml.util.storage.ReplayCacheEntry;
 import org.opensaml.xml.ConfigurationException;
 import org.opensaml.xml.parse.BasicParserPool;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -34,8 +31,12 @@ import com.wy.test.authz.saml20.binding.impl.PostSimpleSignBindingAdapter;
 import com.wy.test.authz.saml20.provider.xml.AuthnResponseGenerator;
 import com.wy.test.authz.saml20.xml.SAML2ValidatorSuite;
 import com.wy.test.core.entity.Saml20Metadata;
+import com.wy.test.core.properties.DreamAuthSamlIdpProperties;
+import com.wy.test.core.properties.DreamAuthSamlIssueProperties;
+import com.wy.test.core.properties.DreamAuthSamlProperties;
 
 import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
+import lombok.extern.slf4j.Slf4j;
 
 // import org.dromara.dream.authz.saml20.binding.decoder.OpenHTTPPostDecoder;
 // import
@@ -55,11 +56,9 @@ import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
 
 @SuppressWarnings({ "deprecation" })
 @AutoConfiguration
-@ComponentScan(
-		basePackages = { "com.wy.authz.saml20.provider.endpoint", "com.wy.authz.saml20.metadata.endpoint", })
+@ComponentScan(basePackages = { "com.wy.authz.saml20.provider.endpoint", "com.wy.authz.saml20.metadata.endpoint", })
+@Slf4j
 public class Saml20AutoConfiguration implements InitializingBean {
-
-	private static final Logger _logger = LoggerFactory.getLogger(Saml20AutoConfiguration.class);
 
 	/**
 	 * samlBootstrapInitializer.
@@ -112,9 +111,10 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 */
 	@Bean(name = "authnResponseGenerator")
 	AuthnResponseGenerator authnResponseGenerator(TimeService timeService, IDService idService,
-			@Value("${dream.saml.v20.idp.issuer}") String issuerEntityName) {
-		_logger.debug("issuerEntityName " + issuerEntityName);
-		AuthnResponseGenerator generator = new AuthnResponseGenerator(issuerEntityName, timeService, idService);
+			DreamAuthSamlIdpProperties dreamAuthSamlIdpProperties) {
+		log.debug("issuerEntityName " + dreamAuthSamlIdpProperties.getIssuer());
+		AuthnResponseGenerator generator =
+				new AuthnResponseGenerator(dreamAuthSamlIdpProperties.getIssuer(), timeService, idService);
 		return generator;
 	}
 
@@ -124,8 +124,8 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 * @return issuerEntityName
 	 */
 	@Bean(name = "issuerEntityName")
-	String issuerEntityName(@Value("${dream.saml.v20.idp.issuer}") String issuerEntityName) {
-		return issuerEntityName;
+	String issuerEntityName(DreamAuthSamlIdpProperties dreamAuthSamlIdpProperties) {
+		return dreamAuthSamlIdpProperties.getIssuer();
 	}
 
 	/**
@@ -134,25 +134,17 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 * @return saml20Metadata
 	 */
 	@Bean(name = "saml20Metadata")
-	Saml20Metadata saml20Metadata(@Value("${dream.saml.v20.metadata.orgName}") String orgName,
-			@Value("${dream.saml.v20.metadata.orgDisplayName}") String orgDisplayName,
-			@Value("${dream.saml.v20.metadata.orgURL}") String orgURL,
-			@Value("${dream.saml.v20.metadata.company}") String company,
-			@Value("${dream.saml.v20.metadata.contactType}") String contactType,
-			@Value("${dream.saml.v20.metadata.givenName}") String givenName,
-			@Value("${dream.saml.v20.metadata.surName}") String surName,
-			@Value("${dream.saml.v20.metadata.emailAddress}") String emailAddress,
-			@Value("${dream.saml.v20.metadata.telephoneNumber}") String telephoneNumber) {
+	Saml20Metadata saml20Metadata(DreamAuthSamlProperties dreamAuthSamlProperties) {
 		Saml20Metadata metadata = new Saml20Metadata();
-		metadata.setOrgName(orgName);
-		metadata.setOrgDisplayName(orgDisplayName);
-		metadata.setOrgURL(orgURL);
-		metadata.setCompany(company);
-		metadata.setContactType(contactType);
-		metadata.setGivenName(givenName);
-		metadata.setSurName(surName);
-		metadata.setEmailAddress(emailAddress);
-		metadata.setTelephoneNumber(telephoneNumber);
+		metadata.setOrgName(dreamAuthSamlProperties.getMetadata().getOrgName());
+		metadata.setOrgDisplayName(dreamAuthSamlProperties.getMetadata().getOrgDisplayName());
+		metadata.setOrgURL(dreamAuthSamlProperties.getMetadata().getOrgUrl());
+		metadata.setCompany(dreamAuthSamlProperties.getMetadata().getCompany());
+		metadata.setContactType(dreamAuthSamlProperties.getMetadata().getContactType());
+		metadata.setGivenName(dreamAuthSamlProperties.getMetadata().getGivenName());
+		metadata.setSurName(dreamAuthSamlProperties.getMetadata().getSurName());
+		metadata.setEmailAddress(dreamAuthSamlProperties.getMetadata().getEmailAddress());
+		metadata.setPhoneNumber(dreamAuthSamlProperties.getMetadata().getPhoneNumber());
 		return metadata;
 	}
 
@@ -205,8 +197,9 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 */
 	@Bean(name = "replayCache")
 	ReplayCache replayCache(MapBasedStorageService<String, ReplayCacheEntry> mapBasedStorageService,
-			@Value("${dream.saml.v20.replay.cache.life.in.millis}") long duration) {
-		ReplayCache replayCache = new ReplayCache(mapBasedStorageService, duration);
+			DreamAuthSamlProperties dreamAuthSamlProperties) {
+		ReplayCache replayCache =
+				new ReplayCache(mapBasedStorageService, dreamAuthSamlProperties.getReplay().getCacheLifeInMillis());
 		return replayCache;
 	}
 
@@ -227,9 +220,9 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 * @return samlParserPool
 	 */
 	@Bean(name = "samlParserPool")
-	BasicParserPool samlParserPool(@Value("${dream.saml.v20.max.parser.pool.size}") int maxPoolSize) {
+	BasicParserPool samlParserPool(DreamAuthSamlProperties dreamAuthSamlProperties) {
 		BasicParserPool samlParserPool = new BasicParserPool();
-		samlParserPool.setMaxPoolSize(maxPoolSize);
+		samlParserPool.setMaxPoolSize(dreamAuthSamlProperties.getMaxParserPoolSize());
 		return samlParserPool;
 	}
 
@@ -239,10 +232,10 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 * @return issueInstantRule
 	 */
 	@Bean(name = "issueInstantRule")
-	IssueInstantRule issueInstantRule(
-			@Value("${dream.saml.v20.issue.instant.check.clock.skew.in.seconds}") int newClockSkew,
-			@Value("${dream.saml.v20.issue.instant.check.validity.time.in.seconds}") int newExpires) {
-		IssueInstantRule decoder = new IssueInstantRule(newClockSkew, newExpires);
+	IssueInstantRule issueInstantRule(DreamAuthSamlIssueProperties dreamAuthSamlIssueProperties) {
+		IssueInstantRule decoder =
+				new IssueInstantRule(dreamAuthSamlIssueProperties.getInstant().getCheckClockSkewInSeconds(),
+						dreamAuthSamlIssueProperties.getInstant().getCheckValidityTimeInSeconds());
 		decoder.setRequiredRule(true);
 		return decoder;
 	}
@@ -254,9 +247,9 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 */
 	@Bean(name = "openHTTPPostSimpleSignDecoder")
 	OpenHTTPPostSimpleSignDecoder openHTTPPostSimpleSignDecoder(BasicParserPool samlParserPool,
-			@Value("${dream.saml.v20.idp.receiver.endpoint}") String receiverEndpoint) {
+			DreamAuthSamlIdpProperties dreamAuthSamlIdpProperties) {
 		OpenHTTPPostSimpleSignDecoder decoder = new OpenHTTPPostSimpleSignDecoder(samlParserPool);
-		decoder.setReceiverEndpoint(receiverEndpoint);
+		decoder.setReceiverEndpoint(dreamAuthSamlIdpProperties.getReceiver().getEndpoint());
 		return decoder;
 	}
 
@@ -267,9 +260,9 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 */
 	@Bean(name = "openHTTPPostDecoder")
 	OpenHTTPPostDecoder openHTTPPostDecoder(BasicParserPool samlParserPool,
-			@Value("${dream.saml.v20.idp.receiver.endpoint}") String receiverEndpoint) {
+			DreamAuthSamlIdpProperties dreamAuthSamlIdpProperties) {
 		OpenHTTPPostDecoder decoder = new OpenHTTPPostDecoder(samlParserPool);
-		decoder.setReceiverEndpoint(receiverEndpoint);
+		decoder.setReceiverEndpoint(dreamAuthSamlIdpProperties.getReceiver().getEndpoint());
 		return decoder;
 	}
 
@@ -280,9 +273,9 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 */
 	@Bean(name = "openHTTPRedirectDecoder")
 	OpenHTTPRedirectDecoder openHTTPRedirectDecoder(BasicParserPool samlParserPool,
-			@Value("${dream.saml.v20.idp.receiver.endpoint}") String receiverEndpoint) {
+			DreamAuthSamlIdpProperties dreamAuthSamlIdpProperties) {
 		OpenHTTPRedirectDecoder decoder = new OpenHTTPRedirectDecoder(samlParserPool);
-		decoder.setReceiverEndpoint(receiverEndpoint);
+		decoder.setReceiverEndpoint(dreamAuthSamlIdpProperties.getReceiver().getEndpoint());
 		return decoder;
 	}
 
@@ -323,10 +316,10 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 */
 	@Bean(name = "postSimpleSignBindingAdapter")
 	PostSimpleSignBindingAdapter postSimpleSignBindingAdapter(VelocityEngine velocityEngine,
-			@Value("${dream.saml.v20.idp.issuer}") String issuerEntityName) {
+			DreamAuthSamlIdpProperties dreamAuthSamlIdpProperties) {
 		PostSimpleSignBindingAdapter adapter = new PostSimpleSignBindingAdapter();
 		adapter.setVelocityEngine(velocityEngine);
-		adapter.setIssuerEntityName(issuerEntityName);
+		adapter.setIssuerEntityName(dreamAuthSamlIdpProperties.getIssuer());
 		return adapter;
 	}
 
@@ -337,10 +330,10 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 */
 	@Bean(name = "postBindingAdapter")
 	PostBindingAdapter postBindingAdapter(VelocityEngine velocityEngine,
-			@Value("${dream.saml.v20.idp.issuer}") String issuerEntityName) {
+			DreamAuthSamlIdpProperties dreamAuthSamlIdpProperties) {
 		PostBindingAdapter adapter = new PostBindingAdapter();
 		adapter.setVelocityEngine(velocityEngine);
-		adapter.setIssuerEntityName(issuerEntityName);
+		adapter.setIssuerEntityName(dreamAuthSamlIdpProperties.getIssuer());
 		return adapter;
 	}
 

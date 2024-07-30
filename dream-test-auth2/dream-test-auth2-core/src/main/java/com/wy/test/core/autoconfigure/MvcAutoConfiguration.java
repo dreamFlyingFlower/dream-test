@@ -40,7 +40,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import com.wy.test.core.constants.ConstsTimeInterval;
 import com.wy.test.core.entity.xml.UserInfoXML;
 import com.wy.test.core.persistence.repository.InstitutionsRepository;
-import com.wy.test.core.properties.DreamServerProperties;
+import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.web.WebInstRequestFilter;
 import com.wy.test.core.web.WebXssRequestFilter;
 
@@ -163,11 +163,11 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 	 */
 
 	@Bean(name = "cookieLocaleResolver")
-	LocaleResolver cookieLocaleResolver(@Value("${dream.server.domain:dream.top}") String domainName) {
-		log.debug("DomainName " + domainName);
+	LocaleResolver cookieLocaleResolver(DreamAuthServerProperties dreamAuthServerProperties) {
+		log.debug("DomainName " + dreamAuthServerProperties.getDomain());
 		CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
 		cookieLocaleResolver.setCookieName("mxk_locale");
-		cookieLocaleResolver.setCookieDomain(domainName);
+		cookieLocaleResolver.setCookieDomain(dreamAuthServerProperties.getDomain());
 		cookieLocaleResolver.setCookieMaxAge(ConstsTimeInterval.TWO_WEEK);
 		return cookieLocaleResolver;
 	}
@@ -276,7 +276,7 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 
 	@Bean
 	FilterRegistrationBean<Filter> WebInstRequestFilter(InstitutionsRepository institutionsRepository,
-			DreamServerProperties dreamServerProperties) {
+			DreamAuthServerProperties dreamServerProperties) {
 		log.debug("WebInstRequestFilter init for /* ");
 		FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<Filter>(
 				new WebInstRequestFilter(institutionsRepository, dreamServerProperties));

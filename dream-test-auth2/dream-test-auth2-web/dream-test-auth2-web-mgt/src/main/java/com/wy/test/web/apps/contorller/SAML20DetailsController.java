@@ -34,7 +34,7 @@ import com.wy.test.core.constants.ConstsProtocols;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.AppsSAML20Details;
-import com.wy.test.core.properties.DreamServerProperties;
+import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.persistence.service.AppsSaml20DetailsService;
 
 import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
@@ -55,7 +55,7 @@ public class SAML20DetailsController extends BaseAppContorller {
 	AppsSaml20DetailsService saml20DetailsService;
 
 	@Autowired
-	DreamServerProperties dreamServerProperties;
+	DreamAuthServerProperties dreamServerProperties;
 
 	@GetMapping(value = { "/init" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> init() {

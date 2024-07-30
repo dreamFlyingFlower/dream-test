@@ -21,7 +21,7 @@ import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.entity.apps.AppsTokenBasedDetails;
-import com.wy.test.core.properties.DreamServerProperties;
+import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.AppsTokenBasedDetailsService;
 
@@ -39,7 +39,7 @@ public class TokenBasedAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 	AppsTokenBasedDetailsService tokenBasedDetailsService;
 
 	@Autowired
-	DreamServerProperties dreamServerProperties;
+	DreamAuthServerProperties dreamServerProperties;
 
 	@Operation(summary = "TokenBased认证接口", description = "传递参数应用ID", method = "GET")
 	@GetMapping("/authz/tokenbased/{id}")

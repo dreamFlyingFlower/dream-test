@@ -14,7 +14,6 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.TriggerBuilder;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,6 +22,7 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import com.wy.test.core.entity.Synchronizers;
 import com.wy.test.core.password.PasswordReciprocal;
+import com.wy.test.core.properties.DreamAuthJobProperties;
 import com.wy.test.synchronizer.core.synchronizer.SynchronizerJob;
 
 import lombok.extern.slf4j.Slf4j;
@@ -35,10 +35,10 @@ public class SynchronizerAutoConfiguration implements InitializingBean {
 
 	@Bean(name = "schedulerSynchronizerJobs")
 	String schedulerSynchronizerJobs(JdbcTemplate jdbcTemplate, SchedulerFactoryBean schedulerFactoryBean,
-			@Value("${dream.job.cron.enable}") boolean jobCronEnable) throws SchedulerException {
+			DreamAuthJobProperties dreamAuthJobProperties) throws SchedulerException {
 
 		Scheduler scheduler = schedulerFactoryBean.getScheduler();
-		if (jobCronEnable) {
+		if (dreamAuthJobProperties.getCron().isEnabled()) {
 			List<Synchronizers> synchronizerList = querySynchronizers(jdbcTemplate);
 			for (Synchronizers synchronizer : synchronizerList) {
 				if (synchronizer.getScheduler() != null && !synchronizer.getScheduler().equals("")

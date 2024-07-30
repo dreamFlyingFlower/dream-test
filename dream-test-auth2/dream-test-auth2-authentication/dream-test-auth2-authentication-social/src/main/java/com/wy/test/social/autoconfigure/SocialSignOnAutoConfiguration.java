@@ -2,10 +2,7 @@ package com.wy.test.social.autoconfigure;
 
 import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
@@ -18,16 +15,17 @@ import com.wy.test.social.authn.support.socialsignon.service.JdbcSocialsAssociat
 import com.wy.test.social.authn.support.socialsignon.service.SocialSignOnProviderService;
 import com.wy.test.social.authn.support.socialsignon.token.RedisTokenStore;
 
+import lombok.extern.slf4j.Slf4j;
+
 @AutoConfiguration
 @ComponentScan(basePackages = { "org.wy.test.social.authn.support.socialsignon" })
+@Slf4j
 public class SocialSignOnAutoConfiguration implements InitializingBean {
-
-	private static final Logger _logger = LoggerFactory.getLogger(SocialSignOnAutoConfiguration.class);
 
 	@Bean(name = "socialSignOnProviderService")
 	@ConditionalOnClass(SocialsProvider.class)
-	SocialSignOnProviderService socialSignOnProviderService(@Value("${dream.server.persistence}") int persistence,
-			JdbcTemplate jdbcTemplate, RedisConnectionFactory redisConnFactory) throws IOException {
+	SocialSignOnProviderService socialSignOnProviderService(JdbcTemplate jdbcTemplate,
+			RedisConnectionFactory redisConnFactory) throws IOException {
 		SocialSignOnProviderService socialSignOnProviderService = new SocialSignOnProviderService(jdbcTemplate);
 		// load default Social Providers from database
 		socialSignOnProviderService.loadSocials("1");
@@ -35,14 +33,14 @@ public class SocialSignOnAutoConfiguration implements InitializingBean {
 		RedisTokenStore redisTokenStore = new RedisTokenStore();
 		socialSignOnProviderService.setRedisTokenStore(redisTokenStore);
 
-		_logger.debug("SocialSignOnProviderService inited.");
+		log.debug("SocialSignOnProviderService inited.");
 		return socialSignOnProviderService;
 	}
 
 	@Bean(name = "socialsAssociateService")
 	JdbcSocialsAssociateService socialsAssociateService(JdbcTemplate jdbcTemplate) {
 		JdbcSocialsAssociateService socialsAssociateService = new JdbcSocialsAssociateService(jdbcTemplate);
-		_logger.debug("JdbcSocialsAssociateService inited.");
+		log.debug("JdbcSocialsAssociateService inited.");
 		return socialsAssociateService;
 	}
 

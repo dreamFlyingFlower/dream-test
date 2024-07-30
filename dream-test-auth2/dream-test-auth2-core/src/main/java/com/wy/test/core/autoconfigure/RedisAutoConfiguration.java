@@ -2,21 +2,19 @@ package com.wy.test.core.autoconfigure;
 
 import java.time.Duration;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 
+import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.JedisPoolConfig;
 
 @AutoConfiguration
+@Slf4j
 public class RedisAutoConfiguration implements InitializingBean {
-
-	private static final Logger _logger = LoggerFactory.getLogger(RedisAutoConfiguration.class);
 
 	/**
 	 * RedisConnectionFactory.
@@ -32,25 +30,28 @@ public class RedisAutoConfiguration implements InitializingBean {
 	 * @return RedisConnectionFactory
 	 */
 	@Bean
-	RedisConnectionFactory redisConnFactory(@Value("${spring.redis.host}") String host,
-			@Value("${spring.redis.port:6379}") int port, @Value("${spring.redis.timeout:10000}") int timeout,
-			@Value("${spring.redis.password}") String password,
-			@Value("${spring.redis.lettuce.pool.max-active:-1}") int maxActive,
-			@Value("${spring.redis.jedis.pool.max-wait:1000}") int maxWait,
-			@Value("${spring.redis.jedis.pool.max-idle:100}") int maxIdle,
-			@Value("${spring.redis.lettuce.pool.min-idle:0}") int minIdle) {
-		_logger.debug("redisConnFactory init .");
+	RedisConnectionFactory redisConnFactory(RedisProperties redisProperties) {
+		log.debug("redisConnFactory init .");
 		RedisConnectionFactory factory = new RedisConnectionFactory();
-		factory.setHostName(host);
-		factory.setPort(port);
-		factory.setTimeOut(timeout);
-		factory.setPassword(password);
+		factory.setHostName(redisProperties.getHost());
+		factory.setPort(redisProperties.getPort() <= 0 ? 6379 : redisProperties.getPort());
+		long timeout = redisProperties.getTimeout().getSeconds();
+		factory.setTimeOut(timeout <= 0 ? 10000 : (int) timeout);
+		factory.setPassword(redisProperties.getPassword());
 
 		JedisPoolConfig poolConfig = new JedisPoolConfig();
-		poolConfig.setMaxIdle(maxIdle);
-		poolConfig.setMinIdle(minIdle);
-		poolConfig.setMaxTotal(maxActive);
-		poolConfig.setMaxWait(Duration.ofMillis(maxWait));
+
+		int maxIdle = redisProperties.getJedis().getPool().getMaxIdle();
+		poolConfig.setMaxIdle(maxIdle <= 0 ? 100 : maxIdle);
+
+		int minIdle = redisProperties.getJedis().getPool().getMinIdle();
+		poolConfig.setMinIdle(minIdle <= 0 ? 0 : maxIdle);
+
+		int maxActive = redisProperties.getJedis().getPool().getMaxActive();
+		poolConfig.setMaxTotal(maxActive <= 0 ? -1 : maxActive);
+
+		Duration maxWait = redisProperties.getJedis().getPool().getMaxWait();
+		poolConfig.setMaxWait(maxWait == null ? Duration.ofMillis(1000) : maxWait);
 
 		factory.setPoolConfig(poolConfig);
 

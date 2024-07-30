@@ -13,7 +13,7 @@ import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.entity.Institutions;
 import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.properties.DreamServerProperties;
+import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
@@ -36,7 +36,7 @@ public class MfaAuthenticationProvider extends AbstractAuthenticationProvider {
 	}
 
 	public MfaAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
-			DreamServerProperties dreamServerProperties, SessionManager sessionManager,
+			DreamAuthServerProperties dreamServerProperties, SessionManager sessionManager,
 			AuthTokenService authTokenService) {
 		this.authenticationRealm = authenticationRealm;
 		this.dreamServerProperties = dreamServerProperties;

@@ -27,7 +27,7 @@ import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 import com.wy.test.core.persistence.cache.MomentaryService;
-import com.wy.test.core.properties.DreamServerProperties;
+import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.oauth2.common.OAuth2Constants;
 import com.wy.test.oauth2.provider.AuthorizationRequest;
 import com.wy.test.oauth2.provider.ClientDetailsService;
@@ -63,7 +63,7 @@ public class OAuth20AccessConfirmationEndpoint {
 	protected MomentaryService momentaryService;
 
 	@Autowired
-	protected DreamServerProperties dreamServerProperties;
+	protected DreamAuthServerProperties dreamServerProperties;
 
 	@Autowired
 	AuthTokenService authTokenService;

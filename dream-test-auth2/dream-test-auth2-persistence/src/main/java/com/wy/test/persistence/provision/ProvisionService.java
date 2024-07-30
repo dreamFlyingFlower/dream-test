@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import com.wy.test.core.properties.DreamServerProperties;
+import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.persistence.provision.thread.ProvisioningThread;
 
 import dream.flying.flower.helper.DateTimeHelper;
@@ -19,7 +19,7 @@ public class ProvisionService {
 	private static final Logger _logger = LoggerFactory.getLogger(ProvisionService.class);
 
 	@Autowired
-	DreamServerProperties dreamServerProperties;
+	DreamAuthServerProperties dreamServerProperties;
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
@@ -52,7 +52,7 @@ public class ProvisionService {
 		}
 	}
 
-	public void setApplicationConfig(DreamServerProperties dreamServerProperties) {
+	public void setApplicationConfig(DreamAuthServerProperties dreamServerProperties) {
 		this.dreamServerProperties = dreamServerProperties;
 	}
 
@@ -60,7 +60,7 @@ public class ProvisionService {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public DreamServerProperties getDreamServerProperties() {
+	public DreamAuthServerProperties getDreamServerProperties() {
 		return dreamServerProperties;
 	}
 }

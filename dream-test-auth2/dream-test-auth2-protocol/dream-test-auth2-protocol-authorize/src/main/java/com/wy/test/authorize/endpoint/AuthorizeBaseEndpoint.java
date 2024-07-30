@@ -14,7 +14,7 @@ import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.password.PasswordReciprocal;
-import com.wy.test.core.properties.DreamServerProperties;
+import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.AccountsService;
@@ -25,7 +25,7 @@ public class AuthorizeBaseEndpoint {
 	final static Logger _logger = LoggerFactory.getLogger(AuthorizeBaseEndpoint.class);
 
 	@Autowired
-	protected DreamServerProperties dreamServerProperties;
+	protected DreamAuthServerProperties dreamServerProperties;
 
 	@Autowired
 	protected AppsService appsService;

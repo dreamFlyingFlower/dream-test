@@ -15,7 +15,9 @@ import lombok.Data;
 @Data
 @ConfigurationProperties("dream.auth.server")
 @Configuration
-public class DreamServerProperties {
+public class DreamAuthServerProperties {
+
+	private String scheme;
 
 	private String baseDomain;
 
@@ -23,7 +25,7 @@ public class DreamServerProperties {
 
 	private String name;
 
-	private String prefix;
+	private String uri;
 
 	private String defaultUri;
 

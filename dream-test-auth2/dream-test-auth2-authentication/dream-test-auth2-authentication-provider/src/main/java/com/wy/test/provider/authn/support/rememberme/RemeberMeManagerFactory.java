@@ -1,28 +1,27 @@
 package com.wy.test.provider.authn.support.rememberme;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.wy.test.core.constants.ConstsPersistence;
+import com.wy.test.core.enums.StoreType;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class RemeberMeManagerFactory {
 
-	private static final Logger _logger = LoggerFactory.getLogger(RemeberMeManagerFactory.class);
-
-	public AbstractRemeberMeManager getService(int persistence, JdbcTemplate jdbcTemplate,
+	public AbstractRemeberMeManager getService(StoreType storeType, JdbcTemplate jdbcTemplate,
 			RedisConnectionFactory redisConnFactory) {
 
 		AbstractRemeberMeManager remeberMeService = null;
-		if (persistence == ConstsPersistence.INMEMORY) {
+		if (StoreType.INMEMORY == storeType) {
 			remeberMeService = new InMemoryRemeberMeManager();
-			_logger.debug("InMemoryRemeberMeService");
-		} else if (persistence == ConstsPersistence.JDBC) {
+			log.debug("InMemoryRemeberMeService");
+		} else if (StoreType.JDBC == storeType) {
 			// remeberMeService = new JdbcRemeberMeService(jdbcTemplate);
-			_logger.debug("JdbcRemeberMeService not support ");
-		} else if (persistence == ConstsPersistence.REDIS) {
-			_logger.debug("RedisRemeberMeService  not support ");
+			log.debug("JdbcRemeberMeService not support ");
+		} else if (StoreType.REDIS == storeType) {
+			log.debug("RedisRemeberMeService  not support ");
 		}
 		return remeberMeService;
 	}

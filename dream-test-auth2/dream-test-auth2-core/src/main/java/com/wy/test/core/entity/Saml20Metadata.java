@@ -40,7 +40,7 @@ public class Saml20Metadata extends JpaEntity implements Serializable {
 
 	private String emailAddress;
 
-	private String telephoneNumber;
+	private String phoneNumber;
 
 	public Saml20Metadata() {
 		super();
@@ -111,12 +111,12 @@ public class Saml20Metadata extends JpaEntity implements Serializable {
 		this.emailAddress = emailAddress;
 	}
 
-	public String getTelephoneNumber() {
-		return telephoneNumber;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setTelephoneNumber(String telephoneNumber) {
-		this.telephoneNumber = telephoneNumber;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	@Override
@@ -138,10 +138,9 @@ public class Saml20Metadata extends JpaEntity implements Serializable {
 		builder.append(surName);
 		builder.append(", emailAddress=");
 		builder.append(emailAddress);
-		builder.append(", telephoneNumber=");
-		builder.append(telephoneNumber);
+		builder.append(", phoneNumber=");
+		builder.append(phoneNumber);
 		builder.append("]");
 		return builder.toString();
 	}
-
 }

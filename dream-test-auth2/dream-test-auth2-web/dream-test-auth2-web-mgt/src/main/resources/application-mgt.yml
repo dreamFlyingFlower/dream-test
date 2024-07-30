@@ -8,102 +8,85 @@ server:
         charset: UTF-8
 
 dream:
+  auth:
     server:
         scheme: http
-        basedomain: ${SERVER_DOMAIN:dream.top}
-        domain: sso.${dream.server.basedomain}
-        name: ${dream.server.scheme}://${dream.server.domain}
-        uri: ${dream.server.name}:${server.port}${server.servlet.context-path}
-        default:
-            uri:${dream.server.uri}/main
-        mgt:
-            uri:${dream.server.uri}
-        authz:
-            uri:https://${dream.server.domain}/dream
-        persistence: ${SERVER_PERSISTENCE:0}
+        base-domain: ${SERVER_DOMAIN:dream.top}
+        domain: sso.${dream.auth.server.basedomain}
+        name: ${dream.auth.server.scheme}://${dream.auth.server.domain}
+        uri: ${dream.auth.server.name}:${server.port}${server.servlet.context-path}
+        default-uri: ${dream.auth.server.uri}/main
+        mgt-uri: ${dream.auth.server.uri}
+        authz-uri: https://${dream.auth.server.domain}/dream
         provision: ${SERVER_PROVISION:false}
-    session:
-        timeout: ${SERVER_SESSION_TIMEOUT:1800}
-    auth:
-        jwt:
-            issuer: ${dream.server.uri}
-            expires: 900
-            secret: 7heM-14BtxjyKPuH3ITIm7q2-ps5MuBirWCsrrdbzzSAOuSPrbQYiaJ54AeA0uH2XdkYy3hHAkTFIsieGkyqxOJZ_dQzrCbaYISH9rhUZAKYx8tUY0wkE4ArOC6LqHDJarR6UIcMsARakK9U4dhoOPO1cj74XytemI-w6ACYfzRUn_Rn4e-CQMcnD1C56oNEukwalf06xVgXl41h6K8IBEzLVod58y_VfvFn-NGWpNG0fy_Qxng6dg8Dgva2DobvzMN2eejHGLGB-x809MvC4zbG7CKNVlcrzMYDt2Gt2sOVDrt2l9YqJNfgaLFjrOEVw5cuXemGkX1MvHj6TAsbLg
-            refresh:
-                secret:7heM-14BtxjyKPuH3ITIm7q2-ps5MuBirWCsrrdbzzSAOuSPrbQYiaJ54AeA0uH2XdkYy3hHAkTFIsieGkyqxOJZ_dQzrCbaYISH9rhUZAKYx8tUY0wkE4ArOC6LqHDJarR6UIcMsARakK9U4dhoOPO1cj74XytemI-w6ACYfzRUn_Rn4e-CQMcnD1C56oNEukwalf06xVgXl41h6K8IBEzLVod58y_VfvFn-NGWpNG0fy_Qxng6dg8Dgva2DobvzMN2eejHGLGB-x809MvC4zbG7CKNVlcrzMYDt2Gt2sOVDrt2l9YqJNfgaLFjrOEVw5cuXemGkX1MvHj6TAsbLg
-    crypto:
-        password:
-            encoder: bcrypt
+    jwk:
+      issuer: ${dream.auth.server.uri}
+      expires: 900
+      secret: 7heM-14BtxjyKPuH3ITIm7q2-ps5MuBirWCsrrdbzzSAOuSPrbQYiaJ54AeA0uH2XdkYy3hHAkTFIsieGkyqxOJZ_dQzrCbaYISH9rhUZAKYx8tUY0wkE4ArOC6LqHDJarR6UIcMsARakK9U4dhoOPO1cj74XytemI-w6ACYfzRUn_Rn4e-CQMcnD1C56oNEukwalf06xVgXl41h6K8IBEzLVod58y_VfvFn-NGWpNG0fy_Qxng6dg8Dgva2DobvzMN2eejHGLGB-x809MvC4zbG7CKNVlcrzMYDt2Gt2sOVDrt2l9YqJNfgaLFjrOEVw5cuXemGkX1MvHj6TAsbLg
+      refresh-secret: 7heM-14BtxjyKPuH3ITIm7q2-ps5MuBirWCsrrdbzzSAOuSPrbQYiaJ54AeA0uH2XdkYy3hHAkTFIsieGkyqxOJZ_dQzrCbaYISH9rhUZAKYx8tUY0wkE4ArOC6LqHDJarR6UIcMsARakK9U4dhoOPO1cj74XytemI-w6ACYfzRUn_Rn4e-CQMcnD1C56oNEukwalf06xVgXl41h6K8IBEzLVod58y_VfvFn-NGWpNG0fy_Qxng6dg8Dgva2DobvzMN2eejHGLGB-x809MvC4zbG7CKNVlcrzMYDt2Gt2sOVDrt2l9YqJNfgaLFjrOEVw5cuXemGkX1MvHj6TAsbLg
     login:
-        captcha: ${LOGIN_CAPTCHA:true}
-        mfa: false
-        kerberos: false
-        wsfederation: false
-        remeberme: 
-          enabled: false
-          validity: 0
-        jwt:
-          enabled: ${LOGIN_JWT:true}
-          issuer: ${LOGIN_JWT_ISSUER:${dream.server.authz.uri}}
+      captcha: ${LOGIN_CAPTCHA:true}
+      mfa: false
+      ws-federation: false
+      remember-me: false
+      remember-me-validity: 0
+      kerberos: 
+        enabled: false
+      jwt:
+        enabled: ${LOGIN_JWT:true}
+        issuer: ${LOGIN_JWT_ISSUER:${dream.server.authz.uri}}
     ipaddress:
         whitelist:false
     otp:
-        policy:
-            type:totp
-            digits:6
-            issuer:${OTP_POLICY_ISSUER:dream}
-            domain:${dream.server.domain}
-            period:30
-    saml:
+      policy:
+        type: totp
+        digits: 6
+        issuer: ${OTP_POLICY_ISSUER:dream}
+        domain: ${dream.server.domain}
+        period: 30
+    oidc:
+      metadata:
+        issuer: ${dream.server.authz.uri}
+        authorizationEndpoint: ${dream.server.authz.uri}/authz/oauth/v20/authorize
+        tokenEndpoint: ${dream.server.authz.uri}/authz/oauth/v20/token
+        userinfoEndpoint: ${dream.server.authz.uri}/api/connect/userinfo
+    saml2:
+      max-parser-pool-size: 2
+      replay:
+        cache-life-in-millis: 14400000
+      metadata:
+        org-name: dreamTop
+        org-display-name: dreamTop
+        org-url: https://www.dream.top
+        contact-type: technical
+        company: dreamTop
+        given-name: dream
+        sur-name: dream
+        email-address: dreamsupport@163.com
+        phone-number: 4008981111
+      idp:
+        issuer: ${dream.server.authz.uri}/saml
+        receiver:
+          endpoint: https\://sso.dream.top/
+        keystore:
+          path: classpath\:config/samlServerKeystore.jks
+          password: dream
+          private:
+            key:
+              password:dream
+        issuing:
+          entity:
+            id: dream.top
+      issue:
+        instant:
+          check-clock-skew-in-seconds: 90
+          check-validity-time-in-seconds: 300
         v20:
-            max:
-                parser:
-                    pool:
-                        size:2
             assertion:
                 validity:
                     time:
                         ins:
                             seconds:90
-            replay:
-                cache:
-                    life:
-                        in:
-                            millis:14400000
-            issue:
-                instant:
-                    check:
-                        clock:
-                            skew:
-                                in:
-                                    seconds:90
-                        validity:
-                            time:
-                                in:
-                                    seconds:300
-            idp:
-                keystore:
-                  path: classpath\:config/samlServerKeystore.jks
-                  password: dream
-                  private:
-                    key:
-                      password:dream
-                issuing:
-                    entity:
-                        id:dream.top
-                issuer: ${dream.server.authz.uri}/saml
-                receiver:
-                    endpoint: https\://sso.dream.top/
-            metadata:
-                orgName: dreamTop
-                orgDisplayName: dreamTop
-                orgURL: https://www.dream.top
-                contactType: technical
-                company: dreamTop
-                givenName: dream
-                surName: dream
-                emailAddress: dreamsupport@163.com
-                telephoneNumber: 4008981111
             sp:
                 keystore:
                     path: classpath\:config/samlClientKeystore.jks
@@ -114,90 +97,85 @@ dream:
                 issuing:
                     entity:
                         id:client.dream.org
-    oidc:
-        metadata:
-            issuer:${dream.server.authz.uri}
-            authorizationEndpoint:${dream.server.authz.uri}/authz/oauth/v20/authorize
-            tokenEndpoint:${dream.server.authz.uri}/authz/oauth/v20/token
-            userinfoEndpoint:${dream.server.authz.uri}/api/connect/userinfo
     job:
-        cron:
-            schedule:0 0 0/1 * * ?
-            enable:true
+      cron:
+        enabled: true
+        schedule: 0 0 0/1 * * ?
     swagger:
-        enable:true
-        title:dream\u5355\u70b9\u767b\u5f55\u8ba4\u8bc1\u7cfb\u7edfAPI\u6587\u6863
-        description:dream\u5355\u70b9\u767b\u5f55\u8ba4\u8bc1\u7cfb\u7edfAPI\u6587\u6863
-        version:${application.formatted-version}
+        enabled: true
+        title: dream\u5355\u70b9\u767b\u5f55\u8ba4\u8bc1\u7cfb\u7edfAPI\u6587\u6863
+        description: dream\u5355\u70b9\u767b\u5f55\u8ba4\u8bc1\u7cfb\u7edfAPI\u6587\u6863
+        version: ${application.formatted-version}
+
 spring:
-    datasource:
-        type: com.alibaba.druid.pool.DruidDataSource
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        username: ${DATABASE_USER:root}
-        password: ${DATABASE_PWD:dream}
-        url: jdbc:mysql://${DATABASE_HOST:localhost}:${DATABASE_PORT:3306}/${DATABASE_NAME:dream}?autoReconnect=true&characterEncoding=UTF-8&serverTimezone=UTC
-# highgo
-# driver-class-name: com.highgo.jdbc.Driver
-# username: root
-# password: 123456
-# url: jdbc:highgo://192.168.56.107:5866/highgo?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
-# postgresql
-# driver-class-name: org.postgresql.Driver
-# username: root
-# password: 123456
-# url: jdbc:postgresql://localhost/dream?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
-    redis:
-        host: ${REDIS_HOST:127.0.0.1}
-        port: ${REDIS_PORT:6379}
-        password: ${REDIS_PWD:password}
-        timeout: 10000
-        jedis:
-            pool:
-                max-wait: 1000
-                max-idle: 200
-        lettuce:
-            pool:
-                max-active: -1
-                min-idle: 0
-    mail:
-        default-encoding: utf-8
-        host: ${MAIL_HOST:smtp.163.com}
-        port: ${MAIL_PORT:465}
-        username: ${MAIL_USER:dream@163.com}
-        password: ${MAIL_PWD:password}
-        protocol: smtp
-        properties:
-            ssl: true
-            sender: ${MAIL_SENDER:dream@163.com}
-            mailotp:
-                message:
-                    subject: Dream One Time PassWord
-                    template: "{0} You Token is {1} , it validity in {2}  minutes."
-                    type: html
-                    validity: 300
-    boot:
-        admin:
-            client:
-                enabled:${SPRING_BOOT_ADMIN_ENABLED:false}
-                url:${SPRING_BOOT_ADMIN_URL:http://127.0.0.1:9528}
-                username:${SPRING_BOOT_ADMIN_USERNAME:}
-                password:${SPRING_BOOT_ADMIN_PASSWORD:}
-    freemarker:
-        template-loader-path: classpath:/templates/views
-        cache: false
-        charset: UTF-8
-        check-template-location: true
-        content-type: text/html
-        expose-request-attributes: false
-        expose-session-attributes: false
-        request-context-attribute: request
-        suffix: .ftl
-    mvc:
-        static-path-pattern: /static/**
-    servlet:
-        multipart:
-            enabled: true
-            max-file-size: 4194304
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DATABASE_USER:root}
+    password: ${DATABASE_PWD:dream}
+    url: jdbc:mysql://${DATABASE_HOST:localhost}:${DATABASE_PORT:3306}/${DATABASE_NAME:dream}?autoReconnect=true&characterEncoding=UTF-8&serverTimezone=UTC
+    # highgo
+    # driver-class-name: com.highgo.jdbc.Driver
+    # username: root
+    # password: 123456
+    # url: jdbc:highgo://192.168.56.107:5866/highgo?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+    # postgresql
+    # driver-class-name: org.postgresql.Driver
+    # username: root
+    # password: 123456
+    # url: jdbc:postgresql://localhost/dream?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+  redis:
+    host: ${REDIS_HOST:127.0.0.1}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PWD:password}
+    timeout: 10000
+    jedis:
+      pool:
+        max-wait: 1000
+        max-idle: 200
+    lettuce:
+      pool:
+        max-active: -1
+        min-idle: 0
+  mail:
+    default-encoding: utf-8
+    host: ${MAIL_HOST:smtp.163.com}
+    port: ${MAIL_PORT:465}
+    username: ${MAIL_USER:dream@163.com}
+    password: ${MAIL_PWD:password}
+    protocol: smtp
+    properties:
+      ssl: true
+      sender: ${MAIL_SENDER:dream@163.com}
+      mailotp:
+        message:
+        subject: Dream One Time PassWord
+        template: "{0} You Token is {1} , it validity in {2}  minutes."
+        type: html
+        validity: 300
+  boot:
+    admin:
+      client:
+        enabled: ${SPRING_BOOT_ADMIN_ENABLED:false}
+        url: ${SPRING_BOOT_ADMIN_URL:http://127.0.0.1:9528}
+        username: ${SPRING_BOOT_ADMIN_USERNAME:}
+        password: ${SPRING_BOOT_ADMIN_PASSWORD:}
+  freemarker:
+    template-loader-path: classpath:/templates/views
+    cache: false
+    charset: UTF-8
+    check-template-location: true
+    content-type: text/html
+    expose-request-attributes: false
+    expose-session-attributes: false
+    request-context-attribute: request
+    suffix: .ftl
+  mvc:
+    static-path-pattern: /static/**
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 4194304
 mybatis:
     dialect: mysql
     type-aliases-package: org.dream.entity,org.dream.entity.apps,
@@ -208,40 +186,41 @@ mybatis:
     table-column-case: lowercase
 
 management:
-    security:
-        enabled: false
-    endpoints:
-      web:
-          exposure:
-              include: "*"
-      jmx:
-        exposure:
-          include:
-          - health
-          - info
-    endpoint:
-      health:
-        show-details: ALWAYS
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    jmx:
+      exposure:
+        include:
+        - health
+        - info
+  endpoint:
     health:
+      show-details: ALWAYS
+  health:
       redis:
         enabled: false
       mail:
         enabled: false
+
 springdoc:
-    swagger-ui:
-        path: /swagger-ui.html
-        enabled: true
-        tags-sorter: alpha
-        operations-sorter: alpha
-        showExtensions: true
-    api-docs:
-        path: /v3/api-docs
-    group-configs: 
-      - group: default
-        paths-to-match: /*
-        packages-to-scan: org.dream
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    tags-sorter: alpha
+    operations-sorter: alpha
+    showExtensions: true
+  api-docs:
+    path: /v3/api-docs
+  group-configs: 
+    - group: default
+      paths-to-match: /*
+      packages-to-scan: org.dream
 knife4j:
-    enable: true
-    setting:
-        language:zh_cn
-        swagger-model-name:\u5B9E\u4F53\u7C7B\u5217\u8868
+  enable: true
+  setting:
+      language:zh_cn
+      swagger-model-name:\u5B9E\u4F53\u7C7B\u5217\u8868

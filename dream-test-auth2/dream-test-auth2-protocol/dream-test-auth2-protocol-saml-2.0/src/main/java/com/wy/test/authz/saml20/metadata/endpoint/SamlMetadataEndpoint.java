@@ -139,7 +139,7 @@ public class SamlMetadataEndpoint {
 			descriptor.getContactPersons()
 					.add(metadataGenerator.getContactPerson(saml20Metadata.getCompany(), saml20Metadata.getGivenName(),
 							saml20Metadata.getSurName(), saml20Metadata.getEmailAddress(),
-							saml20Metadata.getTelephoneNumber(), contactPersonType));
+							saml20Metadata.getPhoneNumber(), contactPersonType));
 
 			descriptor.setOrganization(metadataGenerator.getOrganization(saml20Metadata.getOrgName(),
 					saml20Metadata.getOrgDisplayName(), saml20Metadata.getOrgURL()));

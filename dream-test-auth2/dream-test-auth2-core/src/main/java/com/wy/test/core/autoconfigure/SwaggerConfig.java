@@ -8,7 +8,7 @@ import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
-import com.wy.test.core.properties.DreamSwaggerProperties;
+import com.wy.test.core.properties.DreamAuthSwaggerProperties;
 
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -20,7 +20,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SwaggerConfig {
 
-	private final DreamSwaggerProperties dreamSwaggerProperties;
+	private final DreamAuthSwaggerProperties dreamSwaggerProperties;
 
 	@Bean
 	GlobalOpenApiCustomizer orderGlobalOpenApiCustomizer() {

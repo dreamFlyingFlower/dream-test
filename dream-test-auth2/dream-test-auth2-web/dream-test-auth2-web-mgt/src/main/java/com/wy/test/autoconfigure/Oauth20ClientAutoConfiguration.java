@@ -2,10 +2,7 @@ package com.wy.test.autoconfigure;
 
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,7 +10,9 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.wy.test.core.enums.StoreType;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.properties.DreamAuthStoreProperties;
 import com.wy.test.oauth2.provider.client.ClientDetailsUserDetailsService;
 import com.wy.test.oauth2.provider.client.JdbcClientDetailsService;
 import com.wy.test.oauth2.provider.token.DefaultTokenServices;
@@ -21,20 +20,21 @@ import com.wy.test.oauth2.provider.token.TokenStore;
 import com.wy.test.oauth2.provider.token.store.InMemoryTokenStore;
 import com.wy.test.oauth2.provider.token.store.RedisTokenStore;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * like Oauth20AutoConfiguration for mgmt
  */
 @AutoConfiguration
+@Slf4j
 public class Oauth20ClientAutoConfiguration implements InitializingBean {
-
-	private static final Logger _logger = LoggerFactory.getLogger(Oauth20ClientAutoConfiguration.class);
 
 	@Bean
 	JdbcClientDetailsService oauth20JdbcClientDetailsService(DataSource dataSource,
 			PasswordEncoder passwordReciprocal) {
 		JdbcClientDetailsService clientDetailsService = new JdbcClientDetailsService(dataSource);
 		// clientDetailsService.setPasswordEncoder(passwordReciprocal);
-		_logger.debug("JdbcClientDetailsService inited.");
+		log.debug("JdbcClientDetailsService inited.");
 		return clientDetailsService;
 	}
 
@@ -45,15 +45,15 @@ public class Oauth20ClientAutoConfiguration implements InitializingBean {
 	 * @return oauth20TokenStore
 	 */
 	@Bean
-	TokenStore oauth20TokenStore(@Value("${dream.server.persistence}") int persistence, JdbcTemplate jdbcTemplate,
+	TokenStore oauth20TokenStore(DreamAuthStoreProperties dreamAuthStoreProperties, JdbcTemplate jdbcTemplate,
 			RedisConnectionFactory jedisConnectionFactory) {
 		TokenStore tokenStore = null;
-		if (persistence == 2) {
+		if (StoreType.REDIS == dreamAuthStoreProperties.getStoreType()) {
 			tokenStore = new RedisTokenStore(jedisConnectionFactory);
-			_logger.debug("RedisTokenStore");
+			log.debug("RedisTokenStore");
 		} else {
 			tokenStore = new InMemoryTokenStore();
-			_logger.debug("InMemoryTokenStore");
+			log.debug("InMemoryTokenStore");
 		}
 
 		return tokenStore;
@@ -90,7 +90,7 @@ public class Oauth20ClientAutoConfiguration implements InitializingBean {
 		daoAuthenticationProvider.setPasswordEncoder(passwordReciprocal);
 		daoAuthenticationProvider.setUserDetailsService(cientDetailsUserDetailsService);
 		ProviderManager authenticationManager = new ProviderManager(daoAuthenticationProvider);
-		_logger.debug("OAuth 2 Client Authentication Manager init.");
+		log.debug("OAuth 2 Client Authentication Manager init.");
 		return authenticationManager;
 	}
 

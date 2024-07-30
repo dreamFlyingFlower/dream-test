@@ -6,24 +6,26 @@ import org.springframework.context.annotation.Configuration;
 import lombok.Data;
 
 /**
- * 登录配置
+ * SAML配置
  *
  * @author 飞花梦影
  * @date 2024-07-30 09:14:00
  * @git {@link https://github.com/dreamFlyingFlower}
  */
 @Data
-@ConfigurationProperties("dream.auth.login")
+@ConfigurationProperties("dream.auth.saml2.idp")
 @Configuration
-public class DreamLoginProperties {
+public class DreamAuthSamlIdpProperties {
 
-	private boolean captcha;
+	private String issuer;
 
-	private boolean mfa;
+	private Receiver receiver = new Receiver();
 
-	private boolean kerberos;
+	@Data
+	public static class Receiver {
 
-	private boolean remeberMe;
+		private boolean enabled = false;
 
-	private boolean wsFederation;
+		private String endpoint;
+	}
 }

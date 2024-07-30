@@ -1,10 +1,10 @@
 package com.wy.test.core.autoconfigure;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.time.Duration;
+
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -13,11 +13,13 @@ import com.wy.test.core.authn.session.SessionManagerFactory;
 import com.wy.test.core.authn.web.HttpSessionListenerAdapter;
 import com.wy.test.core.authn.web.SavedRequestAwareAuthenticationSuccessHandler;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.properties.DreamAuthStoreProperties;
+
+import lombok.extern.slf4j.Slf4j;
 
 @AutoConfiguration
+@Slf4j
 public class SessionAutoConfiguration implements InitializingBean {
-
-	private static final Logger _logger = LoggerFactory.getLogger(SessionAutoConfiguration.class);
 
 	@Bean(name = "savedRequestSuccessHandler")
 	SavedRequestAwareAuthenticationSuccessHandler savedRequestAwareAuthenticationSuccessHandler() {
@@ -25,10 +27,12 @@ public class SessionAutoConfiguration implements InitializingBean {
 	}
 
 	@Bean
-	SessionManager sessionManager(@Value("${dream.server.persistence}") int persistence, JdbcTemplate jdbcTemplate,
-			RedisConnectionFactory redisConnFactory, @Value("${dream.session.timeout:1800}") int timeout) {
-		_logger.debug("session timeout " + timeout);
-		SessionManager sessionManager = new SessionManagerFactory(persistence, jdbcTemplate, redisConnFactory, timeout);
+	SessionManager sessionManager(DreamAuthStoreProperties dreamAuthRedisProperties, JdbcTemplate jdbcTemplate,
+			RedisConnectionFactory redisConnFactory, ServerProperties serverProperties) {
+		Duration duration = serverProperties.getServlet().getSession().getTimeout();
+		log.debug("session timeout " + (null == duration ? null : duration.getSeconds()));
+		SessionManager sessionManager = new SessionManagerFactory(dreamAuthRedisProperties.getStoreType(), jdbcTemplate,
+				redisConnFactory, null == duration ? 1800 : (int) duration.getSeconds());
 		return sessionManager;
 	}
 

@@ -11,9 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import com.wy.test.core.constants.ConstsPersistence;
 import com.wy.test.core.entity.HistoryLogin;
 import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.enums.StoreType;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 
 import dream.flying.flower.helper.DateTimeHelper;
@@ -51,13 +51,13 @@ public class SessionManagerFactory implements SessionManager {
 
 	private int validitySeconds;
 
-	public SessionManagerFactory(int persistence, JdbcTemplate jdbcTemplate, RedisConnectionFactory redisConnFactory,
-			int validitySeconds) {
+	public SessionManagerFactory(StoreType storeType, JdbcTemplate jdbcTemplate,
+			RedisConnectionFactory redisConnFactory, int validitySeconds) {
 		this.validitySeconds = validitySeconds;
 		this.jdbcTemplate = jdbcTemplate;
 		this.inMemorySessionManager = new InMemorySessionManager(validitySeconds);
 		_logger.debug("InMemorySessionManager");
-		if (persistence == ConstsPersistence.REDIS) {
+		if (storeType == StoreType.REDIS) {
 			isRedis = true;
 			this.redisSessionManager = new RedisSessionManager(redisConnFactory, validitySeconds);
 			_logger.debug("RedisSessionManager");

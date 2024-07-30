@@ -11,7 +11,7 @@ import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.properties.DreamServerProperties;
+import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
@@ -38,7 +38,7 @@ public class MobileAuthenticationProvider extends AbstractAuthenticationProvider
 	}
 
 	public MobileAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
-			DreamServerProperties dreamServerProperties, SmsOtpAuthnService smsOtpAuthnService,
+			DreamAuthServerProperties dreamServerProperties, SmsOtpAuthnService smsOtpAuthnService,
 			SessionManager sessionManager) {
 		this.authenticationRealm = authenticationRealm;
 		this.dreamServerProperties = dreamServerProperties;

@@ -1,9 +1,6 @@
 package com.wy.test.provider.autoconfigure;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -14,8 +11,8 @@ import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.persistence.repository.LoginHistoryRepository;
 import com.wy.test.core.persistence.repository.LoginRepository;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
-import com.wy.test.core.properties.DreamLoginProperties;
-import com.wy.test.core.properties.DreamServerProperties;
+import com.wy.test.core.properties.DreamAuthLoginProperties;
+import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.provider.authn.provider.AuthenticationProviderFactory;
 import com.wy.test.provider.authn.provider.impl.MobileAuthenticationProvider;
@@ -26,10 +23,11 @@ import com.wy.test.provider.authn.support.rememberme.AbstractRemeberMeManager;
 import com.wy.test.provider.authn.support.rememberme.JdbcRemeberMeManager;
 import com.wy.test.sms.password.sms.SmsOtpAuthnService;
 
-@AutoConfiguration
-public class AuthnProviderAutoConfiguration implements InitializingBean {
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Logger _logger = LoggerFactory.getLogger(AuthnProviderAutoConfiguration.class);
+@AutoConfiguration
+@Slf4j
+public class AuthnProviderAutoConfiguration implements InitializingBean {
 
 	@Bean
 	AbstractAuthenticationProvider authenticationProvider(AbstractAuthenticationProvider normalAuthenticationProvider,
@@ -45,26 +43,26 @@ public class AuthnProviderAutoConfiguration implements InitializingBean {
 
 	@Bean
 	AbstractAuthenticationProvider normalAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
-			DreamServerProperties dreamServerProperties, SessionManager sessionManager,
+			DreamAuthServerProperties dreamServerProperties, SessionManager sessionManager,
 			AuthTokenService authTokenService) {
-		_logger.debug("init authentication Provider .");
+		log.debug("init authentication Provider .");
 		return new NormalAuthenticationProvider(authenticationRealm, dreamServerProperties, sessionManager,
 				authTokenService);
 	}
 
 	@Bean
 	AbstractAuthenticationProvider mobileAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
-			DreamServerProperties dreamServerProperties, SmsOtpAuthnService smsAuthnService,
+			DreamAuthServerProperties dreamServerProperties, SmsOtpAuthnService smsAuthnService,
 			SessionManager sessionManager) {
-		_logger.debug("init Mobile authentication Provider .");
+		log.debug("init Mobile authentication Provider .");
 		return new MobileAuthenticationProvider(authenticationRealm, dreamServerProperties, smsAuthnService,
 				sessionManager);
 	}
 
 	@Bean
 	AbstractAuthenticationProvider trustedAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
-			DreamServerProperties dreamServerProperties, SessionManager sessionManager) {
-		_logger.debug("init Mobile authentication Provider .");
+			DreamAuthServerProperties dreamServerProperties, SessionManager sessionManager) {
+		log.debug("init Mobile authentication Provider .");
 		return new TrustedAuthenticationProvider(authenticationRealm, dreamServerProperties, sessionManager);
 	}
 
@@ -89,11 +87,11 @@ public class AuthnProviderAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	AbstractRemeberMeManager remeberMeManager(@Value("${dream.server.persistence}") int persistence,
-			@Value("${dream.login.remeberme.validity}") int validity, DreamLoginProperties dreamLoginProperties,
+	AbstractRemeberMeManager remeberMeManager(DreamAuthLoginProperties dreamLoginProperties,
 			AuthTokenService authTokenService, JdbcTemplate jdbcTemplate) {
-		_logger.trace("init RemeberMeManager , validity {}.", validity);
-		return new JdbcRemeberMeManager(jdbcTemplate, dreamLoginProperties, authTokenService, validity);
+		log.trace("init RemeberMeManager , validity {}.", dreamLoginProperties.getRememberMeValidity());
+		return new JdbcRemeberMeManager(jdbcTemplate, dreamLoginProperties, authTokenService,
+				dreamLoginProperties.getRememberMeValidity());
 	}
 
 	@Override

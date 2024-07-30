@@ -13,7 +13,7 @@ import org.springframework.web.filter.GenericFilterBean;
 
 import com.wy.test.core.entity.Institutions;
 import com.wy.test.core.persistence.repository.InstitutionsRepository;
-import com.wy.test.core.properties.DreamServerProperties;
+import com.wy.test.core.properties.DreamAuthServerProperties;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,7 +28,7 @@ public class WebInstRequestFilter extends GenericFilterBean {
 
 	InstitutionsRepository institutionsRepository;
 
-	DreamServerProperties dreamServerProperties;
+	DreamAuthServerProperties dreamServerProperties;
 
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
@@ -67,7 +67,7 @@ public class WebInstRequestFilter extends GenericFilterBean {
 	}
 
 	public WebInstRequestFilter(InstitutionsRepository institutionsRepository,
-			DreamServerProperties dreamServerProperties) {
+			DreamAuthServerProperties dreamServerProperties) {
 		super();
 		this.institutionsRepository = institutionsRepository;
 		this.dreamServerProperties = dreamServerProperties;

@@ -7,26 +7,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.properties.DreamLoginProperties;
+import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.framework.web.crypto.jwt.HMAC512Service;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public abstract class AbstractRemeberMeManager {
 
-	private static final Logger _logger = LoggerFactory.getLogger(AbstractRemeberMeManager.class);
+	protected Long validity = 7L;
 
-	protected Integer validity = 7;
-
-	protected DreamLoginProperties dreamLoginProperties;
+	protected DreamAuthLoginProperties dreamLoginProperties;
 
 	AuthTokenService authTokenService;
 
@@ -42,18 +40,18 @@ public abstract class AbstractRemeberMeManager {
 
 	public String createRemeberMe(Authentication authentication, HttpServletRequest request,
 			HttpServletResponse response) {
-		if (dreamLoginProperties.isRemeberMe()) {
+		if (dreamLoginProperties.isRememberMe()) {
 			SignPrincipal principal = ((SignPrincipal) authentication.getPrincipal());
 			UserInfo userInfo = principal.getUserInfo();
-			_logger.debug("Remeber Me ...");
+			log.debug("Remeber Me ...");
 			RemeberMe remeberMe = new RemeberMe();
 			remeberMe.setId(WebContext.genId());
 			remeberMe.setUserId(userInfo.getId());
 			remeberMe.setUsername(userInfo.getUsername());
 			remeberMe.setLastLoginTime(new Date());
-			remeberMe.setExpirationTime(DateTime.now().plusDays(validity).toDate());
+			remeberMe.setExpirationTime(DateTime.now().plusDays(validity.intValue()).toDate());
 			save(remeberMe);
-			_logger.debug("Remeber Me " + remeberMe);
+			log.debug("Remeber Me " + remeberMe);
 			return genRemeberMe(remeberMe);
 		}
 		return null;
@@ -61,9 +59,9 @@ public abstract class AbstractRemeberMeManager {
 
 	public String updateRemeberMe(RemeberMe remeberMe) {
 		remeberMe.setLastLoginTime(new Date());
-		remeberMe.setExpirationTime(DateTime.now().plusDays(validity).toDate());
+		remeberMe.setExpirationTime(DateTime.now().plusDays(validity.intValue()).toDate());
 		update(remeberMe);
-		_logger.debug("update Remeber Me " + remeberMe);
+		log.debug("update Remeber Me " + remeberMe);
 
 		return genRemeberMe(remeberMe);
 	}
@@ -83,7 +81,7 @@ public abstract class AbstractRemeberMeManager {
 	}
 
 	public String genRemeberMe(RemeberMe remeberMe) {
-		_logger.debug("expiration Time : {}", remeberMe.getExpirationTime());
+		log.debug("expiration Time : {}", remeberMe.getExpirationTime());
 
 		JWTClaimsSet remeberMeJwtClaims = new JWTClaimsSet.Builder().issuer("").subject(remeberMe.getUsername())
 				.jwtID(remeberMe.getId()).issueTime(remeberMe.getLastLoginTime())
@@ -92,14 +90,13 @@ public abstract class AbstractRemeberMeManager {
 		return authTokenService.signedJWT(remeberMeJwtClaims);
 	}
 
-	public Integer getValidity() {
+	public Long getValidity() {
 		return validity;
 	}
 
-	public void setValidity(Integer validity) {
+	public void setValidity(Long validity) {
 		if (validity != 0) {
 			this.validity = validity;
 		}
 	}
-
 }

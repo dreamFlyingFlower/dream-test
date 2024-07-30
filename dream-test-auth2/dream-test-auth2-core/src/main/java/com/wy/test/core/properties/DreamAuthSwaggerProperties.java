@@ -15,7 +15,7 @@ import lombok.Data;
 @Data
 @Configuration
 @ConfigurationProperties("dream.auth.swagger")
-public class DreamSwaggerProperties {
+public class DreamAuthSwaggerProperties {
 
 	private boolean enabled;
 

@@ -22,7 +22,7 @@ import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 import com.nimbusds.jose.JOSEException;
-import com.wy.test.core.constants.ConstsPersistence;
+import com.wy.test.core.enums.StoreType;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.password.SM3PasswordEncoder;
 import com.wy.test.core.persistence.cache.InMemoryMomentaryService;
@@ -31,6 +31,9 @@ import com.wy.test.core.persistence.cache.RedisMomentaryService;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.core.persistence.repository.InstitutionsRepository;
 import com.wy.test.core.persistence.repository.LocalizationRepository;
+import com.wy.test.core.properties.DreamAuthCryptoProperties;
+import com.wy.test.core.properties.DreamAuthIdProperties;
+import com.wy.test.core.properties.DreamAuthStoreProperties;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
@@ -72,7 +75,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	PasswordEncoder passwordEncoder(@Value("${dream.crypto.password.encoder:bcrypt}") String idForEncode) {
+	PasswordEncoder passwordEncoder(DreamAuthCryptoProperties dreamAuthCryptoProperties) {
 		Map<String, PasswordEncoder> encoders = new HashMap<String, PasswordEncoder>();
 		encoders.put("bcrypt", new BCryptPasswordEncoder());
 		encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
@@ -84,7 +87,8 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 		encoders.put("ldap", new LdapShaPasswordEncoder());
 
 		// idForEncode is default for encoder
-		PasswordEncoder passwordEncoder = new DelegatingPasswordEncoder(idForEncode, encoders);
+		PasswordEncoder passwordEncoder =
+				new DelegatingPasswordEncoder(dreamAuthCryptoProperties.getPasswordType(), encoders);
 
 		if (log.isTraceEnabled()) {
 			log.trace("Password Encoders :");
@@ -92,7 +96,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 				log.trace("{}= {}", String.format("%-10s", key), encoders.get(key).getClass().getName());
 			}
 		}
-		log.debug("{} is default encoder", idForEncode);
+		log.debug("{} is default encoder", dreamAuthCryptoProperties.getPasswordType());
 		return passwordEncoder;
 	}
 
@@ -144,11 +148,11 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	GeneratorStrategyContext idGenerator(@Value("${dream.id.strategy:SnowFlake}") String strategy,
-			@Value("${dream.id.datacenterId:0}") int datacenterId, @Value("${dream.id.machineId:0}") int machineId) {
+	GeneratorStrategyContext idGenerator(DreamAuthIdProperties dreamAuthIdProperties) {
 		GeneratorStrategyContext idGenerator = new GeneratorStrategyContext();
-		idGenerator.setStrategy(strategy);
-		SnowFlakeGenerator SnowFlakeId = new SnowFlakeGenerator(datacenterId, machineId);
+		idGenerator.setStrategy(dreamAuthIdProperties.getStrategy());
+		SnowFlakeGenerator SnowFlakeId =
+				new SnowFlakeGenerator(dreamAuthIdProperties.getDatacenterId(), dreamAuthIdProperties.getMachineId());
 		idGenerator.setSnowFlakeGenerator(SnowFlakeId);
 		WebContext.idGenerator = idGenerator;
 		return idGenerator;
@@ -156,14 +160,13 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 
 	@Bean
 	MomentaryService momentaryService(RedisConnectionFactory redisConnFactory,
-			@Value("${dream.server.persistence}") int persistence) throws JOSEException {
+			DreamAuthStoreProperties dreamAuthRedisProperties) throws JOSEException {
 		MomentaryService momentaryService;
-		if (persistence == ConstsPersistence.REDIS) {
+		if (dreamAuthRedisProperties.getStoreType() == StoreType.REDIS) {
 			momentaryService = new RedisMomentaryService(redisConnFactory);
 		} else {
 			momentaryService = new InMemoryMomentaryService();
 		}
-
 		return momentaryService;
 	}
 

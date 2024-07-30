@@ -6,7 +6,6 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,7 +13,9 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.wy.test.core.enums.StoreType;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.properties.DreamAuthStoreProperties;
 import com.wy.test.oauth2.provider.client.ClientDetailsUserDetailsService;
 import com.wy.test.oauth2.provider.client.JdbcClientDetailsService;
 import com.wy.test.oauth2.provider.token.DefaultTokenServices;
@@ -46,10 +47,10 @@ public class Oauth20ClientAutoConfiguration implements InitializingBean {
 	 * @return oauth20TokenStore
 	 */
 	@Bean
-	TokenStore oauth20TokenStore(@Value("${dream.server.persistence}") int persistence, JdbcTemplate jdbcTemplate,
+	TokenStore oauth20TokenStore(DreamAuthStoreProperties dreamAuthStoreProperties, JdbcTemplate jdbcTemplate,
 			RedisConnectionFactory jedisConnectionFactory) {
 		TokenStore tokenStore = null;
-		if (persistence == 2) {
+		if (StoreType.REDIS == dreamAuthStoreProperties.getStoreType()) {
 			tokenStore = new RedisTokenStore(jedisConnectionFactory);
 			_logger.debug("RedisTokenStore");
 		} else {

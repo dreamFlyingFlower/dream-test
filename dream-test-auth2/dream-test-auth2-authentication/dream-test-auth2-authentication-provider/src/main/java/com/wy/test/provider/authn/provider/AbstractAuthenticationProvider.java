@@ -20,8 +20,8 @@ import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.constants.ConstsStatus;
 import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.properties.DreamLoginProperties;
-import com.wy.test.core.properties.DreamServerProperties;
+import com.wy.test.core.properties.DreamAuthLoginProperties;
+import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
@@ -48,9 +48,9 @@ public abstract class AbstractAuthenticationProvider {
 		public final static String TRUSTED = "trusted";
 	}
 
-	protected DreamServerProperties dreamServerProperties;
+	protected DreamAuthServerProperties dreamServerProperties;
 
-	protected DreamLoginProperties dreamLoginProperties;
+	protected DreamAuthLoginProperties dreamLoginProperties;
 
 	protected AbstractAuthenticationRealm authenticationRealm;
 

@@ -12,7 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.util.Assert;
 
 import com.wy.test.core.persistence.cache.MomentaryService;
-import com.wy.test.core.properties.DreamServerProperties;
+import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.oauth2.provider.ClientDetailsService;
 import com.wy.test.oauth2.provider.CompositeTokenGranter;
 import com.wy.test.oauth2.provider.OAuth2RequestFactory;
@@ -64,7 +64,7 @@ public class AbstractEndpoint implements InitializingBean {
 
 	@Autowired
 	@Qualifier("applicationConfig")
-	protected DreamServerProperties dreamServerProperties;
+	protected DreamAuthServerProperties dreamServerProperties;
 
 	@Autowired
 	protected MomentaryService momentaryService;

@@ -2,10 +2,6 @@ package com.wy.test.web.autoconfigure;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -16,7 +12,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.wy.test.core.authn.web.CurrentUserMethodArgumentResolver;
 import com.wy.test.core.authn.web.interceptor.PermissionInterceptor;
-import com.wy.test.core.properties.DreamServerProperties;
+import com.wy.test.core.properties.DreamAuthLoginProperties;
+import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.provider.authn.support.basic.BasicEntryPoint;
 import com.wy.test.provider.authn.support.httpheader.HttpHeaderEntryPoint;
@@ -25,55 +22,45 @@ import com.wy.test.provider.authn.support.kerberos.KerberosService;
 import com.wy.test.web.web.interceptor.HistorySignOnAppInterceptor;
 import com.wy.test.web.web.interceptor.SingleSignOnInterceptor;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 @EnableWebMvc
 @AutoConfiguration
+@AllArgsConstructor
+@Slf4j
 public class DreamAuthMvcConfig implements WebMvcConfigurer {
 
-	private static final Logger _logger = LoggerFactory.getLogger(DreamAuthMvcConfig.class);
+	DreamAuthServerProperties dreamServerProperties;
 
-	@Value("${dream.login.basic.enable:false}")
-	private boolean basicEnable;
+	DreamAuthLoginProperties dreamAuthLoginProperties;
 
-	@Value("${dream.login.httpheader.enable:false}")
-	private boolean httpHeaderEnable;
-
-	@Value("${dream.login.httpheader.headername:iv-user}")
-	private String httpHeaderName;
-
-	@Autowired
-	DreamServerProperties dreamServerProperties;
-
-	@Autowired
 	AbstractAuthenticationProvider authenticationProvider;
 
-	@Autowired
 	KerberosService kerberosService;
 
-	@Autowired
 	PermissionInterceptor permissionInterceptor;
 
-	@Autowired
 	SingleSignOnInterceptor singleSignOnInterceptor;
 
-	@Autowired
 	HistorySignOnAppInterceptor historySignOnAppInterceptor;
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		_logger.debug("add Resource Handlers");
-		_logger.debug("add statics");
+		log.debug("add Resource Handlers");
+		log.debug("add statics");
 		registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-		_logger.debug("add templates");
+		log.debug("add templates");
 		registry.addResourceHandler("/templates/**").addResourceLocations("classpath:/templates/");
 
-		_logger.debug("add knife4j");
+		log.debug("add knife4j");
 		registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
 
-		_logger.debug("add swagger");
+		log.debug("add swagger");
 		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
 		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
 
-		_logger.debug("add Resource Handler finished .");
+		log.debug("add Resource Handler finished .");
 	}
 
 	@Override
@@ -81,19 +68,21 @@ public class DreamAuthMvcConfig implements WebMvcConfigurer {
 		// addPathPatterns 用于添加拦截规则 ， 先把所有路径都加入拦截， 再一个个排除
 		// excludePathPatterns 表示改路径不用拦截
 
-		_logger.debug("add Http Kerberos Entry Point");
+		log.debug("add Http Kerberos Entry Point");
 		registry.addInterceptor(
 				new HttpKerberosEntryPoint(authenticationProvider, kerberosService, dreamServerProperties, true))
 				.addPathPatterns("/login");
 
-		if (httpHeaderEnable) {
-			registry.addInterceptor(new HttpHeaderEntryPoint(httpHeaderName, httpHeaderEnable)).addPathPatterns("/*");
-			_logger.debug("add Http Header Entry Point");
+		if (dreamAuthLoginProperties.getHttpHeader().isEnabled()) {
+			registry.addInterceptor(new HttpHeaderEntryPoint(dreamAuthLoginProperties.getHttpHeader().getHeaderName(),
+					dreamAuthLoginProperties.getHttpHeader().isEnabled())).addPathPatterns("/*");
+			log.debug("add Http Header Entry Point");
 		}
 
-		if (basicEnable) {
-			registry.addInterceptor(new BasicEntryPoint(basicEnable)).addPathPatterns("/*");
-			_logger.debug("add Basic Entry Point");
+		if (dreamAuthLoginProperties.isBasicEnabled()) {
+			registry.addInterceptor(new BasicEntryPoint(dreamAuthLoginProperties.isBasicEnabled()))
+					.addPathPatterns("/*");
+			log.debug("add Basic Entry Point");
 		}
 
 		// for frontend
@@ -104,7 +93,7 @@ public class DreamAuthMvcConfig implements WebMvcConfigurer {
 				.addPathPatterns("/authz/oauth/v20/authorize/approval/**").addPathPatterns("/logon/oauth20/bind/**")
 				.addPathPatterns("/logout").addPathPatterns("/logout/**").addPathPatterns("/authz/refused");
 
-		_logger.debug("add Permission Interceptor");
+		log.debug("add Permission Interceptor");
 
 		// for Single Sign On
 		registry.addInterceptor(singleSignOnInterceptor).addPathPatterns("/authz/basic/*")
@@ -140,7 +129,7 @@ public class DreamAuthMvcConfig implements WebMvcConfigurer {
 				// online ticket Validate
 				.excludePathPatterns("/onlineticket/ticketValidate")
 				.excludePathPatterns("/onlineticket/ticketValidate/*");
-		_logger.debug("add Single SignOn Interceptor");
+		log.debug("add Single SignOn Interceptor");
 
 		registry.addInterceptor(historySignOnAppInterceptor).addPathPatterns("/authz/basic/*")
 				.addPathPatterns("/authz/ltpa/*")
@@ -158,7 +147,7 @@ public class DreamAuthMvcConfig implements WebMvcConfigurer {
 				.addPathPatterns("/authz/cas/granting")
 				// OAuth
 				.addPathPatterns("/authz/oauth/v20/approval_confirm");
-		_logger.debug("add history SignOn App Interceptor");
+		log.debug("add history SignOn App Interceptor");
 
 	}
 

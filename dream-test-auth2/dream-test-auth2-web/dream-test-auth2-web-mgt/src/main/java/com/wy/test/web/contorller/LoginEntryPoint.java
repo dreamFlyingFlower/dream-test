@@ -16,7 +16,7 @@ import com.wy.test.core.authn.jwt.AuthJwt;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.entity.Institutions;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.properties.DreamLoginProperties;
+import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
@@ -34,7 +34,7 @@ public class LoginEntryPoint {
 
 	private final AbstractAuthenticationProvider authenticationProvider;
 
-	private final DreamLoginProperties dreamLoginProperties;
+	private final DreamAuthLoginProperties dreamLoginProperties;
 
 	/**
 	 * init login
@@ -46,7 +46,7 @@ public class LoginEntryPoint {
 		log.debug("/login.");
 
 		HashMap<String, Object> model = new HashMap<String, Object>();
-		model.put("isRemeberMe", dreamLoginProperties.isRemeberMe());
+		model.put("isRemeberMe", dreamLoginProperties.isRememberMe());
 		Institutions inst = (Institutions) WebContext.getAttribute(WebConstants.CURRENT_INST);
 		model.put("inst", inst);
 		if (dreamLoginProperties.isCaptcha()) {

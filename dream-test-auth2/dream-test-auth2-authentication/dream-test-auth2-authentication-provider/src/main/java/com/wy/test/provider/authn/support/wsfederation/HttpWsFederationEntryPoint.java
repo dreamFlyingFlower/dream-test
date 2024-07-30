@@ -11,7 +11,7 @@ import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.constants.ConstsLoginType;
-import com.wy.test.core.properties.DreamLoginProperties;
+import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
 import dream.flying.flower.lang.StrHelper;
@@ -22,7 +22,7 @@ public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 
 	boolean enable;
 
-	DreamLoginProperties dreamLoginProperties;
+	DreamAuthLoginProperties dreamLoginProperties;
 
 	AbstractAuthenticationProvider authenticationProvider;
 
@@ -110,7 +110,7 @@ public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 	}
 
 	public HttpWsFederationEntryPoint(AbstractAuthenticationProvider authenticationProvider,
-			WsFederationService wsFederationService, DreamLoginProperties dreamLoginProperties, boolean enable) {
+			WsFederationService wsFederationService, DreamAuthLoginProperties dreamLoginProperties, boolean enable) {
 		super();
 		this.authenticationProvider = authenticationProvider;
 		this.wsFederationService = wsFederationService;
@@ -126,7 +126,7 @@ public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 		this.enable = enable;
 	}
 
-	public void setDreamLoginProperties(DreamLoginProperties dreamLoginProperties) {
+	public void setDreamLoginProperties(DreamAuthLoginProperties dreamLoginProperties) {
 		this.dreamLoginProperties = dreamLoginProperties;
 	}
 

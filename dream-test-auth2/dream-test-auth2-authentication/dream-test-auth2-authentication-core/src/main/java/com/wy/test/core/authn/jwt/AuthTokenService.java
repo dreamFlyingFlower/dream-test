@@ -9,7 +9,7 @@ import org.springframework.security.core.Authentication;
 
 import com.nimbusds.jose.JOSEException;
 import com.wy.test.core.persistence.cache.MomentaryService;
-import com.wy.test.core.properties.DreamJwkProperties;
+import com.wy.test.core.properties.DreamAuthJwkProperties;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.framework.web.crypto.jwt.HMAC512Service;
@@ -18,7 +18,7 @@ public class AuthTokenService extends AuthJwtService {
 
 	private static final Logger _logger = LoggerFactory.getLogger(AuthTokenService.class);
 
-	DreamJwkProperties dreamJwkProperties;
+	DreamAuthJwkProperties dreamJwkProperties;
 
 	CongressService congressService;
 
@@ -26,7 +26,7 @@ public class AuthTokenService extends AuthJwtService {
 
 	AuthRefreshTokenService refreshTokenService;
 
-	public AuthTokenService(DreamJwkProperties dreamJwkProperties, CongressService congressService,
+	public AuthTokenService(DreamAuthJwkProperties dreamJwkProperties, CongressService congressService,
 			MomentaryService momentaryService, AuthRefreshTokenService refreshTokenService) throws JOSEException {
 
 		this.dreamJwkProperties = dreamJwkProperties;
