@@ -17,10 +17,11 @@ import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.constants.ConstsStatus;
 import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.properties.DreamLoginProperties;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
@@ -47,7 +48,9 @@ public abstract class AbstractAuthenticationProvider {
 		public final static String TRUSTED = "trusted";
 	}
 
-	protected ApplicationConfig applicationConfig;
+	protected DreamServerProperties dreamServerProperties;
+
+	protected DreamLoginProperties dreamLoginProperties;
 
 	protected AbstractAuthenticationRealm authenticationRealm;
 
@@ -129,8 +132,8 @@ public abstract class AbstractAuthenticationProvider {
 	}
 
 	/**
-	 * login user by j_username and j_cname first query user by j_cname if first
-	 * step userinfo is null,query user from system.
+	 * login user by j_username and j_cname first query user by j_cname if first step userinfo is null,query user from
+	 * system.
 	 * 
 	 * @param username String
 	 * @param password String

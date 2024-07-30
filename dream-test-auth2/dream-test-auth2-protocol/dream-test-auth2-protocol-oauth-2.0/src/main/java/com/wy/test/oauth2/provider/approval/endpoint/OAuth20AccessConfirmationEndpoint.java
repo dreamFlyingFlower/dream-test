@@ -22,20 +22,19 @@ import org.springframework.web.servlet.ModelAndView;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 import com.wy.test.core.persistence.cache.MomentaryService;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.oauth2.common.OAuth2Constants;
 import com.wy.test.oauth2.provider.AuthorizationRequest;
 import com.wy.test.oauth2.provider.ClientDetailsService;
 import com.wy.test.persistence.service.AppsService;
 
 /**
- * Controller for retrieving the model for and displaying the confirmation page
- * for access to a protected resource.
+ * Controller for retrieving the model for and displaying the confirmation page for access to a protected resource.
  *
  * @author Ryan Heaton
  */
@@ -64,7 +63,7 @@ public class OAuth20AccessConfirmationEndpoint {
 	protected MomentaryService momentaryService;
 
 	@Autowired
-	protected ApplicationConfig applicationConfig;
+	protected DreamServerProperties dreamServerProperties;
 
 	@Autowired
 	AuthTokenService authTokenService;
@@ -115,7 +114,7 @@ public class OAuth20AccessConfirmationEndpoint {
 			_logger.trace("key " + key + "=" + model.get(key));
 		}
 
-		model.put("authorizeApproveUri", applicationConfig.getFrontendUri() + "/#/authz/oauth2approve");
+		model.put("authorizeApproveUri", dreamServerProperties.getFrontendUri() + "/#/authz/oauth2approve");
 
 		modelAndView.addObject("model", model);
 		return modelAndView;

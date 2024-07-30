@@ -5,18 +5,17 @@ import java.text.MessageFormat;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.HtmlEmail;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.mail.MailProperties;
 
-import com.wy.test.core.configuration.EmailConfig;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class MailOtpAuthn extends AbstractOtpAuthn {
 
-	private static final Logger _logger = LoggerFactory.getLogger(MailOtpAuthn.class);
-
-	EmailConfig emailConfig;
+	MailProperties mailProperties;
 
 	String subject = "One Time PassWord";
 
@@ -26,14 +25,14 @@ public class MailOtpAuthn extends AbstractOtpAuthn {
 		otpType = OtpTypes.EMAIL;
 	}
 
-	public MailOtpAuthn(EmailConfig emailConfig) {
+	public MailOtpAuthn(MailProperties mailProperties) {
 		otpType = OtpTypes.EMAIL;
-		this.emailConfig = emailConfig;
+		this.mailProperties = mailProperties;
 	}
 
-	public MailOtpAuthn(EmailConfig emailConfig, String subject, String messageTemplate) {
+	public MailOtpAuthn(MailProperties mailProperties, String subject, String messageTemplate) {
 		otpType = OtpTypes.EMAIL;
-		this.emailConfig = emailConfig;
+		this.mailProperties = mailProperties;
 		this.subject = subject;
 		this.messageTemplate = messageTemplate;
 	}
@@ -44,12 +43,13 @@ public class MailOtpAuthn extends AbstractOtpAuthn {
 			String token = this.genToken(userInfo);
 			Email email = new HtmlEmail();
 			email.setCharset(this.defaultEncoding);
-			email.setHostName(emailConfig.getSmtpHost());
-			email.setSmtpPort(emailConfig.getPort());
-			email.setSSLOnConnect(emailConfig.isSsl());
-			email.setAuthenticator(new DefaultAuthenticator(emailConfig.getUsername(), emailConfig.getPassword()));
+			email.setHostName(mailProperties.getHost());
+			email.setSmtpPort(mailProperties.getPort());
+			email.setSSLOnConnect(Boolean.parseBoolean(mailProperties.getProperties().get("ssl")));
+			email.setAuthenticator(
+					new DefaultAuthenticator(mailProperties.getUsername(), mailProperties.getPassword()));
 
-			email.setFrom(emailConfig.getSender());
+			email.setFrom(mailProperties.getProperties().get("sender"));
 			email.setSubject(subject);
 			email.setMsg(MessageFormat.format(messageTemplate, userInfo.getUsername(), token, (interval / 60)));
 
@@ -59,8 +59,7 @@ public class MailOtpAuthn extends AbstractOtpAuthn {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			_logger.debug(
-					"token " + token + " send to user " + userInfo.getUsername() + ", email " + userInfo.getEmail());
+			log.debug("token " + token + " send to user " + userInfo.getUsername() + ", email " + userInfo.getEmail());
 			// 成功返回
 			this.optTokenStore.store(userInfo, token, userInfo.getMobile(), OtpTypes.EMAIL);
 			return true;
@@ -75,8 +74,8 @@ public class MailOtpAuthn extends AbstractOtpAuthn {
 		return this.optTokenStore.validate(userInfo, token, OtpTypes.EMAIL, interval);
 	}
 
-	public void setEmailConfig(EmailConfig emailConfig) {
-		this.emailConfig = emailConfig;
+	public void setMailProperties(MailProperties mailProperties) {
+		this.mailProperties = mailProperties;
 	}
 
 	public String getSubject() {
@@ -94,5 +93,4 @@ public class MailOtpAuthn extends AbstractOtpAuthn {
 	public void setMessageTemplate(String messageTemplate) {
 		this.messageTemplate = messageTemplate;
 	}
-
 }

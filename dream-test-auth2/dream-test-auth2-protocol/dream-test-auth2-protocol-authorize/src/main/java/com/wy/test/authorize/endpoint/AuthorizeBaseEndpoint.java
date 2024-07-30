@@ -10,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.core.configuration.ApplicationConfig;
-import com.wy.test.core.crypto.password.PasswordReciprocal;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.password.PasswordReciprocal;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.AccountsService;
@@ -25,7 +25,7 @@ public class AuthorizeBaseEndpoint {
 	final static Logger _logger = LoggerFactory.getLogger(AuthorizeBaseEndpoint.class);
 
 	@Autowired
-	protected ApplicationConfig applicationConfig;
+	protected DreamServerProperties dreamServerProperties;
 
 	@Autowired
 	protected AppsService appsService;
@@ -81,7 +81,7 @@ public class AuthorizeBaseEndpoint {
 
 	public ModelAndView initCredentialView(String appId, String redirect_uri) {
 		String initCredentialURL =
-				"" + applicationConfig.getFrontendUri() + "/#/authz/credential?appId=%s&redirect_uri=%s";
+				"" + dreamServerProperties.getFrontendUri() + "/#/authz/credential?appId=%s&redirect_uri=%s";
 
 		initCredentialURL = String.format(initCredentialURL, appId, redirect_uri);
 		_logger.debug("redirect to {}.", initCredentialURL);

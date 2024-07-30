@@ -10,8 +10,8 @@ import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.constants.ConstsLoginType;
+import com.wy.test.core.properties.DreamLoginProperties;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
 import dream.flying.flower.lang.StrHelper;
@@ -22,7 +22,7 @@ public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 
 	boolean enable;
 
-	ApplicationConfig applicationConfig;
+	DreamLoginProperties dreamLoginProperties;
 
 	AbstractAuthenticationProvider authenticationProvider;
 
@@ -35,8 +35,7 @@ public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 		String wsFederationWA = request.getParameter(WsFederationConstants.WA);
 		String wsFederationWResult = request.getParameter(WsFederationConstants.WRESULT);
 
-		if (!enable || isAuthenticated || !applicationConfig.getLoginConfig().isWsFederation()
-				|| wsFederationWA == null) {
+		if (!enable || isAuthenticated || !dreamLoginProperties.isWsFederation() || wsFederationWA == null) {
 			return true;
 		}
 
@@ -59,7 +58,7 @@ public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 
 		// for WsFederation Login
 		_logger.debug("WsFederation : " + wsFederationWA + " , wsFederationWResult : " + wsFederationWResult);
-		if (applicationConfig.getLoginConfig().isWsFederation() && StrHelper.isNotEmpty(wsFederationWA)
+		if (dreamLoginProperties.isWsFederation() && StrHelper.isNotEmpty(wsFederationWA)
 				&& wsFederationWA.equalsIgnoreCase(WsFederationConstants.WSIGNIN)) {
 			_logger.debug("wresult : {}" + wsFederationWResult);
 
@@ -111,11 +110,11 @@ public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 	}
 
 	public HttpWsFederationEntryPoint(AbstractAuthenticationProvider authenticationProvider,
-			WsFederationService wsFederationService, ApplicationConfig applicationConfig, boolean enable) {
+			WsFederationService wsFederationService, DreamLoginProperties dreamLoginProperties, boolean enable) {
 		super();
 		this.authenticationProvider = authenticationProvider;
 		this.wsFederationService = wsFederationService;
-		this.applicationConfig = applicationConfig;
+		this.dreamLoginProperties = dreamLoginProperties;
 		this.enable = enable;
 	}
 
@@ -127,8 +126,8 @@ public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 		this.enable = enable;
 	}
 
-	public void setApplicationConfig(ApplicationConfig applicationConfig) {
-		this.applicationConfig = applicationConfig;
+	public void setDreamLoginProperties(DreamLoginProperties dreamLoginProperties) {
+		this.dreamLoginProperties = dreamLoginProperties;
 	}
 
 	public void setAuthenticationProvider(AbstractAuthenticationProvider authenticationProvider) {
@@ -138,5 +137,4 @@ public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 	public void setWsFederationService(WsFederationService wsFederationService) {
 		this.wsFederationService = wsFederationService;
 	}
-
 }

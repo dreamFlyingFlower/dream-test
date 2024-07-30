@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.NoSuchClientException;
 
-import com.wy.test.core.crypto.password.PasswordReciprocal;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
+import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.oauth2.provider.ClientDetailsService;
 
 /**

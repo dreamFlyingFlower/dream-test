@@ -17,10 +17,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 
 import com.wy.test.core.constants.ConstsPasswordSetType;
 import com.wy.test.core.constants.ConstsStatus;
-import com.wy.test.core.crypto.password.PasswordGen;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.PasswordPolicy;
 import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.password.PasswordGen;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 

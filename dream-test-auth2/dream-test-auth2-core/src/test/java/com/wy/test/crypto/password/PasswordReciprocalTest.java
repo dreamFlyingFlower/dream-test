@@ -2,7 +2,7 @@ package com.wy.test.crypto.password;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.wy.test.core.crypto.password.PasswordReciprocal;
+import com.wy.test.core.password.PasswordReciprocal;
 
 public class PasswordReciprocalTest {
 

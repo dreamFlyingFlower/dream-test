@@ -43,7 +43,7 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 		_logger.trace("SocialSignOn provider : " + provider);
 		String instId = WebContext.getInst().getId();
 		String originURL = WebContext.getContextPath(request, false);
-		String authorizationUrl = buildAuthRequest(instId, provider, originURL + applicationConfig.getFrontendUri())
+		String authorizationUrl = buildAuthRequest(instId, provider, originURL + dreamServerProperties.getFrontendUri())
 				.authorize(authTokenService.genRandomJwt());
 
 		_logger.trace("authorize SocialSignOn : " + authorizationUrl);
@@ -55,7 +55,8 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 	public ResponseEntity<?> scanQRCode(HttpServletRequest request, @PathVariable("provider") String provider) {
 		String instId = WebContext.getInst().getId();
 		String originURL = WebContext.getContextPath(request, false);
-		AuthRequest authRequest = buildAuthRequest(instId, provider, originURL + applicationConfig.getFrontendUri());
+		AuthRequest authRequest =
+				buildAuthRequest(instId, provider, originURL + dreamServerProperties.getFrontendUri());
 
 		if (authRequest == null) {
 			_logger.error("build authRequest fail .");
@@ -67,8 +68,8 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 		SocialsProvider socialSignOnProvider = socialSignOnProviderService.get(instId, provider);
 		SocialsProvider scanQrProvider = new SocialsProvider(socialSignOnProvider);
 		scanQrProvider.setState(state);
-		scanQrProvider.setRedirectUri(
-				socialSignOnProviderService.getRedirectUri(originURL + applicationConfig.getFrontendUri(), provider));
+		scanQrProvider.setRedirectUri(socialSignOnProviderService
+				.getRedirectUri(originURL + dreamServerProperties.getFrontendUri(), provider));
 		// 缓存state票据在缓存或者是redis中五分钟过期
 		if (provider.equalsIgnoreCase(AuthDreamRequest.KEY)) {
 			socialSignOnProviderService.setToken(state);
@@ -83,8 +84,8 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 		// auth call back may exception
 		try {
 			String originURL = WebContext.getContextPath(request, false);
-			SocialsAssociate socialsAssociate =
-					this.authCallback(userInfo.getInstId(), provider, originURL + applicationConfig.getFrontendUri());
+			SocialsAssociate socialsAssociate = this.authCallback(userInfo.getInstId(), provider,
+					originURL + dreamServerProperties.getFrontendUri());
 			socialsAssociate.setSocialUserInfo(accountJsonString);
 			socialsAssociate.setUserId(userInfo.getId());
 			socialsAssociate.setUsername(userInfo.getUsername());
@@ -109,7 +110,7 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 			String originURL = WebContext.getContextPath(request, false);
 			String instId = WebContext.getInst().getId();
 			SocialsAssociate socialsAssociate =
-					this.authCallback(instId, provider, originURL + applicationConfig.getFrontendUri());
+					this.authCallback(instId, provider, originURL + dreamServerProperties.getFrontendUri());
 
 			SocialsAssociate socialssssociate1 = this.socialsAssociateService.get(socialsAssociate);
 

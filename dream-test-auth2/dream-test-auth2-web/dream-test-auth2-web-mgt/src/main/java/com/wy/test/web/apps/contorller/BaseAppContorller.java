@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.wy.test.core.crypto.password.PasswordReciprocal;
 import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.persistence.service.AppsService;
 import com.wy.test.persistence.service.FileUploadService;
 import com.wy.test.persistence.service.HistorySystemLogsService;

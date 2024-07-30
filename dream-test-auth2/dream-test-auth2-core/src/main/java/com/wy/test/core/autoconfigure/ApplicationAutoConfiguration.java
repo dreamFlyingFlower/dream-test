@@ -23,8 +23,8 @@ import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 import com.nimbusds.jose.JOSEException;
 import com.wy.test.core.constants.ConstsPersistence;
-import com.wy.test.core.crypto.password.PasswordReciprocal;
-import com.wy.test.core.crypto.password.SM3PasswordEncoder;
+import com.wy.test.core.password.PasswordReciprocal;
+import com.wy.test.core.password.SM3PasswordEncoder;
 import com.wy.test.core.persistence.cache.InMemoryMomentaryService;
 import com.wy.test.core.persistence.cache.MomentaryService;
 import com.wy.test.core.persistence.cache.RedisMomentaryService;

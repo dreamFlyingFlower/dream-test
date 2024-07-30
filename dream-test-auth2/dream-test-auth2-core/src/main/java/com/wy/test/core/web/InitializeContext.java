@@ -18,8 +18,6 @@ import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.arch.Processor;
 import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -28,15 +26,16 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.constants.ConstsDatabase;
 import com.wy.test.core.util.PathUtils;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * InitApplicationContext .
  */
+@Slf4j
 public class InitializeContext extends HttpServlet {
-
-	private static final Logger _logger = LoggerFactory.getLogger(InitializeContext.class);
 
 	private static final long serialVersionUID = -797399138268601444L;
 
@@ -80,7 +79,7 @@ public class InitializeContext extends HttpServlet {
 			BeanDefinitionRegistry beanFactory = (BeanDefinitionRegistry) applicationContext.getBeanFactory();
 			beanFactory.removeBeanDefinition("localeResolver");
 			beanFactory.registerBeanDefinition("localeResolver", beanFactory.getBeanDefinition("cookieLocaleResolver"));
-			_logger.debug("cookieLocaleResolver replaced localeResolver.");
+			log.debug("cookieLocaleResolver replaced localeResolver.");
 		}
 		this.applicationContext = applicationContext;
 	}
@@ -91,33 +90,33 @@ public class InitializeContext extends HttpServlet {
 	public void listDataBaseVariables() {
 		if (applicationContext.containsBean("dataSource")) {
 			try {
-				_logger.debug("-----------------------------------------------------------");
-				_logger.debug("List DatabaseMetaData Variables ");
+				log.debug("-----------------------------------------------------------");
+				log.debug("List DatabaseMetaData Variables ");
 				Connection connection =
 						((javax.sql.DataSource) applicationContext.getBean("dataSource")).getConnection();
 
 				DatabaseMetaData databaseMetaData = connection.getMetaData();
-				ApplicationConfig.databaseProduct = databaseMetaData.getDatabaseProductName();
+				ConstsDatabase.databaseProduct = databaseMetaData.getDatabaseProductName();
 
-				_logger.debug("DatabaseProductName   :   {}", databaseMetaData.getDatabaseProductName());
-				_logger.debug("DatabaseProductVersion:   {}", databaseMetaData.getDatabaseProductVersion());
-				_logger.trace("DatabaseMajorVersion  :   {}", databaseMetaData.getDatabaseMajorVersion());
-				_logger.trace("DatabaseMinorVersion  :   {}", databaseMetaData.getDatabaseMinorVersion());
-				_logger.trace("supportsTransactions  :   {}", databaseMetaData.supportsTransactions());
-				_logger.trace("DefaultTransaction    :   {}", databaseMetaData.getDefaultTransactionIsolation());
-				_logger.trace("MaxConnections        :   {}", databaseMetaData.getMaxConnections());
-				_logger.trace("");
-				_logger.trace("JDBCMajorVersion      :   {}", databaseMetaData.getJDBCMajorVersion());
-				_logger.trace("JDBCMinorVersion      :   {}", databaseMetaData.getJDBCMinorVersion());
-				_logger.trace("DriverName            :   {}", databaseMetaData.getDriverName());
-				_logger.trace("DriverVersion         :   {}", databaseMetaData.getDriverVersion());
-				_logger.debug("");
-				_logger.debug("DBMS  URL             :   {}", databaseMetaData.getURL());
-				_logger.debug("UserName              :   {}", databaseMetaData.getUserName());
-				_logger.debug("-----------------------------------------------------------");
+				log.debug("DatabaseProductName   :   {}", databaseMetaData.getDatabaseProductName());
+				log.debug("DatabaseProductVersion:   {}", databaseMetaData.getDatabaseProductVersion());
+				log.trace("DatabaseMajorVersion  :   {}", databaseMetaData.getDatabaseMajorVersion());
+				log.trace("DatabaseMinorVersion  :   {}", databaseMetaData.getDatabaseMinorVersion());
+				log.trace("supportsTransactions  :   {}", databaseMetaData.supportsTransactions());
+				log.trace("DefaultTransaction    :   {}", databaseMetaData.getDefaultTransactionIsolation());
+				log.trace("MaxConnections        :   {}", databaseMetaData.getMaxConnections());
+				log.trace("");
+				log.trace("JDBCMajorVersion      :   {}", databaseMetaData.getJDBCMajorVersion());
+				log.trace("JDBCMinorVersion      :   {}", databaseMetaData.getJDBCMinorVersion());
+				log.trace("DriverName            :   {}", databaseMetaData.getDriverName());
+				log.trace("DriverVersion         :   {}", databaseMetaData.getDriverVersion());
+				log.debug("");
+				log.debug("DBMS  URL             :   {}", databaseMetaData.getURL());
+				log.debug("UserName              :   {}", databaseMetaData.getUserName());
+				log.debug("-----------------------------------------------------------");
 			} catch (SQLException e) {
 				e.printStackTrace();
-				_logger.error("DatabaseMetaData Variables Error .", e);
+				log.error("DatabaseMetaData Variables Error .", e);
 			}
 		}
 	}
@@ -127,8 +126,8 @@ public class InitializeContext extends HttpServlet {
 	 */
 	public void listProperties() {
 		if (applicationContext.containsBean("propertySourcesPlaceholderConfigurer")) {
-			_logger.trace("-----------------------------------------------------------");
-			_logger.trace("List Properties Variables ");
+			log.trace("-----------------------------------------------------------");
+			log.trace("List Properties Variables ");
 			PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer =
 					((PropertySourcesPlaceholderConfigurer) applicationContext
 							.getBean("propertySourcesPlaceholderConfigurer"));
@@ -139,10 +138,10 @@ public class InitializeContext extends HttpServlet {
 
 			Iterator<PropertySource<?>> it = WebContext.properties.getPropertySources().iterator();
 			while (it.hasNext()) {
-				_logger.debug("propertySource {}", it.next());
+				log.debug("propertySource {}", it.next());
 			}
 
-			_logger.trace("-----------------------------------------------------------");
+			log.trace("-----------------------------------------------------------");
 		}
 	}
 
@@ -150,8 +149,8 @@ public class InitializeContext extends HttpServlet {
 	 * listEnvVars.
 	 */
 	public void listEnvVars() {
-		_logger.debug("-----------------------------------------------------------");
-		_logger.debug("List Environment Variables ");
+		log.debug("-----------------------------------------------------------");
+		log.debug("List Environment Variables ");
 		Map<String, String> map = System.getenv();
 		SortedSet<String> keyValueSet = new TreeSet<String>();
 		for (Iterator<String> itr = map.keySet().iterator(); itr.hasNext();) {
@@ -161,26 +160,25 @@ public class InitializeContext extends HttpServlet {
 		// out
 		for (Iterator<String> it = keyValueSet.iterator(); it.hasNext();) {
 			String key = (String) it.next();
-			_logger.trace(key + "   =   {}", map.get(key));
+			log.trace(key + "   =   {}", map.get(key));
 		}
-		_logger.debug("APP_HOME" + "   =   {}", PathUtils.getInstance().getAppPath());
+		log.debug("APP_HOME" + "   =   {}", PathUtils.getInstance().getAppPath());
 
 		Processor processor = ArchUtils.getProcessor();
 		if (Objects.isNull(processor)) {
 			processor = new Processor(Processor.Arch.UNKNOWN, Processor.Type.UNKNOWN);
 		}
-		_logger.debug("OS      : {}({} {}), version {}", SystemUtils.OS_NAME, SystemUtils.OS_ARCH, processor.getType(),
+		log.debug("OS      : {}({} {}), version {}", SystemUtils.OS_NAME, SystemUtils.OS_ARCH, processor.getType(),
 				SystemUtils.OS_VERSION
 
 		);
-		_logger.debug("COMPUTER: {}, USERNAME : {}", map.get("COMPUTERNAME"), map.get("USERNAME"));
-		_logger.debug("JAVA    :");
-		_logger.debug("{} java version {}, class {}", SystemUtils.JAVA_VENDOR, SystemUtils.JAVA_VERSION,
+		log.debug("COMPUTER: {}, USERNAME : {}", map.get("COMPUTERNAME"), map.get("USERNAME"));
+		log.debug("JAVA    :");
+		log.debug("{} java version {}, class {}", SystemUtils.JAVA_VENDOR, SystemUtils.JAVA_VERSION,
 				SystemUtils.JAVA_CLASS_VERSION);
-		_logger.debug("{} (build {}, {})", SystemUtils.JAVA_VM_NAME, SystemUtils.JAVA_VM_VERSION,
-				SystemUtils.JAVA_VM_INFO);
+		log.debug("{} (build {}, {})", SystemUtils.JAVA_VM_NAME, SystemUtils.JAVA_VM_VERSION, SystemUtils.JAVA_VM_INFO);
 
-		_logger.debug("-----------------------------------------------------------");
+		log.debug("-----------------------------------------------------------");
 
 	}
 
@@ -188,16 +186,14 @@ public class InitializeContext extends HttpServlet {
 	 * showLicense.
 	 */
 	public void showLicense() {
-		_logger.info("-----------------------------------------------------------");
-		_logger.info("+                       Community  Edition ");
-		_logger.info("+                      Single   Sign  On ( SSO ) ");
-		_logger.info("+                           Version {}",
+		log.info("-----------------------------------------------------------");
+		log.info("+                       Community  Edition ");
+		log.info("+                      Single   Sign  On ( SSO ) ");
+		log.info("+                           Version {}",
 				WebContext.properties.getProperty("application.formatted-version"));
-		_logger.info("+");
-		_logger.info("+                 {}Copyright 2018 - {} https://www.top/", (char) 0xA9,
-				new DateTime().getYear());
-		_logger.info("+                 Licensed under the Apache License, Version 2.0 ");
-		_logger.info("-----------------------------------------------------------");
+		log.info("+");
+		log.info("+                 {}Copyright 2018 - {} https://www.top/", (char) 0xA9, new DateTime().getYear());
+		log.info("+                 Licensed under the Apache License, Version 2.0 ");
+		log.info("-----------------------------------------------------------");
 	}
-
 }

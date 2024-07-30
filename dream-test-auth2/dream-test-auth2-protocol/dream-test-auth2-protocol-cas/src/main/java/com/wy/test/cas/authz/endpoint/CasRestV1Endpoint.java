@@ -76,7 +76,7 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 
 			String ticket = casTicketGrantingTicketServices.createTicket(ticketGrantingTicket);
 			String location =
-					applicationConfig.getServerPrefix() + CasConstants.ENDPOINT.ENDPOINT_REST_TICKET_V1 + "/" + ticket;
+					dreamServerProperties.getPrefix() + CasConstants.ENDPOINT.ENDPOINT_REST_TICKET_V1 + "/" + ticket;
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("location", location);
 			_logger.trace("ticket {}", ticket);
@@ -174,8 +174,7 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 					new TicketGrantingTicketImpl("Random", AuthorizationUtils.getAuthentication(), null);
 
 			String ticket = casTicketGrantingTicketServices.createTicket(ticketGrantingTicket);
-			String location =
-					applicationConfig.getServerPrefix() + CasConstants.ENDPOINT.ENDPOINT_REST_TICKET_V1 + ticket;
+			String location = dreamServerProperties.getPrefix() + CasConstants.ENDPOINT.ENDPOINT_REST_TICKET_V1 + ticket;
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("location", location);
 			ServiceResponseBuilder serviceResponseBuilder = new ServiceResponseBuilder();

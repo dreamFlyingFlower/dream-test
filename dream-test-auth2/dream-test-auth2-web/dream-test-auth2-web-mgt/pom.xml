@@ -15,6 +15,10 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>dream.flying.flower</groupId>
 			<artifactId>dream-test-auth2-authentication-captcha</artifactId>
 		</dependency>

@@ -15,7 +15,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.wy.test.core.authn.web.CurrentUserMethodArgumentResolver;
 import com.wy.test.core.authn.web.interceptor.PermissionInterceptor;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
 @EnableWebMvc
@@ -23,9 +22,6 @@ import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 public class DreamMgtMvcConfig implements WebMvcConfigurer {
 
 	private static final Logger _logger = LoggerFactory.getLogger(DreamMgtMvcConfig.class);
-
-	@Autowired
-	ApplicationConfig applicationConfig;
 
 	@Autowired
 	AbstractAuthenticationProvider authenticationProvider;

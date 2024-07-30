@@ -10,10 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.wy.test.core.constants.ConstsStatus;
-import com.wy.test.core.crypto.password.PasswordReciprocal;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.mapper.UserInfoMapper;
@@ -58,7 +58,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 	public boolean insert(UserInfo userInfo) {
 		this.passwordEncoder(userInfo);
 		if (super.insert(userInfo)) {
-			if (provisionService.getApplicationConfig().isProvisionSupport()) {
+			if (provisionService.getDreamServerProperties().isProvision()) {
 				UserInfo loadUserInfo = findUserRelated(userInfo.getId());
 				provisionService.send(ProvisionTopic.USERINFO_TOPIC, loadUserInfo, ProvisionAction.CREATE_ACTION);
 			}
@@ -74,7 +74,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 			this.passwordEncoder(userInfo);
 		}
 		if (super.insert(userInfo)) {
-			if (provisionService.getApplicationConfig().isProvisionSupport()) {
+			if (provisionService.getDreamServerProperties().isProvision()) {
 				UserInfo loadUserInfo = findUserRelated(userInfo.getId());
 				provisionService.send(ProvisionTopic.USERINFO_TOPIC, loadUserInfo, ProvisionAction.CREATE_ACTION);
 			}
@@ -89,7 +89,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 	public boolean update(UserInfo userInfo) {
 		ChangePassword changePassword = this.passwordEncoder(userInfo);
 		if (super.update(userInfo)) {
-			if (provisionService.getApplicationConfig().isProvisionSupport()) {
+			if (provisionService.getDreamServerProperties().isProvision()) {
 				UserInfo loadUserInfo = findUserRelated(userInfo.getId());
 				accountUpdate(loadUserInfo);
 				provisionService.send(ProvisionTopic.USERINFO_TOPIC, loadUserInfo, ProvisionAction.UPDATE_ACTION);
@@ -105,7 +105,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 	@Override
 	public boolean delete(UserInfo userInfo) {
 		UserInfo loadUserInfo = null;
-		if (provisionService.getApplicationConfig().isProvisionSupport()) {
+		if (provisionService.getDreamServerProperties().isProvision()) {
 			loadUserInfo = findUserRelated(userInfo.getId());
 		}
 

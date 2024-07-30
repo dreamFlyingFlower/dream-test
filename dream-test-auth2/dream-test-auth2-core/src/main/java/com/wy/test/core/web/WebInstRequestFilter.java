@@ -9,17 +9,16 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.GenericFilterBean;
 
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.entity.Institutions;
 import com.wy.test.core.persistence.repository.InstitutionsRepository;
+import com.wy.test.core.properties.DreamServerProperties;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class WebInstRequestFilter extends GenericFilterBean {
-
-	final static Logger _logger = LoggerFactory.getLogger(GenericFilterBean.class);
 
 	public final static String HEADER_HOST = "host";
 
@@ -29,48 +28,48 @@ public class WebInstRequestFilter extends GenericFilterBean {
 
 	InstitutionsRepository institutionsRepository;
 
-	ApplicationConfig applicationConfig;
+	DreamServerProperties dreamServerProperties;
 
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
 			throws IOException, ServletException {
-		_logger.trace("WebInstRequestFilter");
+		log.trace("WebInstRequestFilter");
 		HttpServletRequest request = ((HttpServletRequest) servletRequest);
 
 		if (request.getSession().getAttribute(WebConstants.CURRENT_INST) == null) {
-			if (_logger.isTraceEnabled()) {
+			if (log.isTraceEnabled()) {
 				WebContext.printRequest(request);
 			}
 			String host = request.getHeader(HEADER_HOSTNAME);
-			_logger.trace("hostname {}", host);
+			log.trace("hostname {}", host);
 			if (StringUtils.isEmpty(host)) {
 				host = request.getHeader(HEADER_HOST);
-				_logger.trace("host {}", host);
+				log.trace("host {}", host);
 			}
 			if (StringUtils.isEmpty(host)) {
-				host = applicationConfig.getDomainName();
-				_logger.trace("config domain {}", host);
+				host = dreamServerProperties.getDomain();
+				log.trace("config domain {}", host);
 			}
 			if (host.indexOf(":") > -1) {
 				host = host.split(":")[0];
-				_logger.trace("domain split {}", host);
+				log.trace("domain split {}", host);
 			}
 			Institutions institution = institutionsRepository.get(host);
-			_logger.trace("{}", institution);
+			log.trace("{}", institution);
 			request.getSession().setAttribute(WebConstants.CURRENT_INST, institution);
 
 			String origin = request.getHeader(HEADER_ORIGIN);
 			if (StringUtils.isEmpty(origin)) {
-				origin = applicationConfig.getFrontendUri();
+				origin = dreamServerProperties.getFrontendUri();
 			}
 		}
 		chain.doFilter(servletRequest, servletResponse);
 	}
 
-	public WebInstRequestFilter(InstitutionsRepository institutionsRepository, ApplicationConfig applicationConfig) {
+	public WebInstRequestFilter(InstitutionsRepository institutionsRepository,
+			DreamServerProperties dreamServerProperties) {
 		super();
 		this.institutionsRepository = institutionsRepository;
-		this.applicationConfig = applicationConfig;
+		this.dreamServerProperties = dreamServerProperties;
 	}
-
 }

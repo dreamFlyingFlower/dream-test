@@ -1,4 +1,4 @@
-package com.wy.test.core.crypto.password;
+package com.wy.test.core.password;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;

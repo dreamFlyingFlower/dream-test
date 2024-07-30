@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.crypto.password.PasswordReciprocal;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.otp.password.onetimepwd.algorithm.OtpKeyUriFormat;
 import com.wy.test.otp.password.onetimepwd.algorithm.OtpSecret;
 import com.wy.test.otp.password.onetimepwd.impl.TimeBasedOtpAuthn;

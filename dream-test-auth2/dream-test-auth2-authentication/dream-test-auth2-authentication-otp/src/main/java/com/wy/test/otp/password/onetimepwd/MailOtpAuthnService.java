@@ -3,12 +3,13 @@ package com.wy.test.otp.password.onetimepwd;
 import java.sql.Types;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.boot.autoconfigure.mail.MailProperties;
+
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.core.configuration.EmailConfig;
 import com.wy.test.core.constants.ConstsBoolean;
-import com.wy.test.core.crypto.password.PasswordReciprocal;
 import com.wy.test.core.entity.EmailSenders;
+import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.otp.password.onetimepwd.impl.MailOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.token.RedisOtpTokenStore;
 import com.wy.test.persistence.service.EmailSendersService;
@@ -37,9 +38,15 @@ public class MailOtpAuthnService {
 					new int[] { Types.VARCHAR });
 
 			String credentials = PasswordReciprocal.getInstance().decoder(emailSender.getCredentials());
-			EmailConfig emailConfig = new EmailConfig(emailSender.getAccount(), credentials, emailSender.getSmtpHost(),
-					emailSender.getPort(), ConstsBoolean.isTrue(emailSender.getSslSwitch()), emailSender.getSender());
-			MailOtpAuthn mailOtpAuthn = new MailOtpAuthn(emailConfig);
+
+			MailProperties mailProperties = new MailProperties();
+			mailProperties.setUsername(emailSender.getAccount());
+			mailProperties.setPassword(credentials);
+			mailProperties.setHost(emailSender.getSmtpHost());
+			mailProperties.setPort(emailSender.getPort());
+			mailProperties.getProperties().put("ssl", String.valueOf(ConstsBoolean.isTrue(emailSender.getSslSwitch())));
+			mailProperties.getProperties().put("sender", emailSender.getSender());
+			MailOtpAuthn mailOtpAuthn = new MailOtpAuthn(mailProperties);
 			mailOtpAuthn.setInterval(60 * 5);// 5 minute
 			if (redisOptTokenStore != null) {
 				mailOtpAuthn.setOptTokenStore(redisOptTokenStore);
@@ -53,5 +60,4 @@ public class MailOtpAuthnService {
 	public void setRedisOptTokenStore(RedisOtpTokenStore redisOptTokenStore) {
 		this.redisOptTokenStore = redisOptTokenStore;
 	}
-
 }

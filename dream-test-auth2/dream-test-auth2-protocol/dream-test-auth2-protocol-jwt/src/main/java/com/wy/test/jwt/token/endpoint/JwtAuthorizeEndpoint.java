@@ -23,12 +23,12 @@ import com.wy.test.authorize.endpoint.AuthorizeBaseEndpoint;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.constants.ContentType;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.entity.apps.AppsJwtDetails;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.jwt.jwt.endpoint.adapter.JwtAdapter;
 import com.wy.test.persistence.service.AppsJwtDetailsService;
@@ -48,7 +48,7 @@ public class JwtAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 	AppsJwtDetailsService jwtDetailsService;
 
 	@Autowired
-	ApplicationConfig applicationConfig;
+	DreamServerProperties dreamServerProperties;
 
 	@Operation(summary = "JWT应用ID认证接口", description = "应用ID", method = "GET")
 	@GetMapping("/authz/jwt/{id}")

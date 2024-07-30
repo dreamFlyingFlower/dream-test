@@ -11,7 +11,7 @@
 	<artifactId>dream-test-auth2-core</artifactId>
 	<name>dream-test-auth2-core</name>
 	<description>study for spring cloud security</description>
-	
+
 	<properties>
 		<spring-security-oauth2.version>2.3.8.RELEASE</spring-security-oauth2.version>
 	</properties>
@@ -24,6 +24,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>

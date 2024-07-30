@@ -11,10 +11,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.persistence.repository.LoginHistoryRepository;
 import com.wy.test.core.persistence.repository.LoginRepository;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
+import com.wy.test.core.properties.DreamLoginProperties;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.provider.authn.provider.AuthenticationProviderFactory;
 import com.wy.test.provider.authn.provider.impl.MobileAuthenticationProvider;
@@ -44,25 +45,27 @@ public class AuthnProviderAutoConfiguration implements InitializingBean {
 
 	@Bean
 	AbstractAuthenticationProvider normalAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
-			ApplicationConfig applicationConfig, SessionManager sessionManager, AuthTokenService authTokenService) {
+			DreamServerProperties dreamServerProperties, SessionManager sessionManager,
+			AuthTokenService authTokenService) {
 		_logger.debug("init authentication Provider .");
-		return new NormalAuthenticationProvider(authenticationRealm, applicationConfig, sessionManager,
+		return new NormalAuthenticationProvider(authenticationRealm, dreamServerProperties, sessionManager,
 				authTokenService);
 	}
 
 	@Bean
 	AbstractAuthenticationProvider mobileAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
-			ApplicationConfig applicationConfig, SmsOtpAuthnService smsAuthnService, SessionManager sessionManager) {
+			DreamServerProperties dreamServerProperties, SmsOtpAuthnService smsAuthnService,
+			SessionManager sessionManager) {
 		_logger.debug("init Mobile authentication Provider .");
-		return new MobileAuthenticationProvider(authenticationRealm, applicationConfig, smsAuthnService,
+		return new MobileAuthenticationProvider(authenticationRealm, dreamServerProperties, smsAuthnService,
 				sessionManager);
 	}
 
 	@Bean
 	AbstractAuthenticationProvider trustedAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
-			ApplicationConfig applicationConfig, SessionManager sessionManager) {
+			DreamServerProperties dreamServerProperties, SessionManager sessionManager) {
 		_logger.debug("init Mobile authentication Provider .");
-		return new TrustedAuthenticationProvider(authenticationRealm, applicationConfig, sessionManager);
+		return new TrustedAuthenticationProvider(authenticationRealm, dreamServerProperties, sessionManager);
 	}
 
 	@Bean
@@ -87,10 +90,10 @@ public class AuthnProviderAutoConfiguration implements InitializingBean {
 	 */
 	@Bean
 	AbstractRemeberMeManager remeberMeManager(@Value("${dream.server.persistence}") int persistence,
-			@Value("${dream.login.remeberme.validity}") int validity, ApplicationConfig applicationConfig,
+			@Value("${dream.login.remeberme.validity}") int validity, DreamLoginProperties dreamLoginProperties,
 			AuthTokenService authTokenService, JdbcTemplate jdbcTemplate) {
 		_logger.trace("init RemeberMeManager , validity {}.", validity);
-		return new JdbcRemeberMeManager(jdbcTemplate, applicationConfig, authTokenService, validity);
+		return new JdbcRemeberMeManager(jdbcTemplate, dreamLoginProperties, authTokenService, validity);
 	}
 
 	@Override

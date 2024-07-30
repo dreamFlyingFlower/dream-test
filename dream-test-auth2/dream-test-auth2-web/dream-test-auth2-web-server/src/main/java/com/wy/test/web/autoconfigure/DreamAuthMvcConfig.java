@@ -16,7 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.wy.test.core.authn.web.CurrentUserMethodArgumentResolver;
 import com.wy.test.core.authn.web.interceptor.PermissionInterceptor;
-import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.provider.authn.support.basic.BasicEntryPoint;
 import com.wy.test.provider.authn.support.httpheader.HttpHeaderEntryPoint;
@@ -41,7 +41,7 @@ public class DreamAuthMvcConfig implements WebMvcConfigurer {
 	private String httpHeaderName;
 
 	@Autowired
-	ApplicationConfig applicationConfig;
+	DreamServerProperties dreamServerProperties;
 
 	@Autowired
 	AbstractAuthenticationProvider authenticationProvider;
@@ -83,7 +83,7 @@ public class DreamAuthMvcConfig implements WebMvcConfigurer {
 
 		_logger.debug("add Http Kerberos Entry Point");
 		registry.addInterceptor(
-				new HttpKerberosEntryPoint(authenticationProvider, kerberosService, applicationConfig, true))
+				new HttpKerberosEntryPoint(authenticationProvider, kerberosService, dreamServerProperties, true))
 				.addPathPatterns("/login");
 
 		if (httpHeaderEnable) {

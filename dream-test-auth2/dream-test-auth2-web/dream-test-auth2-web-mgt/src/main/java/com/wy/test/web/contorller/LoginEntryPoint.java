@@ -2,9 +2,6 @@ package com.wy.test.web.contorller;
 
 import java.util.HashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,27 +14,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthJwt;
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.entity.Institutions;
 import com.wy.test.core.entity.Message;
+import com.wy.test.core.properties.DreamLoginProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
 @RequestMapping(value = "/login")
+@Slf4j
+@AllArgsConstructor
 public class LoginEntryPoint {
 
-	private static Logger _logger = LoggerFactory.getLogger(LoginEntryPoint.class);
+	private final AuthTokenService authTokenService;
 
-	@Autowired
-	AuthTokenService authTokenService;
+	private final AbstractAuthenticationProvider authenticationProvider;
 
-	@Autowired
-	protected ApplicationConfig applicationConfig;
-
-	@Autowired
-	AbstractAuthenticationProvider authenticationProvider;
+	private final DreamLoginProperties dreamLoginProperties;
 
 	/**
 	 * init login
@@ -46,13 +43,13 @@ public class LoginEntryPoint {
 	 */
 	@GetMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get() {
-		_logger.debug("/login.");
+		log.debug("/login.");
 
 		HashMap<String, Object> model = new HashMap<String, Object>();
-		model.put("isRemeberMe", applicationConfig.getLoginConfig().isRemeberMe());
+		model.put("isRemeberMe", dreamLoginProperties.isRemeberMe());
 		Institutions inst = (Institutions) WebContext.getAttribute(WebConstants.CURRENT_INST);
 		model.put("inst", inst);
-		if (applicationConfig.getLoginConfig().isCaptcha()) {
+		if (dreamLoginProperties.isCaptcha()) {
 			model.put("captcha", "true");
 		} else {
 			model.put("captcha", inst.getCaptcha());
@@ -73,7 +70,7 @@ public class LoginEntryPoint {
 				String errorMsg = WebContext.getAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE) == null ? ""
 						: WebContext.getAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE).toString();
 				authJwtMessage.setMessage(Message.FAIL, errorMsg);
-				_logger.debug("login fail , message {}", errorMsg);
+				log.debug("login fail , message {}", errorMsg);
 			}
 		}
 		return authJwtMessage.buildResponse();

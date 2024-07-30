@@ -64,5 +64,4 @@ public class WebConstants {
 
 		public static final String USER_INACTIVE = "inactive";
 	}
-
 }

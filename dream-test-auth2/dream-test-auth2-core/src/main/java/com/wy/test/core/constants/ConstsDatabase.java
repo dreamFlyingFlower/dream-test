@@ -1,8 +1,8 @@
 package com.wy.test.core.constants;
 
-import com.wy.test.core.configuration.ApplicationConfig;
-
 public class ConstsDatabase {
+
+	public static String databaseProduct = "MySQL";
 
 	public static String MYSQL = "MySQL";
 
@@ -15,10 +15,9 @@ public class ConstsDatabase {
 	public static String DB2 = "db2";
 
 	public static boolean compare(String databaseProduct) {
-		if (databaseProduct.equalsIgnoreCase(ApplicationConfig.databaseProduct)) {
+		if (databaseProduct.equalsIgnoreCase(databaseProduct)) {
 			return true;
 		}
 		return false;
 	}
-
 }

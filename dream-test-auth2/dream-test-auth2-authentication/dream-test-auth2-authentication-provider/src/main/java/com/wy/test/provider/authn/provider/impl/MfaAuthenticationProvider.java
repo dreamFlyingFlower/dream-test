@@ -10,10 +10,10 @@ import org.springframework.security.core.AuthenticationException;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.entity.Institutions;
 import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
@@ -36,9 +36,10 @@ public class MfaAuthenticationProvider extends AbstractAuthenticationProvider {
 	}
 
 	public MfaAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
-			ApplicationConfig applicationConfig, SessionManager sessionManager, AuthTokenService authTokenService) {
+			DreamServerProperties dreamServerProperties, SessionManager sessionManager,
+			AuthTokenService authTokenService) {
 		this.authenticationRealm = authenticationRealm;
-		this.applicationConfig = applicationConfig;
+		this.dreamServerProperties = dreamServerProperties;
 		this.sessionManager = sessionManager;
 		this.authTokenService = authTokenService;
 	}
@@ -102,7 +103,7 @@ public class MfaAuthenticationProvider extends AbstractAuthenticationProvider {
 	 */
 	protected void mfacaptchaValid(String otpCaptcha, UserInfo userInfo) {
 		// for one time password 2 factor
-		if (applicationConfig.getLoginConfig().isMfa()) {
+		if (dreamLoginProperties.isMfa()) {
 			UserInfo validUserInfo = new UserInfo();
 			validUserInfo.setUsername(userInfo.getUsername());
 			validUserInfo.setSharedSecret(userInfo.getSharedSecret());
@@ -115,5 +116,4 @@ public class MfaAuthenticationProvider extends AbstractAuthenticationProvider {
 			}
 		}
 	}
-
 }

@@ -15,8 +15,8 @@ import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.AppsCasDetailsService;
@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SingleSignOnInterceptor implements AsyncHandlerInterceptor {
 
 	@Autowired
-	ApplicationConfig applicationConfig;
+	DreamServerProperties dreamServerProperties;
 
 	@Autowired
 	SessionManager sessionManager;
@@ -52,7 +52,7 @@ public class SingleSignOnInterceptor implements AsyncHandlerInterceptor {
 		AuthorizationUtils.authenticateWithCookie(request, authTokenService, sessionManager);
 
 		if (AuthorizationUtils.isNotAuthenticated()) {
-			String loginUrl = applicationConfig.getFrontendUri() + "/#/passport/login?redirect_uri=%s";
+			String loginUrl = dreamServerProperties.getFrontendUri() + "/#/passport/login?redirect_uri=%s";
 			String redirect_uri = UrlUtils.buildFullRequestUrl(request);
 			String base64RequestUrl = Base64Helper.encodeUrlString(redirect_uri.getBytes());
 			log.debug("No Authentication ... Redirect to /passport/login , redirect_uri {} , base64 {}", redirect_uri,

@@ -8,12 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.web.InitializeContext;
 
 @ComponentScan(basePackages = { "org.dream.authn", "org.dream.configuration", "org.dream.entity",
@@ -39,7 +39,7 @@ public class DreamOpenApiApplication extends SpringBootServletInitializer {
 			_logger.error("Exception ", e);
 		}
 		_logger.info("dream OpenApi at {}", new DateTime());
-		_logger.info("dream OpenApi Server Port {}", applicationContext.getBean(ApplicationConfig.class).getPort());
+		_logger.info("dream OpenApi Server Port {}", applicationContext.getBean(ServerProperties.class).getPort());
 		_logger.info("dream OpenApi started.");
 	}
 

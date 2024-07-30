@@ -5,36 +5,35 @@ import java.util.Set;
 
 public interface OIDCProviderMetadata {
 
-	public String getIssuer();
+	String getIssuer();
 
-	public void setIssuer(String issuer);
+	void setIssuer(String issuer);
 
-	public URI getAuthorizationEndpoint();
+	URI getAuthorizationEndpoint();
 
-	public void setAuthorizationEndpoint(URI authorizationEndpoint);
+	void setAuthorizationEndpoint(URI authorizationEndpoint);
 
-	public URI getTokenEndpoint();
+	URI getTokenEndpoint();
 
-	public void setTokenEndpoint(URI tokenEndpoint);
+	void setTokenEndpoint(URI tokenEndpoint);
 
-	public URI getUserinfoEndpoint();
+	URI getUserinfoEndpoint();
 
-	public void setUserinfoEndpoint(URI userinfoEndpoint);
+	void setUserinfoEndpoint(URI userinfoEndpoint);
 
-	public URI getJwksUri();
+	URI getJwksUri();
 
-	public void setJwksUri(URI jwksUri);
+	void setJwksUri(URI jwksUri);
 
-	public URI getRegistrationEndpoint();
+	URI getRegistrationEndpoint();
 
-	public void setRegistrationEndpoint(URI registrationEndpoint);
+	void setRegistrationEndpoint(URI registrationEndpoint);
 
-	public Set<String> getScopesSupported();
+	Set<String> getScopesSupported();
 
-	public void setScopesSupported(Set<String> scopesSupported);
+	void setScopesSupported(Set<String> scopesSupported);
 
-	public Set<String> getResponseTypesSupported();
+	Set<String> getResponseTypesSupported();
 
-	public void setResponseTypesSupported(Set<String> responseTypesSupported);
-
+	void setResponseTypesSupported(Set<String> responseTypesSupported);
 }

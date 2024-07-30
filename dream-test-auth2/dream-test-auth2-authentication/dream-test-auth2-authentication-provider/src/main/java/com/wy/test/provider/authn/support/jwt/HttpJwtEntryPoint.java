@@ -15,9 +15,9 @@ import com.nimbusds.jwt.SignedJWT;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthJwt;
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.entity.Message;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
@@ -28,7 +28,7 @@ public class HttpJwtEntryPoint {
 	private static final Logger _logger = LoggerFactory.getLogger(HttpJwtEntryPoint.class);
 
 	@Autowired
-	ApplicationConfig applicationConfig;
+	DreamServerProperties dreamServerProperties;
 
 	@Autowired
 	AbstractAuthenticationProvider authenticationProvider;
@@ -90,8 +90,8 @@ public class HttpJwtEntryPoint {
 		return new Message<AuthJwt>(Message.FAIL).buildResponse();
 	}
 
-	public void setApplicationConfig(ApplicationConfig applicationConfig) {
-		this.applicationConfig = applicationConfig;
+	public void setApplicationConfig(DreamServerProperties dreamServerProperties) {
+		this.dreamServerProperties = dreamServerProperties;
 	}
 
 	public void setAuthenticationProvider(AbstractAuthenticationProvider authenticationProvider) {
@@ -101,5 +101,4 @@ public class HttpJwtEntryPoint {
 	public void setJwtLoginService(JwtLoginService jwtLoginService) {
 		this.jwtLoginService = jwtLoginService;
 	}
-
 }

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.persistence.provision.thread.ProvisioningThread;
 
 import dream.flying.flower.helper.DateTimeHelper;
@@ -19,7 +19,7 @@ public class ProvisionService {
 	private static final Logger _logger = LoggerFactory.getLogger(ProvisionService.class);
 
 	@Autowired
-	ApplicationConfig applicationConfig;
+	DreamServerProperties dreamServerProperties;
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
@@ -33,7 +33,7 @@ public class ProvisionService {
 	 */
 	public void send(String topic, Object content, String actionType) {
 		// dream.server.message.queue , if not none
-		if (applicationConfig.isProvisionSupport()) {
+		if (dreamServerProperties.isProvision()) {
 			ProvisionMessage message = new ProvisionMessage(UUID.randomUUID().toString(), // message id as uuid
 					topic, // TOPIC
 					actionType, // action of content
@@ -42,7 +42,7 @@ public class ProvisionService {
 					content);
 			// sand msg to provision topic
 			Thread thread = null;
-			if (applicationConfig.isProvisionSupport()) {
+			if (dreamServerProperties.isProvision()) {
 				_logger.trace("message...");
 				thread = new ProvisioningThread(jdbcTemplate, message);
 				thread.start();
@@ -52,16 +52,15 @@ public class ProvisionService {
 		}
 	}
 
-	public void setApplicationConfig(ApplicationConfig applicationConfig) {
-		this.applicationConfig = applicationConfig;
+	public void setApplicationConfig(DreamServerProperties dreamServerProperties) {
+		this.dreamServerProperties = dreamServerProperties;
 	}
 
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public ApplicationConfig getApplicationConfig() {
-		return applicationConfig;
+	public DreamServerProperties getDreamServerProperties() {
+		return dreamServerProperties;
 	}
-
 }

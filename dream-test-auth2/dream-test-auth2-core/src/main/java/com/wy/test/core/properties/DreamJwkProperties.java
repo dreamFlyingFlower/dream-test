@@ -6,22 +6,24 @@ import org.springframework.context.annotation.Configuration;
 import lombok.Data;
 
 /**
- * Swagger配置
+ * JWK配置
  *
  * @author 飞花梦影
- * @date 2024-07-18 22:05:04
+ * @date 2024-07-30 09:14:00
  * @git {@link https://github.com/dreamFlyingFlower}
  */
 @Data
+@ConfigurationProperties("dream.auth.jwk")
 @Configuration
-@ConfigurationProperties("dream.auth.swagger")
-public class DreamSwaggerProperties {
+public class DreamJwkProperties {
 
-	private boolean enabled;
+	private int expires = 86400;
 
-	private String title;
+	private String secret;
 
-	private String description;
+	private int refreshExpires;
 
-	private String version;
+	private String refreshSecret;
+
+	private String issuer = "https://sso.dream.top/";
 }

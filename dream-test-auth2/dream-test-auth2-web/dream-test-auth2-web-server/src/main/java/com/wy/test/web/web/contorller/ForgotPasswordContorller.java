@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.core.configuration.EmailConfig;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.PasswordPolicy;
@@ -39,9 +38,6 @@ public class ForgotPasswordContorller {
 			Pattern.compile("^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$");
 
 	Pattern mobileRegex = Pattern.compile("^[1][3,4,5,7,8][0-9]{9}$");
-
-	@Autowired
-	EmailConfig emailConfig;
 
 	public class ForgotType {
 

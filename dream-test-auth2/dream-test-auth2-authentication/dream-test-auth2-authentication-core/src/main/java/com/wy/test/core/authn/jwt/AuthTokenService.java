@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 
 import com.nimbusds.jose.JOSEException;
-import com.wy.test.core.configuration.AuthJwkConfig;
 import com.wy.test.core.persistence.cache.MomentaryService;
+import com.wy.test.core.properties.DreamJwkProperties;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.framework.web.crypto.jwt.HMAC512Service;
@@ -18,7 +18,7 @@ public class AuthTokenService extends AuthJwtService {
 
 	private static final Logger _logger = LoggerFactory.getLogger(AuthTokenService.class);
 
-	AuthJwkConfig authJwkConfig;
+	DreamJwkProperties dreamJwkProperties;
 
 	CongressService congressService;
 
@@ -26,10 +26,10 @@ public class AuthTokenService extends AuthJwtService {
 
 	AuthRefreshTokenService refreshTokenService;
 
-	public AuthTokenService(AuthJwkConfig authJwkConfig, CongressService congressService,
+	public AuthTokenService(DreamJwkProperties dreamJwkProperties, CongressService congressService,
 			MomentaryService momentaryService, AuthRefreshTokenService refreshTokenService) throws JOSEException {
 
-		this.authJwkConfig = authJwkConfig;
+		this.dreamJwkProperties = dreamJwkProperties;
 
 		this.congressService = congressService;
 
@@ -37,7 +37,7 @@ public class AuthTokenService extends AuthJwtService {
 
 		this.refreshTokenService = refreshTokenService;
 
-		this.hmac512Service = new HMAC512Service(authJwkConfig.getSecret());
+		this.hmac512Service = new HMAC512Service(dreamJwkProperties.getSecret());
 
 	}
 
@@ -52,14 +52,14 @@ public class AuthTokenService extends AuthJwtService {
 			String refreshToken = refreshTokenService.genRefreshToken(authentication);
 			_logger.trace("generate JWT Token");
 			String accessToken = genJwt(authentication);
-			AuthJwt authJwt = new AuthJwt(accessToken, authentication, authJwkConfig.getExpires(), refreshToken);
+			AuthJwt authJwt = new AuthJwt(accessToken, authentication, dreamJwkProperties.getExpires(), refreshToken);
 			return authJwt;
 		}
 		return null;
 	}
 
 	public String genJwt(Authentication authentication) {
-		return genJwt(authentication, authJwkConfig.getIssuer(), authJwkConfig.getExpires());
+		return genJwt(authentication, dreamJwkProperties.getIssuer(), dreamJwkProperties.getExpires());
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class AuthTokenService extends AuthJwtService {
 	 * @return
 	 */
 	public String genJwt(String subject) {
-		return genJwt(subject, authJwkConfig.getIssuer(), authJwkConfig.getExpires());
+		return genJwt(subject, dreamJwkProperties.getIssuer(), dreamJwkProperties.getExpires());
 	}
 
 	/**
@@ -78,14 +78,14 @@ public class AuthTokenService extends AuthJwtService {
 	 * @return
 	 */
 	public String genRandomJwt() {
-		return genRandomJwt(authJwkConfig.getExpires());
+		return genRandomJwt(dreamJwkProperties.getExpires());
 	}
 
 	public String createCongress(Authentication authentication) {
 		String congress = WebContext.genId();
 		String refreshToken = refreshTokenService.genRefreshToken(authentication);
 		congressService.store(congress,
-				new AuthJwt(genJwt(authentication), authentication, authJwkConfig.getExpires(), refreshToken));
+				new AuthJwt(genJwt(authentication), authentication, dreamJwkProperties.getExpires(), refreshToken));
 		return congress;
 	}
 

@@ -9,9 +9,9 @@ import org.springframework.security.core.AuthenticationException;
 
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
@@ -38,9 +38,10 @@ public class MobileAuthenticationProvider extends AbstractAuthenticationProvider
 	}
 
 	public MobileAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
-			ApplicationConfig applicationConfig, SmsOtpAuthnService smsOtpAuthnService, SessionManager sessionManager) {
+			DreamServerProperties dreamServerProperties, SmsOtpAuthnService smsOtpAuthnService,
+			SessionManager sessionManager) {
 		this.authenticationRealm = authenticationRealm;
-		this.applicationConfig = applicationConfig;
+		this.dreamServerProperties = dreamServerProperties;
 		this.smsOtpAuthnService = smsOtpAuthnService;
 		this.sessionManager = sessionManager;
 	}
@@ -101,7 +102,7 @@ public class MobileAuthenticationProvider extends AbstractAuthenticationProvider
 	 */
 	protected void mobileCaptchaValid(String password, UserInfo userInfo) {
 		// for mobile password
-		if (applicationConfig.getLoginConfig().isMfa()) {
+		if (dreamLoginProperties.isMfa()) {
 			UserInfo validUserInfo = new UserInfo();
 			validUserInfo.setUsername(userInfo.getUsername());
 			validUserInfo.setId(userInfo.getId());
@@ -113,5 +114,4 @@ public class MobileAuthenticationProvider extends AbstractAuthenticationProvider
 			}
 		}
 	}
-
 }

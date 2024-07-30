@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.listener.DynamicRolesListenerAdapter;
 import com.wy.test.listener.ListenerAdapter;
 import com.wy.test.listener.ListenerParameter;
@@ -48,8 +48,8 @@ public class DreamMgtListenerConfig implements InitializingBean {
 
 	@Bean
 	String provisioningRunnerThread(ConnectorsService connectorsService, JdbcTemplate jdbcTemplate,
-			ApplicationConfig applicationConfig) throws SchedulerException {
-		if (applicationConfig.isProvisionSupport()) {
+			DreamServerProperties dreamServerProperties) throws SchedulerException {
+		if (dreamServerProperties.isProvision()) {
 			ProvisioningRunner runner = new ProvisioningRunner(connectorsService, jdbcTemplate);
 			ProvisioningRunnerThread runnerThread = new ProvisioningRunnerThread(runner);
 			runnerThread.start();

@@ -1,0 +1,10 @@
+application:
+  title: Dream-Mgt
+  formatted-version: v3.5.15 GA
+
+spring:
+  application:
+    name: dream-mgt
+  main.banner-mode: log
+  profiles:
+    active: ${SERVER_PROFILES:mgt}

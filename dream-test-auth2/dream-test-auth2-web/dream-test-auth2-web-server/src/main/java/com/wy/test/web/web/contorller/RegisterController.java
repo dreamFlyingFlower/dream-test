@@ -20,11 +20,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.constants.ConstsStatus;
-import com.wy.test.core.crypto.password.PasswordReciprocal;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.persistence.service.UserInfoService;
@@ -42,9 +41,6 @@ public class RegisterController {
 
 	@Autowired
 	AuthTokenService authTokenService;
-
-	@Autowired
-	protected ApplicationConfig applicationConfig;
 
 	@Autowired
 	private UserInfoService userInfoService;

@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.entity.SocialsAssociate;
 import com.wy.test.core.entity.SocialsProvider;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.social.authn.support.socialsignon.service.SocialSignOnProviderService;
@@ -40,7 +40,7 @@ public class AbstractSocialSignOnEndpoint {
 	AuthTokenService authTokenService;
 
 	@Autowired
-	ApplicationConfig applicationConfig;
+	DreamServerProperties dreamServerProperties;
 
 	protected AuthRequest buildAuthRequest(String instId, String provider, String baseUrl) {
 		try {

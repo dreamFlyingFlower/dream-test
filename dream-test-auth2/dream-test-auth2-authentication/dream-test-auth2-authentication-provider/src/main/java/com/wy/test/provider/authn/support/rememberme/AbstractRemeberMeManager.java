@@ -14,8 +14,8 @@ import org.springframework.security.core.Authentication;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.properties.DreamLoginProperties;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.framework.web.crypto.jwt.HMAC512Service;
@@ -26,7 +26,7 @@ public abstract class AbstractRemeberMeManager {
 
 	protected Integer validity = 7;
 
-	protected ApplicationConfig applicationConfig;
+	protected DreamLoginProperties dreamLoginProperties;
 
 	AuthTokenService authTokenService;
 
@@ -42,7 +42,7 @@ public abstract class AbstractRemeberMeManager {
 
 	public String createRemeberMe(Authentication authentication, HttpServletRequest request,
 			HttpServletResponse response) {
-		if (applicationConfig.getLoginConfig().isRemeberMe()) {
+		if (dreamLoginProperties.isRemeberMe()) {
 			SignPrincipal principal = ((SignPrincipal) authentication.getPrincipal());
 			UserInfo userInfo = principal.getUserInfo();
 			_logger.debug("Remeber Me ...");

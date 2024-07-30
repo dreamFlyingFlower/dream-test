@@ -27,7 +27,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.entity.Institutions;
 
 import dream.flying.flower.generator.GeneratorStrategyContext;
@@ -245,17 +244,6 @@ public final class WebContext {
 
 	public static Institutions getInst() {
 		return (Institutions) getAttribute(WebConstants.CURRENT_INST);
-	}
-
-	/**
-	 * encoding encodingString by ApplicationConfig.
-	 * 
-	 * @param encodingString String
-	 * @return encoded String
-	 */
-	public static String encoding(String encodingString) {
-		ApplicationConfig applicationConfig = getBean("applicationConfig", ApplicationConfig.class);
-		return applicationConfig.getCharacterEncodingConfig().encoding(encodingString);
 	}
 
 	/**

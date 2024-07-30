@@ -25,11 +25,11 @@ import com.wy.test.authorize.singlelogout.SingleLogout;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.constants.ConstsProtocols;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.properties.DreamServerProperties;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,7 +41,7 @@ public class LogoutEndpoint {
 	private static Logger _logger = LoggerFactory.getLogger(LogoutEndpoint.class);
 
 	@Autowired
-	ApplicationConfig applicationConfig;
+	DreamServerProperties dreamServerProperties;
 
 	@Autowired
 	SessionManager sessionManager;
@@ -91,7 +91,7 @@ public class LogoutEndpoint {
 		_logger.debug("/force/logout http Session id {}", request.getSession().getId());
 		request.getSession().invalidate();
 		StringBuffer logoutUrl = new StringBuffer("");
-		logoutUrl.append(applicationConfig.getFrontendUri()).append("/#/passport/logout");
+		logoutUrl.append(dreamServerProperties.getFrontendUri()).append("/#/passport/logout");
 		if (StringUtils.isNotBlank(redirect_uri)) {
 			logoutUrl.append("?").append("redirect_uri=").append(redirect_uri);
 		}

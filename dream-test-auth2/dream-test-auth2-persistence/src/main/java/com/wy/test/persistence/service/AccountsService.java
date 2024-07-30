@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.wy.test.core.constants.ConstsStatus;
-import com.wy.test.core.crypto.password.PasswordReciprocal;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.AccountsStrategy;
 import com.wy.test.core.entity.OrganizationsCast;
 import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.persistence.mapper.AccountsMapper;
 import com.wy.test.persistence.provision.ProvisionAction;
 import com.wy.test.persistence.provision.ProvisionService;
@@ -57,7 +57,7 @@ public class AccountsService extends JpaService<Accounts> {
 	@Override
 	public boolean insert(Accounts account) {
 		if (super.insert(account)) {
-			if (provisionService.getApplicationConfig().isProvisionSupport()) {
+			if (provisionService.getDreamServerProperties().isProvision()) {
 				UserInfo loadUserInfo = userInfoService.findUserRelated(account.getUserId());
 				account.setUserInfo(loadUserInfo);
 				OrganizationsCast cast = new OrganizationsCast();
@@ -75,7 +75,7 @@ public class AccountsService extends JpaService<Accounts> {
 	@Override
 	public boolean update(Accounts account) {
 		if (super.update(account)) {
-			if (provisionService.getApplicationConfig().isProvisionSupport()) {
+			if (provisionService.getDreamServerProperties().isProvision()) {
 				UserInfo loadUserInfo = userInfoService.findUserRelated(account.getUserId());
 				account.setUserInfo(loadUserInfo);
 				OrganizationsCast cast = new OrganizationsCast();
@@ -99,7 +99,7 @@ public class AccountsService extends JpaService<Accounts> {
 		Accounts account = this.get(id);
 		if (super.remove(id)) {
 			UserInfo loadUserInfo = null;
-			if (provisionService.getApplicationConfig().isProvisionSupport()) {
+			if (provisionService.getDreamServerProperties().isProvision()) {
 				loadUserInfo = userInfoService.findUserRelated(account.getUserId());
 				account.setUserInfo(loadUserInfo);
 				provisionService.send(ProvisionTopic.ACCOUNT_TOPIC, account, ProvisionAction.DELETE_ACTION);

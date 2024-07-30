@@ -7,8 +7,8 @@ import org.springframework.security.core.Authentication;
 
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.provider.authn.realm.AbstractAuthenticationRealm;
@@ -30,9 +30,9 @@ public class TrustedAuthenticationProvider extends AbstractAuthenticationProvide
 	}
 
 	public TrustedAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
-			ApplicationConfig applicationConfig, SessionManager sessionManager) {
+			DreamServerProperties dreamServerProperties, SessionManager sessionManager) {
 		this.authenticationRealm = authenticationRealm;
-		this.applicationConfig = applicationConfig;
+		this.dreamServerProperties = dreamServerProperties;
 		this.sessionManager = sessionManager;
 	}
 

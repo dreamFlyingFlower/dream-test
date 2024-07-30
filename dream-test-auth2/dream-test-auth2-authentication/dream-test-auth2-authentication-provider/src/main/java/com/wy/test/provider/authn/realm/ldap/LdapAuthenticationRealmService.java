@@ -7,8 +7,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.core.crypto.password.PasswordReciprocal;
 import com.wy.test.core.entity.LdapContext;
+import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.persistence.ldap.ActiveDirectoryUtils;
 import com.wy.test.core.persistence.ldap.LdapUtils;
 import com.wy.test.persistence.service.LdapContextService;

@@ -12,10 +12,10 @@ import org.springframework.security.core.AuthenticationException;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.entity.Institutions;
 import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
@@ -38,9 +38,10 @@ public class NormalAuthenticationProvider extends AbstractAuthenticationProvider
 	}
 
 	public NormalAuthenticationProvider(AbstractAuthenticationRealm authenticationRealm,
-			ApplicationConfig applicationConfig, SessionManager sessionManager, AuthTokenService authTokenService) {
+			DreamServerProperties dreamServerProperties, SessionManager sessionManager,
+			AuthTokenService authTokenService) {
 		this.authenticationRealm = authenticationRealm;
-		this.applicationConfig = applicationConfig;
+		this.dreamServerProperties = dreamServerProperties;
 		this.sessionManager = sessionManager;
 		this.authTokenService = authTokenService;
 	}
@@ -55,7 +56,7 @@ public class NormalAuthenticationProvider extends AbstractAuthenticationProvider
 
 			Institutions inst = (Institutions) WebContext.getAttribute(WebConstants.CURRENT_INST);
 
-			if (this.applicationConfig.getLoginConfig().isCaptcha()) {
+			if (dreamLoginProperties.isCaptcha()) {
 				captchaValid(loginCredential.getState(), loginCredential.getCaptcha());
 
 			} else if (!inst.getCaptcha().equalsIgnoreCase("NONE")) {

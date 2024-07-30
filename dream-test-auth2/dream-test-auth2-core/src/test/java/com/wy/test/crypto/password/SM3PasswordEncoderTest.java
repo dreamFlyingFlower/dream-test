@@ -1,6 +1,6 @@
 package com.wy.test.crypto.password;
 
-import com.wy.test.core.crypto.password.SM3PasswordEncoder;
+import com.wy.test.core.password.SM3PasswordEncoder;
 
 public class SM3PasswordEncoderTest {
 

@@ -7,9 +7,6 @@ import java.util.Set;
 
 /**
  * OIDCProviderMetadataDetails.
- * 
- * @author cm
- *
  */
 public class OIDCProviderMetadataDetails implements OIDCProviderMetadata {
 

@@ -8,9 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,13 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthJwt;
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.entity.Institutions;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.SocialsAssociate;
 import com.wy.test.core.entity.SocialsProvider;
 import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.properties.DreamLoginProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
@@ -46,45 +43,37 @@ import com.wy.test.social.authn.support.socialsignon.service.SocialSignOnProvide
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "1-1-登录接口文档模块")
 @RestController
 @RequestMapping(value = "/login")
+@Slf4j
+@AllArgsConstructor
 public class LoginEntryPoint {
-
-	private static Logger _logger = LoggerFactory.getLogger(LoginEntryPoint.class);
 
 	Pattern mobileRegex = Pattern.compile("^(13[4,5,6,7,8,9]|15[0,8,9,1,7]|188|187)\\\\d{8}$");
 
-	@Autowired
-	AuthTokenService authTokenService;
+	private final AuthTokenService authTokenService;
 
-	@Autowired
-	ApplicationConfig applicationConfig;
+	private final DreamLoginProperties dreamLoginProperties;
 
-	@Autowired
-	AbstractAuthenticationProvider authenticationProvider;
+	private final AbstractAuthenticationProvider authenticationProvider;
 
-	@Autowired
-	SocialSignOnProviderService socialSignOnProviderService;
+	private final SocialSignOnProviderService socialSignOnProviderService;
 
-	@Autowired
-	SocialsAssociatesService socialsAssociatesService;
+	private final SocialsAssociatesService socialsAssociatesService;
 
-	@Autowired
-	KerberosService kerberosService;
+	private final KerberosService kerberosService;
 
-	@Autowired
-	UserInfoService userInfoService;
+	private final UserInfoService userInfoService;
 
-	@Autowired
-	AbstractOtpAuthn tfaOtpAuthn;
+	private final AbstractOtpAuthn tfaOtpAuthn;
 
-	@Autowired
-	SmsOtpAuthnService smsAuthnService;
+	private final SmsOtpAuthnService smsAuthnService;
 
-	@Autowired
-	AbstractRemeberMeManager remeberMeManager;
+	private final AbstractRemeberMeManager remeberMeManager;
 
 	/**
 	 * init login
@@ -94,7 +83,7 @@ public class LoginEntryPoint {
 	@Operation(summary = "登录接口", description = "用户登录地址", method = "GET")
 	@GetMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@RequestParam(value = "remember_me", required = false) String rememberMeJwt) {
-		_logger.debug("/get.");
+		log.debug("/get.");
 		// Remember Me
 		if (StringUtils.isNotBlank(rememberMeJwt) && authTokenService.validateJwtToken(rememberMeJwt)) {
 			try {
@@ -115,20 +104,20 @@ public class LoginEntryPoint {
 		}
 		// for normal login
 		HashMap<String, Object> model = new HashMap<String, Object>();
-		model.put("isRemeberMe", applicationConfig.getLoginConfig().isRemeberMe());
-		model.put("isKerberos", applicationConfig.getLoginConfig().isKerberos());
-		if (applicationConfig.getLoginConfig().isMfa()) {
+		model.put("isRemeberMe", dreamLoginProperties.isRemeberMe());
+		model.put("isKerberos", dreamLoginProperties.isKerberos());
+		if (dreamLoginProperties.isMfa()) {
 			model.put("otpType", tfaOtpAuthn.getOtpType());
 			model.put("otpInterval", tfaOtpAuthn.getInterval());
 		}
 
-		if (applicationConfig.getLoginConfig().isKerberos()) {
+		if (dreamLoginProperties.isKerberos()) {
 			model.put("userDomainUrlJson", kerberosService.buildKerberosProxys());
 		}
 
 		Institutions inst = (Institutions) WebContext.getAttribute(WebConstants.CURRENT_INST);
 		model.put("inst", inst);
-		if (applicationConfig.getLoginConfig().isCaptcha()) {
+		if (dreamLoginProperties.isCaptcha()) {
 			model.put("captcha", "true");
 		} else {
 			model.put("captcha", inst.getCaptcha());
@@ -204,7 +193,7 @@ public class LoginEntryPoint {
 		Message<AuthJwt> authJwtMessage = new Message<AuthJwt>(Message.FAIL);
 		if (authTokenService.validateJwtToken(credential.getState())) {
 			String authType = credential.getAuthType();
-			_logger.debug("Login AuthN Type  " + authType);
+			log.debug("Login AuthN Type  " + authType);
 			if (StringUtils.isNotBlank(authType)) {
 				Authentication authentication = authenticationProvider.authenticate(credential);
 				if (authentication != null) {
@@ -223,10 +212,10 @@ public class LoginEntryPoint {
 					String errorMsg = WebContext.getAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE) == null ? ""
 							: WebContext.getAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE).toString();
 					authJwtMessage.setMessage(errorMsg);
-					_logger.debug("login fail , message {}", errorMsg);
+					log.debug("login fail , message {}", errorMsg);
 				}
 			} else {
-				_logger.error("Login AuthN type must eq normal , tfa or mobile . ");
+				log.error("Login AuthN type must eq normal , tfa or mobile . ");
 			}
 		}
 		return authJwtMessage.buildResponse();

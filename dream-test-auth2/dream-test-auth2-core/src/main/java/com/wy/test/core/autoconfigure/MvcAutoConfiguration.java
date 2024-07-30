@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.servlet.Filter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.endpoint.ApiVersion;
@@ -39,17 +37,18 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.constants.ConstsTimeInterval;
 import com.wy.test.core.entity.xml.UserInfoXML;
 import com.wy.test.core.persistence.repository.InstitutionsRepository;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.core.web.WebInstRequestFilter;
 import com.wy.test.core.web.WebXssRequestFilter;
 
-@AutoConfiguration
-public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer {
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Logger _logger = LoggerFactory.getLogger(MvcAutoConfiguration.class);
+@AutoConfiguration
+@Slf4j
+public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer {
 
 	/**
 	 * 消息处理，可以直接使用properties的key值，返回的是对应的value值 messageSource .
@@ -59,7 +58,7 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 	@Bean(name = "messageSource")
 	ReloadableResourceBundleMessageSource reloadableResourceBundleMessageSource(
 			@Value("${spring.messages.basename:classpath:messages/message}") String messagesBasename) {
-		_logger.debug("Basename " + messagesBasename);
+		log.debug("Basename " + messagesBasename);
 		String passwordPolicyMessagesBasename = "classpath:messages/passwordpolicy_message";
 
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -89,7 +88,7 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 	@Bean(name = "multipartResolver")
 	CommonsMultipartResolver
 			commonsMultipartResolver(@Value("${spring.servlet.multipart.max-file-size:0}") int maxUploadSize) {
-		_logger.debug("maxUploadSize " + maxUploadSize);
+		log.debug("maxUploadSize " + maxUploadSize);
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
 		multipartResolver.setMaxUploadSize(maxUploadSize);
 		return multipartResolver;
@@ -133,7 +132,7 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 		mediaTypesList.add(MediaType.APPLICATION_XML);
 		mediaTypesList.add(MediaType.TEXT_XML);
 		mediaTypesList.add(MediaType.TEXT_PLAIN);
-		_logger.debug("marshallingHttpMessageConverter MediaTypes " + mediaTypesList);
+		log.debug("marshallingHttpMessageConverter MediaTypes " + mediaTypesList);
 		marshallingHttpMessageConverter.setSupportedMediaTypes(mediaTypesList);
 		return marshallingHttpMessageConverter;
 	}
@@ -152,7 +151,7 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 		mediaTypesList.add(MediaType.valueOf(ApiVersion.V2.getProducedMimeType().toString()));
 		mediaTypesList.add(MediaType.valueOf(ApiVersion.V3.getProducedMimeType().toString()));
 		// mediaTypesList.add(MediaType.TEXT_PLAIN);
-		_logger.debug("mappingJacksonHttpMessageConverter MediaTypes " + mediaTypesList);
+		log.debug("mappingJacksonHttpMessageConverter MediaTypes " + mediaTypesList);
 		mappingJacksonHttpMessageConverter.setSupportedMediaTypes(mediaTypesList);
 		return mappingJacksonHttpMessageConverter;
 	}
@@ -165,7 +164,7 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 
 	@Bean(name = "cookieLocaleResolver")
 	LocaleResolver cookieLocaleResolver(@Value("${dream.server.domain:dream.top}") String domainName) {
-		_logger.debug("DomainName " + domainName);
+		log.debug("DomainName " + domainName);
 		CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
 		cookieLocaleResolver.setCookieName("mxk_locale");
 		cookieLocaleResolver.setCookieDomain(domainName);
@@ -188,7 +187,7 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 		httpMessageConverterList.add(mappingJacksonHttpMessageConverter);
 		httpMessageConverterList.add(marshallingHttpMessageConverter);
 		httpMessageConverterList.add(stringHttpMessageConverter);
-		_logger.debug("stringHttpMessageConverter {}", stringHttpMessageConverter.getDefaultCharset());
+		log.debug("stringHttpMessageConverter {}", stringHttpMessageConverter.getDefaultCharset());
 
 		requestMappingHandlerAdapter.setMessageConverters(httpMessageConverterList);
 		return requestMappingHandlerAdapter;
@@ -221,7 +220,7 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 
 			@Override
 			public void customize(ConfigurableWebServerFactory factory) {
-				_logger.debug("WebServerFactoryCustomizer ... ");
+				log.debug("WebServerFactoryCustomizer ... ");
 				ErrorPage errorPage400 = new ErrorPage(HttpStatus.BAD_REQUEST, "/exception/error/400");
 				ErrorPage errorPage404 = new ErrorPage(HttpStatus.NOT_FOUND, "/exception/error/404");
 				ErrorPage errorPage500 = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/exception/error/500");
@@ -232,7 +231,7 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 
 	@Bean
 	SecurityContextHolderAwareRequestFilter securityContextHolderAwareRequestFilter() {
-		_logger.debug("securityContextHolderAwareRequestFilter init ");
+		log.debug("securityContextHolderAwareRequestFilter init ");
 		return new SecurityContextHolderAwareRequestFilter();
 	}
 
@@ -254,7 +253,7 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 
 	@Bean
 	FilterRegistrationBean<Filter> delegatingFilterProxy() {
-		_logger.debug("delegatingFilterProxy init for /* ");
+		log.debug("delegatingFilterProxy init for /* ");
 		FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<Filter>();
 		registrationBean.setFilter(new DelegatingFilterProxy("securityContextHolderAwareRequestFilter"));
 		registrationBean.addUrlPatterns("/*");
@@ -267,7 +266,7 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 
 	@Bean
 	FilterRegistrationBean<Filter> webXssRequestFilter() {
-		_logger.debug("webXssRequestFilter init for /* ");
+		log.debug("webXssRequestFilter init for /* ");
 		FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<Filter>(new WebXssRequestFilter());
 		registrationBean.addUrlPatterns("/*");
 		registrationBean.setName("webXssRequestFilter");
@@ -277,10 +276,10 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 
 	@Bean
 	FilterRegistrationBean<Filter> WebInstRequestFilter(InstitutionsRepository institutionsRepository,
-			ApplicationConfig applicationConfig) {
-		_logger.debug("WebInstRequestFilter init for /* ");
-		FilterRegistrationBean<Filter> registrationBean =
-				new FilterRegistrationBean<Filter>(new WebInstRequestFilter(institutionsRepository, applicationConfig));
+			DreamServerProperties dreamServerProperties) {
+		log.debug("WebInstRequestFilter init for /* ");
+		FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<Filter>(
+				new WebInstRequestFilter(institutionsRepository, dreamServerProperties));
 		registrationBean.addUrlPatterns("/*");
 		registrationBean.setName("webInstRequestFilter");
 		registrationBean.setOrder(4);
@@ -291,5 +290,4 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 	public void afterPropertiesSet() throws Exception {
 
 	}
-
 }

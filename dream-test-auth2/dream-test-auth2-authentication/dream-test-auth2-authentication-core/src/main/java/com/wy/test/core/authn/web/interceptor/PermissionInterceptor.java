@@ -14,7 +14,7 @@ import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.properties.DreamServerProperties;
 
 /**
  * 权限Interceptor处理
@@ -26,7 +26,7 @@ public class PermissionInterceptor implements AsyncHandlerInterceptor {
 
 	// 无需Interceptor url
 	@Autowired
-	ApplicationConfig applicationConfig;
+	DreamServerProperties dreamServerProperties;
 
 	@Autowired
 	SessionManager sessionManager;
@@ -39,10 +39,8 @@ public class PermissionInterceptor implements AsyncHandlerInterceptor {
 	/*
 	 * 请求前处理 (non-Javadoc)
 	 * 
-	 * @see
-	 * org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(
-	 * javax.servlet.http. HttpServletRequest,
-	 * javax.servlet.http.HttpServletResponse, java.lang.Object)
+	 * @see org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle( javax.servlet.http.
+	 * HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object)
 	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)

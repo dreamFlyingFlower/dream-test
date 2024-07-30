@@ -10,10 +10,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.constants.ConstsBoolean;
-import com.wy.test.core.crypto.password.PasswordReciprocal;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.binary.Base64Helper;

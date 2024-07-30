@@ -30,11 +30,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.authz.saml20.metadata.MetadataDescriptorUtil;
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.configuration.ApplicationConfig;
 import com.wy.test.core.constants.ConstsProtocols;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.AppsSAML20Details;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.persistence.service.AppsSaml20DetailsService;
 
 import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
@@ -55,7 +55,7 @@ public class SAML20DetailsController extends BaseAppContorller {
 	AppsSaml20DetailsService saml20DetailsService;
 
 	@Autowired
-	ApplicationConfig applicationConfig;
+	DreamServerProperties dreamServerProperties;
 
 	@GetMapping(value = { "/init" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> init() {
@@ -161,9 +161,11 @@ public class SAML20DetailsController extends BaseAppContorller {
 			samlDetails.setCertSubject(samlDetails.getTrustCert().getSubjectDN().getName());
 			samlDetails.setCertExpiration(samlDetails.getTrustCert().getNotAfter().toString());
 
-			samlDetails.setCertIssuer(X509CertHelpers.getCommonName(samlDetails.getTrustCert().getIssuerX500Principal()));
+			samlDetails
+					.setCertIssuer(X509CertHelpers.getCommonName(samlDetails.getTrustCert().getIssuerX500Principal()));
 
-			KeyStore keyStore = KeyStoreHelpers.clone(keyStoreLoader.getKeyStore(), keyStoreLoader.getKeystorePassword());
+			KeyStore keyStore =
+					KeyStoreHelpers.clone(keyStoreLoader.getKeyStore(), keyStoreLoader.getKeystorePassword());
 
 			KeyStore trustKeyStore = null;
 			if (!samlDetails.getEntityId().equals("")) {

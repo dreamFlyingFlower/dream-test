@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.ClassPathResource;
@@ -19,7 +20,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.wy.test.core.configuration.EmailConfig;
 import com.wy.test.core.constants.ConstsPersistence;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.core.persistence.repository.LoginHistoryRepository;
@@ -40,8 +40,8 @@ import com.wy.test.provider.authn.support.kerberos.RemoteKerberosService;
 
 @AutoConfiguration
 @ComponentScan(basePackages = { "org.dream.authn", "org.dream.configuration", "org.dream.domain",
-		"org.dream.domain.apps", "org.dream.domain.userinfo", "org.dream.api.v1.contorller",
-		"org.dream.web.endpoint", "org.dream.web.contorller", "org.dream.web.interceptor",
+		"org.dream.domain.apps", "org.dream.domain.userinfo", "org.dream.api.v1.contorller", "org.dream.web.endpoint",
+		"org.dream.web.contorller", "org.dream.web.interceptor",
 		// single sign on protocol
 		"org.dream.authz.endpoint", "org.dream.authz.desktop.endpoint", "org.dream.authz.exapi.endpoint",
 		"org.dream.authz.formbased.endpoint", "org.dream.authz.ltpa.endpoint", "org.dream.authz.token.endpoint" })
@@ -52,8 +52,8 @@ public class DreamTestConfig implements InitializingBean {
 	@Bean
 	OtpKeyUriFormat otpKeyUriFormat(@Value("${dream.otp.policy.type:totp}") String type,
 			@Value("${dream.otp.policy.domain:dream.top}") String domain,
-			@Value("${dream.otp.policy.issuer:dream}") String issuer,
-			@Value("${dream.otp.policy.digits:6}") int digits, @Value("${dream.otp.policy.period:30}") int period) {
+			@Value("${dream.otp.policy.issuer:dream}") String issuer, @Value("${dream.otp.policy.digits:6}") int digits,
+			@Value("${dream.otp.policy.period:30}") int period) {
 
 		OtpKeyUriFormat otpKeyUriFormat = new OtpKeyUriFormat(type, issuer, domain, digits, period);
 		_logger.debug("OTP KeyUri Format " + otpKeyUriFormat);
@@ -99,7 +99,7 @@ public class DreamTestConfig implements InitializingBean {
 	}
 
 	@Bean
-	MailOtpAuthn mailOtpAuthn(EmailConfig emailConfig,
+	MailOtpAuthn mailOtpAuthn(MailProperties mailProperties,
 			@Value("${spring.mail.properties.mailotp.message.subject}") String messageSubject,
 			@Value("${spring.mail.properties.mailotp.message.template}") String messageTemplate,
 			@Value("${spring.mail.properties.mailotp.message.validity}") int messageValidity,
@@ -118,7 +118,7 @@ public class DreamTestConfig implements InitializingBean {
 		MailOtpAuthn mailOtpAuthn = new MailOtpAuthn();
 		mailOtpAuthn.setSubject(messageSubject);
 		mailOtpAuthn.setMessageTemplate(messageTemplate);
-		mailOtpAuthn.setEmailConfig(emailConfig);
+		mailOtpAuthn.setMailProperties(mailProperties);
 		mailOtpAuthn.setInterval(messageValidity);
 		_logger.debug("MailOtpAuthn inited.");
 		return mailOtpAuthn;

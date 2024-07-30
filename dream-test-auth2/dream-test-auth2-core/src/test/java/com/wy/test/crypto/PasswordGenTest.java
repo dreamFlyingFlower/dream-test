@@ -1,6 +1,6 @@
 package com.wy.test.crypto;
 
-import com.wy.test.core.crypto.password.PasswordGen;
+import com.wy.test.core.password.PasswordGen;
 
 public class PasswordGenTest {
 

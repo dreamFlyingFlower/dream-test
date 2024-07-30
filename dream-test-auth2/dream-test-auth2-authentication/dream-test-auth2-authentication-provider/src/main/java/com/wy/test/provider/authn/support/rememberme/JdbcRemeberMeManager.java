@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.properties.DreamLoginProperties;
 
 public class JdbcRemeberMeManager extends AbstractRemeberMeManager {
 
@@ -31,10 +31,10 @@ public class JdbcRemeberMeManager extends AbstractRemeberMeManager {
 
 	private final JdbcTemplate jdbcTemplate;
 
-	public JdbcRemeberMeManager(JdbcTemplate jdbcTemplate, ApplicationConfig applicationConfig,
+	public JdbcRemeberMeManager(JdbcTemplate jdbcTemplate, DreamLoginProperties dreamLoginProperties,
 			AuthTokenService authTokenService, int validity) {
 		this.jdbcTemplate = jdbcTemplate;
-		this.applicationConfig = applicationConfig;
+		this.dreamLoginProperties = dreamLoginProperties;
 		this.authTokenService = authTokenService;
 		if (validity != 0) {
 			this.validity = validity;

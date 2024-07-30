@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.security.Provider;
 import java.security.Security;
 
-import com.wy.test.core.crypto.password.PasswordReciprocal;
+import com.wy.test.core.password.PasswordReciprocal;
 
 import dream.flying.flower.reflect.ReflectHelper;
 

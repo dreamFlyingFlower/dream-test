@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.wy.test.core.authn.web.CurrentUserMethodArgumentResolver;
 import com.wy.test.core.authn.web.interceptor.PermissionInterceptor;
-import com.wy.test.core.configuration.ApplicationConfig;
+import com.wy.test.core.properties.DreamServerProperties;
 import com.wy.test.openapi.web.interceptor.RestApiPermissionAdapter;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
@@ -26,7 +26,7 @@ public class DreamOpenApiMvcConfig implements WebMvcConfigurer {
 	private static final Logger _logger = LoggerFactory.getLogger(DreamOpenApiMvcConfig.class);
 
 	@Autowired
-	ApplicationConfig applicationConfig;
+	DreamServerProperties dreamServerProperties;
 
 	@Autowired
 	AbstractAuthenticationProvider authenticationProvider;

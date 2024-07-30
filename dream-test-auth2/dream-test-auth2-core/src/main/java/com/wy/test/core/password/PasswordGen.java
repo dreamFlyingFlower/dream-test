@@ -1,4 +1,4 @@
-package com.wy.test.core.crypto.password;
+package com.wy.test.core.password;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,0 +1,12 @@
+application:
+  title: dream
+  formatted-version: v3.5.15 GA
+
+# for dynamic service discovery
+spring:
+  application:
+    name: dream
+  main:
+    banner-mode: log
+  profiles:
+    active: ${SERVER_PROFILES:dream}

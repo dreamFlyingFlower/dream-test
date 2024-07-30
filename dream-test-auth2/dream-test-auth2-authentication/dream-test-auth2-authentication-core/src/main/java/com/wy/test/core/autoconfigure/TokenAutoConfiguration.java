@@ -13,10 +13,10 @@ import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.jwt.CongressService;
 import com.wy.test.core.authn.jwt.InMemoryCongressService;
 import com.wy.test.core.authn.jwt.RedisCongressService;
-import com.wy.test.core.configuration.AuthJwkConfig;
 import com.wy.test.core.constants.ConstsPersistence;
 import com.wy.test.core.persistence.cache.MomentaryService;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.properties.DreamJwkProperties;
 
 @AutoConfiguration
 public class TokenAutoConfiguration implements InitializingBean {
@@ -24,7 +24,7 @@ public class TokenAutoConfiguration implements InitializingBean {
 	private static final Logger _logger = LoggerFactory.getLogger(TokenAutoConfiguration.class);
 
 	@Bean
-	AuthTokenService authTokenService(AuthJwkConfig authJwkConfig, RedisConnectionFactory redisConnFactory,
+	AuthTokenService authTokenService(DreamJwkProperties dreamJwkProperties, RedisConnectionFactory redisConnFactory,
 			MomentaryService momentaryService, AuthRefreshTokenService refreshTokenService,
 			@Value("${dream.server.persistence}") int persistence) throws JOSEException {
 		CongressService congressService;
@@ -36,14 +36,14 @@ public class TokenAutoConfiguration implements InitializingBean {
 		}
 
 		AuthTokenService authTokenService =
-				new AuthTokenService(authJwkConfig, congressService, momentaryService, refreshTokenService);
+				new AuthTokenService(dreamJwkProperties, congressService, momentaryService, refreshTokenService);
 
 		return authTokenService;
 	}
 
 	@Bean
-	AuthRefreshTokenService refreshTokenService(AuthJwkConfig authJwkConfig) throws JOSEException {
-		return new AuthRefreshTokenService(authJwkConfig);
+	AuthRefreshTokenService refreshTokenService(DreamJwkProperties dreamJwkProperties) throws JOSEException {
+		return new AuthRefreshTokenService(dreamJwkProperties);
 	}
 
 	@Override
