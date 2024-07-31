@@ -16,7 +16,7 @@ import com.wy.test.core.entity.HistorySynchronizer;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.core.entity.SynchroRelated;
 import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.persistence.ldap.LdapUtils;
+import com.wy.test.core.persistence.ldap.LdapHelpers;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LdapUsersService extends AbstractSynchronizerService implements ISynchronizerService {
 
-	LdapUtils ldapUtils;
+	LdapHelpers ldapUtils;
 
 	@Override
 	public void sync() {
@@ -55,7 +55,7 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 					NamingEnumeration<? extends Attribute> attrs = sr.getAttributes().getAll();
 					while (null != attrs && attrs.hasMoreElements()) {
 						Attribute objAttrs = attrs.nextElement();
-						log.trace("attribute {} : {}", objAttrs.getID(), LdapUtils.getAttrStringValue(objAttrs));
+						log.trace("attribute {} : {}", objAttrs.getID(), LdapHelpers.getAttrStringValue(objAttrs));
 						attributeMap.put(objAttrs.getID(), objAttrs);
 					}
 					String originId = DigestHelper.md5Hex(sr.getNameInNamespace());
@@ -102,12 +102,12 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 
 		try {
 			userInfo.setId(userInfo.generateId());
-			String cn = LdapUtils.getAttributeStringValue(InetOrgPerson.CN, attributeMap);
-			String uid = LdapUtils.getAttributeStringValue(InetOrgPerson.UID, attributeMap);
-			String sn = LdapUtils.getAttributeStringValue(InetOrgPerson.SN, attributeMap);
-			String givenName = LdapUtils.getAttributeStringValue(InetOrgPerson.GIVENNAME, attributeMap);
-			String initials = LdapUtils.getAttributeStringValue(InetOrgPerson.INITIALS, attributeMap);
-			String displayName = LdapUtils.getAttributeStringValue(InetOrgPerson.DISPLAYNAME, attributeMap);
+			String cn = LdapHelpers.getAttributeStringValue(InetOrgPerson.CN, attributeMap);
+			String uid = LdapHelpers.getAttributeStringValue(InetOrgPerson.UID, attributeMap);
+			String sn = LdapHelpers.getAttributeStringValue(InetOrgPerson.SN, attributeMap);
+			String givenName = LdapHelpers.getAttributeStringValue(InetOrgPerson.GIVENNAME, attributeMap);
+			String initials = LdapHelpers.getAttributeStringValue(InetOrgPerson.INITIALS, attributeMap);
+			String displayName = LdapHelpers.getAttributeStringValue(InetOrgPerson.DISPLAYNAME, attributeMap);
 			userInfo.setFormattedName(sn + givenName);
 			if (StringUtils.isBlank(uid)) {
 				userInfo.setUsername(cn);
@@ -131,36 +131,36 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 				userInfo.setDisplayName(displayName);
 			}
 
-			userInfo.setEmployeeNumber(LdapUtils.getAttributeStringValue(InetOrgPerson.EMPLOYEENUMBER, attributeMap));
+			userInfo.setEmployeeNumber(LdapHelpers.getAttributeStringValue(InetOrgPerson.EMPLOYEENUMBER, attributeMap));
 			// userInfo.setDepartment(LdapUtils.getAttributeStringValue(InetOrgPerson.OU,attributeMap));
 			// userInfo.setDepartmentId(LdapUtils.getAttributeStringValue(InetOrgPerson.DEPARTMENTNUMBER,attributeMap));
-			userInfo.setJobTitle(LdapUtils.getAttributeStringValue(InetOrgPerson.TITLE, attributeMap));
+			userInfo.setJobTitle(LdapHelpers.getAttributeStringValue(InetOrgPerson.TITLE, attributeMap));
 			userInfo.setWorkOfficeName(
-					LdapUtils.getAttributeStringValue(InetOrgPerson.PHYSICALDELIVERYOFFICENAME, attributeMap));
-			userInfo.setWorkEmail(LdapUtils.getAttributeStringValue(InetOrgPerson.MAIL, attributeMap));
-			userInfo.setWorkRegion(LdapUtils.getAttributeStringValue(InetOrgPerson.ST, attributeMap));
-			userInfo.setWorkLocality(LdapUtils.getAttributeStringValue(InetOrgPerson.L, attributeMap));
-			userInfo.setWorkStreetAddress(LdapUtils.getAttributeStringValue(InetOrgPerson.STREET, attributeMap));
-			userInfo.setWorkPostalCode(LdapUtils.getAttributeStringValue(InetOrgPerson.POSTALCODE, attributeMap));
+					LdapHelpers.getAttributeStringValue(InetOrgPerson.PHYSICALDELIVERYOFFICENAME, attributeMap));
+			userInfo.setWorkEmail(LdapHelpers.getAttributeStringValue(InetOrgPerson.MAIL, attributeMap));
+			userInfo.setWorkRegion(LdapHelpers.getAttributeStringValue(InetOrgPerson.ST, attributeMap));
+			userInfo.setWorkLocality(LdapHelpers.getAttributeStringValue(InetOrgPerson.L, attributeMap));
+			userInfo.setWorkStreetAddress(LdapHelpers.getAttributeStringValue(InetOrgPerson.STREET, attributeMap));
+			userInfo.setWorkPostalCode(LdapHelpers.getAttributeStringValue(InetOrgPerson.POSTALCODE, attributeMap));
 			userInfo.setWorkAddressFormatted(
-					LdapUtils.getAttributeStringValue(InetOrgPerson.POSTOFFICEBOX, attributeMap));
+					LdapHelpers.getAttributeStringValue(InetOrgPerson.POSTOFFICEBOX, attributeMap));
 			userInfo.setWorkFax(
-					LdapUtils.getAttributeStringValue(InetOrgPerson.FACSIMILETELEPHONENUMBER, attributeMap));
+					LdapHelpers.getAttributeStringValue(InetOrgPerson.FACSIMILETELEPHONENUMBER, attributeMap));
 
-			userInfo.setHomePhoneNumber(LdapUtils.getAttributeStringValue(InetOrgPerson.HOMEPHONE, attributeMap));
+			userInfo.setHomePhoneNumber(LdapHelpers.getAttributeStringValue(InetOrgPerson.HOMEPHONE, attributeMap));
 			userInfo.setHomeAddressFormatted(
-					LdapUtils.getAttributeStringValue(InetOrgPerson.HOMEPOSTALADDRESS, attributeMap));
+					LdapHelpers.getAttributeStringValue(InetOrgPerson.HOMEPOSTALADDRESS, attributeMap));
 
-			if (LdapUtils.getAttributeStringValue(InetOrgPerson.MOBILE, attributeMap).equals("")) {
+			if (LdapHelpers.getAttributeStringValue(InetOrgPerson.MOBILE, attributeMap).equals("")) {
 				userInfo.setMobile(userInfo.getId());
 			} else {
-				userInfo.setMobile(LdapUtils.getAttributeStringValue(InetOrgPerson.MOBILE, attributeMap));
+				userInfo.setMobile(LdapHelpers.getAttributeStringValue(InetOrgPerson.MOBILE, attributeMap));
 			}
 
 			userInfo.setPreferredLanguage(
-					LdapUtils.getAttributeStringValue(InetOrgPerson.PREFERREDLANGUAGE, attributeMap));
+					LdapHelpers.getAttributeStringValue(InetOrgPerson.PREFERREDLANGUAGE, attributeMap));
 
-			userInfo.setDescription(LdapUtils.getAttributeStringValue(InetOrgPerson.DESCRIPTION, attributeMap));
+			userInfo.setDescription(LdapHelpers.getAttributeStringValue(InetOrgPerson.DESCRIPTION, attributeMap));
 			userInfo.setUserState("RESIDENT");
 			userInfo.setUserType("EMPLOYEE");
 			userInfo.setTimeZone("Asia/Shanghai");
@@ -184,11 +184,11 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 		return userInfo;
 	}
 
-	public LdapUtils getLdapUtils() {
+	public LdapHelpers getLdapUtils() {
 		return ldapUtils;
 	}
 
-	public void setLdapUtils(LdapUtils ldapUtils) {
+	public void setLdapUtils(LdapHelpers ldapUtils) {
 		this.ldapUtils = ldapUtils;
 	}
 

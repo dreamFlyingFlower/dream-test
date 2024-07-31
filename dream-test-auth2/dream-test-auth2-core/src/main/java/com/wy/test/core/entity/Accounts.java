@@ -16,10 +16,18 @@ import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-/*
- * ID varchar(40) not null, UID varchar(40) null, APPID varchar(40) null,
- * USERNAME varchar(60) null, PASSWORD varchar(60) null, STATUS char(1) null
+/**
+ * 帐号表
+ * 
+ * <pre>
+ * ID varchar(40) not null,
+ * UID varchar(40) null, 
+ * APPID varchar(40) null,
+ * USERNAME varchar(60) null,
+ * PASSWORD varchar(60) null,
+ * STATUS char(1) null
  * constraint PK_ROLES primary key clustered (ID)
+ * </pre>
  */
 @Entity
 @Table(name = "MXK_ACCOUNTS")

@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.web.WebContext;
 
 @Entity
@@ -34,7 +34,7 @@ public class RolePrivileges extends JpaEntity implements Serializable {
 	@Column
 	String resourceId;
 
-	int status = ConstsStatus.ACTIVE;
+	int status = ConstStatus.ACTIVE;
 
 	@Column
 	private String instId;

@@ -11,14 +11,14 @@ import javax.naming.directory.SearchResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.constants.ldap.ActiveDirectoryUser;
 import com.wy.test.core.entity.HistorySynchronizer;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.core.entity.SynchroRelated;
 import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.persistence.ldap.ActiveDirectoryUtils;
-import com.wy.test.core.persistence.ldap.LdapUtils;
+import com.wy.test.core.persistence.ldap.ActiveDirectoryHelpers;
+import com.wy.test.core.persistence.ldap.LdapHelpers;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ActiveDirectoryUsersService extends AbstractSynchronizerService implements ISynchronizerService {
 
-	ActiveDirectoryUtils ldapUtils;
+	ActiveDirectoryHelpers ldapUtils;
 
 	@Override
 	public void sync() {
@@ -62,7 +62,7 @@ public class ActiveDirectoryUsersService extends AbstractSynchronizerService imp
 					while (null != attrs && attrs.hasMoreElements()) {
 						Attribute objAttrs = attrs.nextElement();
 						log.trace("attribute {} : {}", objAttrs.getID(),
-								ActiveDirectoryUtils.getAttrStringValue(objAttrs));
+								ActiveDirectoryHelpers.getAttrStringValue(objAttrs));
 						attributeMap.put(objAttrs.getID().toLowerCase(), objAttrs);
 					}
 
@@ -115,58 +115,58 @@ public class ActiveDirectoryUsersService extends AbstractSynchronizerService imp
 		userInfo.setDepartmentId(deptOrg.getId());
 		try {
 			userInfo.setId(userInfo.generateId());
-			userInfo.setFormattedName(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.CN, attributeMap));// cn
+			userInfo.setFormattedName(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.CN, attributeMap));// cn
 			//
-			userInfo.setUsername(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.SAMACCOUNTNAME, attributeMap));// WindowsAccount
+			userInfo.setUsername(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.SAMACCOUNTNAME, attributeMap));// WindowsAccount
 			userInfo.setWindowsAccount(
-					LdapUtils.getAttributeStringValue(ActiveDirectoryUser.SAMACCOUNTNAME, attributeMap));
+					LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.SAMACCOUNTNAME, attributeMap));
 			// userInfo.setWindowsAccount(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.USERPRINCIPALNAME,attributeMap));//
 
 			//
-			userInfo.setFamilyName(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.SN, attributeMap));// Last
+			userInfo.setFamilyName(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.SN, attributeMap));// Last
 																											// Name/SurName
-			userInfo.setGivenName(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.GIVENNAME, attributeMap));// First
+			userInfo.setGivenName(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.GIVENNAME, attributeMap));// First
 																													// Name
-			userInfo.setNickName(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.INITIALS, attributeMap));// Initials
-			userInfo.setNameZhShortSpell(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.INITIALS, attributeMap));// Initials
-			userInfo.setDisplayName(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.DISPLAYNAME, attributeMap));//
-			userInfo.setDescription(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.DESCRIPTION, attributeMap));//
+			userInfo.setNickName(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.INITIALS, attributeMap));// Initials
+			userInfo.setNameZhShortSpell(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.INITIALS, attributeMap));// Initials
+			userInfo.setDisplayName(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.DISPLAYNAME, attributeMap));//
+			userInfo.setDescription(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.DESCRIPTION, attributeMap));//
 			userInfo.setWorkPhoneNumber(
-					LdapUtils.getAttributeStringValue(ActiveDirectoryUser.TELEPHONENUMBER, attributeMap));//
+					LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.TELEPHONENUMBER, attributeMap));//
 			userInfo.setWorkOfficeName(
-					LdapUtils.getAttributeStringValue(ActiveDirectoryUser.PHYSICALDELIVERYOFFICENAME, attributeMap));//
-			userInfo.setWorkEmail(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.MAIL, attributeMap));//
-			userInfo.setWebSite(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.WWWHOMEPAGE, attributeMap));//
+					LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.PHYSICALDELIVERYOFFICENAME, attributeMap));//
+			userInfo.setWorkEmail(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.MAIL, attributeMap));//
+			userInfo.setWebSite(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.WWWHOMEPAGE, attributeMap));//
 			//
-			userInfo.setWorkCountry(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.CO, attributeMap));//
-			userInfo.setWorkRegion(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.ST, attributeMap));//
-			userInfo.setWorkLocality(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.L, attributeMap));//
+			userInfo.setWorkCountry(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.CO, attributeMap));//
+			userInfo.setWorkRegion(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.ST, attributeMap));//
+			userInfo.setWorkLocality(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.L, attributeMap));//
 			userInfo.setWorkStreetAddress(
-					LdapUtils.getAttributeStringValue(ActiveDirectoryUser.STREETADDRESS, attributeMap));//
-			userInfo.setWorkPostalCode(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.POSTALCODE, attributeMap));//
+					LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.STREETADDRESS, attributeMap));//
+			userInfo.setWorkPostalCode(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.POSTALCODE, attributeMap));//
 			userInfo.setWorkAddressFormatted(
-					LdapUtils.getAttributeStringValue(ActiveDirectoryUser.POSTOFFICEBOX, attributeMap));//
+					LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.POSTOFFICEBOX, attributeMap));//
 
-			if (LdapUtils.getAttributeStringValue(ActiveDirectoryUser.MOBILE, attributeMap).equals("")) {
+			if (LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.MOBILE, attributeMap).equals("")) {
 				userInfo.setMobile(userInfo.getId());
 			} else {
-				userInfo.setMobile(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.MOBILE, attributeMap));//
+				userInfo.setMobile(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.MOBILE, attributeMap));//
 			}
-			userInfo.setHomePhoneNumber(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.HOMEPHONE, attributeMap));//
+			userInfo.setHomePhoneNumber(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.HOMEPHONE, attributeMap));//
 			userInfo.setWorkFax(
-					LdapUtils.getAttributeStringValue(ActiveDirectoryUser.FACSIMILETELEPHONENUMBER, attributeMap));//
-			userInfo.setHomeAddressFormatted(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.INFO, attributeMap));//
+					LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.FACSIMILETELEPHONENUMBER, attributeMap));//
+			userInfo.setHomeAddressFormatted(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.INFO, attributeMap));//
 
-			userInfo.setDivision(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.COMPANY, attributeMap)); //
+			userInfo.setDivision(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.COMPANY, attributeMap)); //
 			// userInfo.setDepartment(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.DEPARTMENT,attributeMap));
 			// //
 			// userInfo.setDepartmentId(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.DEPARTMENT,attributeMap));
 			// //
-			userInfo.setJobTitle(LdapUtils.getAttributeStringValue(ActiveDirectoryUser.TITLE, attributeMap));//
+			userInfo.setJobTitle(LdapHelpers.getAttributeStringValue(ActiveDirectoryUser.TITLE, attributeMap));//
 			userInfo.setUserState("RESIDENT");
 			userInfo.setUserType("EMPLOYEE");
 			userInfo.setTimeZone("Asia/Shanghai");
-			userInfo.setStatus(ConstsStatus.ACTIVE);
+			userInfo.setStatus(ConstStatus.ACTIVE);
 			userInfo.setInstId(this.synchronizer.getInstId());
 
 			HistorySynchronizer historySynchronizer = new HistorySynchronizer();
@@ -186,11 +186,11 @@ public class ActiveDirectoryUsersService extends AbstractSynchronizerService imp
 		return userInfo;
 	}
 
-	public ActiveDirectoryUtils getLdapUtils() {
+	public ActiveDirectoryHelpers getLdapUtils() {
 		return ldapUtils;
 	}
 
-	public void setLdapUtils(ActiveDirectoryUtils ldapUtils) {
+	public void setLdapUtils(ActiveDirectoryHelpers ldapUtils) {
 		this.ldapUtils = ldapUtils;
 	}
 

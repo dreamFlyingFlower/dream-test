@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.stereotype.Service;
 
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
@@ -102,7 +102,7 @@ public class JdbcUsersService extends AbstractSynchronizerService implements ISy
 		if (meta.getColumnDetail().containsKey("status")) {
 			user.setStatus(rs.getInt("status"));
 		} else {
-			user.setStatus(ConstsStatus.ACTIVE);
+			user.setStatus(ConstStatus.ACTIVE);
 		}
 		user.setInstId(this.synchronizer.getInstId());
 

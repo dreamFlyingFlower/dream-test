@@ -22,9 +22,10 @@ import com.wy.test.authz.saml.service.IDService;
 import com.wy.test.authz.saml.service.TimeService;
 import com.wy.test.authz.saml20.binding.BindingAdapter;
 import com.wy.test.authz.saml20.xml.IssuerGenerator;
-import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.AppsSAML20Details;
+
+import dream.flying.flower.enums.YesNoEnum;
 
 public class AuthnResponseGenerator {
 
@@ -61,7 +62,7 @@ public class AuthnResponseGenerator {
 				Integer.parseInt(saml20Details.getValidityInterval()), attributeMap, currentUser);
 
 		// Encrypt
-		if (ConstsBoolean.isYes(saml20Details.getEncrypted())) {
+		if (YesNoEnum.isYes(saml20Details.getEncrypted())) {
 			logger.info("begin to encrypt assertion");
 			try {
 				// Assume this contains a recipient's RSA public

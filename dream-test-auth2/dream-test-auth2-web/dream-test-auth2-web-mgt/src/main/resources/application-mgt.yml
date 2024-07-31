@@ -10,15 +10,15 @@ server:
 dream:
   auth:
     server:
-        scheme: http
-        base-domain: ${SERVER_DOMAIN:dream.top}
-        domain: sso.${dream.auth.server.basedomain}
-        name: ${dream.auth.server.scheme}://${dream.auth.server.domain}
-        uri: ${dream.auth.server.name}:${server.port}${server.servlet.context-path}
-        default-uri: ${dream.auth.server.uri}/main
-        mgt-uri: ${dream.auth.server.uri}
-        authz-uri: https://${dream.auth.server.domain}/dream
-        provision: ${SERVER_PROVISION:false}
+      scheme: http
+      base-domain: ${SERVER_DOMAIN:dream.top}
+      domain: sso.${dream.auth.server.basedomain}
+      name: ${dream.auth.server.scheme}://${dream.auth.server.domain}
+      uri: ${dream.auth.server.name}:${server.port}${server.servlet.context-path}
+      default-uri: ${dream.auth.server.uri}/main
+      mgt-uri: ${dream.auth.server.uri}
+      authz-uri: https://${dream.auth.server.domain}/dream
+      provision: ${SERVER_PROVISION:false}
     jwk:
       issuer: ${dream.auth.server.uri}
       expires: 900
@@ -102,10 +102,10 @@ dream:
         enabled: true
         schedule: 0 0 0/1 * * ?
     swagger:
-        enabled: true
-        title: dream\u5355\u70b9\u767b\u5f55\u8ba4\u8bc1\u7cfb\u7edfAPI\u6587\u6863
-        description: dream\u5355\u70b9\u767b\u5f55\u8ba4\u8bc1\u7cfb\u7edfAPI\u6587\u6863
-        version: ${application.formatted-version}
+      enabled: true
+      title: dream\u5355\u70b9\u767b\u5f55\u8ba4\u8bc1\u7cfb\u7edfAPI\u6587\u6863
+      description: dream\u5355\u70b9\u767b\u5f55\u8ba4\u8bc1\u7cfb\u7edfAPI\u6587\u6863
+      version: ${application.formatted-version}
 
 spring:
   datasource:
@@ -170,8 +170,6 @@ spring:
     expose-session-attributes: false
     request-context-attribute: request
     suffix: .ftl
-  mvc:
-    static-path-pattern: /static/**
   servlet:
     multipart:
       enabled: true

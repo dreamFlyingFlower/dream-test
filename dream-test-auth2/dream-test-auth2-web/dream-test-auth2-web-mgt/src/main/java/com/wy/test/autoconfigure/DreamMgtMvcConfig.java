@@ -2,8 +2,6 @@ package com.wy.test.autoconfigure;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -17,11 +15,12 @@ import com.wy.test.core.authn.web.CurrentUserMethodArgumentResolver;
 import com.wy.test.core.authn.web.interceptor.PermissionInterceptor;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
+import lombok.extern.slf4j.Slf4j;
+
 @EnableWebMvc
 @AutoConfiguration
+@Slf4j
 public class DreamMgtMvcConfig implements WebMvcConfigurer {
-
-	private static final Logger _logger = LoggerFactory.getLogger(DreamMgtMvcConfig.class);
 
 	@Autowired
 	AbstractAuthenticationProvider authenticationProvider;
@@ -31,29 +30,29 @@ public class DreamMgtMvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		_logger.debug("add Resource Handlers");
+		log.debug("add Resource Handlers");
 
-		_logger.debug("add statics");
+		log.debug("add statics");
 		registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-		_logger.debug("add templates");
+		log.debug("add templates");
 		registry.addResourceHandler("/templates/**").addResourceLocations("classpath:/templates/");
 
-		_logger.debug("add swagger");
+		log.debug("add swagger");
 		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
 		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
 
-		_logger.debug("add knife4j");
+		log.debug("add knife4j");
 		registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
 		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
 
-		_logger.debug("add Resource Handler finished .");
+		log.debug("add Resource Handler finished .");
 	}
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		// addPathPatterns 用于添加拦截规则 ， 先把所有路径都加入拦截， 再一个个排除
 		// excludePathPatterns 表示改路径不用拦截
-		_logger.debug("add Interceptors");
+		log.debug("add Interceptors");
 
 		permissionInterceptor.setMgmt(true);
 
@@ -75,7 +74,7 @@ public class DreamMgtMvcConfig implements WebMvcConfigurer {
 
 				.addPathPatterns("/logout").addPathPatterns("/logout/**");
 
-		_logger.debug("add Permission Adapter");
+		log.debug("add Permission Adapter");
 
 	}
 
@@ -88,5 +87,4 @@ public class DreamMgtMvcConfig implements WebMvcConfigurer {
 	CurrentUserMethodArgumentResolver currentUserMethodArgumentResolver() {
 		return new CurrentUserMethodArgumentResolver();
 	}
-
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.constants.ConstProtocols;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.AppsJwtDetails;
@@ -36,7 +36,7 @@ public class JwtDetailsController extends BaseAppContorller {
 	public ResponseEntity<?> init() {
 		AppsJwtDetails jwtDetails = new AppsJwtDetails();
 		jwtDetails.setId(jwtDetails.generateId());
-		jwtDetails.setProtocol(ConstsProtocols.JWT);
+		jwtDetails.setProtocol(ConstProtocols.JWT);
 		jwtDetails.setSecret(ReciprocalHelpers.generateKey(""));
 		jwtDetails.setUserPropertys("userPropertys");
 		return new Message<AppsJwtDetails>(jwtDetails).buildResponse();

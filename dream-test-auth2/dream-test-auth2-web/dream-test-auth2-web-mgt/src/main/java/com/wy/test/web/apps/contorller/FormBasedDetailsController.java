@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.constants.ConstProtocols;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.AppsFormBasedDetails;
@@ -36,7 +36,7 @@ public class FormBasedDetailsController extends BaseAppContorller {
 	public ResponseEntity<?> init() {
 		AppsFormBasedDetails formBasedDetails = new AppsFormBasedDetails();
 		formBasedDetails.setId(formBasedDetails.generateId());
-		formBasedDetails.setProtocol(ConstsProtocols.FORMBASED);
+		formBasedDetails.setProtocol(ConstProtocols.FORMBASED);
 		formBasedDetails.setSecret(ReciprocalHelpers.generateKey(""));
 		return new Message<AppsFormBasedDetails>(formBasedDetails).buildResponse();
 	}

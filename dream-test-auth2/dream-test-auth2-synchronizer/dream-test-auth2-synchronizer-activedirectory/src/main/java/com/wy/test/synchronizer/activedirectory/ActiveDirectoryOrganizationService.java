@@ -14,13 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.constants.ldap.OrganizationalUnit;
 import com.wy.test.core.entity.HistorySynchronizer;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.core.entity.SynchroRelated;
-import com.wy.test.core.persistence.ldap.ActiveDirectoryUtils;
-import com.wy.test.core.persistence.ldap.LdapUtils;
+import com.wy.test.core.persistence.ldap.ActiveDirectoryHelpers;
+import com.wy.test.core.persistence.ldap.LdapHelpers;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
@@ -31,7 +31,7 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 
 	final static Logger _logger = LoggerFactory.getLogger(ActiveDirectoryOrganizationService.class);
 
-	ActiveDirectoryUtils ldapUtils;
+	ActiveDirectoryHelpers ldapUtils;
 
 	@Override
 	public void sync() {
@@ -130,7 +130,7 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 				while (null != attrs && attrs.hasMoreElements()) {
 					Attribute objAttrs = attrs.nextElement();
 					_logger.trace("attribute {} : {}", objAttrs.getID(),
-							ActiveDirectoryUtils.getAttrStringValue(objAttrs));
+							ActiveDirectoryHelpers.getAttrStringValue(objAttrs));
 					attributeMap.put(objAttrs.getID().toLowerCase(), objAttrs);
 				}
 
@@ -167,17 +167,17 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 			org.setOrgCode(org.getId());
 			org.setNamePath(namePah);
 			org.setLevel(namePaths.length);
-			org.setOrgName(LdapUtils.getAttributeStringValue(OrganizationalUnit.OU, attributeMap));
+			org.setOrgName(LdapHelpers.getAttributeStringValue(OrganizationalUnit.OU, attributeMap));
 			org.setFullName(org.getOrgName());
 			org.setType("department");
-			org.setCountry(LdapUtils.getAttributeStringValue(OrganizationalUnit.CO, attributeMap));
-			org.setRegion(LdapUtils.getAttributeStringValue(OrganizationalUnit.ST, attributeMap));
-			org.setLocality(LdapUtils.getAttributeStringValue(OrganizationalUnit.L, attributeMap));
-			org.setStreet(LdapUtils.getAttributeStringValue(OrganizationalUnit.STREET, attributeMap));
-			org.setPostalCode(LdapUtils.getAttributeStringValue(OrganizationalUnit.POSTALCODE, attributeMap));
-			org.setDescription(LdapUtils.getAttributeStringValue(OrganizationalUnit.DESCRIPTION, attributeMap));
+			org.setCountry(LdapHelpers.getAttributeStringValue(OrganizationalUnit.CO, attributeMap));
+			org.setRegion(LdapHelpers.getAttributeStringValue(OrganizationalUnit.ST, attributeMap));
+			org.setLocality(LdapHelpers.getAttributeStringValue(OrganizationalUnit.L, attributeMap));
+			org.setStreet(LdapHelpers.getAttributeStringValue(OrganizationalUnit.STREET, attributeMap));
+			org.setPostalCode(LdapHelpers.getAttributeStringValue(OrganizationalUnit.POSTALCODE, attributeMap));
+			org.setDescription(LdapHelpers.getAttributeStringValue(OrganizationalUnit.DESCRIPTION, attributeMap));
 			org.setInstId(this.synchronizer.getInstId());
-			org.setStatus(ConstsStatus.ACTIVE);
+			org.setStatus(ConstStatus.ACTIVE);
 
 			_logger.debug("Organization " + org);
 			return org;
@@ -187,11 +187,11 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 		return null;
 	}
 
-	public ActiveDirectoryUtils getLdapUtils() {
+	public ActiveDirectoryHelpers getLdapUtils() {
 		return ldapUtils;
 	}
 
-	public void setLdapUtils(ActiveDirectoryUtils ldapUtils) {
+	public void setLdapUtils(ActiveDirectoryHelpers ldapUtils) {
 		this.ldapUtils = ldapUtils;
 	}
 

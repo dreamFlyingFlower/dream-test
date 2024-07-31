@@ -15,7 +15,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.core.constants.ConstsTimeInterval;
+import com.wy.test.core.constants.ConstTimeInterval;
 import com.wy.test.core.entity.Localization;
 
 public class LocalizationRepository {
@@ -39,7 +39,7 @@ public class LocalizationRepository {
 	JdbcTemplate jdbcTemplate;
 
 	protected static final Cache<String, String> localizationStore =
-			Caffeine.newBuilder().expireAfterWrite(ConstsTimeInterval.ONE_HOUR, TimeUnit.SECONDS).build();
+			Caffeine.newBuilder().expireAfterWrite(ConstTimeInterval.ONE_HOUR, TimeUnit.SECONDS).build();
 
 	public LocalizationRepository() {
 

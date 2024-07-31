@@ -3,14 +3,14 @@ package com.wy.test.provider.authn.realm.ldap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.core.persistence.ldap.ActiveDirectoryUtils;
+import com.wy.test.core.persistence.ldap.ActiveDirectoryHelpers;
 import com.wy.test.provider.authn.realm.IAuthenticationServer;
 
 public final class ActiveDirectoryServer implements IAuthenticationServer {
 
 	private final static Logger _logger = LoggerFactory.getLogger(ActiveDirectoryServer.class);
 
-	ActiveDirectoryUtils activeDirectoryUtils;
+	ActiveDirectoryHelpers activeDirectoryUtils;
 
 	String filter;
 
@@ -25,7 +25,7 @@ public final class ActiveDirectoryServer implements IAuthenticationServer {
 	 */
 	@Override
 	public boolean authenticate(String username, String password) {
-		ActiveDirectoryUtils ldapPassWordValid = new ActiveDirectoryUtils(activeDirectoryUtils.getProviderUrl(),
+		ActiveDirectoryHelpers ldapPassWordValid = new ActiveDirectoryHelpers(activeDirectoryUtils.getProviderUrl(),
 				username, password, activeDirectoryUtils.getDomain());
 		ldapPassWordValid.openConnection();
 		if (ldapPassWordValid.getCtx() != null) {
@@ -38,11 +38,11 @@ public final class ActiveDirectoryServer implements IAuthenticationServer {
 		return false;
 	}
 
-	public ActiveDirectoryUtils getActiveDirectoryUtils() {
+	public ActiveDirectoryHelpers getActiveDirectoryUtils() {
 		return activeDirectoryUtils;
 	}
 
-	public void setActiveDirectoryUtils(ActiveDirectoryUtils activeDirectoryUtils) {
+	public void setActiveDirectoryUtils(ActiveDirectoryHelpers activeDirectoryUtils) {
 		this.activeDirectoryUtils = activeDirectoryUtils;
 	}
 

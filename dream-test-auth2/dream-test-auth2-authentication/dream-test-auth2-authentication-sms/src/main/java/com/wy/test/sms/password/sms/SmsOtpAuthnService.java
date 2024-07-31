@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.mail.MailProperties;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.entity.EmailSenders;
 import com.wy.test.core.entity.SmsProvider;
 import com.wy.test.core.password.PasswordReciprocal;
@@ -19,6 +18,8 @@ import com.wy.test.persistence.service.SmsProviderService;
 import com.wy.test.sms.password.sms.impl.SmsOtpAuthnAliyun;
 import com.wy.test.sms.password.sms.impl.SmsOtpAuthnTencentCloud;
 import com.wy.test.sms.password.sms.impl.SmsOtpAuthnYunxin;
+
+import dream.flying.flower.framework.core.enums.BooleanEnum;
 
 public class SmsOtpAuthnService {
 
@@ -85,7 +86,7 @@ public class SmsOtpAuthnService {
 					mailProperties.setHost(emailSender.getSmtpHost());
 					mailProperties.setPort(emailSender.getPort());
 					mailProperties.getProperties().put("ssl",
-							String.valueOf(ConstsBoolean.isTrue(emailSender.getSslSwitch())));
+							String.valueOf(BooleanEnum.isTrue(emailSender.getSslSwitch())));
 					mailProperties.getProperties().put("sender", emailSender.getSender());
 					MailOtpAuthn mailOtpAuthn = new MailOtpAuthn(mailProperties);
 					if (redisOptTokenStore != null) {
@@ -103,5 +104,4 @@ public class SmsOtpAuthnService {
 	public void setRedisOptTokenStore(RedisOtpTokenStore redisOptTokenStore) {
 		this.redisOptTokenStore = redisOptTokenStore;
 	}
-
 }

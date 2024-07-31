@@ -2,7 +2,7 @@ package com.wy.test.otp.password.onetimepwd.token;
 
 import org.joda.time.DateTime;
 
-import com.wy.test.core.constants.ConstsTimeInterval;
+import com.wy.test.core.constants.ConstTimeInterval;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.persistence.redis.RedisConnection;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
@@ -10,7 +10,7 @@ import com.wy.test.otp.password.onetimepwd.OneTimePassword;
 
 public class RedisOtpTokenStore extends AbstractOtpTokenStore {
 
-	protected int validitySeconds = ConstsTimeInterval.ONE_MINUTE * 5;
+	protected long validitySeconds = ConstTimeInterval.ONE_MINUTE * 5;
 
 	RedisConnectionFactory connectionFactory;
 

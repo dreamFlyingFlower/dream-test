@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.core.entity.Synchronizers;
-import com.wy.test.core.persistence.ldap.LdapUtils;
+import com.wy.test.core.persistence.ldap.LdapHelpers;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class LdapSynchronizerService implements ISynchronizerService {
 	@Override
 	public void sync() {
 		log.info("Sync ...");
-		LdapUtils ldapUtils = new LdapUtils(synchronizer.getProviderUrl(), synchronizer.getPrincipal(),
+		LdapHelpers ldapUtils = new LdapHelpers(synchronizer.getProviderUrl(), synchronizer.getPrincipal(),
 				synchronizer.getCredentials(), synchronizer.getUserBasedn());
 		ldapUtils.openConnection();
 

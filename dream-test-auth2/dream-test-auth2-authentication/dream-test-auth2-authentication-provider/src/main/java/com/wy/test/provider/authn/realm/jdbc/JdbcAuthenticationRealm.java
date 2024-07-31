@@ -6,8 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.wy.test.core.constants.ConstsLoginType;
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.PasswordPolicy;
 import com.wy.test.core.entity.UserInfo;
@@ -20,6 +19,8 @@ import com.wy.test.persistence.service.UserInfoService;
 import com.wy.test.provider.authn.realm.AbstractAuthenticationRealm;
 import com.wy.test.provider.authn.realm.ldap.LdapAuthenticationRealm;
 import com.wy.test.provider.authn.realm.ldap.LdapAuthenticationRealmService;
+
+import dream.flying.flower.framework.web.enums.AuthLoginType;
 
 /**
  * JdbcAuthenticationRealm.
@@ -81,7 +82,7 @@ public class JdbcAuthenticationRealm extends AbstractAuthenticationRealm {
 			try {
 				LdapAuthenticationRealm ldapRealm = ldapAuthenticationRealmService.getByInstId(userInfo.getInstId());
 				if (!passwordMatches && ldapRealm != null && ldapRealm.isLdapSupport()
-						&& userInfo.getIsLocked() == ConstsStatus.ACTIVE) {
+						&& userInfo.getIsLocked() == ConstStatus.ACTIVE) {
 					passwordMatches = ldapRealm.passwordMatches(userInfo, password);
 					if (passwordMatches) {
 						// write password to database Realm
@@ -97,7 +98,7 @@ public class JdbcAuthenticationRealm extends AbstractAuthenticationRealm {
 		_logger.debug("passwordvalid : {}", passwordMatches);
 		if (!passwordMatches) {
 			passwordPolicyValidator.plusBadPasswordCount(userInfo);
-			insertLoginHistory(userInfo, ConstsLoginType.LOCAL, "", "xe00000004",
+			insertLoginHistory(userInfo, AuthLoginType.LOCAL, "", "xe00000004",
 					WebConstants.LOGIN_RESULT.PASSWORD_ERROE);
 			PasswordPolicy passwordPolicy = passwordPolicyValidator.getPasswordPolicyRepository().getPasswordPolicy();
 			if (userInfo.getBadPasswordCount() >= (passwordPolicy.getAttempts() / 2)) {

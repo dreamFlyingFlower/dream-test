@@ -10,7 +10,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
@@ -86,7 +86,7 @@ public class JdbcOrganizationService extends AbstractSynchronizerService impleme
 		if (meta.getColumnDetail().containsKey("status")) {
 			org.setStatus(rs.getInt("status"));
 		} else {
-			org.setStatus(ConstsStatus.ACTIVE);
+			org.setStatus(ConstStatus.ACTIVE);
 		}
 
 		log.debug("Organization {}", org);

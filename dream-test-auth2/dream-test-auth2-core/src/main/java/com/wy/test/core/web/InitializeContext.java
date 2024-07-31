@@ -26,8 +26,8 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.wy.test.core.constants.ConstsDatabase;
-import com.wy.test.core.util.PathUtils;
+import com.wy.test.core.constants.ConstDatabase;
+import com.wy.test.core.util.PathHelpers;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -96,7 +96,7 @@ public class InitializeContext extends HttpServlet {
 						((javax.sql.DataSource) applicationContext.getBean("dataSource")).getConnection();
 
 				DatabaseMetaData databaseMetaData = connection.getMetaData();
-				ConstsDatabase.databaseProduct = databaseMetaData.getDatabaseProductName();
+				ConstDatabase.databaseProduct = databaseMetaData.getDatabaseProductName();
 
 				log.debug("DatabaseProductName   :   {}", databaseMetaData.getDatabaseProductName());
 				log.debug("DatabaseProductVersion:   {}", databaseMetaData.getDatabaseProductVersion());
@@ -162,7 +162,7 @@ public class InitializeContext extends HttpServlet {
 			String key = (String) it.next();
 			log.trace(key + "   =   {}", map.get(key));
 		}
-		log.debug("APP_HOME" + "   =   {}", PathUtils.getInstance().getAppPath());
+		log.debug("APP_HOME" + "   =   {}", PathHelpers.getInstance().getAppPath());
 
 		Processor processor = ArchUtils.getProcessor();
 		if (Objects.isNull(processor)) {

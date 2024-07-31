@@ -17,7 +17,6 @@ import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.authz.token.endpoint.adapter.TokenBasedDefaultAdapter;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.entity.apps.AppsTokenBasedDetails;
@@ -25,6 +24,7 @@ import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.AppsTokenBasedDetailsService;
 
+import dream.flying.flower.framework.core.enums.BooleanEnum;
 import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -58,7 +58,7 @@ public class TokenBasedAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 		tokenBasedDetails.setIsAdapter(application.getIsAdapter());
 
 		AbstractAuthorizeAdapter adapter;
-		if (ConstsBoolean.isTrue(tokenBasedDetails.getIsAdapter())) {
+		if (BooleanEnum.isTrue(tokenBasedDetails.getIsAdapter())) {
 			adapter = (AbstractAuthorizeAdapter) ReflectHelper.newInstance(tokenBasedDetails.getAdapter());
 		} else {
 			adapter = (AbstractAuthorizeAdapter) new TokenBasedDefaultAdapter();

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
@@ -33,7 +33,7 @@ public class ReorgDeptService extends AbstractSynchronizerService implements ISy
 
 			for (Organizations org : listOrg) {
 				log.info("Dept " + (++responseCount) + " : " + org);
-				org.setStatus(ConstsStatus.ACTIVE);
+				org.setStatus(ConstStatus.ACTIVE);
 				organizationsService.update(org);
 			}
 

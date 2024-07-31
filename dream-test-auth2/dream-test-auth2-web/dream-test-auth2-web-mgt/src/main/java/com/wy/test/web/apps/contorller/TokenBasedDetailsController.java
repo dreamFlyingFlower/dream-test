@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.constants.ConstProtocols;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.AppsJwtDetails;
@@ -37,7 +37,7 @@ public class TokenBasedDetailsController extends BaseAppContorller {
 	public ResponseEntity<?> init() {
 		AppsTokenBasedDetails tokenBasedDetails = new AppsTokenBasedDetails();
 		tokenBasedDetails.setId(tokenBasedDetails.generateId());
-		tokenBasedDetails.setProtocol(ConstsProtocols.TOKENBASED);
+		tokenBasedDetails.setProtocol(ConstProtocols.TOKENBASED);
 		tokenBasedDetails.setSecret(ReciprocalHelpers.generateKey(ReciprocalHelpers.Algorithm.AES));
 		tokenBasedDetails.setAlgorithmKey(tokenBasedDetails.getSecret());
 		tokenBasedDetails.setUserPropertys("userPropertys");

@@ -21,9 +21,9 @@ import com.wy.test.cas.authz.endpoint.ticket.ProxyGrantingTicketImpl;
 import com.wy.test.cas.authz.endpoint.ticket.ProxyTicketImpl;
 import com.wy.test.cas.authz.endpoint.ticket.Ticket;
 import com.wy.test.core.authn.SignPrincipal;
-import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.web.HttpResponseConstants;
 
+import dream.flying.flower.framework.core.enums.BooleanEnum;
 import dream.flying.flower.lang.StrHelper;
 import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -77,7 +77,7 @@ public class Cas30AuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 						null);
 			}
 
-			if (ConstsBoolean.isTrue(storedTicket.getCasDetails().getIsAdapter())) {
+			if (BooleanEnum.isTrue(storedTicket.getCasDetails().getIsAdapter())) {
 				try {
 					Object samlAdapter = ReflectHelper.newInstance(storedTicket.getCasDetails().getAdapter());
 					BeanUtils.setProperty(samlAdapter, "serviceResponseBuilder", serviceResponseBuilder);
@@ -147,7 +147,7 @@ public class Cas30AuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 
 		if (storedTicket != null) {
 			SignPrincipal authentication = ((SignPrincipal) storedTicket.getAuthentication().getPrincipal());
-			if (ConstsBoolean.isTrue(storedTicket.getCasDetails().getIsAdapter())) {
+			if (BooleanEnum.isTrue(storedTicket.getCasDetails().getIsAdapter())) {
 				try {
 					Object samlAdapter = ReflectHelper.newInstance(storedTicket.getCasDetails().getAdapter());
 					BeanUtils.setProperty(samlAdapter, "serviceResponseBuilder", serviceResponseBuilder);

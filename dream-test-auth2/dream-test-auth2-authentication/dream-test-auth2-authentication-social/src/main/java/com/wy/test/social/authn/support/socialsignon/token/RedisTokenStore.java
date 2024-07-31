@@ -4,11 +4,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.wy.test.core.constants.ConstsTimeInterval;
+import com.wy.test.core.constants.ConstTimeInterval;
 
 public class RedisTokenStore {
 
-	protected int validitySeconds = ConstsTimeInterval.ONE_MINUTE * 2;
+	protected long validitySeconds = ConstTimeInterval.ONE_MINUTE * 2;
 
 	private final ConcurrentHashMap<String, String> tokenStore = new ConcurrentHashMap<String, String>();
 
@@ -21,9 +21,8 @@ public class RedisTokenStore {
 	public void store(String token) {
 		tokenStore.put(PREFIX + token, "-1");
 		/*
-		 * DateTime currentDateTime = new DateTime(); RedisConnection conn =
-		 * connectionFactory.getConnection(); conn.getConn().setex(PREFIX + token,
-		 * validitySeconds, "-1"); conn.close();
+		 * DateTime currentDateTime = new DateTime(); RedisConnection conn = connectionFactory.getConnection();
+		 * conn.getConn().setex(PREFIX + token, validitySeconds, "-1"); conn.close();
 		 */
 	}
 
@@ -31,9 +30,8 @@ public class RedisTokenStore {
 		boolean flag = false;
 		try {
 			/*
-			 * DateTime currentDateTime = new DateTime(); RedisConnection conn =
-			 * connectionFactory.getConnection(); conn.getConn().setex(PREFIX + token,
-			 * validitySeconds, loginname); //conn.setexObject(PREFIX + token,
+			 * DateTime currentDateTime = new DateTime(); RedisConnection conn = connectionFactory.getConnection();
+			 * conn.getConn().setex(PREFIX + token, validitySeconds, loginname); //conn.setexObject(PREFIX + token,
 			 * validitySeconds, loginname); conn.close();
 			 */
 			tokenStore.put(PREFIX + token, loginname);
@@ -46,9 +44,9 @@ public class RedisTokenStore {
 
 	public String get(String token) {
 		/*
-		 * RedisConnection conn = connectionFactory.getConnection(); String value =
-		 * conn.get(PREFIX + token); if(StringUtils.isNotEmpty(value) &&
-		 * !"-1".equalsIgnoreCase(value)) { conn.delete(PREFIX + token); return value; }
+		 * RedisConnection conn = connectionFactory.getConnection(); String value = conn.get(PREFIX + token);
+		 * if(StringUtils.isNotEmpty(value) && !"-1".equalsIgnoreCase(value)) { conn.delete(PREFIX + token); return
+		 * value; }
 		 */
 
 		String value = tokenStore.get(PREFIX + token);

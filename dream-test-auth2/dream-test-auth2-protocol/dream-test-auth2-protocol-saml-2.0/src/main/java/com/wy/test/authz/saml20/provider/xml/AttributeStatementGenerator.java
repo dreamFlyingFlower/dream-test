@@ -20,12 +20,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 
-import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.constants.ldap.ActiveDirectoryUser;
 import com.wy.test.core.entity.ExtraAttr;
 import com.wy.test.core.entity.ExtraAttrs;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.AppsSAML20Details;
+
+import dream.flying.flower.framework.core.enums.BooleanEnum;
 
 public class AttributeStatementGenerator {
 
@@ -67,7 +68,7 @@ public class AttributeStatementGenerator {
 		}
 
 		logger.debug("ExtendAttr " + saml20Details.getExtendAttr());
-		if (ConstsBoolean.isTrue(saml20Details.getIsExtendAttr()) && saml20Details.getExtendAttr() != null) {
+		if (BooleanEnum.isTrue(saml20Details.getIsExtendAttr()) && saml20Details.getExtendAttr() != null) {
 			ExtraAttrs extraAttrs = new ExtraAttrs(saml20Details.getExtendAttr());
 			for (ExtraAttr extraAttr : extraAttrs.getExtraAttrs()) {
 				extraAttr.setValue(extraAttr.getValue().replaceAll(COMMA_ISO8859_1, COMMA));

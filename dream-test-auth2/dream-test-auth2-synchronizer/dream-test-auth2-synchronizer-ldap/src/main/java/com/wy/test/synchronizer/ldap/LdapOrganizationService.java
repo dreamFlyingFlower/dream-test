@@ -12,12 +12,12 @@ import javax.naming.directory.SearchResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.constants.ldap.OrganizationalUnit;
 import com.wy.test.core.entity.HistorySynchronizer;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.core.entity.SynchroRelated;
-import com.wy.test.core.persistence.ldap.LdapUtils;
+import com.wy.test.core.persistence.ldap.LdapHelpers;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LdapOrganizationService extends AbstractSynchronizerService implements ISynchronizerService {
 
-	LdapUtils ldapUtils;
+	LdapHelpers ldapUtils;
 
 	@Override
 	public void sync() {
@@ -126,7 +126,7 @@ public class LdapOrganizationService extends AbstractSynchronizerService impleme
 				NamingEnumeration<? extends Attribute> attrs = sr.getAttributes().getAll();
 				while (null != attrs && attrs.hasMoreElements()) {
 					Attribute objAttrs = attrs.nextElement();
-					log.trace("attribute {} : {}", objAttrs.getID(), LdapUtils.getAttrStringValue(objAttrs));
+					log.trace("attribute {} : {}", objAttrs.getID(), LdapHelpers.getAttrStringValue(objAttrs));
 					attributeMap.put(objAttrs.getID().toLowerCase(), objAttrs);
 				}
 
@@ -164,20 +164,20 @@ public class LdapOrganizationService extends AbstractSynchronizerService impleme
 			org.setOrgCode(org.getId());
 			org.setNamePath(namePah);
 			org.setLevel(namePaths.length);
-			org.setOrgName(LdapUtils.getAttributeStringValue(OrganizationalUnit.OU, attributeMap));
+			org.setOrgName(LdapHelpers.getAttributeStringValue(OrganizationalUnit.OU, attributeMap));
 			org.setFullName(org.getOrgName());
 			org.setType("department");
 			// org.setCountry(LdapUtils.getAttributeStringValue(OrganizationalUnit.CO,attributeMap));
-			org.setRegion(LdapUtils.getAttributeStringValue(OrganizationalUnit.ST, attributeMap));
-			org.setLocality(LdapUtils.getAttributeStringValue(OrganizationalUnit.L, attributeMap));
-			org.setStreet(LdapUtils.getAttributeStringValue(OrganizationalUnit.STREET, attributeMap));
-			org.setPostalCode(LdapUtils.getAttributeStringValue(OrganizationalUnit.POSTALCODE, attributeMap));
-			org.setAddress(LdapUtils.getAttributeStringValue(OrganizationalUnit.POSTALADDRESS, attributeMap));
-			org.setPhone(LdapUtils.getAttributeStringValue(OrganizationalUnit.TELEPHONENUMBER, attributeMap));
-			org.setFax(LdapUtils.getAttributeStringValue(OrganizationalUnit.FACSIMILETELEPHONENUMBER, attributeMap));
-			org.setDescription(LdapUtils.getAttributeStringValue(OrganizationalUnit.DESCRIPTION, attributeMap));
+			org.setRegion(LdapHelpers.getAttributeStringValue(OrganizationalUnit.ST, attributeMap));
+			org.setLocality(LdapHelpers.getAttributeStringValue(OrganizationalUnit.L, attributeMap));
+			org.setStreet(LdapHelpers.getAttributeStringValue(OrganizationalUnit.STREET, attributeMap));
+			org.setPostalCode(LdapHelpers.getAttributeStringValue(OrganizationalUnit.POSTALCODE, attributeMap));
+			org.setAddress(LdapHelpers.getAttributeStringValue(OrganizationalUnit.POSTALADDRESS, attributeMap));
+			org.setPhone(LdapHelpers.getAttributeStringValue(OrganizationalUnit.TELEPHONENUMBER, attributeMap));
+			org.setFax(LdapHelpers.getAttributeStringValue(OrganizationalUnit.FACSIMILETELEPHONENUMBER, attributeMap));
+			org.setDescription(LdapHelpers.getAttributeStringValue(OrganizationalUnit.DESCRIPTION, attributeMap));
 			org.setInstId(this.synchronizer.getInstId());
-			org.setStatus(ConstsStatus.ACTIVE);
+			org.setStatus(ConstStatus.ACTIVE);
 			log.info("org " + org);
 			return org;
 		} catch (NamingException e) {
@@ -186,11 +186,11 @@ public class LdapOrganizationService extends AbstractSynchronizerService impleme
 		return null;
 	}
 
-	public LdapUtils getLdapUtils() {
+	public LdapHelpers getLdapUtils() {
 		return ldapUtils;
 	}
 
-	public void setLdapUtils(LdapUtils ldapUtils) {
+	public void setLdapUtils(LdapHelpers ldapUtils) {
 		this.ldapUtils = ldapUtils;
 	}
 

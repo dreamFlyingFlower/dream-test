@@ -15,8 +15,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 
-import com.wy.test.core.constants.ConstsPasswordSetType;
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstPasswordSetType;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.PasswordPolicy;
 import com.wy.test.core.entity.UserInfo;
@@ -134,12 +134,12 @@ public class PasswordPolicyValidator {
 		}
 
 		// locked
-		if (userInfo.getIsLocked() == ConstsStatus.LOCK) {
+		if (userInfo.getIsLocked() == ConstStatus.LOCK) {
 			throw new BadCredentialsException(
 					userInfo.getUsername() + " " + WebContext.getI18nValue("login.error.locked"));
 		}
 		// inactive
-		if (userInfo.getStatus() != ConstsStatus.ACTIVE) {
+		if (userInfo.getStatus() != ConstStatus.ACTIVE) {
 			throw new BadCredentialsException(userInfo.getUsername() + WebContext.getI18nValue("login.error.inactive"));
 		}
 
@@ -153,16 +153,16 @@ public class PasswordPolicyValidator {
 		// initial password need change
 		if (userInfo.getLoginCount() <= 0) {
 			WebContext.getSession().setAttribute(WebConstants.CURRENT_USER_PASSWORD_SET_TYPE,
-					ConstsPasswordSetType.INITIAL_PASSWORD);
+					ConstPasswordSetType.INITIAL_PASSWORD);
 		}
 
-		if (userInfo.getPasswordSetType() != ConstsPasswordSetType.PASSWORD_NORMAL) {
+		if (userInfo.getPasswordSetType() != ConstPasswordSetType.PASSWORD_NORMAL) {
 			WebContext.getSession().setAttribute(WebConstants.CURRENT_USER_PASSWORD_SET_TYPE,
 					userInfo.getPasswordSetType());
 			return;
 		} else {
 			WebContext.getSession().setAttribute(WebConstants.CURRENT_USER_PASSWORD_SET_TYPE,
-					ConstsPasswordSetType.PASSWORD_NORMAL);
+					ConstPasswordSetType.PASSWORD_NORMAL);
 		}
 
 		/*
@@ -182,7 +182,7 @@ public class PasswordPolicyValidator {
 					intDuration, passwordPolicy.getExpiration(), intDuration <= passwordPolicy.getExpiration());
 			if (intDuration > passwordPolicy.getExpiration()) {
 				WebContext.getSession().setAttribute(WebConstants.CURRENT_USER_PASSWORD_SET_TYPE,
-						ConstsPasswordSetType.PASSWORD_EXPIRED);
+						ConstPasswordSetType.PASSWORD_EXPIRED);
 			}
 		}
 
@@ -197,11 +197,11 @@ public class PasswordPolicyValidator {
 	public void lockUser(UserInfo userInfo) {
 		try {
 			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
-				if (userInfo.getIsLocked() == ConstsStatus.ACTIVE) {
+				if (userInfo.getIsLocked() == ConstStatus.ACTIVE) {
 					jdbcTemplate.update(LOCK_USER_UPDATE_STATEMENT,
-							new Object[] { ConstsStatus.LOCK, new Date(), userInfo.getId() },
+							new Object[] { ConstStatus.LOCK, new Date(), userInfo.getId() },
 							new int[] { Types.VARCHAR, Types.TIMESTAMP, Types.VARCHAR });
-					userInfo.setIsLocked(ConstsStatus.LOCK);
+					userInfo.setIsLocked(ConstStatus.LOCK);
 				}
 			}
 		} catch (Exception e) {
@@ -218,9 +218,9 @@ public class PasswordPolicyValidator {
 		try {
 			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				jdbcTemplate.update(UNLOCK_USER_UPDATE_STATEMENT,
-						new Object[] { ConstsStatus.ACTIVE, new Date(), userInfo.getId() },
+						new Object[] { ConstStatus.ACTIVE, new Date(), userInfo.getId() },
 						new int[] { Types.VARCHAR, Types.TIMESTAMP, Types.VARCHAR });
-				userInfo.setIsLocked(ConstsStatus.ACTIVE);
+				userInfo.setIsLocked(ConstStatus.ACTIVE);
 			}
 		} catch (Exception e) {
 			_logger.error("unlockUser Exception", e);
@@ -236,9 +236,9 @@ public class PasswordPolicyValidator {
 		try {
 			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				jdbcTemplate.update(BADPASSWORDCOUNT_RESET_UPDATE_STATEMENT,
-						new Object[] { 0, ConstsStatus.ACTIVE, new Date(), userInfo.getId() },
+						new Object[] { 0, ConstStatus.ACTIVE, new Date(), userInfo.getId() },
 						new int[] { Types.INTEGER, Types.INTEGER, Types.TIMESTAMP, Types.VARCHAR });
-				userInfo.setIsLocked(ConstsStatus.ACTIVE);
+				userInfo.setIsLocked(ConstStatus.ACTIVE);
 				userInfo.setBadPasswordCount(0);
 			}
 		} catch (Exception e) {

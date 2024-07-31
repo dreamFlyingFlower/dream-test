@@ -5,8 +5,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.jwt.AuthJwt;
-import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.SocialsAssociate;
 import com.wy.test.core.entity.SocialsProvider;
@@ -29,24 +26,25 @@ import com.wy.test.core.uuid.UUID;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.social.zhyd.request.AuthDreamRequest;
 
+import dream.flying.flower.framework.web.enums.AuthLoginType;
+import lombok.extern.slf4j.Slf4j;
 import me.zhyd.oauth.request.AuthRequest;
 
 @Controller
 @RequestMapping(value = "/logon/oauth20")
+@Slf4j
 public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
-
-	final static Logger _logger = LoggerFactory.getLogger(SocialSignOnEndpoint.class);
 
 	@GetMapping(value = { "/authorize/{provider}" })
 	@ResponseBody
 	public ResponseEntity<?> authorize(HttpServletRequest request, @PathVariable String provider) {
-		_logger.trace("SocialSignOn provider : " + provider);
+		log.trace("SocialSignOn provider : " + provider);
 		String instId = WebContext.getInst().getId();
 		String originURL = WebContext.getContextPath(request, false);
 		String authorizationUrl = buildAuthRequest(instId, provider, originURL + dreamServerProperties.getFrontendUri())
 				.authorize(authTokenService.genRandomJwt());
 
-		_logger.trace("authorize SocialSignOn : " + authorizationUrl);
+		log.trace("authorize SocialSignOn : " + authorizationUrl);
 		return new Message<Object>((Object) authorizationUrl).buildResponse();
 	}
 
@@ -59,7 +57,7 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 				buildAuthRequest(instId, provider, originURL + dreamServerProperties.getFrontendUri());
 
 		if (authRequest == null) {
-			_logger.error("build authRequest fail .");
+			log.error("build authRequest fail .");
 		}
 		String state = UUID.generate().toString();
 		// String state = authTokenService.genRandomJwt();
@@ -92,12 +90,12 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 			socialsAssociate.setInstId(userInfo.getInstId());
 			// socialsAssociate.setAccessToken(JsonUtils.object2Json(accessToken));
 			// socialsAssociate.setExAttribute(JsonUtils.object2Json(accessToken.getResponseObject()));
-			_logger.debug("Social Bind : " + socialsAssociate);
+			log.debug("Social Bind : " + socialsAssociate);
 			this.socialsAssociateService.delete(socialsAssociate);
 			this.socialsAssociateService.insert(socialsAssociate);
 			return new Message<AuthJwt>().buildResponse();
 		} catch (Exception e) {
-			_logger.error("callback Exception  ", e);
+			log.error("callback Exception  ", e);
 		}
 
 		return new Message<AuthJwt>(Message.ERROR).buildResponse();
@@ -114,7 +112,7 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 
 			SocialsAssociate socialssssociate1 = this.socialsAssociateService.get(socialsAssociate);
 
-			_logger.debug("Loaded SocialSignOn Socials Associate : " + socialssssociate1);
+			log.debug("Loaded SocialSignOn Socials Associate : " + socialssssociate1);
 
 			if (null == socialssssociate1) {
 				// 如果存在第三方ID并且在数据库无法找到映射关系，则进行绑定逻辑
@@ -125,11 +123,11 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 			}
 
 			socialsAssociate = socialssssociate1;
-			_logger.debug("Social Sign On from {} mapping to user {}", socialsAssociate.getProvider(),
+			log.debug("Social Sign On from {} mapping to user {}", socialsAssociate.getProvider(),
 					socialsAssociate.getUsername());
 
 			LoginCredential loginCredential =
-					new LoginCredential(socialsAssociate.getUsername(), "", ConstsLoginType.SOCIALSIGNON);
+					new LoginCredential(socialsAssociate.getUsername(), "", AuthLoginType.SOCIALSIGNON);
 			SocialsProvider socialSignOnProvider = socialSignOnProviderService.get(instId, provider);
 			loginCredential.setProvider(socialSignOnProvider.getProviderName());
 
@@ -141,7 +139,7 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 			this.socialsAssociateService.update(socialsAssociate);
 			return new Message<AuthJwt>(authTokenService.genAuthJwt(authentication)).buildResponse();
 		} catch (Exception e) {
-			_logger.error("callback Exception  ", e);
+			log.error("callback Exception  ", e);
 			return new Message<AuthJwt>(Message.ERROR).buildResponse();
 		}
 	}
@@ -172,7 +170,7 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 				return new Message<AuthJwt>(Message.WARNING, "Invalid token").buildResponse();
 			}
 		} catch (Exception e) {
-			_logger.error("qrAuthLogin Exception  ", e);
+			log.error("qrAuthLogin Exception  ", e);
 		}
 		return new Message<AuthJwt>(Message.ERROR).buildResponse();
 	}
@@ -212,17 +210,17 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 
 			socialsAssociate = this.socialsAssociateService.get(socialsAssociate);
 
-			_logger.debug("qrcallback Loaded SocialSignOn Socials Associate : " + socialsAssociate);
+			log.debug("qrcallback Loaded SocialSignOn Socials Associate : " + socialsAssociate);
 
 			if (null == socialsAssociate) {
 				return new Message<AuthJwt>(Message.ERROR).buildResponse();
 			}
 
-			_logger.debug("qrcallback Social Sign On from {} mapping to user {}", socialsAssociate.getProvider(),
+			log.debug("qrcallback Social Sign On from {} mapping to user {}", socialsAssociate.getProvider(),
 					socialsAssociate.getUsername());
 
 			LoginCredential loginCredential =
-					new LoginCredential(socialsAssociate.getUsername(), "", ConstsLoginType.SOCIALSIGNON);
+					new LoginCredential(socialsAssociate.getUsername(), "", AuthLoginType.SOCIALSIGNON);
 			SocialsProvider socialSignOnProvider = socialSignOnProviderService.get(instId, provider);
 			loginCredential.setProvider(socialSignOnProvider.getProviderName());
 
@@ -234,7 +232,7 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 			this.socialsAssociateService.update(socialsAssociate);
 			return new Message<AuthJwt>(authTokenService.genAuthJwt(authentication)).buildResponse();
 		} catch (Exception e) {
-			_logger.error("qrcallback Exception  ", e);
+			log.error("qrcallback Exception  ", e);
 			return new Message<AuthJwt>(Message.ERROR).buildResponse();
 		}
 	}

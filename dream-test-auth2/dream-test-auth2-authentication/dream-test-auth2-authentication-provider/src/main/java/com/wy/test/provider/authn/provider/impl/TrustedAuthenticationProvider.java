@@ -1,7 +1,5 @@
 package com.wy.test.provider.authn.provider.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 
@@ -13,12 +11,13 @@ import com.wy.test.core.web.WebContext;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.provider.authn.realm.AbstractAuthenticationRealm;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Trusted Authentication provider.
  */
+@Slf4j
 public class TrustedAuthenticationProvider extends AbstractAuthenticationProvider {
-
-	private static final Logger _logger = LoggerFactory.getLogger(TrustedAuthenticationProvider.class);
 
 	@Override
 	public String getProviderName() {
@@ -47,15 +46,14 @@ public class TrustedAuthenticationProvider extends AbstractAuthenticationProvide
 			authenticationRealm.getPasswordPolicyValidator().applyPasswordPolicy(loadeduserInfo);
 			Authentication authentication = createOnlineTicket(loginCredential, loadeduserInfo);
 
-			authenticationRealm.insertLoginHistory(loadeduserInfo, loginCredential.getAuthType(),
+			authenticationRealm.insertLoginHistory(loadeduserInfo, loginCredential.getAuthLoginType(),
 					loginCredential.getProvider(), loginCredential.getCode(), loginCredential.getMessage());
 
 			return authentication;
 		} else {
 			String i18nMessage = WebContext.getI18nValue("login.error.username");
-			_logger.debug("login user {} not in this System . {}", loginCredential.getUsername(), i18nMessage);
+			log.debug("login user {} not in this System . {}", loginCredential.getUsername(), i18nMessage);
 			throw new BadCredentialsException(WebContext.getI18nValue("login.error.username"));
 		}
 	}
-
 }

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstsTimeInterval;
+import com.wy.test.core.constants.ConstTimeInterval;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.web.WebConstants;
@@ -55,7 +55,7 @@ public class SafeController {
 		currentUser.setEmail(email);
 
 		currentUser.setTheme(theme);
-		WebContext.setCookie(response, null, WebConstants.THEME_COOKIE_NAME, theme, ConstsTimeInterval.ONE_WEEK);
+		WebContext.setCookie(response, null, WebConstants.THEME_COOKIE_NAME, theme, ConstTimeInterval.ONE_WEEK);
 
 		userInfoService.updateEmail(currentUser);
 

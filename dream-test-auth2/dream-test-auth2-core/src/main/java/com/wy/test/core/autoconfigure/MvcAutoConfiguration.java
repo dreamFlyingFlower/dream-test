@@ -37,7 +37,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import com.wy.test.core.constants.ConstsTimeInterval;
+import com.wy.test.core.constants.ConstTimeInterval;
 import com.wy.test.core.entity.xml.UserInfoXML;
 import com.wy.test.core.persistence.repository.InstitutionsRepository;
 import com.wy.test.core.properties.DreamAuthServerProperties;
@@ -168,7 +168,7 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 		CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
 		cookieLocaleResolver.setCookieName("mxk_locale");
 		cookieLocaleResolver.setCookieDomain(dreamAuthServerProperties.getDomain());
-		cookieLocaleResolver.setCookieMaxAge(ConstsTimeInterval.TWO_WEEK);
+		cookieLocaleResolver.setCookieMaxAge((int) ConstTimeInterval.TWO_WEEK);
 		return cookieLocaleResolver;
 	}
 

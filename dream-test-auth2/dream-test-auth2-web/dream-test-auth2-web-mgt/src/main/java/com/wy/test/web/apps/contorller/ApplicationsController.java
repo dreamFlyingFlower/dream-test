@@ -26,7 +26,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.gen.OctetSequenceKeyGenerator;
 import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.constants.ConstProtocols;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
@@ -43,7 +43,7 @@ public class ApplicationsController extends BaseAppContorller {
 	public ResponseEntity<?> init() {
 		Apps app = new Apps();
 		app.setId(app.generateId());
-		app.setProtocol(ConstsProtocols.BASIC);
+		app.setProtocol(ConstProtocols.BASIC);
 		app.setSecret(ReciprocalHelpers.generateKey(""));
 		return new Message<Apps>(app).buildResponse();
 	}

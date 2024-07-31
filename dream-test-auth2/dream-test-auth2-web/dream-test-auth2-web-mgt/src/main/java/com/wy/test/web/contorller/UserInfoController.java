@@ -37,10 +37,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstsEntryType;
-import com.wy.test.core.constants.ConstsOperateAction;
-import com.wy.test.core.constants.ConstsOperateResult;
-import com.wy.test.core.constants.ConstsPasswordSetType;
+import com.wy.test.core.constants.ConstEntryType;
+import com.wy.test.core.constants.ConstOperateAction;
+import com.wy.test.core.constants.ConstOperateResult;
+import com.wy.test.core.constants.ConstPasswordSetType;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.ExcelImport;
 import com.wy.test.core.entity.Message;
@@ -114,8 +114,8 @@ public class UserInfoController {
 			fileUploadService.remove(userInfo.getPictureId());
 		}
 		if (userInfoService.insert(userInfo)) {
-			systemLog.insert(ConstsEntryType.USERINFO, userInfo, ConstsOperateAction.CREATE,
-					ConstsOperateResult.SUCCESS, currentUser);
+			systemLog.insert(ConstEntryType.USERINFO, userInfo, ConstOperateAction.CREATE,
+					ConstOperateResult.SUCCESS, currentUser);
 			return new Message<UserInfo>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<UserInfo>(Message.FAIL).buildResponse();
@@ -140,8 +140,8 @@ public class UserInfoController {
 			fileUploadService.remove(userInfo.getPictureId());
 		}
 		if (userInfoService.update(userInfo)) {
-			systemLog.insert(ConstsEntryType.USERINFO, userInfo, ConstsOperateAction.UPDATE,
-					ConstsOperateResult.SUCCESS, currentUser);
+			systemLog.insert(ConstEntryType.USERINFO, userInfo, ConstOperateAction.UPDATE,
+					ConstOperateResult.SUCCESS, currentUser);
 			return new Message<UserInfo>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<UserInfo>(Message.FAIL).buildResponse();
@@ -154,7 +154,7 @@ public class UserInfoController {
 		_logger.debug("-delete  ids : {} ", ids);
 
 		if (userInfoService.deleteBatch(ids)) {
-			systemLog.insert(ConstsEntryType.USERINFO, ids, ConstsOperateAction.DELETE, ConstsOperateResult.SUCCESS,
+			systemLog.insert(ConstEntryType.USERINFO, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new Message<UserInfo>(Message.SUCCESS).buildResponse();
 		} else {
@@ -186,10 +186,10 @@ public class UserInfoController {
 	public ResponseEntity<?> changePassword(@RequestBody ChangePassword changePassword,
 			@CurrentUser UserInfo currentUser) {
 		_logger.debug("UserId {}", changePassword.getUserId());
-		changePassword.setPasswordSetType(ConstsPasswordSetType.PASSWORD_NORMAL);
+		changePassword.setPasswordSetType(ConstPasswordSetType.PASSWORD_NORMAL);
 		if (userInfoService.changePassword(changePassword, true)) {
-			systemLog.insert(ConstsEntryType.USERINFO, changePassword, ConstsOperateAction.CHANGE_PASSWORD,
-					ConstsOperateResult.SUCCESS, currentUser);
+			systemLog.insert(ConstEntryType.USERINFO, changePassword, ConstOperateAction.CHANGE_PASSWORD,
+					ConstOperateResult.SUCCESS, currentUser);
 			return new Message<UserInfo>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<UserInfo>(Message.FAIL).buildResponse();
@@ -205,8 +205,8 @@ public class UserInfoController {
 		userInfo.setUsername(loadUserInfo.getUsername());
 		userInfo.setDisplayName(loadUserInfo.getDisplayName());
 		if (userInfoService.updateStatus(userInfo)) {
-			systemLog.insert(ConstsEntryType.USERINFO, userInfo,
-					ConstsOperateAction.statusActon.get(userInfo.getStatus()), ConstsOperateResult.SUCCESS,
+			systemLog.insert(ConstEntryType.USERINFO, userInfo,
+					ConstOperateAction.statusActon.get(userInfo.getStatus()), ConstOperateResult.SUCCESS,
 					currentUser);
 			return new Message<UserInfo>(Message.SUCCESS).buildResponse();
 		} else {

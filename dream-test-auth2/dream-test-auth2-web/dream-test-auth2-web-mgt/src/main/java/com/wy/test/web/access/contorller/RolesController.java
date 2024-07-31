@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstsEntryType;
-import com.wy.test.core.constants.ConstsOperateAction;
-import com.wy.test.core.constants.ConstsOperateResult;
+import com.wy.test.core.constants.ConstEntryType;
+import com.wy.test.core.constants.ConstOperateAction;
+import com.wy.test.core.constants.ConstOperateResult;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.Roles;
 import com.wy.test.core.entity.UserInfo;
@@ -28,12 +28,14 @@ import com.wy.test.persistence.service.HistorySystemLogsService;
 import com.wy.test.persistence.service.RolesService;
 
 import dream.flying.flower.lang.StrHelper;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping(value = { "/access/roles" })
+@Slf4j
 public class RolesController {
 
-	final static Logger _logger = LoggerFactory.getLogger(RolesController.class);
+	final static Logger log = LoggerFactory.getLogger(RolesController.class);
 
 	@Autowired
 	RolesService rolesService;
@@ -44,7 +46,7 @@ public class RolesController {
 	@GetMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
 	public ResponseEntity<?> fetch(@ModelAttribute Roles role, @CurrentUser UserInfo currentUser) {
-		_logger.debug("" + role);
+		log.debug("" + role);
 		role.setInstId(currentUser.getInstId());
 		return new Message<JpaPageResults<Roles>>(rolesService.fetchPageResults(role)).buildResponse();
 	}
@@ -52,7 +54,7 @@ public class RolesController {
 	@ResponseBody
 	@GetMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> query(@ModelAttribute Roles role, @CurrentUser UserInfo currentUser) {
-		_logger.debug("-query  :" + role);
+		log.debug("-query  :" + role);
 		role.setInstId(currentUser.getInstId());
 		if (CollectionUtils.isNotEmpty(rolesService.query(role))) {
 			return new Message<Roles>(Message.SUCCESS).buildResponse();
@@ -71,7 +73,7 @@ public class RolesController {
 	@ResponseBody
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> insert(@RequestBody Roles role, @CurrentUser UserInfo currentUser) {
-		_logger.debug("-Add  :" + role);
+		log.debug("-Add  :" + role);
 		role.setInstId(currentUser.getInstId());
 		role.setId(role.generateId());
 		if (StrHelper.isBlank(role.getRoleCode())) {
@@ -79,7 +81,7 @@ public class RolesController {
 		}
 		if (rolesService.insert(role)) {
 			rolesService.refreshDynamicRoles(role);
-			systemLog.insert(ConstsEntryType.ROLE, role, ConstsOperateAction.CREATE, ConstsOperateResult.SUCCESS,
+			systemLog.insert(ConstEntryType.ROLE, role, ConstOperateAction.CREATE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new Message<Roles>(Message.SUCCESS).buildResponse();
 		} else {
@@ -90,14 +92,14 @@ public class RolesController {
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> update(@RequestBody Roles role, @CurrentUser UserInfo currentUser) {
-		_logger.debug("-update  group :" + role);
+		log.debug("-update  group :" + role);
 		if (role.getId().equalsIgnoreCase("ROLE_ALL_USER")) {
 			role.setDefaultAllUser();
 		}
 		role.setInstId(currentUser.getInstId());
 		if (rolesService.update(role)) {
 			rolesService.refreshDynamicRoles(role);
-			systemLog.insert(ConstsEntryType.ROLE, role, ConstsOperateAction.UPDATE, ConstsOperateResult.SUCCESS,
+			systemLog.insert(ConstEntryType.ROLE, role, ConstOperateAction.UPDATE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new Message<Roles>(Message.SUCCESS).buildResponse();
 		} else {
@@ -108,10 +110,10 @@ public class RolesController {
 	@ResponseBody
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
-		_logger.debug("-delete ids : {}", ids);
+		log.debug("-delete ids : {}", ids);
 		ids = ids.replaceAll("ROLE_ALL_USER", "-1").replaceAll("ROLE_ADMINISTRATORS", "-1");
 		if (rolesService.deleteBatch(ids)) {
-			systemLog.insert(ConstsEntryType.ROLE, ids, ConstsOperateAction.DELETE, ConstsOperateResult.SUCCESS,
+			systemLog.insert(ConstEntryType.ROLE, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new Message<Roles>(Message.SUCCESS).buildResponse();
 		} else {

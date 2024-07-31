@@ -14,8 +14,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import com.wy.test.core.constants.ConstsRoles;
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstRoles;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.Roles;
 import com.wy.test.core.entity.UserInfo;
 
@@ -111,9 +111,9 @@ public class LoginRepository {
 		try {
 			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				jdbcTemplate.update(LOCK_USER_UPDATE_STATEMENT,
-						new Object[] { ConstsStatus.LOCK, new Date(), userInfo.getId() },
+						new Object[] { ConstStatus.LOCK, new Date(), userInfo.getId() },
 						new int[] { Types.VARCHAR, Types.TIMESTAMP, Types.VARCHAR });
-				userInfo.setIsLocked(ConstsStatus.LOCK);
+				userInfo.setIsLocked(ConstStatus.LOCK);
 			}
 		} catch (Exception e) {
 			_logger.error("lockUser Exception", e);
@@ -129,9 +129,9 @@ public class LoginRepository {
 		try {
 			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				jdbcTemplate.update(UNLOCK_USER_UPDATE_STATEMENT,
-						new Object[] { ConstsStatus.ACTIVE, new Date(), userInfo.getId() },
+						new Object[] { ConstStatus.ACTIVE, new Date(), userInfo.getId() },
 						new int[] { Types.VARCHAR, Types.TIMESTAMP, Types.VARCHAR });
-				userInfo.setIsLocked(ConstsStatus.ACTIVE);
+				userInfo.setIsLocked(ConstStatus.ACTIVE);
 			}
 		} catch (Exception e) {
 			_logger.error("unlockUser Exception", e);
@@ -147,9 +147,9 @@ public class LoginRepository {
 		try {
 			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				jdbcTemplate.update(BADPASSWORDCOUNT_RESET_UPDATE_STATEMENT,
-						new Object[] { 0, ConstsStatus.ACTIVE, new Date(), userInfo.getId() },
+						new Object[] { 0, ConstStatus.ACTIVE, new Date(), userInfo.getId() },
 						new int[] { Types.INTEGER, Types.INTEGER, Types.TIMESTAMP, Types.VARCHAR });
-				userInfo.setIsLocked(ConstsStatus.ACTIVE);
+				userInfo.setIsLocked(ConstStatus.ACTIVE);
 			}
 		} catch (Exception e) {
 			_logger.error("resetBadPasswordCountAndLockout Exception", e);
@@ -223,9 +223,9 @@ public class LoginRepository {
 
 		// set default roles
 		ArrayList<GrantedAuthority> grantedAuthority = new ArrayList<GrantedAuthority>();
-		grantedAuthority.add(ConstsRoles.ROLE_USER);
-		grantedAuthority.add(ConstsRoles.ROLE_ALL_USER);
-		grantedAuthority.add(ConstsRoles.ROLE_ORDINARY_USER);
+		grantedAuthority.add(ConstRoles.ROLE_USER);
+		grantedAuthority.add(ConstRoles.ROLE_ALL_USER);
+		grantedAuthority.add(ConstRoles.ROLE_ORDINARY_USER);
 		for (Roles role : listRoles) {
 			grantedAuthority.add(new SimpleGrantedAuthority(role.getId()));
 			if (role.getRoleCode().startsWith("ROLE_")

@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.Roles;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.persistence.service.RolesService;
@@ -156,7 +156,7 @@ public class ScimUserController {
 		scimUser.setTimezone(userInfo.getTimeZone());
 		scimUser.setLocale(userInfo.getLocale());
 		scimUser.setPreferredLanguage(userInfo.getPreferredLanguage());
-		scimUser.setActive(userInfo.getStatus() == ConstsStatus.ACTIVE);
+		scimUser.setActive(userInfo.getStatus() == ConstStatus.ACTIVE);
 
 		List<ScimUserEmail> emails = new ArrayList<ScimUserEmail>();
 		if (StrHelper.isNotBlank(userInfo.getEmail())) {

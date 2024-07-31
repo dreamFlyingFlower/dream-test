@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstsEntryType;
-import com.wy.test.core.constants.ConstsOperateAction;
-import com.wy.test.core.constants.ConstsOperateResult;
+import com.wy.test.core.constants.ConstEntryType;
+import com.wy.test.core.constants.ConstOperateAction;
+import com.wy.test.core.constants.ConstOperateResult;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.Resources;
 import com.wy.test.core.entity.UserInfo;
@@ -75,8 +75,8 @@ public class ResourcesController {
 		_logger.debug("-Add  :" + resource);
 		resource.setInstId(currentUser.getInstId());
 		if (resourcesService.insert(resource)) {
-			systemLog.insert(ConstsEntryType.RESOURCE, resource, ConstsOperateAction.CREATE,
-					ConstsOperateResult.SUCCESS, currentUser);
+			systemLog.insert(ConstEntryType.RESOURCE, resource, ConstOperateAction.CREATE,
+					ConstOperateResult.SUCCESS, currentUser);
 			return new Message<Resources>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<Resources>(Message.FAIL).buildResponse();
@@ -89,8 +89,8 @@ public class ResourcesController {
 		_logger.debug("-update  :" + resource);
 		resource.setInstId(currentUser.getInstId());
 		if (resourcesService.update(resource)) {
-			systemLog.insert(ConstsEntryType.RESOURCE, resource, ConstsOperateAction.UPDATE,
-					ConstsOperateResult.SUCCESS, currentUser);
+			systemLog.insert(ConstEntryType.RESOURCE, resource, ConstOperateAction.UPDATE,
+					ConstOperateResult.SUCCESS, currentUser);
 			return new Message<Resources>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<Resources>(Message.FAIL).buildResponse();
@@ -102,7 +102,7 @@ public class ResourcesController {
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
 		_logger.debug("-delete  ids : {} ", ids);
 		if (resourcesService.deleteBatch(ids)) {
-			systemLog.insert(ConstsEntryType.RESOURCE, ids, ConstsOperateAction.DELETE, ConstsOperateResult.SUCCESS,
+			systemLog.insert(ConstEntryType.RESOURCE, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new Message<Resources>(Message.SUCCESS).buildResponse();
 		} else {

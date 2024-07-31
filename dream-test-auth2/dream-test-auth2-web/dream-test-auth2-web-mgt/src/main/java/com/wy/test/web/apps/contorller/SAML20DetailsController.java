@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.authz.saml20.metadata.MetadataDescriptorUtil;
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.constants.ConstProtocols;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.AppsSAML20Details;
@@ -61,7 +61,7 @@ public class SAML20DetailsController extends BaseAppContorller {
 	public ResponseEntity<?> init() {
 		AppsSAML20Details saml20Details = new AppsSAML20Details();
 		saml20Details.setSecret(ReciprocalHelpers.generateKey(""));
-		saml20Details.setProtocol(ConstsProtocols.SAML20);
+		saml20Details.setProtocol(ConstProtocols.SAML20);
 		saml20Details.setId(saml20Details.generateId());
 		return new Message<AppsSAML20Details>(saml20Details).buildResponse();
 	}

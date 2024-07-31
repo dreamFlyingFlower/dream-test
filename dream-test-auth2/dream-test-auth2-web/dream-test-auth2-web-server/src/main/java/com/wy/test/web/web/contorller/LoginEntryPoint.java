@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthJwt;
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.entity.Institutions;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.SocialsAssociate;
@@ -41,6 +40,7 @@ import com.wy.test.provider.authn.support.rememberme.RemeberMe;
 import com.wy.test.sms.password.sms.SmsOtpAuthnService;
 import com.wy.test.social.authn.support.socialsignon.service.SocialSignOnProviderService;
 
+import dream.flying.flower.framework.web.enums.AuthLoginType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -149,7 +149,7 @@ public class LoginEntryPoint {
 		// dream存储的手机号
 		String mobile = credential.getMobile();
 		// 社交服务类型
-		String authType = credential.getAuthType();
+		AuthLoginType authType = credential.getAuthLoginType();
 
 		UserInfo userInfo = userInfoService.findByEmailMobile(mobile);
 		// 验证码验证是否合法
@@ -158,7 +158,7 @@ public class LoginEntryPoint {
 			SocialsAssociate socialsAssociate = new SocialsAssociate();
 			socialsAssociate.setUserId(userInfo.getId());
 			socialsAssociate.setUsername(userInfo.getUsername());
-			socialsAssociate.setProvider(authType);
+			socialsAssociate.setProvider(authType.getMsg());
 			socialsAssociate.setSocialUserId(username);
 			socialsAssociate.setInstId(userInfo.getInstId());
 			// 插入dream和社交服务的用户映射表
@@ -166,7 +166,7 @@ public class LoginEntryPoint {
 
 			// 设置完成后，进行登录认证
 			LoginCredential loginCredential =
-					new LoginCredential(socialsAssociate.getUsername(), "", ConstsLoginType.SOCIALSIGNON);
+					new LoginCredential(socialsAssociate.getUsername(), "", AuthLoginType.SOCIALSIGNON);
 
 			SocialsProvider socialSignOnProvider =
 					socialSignOnProviderService.get(socialsAssociate.getInstId(), socialsAssociate.getProvider());
@@ -192,9 +192,9 @@ public class LoginEntryPoint {
 			@RequestBody LoginCredential credential) {
 		Message<AuthJwt> authJwtMessage = new Message<AuthJwt>(Message.FAIL);
 		if (authTokenService.validateJwtToken(credential.getState())) {
-			String authType = credential.getAuthType();
+			AuthLoginType authType = credential.getAuthLoginType();
 			log.debug("Login AuthN Type  " + authType);
-			if (StringUtils.isNotBlank(authType)) {
+			if (null != authType) {
 				Authentication authentication = authenticationProvider.authenticate(credential);
 				if (authentication != null) {
 					AuthJwt authJwt = authTokenService.genAuthJwt(authentication);

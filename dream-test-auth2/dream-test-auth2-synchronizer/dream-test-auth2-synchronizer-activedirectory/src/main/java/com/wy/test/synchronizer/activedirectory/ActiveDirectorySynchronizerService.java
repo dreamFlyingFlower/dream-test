@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.core.entity.Synchronizers;
-import com.wy.test.core.persistence.ldap.ActiveDirectoryUtils;
+import com.wy.test.core.persistence.ldap.ActiveDirectoryHelpers;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +28,8 @@ public class ActiveDirectorySynchronizerService implements ISynchronizerService 
 	@Override
 	public void sync() {
 		log.info("Sync ...");
-		ActiveDirectoryUtils ldapUtils =
-				new ActiveDirectoryUtils(synchronizer.getProviderUrl(), synchronizer.getPrincipal(),
+		ActiveDirectoryHelpers ldapUtils =
+				new ActiveDirectoryHelpers(synchronizer.getProviderUrl(), synchronizer.getPrincipal(),
 						synchronizer.getCredentials(), synchronizer.getUserBasedn(), synchronizer.getMsadDomain());
 		ldapUtils.openConnection();
 

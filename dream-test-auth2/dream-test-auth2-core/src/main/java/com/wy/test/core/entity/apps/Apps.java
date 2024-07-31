@@ -12,8 +12,8 @@ import javax.persistence.Table;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.wy.test.core.constants.ConstsBoolean;
 
+import dream.flying.flower.framework.core.enums.BooleanEnum;
 import dream.flying.flower.helper.ImageHelper;
 
 @Entity
@@ -136,9 +136,8 @@ public class Apps extends JpaEntity implements Serializable {
 	private String userPropertys;
 
 	/**
-	 * Signature for client verify create by SignaturePublicKey &
-	 * SignaturePrivateKey issuer is domain name subject is app id append domain
-	 * name
+	 * Signature for client verify create by SignaturePublicKey & SignaturePrivateKey issuer is domain name subject is
+	 * app id append domain name
 	 */
 	@Column
 	private int isSignature;
@@ -191,7 +190,7 @@ public class Apps extends JpaEntity implements Serializable {
 
 	public Apps() {
 		super();
-		isSignature = ConstsBoolean.FALSE;
+		isSignature = BooleanEnum.FALSE.getCode();
 	}
 
 	public String getId() {

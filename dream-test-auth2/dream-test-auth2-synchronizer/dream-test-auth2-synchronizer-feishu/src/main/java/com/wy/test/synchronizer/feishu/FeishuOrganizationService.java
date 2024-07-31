@@ -6,7 +6,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.springframework.stereotype.Service;
 
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.core.entity.SynchroRelated;
 import com.wy.test.core.web.HttpRequestAdapter;
@@ -123,7 +123,7 @@ public class FeishuOrganizationService extends AbstractSynchronizerService imple
 		org.setParentName(synchroRelatedParent.getObjectName());
 		org.setSortIndex(Integer.parseInt(dept.getOrder()));
 		org.setInstId(this.synchronizer.getInstId());
-		org.setStatus(ConstsStatus.ACTIVE);
+		org.setStatus(ConstStatus.ACTIVE);
 		org.setDescription("Feishu");
 		return org;
 	}

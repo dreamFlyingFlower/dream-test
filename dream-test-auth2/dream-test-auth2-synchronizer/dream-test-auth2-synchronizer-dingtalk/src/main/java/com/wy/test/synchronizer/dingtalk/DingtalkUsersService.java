@@ -12,7 +12,7 @@ import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiV2UserListRequest;
 import com.dingtalk.api.response.OapiV2UserListResponse;
 import com.dingtalk.api.response.OapiV2UserListResponse.ListUserResponse;
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.SynchroRelated;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
@@ -92,9 +92,9 @@ public class DingtalkUsersService extends AbstractSynchronizerService implements
 		userInfo.setWorkPhoneNumber(user.getTelephone());
 		userInfo.setWorkOfficeName(user.getWorkPlace());
 		if (user.getActive()) {
-			userInfo.setStatus(ConstsStatus.ACTIVE);
+			userInfo.setStatus(ConstStatus.ACTIVE);
 		} else {
-			userInfo.setStatus(ConstsStatus.INACTIVE);
+			userInfo.setStatus(ConstStatus.INACTIVE);
 		}
 
 		userInfo.setInstId(this.synchronizer.getInstId());

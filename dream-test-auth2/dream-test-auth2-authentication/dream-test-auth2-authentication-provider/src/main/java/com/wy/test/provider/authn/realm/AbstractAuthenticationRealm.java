@@ -21,6 +21,7 @@ import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.UserInfoService;
 import com.wy.test.provider.authn.realm.ldap.LdapAuthenticationRealmService;
 
+import dream.flying.flower.framework.web.enums.AuthLoginType;
 import dream.flying.flower.helper.DateTimeHelper;
 
 /**
@@ -101,7 +102,8 @@ public abstract class AbstractAuthenticationRealm {
 	 * @param code
 	 * @param message
 	 */
-	public boolean insertLoginHistory(UserInfo userInfo, String type, String provider, String code, String message) {
+	public boolean insertLoginHistory(UserInfo userInfo, AuthLoginType type, String provider, String code,
+			String message) {
 		HistoryLogin historyLogin = new HistoryLogin();
 		historyLogin.setSessionId(WebContext.genId());
 		historyLogin.setSessionStatus(7);
@@ -122,7 +124,7 @@ public abstract class AbstractAuthenticationRealm {
 		historyLogin.setSourceIp(userInfo.getLastLoginIp());
 		historyLogin.setProvider(provider);
 		historyLogin.setCode(code);
-		historyLogin.setLoginType(type);
+		historyLogin.setLoginType(type.getMsg());
 		historyLogin.setMessage(message);
 		historyLogin.setUserId(userInfo.getId());
 		historyLogin.setUsername(userInfo.getUsername());

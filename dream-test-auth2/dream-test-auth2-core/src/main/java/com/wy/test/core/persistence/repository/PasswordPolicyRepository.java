@@ -26,7 +26,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.core.constants.ConstsProperties;
+import com.wy.test.core.constants.ConstProperties;
 import com.wy.test.core.entity.PasswordPolicy;
 
 public class PasswordPolicyRepository {
@@ -118,7 +118,7 @@ public class PasswordPolicyRepository {
 			if (passwordPolicy.getDictionary() > 0) {
 				try {
 					ClassPathResource dictFile =
-							new ClassPathResource(ConstsProperties.classPathResource(topWeakPasswordPropertySource));
+							new ClassPathResource(ConstProperties.classPathResource(topWeakPasswordPropertySource));
 					Dictionary dictionary =
 							new DictionaryBuilder().addReader(new InputStreamReader(dictFile.getInputStream())).build();
 					passwordPolicyRuleList.add(new DictionaryRule(dictionary));

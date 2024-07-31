@@ -1,7 +1,5 @@
 package com.wy.test.provider.authn.support.jwt;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,17 +13,18 @@ import com.nimbusds.jwt.SignedJWT;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthJwt;
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
+import dream.flying.flower.framework.web.enums.AuthLoginType;
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
 @RequestMapping(value = "/login")
+@Slf4j
 public class HttpJwtEntryPoint {
-
-	private static final Logger _logger = LoggerFactory.getLogger(HttpJwtEntryPoint.class);
 
 	@Autowired
 	DreamAuthServerProperties dreamServerProperties;
@@ -43,20 +42,20 @@ public class HttpJwtEntryPoint {
 	public ResponseEntity<?> jwt(@RequestParam(value = WebConstants.JWT_TOKEN_PARAMETER, required = true) String jwt) {
 		try {
 			// for jwt Login
-			_logger.debug("jwt : " + jwt);
+			log.debug("jwt : " + jwt);
 
 			SignedJWT signedJWT = jwtLoginService.jwtTokenValidation(jwt);
 
 			if (signedJWT != null) {
 				String username = signedJWT.getJWTClaimsSet().getSubject();
-				LoginCredential loginCredential = new LoginCredential(username, "", ConstsLoginType.JWT);
+				LoginCredential loginCredential = new LoginCredential(username, "", AuthLoginType.JWT);
 				Authentication authentication = authenticationProvider.authenticate(loginCredential, true);
-				_logger.debug("JWT Logined in , username " + username);
+				log.debug("JWT Logined in , username " + username);
 				AuthJwt authJwt = authTokenService.genAuthJwt(authentication);
 				return new Message<AuthJwt>(authJwt).buildResponse();
 			}
 		} catch (Exception e) {
-			_logger.error("Exception ", e);
+			log.error("Exception ", e);
 		}
 
 		return new Message<AuthJwt>(Message.FAIL).buildResponse();
@@ -73,18 +72,18 @@ public class HttpJwtEntryPoint {
 			jwtTrust(@RequestParam(value = WebConstants.JWT_TOKEN_PARAMETER, required = true) String jwt) {
 		try {
 			// for jwt Login
-			_logger.debug("jwt : " + jwt);
+			log.debug("jwt : " + jwt);
 
 			if (authTokenService.validateJwtToken(jwt)) {
 				String username = authTokenService.resolve(jwt).getSubject();
-				LoginCredential loginCredential = new LoginCredential(username, "", ConstsLoginType.JWT);
+				LoginCredential loginCredential = new LoginCredential(username, "", AuthLoginType.JWT);
 				Authentication authentication = authenticationProvider.authenticate(loginCredential, true);
-				_logger.debug("JWT Logined in , username " + username);
+				log.debug("JWT Logined in , username " + username);
 				AuthJwt authJwt = authTokenService.genAuthJwt(authentication);
 				return new Message<AuthJwt>(authJwt).buildResponse();
 			}
 		} catch (Exception e) {
-			_logger.error("Exception ", e);
+			log.error("Exception ", e);
 		}
 
 		return new Message<AuthJwt>(Message.FAIL).buildResponse();

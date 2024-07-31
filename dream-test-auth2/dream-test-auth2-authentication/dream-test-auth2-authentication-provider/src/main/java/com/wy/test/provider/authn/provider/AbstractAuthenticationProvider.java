@@ -2,8 +2,6 @@ package com.wy.test.provider.authn.provider;
 
 import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,8 +15,7 @@ import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.constants.ConstsLoginType;
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.properties.DreamAuthServerProperties;
@@ -28,12 +25,14 @@ import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.MailOtpAuthnService;
 import com.wy.test.provider.authn.realm.AbstractAuthenticationRealm;
 
+import dream.flying.flower.framework.web.enums.AuthLoginType;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * login Authentication abstract class.
  */
+@Slf4j
 public abstract class AbstractAuthenticationProvider {
-
-	private static final Logger _logger = LoggerFactory.getLogger(AbstractAuthenticationProvider.class);
 
 	public static String PROVIDER_SUFFIX = "AuthenticationProvider";
 
@@ -105,10 +104,10 @@ public abstract class AbstractAuthenticationProvider {
 		for (GrantedAuthority administratorsAuthority : grantedAdministratorsAuthoritys) {
 			if (grantedAuthoritys.contains(administratorsAuthority)) {
 				principal.setRoleAdministrators(true);
-				_logger.trace("ROLE ADMINISTRATORS Authentication .");
+				log.trace("ROLE ADMINISTRATORS Authentication .");
 			}
 		}
-		_logger.debug("Granted Authority {}", grantedAuthoritys);
+		log.debug("Granted Authority {}", grantedAuthoritys);
 
 		principal.setGrantedAuthorityApps(authenticationRealm.queryAuthorizedApps(grantedAuthoritys));
 
@@ -144,9 +143,9 @@ public abstract class AbstractAuthenticationProvider {
 
 		if (userInfo != null) {
 			if (userInfo.getUserType() == "SYSTEM") {
-				_logger.debug("SYSTEM User Login. ");
+				log.debug("SYSTEM User Login. ");
 			} else {
-				_logger.debug("User Login. ");
+				log.debug("User Login. ");
 			}
 
 		}
@@ -196,27 +195,26 @@ public abstract class AbstractAuthenticationProvider {
 	protected boolean statusValid(LoginCredential loginCredential, UserInfo userInfo) {
 		if (null == userInfo) {
 			String i18nMessage = WebContext.getI18nValue("login.error.username");
-			_logger.debug("login user  " + loginCredential.getUsername() + " not in this System ." + i18nMessage);
+			log.debug("login user  " + loginCredential.getUsername() + " not in this System ." + i18nMessage);
 			UserInfo loginUser = new UserInfo(loginCredential.getUsername());
 			loginUser.setId(loginUser.generateId());
 			loginUser.setUsername(loginCredential.getUsername());
 			loginUser.setDisplayName("not exist");
 			loginUser.setLoginCount(0);
-			authenticationRealm.insertLoginHistory(loginUser, ConstsLoginType.LOCAL, "", i18nMessage,
+			authenticationRealm.insertLoginHistory(loginUser, AuthLoginType.LOCAL, "", i18nMessage,
 					WebConstants.LOGIN_RESULT.USER_NOT_EXIST);
 			throw new BadCredentialsException(i18nMessage);
 		} else {
-			if (userInfo.getIsLocked() == ConstsStatus.LOCK) {
-				authenticationRealm.insertLoginHistory(userInfo, loginCredential.getAuthType(),
+			if (userInfo.getIsLocked() == ConstStatus.LOCK) {
+				authenticationRealm.insertLoginHistory(userInfo, loginCredential.getAuthLoginType(),
 						loginCredential.getProvider(), loginCredential.getCode(),
 						WebConstants.LOGIN_RESULT.USER_LOCKED);
-			} else if (userInfo.getStatus() != ConstsStatus.ACTIVE) {
-				authenticationRealm.insertLoginHistory(userInfo, loginCredential.getAuthType(),
+			} else if (userInfo.getStatus() != ConstStatus.ACTIVE) {
+				authenticationRealm.insertLoginHistory(userInfo, loginCredential.getAuthLoginType(),
 						loginCredential.getProvider(), loginCredential.getCode(),
 						WebConstants.LOGIN_RESULT.USER_INACTIVE);
 			}
 		}
 		return true;
 	}
-
 }

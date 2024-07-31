@@ -15,11 +15,11 @@ import com.wy.test.authorize.endpoint.AuthorizeBaseEndpoint;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
 
+import dream.flying.flower.framework.core.enums.BooleanEnum;
 import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,7 +41,7 @@ public class ExtendApiAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 
 		Apps apps = getApp(id);
 		_logger.debug("" + apps);
-		if (ConstsBoolean.isTrue(apps.getIsAdapter())) {
+		if (BooleanEnum.isTrue(apps.getIsAdapter())) {
 			_logger.debug("Adapter {}", apps.getAdapter());
 			try {
 				AbstractAuthorizeAdapter adapter =

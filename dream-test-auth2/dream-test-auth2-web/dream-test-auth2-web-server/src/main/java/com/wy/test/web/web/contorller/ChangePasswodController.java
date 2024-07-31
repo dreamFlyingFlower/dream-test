@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstsEntryType;
-import com.wy.test.core.constants.ConstsOperateAction;
-import com.wy.test.core.constants.ConstsOperateResult;
-import com.wy.test.core.constants.ConstsPasswordSetType;
+import com.wy.test.core.constants.ConstEntryType;
+import com.wy.test.core.constants.ConstOperateAction;
+import com.wy.test.core.constants.ConstOperateResult;
+import com.wy.test.core.constants.ConstPasswordSetType;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.PasswordPolicy;
@@ -55,10 +55,10 @@ public class ChangePasswodController {
 		changePassword.setUserId(currentUser.getId());
 		changePassword.setUsername(currentUser.getUsername());
 		changePassword.setInstId(currentUser.getInstId());
-		changePassword.setPasswordSetType(ConstsPasswordSetType.PASSWORD_NORMAL);
+		changePassword.setPasswordSetType(ConstPasswordSetType.PASSWORD_NORMAL);
 		if (userInfoService.changePassword(changePassword)) {
-			systemLog.insert(ConstsEntryType.USERINFO, changePassword, ConstsOperateAction.CHANGE_PASSWORD,
-					ConstsOperateResult.SUCCESS, currentUser);
+			systemLog.insert(ConstEntryType.USERINFO, changePassword, ConstOperateAction.CHANGE_PASSWORD,
+					ConstOperateResult.SUCCESS, currentUser);
 			return new Message<ChangePassword>().buildResponse();
 		} else {
 			String message = (String) WebContext.getAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT);

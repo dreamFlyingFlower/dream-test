@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import com.wy.test.core.constants.ConstsDatabase;
+import com.wy.test.core.constants.ConstDatabase;
 import com.wy.test.core.entity.SocialsAssociate;
 
 public class JdbcSocialsAssociateService implements SocialsAssociateService {
@@ -46,7 +46,7 @@ public class JdbcSocialsAssociateService implements SocialsAssociateService {
 	public boolean insert(SocialsAssociate socialsAssociate) {
 		socialsAssociate.setId(socialsAssociate.generateId());
 		jdbcTemplate.update(
-				ConstsDatabase.compare(ConstsDatabase.ORACLE) ? DEFAULT_DEFAULT_INSERT_STATEMENT_ORACLE
+				ConstDatabase.compare(ConstDatabase.ORACLE) ? DEFAULT_DEFAULT_INSERT_STATEMENT_ORACLE
 						: DEFAULT_DEFAULT_INSERT_STATEMENT,
 				new Object[] { socialsAssociate.getId(), socialsAssociate.getUserId(), socialsAssociate.getUsername(),
 						socialsAssociate.getProvider(), socialsAssociate.getSocialUserId(),

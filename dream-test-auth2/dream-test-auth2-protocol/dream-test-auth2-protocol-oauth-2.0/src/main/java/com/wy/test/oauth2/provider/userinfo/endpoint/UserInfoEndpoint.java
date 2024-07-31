@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.authn.SignPrincipal;
-import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
@@ -30,6 +29,7 @@ import com.wy.test.oauth2.provider.token.DefaultTokenServices;
 import com.wy.test.persistence.service.AppsService;
 import com.wy.test.persistence.service.UserInfoService;
 
+import dream.flying.flower.framework.core.enums.BooleanEnum;
 import dream.flying.flower.framework.core.helper.TokenHelpers;
 import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.generator.StringGenerator;
@@ -85,7 +85,7 @@ public class UserInfoEndpoint {
 			Apps app = appsService.get(client_id);
 
 			AbstractAuthorizeAdapter adapter;
-			if (ConstsBoolean.isTrue(app.getIsAdapter())) {
+			if (BooleanEnum.isTrue(app.getIsAdapter())) {
 				adapter = (AbstractAuthorizeAdapter) ReflectHelper.newInstance(app.getAdapter());
 				try {
 					BeanUtils.setProperty(adapter, "clientDetails", clientDetails);

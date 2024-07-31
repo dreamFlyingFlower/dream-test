@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
@@ -38,7 +38,7 @@ public class AuthorizeCredentialEndpoint extends AuthorizeBaseEndpoint {
 			account.setAppName(app.getAppName());
 			account.setInstId(currentUser.getInstId());
 			account.setCreateType("manual");
-			account.setStatus(ConstsStatus.ACTIVE);
+			account.setStatus(ConstStatus.ACTIVE);
 		}
 		return new Message<Accounts>(account).buildResponse();
 	}

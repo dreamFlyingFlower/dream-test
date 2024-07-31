@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.UserInfo;
@@ -119,14 +119,14 @@ public class UserInfoService extends JpaService<UserInfo> {
 
 	// 更新账号状态
 	public void accountUpdate(UserInfo userInfo) {
-		if (userInfo.getStatus() != ConstsStatus.ACTIVE) {
+		if (userInfo.getStatus() != ConstStatus.ACTIVE) {
 			if (accountsService == null) {
 				accountsService = WebContext.getBean("accountsService", AccountsService.class);
 			}
 			Accounts queryAcount = new Accounts();
 			queryAcount.setUserId(userInfo.getId());
 			for (Accounts acount : accountsService.query(queryAcount)) {
-				acount.setStatus(ConstsStatus.INACTIVE);
+				acount.setStatus(ConstStatus.INACTIVE);
 				accountsService.update(acount);
 			}
 		}
@@ -328,7 +328,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 	public void updateLocked(UserInfo userInfo) {
 		try {
 			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
-				userInfo.setIsLocked(ConstsStatus.LOCK);
+				userInfo.setIsLocked(ConstStatus.LOCK);
 				getMapper().updateLocked(userInfo);
 			}
 		} catch (Exception e) {
@@ -344,7 +344,7 @@ public class UserInfoService extends JpaService<UserInfo> {
 	public void updateLockout(UserInfo userInfo) {
 		try {
 			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
-				userInfo.setIsLocked(ConstsStatus.START);
+				userInfo.setIsLocked(ConstStatus.START);
 				userInfo.setBadPasswordCount(0);
 				getMapper().updateLockout(userInfo);
 			}

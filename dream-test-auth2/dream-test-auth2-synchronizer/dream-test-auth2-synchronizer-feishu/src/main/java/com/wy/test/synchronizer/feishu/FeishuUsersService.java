@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.SynchroRelated;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.web.HttpRequestAdapter;
@@ -94,9 +94,9 @@ public class FeishuUsersService extends AbstractSynchronizerService implements I
 
 		// 激活状态: 1=已激活，2=已禁用，4=未激活，5=退出企业。
 		if (user.getStatus().isIs_activated()) {
-			userInfo.setStatus(ConstsStatus.ACTIVE);
+			userInfo.setStatus(ConstStatus.ACTIVE);
 		} else {
-			userInfo.setStatus(ConstsStatus.INACTIVE);
+			userInfo.setStatus(ConstStatus.INACTIVE);
 		}
 		userInfo.setInstId(this.synchronizer.getInstId());
 		return userInfo;

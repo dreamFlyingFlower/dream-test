@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
@@ -102,7 +102,7 @@ public class AppListController {
 
 				appUsers.setRelatedPassword(PasswordReciprocal.getInstance().encode(account.getRelatedPassword()));
 				appUsers.setInstId(currentUser.getInstId());
-				appUsers.setStatus(ConstsStatus.ACTIVE);
+				appUsers.setStatus(ConstStatus.ACTIVE);
 				accountsService.insert(appUsers);
 			} else {
 				appUsers.setRelatedUsername(account.getRelatedUsername());

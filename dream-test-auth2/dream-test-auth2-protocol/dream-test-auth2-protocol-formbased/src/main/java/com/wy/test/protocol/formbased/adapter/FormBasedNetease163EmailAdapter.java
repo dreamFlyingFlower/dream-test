@@ -3,8 +3,9 @@ package com.wy.test.protocol.formbased.adapter;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.entity.apps.AppsFormBasedDetails;
+
+import dream.flying.flower.framework.core.enums.BooleanEnum;
 
 public class FormBasedNetease163EmailAdapter extends AbstractAuthorizeAdapter {
 
@@ -22,7 +23,7 @@ public class FormBasedNetease163EmailAdapter extends AbstractAuthorizeAdapter {
 		modelAndView.addObject("email", account.getRelatedUsername());
 		modelAndView.addObject("password", account.getRelatedPassword());
 
-		if (ConstsBoolean.isTrue(details.getIsExtendAttr())) {
+		if (BooleanEnum.isTrue(details.getIsExtendAttr())) {
 			modelAndView.addObject("extendAttr", details.getExtendAttr());
 			modelAndView.addObject("isExtendAttr", true);
 		} else {
@@ -34,5 +35,4 @@ public class FormBasedNetease163EmailAdapter extends AbstractAuthorizeAdapter {
 		modelAndView.addObject("passwordMapping", details.getPasswordMapping());
 		return modelAndView;
 	}
-
 }

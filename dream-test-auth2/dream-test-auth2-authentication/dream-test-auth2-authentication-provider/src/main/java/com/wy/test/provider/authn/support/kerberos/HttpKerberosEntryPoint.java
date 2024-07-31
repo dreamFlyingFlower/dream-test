@@ -5,24 +5,22 @@ import java.time.LocalDateTime;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
+import dream.flying.flower.framework.web.enums.AuthLoginType;
 import dream.flying.flower.helper.DateTimeHelper;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class HttpKerberosEntryPoint implements AsyncHandlerInterceptor {
-
-	private static final Logger _logger = LoggerFactory.getLogger(HttpKerberosEntryPoint.class);
 
 	boolean enable;
 
@@ -43,27 +41,27 @@ public class HttpKerberosEntryPoint implements AsyncHandlerInterceptor {
 			return true;
 		}
 
-		_logger.trace("Kerberos Login Start ...");
-		_logger.trace("Request url : " + request.getRequestURL());
-		_logger.trace("Request URI : " + request.getRequestURI());
-		_logger.trace("Request ContextPath : " + request.getContextPath());
-		_logger.trace("Request ServletPath : " + request.getServletPath());
-		_logger.trace("RequestSessionId : " + request.getRequestedSessionId());
-		_logger.trace("isRequestedSessionIdValid : " + request.isRequestedSessionIdValid());
-		_logger.trace("getSession : " + request.getSession(false));
+		log.trace("Kerberos Login Start ...");
+		log.trace("Request url : " + request.getRequestURL());
+		log.trace("Request URI : " + request.getRequestURI());
+		log.trace("Request ContextPath : " + request.getContextPath());
+		log.trace("Request ServletPath : " + request.getServletPath());
+		log.trace("RequestSessionId : " + request.getRequestedSessionId());
+		log.trace("isRequestedSessionIdValid : " + request.isRequestedSessionIdValid());
+		log.trace("getSession : " + request.getSession(false));
 
 		// session not exists，session timeout，recreate new session
 		if (request.getSession(false) == null) {
-			_logger.trace("recreate new session .");
+			log.trace("recreate new session .");
 			request.getSession(true);
 		}
 
-		_logger.trace("getSession.getId : " + request.getSession().getId());
+		log.trace("getSession.getId : " + request.getSession().getId());
 
 		// for Kerberos Login
-		_logger.debug("Try Kerberos login ");
-		_logger.debug("encoder Kerberos Token " + kerberosTokenString);
-		_logger.debug("kerberos UserDomain " + kerberosUserDomain);
+		log.debug("Try Kerberos login ");
+		log.debug("encoder Kerberos Token " + kerberosTokenString);
+		log.debug("kerberos UserDomain " + kerberosUserDomain);
 
 		String decoderKerberosToken = null;
 		for (KerberosProxy kerberosProxy : kerberosService.getKerberosProxys()) {
@@ -72,20 +70,20 @@ public class HttpKerberosEntryPoint implements AsyncHandlerInterceptor {
 				break;
 			}
 		}
-		_logger.debug("decoder Kerberos Token " + decoderKerberosToken);
+		log.debug("decoder Kerberos Token " + decoderKerberosToken);
 		KerberosToken kerberosToken = new KerberosToken();
 		kerberosToken = (KerberosToken) JsonHelpers.read(decoderKerberosToken, kerberosToken.getClass());
-		_logger.debug("Kerberos Token " + kerberosToken);
+		log.debug("Kerberos Token " + kerberosToken);
 
 		LocalDateTime localDateTime = DateTimeHelper.toUtcDateTime(kerberosToken.getNotOnOrAfter());
-		_logger.debug("Kerberos Token is After Now  " + localDateTime.isAfter(LocalDateTime.now()));
+		log.debug("Kerberos Token is After Now  " + localDateTime.isAfter(LocalDateTime.now()));
 
 		if (localDateTime.isAfter(LocalDateTime.now())) {
 			LoginCredential loginCredential =
-					new LoginCredential(kerberosToken.getPrincipal(), "", ConstsLoginType.KERBEROS);
+					new LoginCredential(kerberosToken.getPrincipal(), "", AuthLoginType.KERBEROS);
 			loginCredential.setProvider(kerberosUserDomain);
 			authenticationProvider.authenticate(loginCredential, true);
-			_logger.debug("Kerberos Logined in , username " + kerberosToken.getPrincipal());
+			log.debug("Kerberos Logined in , username " + kerberosToken.getPrincipal());
 		}
 
 		return true;
@@ -124,5 +122,4 @@ public class HttpKerberosEntryPoint implements AsyncHandlerInterceptor {
 	public void setAuthenticationProvider(AbstractAuthenticationProvider authenticationProvider) {
 		this.authenticationProvider = authenticationProvider;
 	}
-
 }

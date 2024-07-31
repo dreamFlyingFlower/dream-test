@@ -6,7 +6,7 @@ import org.dromara.mybatis.jpa.JpaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.AccountsStrategy;
 import com.wy.test.core.entity.OrganizationsCast;
@@ -128,7 +128,7 @@ public class AccountsService extends JpaService<Accounts> {
 
 			account.setInstId(strategy.getInstId());
 			account.setCreateType("automatic");
-			account.setStatus(ConstsStatus.ACTIVE);
+			account.setStatus(ConstStatus.ACTIVE);
 			account.setStrategyId(strategy.getId());
 
 			insert(account);

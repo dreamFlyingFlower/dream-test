@@ -4,21 +4,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.opensaml.saml1.core.impl.AssertionImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
+import dream.flying.flower.framework.web.enums.AuthLoginType;
 import dream.flying.flower.lang.StrHelper;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
-
-	private static final Logger _logger = LoggerFactory.getLogger(HttpWsFederationEntryPoint.class);
 
 	boolean enable;
 
@@ -39,31 +37,31 @@ public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 			return true;
 		}
 
-		_logger.trace("WsFederation Login Start ...");
-		_logger.trace("Request url : " + request.getRequestURL());
-		_logger.trace("Request URI : " + request.getRequestURI());
-		_logger.trace("Request ContextPath : " + request.getContextPath());
-		_logger.trace("Request ServletPath : " + request.getServletPath());
-		_logger.trace("RequestSessionId : " + request.getRequestedSessionId());
-		_logger.trace("isRequestedSessionIdValid : " + request.isRequestedSessionIdValid());
-		_logger.trace("getSession : " + request.getSession(false));
+		log.trace("WsFederation Login Start ...");
+		log.trace("Request url : " + request.getRequestURL());
+		log.trace("Request URI : " + request.getRequestURI());
+		log.trace("Request ContextPath : " + request.getContextPath());
+		log.trace("Request ServletPath : " + request.getServletPath());
+		log.trace("RequestSessionId : " + request.getRequestedSessionId());
+		log.trace("isRequestedSessionIdValid : " + request.isRequestedSessionIdValid());
+		log.trace("getSession : " + request.getSession(false));
 
 		// session not exists，session timeout，recreate new session
 		if (request.getSession(false) == null) {
-			_logger.trace("recreate new session .");
+			log.trace("recreate new session .");
 			request.getSession(true);
 		}
 
-		_logger.trace("getSession.getId : " + request.getSession().getId());
+		log.trace("getSession.getId : " + request.getSession().getId());
 
 		// for WsFederation Login
-		_logger.debug("WsFederation : " + wsFederationWA + " , wsFederationWResult : " + wsFederationWResult);
+		log.debug("WsFederation : " + wsFederationWA + " , wsFederationWResult : " + wsFederationWResult);
 		if (dreamLoginProperties.isWsFederation() && StrHelper.isNotEmpty(wsFederationWA)
 				&& wsFederationWA.equalsIgnoreCase(WsFederationConstants.WSIGNIN)) {
-			_logger.debug("wresult : {}" + wsFederationWResult);
+			log.debug("wresult : {}" + wsFederationWResult);
 
 			final String wctx = request.getParameter(WsFederationConstants.WCTX);
-			_logger.debug("wctx : {}" + wctx);
+			log.debug("wctx : {}" + wctx);
 
 			// create credentials
 			final AssertionImpl assertion = WsFederationUtils.parseTokenFromString(wsFederationWResult);
@@ -84,16 +82,15 @@ public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 								wsFederationCredential.getAttributes(),
 								wsFederationService.getWsFederationConfiguration().getUpnSuffix());
 					}
-					LoginCredential loginCredential =
-							new LoginCredential(wsFederationCredential.getAttributes().get("").toString(), "",
-									ConstsLoginType.WSFEDERATION);
+					LoginCredential loginCredential = new LoginCredential(
+							wsFederationCredential.getAttributes().get("").toString(), "", AuthLoginType.WSFEDERATION);
 					authenticationProvider.authenticate(loginCredential, true);
 					return true;
 				} else {
-					_logger.warn("SAML assertions are blank or no longer valid.");
+					log.warn("SAML assertions are blank or no longer valid.");
 				}
 			} else {
-				_logger.error("WS Requested Security Token is blank or the signature is not valid.");
+				log.error("WS Requested Security Token is blank or the signature is not valid.");
 			}
 		}
 

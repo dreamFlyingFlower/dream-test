@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.common.exceptions.RedirectMismatchException;
 import org.springframework.security.oauth2.common.util.OAuth2Utils;
 
-import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.constants.ConstProtocols;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 import com.wy.test.oauth2.common.OAuth2Constants;
 import com.wy.test.oauth2.common.OAuth2Constants.CODE_CHALLENGE_METHOD_TYPE;
@@ -111,7 +111,7 @@ public class AuthorizationCodeTokenGranter extends AbstractTokenGranter {
 		// OAuth 2.1 and PKCE Support
 		logger.debug("client Protocol " + client.getProtocol() + ", PKCE Support "
 				+ (client.getPkce().equalsIgnoreCase(OAuth2Constants.PKCE_TYPE.PKCE_TYPE_YES)));
-		if (client.getProtocol().equalsIgnoreCase(ConstsProtocols.OAUTH21)
+		if (client.getProtocol().equalsIgnoreCase(ConstProtocols.OAUTH21)
 				|| client.getPkce().equalsIgnoreCase(OAuth2Constants.PKCE_TYPE.PKCE_TYPE_YES)) {
 			logger.trace("stored CodeChallengeMethod " + pendingOAuth2Request.getCodeChallengeMethod());
 			logger.trace("stored CodeChallenge " + pendingOAuth2Request.getCodeChallenge());

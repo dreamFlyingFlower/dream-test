@@ -32,6 +32,7 @@ import com.wy.test.core.entity.apps.AppsCasDetails;
 import com.wy.test.core.web.HttpResponseConstants;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
+import dream.flying.flower.framework.web.enums.AuthLoginType;
 import dream.flying.flower.lang.StrHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -62,7 +63,7 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 						"No credentials are provided or extracted to authenticate the REST request");
 			}
 
-			LoginCredential loginCredential = new LoginCredential(username, password, "normal");
+			LoginCredential loginCredential = new LoginCredential(username, password, AuthLoginType.NORMAL);
 
 			// authenticationProvider.authenticate(loginCredential, false);
 			Authentication authentication = authenticationProvider.authenticate(loginCredential);
@@ -166,7 +167,7 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 						"No credentials are provided or extracted to authenticate the REST request");
 			}
 
-			LoginCredential loginCredential = new LoginCredential(username, password, "CASREST");
+			LoginCredential loginCredential = new LoginCredential(username, password, AuthLoginType.CASREST);
 
 			authenticationProvider.authenticate(loginCredential, false);
 			UserInfo userInfo = AuthorizationUtils.getUserInfo();

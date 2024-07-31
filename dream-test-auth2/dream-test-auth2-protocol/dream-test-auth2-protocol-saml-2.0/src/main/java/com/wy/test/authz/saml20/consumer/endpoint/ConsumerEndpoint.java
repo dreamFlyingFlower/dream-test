@@ -53,12 +53,12 @@ import com.wy.test.authz.saml20.provider.xml.AuthnResponseGenerator;
 import com.wy.test.authz.saml20.xml.SAML2ValidatorSuite;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.core.entity.apps.AppsSAML20Details;
 import com.wy.test.persistence.service.AppsSaml20DetailsService;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
 import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.web.enums.AuthLoginType;
 
 @Controller
 public class ConsumerEndpoint {
@@ -129,12 +129,9 @@ public class ConsumerEndpoint {
 
 		SAMLMessageContext messageContext = null;
 		/*
-		 * try { messageContext = bindingAdapter.extractSAMLMessageContext(request); }
-		 * catch (MessageDecodingException me) {
-		 * logger.error("Could not decode SAML Response", me); throw new Exception(me);
-		 * } catch (SecurityException se) {
-		 * logger.error("Could not decode SAML Response", se); throw new Exception(se);
-		 * }
+		 * try { messageContext = bindingAdapter.extractSAMLMessageContext(request); } catch (MessageDecodingException
+		 * me) { logger.error("Could not decode SAML Response", me); throw new Exception(me); } catch (SecurityException
+		 * se) { logger.error("Could not decode SAML Response", se); throw new Exception(se); }
 		 */
 
 		logger.debug("Message received from issuer: " + messageContext.getInboundMessageIssuer());
@@ -172,7 +169,7 @@ public class ConsumerEndpoint {
 		logger.debug("assertion.getSubject().getNameID().getValue() ", username);
 
 		logger.debug("assertion.getID() ", assertion.getAuthnStatements());
-		LoginCredential loginCredential = new LoginCredential(username, "", ConstsLoginType.SAMLTRUST);
+		LoginCredential loginCredential = new LoginCredential(username, "", AuthLoginType.SAMLTRUST);
 
 		Authentication authentication = authenticationProvider.authenticate(loginCredential, true);
 		if (authentication == null) {

@@ -8,11 +8,10 @@ import org.springframework.security.core.GrantedAuthority;
 
 import com.wy.test.core.web.WebConstants;
 
+import dream.flying.flower.framework.web.enums.AuthLoginType;
+
 public class LoginCredential implements Authentication {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 3125709257481600320L;
 
 	String congress;
@@ -29,7 +28,7 @@ public class LoginCredential implements Authentication {
 
 	String remeberMe;
 
-	String authType;
+	AuthLoginType authLoginType;
 
 	String jwtToken;
 
@@ -60,10 +59,10 @@ public class LoginCredential implements Authentication {
 	/**
 	 * BasicAuthentication.
 	 */
-	public LoginCredential(String username, String password, String authType) {
+	public LoginCredential(String username, String password, AuthLoginType authLoginType) {
 		this.username = username;
 		this.password = password;
-		this.authType = authType;
+		this.authLoginType = authLoginType;
 	}
 
 	public String getCongress() {
@@ -158,12 +157,12 @@ public class LoginCredential implements Authentication {
 		this.remeberMe = remeberMe;
 	}
 
-	public String getAuthType() {
-		return authType;
+	public AuthLoginType getAuthLoginType() {
+		return authLoginType;
 	}
 
-	public void setAuthType(String authType) {
-		this.authType = authType;
+	public void setAuthType(AuthLoginType authLoginType) {
+		this.authLoginType = authLoginType;
 	}
 
 	public String getJwtToken() {
@@ -257,8 +256,8 @@ public class LoginCredential implements Authentication {
 		builder.append(otpCaptcha);
 		builder.append(", remeberMe=");
 		builder.append(remeberMe);
-		builder.append(", authType=");
-		builder.append(authType);
+		builder.append(", authLoginType=");
+		builder.append(authLoginType);
 		builder.append(", jwtToken=");
 		builder.append(jwtToken);
 		builder.append(", onlineTicket=");

@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.core.authn.SignPrincipal;
-import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
@@ -17,6 +16,7 @@ import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.binary.Base64Helper;
+import dream.flying.flower.framework.core.enums.BooleanEnum;
 import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
 import dream.flying.flower.framework.web.crypto.cert.CertSigner;
 import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
@@ -40,7 +40,7 @@ public abstract class AbstractAuthorizeAdapter {
 	}
 
 	public Object sign(Object data, String signatureKey, String signature) {
-		if (ConstsBoolean.isTrue(app.getIsSignature())) {
+		if (BooleanEnum.isTrue(app.getIsSignature())) {
 			KeyStoreLoader keyStoreLoader = WebContext.getBean("keyStoreLoader", KeyStoreLoader.class);
 			try {
 				byte[] signData = CertSigner.sign(data.toString().getBytes(), keyStoreLoader.getKeyStore(),

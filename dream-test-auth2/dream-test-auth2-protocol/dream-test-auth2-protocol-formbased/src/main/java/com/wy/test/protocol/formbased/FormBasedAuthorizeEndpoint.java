@@ -4,8 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +14,6 @@ import com.wy.test.authorize.endpoint.AuthorizeBaseEndpoint;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.entity.Accounts;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
@@ -24,15 +21,16 @@ import com.wy.test.core.entity.apps.AppsFormBasedDetails;
 import com.wy.test.persistence.service.AppsFormBasedDetailsService;
 import com.wy.test.protocol.formbased.adapter.FormBasedDefaultAdapter;
 
+import dream.flying.flower.framework.core.enums.BooleanEnum;
 import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "2-7-FormBased接口文档模块")
 @Controller
+@Slf4j
 public class FormBasedAuthorizeEndpoint extends AuthorizeBaseEndpoint {
-
-	final static Logger _logger = LoggerFactory.getLogger(FormBasedAuthorizeEndpoint.class);
 
 	@Autowired
 	AppsFormBasedDetailsService formBasedDetailsService;
@@ -46,14 +44,14 @@ public class FormBasedAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
 		AppsFormBasedDetails formBasedDetails = formBasedDetailsService.getAppDetails(id, true);
-		_logger.debug("formBasedDetails {}", formBasedDetails);
+		log.debug("formBasedDetails {}", formBasedDetails);
 		Apps application = getApp(id);
 		formBasedDetails.setAdapter(application.getAdapter());
 		formBasedDetails.setIsAdapter(application.getIsAdapter());
 		ModelAndView modelAndView = null;
 
 		Accounts account = getAccounts(formBasedDetails, currentUser);
-		_logger.debug("Accounts {}", account);
+		log.debug("Accounts {}", account);
 
 		if (account == null) {
 			return initCredentialView(id, "/authz/formbased/" + id);
@@ -62,7 +60,7 @@ public class FormBasedAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 
 			AbstractAuthorizeAdapter adapter;
 
-			if (ConstsBoolean.isTrue(formBasedDetails.getIsAdapter())) {
+			if (BooleanEnum.isTrue(formBasedDetails.getIsAdapter())) {
 				Object formBasedAdapter = ReflectHelper.newInstance(formBasedDetails.getAdapter());
 				adapter = (AbstractAuthorizeAdapter) formBasedAdapter;
 			} else {
@@ -75,9 +73,7 @@ public class FormBasedAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 
 			modelAndView = adapter.authorize(modelAndView);
 		}
-
-		_logger.debug("FormBased View Name {}", modelAndView.getViewName());
-
+		log.debug("FormBased View Name {}", modelAndView.getViewName());
 		return modelAndView;
 	}
 }

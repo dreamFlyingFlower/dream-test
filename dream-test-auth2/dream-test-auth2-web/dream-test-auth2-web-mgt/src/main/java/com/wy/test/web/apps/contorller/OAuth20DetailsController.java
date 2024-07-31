@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.constants.ConstProtocols;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
@@ -43,7 +43,7 @@ public class OAuth20DetailsController extends BaseAppContorller {
 		oauth20Details.setSecret(ReciprocalHelpers.generateKey(""));
 		oauth20Details.setClientId(oauth20Details.getId());
 		oauth20Details.setClientSecret(oauth20Details.getSecret());
-		oauth20Details.setProtocol(ConstsProtocols.OAUTH20);
+		oauth20Details.setProtocol(ConstProtocols.OAUTH20);
 		return new Message<AppsOAuth20Details>(oauth20Details).buildResponse();
 	}
 
@@ -66,7 +66,7 @@ public class OAuth20DetailsController extends BaseAppContorller {
 	public ResponseEntity<?> add(@RequestBody AppsOAuth20Details oauth20Details, @CurrentUser UserInfo currentUser) {
 		_logger.debug("-Add  :" + oauth20Details);
 
-		if (oauth20Details.getProtocol().equalsIgnoreCase(ConstsProtocols.OAUTH21)) {
+		if (oauth20Details.getProtocol().equalsIgnoreCase(ConstProtocols.OAUTH21)) {
 			oauth20Details.setPkce(OAuth2Constants.PKCE_TYPE.PKCE_TYPE_YES);
 		}
 		transform(oauth20Details);
@@ -88,7 +88,7 @@ public class OAuth20DetailsController extends BaseAppContorller {
 		_logger.debug("-update  :" + oauth20Details);
 		_logger.debug("-update  application :" + oauth20Details);
 		_logger.debug("-update  oauth20Details use oauth20JdbcClientDetails");
-		if (oauth20Details.getProtocol().equalsIgnoreCase(ConstsProtocols.OAUTH21)) {
+		if (oauth20Details.getProtocol().equalsIgnoreCase(ConstProtocols.OAUTH21)) {
 			oauth20Details.setPkce(OAuth2Constants.PKCE_TYPE.PKCE_TYPE_YES);
 		}
 

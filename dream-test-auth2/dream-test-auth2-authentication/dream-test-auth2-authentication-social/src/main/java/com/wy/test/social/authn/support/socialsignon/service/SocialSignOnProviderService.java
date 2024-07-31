@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.core.constants.ConstsTimeInterval;
+import com.wy.test.core.constants.ConstTimeInterval;
 import com.wy.test.core.entity.SocialsProvider;
 import com.wy.test.core.entity.SocialsProviderLogin;
 import com.wy.test.core.password.PasswordReciprocal;
@@ -60,7 +60,7 @@ public class SocialSignOnProviderService {
 			"select * from mxk_socials_provider where instid = ? and status = 1  order by sortindex";
 
 	protected static final Cache<String, SocialsProviderLogin> socialsProviderLoginStore =
-			Caffeine.newBuilder().expireAfterWrite(ConstsTimeInterval.ONE_HOUR, TimeUnit.MINUTES).build();
+			Caffeine.newBuilder().expireAfterWrite(ConstTimeInterval.ONE_HOUR, TimeUnit.MINUTES).build();
 
 	HashMap<String, SocialsProvider> socialSignOnProviderMaps = new HashMap<String, SocialsProvider>();
 

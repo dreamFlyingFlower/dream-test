@@ -25,7 +25,7 @@ import com.wy.test.authorize.singlelogout.SingleLogout;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.constants.ConstProtocols;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.Apps;
@@ -69,7 +69,7 @@ public class LogoutEndpoint {
 				_logger.debug("App Id : " + mapEntry.getKey() + " , " + mapEntry.getValue());
 				if (mapEntry.getValue().getLogoutType() == LogoutType.BACK_CHANNEL) {
 					SingleLogout singleLogout;
-					if (mapEntry.getValue().getProtocol().equalsIgnoreCase(ConstsProtocols.CAS)) {
+					if (mapEntry.getValue().getProtocol().equalsIgnoreCase(ConstProtocols.CAS)) {
 						singleLogout = new SamlSingleLogout();
 					} else {
 						singleLogout = new DefaultSingleLogout();

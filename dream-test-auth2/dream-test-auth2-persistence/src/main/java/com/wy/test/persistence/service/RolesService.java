@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.Institutions;
 import com.wy.test.core.entity.Roles;
 import com.wy.test.persistence.mapper.RolesMapper;
@@ -130,7 +130,7 @@ public class RolesService extends JpaService<Roles> implements Serializable {
 
 	public void refreshAllDynamicRoles() {
 		List<Institutions> instList = institutionsService.find("where status = ? ",
-				new Object[] { ConstsStatus.ACTIVE }, new int[] { Types.INTEGER });
+				new Object[] { ConstStatus.ACTIVE }, new int[] { Types.INTEGER });
 		for (Institutions inst : instList) {
 			Roles role = new Roles();
 			role.setInstId(inst.getId());

@@ -9,8 +9,8 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.wy.test.core.entity.LdapContext;
 import com.wy.test.core.password.PasswordReciprocal;
-import com.wy.test.core.persistence.ldap.ActiveDirectoryUtils;
-import com.wy.test.core.persistence.ldap.LdapUtils;
+import com.wy.test.core.persistence.ldap.ActiveDirectoryHelpers;
+import com.wy.test.core.persistence.ldap.LdapHelpers;
 import com.wy.test.persistence.service.LdapContextService;
 import com.wy.test.provider.authn.realm.IAuthenticationServer;
 
@@ -37,8 +37,8 @@ public class LdapAuthenticationRealmService {
 				for (LdapContext ldapContext : ldapContexts) {
 					if (ldapContext.getProduct().equalsIgnoreCase("ActiveDirectory")) {
 						ActiveDirectoryServer ldapServer = new ActiveDirectoryServer();
-						ActiveDirectoryUtils ldapUtils =
-								new ActiveDirectoryUtils(ldapContext.getProviderUrl(), ldapContext.getPrincipal(),
+						ActiveDirectoryHelpers ldapUtils =
+								new ActiveDirectoryHelpers(ldapContext.getProviderUrl(), ldapContext.getPrincipal(),
 										PasswordReciprocal.getInstance().decoder(ldapContext.getCredentials()),
 										ldapContext.getMsadDomain());
 						ldapServer.setActiveDirectoryUtils(ldapUtils);
@@ -49,7 +49,7 @@ public class LdapAuthenticationRealmService {
 
 					} else {
 						StandardLdapServer standardLdapServer = new StandardLdapServer();
-						LdapUtils ldapUtils = new LdapUtils(ldapContext.getProviderUrl(), ldapContext.getPrincipal(),
+						LdapHelpers ldapUtils = new LdapHelpers(ldapContext.getProviderUrl(), ldapContext.getPrincipal(),
 								PasswordReciprocal.getInstance().decoder(ldapContext.getCredentials()),
 								ldapContext.getBasedn());
 						standardLdapServer.setLdapUtils(ldapUtils);

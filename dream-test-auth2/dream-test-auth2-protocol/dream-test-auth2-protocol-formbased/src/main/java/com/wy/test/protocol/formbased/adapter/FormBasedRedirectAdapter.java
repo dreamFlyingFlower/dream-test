@@ -5,12 +5,12 @@ import java.time.Instant;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.entity.apps.AppsFormBasedDetails;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.digest.DigestHelper;
 import dream.flying.flower.digest.enums.MessageDigestType;
+import dream.flying.flower.framework.core.enums.BooleanEnum;
 
 public class FormBasedRedirectAdapter extends AbstractAuthorizeAdapter {
 
@@ -57,7 +57,7 @@ public class FormBasedRedirectAdapter extends AbstractAuthorizeAdapter {
 			WebContext.removeAttribute("formbased_redirect_submint");
 		}
 
-		if (ConstsBoolean.isTrue(details.getIsExtendAttr())) {
+		if (BooleanEnum.isTrue(details.getIsExtendAttr())) {
 			modelAndView.addObject("extendAttr", details.getExtendAttr());
 			modelAndView.addObject("isExtendAttr", true);
 		} else {
@@ -66,5 +66,4 @@ public class FormBasedRedirectAdapter extends AbstractAuthorizeAdapter {
 
 		return modelAndView;
 	}
-
 }

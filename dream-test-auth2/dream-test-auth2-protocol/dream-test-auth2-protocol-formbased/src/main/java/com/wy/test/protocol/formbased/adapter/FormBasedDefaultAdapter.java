@@ -6,11 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.core.constants.ConstsBoolean;
 import com.wy.test.core.entity.apps.AppsFormBasedDetails;
 
 import dream.flying.flower.digest.DigestHelper;
 import dream.flying.flower.digest.enums.MessageDigestType;
+import dream.flying.flower.framework.core.enums.BooleanEnum;
 
 public class FormBasedDefaultAdapter extends AbstractAuthorizeAdapter {
 
@@ -50,7 +50,7 @@ public class FormBasedDefaultAdapter extends AbstractAuthorizeAdapter {
 		modelAndView.addObject("password", password);
 		modelAndView.addObject("timestamp", "" + Instant.now().getEpochSecond());
 
-		if (ConstsBoolean.isTrue(details.getIsExtendAttr())) {
+		if (BooleanEnum.isTrue(details.getIsExtendAttr())) {
 			modelAndView.addObject("extendAttr", details.getExtendAttr());
 			modelAndView.addObject("isExtendAttr", true);
 		} else {
@@ -60,8 +60,6 @@ public class FormBasedDefaultAdapter extends AbstractAuthorizeAdapter {
 		if (StringUtils.isNotBlank(details.getAuthorizeView())) {
 			modelAndView.setViewName("authorize/" + details.getAuthorizeView());
 		}
-
 		return modelAndView;
 	}
-
 }

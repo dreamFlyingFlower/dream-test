@@ -19,8 +19,8 @@ import com.wy.test.core.entity.LdapContext;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.password.PasswordReciprocal;
-import com.wy.test.core.persistence.ldap.ActiveDirectoryUtils;
-import com.wy.test.core.persistence.ldap.LdapUtils;
+import com.wy.test.core.persistence.ldap.ActiveDirectoryHelpers;
+import com.wy.test.core.persistence.ldap.LdapHelpers;
 import com.wy.test.persistence.service.LdapContextService;
 
 @Controller
@@ -69,15 +69,15 @@ public class LdapContextController {
 			ldapContext.setCredentials(PasswordReciprocal.getInstance().decoder(ldapContext.getCredentials()));
 		}
 
-		LdapUtils ldapUtils = null;
-		if (ldapContext.getProduct().equalsIgnoreCase(LdapUtils.Product.ActiveDirectory)) {
-			ldapUtils = new ActiveDirectoryUtils(ldapContext.getProviderUrl(), ldapContext.getPrincipal(),
+		LdapHelpers ldapUtils = null;
+		if (ldapContext.getProduct().equalsIgnoreCase(LdapHelpers.Product.ActiveDirectory)) {
+			ldapUtils = new ActiveDirectoryHelpers(ldapContext.getProviderUrl(), ldapContext.getPrincipal(),
 					ldapContext.getCredentials(), ldapContext.getBasedn(), ldapContext.getMsadDomain());
-		} else if (ldapContext.getProduct().equalsIgnoreCase(LdapUtils.Product.OpenLDAP)) {
-			ldapUtils = new LdapUtils(ldapContext.getProviderUrl(), ldapContext.getPrincipal(),
+		} else if (ldapContext.getProduct().equalsIgnoreCase(LdapHelpers.Product.OpenLDAP)) {
+			ldapUtils = new LdapHelpers(ldapContext.getProviderUrl(), ldapContext.getPrincipal(),
 					ldapContext.getCredentials(), ldapContext.getBasedn());
-		} else if (ldapContext.getProduct().equalsIgnoreCase(LdapUtils.Product.StandardLDAP)) {
-			ldapUtils = new LdapUtils(ldapContext.getProviderUrl(), ldapContext.getPrincipal(),
+		} else if (ldapContext.getProduct().equalsIgnoreCase(LdapHelpers.Product.StandardLDAP)) {
+			ldapUtils = new LdapHelpers(ldapContext.getProviderUrl(), ldapContext.getPrincipal(),
 					ldapContext.getCredentials(), ldapContext.getBasedn());
 		}
 

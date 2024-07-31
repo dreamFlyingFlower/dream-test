@@ -29,9 +29,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstsEntryType;
-import com.wy.test.core.constants.ConstsOperateAction;
-import com.wy.test.core.constants.ConstsOperateResult;
+import com.wy.test.core.constants.ConstEntryType;
+import com.wy.test.core.constants.ConstOperateAction;
+import com.wy.test.core.constants.ConstOperateResult;
 import com.wy.test.core.entity.ExcelImport;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.Organizations;
@@ -88,7 +88,7 @@ public class OrganizationsController {
 		_logger.debug("-Add  :" + org);
 		org.setInstId(currentUser.getInstId());
 		if (organizationsService.insert(org)) {
-			systemLog.insert(ConstsEntryType.ORGANIZATION, org, ConstsOperateAction.CREATE, ConstsOperateResult.SUCCESS,
+			systemLog.insert(ConstEntryType.ORGANIZATION, org, ConstOperateAction.CREATE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new Message<Organizations>(Message.SUCCESS).buildResponse();
 		} else {
@@ -102,7 +102,7 @@ public class OrganizationsController {
 		_logger.debug("-update  :" + org);
 		org.setInstId(currentUser.getInstId());
 		if (organizationsService.update(org)) {
-			systemLog.insert(ConstsEntryType.ORGANIZATION, org, ConstsOperateAction.UPDATE, ConstsOperateResult.SUCCESS,
+			systemLog.insert(ConstEntryType.ORGANIZATION, org, ConstOperateAction.UPDATE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new Message<Organizations>(Message.SUCCESS).buildResponse();
 		} else {
@@ -115,7 +115,7 @@ public class OrganizationsController {
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
 		_logger.debug("-delete  ids : {} ", ids);
 		if (organizationsService.deleteBatch(ids)) {
-			systemLog.insert(ConstsEntryType.ORGANIZATION, ids, ConstsOperateAction.DELETE, ConstsOperateResult.SUCCESS,
+			systemLog.insert(ConstEntryType.ORGANIZATION, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new Message<Organizations>(Message.SUCCESS).buildResponse();
 		} else {

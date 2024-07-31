@@ -4,12 +4,12 @@ import java.util.concurrent.TimeUnit;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.core.constants.ConstsTimeInterval;
+import com.wy.test.core.constants.ConstTimeInterval;
 
 public class InMemoryRemeberMeManager extends AbstractRemeberMeManager {
 
 	protected static final Cache<String, RemeberMe> remeberMeStore =
-			Caffeine.newBuilder().expireAfterWrite(ConstsTimeInterval.TWO_WEEK, TimeUnit.SECONDS).build();
+			Caffeine.newBuilder().expireAfterWrite(ConstTimeInterval.TWO_WEEK, TimeUnit.SECONDS).build();
 
 	@Override
 	public void save(RemeberMe remeberMe) {

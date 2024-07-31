@@ -3,8 +3,6 @@ package com.wy.test.provider.authn.support.httpheader;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,12 +10,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
 import com.wy.test.core.authn.LoginCredential;
-import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
-public class HttpHeaderEntryPoint implements AsyncHandlerInterceptor {
+import dream.flying.flower.framework.web.enums.AuthLoginType;
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Logger _logger = LoggerFactory.getLogger(HttpHeaderEntryPoint.class);
+@Slf4j
+public class HttpHeaderEntryPoint implements AsyncHandlerInterceptor {
 
 	String headerName;
 
@@ -37,49 +36,49 @@ public class HttpHeaderEntryPoint implements AsyncHandlerInterceptor {
 			return true;
 		}
 		String requestPath = request.getServletPath();
-		_logger.trace("HttpHeader Login Start ...");
-		_logger.trace("Request url : " + request.getRequestURL());
-		_logger.trace("Request URI : " + request.getRequestURI());
-		_logger.trace("Request ContextPath : " + request.getContextPath());
-		_logger.trace("Request ServletPath : " + request.getServletPath());
-		_logger.trace("RequestSessionId : " + request.getRequestedSessionId());
-		_logger.trace("isRequestedSessionIdValid : " + request.isRequestedSessionIdValid());
-		_logger.trace("getSession : " + request.getSession(false));
+		log.trace("HttpHeader Login Start ...");
+		log.trace("Request url : " + request.getRequestURL());
+		log.trace("Request URI : " + request.getRequestURI());
+		log.trace("Request ContextPath : " + request.getContextPath());
+		log.trace("Request ServletPath : " + request.getServletPath());
+		log.trace("RequestSessionId : " + request.getRequestedSessionId());
+		log.trace("isRequestedSessionIdValid : " + request.isRequestedSessionIdValid());
+		log.trace("getSession : " + request.getSession(false));
 
 		for (int i = 0; i < skipRequestURI.length; i++) {
 			if (skipRequestURI[i].indexOf(requestPath) > -1) {
-				_logger.trace("skip uri : " + requestPath);
+				log.trace("skip uri : " + requestPath);
 				return true;
 			}
 		}
 
 		// session not exists，session timeout，recreate new session
 		if (request.getSession(false) == null) {
-			_logger.trace("recreate new session .");
+			log.trace("recreate new session .");
 			request.getSession(true);
 		}
 
-		_logger.trace("getSession.getId : " + request.getSession().getId());
+		log.trace("getSession.getId : " + request.getSession().getId());
 		String httpHeaderUsername = request.getHeader(headerName);
 
-		_logger.trace("HttpHeader username : " + httpHeaderUsername);
+		log.trace("HttpHeader username : " + httpHeaderUsername);
 
 		if (httpHeaderUsername == null || httpHeaderUsername.equals("")) {
-			_logger.info("Authentication fail HttpHeader is null . ");
+			log.info("Authentication fail HttpHeader is null . ");
 			return false;
 		}
 
 		boolean isAuthenticated = false;
 
 		if (SecurityContextHolder.getContext().getAuthentication() == null) {
-			_logger.info("Security Authentication  is  null .");
+			log.info("Security Authentication  is  null .");
 			isAuthenticated = false;
 		} else {
-			_logger.info("Security Authentication   not null . ");
+			log.info("Security Authentication   not null . ");
 			UsernamePasswordAuthenticationToken authenticationToken =
 					(UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 			String lastSessionUserName = authenticationToken.getPrincipal().toString();
-			_logger.info("Authentication Principal : " + lastSessionUserName);
+			log.info("Authentication Principal : " + lastSessionUserName);
 			if (lastSessionUserName != null && !lastSessionUserName.equals(httpHeaderUsername)) {
 				isAuthenticated = false;
 			} else {
@@ -88,9 +87,9 @@ public class HttpHeaderEntryPoint implements AsyncHandlerInterceptor {
 		}
 
 		if (!isAuthenticated) {
-			LoginCredential loginCredential = new LoginCredential(httpHeaderUsername, "", ConstsLoginType.HTTPHEADER);
+			LoginCredential loginCredential = new LoginCredential(httpHeaderUsername, "", AuthLoginType.HTTPHEADER);
 			authenticationProvider.authenticate(loginCredential, true);
-			_logger.info("Authentication  " + httpHeaderUsername + " successful .");
+			log.info("Authentication  " + httpHeaderUsername + " successful .");
 		}
 
 		return true;
@@ -121,5 +120,4 @@ public class HttpHeaderEntryPoint implements AsyncHandlerInterceptor {
 	public void setEnable(boolean enable) {
 		this.enable = enable;
 	}
-
 }

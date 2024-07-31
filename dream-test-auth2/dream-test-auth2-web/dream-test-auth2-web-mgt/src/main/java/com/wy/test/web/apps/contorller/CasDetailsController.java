@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstsProtocols;
+import com.wy.test.core.constants.ConstProtocols;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserInfo;
 import com.wy.test.core.entity.apps.AppsCasDetails;
@@ -36,7 +36,7 @@ public class CasDetailsController extends BaseAppContorller {
 	public ResponseEntity<?> init() {
 		AppsCasDetails casDetails = new AppsCasDetails();
 		casDetails.setId(casDetails.generateId());
-		casDetails.setProtocol(ConstsProtocols.CAS);
+		casDetails.setProtocol(ConstProtocols.CAS);
 		casDetails.setSecret(ReciprocalHelpers.generateKey(""));
 		return new Message<AppsCasDetails>(casDetails).buildResponse();
 	}

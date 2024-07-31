@@ -13,7 +13,7 @@ import com.dingtalk.api.response.OapiV2DepartmentGetResponse;
 import com.dingtalk.api.response.OapiV2DepartmentListsubResponse;
 import com.dingtalk.api.response.OapiV2DepartmentListsubResponse.DeptBaseResponse;
 import com.taobao.api.ApiException;
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.core.entity.SynchroRelated;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
@@ -128,7 +128,7 @@ public class DingtalkOrganizationService extends AbstractSynchronizerService imp
 			org.setParentName(synchroRelatedParent.getObjectName());
 		}
 		org.setInstId(this.synchronizer.getInstId());
-		org.setStatus(ConstsStatus.ACTIVE);
+		org.setStatus(ConstStatus.ACTIVE);
 		org.setDescription("dingtalk");
 		return org;
 	}

@@ -12,11 +12,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
 import com.wy.test.core.authn.LoginCredential;
-import com.wy.test.core.constants.ConstsLoginType;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
 import dream.flying.flower.framework.core.helper.TokenHeader;
 import dream.flying.flower.framework.core.helper.TokenHelpers;
+import dream.flying.flower.framework.web.enums.AuthLoginType;
 
 public class BasicEntryPoint implements AsyncHandlerInterceptor {
 
@@ -114,7 +114,7 @@ public class BasicEntryPoint implements AsyncHandlerInterceptor {
 
 		if (!isAuthenticated) {
 			LoginCredential loginCredential =
-					new LoginCredential(headerCredential.getUsername(), "", ConstsLoginType.BASIC);
+					new LoginCredential(headerCredential.getUsername(), "", AuthLoginType.BASIC);
 			authenticationProvider.authenticate(loginCredential, true);
 			_logger.info("Authentication  " + headerCredential.getUsername() + " successful .");
 		}

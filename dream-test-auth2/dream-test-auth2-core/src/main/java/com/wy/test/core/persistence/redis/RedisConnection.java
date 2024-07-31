@@ -49,7 +49,7 @@ public class RedisConnection {
 		}
 	}
 
-	public void setexObject(String key, int seconds, Object value) {
+	public void setexObject(String key, long seconds, Object value) {
 		if (value instanceof Serializable) {
 			setex(key, seconds, SerializableHelper.serializeHex((Serializable) value));
 		} else {

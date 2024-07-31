@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.dromara.mybatis.jpa.IJpaMapper;
 
-import com.wy.test.core.constants.ConstsStatus;
+import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.Organizations;
 import com.wy.test.core.entity.UserInfo;
@@ -17,11 +17,11 @@ public interface UserInfoMapper extends IJpaMapper<UserInfo> {
 	// login query
 	public UserInfo findByAppIdAndUsername(UserInfo userInfo);
 
-	@Select("select * from  mxk_userinfo where username = #{value} and status = " + ConstsStatus.ACTIVE)
+	@Select("select * from  mxk_userinfo where username = #{value} and status = " + ConstStatus.ACTIVE)
 	public UserInfo findByUsername(String username);
 
 	@Select("select * from  mxk_userinfo where ( email = #{value} or mobile= #{value} ) and status = "
-			+ ConstsStatus.ACTIVE)
+			+ ConstStatus.ACTIVE)
 	public UserInfo findByEmailMobile(String emailMobile);
 
 	public List<Organizations> findDeptsByUserId(String userId);

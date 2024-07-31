@@ -8,14 +8,14 @@ import javax.naming.directory.SearchResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.core.persistence.ldap.LdapUtils;
+import com.wy.test.core.persistence.ldap.LdapHelpers;
 import com.wy.test.provider.authn.realm.IAuthenticationServer;
 
 public final class StandardLdapServer implements IAuthenticationServer {
 
 	private final static Logger _logger = LoggerFactory.getLogger(StandardLdapServer.class);
 
-	LdapUtils ldapUtils;
+	LdapHelpers ldapUtils;
 
 	String filterAttribute;
 
@@ -56,7 +56,7 @@ public final class StandardLdapServer implements IAuthenticationServer {
 			// ldapUtils.close();
 		}
 
-		LdapUtils ldapPassWordValid = new LdapUtils(ldapUtils.getProviderUrl(), dn, password);
+		LdapHelpers ldapPassWordValid = new LdapHelpers(ldapUtils.getProviderUrl(), dn, password);
 		ldapPassWordValid.openConnection();
 		if (ldapPassWordValid.getCtx() != null) {
 			_logger.debug("Directory user " + username + "  is validate .");
@@ -66,11 +66,11 @@ public final class StandardLdapServer implements IAuthenticationServer {
 		return false;
 	}
 
-	public LdapUtils getLdapUtils() {
+	public LdapHelpers getLdapUtils() {
 		return ldapUtils;
 	}
 
-	public void setLdapUtils(LdapUtils ldapUtils) {
+	public void setLdapUtils(LdapHelpers ldapUtils) {
 		this.ldapUtils = ldapUtils;
 	}
 
