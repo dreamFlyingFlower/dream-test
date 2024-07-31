@@ -26,9 +26,11 @@ import com.wy.test.core.entity.Organizations;
 import com.wy.test.persistence.service.OrganizationsService;
 
 import dream.flying.flower.lang.StrHelper;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping(value = { "/api/idm/Organization" })
+@Slf4j
 public class RestOrganizationController {
 
 	@Autowired
@@ -36,6 +38,7 @@ public class RestOrganizationController {
 
 	@GetMapping(value = "/{id}")
 	public Organizations getUser(@PathVariable String id, @RequestParam(required = false) String attributes) {
+		log.debug("Organizations id {} , attributes {}", id , attributes);
 		Organizations org = organizationsService.get(id);
 		return org;
 	}
@@ -43,6 +46,7 @@ public class RestOrganizationController {
 	@PostMapping
 	public Organizations create(@RequestBody Organizations org, @RequestParam(required = false) String attributes,
 			UriComponentsBuilder builder) throws IOException {
+		log.debug("Organizations content {} , attributes {}", org , attributes);
 		Organizations loadOrg = organizationsService.get(org.getId());
 		if (loadOrg == null) {
 			organizationsService.insert(org);
@@ -55,6 +59,7 @@ public class RestOrganizationController {
 	@PutMapping(value = "/{id}")
 	public Organizations replace(@PathVariable String id, @RequestBody Organizations org,
 			@RequestParam(required = false) String attributes) throws IOException {
+		log.debug("Organizations id {} , content {} , attributes {}", id , org , attributes);
 		Organizations loadOrg = organizationsService.get(id);
 		if (loadOrg == null) {
 			organizationsService.insert(org);
@@ -68,6 +73,7 @@ public class RestOrganizationController {
 	@DeleteMapping(value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable final String id) {
+		log.debug("Organizations id {} ", id );
 		organizationsService.remove(id);
 	}
 

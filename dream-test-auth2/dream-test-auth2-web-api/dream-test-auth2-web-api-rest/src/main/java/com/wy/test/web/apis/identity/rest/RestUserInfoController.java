@@ -28,9 +28,11 @@ import com.wy.test.core.entity.UserInfo;
 import com.wy.test.persistence.service.UserInfoService;
 
 import dream.flying.flower.lang.StrHelper;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping(value = { "/api/idm/Users" })
+@Slf4j
 public class RestUserInfoController {
 
 	@Autowired
@@ -39,7 +41,7 @@ public class RestUserInfoController {
 
 	@GetMapping(value = "/{id}")
 	public UserInfo getUser(@PathVariable String id, @RequestParam(required = false) String attributes) {
-
+		log.debug("UserInfo id {} , attributes {}", id, attributes);
 		UserInfo loadUserInfo = userInfoService.get(id);
 		loadUserInfo.setDecipherable(null);
 		return loadUserInfo;
@@ -48,6 +50,7 @@ public class RestUserInfoController {
 	@PostMapping
 	public UserInfo create(@RequestBody UserInfo userInfo, @RequestParam(required = false) String attributes,
 			UriComponentsBuilder builder) throws IOException {
+		log.debug("UserInfo content {} , attributes {}", userInfo, attributes);
 		UserInfo loadUserInfo = userInfoService.findByUsername(userInfo.getUsername());
 		if (loadUserInfo != null) {
 			userInfoService.update(userInfo);
@@ -60,6 +63,7 @@ public class RestUserInfoController {
 	@PostMapping(value = "/changePassword")
 	public String changePassword(@RequestParam(required = true) String username,
 			@RequestParam(required = true) String password, UriComponentsBuilder builder) throws IOException {
+		log.debug("UserInfo username {} , password {}", username, password);
 		UserInfo loadUserInfo = userInfoService.findByUsername(username);
 		if (loadUserInfo != null) {
 			ChangePassword changePassword = new ChangePassword(loadUserInfo);
@@ -73,6 +77,7 @@ public class RestUserInfoController {
 	@PutMapping(value = "/{id}")
 	public UserInfo replace(@PathVariable String id, @RequestBody UserInfo userInfo,
 			@RequestParam(required = false) String attributes) throws IOException {
+		log.debug("UserInfo content {} , attributes {}", userInfo, attributes);
 		UserInfo loadUserInfo = userInfoService.findByUsername(userInfo.getUsername());
 		if (loadUserInfo != null) {
 			userInfoService.update(userInfo);
@@ -85,6 +90,7 @@ public class RestUserInfoController {
 	@DeleteMapping(value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable final String id) {
+		log.debug("UserInfo id {} ", id);
 		userInfoService.logicDelete(id);
 	}
 

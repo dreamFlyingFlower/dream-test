@@ -80,7 +80,6 @@ public class RolePermissionsController {
 		boolean result = true;
 		String appIds = rolePermission.getAppId();
 		if (appIds != null) {
-			appIds = appIds.replaceAll("^,|,$", "");
 			String[] arrAppIds = appIds.split(",");
 			for (int i = 0; i < arrAppIds.length; i++) {
 				RolePermissions newRolePermissions = new RolePermissions(roleId, arrAppIds[i], currentUser.getInstId());
