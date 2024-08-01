@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,6 +116,6 @@ public class JwtAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 			return jwkSetKeyStore.toString(mediaType);
 
 		}
-		return appId + " not exist. \n" + MybatisJpaContext.version();
+		return appId + " not exist";
 	}
 }
