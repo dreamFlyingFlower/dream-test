@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.core.entity.HistoryLogin;
+import com.wy.test.core.entity.HistoryLoginEntity;
 
 import dream.flying.flower.helper.DateTimeHelper;
 
@@ -34,7 +34,7 @@ public class SessionListenerAdapter extends ListenerAdapter implements Job, Seri
 		try {
 			if (sessionManager != null) {
 				int sessionCount = 0;
-				for (HistoryLogin login : sessionManager.querySessions()) {
+				for (HistoryLoginEntity login : sessionManager.querySessions()) {
 					Session session = sessionManager.get(login.getSessionId());
 					if (session == null) {
 						_logger.debug("user {} session {}  Login at {} and TimeOut at {} .", login.getUsername(),

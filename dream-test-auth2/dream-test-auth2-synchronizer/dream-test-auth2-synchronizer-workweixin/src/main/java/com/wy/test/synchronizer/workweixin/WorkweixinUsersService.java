@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.core.constants.ConstStatus;
-import com.wy.test.core.entity.SynchroRelated;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.SyncRelatedEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.web.HttpRequestAdapter;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
@@ -29,26 +29,26 @@ public class WorkweixinUsersService extends AbstractSynchronizerService implemen
 	public void sync() {
 		log.info("Sync Workweixin Users...");
 		try {
-			List<SynchroRelated> synchroRelateds = synchroRelatedService.findOrgs(this.synchronizer);
+			List<SyncRelatedEntity> synchroRelateds = synchroRelatedService.findOrgs(this.synchronizer);
 
-			for (SynchroRelated relatedOrg : synchroRelateds) {
+			for (SyncRelatedEntity relatedOrg : synchroRelateds) {
 				HttpRequestAdapter request = new HttpRequestAdapter();
 				String responseBody = request.get(String.format(USERS_URL, access_token, relatedOrg.getOriginId()));
 				WorkWeixinUsersResponse usersResponse = JsonHelpers.read(responseBody, WorkWeixinUsersResponse.class);
 				log.trace("response : " + responseBody);
 
 				for (WorkWeixinUsers user : usersResponse.getUserlist()) {
-					UserInfo userInfo = buildUserInfo(user);
+					UserEntity userInfo = buildUserInfo(user);
 					log.debug("userInfo : " + userInfo);
-					userInfo.setPassword(userInfo.getUsername() + UserInfo.DEFAULT_PASSWORD_SUFFIX);
+					userInfo.setPassword(userInfo.getUsername() + UserEntity.DEFAULT_PASSWORD_SUFFIX);
 					userInfoService.saveOrUpdate(userInfo);
 
-					SynchroRelated synchroRelated =
-							new SynchroRelated(userInfo.getId(), userInfo.getUsername(), userInfo.getDisplayName(),
-									UserInfo.CLASS_TYPE, synchronizer.getId(), synchronizer.getName(), user.getUserid(),
+					SyncRelatedEntity synchroRelated =
+							new SyncRelatedEntity(userInfo.getId(), userInfo.getUsername(), userInfo.getDisplayName(),
+									UserEntity.CLASS_TYPE, synchronizer.getId(), synchronizer.getName(), user.getUserid(),
 									user.getName(), user.getUserid(), "", synchronizer.getInstId());
 
-					synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated, UserInfo.CLASS_TYPE);
+					synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated, UserEntity.CLASS_TYPE);
 
 					socialsAssociate(synchroRelated, "workweixin");
 				}
@@ -60,12 +60,12 @@ public class WorkweixinUsersService extends AbstractSynchronizerService implemen
 
 	}
 
-	public void postSync(UserInfo userInfo) {
+	public void postSync(UserEntity userInfo) {
 
 	}
 
-	public UserInfo buildUserInfo(WorkWeixinUsers user) {
-		UserInfo userInfo = new UserInfo();
+	public UserEntity buildUserInfo(WorkWeixinUsers user) {
+		UserEntity userInfo = new UserEntity();
 		userInfo.setUsername(user.getUserid());// 账号
 		userInfo.setNickName(user.getAlias());// 名字
 		userInfo.setDisplayName(user.getName());// 名字

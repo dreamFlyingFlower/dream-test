@@ -4,7 +4,7 @@ import java.sql.Types;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.wy.test.core.entity.HistoryLogin;
+import com.wy.test.core.entity.HistoryLoginEntity;
 import com.wy.test.core.web.WebContext;
 
 public class LoginHistoryRepository {
@@ -18,7 +18,7 @@ public class LoginHistoryRepository {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public void login(HistoryLogin historyLogin) {
+	public void login(HistoryLoginEntity historyLogin) {
 		historyLogin.setId(WebContext.genId());
 		historyLogin.setLoginUrl(WebContext.getRequest().getRequestURI());
 		// Thread insert
@@ -29,9 +29,9 @@ public class LoginHistoryRepository {
 
 		JdbcTemplate jdbcTemplate;
 
-		HistoryLogin historyLogin;
+		HistoryLoginEntity historyLogin;
 
-		public HistoryLoginRunnable(JdbcTemplate jdbcTemplate, HistoryLogin historyLogin) {
+		public HistoryLoginRunnable(JdbcTemplate jdbcTemplate, HistoryLoginEntity historyLogin) {
 			super();
 			this.jdbcTemplate = jdbcTemplate;
 			this.historyLogin = historyLogin;

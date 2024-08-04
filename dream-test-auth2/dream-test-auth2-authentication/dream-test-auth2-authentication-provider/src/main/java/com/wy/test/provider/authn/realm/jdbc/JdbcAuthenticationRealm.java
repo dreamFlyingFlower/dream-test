@@ -1,38 +1,37 @@
 package com.wy.test.provider.authn.realm.jdbc;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.ChangePassword;
-import com.wy.test.core.entity.PasswordPolicy;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.PasswordPolicyEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.persistence.repository.LoginHistoryRepository;
 import com.wy.test.core.persistence.repository.LoginRepository;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.UserInfoService;
+import com.wy.test.persistence.service.UserService;
 import com.wy.test.provider.authn.realm.AbstractAuthenticationRealm;
 import com.wy.test.provider.authn.realm.ldap.LdapAuthenticationRealm;
 import com.wy.test.provider.authn.realm.ldap.LdapAuthenticationRealmService;
 
 import dream.flying.flower.framework.web.enums.AuthLoginType;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * JdbcAuthenticationRealm.
  */
+@Slf4j
 public class JdbcAuthenticationRealm extends AbstractAuthenticationRealm {
-
-	private static Logger _logger = LoggerFactory.getLogger(JdbcAuthenticationRealm.class);
 
 	protected PasswordEncoder passwordEncoder;
 
 	public JdbcAuthenticationRealm() {
-		_logger.debug("init . ");
+		log.debug("init . ");
 	}
 
 	public JdbcAuthenticationRealm(JdbcTemplate jdbcTemplate) {
@@ -41,25 +40,25 @@ public class JdbcAuthenticationRealm extends AbstractAuthenticationRealm {
 
 	public JdbcAuthenticationRealm(PasswordEncoder passwordEncoder, PasswordPolicyValidator passwordPolicyValidator,
 			LoginRepository loginRepository, LoginHistoryRepository loginHistoryRepository,
-			UserInfoService userInfoService, JdbcTemplate jdbcTemplate) {
+			UserService userService, JdbcTemplate jdbcTemplate) {
 
 		this.passwordEncoder = passwordEncoder;
 		this.passwordPolicyValidator = passwordPolicyValidator;
 		this.loginRepository = loginRepository;
 		this.loginHistoryRepository = loginHistoryRepository;
-		this.userInfoService = userInfoService;
+		this.userService = userService;
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	public JdbcAuthenticationRealm(PasswordEncoder passwordEncoder, PasswordPolicyValidator passwordPolicyValidator,
 			LoginRepository loginRepository, LoginHistoryRepository loginHistoryRepository,
-			UserInfoService userInfoService, JdbcTemplate jdbcTemplate,
+			UserService userService, JdbcTemplate jdbcTemplate,
 			LdapAuthenticationRealmService ldapAuthenticationRealmService) {
 		this.passwordEncoder = passwordEncoder;
 		this.passwordPolicyValidator = passwordPolicyValidator;
 		this.loginRepository = loginRepository;
 		this.loginHistoryRepository = loginHistoryRepository;
-		this.userInfoService = userInfoService;
+		this.userService = userService;
 		this.jdbcTemplate = jdbcTemplate;
 		this.ldapAuthenticationRealmService = ldapAuthenticationRealmService;
 	}
@@ -68,10 +67,10 @@ public class JdbcAuthenticationRealm extends AbstractAuthenticationRealm {
 	 * passwordMatches.
 	 */
 	@Override
-	public boolean passwordMatches(UserInfo userInfo, String password) {
+	public boolean passwordMatches(UserEntity userInfo, String password) {
 		boolean passwordMatches = false;
 		// jdbc password check
-		// _logger.trace("password : "
+		// log.trace("password : "
 		// + PasswordReciprocal.getInstance().rawPassword(userInfo.getUsername(),
 		// password));
 		passwordMatches = passwordEncoder.matches(password, userInfo.getPassword());
@@ -88,19 +87,20 @@ public class JdbcAuthenticationRealm extends AbstractAuthenticationRealm {
 						// write password to database Realm
 						ChangePassword changePassword = new ChangePassword(userInfo);
 						changePassword.setPassword(password);
-						userInfoService.changePassword(changePassword, false);
+						userService.changePassword(changePassword, false);
 					}
 				}
 			} catch (Exception e) {
-				_logger.debug("passwordvalid Exception : {}", e);
+				log.debug("passwordvalid Exception : {}", e);
 			}
 		}
-		_logger.debug("passwordvalid : {}", passwordMatches);
+		log.debug("passwordvalid : {}", passwordMatches);
 		if (!passwordMatches) {
 			passwordPolicyValidator.plusBadPasswordCount(userInfo);
 			insertLoginHistory(userInfo, AuthLoginType.LOCAL, "", "xe00000004",
 					WebConstants.LOGIN_RESULT.PASSWORD_ERROE);
-			PasswordPolicy passwordPolicy = passwordPolicyValidator.getPasswordPolicyRepository().getPasswordPolicy();
+			PasswordPolicyEntity passwordPolicy =
+					passwordPolicyValidator.getPasswordPolicyRepository().getPasswordPolicy();
 			if (userInfo.getBadPasswordCount() >= (passwordPolicy.getAttempts() / 2)) {
 				throw new BadCredentialsException(WebContext.getI18nValue("login.error.password.attempts",
 						new Object[] { userInfo.getBadPasswordCount() + 1, passwordPolicy.getAttempts(),
@@ -111,5 +111,4 @@ public class JdbcAuthenticationRealm extends AbstractAuthenticationRealm {
 		}
 		return passwordMatches;
 	}
-
 }

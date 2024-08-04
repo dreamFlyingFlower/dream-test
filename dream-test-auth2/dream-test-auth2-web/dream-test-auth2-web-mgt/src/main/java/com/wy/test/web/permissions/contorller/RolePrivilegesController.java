@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.RolePrivileges;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.RolePrivilegeEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.HistorySystemLogsService;
 import com.wy.test.persistence.service.RolePrivilegesService;
 
@@ -39,23 +39,23 @@ public class RolePrivilegesController {
 
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@RequestBody RolePrivileges rolePrivileges, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> update(@RequestBody RolePrivilegeEntity rolePrivileges, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-update  : " + rolePrivileges);
 		// have
-		RolePrivileges queryRolePrivileges =
-				new RolePrivileges(rolePrivileges.getAppId(), rolePrivileges.getRoleId(), currentUser.getInstId());
-		List<RolePrivileges> roleRolePrivilegesList = rolePrivilegesService.queryRolePrivileges(queryRolePrivileges);
+		RolePrivilegeEntity queryRolePrivileges =
+				new RolePrivilegeEntity(rolePrivileges.getAppId(), rolePrivileges.getRoleId(), currentUser.getInstId());
+		List<RolePrivilegeEntity> roleRolePrivilegesList = rolePrivilegesService.queryRolePrivileges(queryRolePrivileges);
 
 		HashMap<String, String> privilegeMap = new HashMap<String, String>();
-		for (RolePrivileges rolePrivilege : roleRolePrivilegesList) {
+		for (RolePrivilegeEntity rolePrivilege : roleRolePrivilegesList) {
 			privilegeMap.put(rolePrivilege.getUniqueId(), rolePrivilege.getId());
 		}
 		// Maybe insert
-		ArrayList<RolePrivileges> newRolePrivilegesList = new ArrayList<RolePrivileges>();
+		ArrayList<RolePrivilegeEntity> newRolePrivilegesList = new ArrayList<RolePrivilegeEntity>();
 		String[] resourceIds = StrHelper.split(rolePrivileges.getResourceId(), ",");
 		HashMap<String, String> newPrivilegesMap = new HashMap<String, String>();
 		for (String resourceId : resourceIds) {
-			RolePrivileges newRolePrivilege = new RolePrivileges(rolePrivileges.getAppId(), rolePrivileges.getRoleId(),
+			RolePrivilegeEntity newRolePrivilege = new RolePrivilegeEntity(rolePrivileges.getAppId(), rolePrivileges.getRoleId(),
 					resourceId, currentUser.getInstId());
 			newRolePrivilege.setId(newRolePrivilege.generateId());
 			newPrivilegesMap.put(newRolePrivilege.getUniqueId(), rolePrivileges.getAppId());
@@ -67,8 +67,8 @@ public class RolePrivilegesController {
 		}
 
 		// delete
-		ArrayList<RolePrivileges> deleteRolePrivilegesList = new ArrayList<RolePrivileges>();
-		for (RolePrivileges rolePrivilege : roleRolePrivilegesList) {
+		ArrayList<RolePrivilegeEntity> deleteRolePrivilegesList = new ArrayList<RolePrivilegeEntity>();
+		for (RolePrivilegeEntity rolePrivilege : roleRolePrivilegesList) {
 			if (!newPrivilegesMap.containsKey(rolePrivilege.getUniqueId())) {
 				rolePrivilege.setInstId(currentUser.getInstId());
 				deleteRolePrivilegesList.add(rolePrivilege);
@@ -81,23 +81,23 @@ public class RolePrivilegesController {
 
 		if (!newRolePrivilegesList.isEmpty() && rolePrivilegesService.insertRolePrivileges(newRolePrivilegesList)) {
 			_logger.debug("-insert  : " + newRolePrivilegesList);
-			return new Message<RolePrivileges>(Message.SUCCESS).buildResponse();
+			return new Message<RolePrivilegeEntity>(Message.SUCCESS).buildResponse();
 
 		} else {
-			return new Message<RolePrivileges>(Message.SUCCESS).buildResponse();
+			return new Message<RolePrivilegeEntity>(Message.SUCCESS).buildResponse();
 		}
 
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> get(@ModelAttribute RolePrivileges rolePrivileges, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> get(@ModelAttribute RolePrivilegeEntity rolePrivileges, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-get  :" + rolePrivileges);
 		// have
-		RolePrivileges queryRolePrivilege =
-				new RolePrivileges(rolePrivileges.getAppId(), rolePrivileges.getRoleId(), currentUser.getInstId());
-		List<RolePrivileges> rolePrivilegeList = rolePrivilegesService.queryRolePrivileges(queryRolePrivilege);
+		RolePrivilegeEntity queryRolePrivilege =
+				new RolePrivilegeEntity(rolePrivileges.getAppId(), rolePrivileges.getRoleId(), currentUser.getInstId());
+		List<RolePrivilegeEntity> rolePrivilegeList = rolePrivilegesService.queryRolePrivileges(queryRolePrivilege);
 
-		return new Message<List<RolePrivileges>>(rolePrivilegeList).buildResponse();
+		return new Message<List<RolePrivilegeEntity>>(rolePrivilegeList).buildResponse();
 	}
 }

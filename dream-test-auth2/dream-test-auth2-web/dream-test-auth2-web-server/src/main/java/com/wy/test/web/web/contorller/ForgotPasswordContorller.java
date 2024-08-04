@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.PasswordPolicy;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.PasswordPolicyEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.MailOtpAuthnService;
@@ -76,10 +76,10 @@ public class ForgotPasswordContorller {
 
 	@GetMapping(value = { "/passwordpolicy" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> passwordpolicy() {
-		PasswordPolicy passwordPolicy = passwordPolicyService.get(WebContext.getInst().getId());
+		PasswordPolicyEntity passwordPolicy = passwordPolicyService.get(WebContext.getInst().getId());
 		// 构建密码强度说明
 		passwordPolicy.buildMessage();
-		return new Message<PasswordPolicy>(passwordPolicy).buildResponse();
+		return new Message<PasswordPolicyEntity>(passwordPolicy).buildResponse();
 	}
 
 	@GetMapping(value = { "/validateCaptcha" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -87,7 +87,7 @@ public class ForgotPasswordContorller {
 			@RequestParam String captcha, @RequestParam String otpCaptcha) {
 		_logger.debug("forgotpassword  /forgotpassword/validateCaptcha.");
 		_logger.debug(" userId {}: ", userId);
-		UserInfo userInfo = userInfoService.get(userId);
+		UserEntity userInfo = userInfoService.get(userId);
 		if (userInfo != null) {
 			AbstractOtpAuthn smsOtpAuthn = smsOtpAuthnService.getByInstId(userInfo.getInstId());
 			if (otpCaptcha == null || !smsOtpAuthn.validate(userInfo, otpCaptcha)) {
@@ -111,7 +111,7 @@ public class ForgotPasswordContorller {
 		ChangePassword change = null;
 		_logger.debug("Mobile Regex matches {}", mobileRegex.matcher(mobile).matches());
 		if (StringUtils.isNotBlank(mobile) && mobileRegex.matcher(mobile).matches()) {
-			UserInfo userInfo = userInfoService.findByEmailMobile(mobile);
+			UserEntity userInfo = userInfoService.findByEmailMobile(mobile);
 			if (userInfo != null) {
 				change = new ChangePassword(userInfo);
 				change.clearPassword();
@@ -135,7 +135,7 @@ public class ForgotPasswordContorller {
 
 		ChangePassword change = null;
 		if (StringUtils.isNotBlank(email) && emailRegex.matcher(email).matches()) {
-			UserInfo userInfo = userInfoService.findByEmailMobile(email);
+			UserEntity userInfo = userInfoService.findByEmailMobile(email);
 			if (userInfo != null) {
 				change = new ChangePassword(userInfo);
 				change.clearPassword();
@@ -153,7 +153,7 @@ public class ForgotPasswordContorller {
 		_logger.debug("forgotPassword  /forgotpassword/setpassword.");
 		if (StringUtils.isNotBlank(changePassword.getPassword())
 				&& changePassword.getPassword().equals(changePassword.getConfirmPassword())) {
-			UserInfo loadedUserInfo = userInfoService.get(changePassword.getUserId());
+			UserEntity loadedUserInfo = userInfoService.get(changePassword.getUserId());
 			if (loadedUserInfo != null) {
 				AbstractOtpAuthn smsOtpAuthn = smsOtpAuthnService.getByInstId(loadedUserInfo.getInstId());
 				AbstractOtpAuthn mailOtpAuthn = mailOtpAuthnService.getMailOtpAuthn(loadedUserInfo.getInstId());

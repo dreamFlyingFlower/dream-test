@@ -10,12 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstStatus;
-import com.wy.test.core.entity.Accounts;
+import com.wy.test.core.entity.AccountEntity;
+import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 
+import dream.flying.flower.generator.GeneratorStrategyContext;
 import dream.flying.flower.lang.StrHelper;
 
 @RestController
@@ -23,12 +24,13 @@ import dream.flying.flower.lang.StrHelper;
 public class AuthorizeCredentialEndpoint extends AuthorizeBaseEndpoint {
 
 	@GetMapping("/get/{appId}")
-	public ResponseEntity<?> get(@PathVariable("appId") String appId, @CurrentUser UserInfo currentUser) {
-		Apps app = getApp(appId);
-		Accounts account = getAccounts(app, currentUser);
+	public ResponseEntity<?> get(@PathVariable("appId") String appId, @CurrentUser UserEntity currentUser) {
+		AppEntity app = getApp(appId);
+		AccountEntity account = getAccounts(app, currentUser);
 		if (account == null) {
-			account = new Accounts();
-			account.setId(account.generateId());
+			account = new AccountEntity();
+			GeneratorStrategyContext generatorStrategyContext = new GeneratorStrategyContext();
+			account.setId(generatorStrategyContext.generate());
 
 			account.setUserId(currentUser.getId());
 			account.setUsername(currentUser.getUsername());
@@ -40,25 +42,25 @@ public class AuthorizeCredentialEndpoint extends AuthorizeBaseEndpoint {
 			account.setCreateType("manual");
 			account.setStatus(ConstStatus.ACTIVE);
 		}
-		return new Message<Accounts>(account).buildResponse();
+		return new Message<AccountEntity>(account).buildResponse();
 	}
 
 	@PostMapping("/update")
-	public ResponseEntity<?> update(@RequestBody Accounts account, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> update(@RequestBody AccountEntity account, @CurrentUser UserEntity currentUser) {
 		if (StrHelper.isNotEmpty(account.getRelatedPassword()) && StrHelper.isNotEmpty(account.getRelatedPassword())) {
 			account.setInstId(currentUser.getInstId());
 			account.setRelatedPassword(PasswordReciprocal.getInstance().encode(account.getRelatedPassword()));
-			if (accountsService.get(account.getId()) == null) {
-				if (accountsService.insert(account)) {
-					return new Message<Accounts>().buildResponse();
+			if (accountService.getById(account.getId()) == null) {
+				if (accountService.insert(account)) {
+					return new Message<AccountEntity>().buildResponse();
 				}
 			} else {
-				if (accountsService.update(account)) {
-					return new Message<Accounts>().buildResponse();
+				if (accountService.update(account)) {
+					return new Message<AccountEntity>().buildResponse();
 				}
 			}
 		}
 
-		return new Message<Accounts>(Message.FAIL).buildResponse();
+		return new Message<AccountEntity>(Message.FAIL).buildResponse();
 	}
 }

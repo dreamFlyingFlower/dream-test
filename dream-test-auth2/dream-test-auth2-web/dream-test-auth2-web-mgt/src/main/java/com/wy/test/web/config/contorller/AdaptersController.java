@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
+import com.wy.test.core.entity.AppAdapterEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.AppsAdapters;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.AppsAdaptersService;
 
 @Controller
@@ -34,60 +34,60 @@ public class AdaptersController {
 
 	@PostMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute AppsAdapters appsAdapter) {
+	public ResponseEntity<?> fetch(@ModelAttribute AppAdapterEntity appsAdapter) {
 		_logger.debug("" + appsAdapter);
-		return new Message<JpaPageResults<AppsAdapters>>(appsAdaptersService.fetchPageResults(appsAdapter))
+		return new Message<JpaPageResults<AppAdapterEntity>>(appsAdaptersService.fetchPageResults(appsAdapter))
 				.buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> query(@ModelAttribute AppsAdapters appsAdapter, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> query(@ModelAttribute AppAdapterEntity appsAdapter, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-query  :" + appsAdapter);
 		if (CollectionUtils.isNotEmpty(appsAdaptersService.query(appsAdapter))) {
-			return new Message<AppsAdapters>(Message.SUCCESS).buildResponse();
+			return new Message<AppAdapterEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsAdapters>(Message.SUCCESS).buildResponse();
+			return new Message<AppAdapterEntity>(Message.SUCCESS).buildResponse();
 		}
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		AppsAdapters appsAdapter = appsAdaptersService.get(id);
-		return new Message<AppsAdapters>(appsAdapter).buildResponse();
+		AppAdapterEntity appsAdapter = appsAdaptersService.get(id);
+		return new Message<AppAdapterEntity>(appsAdapter).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> insert(@RequestBody AppsAdapters appsAdapter, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> insert(@RequestBody AppAdapterEntity appsAdapter, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-Add  :" + appsAdapter);
 
 		if (appsAdaptersService.insert(appsAdapter)) {
-			return new Message<AppsAdapters>(Message.SUCCESS).buildResponse();
+			return new Message<AppAdapterEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsAdapters>(Message.FAIL).buildResponse();
+			return new Message<AppAdapterEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@RequestBody AppsAdapters appsAdapter, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> update(@RequestBody AppAdapterEntity appsAdapter, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-update  :" + appsAdapter);
 		if (appsAdaptersService.update(appsAdapter)) {
-			return new Message<AppsAdapters>(Message.SUCCESS).buildResponse();
+			return new Message<AppAdapterEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsAdapters>(Message.FAIL).buildResponse();
+			return new Message<AppAdapterEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-delete  ids : {} ", ids);
 		if (appsAdaptersService.deleteBatch(ids)) {
-			return new Message<AppsAdapters>(Message.SUCCESS).buildResponse();
+			return new Message<AppAdapterEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsAdapters>(Message.FAIL).buildResponse();
+			return new Message<AppAdapterEntity>(Message.FAIL).buildResponse();
 		}
 	}
 }

@@ -7,7 +7,7 @@ import org.apache.commons.mail.Email;
 import org.apache.commons.mail.HtmlEmail;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class MailOtpAuthn extends AbstractOtpAuthn {
 	}
 
 	@Override
-	public boolean produce(UserInfo userInfo) {
+	public boolean produce(UserEntity userInfo) {
 		try {
 			String token = this.genToken(userInfo);
 			Email email = new HtmlEmail();
@@ -70,7 +70,7 @@ public class MailOtpAuthn extends AbstractOtpAuthn {
 	}
 
 	@Override
-	public boolean validate(UserInfo userInfo, String token) {
+	public boolean validate(UserEntity userInfo, String token) {
 		return this.optTokenStore.validate(userInfo, token, OtpTypes.EMAIL, interval);
 	}
 

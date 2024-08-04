@@ -12,15 +12,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.core.constants.ldap.InetOrgPerson;
-import com.wy.test.core.entity.HistorySynchronizer;
-import com.wy.test.core.entity.Organizations;
-import com.wy.test.core.entity.SynchroRelated;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.HistorySyncEntity;
+import com.wy.test.core.entity.OrgEntity;
+import com.wy.test.core.entity.SyncRelatedEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.persistence.ldap.LdapHelpers;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
 import dream.flying.flower.digest.DigestHelper;
+import dream.flying.flower.generator.GeneratorStrategyContext;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -32,7 +33,7 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 	@Override
 	public void sync() {
 		log.info("Sync Ldap Users ...");
-		loadOrgsByInstId(this.synchronizer.getInstId(), Organizations.ROOT_ORG_ID);
+		loadOrgsByInstId(this.synchronizer.getInstId(), OrgEntity.ROOT_ORG_ID);
 		try {
 			SearchControls constraints = new SearchControls();
 			constraints.setSearchScope(ldapUtils.getSearchScope());
@@ -59,15 +60,16 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 						attributeMap.put(objAttrs.getID(), objAttrs);
 					}
 					String originId = DigestHelper.md5Hex(sr.getNameInNamespace());
-					UserInfo userInfo = buildUserInfo(attributeMap, sr.getName(), sr.getNameInNamespace());
-					userInfo.setPassword(userInfo.getUsername() + UserInfo.DEFAULT_PASSWORD_SUFFIX);
+					UserEntity userInfo = buildUserInfo(attributeMap, sr.getName(), sr.getNameInNamespace());
+					userInfo.setPassword(userInfo.getUsername() + UserEntity.DEFAULT_PASSWORD_SUFFIX);
 					userInfoService.saveOrUpdate(userInfo);
-					SynchroRelated synchroRelated =
-							new SynchroRelated(userInfo.getId(), userInfo.getUsername(), userInfo.getDisplayName(),
-									UserInfo.CLASS_TYPE, synchronizer.getId(), synchronizer.getName(), originId,
+					SyncRelatedEntity synchroRelated =
+							new SyncRelatedEntity(userInfo.getId(), userInfo.getUsername(), userInfo.getDisplayName(),
+									UserEntity.CLASS_TYPE, synchronizer.getId(), synchronizer.getName(), originId,
 									userInfo.getDisplayName(), "", "", synchronizer.getInstId());
 
-					synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated, UserInfo.CLASS_TYPE);
+					synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated,
+							UserEntity.CLASS_TYPE);
 					log.info("userInfo " + userInfo);
 				}
 			}
@@ -79,12 +81,12 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 
 	}
 
-	public void postSync(UserInfo userInfo) {
+	public void postSync(UserEntity userInfo) {
 
 	}
 
-	public UserInfo buildUserInfo(HashMap<String, Attribute> attributeMap, String name, String nameInNamespace) {
-		UserInfo userInfo = new UserInfo();
+	public UserEntity buildUserInfo(HashMap<String, Attribute> attributeMap, String name, String nameInNamespace) {
+		UserEntity userInfo = new UserEntity();
 		userInfo.setLdapDn(nameInNamespace);
 		String[] namePaths = name.replaceAll(",OU=", "/").replaceAll("OU=", "/").replaceAll(",ou=", "/")
 				.replaceAll("ou=", "/").split("/");
@@ -96,12 +98,13 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 		// namePah = namePah.substring(0, namePah.length());
 		String deptNamePath = namePah.substring(0, namePah.lastIndexOf("/"));
 		log.info("deptNamePath  " + deptNamePath);
-		Organizations deptOrg = orgsNamePathMap.get(deptNamePath);
+		OrgEntity deptOrg = orgsNamePathMap.get(deptNamePath);
 		userInfo.setDepartment(deptOrg.getOrgName());
 		userInfo.setDepartmentId(deptOrg.getId());
 
 		try {
-			userInfo.setId(userInfo.generateId());
+			GeneratorStrategyContext generatorStrategyContext = new GeneratorStrategyContext();
+			userInfo.setId(generatorStrategyContext.generate());
 			String cn = LdapHelpers.getAttributeStringValue(InetOrgPerson.CN, attributeMap);
 			String uid = LdapHelpers.getAttributeStringValue(InetOrgPerson.UID, attributeMap);
 			String sn = LdapHelpers.getAttributeStringValue(InetOrgPerson.SN, attributeMap);
@@ -160,24 +163,23 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 			userInfo.setPreferredLanguage(
 					LdapHelpers.getAttributeStringValue(InetOrgPerson.PREFERREDLANGUAGE, attributeMap));
 
-			userInfo.setDescription(LdapHelpers.getAttributeStringValue(InetOrgPerson.DESCRIPTION, attributeMap));
-			userInfo.setUserState("RESIDENT");
+			userInfo.setRemark(LdapHelpers.getAttributeStringValue(InetOrgPerson.DESCRIPTION, attributeMap));
+			userInfo.setUserStatus("RESIDENT");
 			userInfo.setUserType("EMPLOYEE");
 			userInfo.setTimeZone("Asia/Shanghai");
 			userInfo.setStatus(1);
 			userInfo.setInstId(this.synchronizer.getInstId());
 
-			HistorySynchronizer historySynchronizer = new HistorySynchronizer();
-			historySynchronizer.setId(historySynchronizer.generateId());
+			HistorySyncEntity historySynchronizer = new HistorySyncEntity();
+			historySynchronizer.setId(generatorStrategyContext.generate());
 			historySynchronizer.setSyncId(this.synchronizer.getId());
 			historySynchronizer.setSyncName(this.synchronizer.getName());
 			historySynchronizer.setObjectId(userInfo.getId());
 			historySynchronizer.setObjectName(userInfo.getUsername());
-			historySynchronizer.setObjectType(Organizations.class.getSimpleName());
+			historySynchronizer.setObjectType(OrgEntity.class.getSimpleName());
 			historySynchronizer.setInstId(synchronizer.getInstId());
 			historySynchronizer.setResult("success");
-			this.historySynchronizerService.insert(historySynchronizer);
-
+			this.historySynchronizerService.save(historySynchronizer);
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -191,5 +193,4 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 	public void setLdapUtils(LdapHelpers ldapUtils) {
 		this.ldapUtils = ldapUtils;
 	}
-
 }

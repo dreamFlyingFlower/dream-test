@@ -21,10 +21,10 @@ import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstEntryType;
 import com.wy.test.core.constants.ConstOperateAction;
 import com.wy.test.core.constants.ConstOperateResult;
-import com.wy.test.core.entity.Accounts;
-import com.wy.test.core.entity.AccountsStrategy;
+import com.wy.test.core.entity.AccountEntity;
+import com.wy.test.core.entity.AccountStrategyEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.persistence.service.AccountsService;
 import com.wy.test.persistence.service.AccountsStrategyService;
@@ -55,67 +55,67 @@ public class AccountsController {
 
 	@PostMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute Accounts accounts, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> fetch(@ModelAttribute AccountEntity accounts, @CurrentUser UserEntity currentUser) {
 		_logger.debug("" + accounts);
 		accounts.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<Accounts>>(accountsService.fetchPageResults(accounts)).buildResponse();
+		return new Message<JpaPageResults<AccountEntity>>(accountsService.fetchPageResults(accounts)).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> query(@ModelAttribute Accounts account, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> query(@ModelAttribute AccountEntity account, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-query  :" + account);
 		account.setInstId(currentUser.getInstId());
 
 		if (CollectionUtils.isNotEmpty(accountsService.query(account))) {
-			return new Message<Accounts>(Message.SUCCESS).buildResponse();
+			return new Message<AccountEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Accounts>(Message.SUCCESS).buildResponse();
+			return new Message<AccountEntity>(Message.SUCCESS).buildResponse();
 		}
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		Accounts account = accountsService.get(id);
+		AccountEntity account = accountsService.get(id);
 		account.setRelatedPassword(PasswordReciprocal.getInstance().decoder(account.getRelatedPassword()));
-		return new Message<Accounts>(account).buildResponse();
+		return new Message<AccountEntity>(account).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> insert(@RequestBody Accounts account, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> insert(@RequestBody AccountEntity account, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-Add  :" + account);
 		account.setInstId(currentUser.getInstId());
 		account.setRelatedPassword(PasswordReciprocal.getInstance().encode(account.getRelatedPassword()));
 		if (accountsService.insert(account)) {
 			systemLog.insert(ConstEntryType.ACCOUNT, account, ConstOperateAction.CREATE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<Accounts>(Message.SUCCESS).buildResponse();
+			return new Message<AccountEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Accounts>(Message.FAIL).buildResponse();
+			return new Message<AccountEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@RequestBody Accounts account, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> update(@RequestBody AccountEntity account, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-update  :" + account);
 		account.setInstId(currentUser.getInstId());
 		account.setRelatedPassword(PasswordReciprocal.getInstance().encode(account.getRelatedPassword()));
 		if (accountsService.update(account)) {
 			systemLog.insert(ConstEntryType.ACCOUNT, account, ConstOperateAction.UPDATE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<Accounts>(Message.SUCCESS).buildResponse();
+			return new Message<AccountEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Accounts>(Message.FAIL).buildResponse();
+			return new Message<AccountEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@PostMapping(value = { "/updateStatus" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> updateStatus(@ModelAttribute Accounts accounts, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> updateStatus(@ModelAttribute AccountEntity accounts, @CurrentUser UserEntity currentUser) {
 		_logger.debug("" + accounts);
-		Accounts loadAccount = accountsService.get(accounts.getId());
+		AccountEntity loadAccount = accountsService.get(accounts.getId());
 		accounts.setInstId(currentUser.getInstId());
 		accounts.setAppId(loadAccount.getAppId());
 		accounts.setAppName(loadAccount.getAppName());
@@ -127,32 +127,32 @@ public class AccountsController {
 			systemLog.insert(ConstEntryType.ACCOUNT, accounts,
 					ConstOperateAction.statusActon.get(accounts.getStatus()), ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<Accounts>(Message.SUCCESS).buildResponse();
+			return new Message<AccountEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Accounts>(Message.FAIL).buildResponse();
+			return new Message<AccountEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-delete ids : {} ", ids);
 
 		if (accountsService.deleteBatch(ids)) {
 			systemLog.insert(ConstEntryType.ACCOUNT, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<Accounts>(Message.SUCCESS).buildResponse();
+			return new Message<AccountEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Accounts>(Message.FAIL).buildResponse();
+			return new Message<AccountEntity>(Message.FAIL).buildResponse();
 		}
 
 	}
 
 	@ResponseBody
 	@PostMapping(value = "/generate")
-	public ResponseEntity<?> generate(@ModelAttribute Accounts account) {
-		AccountsStrategy accountsStrategy = accountsStrategyService.get(account.getStrategyId());
-		UserInfo userInfo = userInfoService.get(account.getUserId());
+	public ResponseEntity<?> generate(@ModelAttribute AccountEntity account) {
+		AccountStrategyEntity accountsStrategy = accountsStrategyService.get(account.getStrategyId());
+		UserEntity userInfo = userInfoService.get(account.getUserId());
 		return new Message<Object>(Message.SUCCESS,
 				(Object) accountsService.generateAccount(userInfo, accountsStrategy)).buildResponse();
 	}

@@ -27,9 +27,9 @@ import com.nimbusds.jose.jwk.gen.OctetSequenceKeyGenerator;
 import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstProtocols;
+import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.entity.UserEntity;
 
 import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
 
@@ -41,91 +41,91 @@ public class ApplicationsController extends BaseAppContorller {
 
 	@GetMapping(value = { "/init" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> init() {
-		Apps app = new Apps();
+		AppEntity app = new AppEntity();
 		app.setId(app.generateId());
 		app.setProtocol(ConstProtocols.BASIC);
 		app.setSecret(ReciprocalHelpers.generateKey(""));
-		return new Message<Apps>(app).buildResponse();
+		return new Message<AppEntity>(app).buildResponse();
 	}
 
 	@GetMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute Apps apps, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> fetch(@ModelAttribute AppEntity apps, @CurrentUser UserEntity currentUser) {
 		apps.setInstId(currentUser.getInstId());
-		JpaPageResults<Apps> appsList = appsService.fetchPageResults(apps);
-		for (Apps app : appsList.getRows()) {
+		JpaPageResults<AppEntity> appsList = appsService.fetchPageResults(apps);
+		for (AppEntity app : appsList.getRows()) {
 			app.transIconBase64();
 			app.setSecret(null);
 			app.setSharedPassword(null);
 		}
 		_logger.debug("List " + appsList);
-		return new Message<JpaPageResults<Apps>>(appsList).buildResponse();
+		return new Message<JpaPageResults<AppEntity>>(appsList).buildResponse();
 	}
 
 	@ResponseBody
 	@GetMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> query(@ModelAttribute Apps apps, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> query(@ModelAttribute AppEntity apps, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-query  :" + apps);
 		if (CollectionUtils.isNotEmpty(appsService.query(apps))) {
-			return new Message<Apps>(Message.SUCCESS).buildResponse();
+			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Apps>(Message.SUCCESS).buildResponse();
+			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
 		}
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		Apps apps = appsService.get(id);
+		AppEntity apps = appsService.get(id);
 		decoderSecret(apps);
 		apps.transIconBase64();
-		return new Message<Apps>(apps).buildResponse();
+		return new Message<AppEntity>(apps).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> insert(@RequestBody Apps apps, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> insert(@RequestBody AppEntity apps, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-Add  :" + apps);
 		transform(apps);
 		apps.setInstId(currentUser.getInstId());
 		if (appsService.insert(apps)) {
-			return new Message<Apps>(Message.SUCCESS).buildResponse();
+			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Apps>(Message.FAIL).buildResponse();
+			return new Message<AppEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@RequestBody Apps apps, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> update(@RequestBody AppEntity apps, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-update  :" + apps);
 		transform(apps);
 		apps.setInstId(currentUser.getInstId());
 		if (appsService.update(apps)) {
-			return new Message<Apps>(Message.SUCCESS).buildResponse();
+			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Apps>(Message.FAIL).buildResponse();
+			return new Message<AppEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-delete  ids : {} ", ids);
 		if (appsService.deleteBatch(ids)) {
-			return new Message<Apps>(Message.SUCCESS).buildResponse();
+			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Apps>(Message.FAIL).buildResponse();
+			return new Message<AppEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/updateExtendAttr" })
-	public ResponseEntity<?> updateExtendAttr(@RequestBody Apps app) {
+	public ResponseEntity<?> updateExtendAttr(@RequestBody AppEntity app) {
 		_logger.debug("-updateExtendAttr  id : {} , ExtendAttr : {}", app.getId(), app.getExtendAttr());
 		if (appsService.updateExtendAttr(app)) {
-			return new Message<Apps>(Message.SUCCESS).buildResponse();
+			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Apps>(Message.FAIL).buildResponse();
+			return new Message<AppEntity>(Message.FAIL).buildResponse();
 		}
 	}
 

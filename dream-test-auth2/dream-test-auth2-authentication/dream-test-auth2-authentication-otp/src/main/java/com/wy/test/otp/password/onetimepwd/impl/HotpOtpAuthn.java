@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.algorithm.HOTP;
 
@@ -25,12 +25,12 @@ public class HotpOtpAuthn extends AbstractOtpAuthn {
 	}
 
 	@Override
-	public boolean produce(UserInfo userInfo) {
+	public boolean produce(UserEntity userInfo) {
 		return true;
 	}
 
 	@Override
-	public boolean validate(UserInfo userInfo, String token) {
+	public boolean validate(UserEntity userInfo, String token) {
 		_logger.debug("SharedCounter : " + userInfo.getSharedCounter());
 		byte[] byteSharedSecret = Base32Helpers.decode(userInfo.getSharedSecret());
 		String hotpToken;

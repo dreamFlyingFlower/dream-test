@@ -3,7 +3,7 @@ package com.wy.test.synchronizer.workweixin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wy.test.core.entity.Synchronizers;
+import com.wy.test.core.entity.SyncEntity;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WorkweixinSynchronizerService implements ISynchronizerService {
 
-	Synchronizers synchronizer;
+	SyncEntity synchronizer;
 
 	@Autowired
 	WorkweixinUsersService workweixinUsersService;
@@ -67,7 +67,7 @@ public class WorkweixinSynchronizerService implements ISynchronizerService {
 	}
 
 	@Override
-	public void setSynchronizer(Synchronizers synchronizer) {
+	public void setSynchronizer(SyncEntity synchronizer) {
 		this.synchronizer = synchronizer;
 
 	}

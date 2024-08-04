@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthJwt;
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.core.entity.Institutions;
+import com.wy.test.core.entity.InstitutionEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.SocialsAssociate;
-import com.wy.test.core.entity.SocialsProvider;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.SocialAssociateEntity;
+import com.wy.test.core.entity.SocialProviderEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
@@ -115,7 +115,7 @@ public class LoginEntryPoint {
 			model.put("userDomainUrlJson", kerberosService.buildKerberosProxys());
 		}
 
-		Institutions inst = (Institutions) WebContext.getAttribute(WebConstants.CURRENT_INST);
+		InstitutionEntity inst = (InstitutionEntity) WebContext.getAttribute(WebConstants.CURRENT_INST);
 		model.put("inst", inst);
 		if (dreamLoginProperties.isCaptcha()) {
 			model.put("captcha", "true");
@@ -131,7 +131,7 @@ public class LoginEntryPoint {
 
 	@GetMapping(value = { "/sendotp/{mobile}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> produceOtp(@PathVariable("mobile") String mobile) {
-		UserInfo userInfo = userInfoService.findByEmailMobile(mobile);
+		UserEntity userInfo = userInfoService.findByEmailMobile(mobile);
 		if (userInfo != null) {
 			smsAuthnService.getByInstId(WebContext.getInst().getId()).produce(userInfo);
 			return new Message<AuthJwt>(Message.SUCCESS).buildResponse();
@@ -151,11 +151,11 @@ public class LoginEntryPoint {
 		// 社交服务类型
 		AuthLoginType authType = credential.getAuthLoginType();
 
-		UserInfo userInfo = userInfoService.findByEmailMobile(mobile);
+		UserEntity userInfo = userInfoService.findByEmailMobile(mobile);
 		// 验证码验证是否合法
 		if (smsAuthnService.getByInstId(WebContext.getInst().getId()).validate(userInfo, code)) {
 			// 合法进行用户绑定
-			SocialsAssociate socialsAssociate = new SocialsAssociate();
+			SocialAssociateEntity socialsAssociate = new SocialAssociateEntity();
 			socialsAssociate.setUserId(userInfo.getId());
 			socialsAssociate.setUsername(userInfo.getUsername());
 			socialsAssociate.setProvider(authType.getMsg());
@@ -168,7 +168,7 @@ public class LoginEntryPoint {
 			LoginCredential loginCredential =
 					new LoginCredential(socialsAssociate.getUsername(), "", AuthLoginType.SOCIALSIGNON);
 
-			SocialsProvider socialSignOnProvider =
+			SocialProviderEntity socialSignOnProvider =
 					socialSignOnProviderService.get(socialsAssociate.getInstId(), socialsAssociate.getProvider());
 
 			loginCredential.setProvider(socialSignOnProvider.getProviderName());

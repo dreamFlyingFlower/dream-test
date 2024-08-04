@@ -14,7 +14,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.sms.password.sms.SmsOtpAuthn;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
@@ -51,7 +51,7 @@ public class SmsOtpAuthnYunxin extends SmsOtpAuthn {
 	private String templateId = "14860099";
 
 	@Override
-	public boolean produce(UserInfo userInfo) {
+	public boolean produce(UserEntity userInfo) {
 		HttpPost httpPost = null;
 		// 手机号
 		String mobile = userInfo.getMobile();
@@ -117,7 +117,7 @@ public class SmsOtpAuthnYunxin extends SmsOtpAuthn {
 	}
 
 	@Override
-	public boolean validate(UserInfo userInfo, String token) {
+	public boolean validate(UserEntity userInfo, String token) {
 		return this.optTokenStore.validate(userInfo, token, OtpTypes.SMS, interval);
 	}
 

@@ -3,7 +3,7 @@ package com.wy.test.cas.authz.endpoint.ticket;
 import org.springframework.security.core.Authentication;
 
 import com.wy.test.cas.authz.endpoint.ticket.pgt.ProxyTicket;
-import com.wy.test.core.entity.apps.AppsCasDetails;
+import com.wy.test.core.entity.AppCasDetailEntity;
 
 /**
  * The {@link ProxyGrantingTicketIOUImpl} is a concrete implementation of the
@@ -36,7 +36,7 @@ public class ProxyGrantingTicketIOUImpl extends ServiceTicketImpl implements Tic
 
 	}
 
-	public ProxyGrantingTicketIOUImpl(Authentication authentication, AppsCasDetails casDetails) {
+	public ProxyGrantingTicketIOUImpl(Authentication authentication, AppCasDetailEntity casDetails) {
 		this.authentication = authentication;
 		this.casDetails = casDetails;
 	}

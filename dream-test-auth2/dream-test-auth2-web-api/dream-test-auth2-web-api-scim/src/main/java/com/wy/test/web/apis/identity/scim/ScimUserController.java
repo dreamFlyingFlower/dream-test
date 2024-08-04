@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -24,10 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.wy.test.core.constants.ConstStatus;
-import com.wy.test.core.entity.Roles;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.persistence.service.RolesService;
-import com.wy.test.persistence.service.UserInfoService;
+import com.wy.test.core.entity.RoleEntity;
+import com.wy.test.core.entity.UserEntity;
+import com.wy.test.persistence.service.RoleService;
+import com.wy.test.persistence.service.UserService;
 import com.wy.test.web.apis.identity.scim.resources.ScimEnterprise;
 import com.wy.test.web.apis.identity.scim.resources.ScimFormattedName;
 import com.wy.test.web.apis.identity.scim.resources.ScimGroupRef;
@@ -43,6 +41,7 @@ import com.wy.test.web.apis.identity.scim.resources.ScimUserPhoneNumber;
 
 import dream.flying.flower.helper.DateTimeHelper;
 import dream.flying.flower.lang.StrHelper;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This Controller is used to manage User
@@ -55,19 +54,18 @@ import dream.flying.flower.lang.StrHelper;
  */
 @RestController
 @RequestMapping(value = "/api/idm/SCIM/v2/Users")
+@Slf4j
 public class ScimUserController {
 
-	final static Logger _logger = LoggerFactory.getLogger(ScimUserController.class);
+	@Autowired
+	private UserService userService;
 
 	@Autowired
-	private UserInfoService userInfoService;
-
-	@Autowired
-	RolesService rolesService;
+	RoleService roleService;
 
 	@GetMapping(value = "/{id}")
 	public MappingJacksonValue get(@PathVariable String id, @RequestParam(required = false) String attributes) {
-		UserInfo userInfo = userInfoService.get(id);
+		UserEntity userInfo = userService.getById(id);
 		ScimUser scimUser = userInfo2ScimUser(userInfo);
 		return new MappingJacksonValue(scimUser);
 	}
@@ -75,23 +73,23 @@ public class ScimUserController {
 	@PostMapping
 	public MappingJacksonValue create(@RequestBody ScimUser user, @RequestParam(required = false) String attributes,
 			UriComponentsBuilder builder) throws IOException {
-		UserInfo userInfo = scimUser2UserInfo(user);
-		userInfoService.insert(userInfo);
+		UserEntity userInfo = scimUser2UserInfo(user);
+		userService.insert(userInfo);
 		return get(userInfo.getId(), attributes);
 	}
 
 	@PutMapping(value = "/{id}")
 	public MappingJacksonValue replace(@PathVariable String id, @RequestBody ScimUser user,
 			@RequestParam(required = false) String attributes) throws IOException {
-		UserInfo userInfo = scimUser2UserInfo(user);
-		userInfoService.update(userInfo);
+		UserEntity userInfo = scimUser2UserInfo(user);
+		userService.update(userInfo);
 		return get(id, attributes);
 	}
 
 	@DeleteMapping(value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable final String id) {
-		userInfoService.remove(id);
+		userService.removeById(id);
 	}
 
 	@GetMapping
@@ -102,14 +100,14 @@ public class ScimUserController {
 	@PostMapping(value = "/.search")
 	public MappingJacksonValue searchWithPost(@ModelAttribute ScimParameters requestParameters) {
 		requestParameters.parse();
-		_logger.debug("requestParameters {} ", requestParameters);
-		UserInfo queryModel = new UserInfo();
+		log.debug("requestParameters {} ", requestParameters);
+		UserEntity queryModel = new UserEntity();
 		queryModel.setPageSize(requestParameters.getCount());
 		queryModel.calculate(requestParameters.getStartIndex());
 
-		JpaPageResults<UserInfo> orgResults = userInfoService.fetchPageResults(queryModel);
+		JpaPageResults<UserEntity> orgResults = userService.fetchPageResults(queryModel);
 		List<ScimUser> resultList = new ArrayList<ScimUser>();
-		for (UserInfo user : orgResults.getRows()) {
+		for (UserEntity user : orgResults.getRows()) {
 			resultList.add(userInfo2ScimUser(user));
 		}
 		ScimSearchResult<ScimUser> scimSearchResult = new ScimSearchResult<ScimUser>(resultList,
@@ -117,7 +115,7 @@ public class ScimUserController {
 		return new MappingJacksonValue(scimSearchResult);
 	}
 
-	public ScimUser userInfo2ScimUser(UserInfo userInfo) {
+	public ScimUser userInfo2ScimUser(UserEntity userInfo) {
 		ScimUser scimUser = new ScimUser();
 		scimUser.setId(userInfo.getId());
 		scimUser.setExternalId(userInfo.getId());
@@ -145,7 +143,7 @@ public class ScimUserController {
 
 		List<String> groupsList = new ArrayList<String>();
 		List<ScimGroupRef> groups = new ArrayList<ScimGroupRef>();
-		for (Roles role : rolesService.queryRolesByUserId(userInfo.getId())) {
+		for (RoleEntity role : roleService.queryRolesByUserId(userInfo.getId())) {
 			groupsList.add(role.getId());
 			groups.add(new ScimGroupRef(role.getId(), role.getRoleName()));
 
@@ -200,8 +198,8 @@ public class ScimUserController {
 		return scimUser;
 	}
 
-	public UserInfo scimUser2UserInfo(ScimUser scimUser) {
-		UserInfo userInfo = new UserInfo();
+	public UserEntity scimUser2UserInfo(ScimUser scimUser) {
+		UserEntity userInfo = new UserEntity();
 		userInfo.setId(scimUser.getId());
 		userInfo.setUsername(scimUser.getUserName());
 		return userInfo;

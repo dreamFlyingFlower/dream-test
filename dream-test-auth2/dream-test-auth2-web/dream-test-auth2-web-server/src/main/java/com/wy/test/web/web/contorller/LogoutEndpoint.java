@@ -26,9 +26,9 @@ import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.constants.ConstProtocols;
+import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -55,17 +55,17 @@ public class LogoutEndpoint {
 	@Operation(summary = "前端注销接口", description = "前端注销接口", method = "GET")
 	@GetMapping(value = { "/logout" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> logout(@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> logout(@CurrentUser UserEntity currentUser) {
 		// if logined in have onlineTicket ,need remove or logout back
 		String sessionId = currentUser.getSessionId();
 		Session session = sessionManager.get(sessionId);
 		if (session != null) {
 			_logger.debug("/logout frontend clean Session id {}", session.getId());
-			Set<Entry<String, Apps>> entrySet = session.getAuthorizedApps().entrySet();
+			Set<Entry<String, AppEntity>> entrySet = session.getAuthorizedApps().entrySet();
 
-			Iterator<Entry<String, Apps>> iterator = entrySet.iterator();
+			Iterator<Entry<String, AppEntity>> iterator = entrySet.iterator();
 			while (iterator.hasNext()) {
-				Entry<String, Apps> mapEntry = iterator.next();
+				Entry<String, AppEntity> mapEntry = iterator.next();
 				_logger.debug("App Id : " + mapEntry.getKey() + " , " + mapEntry.getValue());
 				if (mapEntry.getValue().getLogoutType() == LogoutType.BACK_CHANNEL) {
 					SingleLogout singleLogout;

@@ -8,7 +8,7 @@ import com.wy.test.core.enums.StoreType;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.core.properties.DreamAuthStoreProperties;
 import com.wy.test.otp.password.onetimepwd.token.RedisOtpTokenStore;
-import com.wy.test.persistence.service.EmailSendersService;
+import com.wy.test.persistence.service.EmailSenderService;
 import com.wy.test.persistence.service.SmsProviderService;
 import com.wy.test.sms.password.sms.SmsOtpAuthnService;
 
@@ -20,9 +20,9 @@ public class SmsAutoConfiguration implements InitializingBean {
 
 	@Bean(name = "smsOtpAuthnService")
 	SmsOtpAuthnService smsOtpAuthnService(DreamAuthStoreProperties dreamAuthStoreProperties,
-			SmsProviderService smsProviderService, EmailSendersService emailSendersService,
+			SmsProviderService smsProviderService, EmailSenderService emailSenderService,
 			RedisConnectionFactory redisConnFactory) {
-		SmsOtpAuthnService smsOtpAuthnService = new SmsOtpAuthnService(smsProviderService, emailSendersService);
+		SmsOtpAuthnService smsOtpAuthnService = new SmsOtpAuthnService(smsProviderService, emailSenderService);
 
 		if (StoreType.REDIS == dreamAuthStoreProperties.getStoreType()) {
 			RedisOtpTokenStore redisOptTokenStore = new RedisOtpTokenStore(redisConnFactory);

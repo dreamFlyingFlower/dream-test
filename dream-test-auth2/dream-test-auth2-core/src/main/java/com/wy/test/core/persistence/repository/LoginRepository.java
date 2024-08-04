@@ -16,8 +16,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.wy.test.core.constants.ConstRoles;
 import com.wy.test.core.constants.ConstStatus;
-import com.wy.test.core.entity.Roles;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.RoleEntity;
+import com.wy.test.core.entity.UserEntity;
+import com.wy.test.core.vo.UserVO;
 
 import dream.flying.flower.lang.StrHelper;
 
@@ -39,7 +40,7 @@ public class LoginRepository {
 
 	private static final String LOGIN_USERINFO_UPDATE_STATEMENT =
 			"update mxk_userinfo set lastlogintime = ?  , lastloginip = ? , logincount = ?, online = "
-					+ UserInfo.ONLINE.ONLINE + "  where id = ?";
+					+ UserEntity.ONLINE.ONLINE + "  where id = ?";
 
 	private static final String ROLES_SELECT_STATEMENT =
 			"select distinct r.id,r.rolecode,r.rolename from mxk_userinfo u,mxk_roles r,mxk_role_member rm where u.id = ?  and u.id=rm.memberid and rm.roleid=r.id ";
@@ -70,8 +71,8 @@ public class LoginRepository {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public UserInfo find(String username, String password) {
-		List<UserInfo> listUserInfo = null;
+	public UserEntity find(String username, String password) {
+		List<UserEntity> listUserInfo = null;
 		if (LOGIN_ATTRIBUTE_TYPE == 1) {
 			listUserInfo = findByUsername(username, password);
 		} else if (LOGIN_ATTRIBUTE_TYPE == 2) {
@@ -80,7 +81,7 @@ public class LoginRepository {
 			listUserInfo = findByUsernameOrMobileOrEmail(username, password);
 		}
 
-		UserInfo userInfo = null;
+		UserEntity userInfo = null;
 		if (listUserInfo != null && listUserInfo.size() > 0) {
 			userInfo = listUserInfo.get(0);
 		}
@@ -88,16 +89,16 @@ public class LoginRepository {
 		return userInfo;
 	}
 
-	public List<UserInfo> findByUsername(String username, String password) {
+	public List<UserEntity> findByUsername(String username, String password) {
 		return jdbcTemplate.query(DEFAULT_USERINFO_SELECT_STATEMENT, new UserInfoRowMapper(), username);
 	}
 
-	public List<UserInfo> findByUsernameOrMobile(String username, String password) {
+	public List<UserEntity> findByUsernameOrMobile(String username, String password) {
 		return jdbcTemplate.query(DEFAULT_USERINFO_SELECT_STATEMENT_USERNAME_MOBILE, new UserInfoRowMapper(), username,
 				username);
 	}
 
-	public List<UserInfo> findByUsernameOrMobileOrEmail(String username, String password) {
+	public List<UserEntity> findByUsernameOrMobileOrEmail(String username, String password) {
 		return jdbcTemplate.query(DEFAULT_USERINFO_SELECT_STATEMENT_USERNAME_MOBILE_EMAIL, new UserInfoRowMapper(),
 				username, username, username);
 	}
@@ -107,7 +108,7 @@ public class LoginRepository {
 	 * 
 	 * @param userInfo
 	 */
-	public void updateLock(UserInfo userInfo) {
+	public void updateLock(UserEntity userInfo) {
 		try {
 			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				jdbcTemplate.update(LOCK_USER_UPDATE_STATEMENT,
@@ -125,7 +126,7 @@ public class LoginRepository {
 	 * 
 	 * @param userInfo
 	 */
-	public void updateUnlock(UserInfo userInfo) {
+	public void updateUnlock(UserEntity userInfo) {
 		try {
 			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				jdbcTemplate.update(UNLOCK_USER_UPDATE_STATEMENT,
@@ -143,7 +144,7 @@ public class LoginRepository {
 	 * 
 	 * @param userInfo
 	 */
-	public void updateLockout(UserInfo userInfo) {
+	public void updateLockout(UserEntity userInfo) {
 		try {
 			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				jdbcTemplate.update(BADPASSWORDCOUNT_RESET_UPDATE_STATEMENT,
@@ -161,7 +162,7 @@ public class LoginRepository {
 	 * 
 	 * @param userInfo
 	 */
-	public void updateBadPasswordCount(UserInfo userInfo) {
+	public void updateBadPasswordCount(UserEntity userInfo) {
 		try {
 			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				int badPasswordCount = userInfo.getBadPasswordCount() + 1;
@@ -196,12 +197,13 @@ public class LoginRepository {
 		return listAuthorizedApps;
 	}
 
-	public List<Roles> queryRoles(UserInfo userInfo) {
-		List<Roles> listRoles = jdbcTemplate.query(ROLES_SELECT_STATEMENT, new RowMapper<Roles>() {
+	public List<RoleEntity> queryRoles(UserVO userInfo) {
+		List<RoleEntity> listRoles = jdbcTemplate.query(ROLES_SELECT_STATEMENT, new RowMapper<RoleEntity>() {
 
 			@Override
-			public Roles mapRow(ResultSet rs, int rowNum) throws SQLException {
-				Roles role = new Roles(rs.getString("id"), rs.getString("rolecode"), rs.getString("rolename"), 0);
+			public RoleEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+				RoleEntity role =
+						new RoleEntity(rs.getString("id"), rs.getString("rolecode"), rs.getString("rolename"), 0);
 
 				return role;
 			}
@@ -217,16 +219,16 @@ public class LoginRepository {
 	 * @param userInfo
 	 * @return ArrayList<GrantedAuthority>
 	 */
-	public ArrayList<GrantedAuthority> grantAuthority(UserInfo userInfo) {
+	public ArrayList<GrantedAuthority> grantAuthority(UserVO userInfo) {
 		// query roles for user
-		List<Roles> listRoles = queryRoles(userInfo);
+		List<RoleEntity> listRoles = queryRoles(userInfo);
 
 		// set default roles
 		ArrayList<GrantedAuthority> grantedAuthority = new ArrayList<GrantedAuthority>();
 		grantedAuthority.add(ConstRoles.ROLE_USER);
 		grantedAuthority.add(ConstRoles.ROLE_ALL_USER);
 		grantedAuthority.add(ConstRoles.ROLE_ORDINARY_USER);
-		for (Roles role : listRoles) {
+		for (RoleEntity role : listRoles) {
 			grantedAuthority.add(new SimpleGrantedAuthority(role.getId()));
 			if (role.getRoleCode().startsWith("ROLE_")
 					&& !grantedAuthority.contains(new SimpleGrantedAuthority(role.getRoleCode()))) {
@@ -238,19 +240,19 @@ public class LoginRepository {
 		return grantedAuthority;
 	}
 
-	public void updateLastLogin(UserInfo userInfo) {
+	public void updateLastLogin(UserVO userInfo) {
 		jdbcTemplate.update(
 				LOGIN_USERINFO_UPDATE_STATEMENT, new Object[] { userInfo.getLastLoginTime(), userInfo.getLastLoginIp(),
 						userInfo.getLoginCount() + 1, userInfo.getId() },
 				new int[] { Types.TIMESTAMP, Types.VARCHAR, Types.INTEGER, Types.VARCHAR });
 	}
 
-	public class UserInfoRowMapper implements RowMapper<UserInfo> {
+	public class UserInfoRowMapper implements RowMapper<UserEntity> {
 
 		@Override
-		public UserInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+		public UserEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-			UserInfo userInfo = new UserInfo();
+			UserEntity userInfo = new UserEntity();
 			userInfo.setId(rs.getString("id"));
 			userInfo.setUsername(rs.getString("username"));
 			userInfo.setPassword(rs.getString("password"));
@@ -272,7 +274,7 @@ public class LoginRepository {
 			userInfo.setFormattedName(rs.getString("formattedname"));
 
 			userInfo.setGender(rs.getInt("gender"));
-			userInfo.setBirthDate(rs.getString("birthdate"));
+			userInfo.setBirthDate(rs.getDate("birthdate"));
 			userInfo.setPicture(rs.getBytes("picture"));
 			userInfo.setMarried(rs.getInt("married"));
 			userInfo.setIdType(rs.getInt("idtype"));
@@ -291,15 +293,15 @@ public class LoginRepository {
 			userInfo.setAppLoginPassword(rs.getString("apploginpassword"));
 			userInfo.setProtectedApps(rs.getString("protectedapps"));
 
-			userInfo.setPasswordLastSetTime(rs.getString("passwordlastsettime"));
+			userInfo.setPasswordLastSetTime(rs.getDate("passwordlastsettime"));
 			userInfo.setPasswordSetType(rs.getInt("passwordsettype"));
 			userInfo.setBadPasswordCount(rs.getInt("badpasswordcount"));
-			userInfo.setBadPasswordTime(rs.getString("badpasswordtime"));
+			userInfo.setBadPasswordTime(rs.getDate("badpasswordtime"));
 			userInfo.setUnLockTime(rs.getString("unlocktime"));
 			userInfo.setIsLocked(rs.getInt("islocked"));
-			userInfo.setLastLoginTime(rs.getString("lastlogintime"));
+			userInfo.setLastLoginTime(rs.getDate("lastlogintime"));
 			userInfo.setLastLoginIp(rs.getString("lastloginip"));
-			userInfo.setLastLogoffTime(rs.getString("lastlogofftime"));
+			userInfo.setLastLogoffTime(rs.getDate("lastlogofftime"));
 			userInfo.setLoginCount(rs.getInt("logincount"));
 			userInfo.setRegionHistory(rs.getString("regionhistory"));
 			userInfo.setPasswordHistory(rs.getString("passwordhistory"));
@@ -340,20 +342,20 @@ public class LoginRepository {
 			userInfo.setManager(rs.getString("manager"));
 			userInfo.setAssistantId(rs.getString("assistantid"));
 			userInfo.setAssistant(rs.getString("assistant"));
-			userInfo.setEntryDate(rs.getString("entrydate"));//
-			userInfo.setQuitDate(rs.getString("quitdate"));
-			userInfo.setStartWorkDate(rs.getString("startworkdate"));// STARTWORKDATE
+			userInfo.setEntryDate(rs.getDate("entrydate"));//
+			userInfo.setQuitDate(rs.getDate("quitdate"));
+			userInfo.setStartWorkDate(rs.getDate("startworkdate"));// STARTWORKDATE
 
 			userInfo.setExtraAttribute(rs.getString("extraattribute"));
 
-			userInfo.setCreatedBy(rs.getString("createdby"));
-			userInfo.setCreatedDate(rs.getString("createddate"));
-			userInfo.setModifiedBy(rs.getString("modifiedby"));
-			userInfo.setModifiedDate(rs.getString("modifieddate"));
+			userInfo.setCreateUser(rs.getLong("create_user"));
+			userInfo.setCreateTime(rs.getDate("create_time"));
+			userInfo.setUpdateUser(rs.getLong("update_user"));
+			userInfo.setUpdateTime(rs.getDate("update_time"));
 
 			userInfo.setStatus(rs.getInt("status"));
 			userInfo.setGridList(rs.getInt("gridlist"));
-			userInfo.setDescription(rs.getString("description"));
+			userInfo.setRemark(rs.getString("remark"));
 			userInfo.setTheme(rs.getString("theme"));
 			userInfo.setInstId(rs.getString("instid"));
 			if (userInfo.getTheme() == null || userInfo.getTheme().equalsIgnoreCase("")) {

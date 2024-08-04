@@ -9,7 +9,7 @@ import com.tencentcloudapi.common.profile.HttpProfile;
 import com.tencentcloudapi.sms.v20190711.SmsClient;
 import com.tencentcloudapi.sms.v20190711.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20190711.models.SendSmsResponse;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.sms.password.sms.SmsOtpAuthn;
 
 /**
@@ -49,7 +49,7 @@ public class SmsOtpAuthnTencentCloud extends SmsOtpAuthn {
 	}
 
 	@Override
-	public boolean produce(UserInfo userInfo) {
+	public boolean produce(UserEntity userInfo) {
 		// 手机号
 		String mobile = userInfo.getMobile();
 		if (mobile != null && !mobile.equals("")) {
@@ -86,7 +86,7 @@ public class SmsOtpAuthnTencentCloud extends SmsOtpAuthn {
 	}
 
 	@Override
-	public boolean validate(UserInfo userInfo, String token) {
+	public boolean validate(UserEntity userInfo, String token) {
 		return this.optTokenStore.validate(userInfo, token, OtpTypes.SMS, interval);
 	}
 

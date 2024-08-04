@@ -17,8 +17,8 @@ import com.wy.test.core.constants.ConstOperateResult;
 import com.wy.test.core.constants.ConstPasswordSetType;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.PasswordPolicy;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.PasswordPolicyEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.HistorySystemLogsService;
@@ -41,16 +41,16 @@ public class ChangePasswodController {
 	private PasswordPolicyService passwordPolicyService;
 
 	@PostMapping(value = { "/passwordpolicy" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> passwordpolicy(@CurrentUser UserInfo currentUser) {
-		PasswordPolicy passwordPolicy = passwordPolicyService.get(currentUser.getInstId());
+	public ResponseEntity<?> passwordpolicy(@CurrentUser UserEntity currentUser) {
+		PasswordPolicyEntity passwordPolicy = passwordPolicyService.get(currentUser.getInstId());
 		// 构建密码强度说明
 		passwordPolicy.buildMessage();
-		return new Message<PasswordPolicy>(passwordPolicy).buildResponse();
+		return new Message<PasswordPolicyEntity>(passwordPolicy).buildResponse();
 	}
 
 	@PostMapping(value = { "/changePassword" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> changePasswod(@RequestBody ChangePassword changePassword,
-			@CurrentUser UserInfo currentUser) {
+			@CurrentUser UserEntity currentUser) {
 
 		changePassword.setUserId(currentUser.getId());
 		changePassword.setUsername(currentUser.getUsername());

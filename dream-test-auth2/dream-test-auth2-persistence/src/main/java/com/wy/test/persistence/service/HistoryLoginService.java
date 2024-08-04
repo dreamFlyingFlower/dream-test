@@ -1,30 +1,21 @@
 package com.wy.test.persistence.service;
 
-import org.dromara.mybatis.jpa.JpaService;
-import org.dromara.mybatis.jpa.entity.JpaPageResults;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
-import com.wy.test.core.entity.HistoryLogin;
-import com.wy.test.persistence.mapper.HistoryLoginMapper;
+import com.wy.test.core.entity.HistoryLoginEntity;
+import com.wy.test.core.query.HistoryLoginQuery;
+import com.wy.test.core.vo.HistoryLoginVO;
 
-@Repository
-public class HistoryLoginService extends JpaService<HistoryLogin> {
+import dream.flying.flower.framework.mybatis.plus.service.BaseServices;
 
-	public HistoryLoginService() {
-		super(HistoryLoginMapper.class);
-	}
+/**
+ * 登录历史
+ *
+ * @author 飞花梦影
+ * @date 2024-08-01
+ * @git {@link https://github.com/dreamFlyingFlower}
+ */
+public interface HistoryLoginService extends BaseServices<HistoryLoginEntity, HistoryLoginVO, HistoryLoginQuery> {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.connsec.db.service.BaseService#getMapper()
-	 */
-	@Override
-	public HistoryLoginMapper getMapper() {
-		return (HistoryLoginMapper) super.getMapper();
-	}
-
-	public JpaPageResults<HistoryLogin> queryOnlineSession(HistoryLogin historyLogin) {
-		return this.fetchPageResults("queryOnlineSession", historyLogin);
-	}
+	List<HistoryLoginEntity> queryOnlineSession(HistoryLoginEntity historyLogin);
 }

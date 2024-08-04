@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.core.constants.ConstStatus;
-import com.wy.test.core.entity.SynchroRelated;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.SyncRelatedEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.web.HttpRequestAdapter;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
@@ -16,6 +16,7 @@ import com.wy.test.synchronizer.feishu.entity.FeishuUsersResponse;
 
 import dream.flying.flower.framework.core.helper.TokenHelpers;
 import dream.flying.flower.framework.core.json.JsonHelpers;
+import dream.flying.flower.generator.GeneratorStrategyContext;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -31,29 +32,29 @@ public class FeishuUsersService extends AbstractSynchronizerService implements I
 	public void sync() {
 		log.info("Sync Feishu Users...");
 		try {
-			List<SynchroRelated> synchroRelateds = synchroRelatedService.findOrgs(this.synchronizer);
+			List<SyncRelatedEntity> synchroRelateds = synchroRelatedService.findOrgs(this.synchronizer);
 
-			for (SynchroRelated relatedOrg : synchroRelateds) {
+			for (SyncRelatedEntity relatedOrg : synchroRelateds) {
 				HttpRequestAdapter request = new HttpRequestAdapter();
 				HashMap<String, String> headers = new HashMap<String, String>();
 				headers.put("Authorization", TokenHelpers.createBearer(access_token));
 				String responseBody = request.get(String.format(USERS_URL, relatedOrg.getOriginId()), headers);
-				FeishuUsersResponse usersResponse =
-						JsonHelpers.read(responseBody, FeishuUsersResponse.class);
+				FeishuUsersResponse usersResponse = JsonHelpers.read(responseBody, FeishuUsersResponse.class);
 				log.trace("response : " + responseBody);
 				if (usersResponse.getCode() == 0 && usersResponse.getData().getItems() != null) {
 					for (FeishuUsers feiShuUser : usersResponse.getData().getItems()) {
-						UserInfo userInfo = buildUserInfo(feiShuUser, relatedOrg);
+						UserEntity userInfo = buildUserInfo(feiShuUser, relatedOrg);
 						log.debug("userInfo : " + userInfo);
-						userInfo.setPassword(userInfo.getUsername() + UserInfo.DEFAULT_PASSWORD_SUFFIX);
+						userInfo.setPassword(userInfo.getUsername() + UserEntity.DEFAULT_PASSWORD_SUFFIX);
 						userInfoService.saveOrUpdate(userInfo);
 
-						SynchroRelated synchroRelated = new SynchroRelated(userInfo.getId(), userInfo.getUsername(),
-								userInfo.getDisplayName(), UserInfo.CLASS_TYPE, synchronizer.getId(),
-								synchronizer.getName(), feiShuUser.getOpen_id(), feiShuUser.getName(),
-								feiShuUser.getUser_id(), feiShuUser.getUnion_id(), synchronizer.getInstId());
+						SyncRelatedEntity synchroRelated =
+								new SyncRelatedEntity(userInfo.getId(), userInfo.getUsername(),
+										userInfo.getDisplayName(), UserEntity.CLASS_TYPE, synchronizer.getId(),
+										synchronizer.getName(), feiShuUser.getOpen_id(), feiShuUser.getName(),
+										feiShuUser.getUser_id(), feiShuUser.getUnion_id(), synchronizer.getInstId());
 						synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated,
-								UserInfo.CLASS_TYPE);
+								UserEntity.CLASS_TYPE);
 
 						synchroRelated.setOriginId(feiShuUser.getUnion_id());
 						socialsAssociate(synchroRelated, "feishu");
@@ -68,13 +69,14 @@ public class FeishuUsersService extends AbstractSynchronizerService implements I
 
 	}
 
-	public void postSync(UserInfo userInfo) {
+	public void postSync(UserEntity userInfo) {
 
 	}
 
-	public UserInfo buildUserInfo(FeishuUsers user, SynchroRelated relatedOrg) {
-		UserInfo userInfo = new UserInfo();
-		userInfo.setId(userInfo.generateId());
+	public UserEntity buildUserInfo(FeishuUsers user, SyncRelatedEntity relatedOrg) {
+		UserEntity userInfo = new UserEntity();
+		GeneratorStrategyContext generatorStrategyContext = new GeneratorStrategyContext();
+		userInfo.setId(generatorStrategyContext.generate());
 		userInfo.setUsername(user.getUser_id());// 账号
 		userInfo.setNickName(user.getNickname());// 名字
 		userInfo.setDisplayName(user.getName());// 名字

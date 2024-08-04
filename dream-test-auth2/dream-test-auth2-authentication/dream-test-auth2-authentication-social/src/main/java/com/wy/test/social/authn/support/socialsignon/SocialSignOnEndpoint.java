@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -18,11 +19,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.jwt.AuthJwt;
+import com.wy.test.core.convert.SocialProviderConvert;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.SocialsAssociate;
-import com.wy.test.core.entity.SocialsProvider;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.SocialAssociateEntity;
+import com.wy.test.core.entity.SocialProviderEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.uuid.UUID;
+import com.wy.test.core.vo.SocialProviderVO;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.social.zhyd.request.AuthDreamRequest;
 
@@ -34,6 +37,9 @@ import me.zhyd.oauth.request.AuthRequest;
 @RequestMapping(value = "/logon/oauth20")
 @Slf4j
 public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
+
+	@Autowired
+	private SocialProviderConvert socialProviderConvert;
 
 	@GetMapping(value = { "/authorize/{provider}" })
 	@ResponseBody
@@ -63,26 +69,27 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 		// String state = authTokenService.genRandomJwt();
 		authRequest.authorize(state);
 
-		SocialsProvider socialSignOnProvider = socialSignOnProviderService.get(instId, provider);
-		SocialsProvider scanQrProvider = new SocialsProvider(socialSignOnProvider);
-		scanQrProvider.setState(state);
-		scanQrProvider.setRedirectUri(socialSignOnProviderService
+		SocialProviderEntity socialSignOnProvider = socialSignOnProviderService.get(instId, provider);
+		SocialProviderEntity scanQrProvider = new SocialProviderEntity(socialSignOnProvider);
+		SocialProviderVO socialProviderVO = socialProviderConvert.convertt(scanQrProvider);
+		socialProviderVO.setStatus(state);
+		socialProviderVO.setRedirectUri(socialSignOnProviderService
 				.getRedirectUri(originURL + dreamServerProperties.getFrontendUri(), provider));
 		// 缓存state票据在缓存或者是redis中五分钟过期
 		if (provider.equalsIgnoreCase(AuthDreamRequest.KEY)) {
 			socialSignOnProviderService.setToken(state);
 		}
 
-		return new Message<SocialsProvider>(scanQrProvider).buildResponse();
+		return new Message<SocialProviderVO>(socialProviderVO).buildResponse();
 	}
 
 	@GetMapping(value = { "/bind/{provider}" })
-	public ResponseEntity<?> bind(@PathVariable String provider, @CurrentUser UserInfo userInfo,
+	public ResponseEntity<?> bind(@PathVariable String provider, @CurrentUser UserEntity userInfo,
 			HttpServletRequest request) {
 		// auth call back may exception
 		try {
 			String originURL = WebContext.getContextPath(request, false);
-			SocialsAssociate socialsAssociate = this.authCallback(userInfo.getInstId(), provider,
+			SocialAssociateEntity socialsAssociate = this.authCallback(userInfo.getInstId(), provider,
 					originURL + dreamServerProperties.getFrontendUri());
 			socialsAssociate.setSocialUserInfo(accountJsonString);
 			socialsAssociate.setUserId(userInfo.getId());
@@ -107,10 +114,10 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 		try {
 			String originURL = WebContext.getContextPath(request, false);
 			String instId = WebContext.getInst().getId();
-			SocialsAssociate socialsAssociate =
+			SocialAssociateEntity socialsAssociate =
 					this.authCallback(instId, provider, originURL + dreamServerProperties.getFrontendUri());
 
-			SocialsAssociate socialssssociate1 = this.socialsAssociateService.get(socialsAssociate);
+			SocialAssociateEntity socialssssociate1 = this.socialsAssociateService.get(socialsAssociate);
 
 			log.debug("Loaded SocialSignOn Socials Associate : " + socialssssociate1);
 
@@ -128,7 +135,7 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 
 			LoginCredential loginCredential =
 					new LoginCredential(socialsAssociate.getUsername(), "", AuthLoginType.SOCIALSIGNON);
-			SocialsProvider socialSignOnProvider = socialSignOnProviderService.get(instId, provider);
+			SocialProviderEntity socialSignOnProvider = socialSignOnProviderService.get(instId, provider);
 			loginCredential.setProvider(socialSignOnProvider.getProviderName());
 
 			Authentication authentication = authenticationProvider.authenticate(loginCredential, true);
@@ -203,7 +210,7 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 			}
 			String instId = WebContext.getInst().getId();
 
-			SocialsAssociate socialsAssociate = new SocialsAssociate();
+			SocialAssociateEntity socialsAssociate = new SocialAssociateEntity();
 			socialsAssociate.setProvider(provider);
 			socialsAssociate.setSocialUserId(loginName);
 			socialsAssociate.setInstId(instId);
@@ -221,7 +228,7 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 
 			LoginCredential loginCredential =
 					new LoginCredential(socialsAssociate.getUsername(), "", AuthLoginType.SOCIALSIGNON);
-			SocialsProvider socialSignOnProvider = socialSignOnProviderService.get(instId, provider);
+			SocialProviderEntity socialSignOnProvider = socialSignOnProviderService.get(instId, provider);
 			loginCredential.setProvider(socialSignOnProvider.getProviderName());
 
 			Authentication authentication = authenticationProvider.authenticate(loginCredential, true);

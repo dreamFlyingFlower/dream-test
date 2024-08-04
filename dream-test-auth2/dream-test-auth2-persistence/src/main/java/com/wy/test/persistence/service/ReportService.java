@@ -4,59 +4,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.dromara.mybatis.jpa.JpaService;
-import org.dromara.mybatis.jpa.entity.JpaEntity;
-import org.springframework.stereotype.Repository;
+/**
+ * 报表
+ *
+ * @author 飞花梦影
+ * @date 2024-08-04 23:25:10
+ * @git {@link https://github.com/dreamFlyingFlower}
+ */
+public interface ReportService {
 
-import com.wy.test.persistence.mapper.ReportMapper;
+	Integer analysisDay(HashMap<String, Object> reportParameter);
 
-@Repository
-public class ReportService extends JpaService<JpaEntity> {
+	Integer analysisNewUsers(HashMap<String, Object> reportParameter);
 
-	public Integer analysisDay(HashMap<String, Object> reportParameter) {
-		return getMapper().analysisDay(reportParameter);
-	};
+	Integer analysisOnlineUsers(HashMap<String, Object> reportParameter);
 
-	public Integer analysisNewUsers(HashMap<String, Object> reportParameter) {
-		return getMapper().analysisNewUsers(reportParameter);
-	};
+	Integer analysisActiveUsers(HashMap<String, Object> reportParameter);
 
-	public Integer analysisOnlineUsers(HashMap<String, Object> reportParameter) {
-		return getMapper().analysisOnlineUsers(reportParameter);
-	};
+	List<Map<String, Object>> analysisDayHour(HashMap<String, Object> reportParameter);
 
-	public Integer analysisActiveUsers(HashMap<String, Object> reportParameter) {
-		return getMapper().analysisActiveUsers(reportParameter);
-	};
+	List<Map<String, Object>> analysisMonth(HashMap<String, Object> reportParameter);
 
-	public List<Map<String, Object>> analysisDayHour(HashMap<String, Object> reportParameter) {
-		return getMapper().analysisDayHour(reportParameter);
-	}
+	List<Map<String, Object>> analysisBrowser(HashMap<String, Object> reportParameter);
 
-	public List<Map<String, Object>> analysisMonth(HashMap<String, Object> reportParameter) {
-		return getMapper().analysisMonth(reportParameter);
-	}
-
-	public List<Map<String, Object>> analysisBrowser(HashMap<String, Object> reportParameter) {
-		return getMapper().analysisBrowser(reportParameter);
-	}
-
-	public List<Map<String, Object>> analysisApp(HashMap<String, Object> reportParameter) {
-		return getMapper().analysisApp(reportParameter);
-	}
-
-	public ReportService() {
-		super(ReportMapper.class);
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.connsec.db.service.BaseService#getMapper()
-	 */
-	@Override
-	public ReportMapper getMapper() {
-		return (ReportMapper) super.getMapper();
-	}
+	List<Map<String, Object>> analysisApp(HashMap<String, Object> reportParameter);
 }

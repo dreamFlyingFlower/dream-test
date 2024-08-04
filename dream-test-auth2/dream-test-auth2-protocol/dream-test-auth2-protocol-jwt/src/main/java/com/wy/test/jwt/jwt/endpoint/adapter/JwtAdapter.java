@@ -21,7 +21,7 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.PlainJWT;
 import com.nimbusds.jwt.SignedJWT;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.core.entity.apps.AppsJwtDetails;
+import com.wy.test.core.entity.AppJwtDetailEntity;
 import com.wy.test.core.web.WebConstants;
 
 import dream.flying.flower.framework.web.crypto.jwt.encryption.DefaultJwtEncryptionAndDecryptionHandler;
@@ -31,7 +31,7 @@ public class JwtAdapter extends AbstractAuthorizeAdapter {
 
 	final static Logger _logger = LoggerFactory.getLogger(JwtAdapter.class);
 
-	AppsJwtDetails jwtDetails;
+	AppJwtDetailEntity jwtDetails;
 
 	JWT jwtToken;
 
@@ -43,7 +43,7 @@ public class JwtAdapter extends AbstractAuthorizeAdapter {
 
 	}
 
-	public JwtAdapter(AppsJwtDetails jwtDetails) {
+	public JwtAdapter(AppJwtDetailEntity jwtDetails) {
 		this.jwtDetails = jwtDetails;
 	}
 
@@ -138,7 +138,7 @@ public class JwtAdapter extends AbstractAuthorizeAdapter {
 		return modelAndView;
 	}
 
-	public void setJwtDetails(AppsJwtDetails jwtDetails) {
+	public void setJwtDetails(AppJwtDetailEntity jwtDetails) {
 		this.jwtDetails = jwtDetails;
 	}
 

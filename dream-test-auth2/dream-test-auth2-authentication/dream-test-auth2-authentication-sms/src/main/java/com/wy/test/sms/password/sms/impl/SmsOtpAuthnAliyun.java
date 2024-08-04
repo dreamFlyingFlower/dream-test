@@ -9,7 +9,7 @@ import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.sms.password.sms.SmsOtpAuthn;
 
 /**
@@ -46,7 +46,7 @@ public class SmsOtpAuthnAliyun extends SmsOtpAuthn {
 	private String signName = "dream";
 
 	@Override
-	public boolean produce(UserInfo userInfo) {
+	public boolean produce(UserEntity userInfo) {
 		// 手机号
 		String mobile = userInfo.getMobile();
 		if (mobile != null && !mobile.equals("")) {
@@ -80,7 +80,7 @@ public class SmsOtpAuthnAliyun extends SmsOtpAuthn {
 	}
 
 	@Override
-	public boolean validate(UserInfo userInfo, String token) {
+	public boolean validate(UserEntity userInfo, String token) {
 		return this.optTokenStore.validate(userInfo, token, OtpTypes.SMS, interval);
 	}
 

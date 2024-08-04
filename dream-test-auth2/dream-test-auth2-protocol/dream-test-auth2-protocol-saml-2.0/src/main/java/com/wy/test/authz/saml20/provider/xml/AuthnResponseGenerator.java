@@ -22,8 +22,8 @@ import com.wy.test.authz.saml.service.IDService;
 import com.wy.test.authz.saml.service.TimeService;
 import com.wy.test.authz.saml20.binding.BindingAdapter;
 import com.wy.test.authz.saml20.xml.IssuerGenerator;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.AppsSAML20Details;
+import com.wy.test.core.entity.AppSamlDetailEntity;
+import com.wy.test.core.entity.UserEntity;
 
 import dream.flying.flower.enums.YesNoEnum;
 
@@ -52,8 +52,8 @@ public class AuthnResponseGenerator {
 		statusGenerator = new StatusGenerator();
 	}
 
-	public Response generateAuthnResponse(AppsSAML20Details saml20Details, AuthnRequestInfo authnRequestInfo,
-			HashMap<String, String> attributeMap, BindingAdapter bindingAdapter, UserInfo currentUser) {
+	public Response generateAuthnResponse(AppSamlDetailEntity saml20Details, AuthnRequestInfo authnRequestInfo,
+			HashMap<String, String> attributeMap, BindingAdapter bindingAdapter, UserEntity currentUser) {
 
 		Response authResponse = new ResponseBuilder().buildObject();
 		// builder Assertion

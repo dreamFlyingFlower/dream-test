@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.core.entity.HistoryLogin;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.HistoryLoginEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.HistoryLoginService;
 
 import dream.flying.flower.ConstDate;
@@ -49,8 +49,8 @@ public class LoginSessionController {
 	 * @return
 	 */
 	@GetMapping(value = { "/fetch" })
-	public ResponseEntity<?> fetch(@ModelAttribute("historyLogin") HistoryLogin historyLogin,
-			@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> fetch(@ModelAttribute("historyLogin") HistoryLoginEntity historyLogin,
+			@CurrentUser UserEntity currentUser) {
 		_logger.debug("history/session/fetch {}", historyLogin);
 		historyLogin.setUserId(currentUser.getId());
 		historyLogin.setInstId(currentUser.getInstId());
@@ -58,7 +58,7 @@ public class LoginSessionController {
 	}
 
 	@GetMapping(value = "/terminate")
-	public ResponseEntity<?> terminate(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> terminate(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		_logger.debug(ids);
 		boolean isTerminated = false;
 		try {

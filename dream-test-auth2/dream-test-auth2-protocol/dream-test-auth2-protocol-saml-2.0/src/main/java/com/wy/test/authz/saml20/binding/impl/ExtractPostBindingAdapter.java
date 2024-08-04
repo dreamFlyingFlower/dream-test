@@ -21,7 +21,7 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.wy.test.authz.saml.common.TrustResolver;
 import com.wy.test.authz.saml20.binding.ExtractBindingAdapter;
-import com.wy.test.core.entity.apps.AppsSAML20Details;
+import com.wy.test.core.entity.AppSamlDetailEntity;
 
 import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
 
@@ -47,7 +47,7 @@ public class ExtractPostBindingAdapter implements ExtractBindingAdapter, Initial
 
 	protected CredentialResolver credentialResolver;
 
-	protected AppsSAML20Details saml20Detail;
+	protected AppSamlDetailEntity saml20Detail;
 
 	public ExtractPostBindingAdapter() {
 
@@ -125,12 +125,12 @@ public class ExtractPostBindingAdapter implements ExtractBindingAdapter, Initial
 	}
 
 	@Override
-	public void setSaml20Detail(AppsSAML20Details saml20Detail) {
+	public void setSaml20Detail(AppSamlDetailEntity saml20Detail) {
 		this.saml20Detail = saml20Detail;
 	}
 
 	@Override
-	public AppsSAML20Details getSaml20Detail() {
+	public AppSamlDetailEntity getSaml20Detail() {
 		return saml20Detail;
 	}
 

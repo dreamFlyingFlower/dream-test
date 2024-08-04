@@ -13,7 +13,7 @@ import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 
@@ -111,8 +111,8 @@ public class AuthorizationUtils {
 		return authentication == null ? null : (SignPrincipal) authentication.getPrincipal();
 	}
 
-	public static UserInfo getUserInfo(Authentication authentication) {
-		UserInfo userInfo = null;
+	public static UserVO getUserInfo(Authentication authentication) {
+		UserVO userInfo = null;
 		SignPrincipal principal = getPrincipal(authentication);
 		if (principal != null) {
 			userInfo = principal.getUserInfo();
@@ -120,8 +120,7 @@ public class AuthorizationUtils {
 		return userInfo;
 	}
 
-	public static UserInfo getUserInfo() {
+	public static UserVO getUserInfo() {
 		return getUserInfo(getAuthentication());
 	}
-
 }

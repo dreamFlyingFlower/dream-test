@@ -22,8 +22,8 @@ import com.wy.test.core.constants.ConstEntryType;
 import com.wy.test.core.constants.ConstOperateAction;
 import com.wy.test.core.constants.ConstOperateResult;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.Roles;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.RoleEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.HistorySystemLogsService;
 import com.wy.test.persistence.service.RolesService;
 
@@ -45,34 +45,34 @@ public class RolesController {
 
 	@GetMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute Roles role, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> fetch(@ModelAttribute RoleEntity role, @CurrentUser UserEntity currentUser) {
 		log.debug("" + role);
 		role.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<Roles>>(rolesService.fetchPageResults(role)).buildResponse();
+		return new Message<JpaPageResults<RoleEntity>>(rolesService.fetchPageResults(role)).buildResponse();
 	}
 
 	@ResponseBody
 	@GetMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> query(@ModelAttribute Roles role, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> query(@ModelAttribute RoleEntity role, @CurrentUser UserEntity currentUser) {
 		log.debug("-query  :" + role);
 		role.setInstId(currentUser.getInstId());
 		if (CollectionUtils.isNotEmpty(rolesService.query(role))) {
-			return new Message<Roles>(Message.SUCCESS).buildResponse();
+			return new Message<RoleEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Roles>(Message.FAIL).buildResponse();
+			return new Message<RoleEntity>(Message.FAIL).buildResponse();
 		}
 
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> get(@PathVariable("id") String id, @CurrentUser UserInfo currentUser) {
-		Roles role = rolesService.get(id);
-		return new Message<Roles>(role).buildResponse();
+	public ResponseEntity<?> get(@PathVariable("id") String id, @CurrentUser UserEntity currentUser) {
+		RoleEntity role = rolesService.get(id);
+		return new Message<RoleEntity>(role).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> insert(@RequestBody Roles role, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> insert(@RequestBody RoleEntity role, @CurrentUser UserEntity currentUser) {
 		log.debug("-Add  :" + role);
 		role.setInstId(currentUser.getInstId());
 		role.setId(role.generateId());
@@ -83,15 +83,15 @@ public class RolesController {
 			rolesService.refreshDynamicRoles(role);
 			systemLog.insert(ConstEntryType.ROLE, role, ConstOperateAction.CREATE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<Roles>(Message.SUCCESS).buildResponse();
+			return new Message<RoleEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Roles>(Message.FAIL).buildResponse();
+			return new Message<RoleEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@RequestBody Roles role, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> update(@RequestBody RoleEntity role, @CurrentUser UserEntity currentUser) {
 		log.debug("-update  group :" + role);
 		if (role.getId().equalsIgnoreCase("ROLE_ALL_USER")) {
 			role.setDefaultAllUser();
@@ -101,23 +101,23 @@ public class RolesController {
 			rolesService.refreshDynamicRoles(role);
 			systemLog.insert(ConstEntryType.ROLE, role, ConstOperateAction.UPDATE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<Roles>(Message.SUCCESS).buildResponse();
+			return new Message<RoleEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Roles>(Message.FAIL).buildResponse();
+			return new Message<RoleEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete ids : {}", ids);
 		ids = ids.replaceAll("ROLE_ALL_USER", "-1").replaceAll("ROLE_ADMINISTRATORS", "-1");
 		if (rolesService.deleteBatch(ids)) {
 			systemLog.insert(ConstEntryType.ROLE, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<Roles>(Message.SUCCESS).buildResponse();
+			return new Message<RoleEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Roles>(Message.FAIL).buildResponse();
+			return new Message<RoleEntity>(Message.FAIL).buildResponse();
 		}
 	}
 }

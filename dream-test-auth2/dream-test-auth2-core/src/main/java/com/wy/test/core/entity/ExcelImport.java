@@ -4,64 +4,39 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class ExcelImport extends JpaEntity implements Serializable {
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ExcelImport implements Serializable {
 
 	private static final long serialVersionUID = 4665009770629818479L;
 
-	@Id
-	@Column
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "snowflakeid")
-	String id;
+	@TableId(type = IdType.ASSIGN_ID)
+	private String id;
 
 	@JsonIgnore
 	protected MultipartFile excelFile;
 
-	String updateExist;
+	private String updateExist;
 
-	InputStream inputStream = null;
+	private InputStream inputStream;
 
-	Workbook workbook = null;
-
-	public ExcelImport() {
-		super();
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getUpdateExist() {
-		return updateExist;
-	}
-
-	public void setUpdateExist(String updateExist) {
-		this.updateExist = updateExist;
-	}
-
-	public MultipartFile getExcelFile() {
-		return excelFile;
-	}
-
-	public void setExcelFile(MultipartFile excelFile) {
-		this.excelFile = excelFile;
-	}
+	private Workbook workbook;
 
 	public boolean isExcelNotEmpty() {
 		return excelFile != null && !excelFile.isEmpty();
@@ -96,5 +71,4 @@ public class ExcelImport extends JpaEntity implements Serializable {
 			}
 		}
 	}
-
 }

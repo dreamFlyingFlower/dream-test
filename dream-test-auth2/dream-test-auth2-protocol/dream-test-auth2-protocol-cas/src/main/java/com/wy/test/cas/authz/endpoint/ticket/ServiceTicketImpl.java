@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.springframework.security.core.Authentication;
 
 import com.wy.test.cas.authz.endpoint.ticket.pgt.ProxyGrantingTicket;
-import com.wy.test.core.entity.apps.AppsCasDetails;
+import com.wy.test.core.entity.AppCasDetailEntity;
 
 /**
  * Domain object representing a Service Ticket. A service ticket grants specific
@@ -56,7 +56,7 @@ public class ServiceTicketImpl extends AbstractTicket implements ServiceTicket {
 	/**
 	 * Instantiates a new service ticket impl.
 	 */
-	public ServiceTicketImpl(Authentication authentication, AppsCasDetails casDetails) {
+	public ServiceTicketImpl(Authentication authentication, AppCasDetailEntity casDetails) {
 		// exists for JPA purposes
 		this.authentication = authentication;
 		this.casDetails = casDetails;

@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.core.entity.SocialsAssociate;
-import com.wy.test.core.entity.SocialsProvider;
+import com.wy.test.core.entity.SocialAssociateEntity;
+import com.wy.test.core.entity.SocialProviderEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
@@ -44,7 +44,7 @@ public class AbstractSocialSignOnEndpoint {
 
 	protected AuthRequest buildAuthRequest(String instId, String provider, String baseUrl) {
 		try {
-			SocialsProvider socialSignOnProvider = socialSignOnProviderService.get(instId, provider);
+			SocialProviderEntity socialSignOnProvider = socialSignOnProviderService.get(instId, provider);
 			_logger.debug("socialSignOn Provider : " + socialSignOnProvider);
 
 			if (socialSignOnProvider != null) {
@@ -57,8 +57,8 @@ public class AbstractSocialSignOnEndpoint {
 		return null;
 	}
 
-	protected SocialsAssociate authCallback(String instId, String provider, String baseUrl) throws Exception {
-		SocialsAssociate socialsAssociate = null;
+	protected SocialAssociateEntity authCallback(String instId, String provider, String baseUrl) throws Exception {
+		SocialAssociateEntity socialsAssociate = null;
 		AuthCallback authCallback = new AuthCallback();
 		authCallback.setCode(WebContext.getRequest().getParameter("code"));
 		authCallback.setAuth_code(WebContext.getRequest().getParameter("auth_code"));
@@ -83,7 +83,7 @@ public class AbstractSocialSignOnEndpoint {
 
 		AuthResponse<?> authResponse = authRequest.login(authCallback);
 		_logger.debug("Response  : " + authResponse.getData());
-		socialsAssociate = new SocialsAssociate();
+		socialsAssociate = new SocialAssociateEntity();
 		socialsAssociate.setProvider(provider);
 		socialsAssociate.setSocialUserId(socialSignOnProviderService.getAccountId(provider, authResponse));
 		socialsAssociate.setInstId(instId);

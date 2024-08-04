@@ -23,8 +23,8 @@ import com.wy.test.core.constants.ConstEntryType;
 import com.wy.test.core.constants.ConstOperateAction;
 import com.wy.test.core.constants.ConstOperateResult;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.Resources;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.ResourceEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.web.component.TreeAttributes;
 import com.wy.test.core.web.component.TreeNode;
 import com.wy.test.persistence.service.HistorySystemLogsService;
@@ -44,82 +44,82 @@ public class ResourcesController {
 
 	@PostMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute Resources resource, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> fetch(@ModelAttribute ResourceEntity resource, @CurrentUser UserEntity currentUser) {
 		_logger.debug("fetch {}", resource);
 		resource.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<Resources>>(resourcesService.fetchPageResults(resource)).buildResponse();
+		return new Message<JpaPageResults<ResourceEntity>>(resourcesService.fetchPageResults(resource)).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> query(@ModelAttribute Resources resource, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> query(@ModelAttribute ResourceEntity resource, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-query  {}", resource);
 		resource.setInstId(currentUser.getInstId());
-		List<Resources> resourceList = resourcesService.query(resource);
+		List<ResourceEntity> resourceList = resourcesService.query(resource);
 		if (resourceList != null) {
-			return new Message<List<Resources>>(Message.SUCCESS, resourceList).buildResponse();
+			return new Message<List<ResourceEntity>>(Message.SUCCESS, resourceList).buildResponse();
 		} else {
-			return new Message<List<Resources>>(Message.FAIL).buildResponse();
+			return new Message<List<ResourceEntity>>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		Resources resource = resourcesService.get(id);
-		return new Message<Resources>(resource).buildResponse();
+		ResourceEntity resource = resourcesService.get(id);
+		return new Message<ResourceEntity>(resource).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> insert(@RequestBody Resources resource, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> insert(@RequestBody ResourceEntity resource, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-Add  :" + resource);
 		resource.setInstId(currentUser.getInstId());
 		if (resourcesService.insert(resource)) {
 			systemLog.insert(ConstEntryType.RESOURCE, resource, ConstOperateAction.CREATE,
 					ConstOperateResult.SUCCESS, currentUser);
-			return new Message<Resources>(Message.SUCCESS).buildResponse();
+			return new Message<ResourceEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Resources>(Message.FAIL).buildResponse();
+			return new Message<ResourceEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@RequestBody Resources resource, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> update(@RequestBody ResourceEntity resource, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-update  :" + resource);
 		resource.setInstId(currentUser.getInstId());
 		if (resourcesService.update(resource)) {
 			systemLog.insert(ConstEntryType.RESOURCE, resource, ConstOperateAction.UPDATE,
 					ConstOperateResult.SUCCESS, currentUser);
-			return new Message<Resources>(Message.SUCCESS).buildResponse();
+			return new Message<ResourceEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Resources>(Message.FAIL).buildResponse();
+			return new Message<ResourceEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-delete  ids : {} ", ids);
 		if (resourcesService.deleteBatch(ids)) {
 			systemLog.insert(ConstEntryType.RESOURCE, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<Resources>(Message.SUCCESS).buildResponse();
+			return new Message<ResourceEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Resources>(Message.FAIL).buildResponse();
+			return new Message<ResourceEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/tree" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> tree(@ModelAttribute Resources resource, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> tree(@ModelAttribute ResourceEntity resource, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-query  {}", resource);
 		resource.setInstId(currentUser.getInstId());
-		List<Resources> resourceList = resourcesService.query(resource);
+		List<ResourceEntity> resourceList = resourcesService.query(resource);
 		if (resourceList != null) {
 			TreeAttributes treeAttributes = new TreeAttributes();
 			int nodeCount = 0;
-			for (Resources r : resourceList) {
+			for (ResourceEntity r : resourceList) {
 				TreeNode treeNode = new TreeNode(r.getId(), r.getResourceName());
 				treeNode.setParentKey(r.getParentId());
 				treeNode.setParentTitle(r.getParentName());

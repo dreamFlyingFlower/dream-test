@@ -22,9 +22,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.web.AuthorizationUtils;
+import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 import com.wy.test.core.persistence.cache.MomentaryService;
 import com.wy.test.core.properties.DreamAuthServerProperties;
@@ -77,7 +77,7 @@ public class OAuth20AccessConfirmationEndpoint {
 
 	@GetMapping(OAuth2Constants.ENDPOINT.ENDPOINT_APPROVAL_CONFIRM)
 	public ModelAndView getAccessConfirmation(@RequestParam Map<String, Object> model,
-			@CurrentUser UserInfo currentUser) {
+			@CurrentUser UserEntity currentUser) {
 		try {
 			// Map<String, Object> model
 			AuthorizationRequest clientAuth =
@@ -122,7 +122,7 @@ public class OAuth20AccessConfirmationEndpoint {
 
 	@GetMapping(OAuth2Constants.ENDPOINT.ENDPOINT_APPROVAL_CONFIRM + "/get/{oauth_approval}")
 	public ResponseEntity<?> getAccess(@PathVariable("oauth_approval") String oauth_approval,
-			@CurrentUser UserInfo currentUser) {
+			@CurrentUser UserEntity currentUser) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		if (authTokenService.validateJwtToken(oauth_approval)) {
 			try {
@@ -130,7 +130,7 @@ public class OAuth20AccessConfirmationEndpoint {
 						(AuthorizationRequest) momentaryService.get(currentUser.getSessionId(), "authorizationRequest");
 				ClientDetails client = clientDetailsService.loadClientByClientId(clientAuth.getClientId(), true);
 
-				Apps app = appsService.get(client.getClientId(), true);
+				AppEntity app = appsService.get(client.getClientId(), true);
 				app.transIconBase64();
 
 				model.put("auth_request", clientAuth);

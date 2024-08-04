@@ -15,7 +15,7 @@ import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
@@ -64,7 +64,7 @@ public class SingleSignOnInterceptor implements AsyncHandlerInterceptor {
 		// 判断应用访问权限
 		if (AuthorizationUtils.isAuthenticated()) {
 			log.debug("preHandle {}", request.getRequestURI());
-			Apps app = (Apps) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
+			AppEntity app = (AppEntity) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
 			if (app == null) {
 
 				String requestURI = request.getRequestURI();

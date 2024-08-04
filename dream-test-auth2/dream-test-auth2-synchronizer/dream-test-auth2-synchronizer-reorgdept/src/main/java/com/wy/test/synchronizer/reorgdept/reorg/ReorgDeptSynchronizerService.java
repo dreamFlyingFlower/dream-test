@@ -3,7 +3,7 @@ package com.wy.test.synchronizer.reorgdept.reorg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wy.test.core.entity.Synchronizers;
+import com.wy.test.core.entity.SyncEntity;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 import com.wy.test.synchronizer.reorgdept.workweixin.service.ReorgDeptService;
 
@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ReorgDeptSynchronizerService implements ISynchronizerService {
 
-	Synchronizers synchronizer;
+	SyncEntity synchronizer;
 
 	@Autowired
 	ReorgDeptService reorgDeptService;
@@ -35,7 +35,7 @@ public class ReorgDeptSynchronizerService implements ISynchronizerService {
 	}
 
 	@Override
-	public void setSynchronizer(Synchronizers synchronizer) {
+	public void setSynchronizer(SyncEntity synchronizer) {
 		this.synchronizer = synchronizer;
 
 	}

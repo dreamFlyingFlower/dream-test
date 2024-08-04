@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.otp.password.onetimepwd.algorithm.OtpKeyUriFormat;
 import com.wy.test.otp.password.onetimepwd.algorithm.OtpSecret;
@@ -48,7 +48,7 @@ public class OneTimePasswordController {
 	@GetMapping(value = { "/timebased" })
 	@ResponseBody
 	@SneakyThrows
-	public ResponseEntity<?> timebased(@RequestParam String generate, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> timebased(@RequestParam String generate, @CurrentUser UserEntity currentUser) {
 		HashMap<String, Object> timebased = new HashMap<String, Object>();
 
 		generate(generate, currentUser);
@@ -72,7 +72,7 @@ public class OneTimePasswordController {
 		return new Message<HashMap<String, Object>>(timebased).buildResponse();
 	}
 
-	public void generate(String generate, @CurrentUser UserInfo currentUser) {
+	public void generate(String generate, @CurrentUser UserEntity currentUser) {
 		if ((StringUtils.isNotBlank(generate) && generate.equalsIgnoreCase("YES"))
 				|| StringUtils.isBlank(currentUser.getSharedSecret())) {
 
@@ -86,7 +86,7 @@ public class OneTimePasswordController {
 
 	@SuppressWarnings("unused")
 	@GetMapping("/verify")
-	public ResponseEntity<?> verify(@RequestParam("otp") String otp, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> verify(@RequestParam("otp") String otp, @CurrentUser UserEntity currentUser) {
 		// 从当前用户信息中获取共享密钥
 		String sharedSecret = PasswordReciprocal.getInstance().decoder(currentUser.getSharedSecret());
 		// 计算当前时间对应的动态密码

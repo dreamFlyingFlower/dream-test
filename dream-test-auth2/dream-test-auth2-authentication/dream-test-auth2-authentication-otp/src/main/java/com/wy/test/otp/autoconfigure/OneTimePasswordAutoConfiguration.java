@@ -9,7 +9,7 @@ import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.core.properties.DreamAuthStoreProperties;
 import com.wy.test.otp.password.onetimepwd.MailOtpAuthnService;
 import com.wy.test.otp.password.onetimepwd.token.RedisOtpTokenStore;
-import com.wy.test.persistence.service.EmailSendersService;
+import com.wy.test.persistence.service.EmailSenderService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,8 +19,8 @@ public class OneTimePasswordAutoConfiguration implements InitializingBean {
 
 	@Bean(name = "mailOtpAuthnService")
 	MailOtpAuthnService mailOtpAuthnService(DreamAuthStoreProperties dreamAuthStoreProperties,
-			EmailSendersService emailSendersService, RedisConnectionFactory redisConnFactory) {
-		MailOtpAuthnService otpAuthnService = new MailOtpAuthnService(emailSendersService);
+			EmailSenderService emailSenderService, RedisConnectionFactory redisConnFactory) {
+		MailOtpAuthnService otpAuthnService = new MailOtpAuthnService(emailSenderService);
 
 		if (StoreType.REDIS == dreamAuthStoreProperties.getStoreType()) {
 			RedisOtpTokenStore redisOptTokenStore = new RedisOtpTokenStore(redisConnFactory);

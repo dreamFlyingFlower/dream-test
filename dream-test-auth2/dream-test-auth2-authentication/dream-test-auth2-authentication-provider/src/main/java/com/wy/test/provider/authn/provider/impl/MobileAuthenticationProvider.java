@@ -7,7 +7,7 @@ import org.springframework.security.core.AuthenticationException;
 
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
@@ -62,7 +62,7 @@ public class MobileAuthenticationProvider extends AbstractAuthenticationProvider
 
 			emptyUsernameValid(loginCredential.getUsername());
 
-			UserInfo userInfo = loadUserInfo(loginCredential.getUsername(), loginCredential.getPassword());
+			UserEntity userInfo = loadUserInfo(loginCredential.getUsername(), loginCredential.getPassword());
 
 			statusValid(loginCredential, userInfo);
 
@@ -98,10 +98,10 @@ public class MobileAuthenticationProvider extends AbstractAuthenticationProvider
 	 * @param authType String
 	 * @param userInfo UserInfo
 	 */
-	protected void mobileCaptchaValid(String password, UserInfo userInfo) {
+	protected void mobileCaptchaValid(String password, UserEntity userInfo) {
 		// for mobile password
 		if (dreamLoginProperties.isMfa()) {
-			UserInfo validUserInfo = new UserInfo();
+			UserEntity validUserInfo = new UserEntity();
 			validUserInfo.setUsername(userInfo.getUsername());
 			validUserInfo.setId(userInfo.getId());
 			AbstractOtpAuthn smsOtpAuthn = smsOtpAuthnService.getByInstId(userInfo.getInstId());

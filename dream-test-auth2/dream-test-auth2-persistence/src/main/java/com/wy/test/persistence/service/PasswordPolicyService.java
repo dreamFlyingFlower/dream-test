@@ -1,26 +1,19 @@
 package com.wy.test.persistence.service;
 
-import org.dromara.mybatis.jpa.JpaService;
-import org.springframework.stereotype.Repository;
+import com.wy.test.core.entity.PasswordPolicyEntity;
+import com.wy.test.core.query.PasswordPolicyQuery;
+import com.wy.test.core.vo.PasswordPolicyVO;
 
-import com.wy.test.core.entity.PasswordPolicy;
-import com.wy.test.persistence.mapper.PasswordPolicyMapper;
+import dream.flying.flower.framework.mybatis.plus.service.BaseServices;
 
-@Repository
-public class PasswordPolicyService extends JpaService<PasswordPolicy> {
 
-	public PasswordPolicyService() {
-		super(PasswordPolicyMapper.class);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.connsec.db.service.BaseService#getMapper()
-	 */
-	@Override
-	public PasswordPolicyMapper getMapper() {
-		return (PasswordPolicyMapper) super.getMapper();
-	}
+/**
+ * 密码策略
+ *
+ * @author 飞花梦影
+ * @date 2024-08-01
+ * @git {@link https://github.com/dreamFlyingFlower}
+ */
+public interface PasswordPolicyService extends BaseServices<PasswordPolicyEntity, PasswordPolicyVO, PasswordPolicyQuery> {
 
 }

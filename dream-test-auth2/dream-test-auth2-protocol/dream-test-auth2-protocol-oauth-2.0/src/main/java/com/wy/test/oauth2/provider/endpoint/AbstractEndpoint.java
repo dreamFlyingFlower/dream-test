@@ -26,7 +26,7 @@ import com.wy.test.oauth2.provider.password.ResourceOwnerPasswordTokenGranter;
 import com.wy.test.oauth2.provider.refresh.RefreshTokenGranter;
 import com.wy.test.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import com.wy.test.oauth2.provider.token.AuthorizationServerTokenServices;
-import com.wy.test.persistence.service.AppsService;
+import com.wy.test.persistence.service.AppService;
 
 public class AbstractEndpoint implements InitializingBean {
 
@@ -60,7 +60,7 @@ public class AbstractEndpoint implements InitializingBean {
 
 	@Autowired
 	@Qualifier("appsService")
-	protected AppsService appsService;
+	protected AppService appService;
 
 	@Autowired
 	@Qualifier("applicationConfig")

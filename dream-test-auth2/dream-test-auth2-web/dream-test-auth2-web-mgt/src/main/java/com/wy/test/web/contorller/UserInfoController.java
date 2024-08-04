@@ -44,7 +44,7 @@ import com.wy.test.core.constants.ConstPasswordSetType;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.ExcelImport;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.FileUploadService;
 import com.wy.test.persistence.service.HistorySystemLogsService;
@@ -72,40 +72,40 @@ public class UserInfoController {
 
 	@PostMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute UserInfo userInfo, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> fetch(@ModelAttribute UserEntity userInfo, @CurrentUser UserEntity currentUser) {
 		_logger.debug("" + userInfo);
 		userInfo.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<UserInfo>>(userInfoService.fetchPageResults(userInfo)).buildResponse();
+		return new Message<JpaPageResults<UserEntity>>(userInfoService.fetchPageResults(userInfo)).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> query(@ModelAttribute UserInfo userInfo, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> query(@ModelAttribute UserEntity userInfo, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-query  :" + userInfo);
 		if (CollectionUtils.isNotEmpty(userInfoService.query(userInfo))) {
-			return new Message<UserInfo>(Message.SUCCESS).buildResponse();
+			return new Message<UserEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<UserInfo>(Message.SUCCESS).buildResponse();
+			return new Message<UserEntity>(Message.SUCCESS).buildResponse();
 		}
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		UserInfo userInfo = userInfoService.get(id);
+		UserEntity userInfo = userInfoService.get(id);
 		userInfo.trans();
-		return new Message<UserInfo>(userInfo).buildResponse();
+		return new Message<UserEntity>(userInfo).buildResponse();
 	}
 
 	@GetMapping(value = { "/getByUsername/{username}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> getByUsername(@PathVariable("username") String username) {
-		UserInfo userInfo = userInfoService.findByUsername(username);
+		UserEntity userInfo = userInfoService.findByUsername(username);
 		userInfo.trans();
-		return new Message<UserInfo>(userInfo).buildResponse();
+		return new Message<UserEntity>(userInfo).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> insert(@RequestBody UserInfo userInfo, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> insert(@RequestBody UserEntity userInfo, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-Add  :" + userInfo);
 		userInfo.setId(WebContext.genId());
 		userInfo.setInstId(currentUser.getInstId());
@@ -116,15 +116,15 @@ public class UserInfoController {
 		if (userInfoService.insert(userInfo)) {
 			systemLog.insert(ConstEntryType.USERINFO, userInfo, ConstOperateAction.CREATE,
 					ConstOperateResult.SUCCESS, currentUser);
-			return new Message<UserInfo>(Message.SUCCESS).buildResponse();
+			return new Message<UserEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<UserInfo>(Message.FAIL).buildResponse();
+			return new Message<UserEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@RequestBody UserInfo userInfo, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> update(@RequestBody UserEntity userInfo, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-update  :" + userInfo);
 		_logger.info(userInfo.getExtraAttributeName());
 		_logger.info(userInfo.getExtraAttributeValue());
@@ -142,23 +142,23 @@ public class UserInfoController {
 		if (userInfoService.update(userInfo)) {
 			systemLog.insert(ConstEntryType.USERINFO, userInfo, ConstOperateAction.UPDATE,
 					ConstOperateResult.SUCCESS, currentUser);
-			return new Message<UserInfo>(Message.SUCCESS).buildResponse();
+			return new Message<UserEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<UserInfo>(Message.FAIL).buildResponse();
+			return new Message<UserEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-delete  ids : {} ", ids);
 
 		if (userInfoService.deleteBatch(ids)) {
 			systemLog.insert(ConstEntryType.USERINFO, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<UserInfo>(Message.SUCCESS).buildResponse();
+			return new Message<UserEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<UserInfo>(Message.FAIL).buildResponse();
+			return new Message<UserEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
@@ -168,7 +168,7 @@ public class UserInfoController {
 		return new Message<Object>(Message.SUCCESS, (Object) userInfoService.randomPassword()).buildResponse();
 	}
 
-	protected void convertExtraAttribute(UserInfo userInfo) {
+	protected void convertExtraAttribute(UserEntity userInfo) {
 		if (userInfo.getExtraAttributeValue() != null) {
 			String[] extraAttributeLabel = userInfo.getExtraAttributeName().split(",");
 			String[] extraAttributeValue = userInfo.getExtraAttributeValue().split(",");
@@ -184,23 +184,23 @@ public class UserInfoController {
 	@ResponseBody
 	@PostMapping(value = "/changePassword", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> changePassword(@RequestBody ChangePassword changePassword,
-			@CurrentUser UserInfo currentUser) {
+			@CurrentUser UserEntity currentUser) {
 		_logger.debug("UserId {}", changePassword.getUserId());
 		changePassword.setPasswordSetType(ConstPasswordSetType.PASSWORD_NORMAL);
 		if (userInfoService.changePassword(changePassword, true)) {
 			systemLog.insert(ConstEntryType.USERINFO, changePassword, ConstOperateAction.CHANGE_PASSWORD,
 					ConstOperateResult.SUCCESS, currentUser);
-			return new Message<UserInfo>(Message.SUCCESS).buildResponse();
+			return new Message<UserEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<UserInfo>(Message.FAIL).buildResponse();
+			return new Message<UserEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@PostMapping(value = { "/updateStatus" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> updateStatus(@ModelAttribute UserInfo userInfo, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> updateStatus(@ModelAttribute UserEntity userInfo, @CurrentUser UserEntity currentUser) {
 		_logger.debug("" + userInfo);
-		UserInfo loadUserInfo = userInfoService.get(userInfo.getId());
+		UserEntity loadUserInfo = userInfoService.get(userInfo.getId());
 		userInfo.setInstId(currentUser.getInstId());
 		userInfo.setUsername(loadUserInfo.getUsername());
 		userInfo.setDisplayName(loadUserInfo.getDisplayName());
@@ -208,18 +208,18 @@ public class UserInfoController {
 			systemLog.insert(ConstEntryType.USERINFO, userInfo,
 					ConstOperateAction.statusActon.get(userInfo.getStatus()), ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<UserInfo>(Message.SUCCESS).buildResponse();
+			return new Message<UserEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<UserInfo>(Message.FAIL).buildResponse();
+			return new Message<UserEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@PostMapping(value = "/import")
 	public ResponseEntity<?> importingUsers(@ModelAttribute("excelImportFile") ExcelImport excelImportFile,
-			@CurrentUser UserInfo currentUser) {
+			@CurrentUser UserEntity currentUser) {
 		if (excelImportFile.isExcelNotEmpty()) {
 			try {
-				List<UserInfo> userInfoList = Lists.newArrayList();
+				List<UserEntity> userInfoList = Lists.newArrayList();
 				Workbook workbook = excelImportFile.biuldWorkbook();
 				int recordCount = 0;
 				int sheetSize = workbook.getNumberOfSheets();
@@ -231,7 +231,7 @@ public class UserInfoController {
 						if (row == null || j < 3) {// 略过空行和前3行
 							continue;
 						} else {// 其他行是数据行
-							UserInfo userInfo = buildUserFromSheetRow(row, currentUser);
+							UserEntity userInfo = buildUserFromSheetRow(row, currentUser);
 							userInfoList.add(userInfo);
 							recordCount++;
 							_logger.debug("record {} user {} account {}", recordCount, userInfo.getDisplayName(),
@@ -247,7 +247,7 @@ public class UserInfoController {
 											() -> new TreeSet<>(Comparator.comparing(o -> o.getUsername()))),
 									ArrayList::new));
 					if (userInfoService.insertBatch(userInfoList)) {
-						return new Message<UserInfo>(Message.SUCCESS).buildResponse();
+						return new Message<UserEntity>(Message.SUCCESS).buildResponse();
 					}
 				}
 			} catch (IOException e) {
@@ -256,7 +256,7 @@ public class UserInfoController {
 				excelImportFile.closeWorkbook();
 			}
 		}
-		return new Message<UserInfo>(Message.FAIL).buildResponse();
+		return new Message<UserEntity>(Message.FAIL).buildResponse();
 
 	}
 
@@ -279,8 +279,8 @@ public class UserInfoController {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
 	}
 
-	public UserInfo buildUserFromSheetRow(Row row, UserInfo currentUser) {
-		UserInfo userInfo = new UserInfo();
+	public UserEntity buildUserFromSheetRow(Row row, UserEntity currentUser) {
+		UserEntity userInfo = new UserEntity();
 		userInfo.setCreatedDate(DateTimeHelper.formatDateTime());
 		// 登录账号
 		userInfo.setUsername(ExcelContentHelpers.getValueString(row, 0));

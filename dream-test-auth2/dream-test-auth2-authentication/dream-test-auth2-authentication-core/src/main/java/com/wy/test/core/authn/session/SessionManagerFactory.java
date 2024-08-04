@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import com.wy.test.core.entity.HistoryLogin;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.HistoryLoginEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.enums.StoreType;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 
@@ -33,7 +33,7 @@ public class SessionManagerFactory implements SessionManager {
 			"select id,sessionid,userId,username,displayname,logintime from mxk_history_login where sessionstatus = 1";
 
 	private static final String LOGOUT_USERINFO_UPDATE_STATEMENT =
-			"update mxk_userinfo set lastlogofftime = ? , online = " + UserInfo.ONLINE.OFFLINE + "  where id = ?";
+			"update mxk_userinfo set lastlogofftime = ? , online = " + UserEntity.ONLINE.OFFLINE + "  where id = ?";
 
 	private static final String HISTORY_LOGOUT_UPDATE_STATEMENT =
 			"update mxk_history_login set logouttime = ? ,sessionstatus = 7 where  sessionid = ?";
@@ -119,11 +119,11 @@ public class SessionManagerFactory implements SessionManager {
 	}
 
 	@Override
-	public List<HistoryLogin> querySessions() {
+	public List<HistoryLoginEntity> querySessions() {
 		// clear session id is null
 		jdbcTemplate.execute(NO_SESSION_UPDATE_STATEMENT);
 		// query on line session
-		List<HistoryLogin> listSessions =
+		List<HistoryLoginEntity> listSessions =
 				jdbcTemplate.query(DEFAULT_DEFAULT_SELECT_STATEMENT, new OnlineTicketRowMapper());
 		return listSessions;
 	}
@@ -154,11 +154,11 @@ public class SessionManagerFactory implements SessionManager {
 		return validitySeconds;
 	}
 
-	private final class OnlineTicketRowMapper implements RowMapper<HistoryLogin> {
+	private final class OnlineTicketRowMapper implements RowMapper<HistoryLoginEntity> {
 
 		@Override
-		public HistoryLogin mapRow(ResultSet rs, int rowNum) throws SQLException {
-			HistoryLogin history = new HistoryLogin();
+		public HistoryLoginEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+			HistoryLoginEntity history = new HistoryLoginEntity();
 			history.setId(rs.getString(1));
 			history.setSessionId(rs.getString(2));
 			history.setUserId(rs.getString(3));

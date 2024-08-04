@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.PasswordPolicy;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.PasswordPolicyEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.PasswordPolicyService;
 
 @Controller
@@ -31,25 +31,25 @@ public class PasswordPolicyController {
 	private PasswordPolicyService passwordPolicyService;
 
 	@GetMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> get(@CurrentUser UserInfo currentUser) {
-		PasswordPolicy passwordPolicy = passwordPolicyService.get(currentUser.getInstId());
-		return new Message<PasswordPolicy>(passwordPolicy).buildResponse();
+	public ResponseEntity<?> get(@CurrentUser UserEntity currentUser) {
+		PasswordPolicyEntity passwordPolicy = passwordPolicyService.get(currentUser.getInstId());
+		return new Message<PasswordPolicyEntity>(passwordPolicy).buildResponse();
 	}
 
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@Valid @RequestBody PasswordPolicy passwordPolicy,
-			@CurrentUser UserInfo currentUser, BindingResult result) {
+	public ResponseEntity<?> update(@Valid @RequestBody PasswordPolicyEntity passwordPolicy,
+			@CurrentUser UserEntity currentUser, BindingResult result) {
 		_logger.debug("updateRole passwordPolicy : " + passwordPolicy);
 		// Message message = this.validate(result, passwordPolicy);
 
 		if (passwordPolicyService.update(passwordPolicy)) {
-			return new Message<PasswordPolicy>(Message.SUCCESS).buildResponse();
+			return new Message<PasswordPolicyEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<PasswordPolicy>(Message.ERROR).buildResponse();
+			return new Message<PasswordPolicyEntity>(Message.ERROR).buildResponse();
 		}
 	}
 
-	public Message<?> validate(BindingResult result, PasswordPolicy passwordPolicy) {
+	public Message<?> validate(BindingResult result, PasswordPolicyEntity passwordPolicy) {
 		if (result.hasErrors()) {
 			return new Message<>(result);
 		}

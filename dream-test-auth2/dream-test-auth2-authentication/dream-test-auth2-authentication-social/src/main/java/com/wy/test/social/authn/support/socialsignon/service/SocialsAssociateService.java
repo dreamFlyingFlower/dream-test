@@ -2,18 +2,18 @@ package com.wy.test.social.authn.support.socialsignon.service;
 
 import java.util.List;
 
-import com.wy.test.core.entity.SocialsAssociate;
+import com.wy.test.core.entity.SocialAssociateEntity;
 
 public interface SocialsAssociateService {
 
-	public boolean insert(SocialsAssociate socialsAssociate);
+	public boolean insert(SocialAssociateEntity socialsAssociate);
 
-	public List<SocialsAssociate> query(SocialsAssociate socialsAssociate);
+	public List<SocialAssociateEntity> query(SocialAssociateEntity socialsAssociate);
 
-	public SocialsAssociate get(SocialsAssociate socialsAssociate);
+	public SocialAssociateEntity get(SocialAssociateEntity socialsAssociate);
 
-	public boolean delete(SocialsAssociate socialsAssociate);
+	public boolean delete(SocialAssociateEntity socialsAssociate);
 
-	public boolean update(SocialsAssociate socialsAssociate);
+	public boolean update(SocialAssociateEntity socialsAssociate);
 
 }

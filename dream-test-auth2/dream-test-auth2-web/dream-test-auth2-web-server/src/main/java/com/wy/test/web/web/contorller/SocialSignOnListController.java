@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
+import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.SocialsAssociate;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.entity.SocialAssociateEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.SocialsAssociatesService;
 
 @Controller
@@ -31,21 +31,21 @@ public class SocialSignOnListController {
 
 	@GetMapping(value = { "/fetch" })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> fetch(@CurrentUser UserEntity currentUser) {
 
-		List<SocialsAssociate> listSocialsAssociate = socialsAssociatesService.queryByUser(currentUser);
+		List<SocialAssociateEntity> listSocialsAssociate = socialsAssociatesService.queryByUser(currentUser);
 
-		return new Message<List<SocialsAssociate>>(listSocialsAssociate).buildResponse();
+		return new Message<List<SocialAssociateEntity>>(listSocialsAssociate).buildResponse();
 	}
 
 	@ResponseBody
 	@GetMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-delete  ids : {} ", ids);
 		if (socialsAssociatesService.deleteBatch(ids)) {
-			return new Message<Apps>(Message.SUCCESS).buildResponse();
+			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Apps>(Message.FAIL).buildResponse();
+			return new Message<AppEntity>(Message.FAIL).buildResponse();
 		}
 	}
 }

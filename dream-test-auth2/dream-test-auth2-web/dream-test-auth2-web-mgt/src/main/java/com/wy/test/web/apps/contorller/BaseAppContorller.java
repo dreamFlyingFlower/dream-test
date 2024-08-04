@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.persistence.service.AppsService;
 import com.wy.test.persistence.service.FileUploadService;
@@ -32,7 +32,7 @@ public class BaseAppContorller {
 		this.appsService = appsService;
 	}
 
-	protected void transform(Apps application) {
+	protected void transform(AppEntity application) {
 		encodeSharedPassword(application);
 		encodeSecret(application);
 		/*
@@ -49,30 +49,30 @@ public class BaseAppContorller {
 
 	}
 
-	protected void encodeSharedPassword(Apps application) {
+	protected void encodeSharedPassword(AppEntity application) {
 		if (StrHelper.isNotBlank(application.getSharedPassword())) {
 			application.setSharedPassword(PasswordReciprocal.getInstance().encode(application.getSharedPassword()));
 		}
 	}
 
-	protected void decoderSharedPassword(Apps application) {
+	protected void decoderSharedPassword(AppEntity application) {
 		if (StrHelper.isNotBlank(application.getSharedPassword())) {
 			application.setSharedPassword(PasswordReciprocal.getInstance().decoder(application.getSharedPassword()));
 		}
 	}
 
-	protected void encoding(Apps application) {
+	protected void encoding(AppEntity application) {
 
 	}
 
-	protected void encodeSecret(Apps application) {
+	protected void encodeSecret(AppEntity application) {
 		if (StrHelper.isNotBlank(application.getSecret())) {
 			String encodeSecret = passwordReciprocal.encode(application.getSecret());
 			application.setSecret(encodeSecret);
 		}
 	}
 
-	protected void decoderSecret(Apps application) {
+	protected void decoderSecret(AppEntity application) {
 		if (StrHelper.isNotBlank(application.getSecret())) {
 			String decodeSecret = passwordReciprocal.decoder(application.getSecret());
 			application.setSecret(decodeSecret);

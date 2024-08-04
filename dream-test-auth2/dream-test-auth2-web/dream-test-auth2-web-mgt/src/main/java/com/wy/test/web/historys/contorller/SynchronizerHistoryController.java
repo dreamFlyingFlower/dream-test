@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.entity.HistorySynchronizer;
+import com.wy.test.core.entity.HistorySyncEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.HistorySynchronizerService;
 
 import dream.flying.flower.ConstDate;
@@ -43,11 +43,11 @@ public class SynchronizerHistoryController {
 	 */
 	@PostMapping(value = { "/synchronizerHistory/fetch" })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute("historySynchronizer") HistorySynchronizer historySynchronizer,
-			@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> fetch(@ModelAttribute("historySynchronizer") HistorySyncEntity historySynchronizer,
+			@CurrentUser UserEntity currentUser) {
 		_logger.debug("historys/synchronizerHistory/fetch/ {}", historySynchronizer);
 		historySynchronizer.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<HistorySynchronizer>>(
+		return new Message<JpaPageResults<HistorySyncEntity>>(
 				historySynchronizerService.fetchPageResults(historySynchronizer)).buildResponse();
 	}
 

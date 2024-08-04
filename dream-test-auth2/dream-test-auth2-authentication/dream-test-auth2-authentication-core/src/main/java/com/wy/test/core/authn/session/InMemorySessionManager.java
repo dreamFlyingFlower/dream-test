@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.core.entity.HistoryLogin;
+import com.wy.test.core.entity.HistoryLoginEntity;
 
 public class InMemorySessionManager implements SessionManager {
 
@@ -81,7 +81,7 @@ public class InMemorySessionManager implements SessionManager {
 	}
 
 	@Override
-	public List<HistoryLogin> querySessions() {
+	public List<HistoryLoginEntity> querySessions() {
 		// not need implement
 		return null;
 	}

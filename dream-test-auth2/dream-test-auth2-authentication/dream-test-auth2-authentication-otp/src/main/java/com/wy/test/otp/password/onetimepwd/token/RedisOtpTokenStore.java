@@ -3,7 +3,7 @@ package com.wy.test.otp.password.onetimepwd.token;
 import org.joda.time.DateTime;
 
 import com.wy.test.core.constants.ConstTimeInterval;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.persistence.redis.RedisConnection;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.otp.password.onetimepwd.OneTimePassword;
@@ -22,7 +22,7 @@ public class RedisOtpTokenStore extends AbstractOtpTokenStore {
 	public static String PREFIX = "REDIS_OTP_SERVICE_";
 
 	@Override
-	public void store(UserInfo userInfo, String token, String receiver, String type) {
+	public void store(UserEntity userInfo, String token, String receiver, String type) {
 		DateTime currentDateTime = new DateTime();
 		OneTimePassword otp = new OneTimePassword();
 		otp.setId(userInfo.getUsername() + "_" + type + "_" + token);
@@ -37,7 +37,7 @@ public class RedisOtpTokenStore extends AbstractOtpTokenStore {
 	}
 
 	@Override
-	public boolean validate(UserInfo userInfo, String token, String type, int interval) {
+	public boolean validate(UserEntity userInfo, String token, String type, int interval) {
 		RedisConnection conn = connectionFactory.getConnection();
 		OneTimePassword otp =
 				(OneTimePassword) conn.getObject(PREFIX + userInfo.getUsername() + "_" + type + "_" + token);

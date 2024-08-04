@@ -8,7 +8,7 @@ import java.util.Map;
 import org.springframework.security.core.Authentication;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.wy.test.core.entity.apps.AppsCasDetails;
+import com.wy.test.core.entity.AppCasDetailEntity;
 
 /**
  * Interface for a ticket granting ticket. A TicketGrantingTicket is the main
@@ -47,7 +47,7 @@ public interface TicketGrantingTicket extends Ticket {
 	 * @return the service ticket granted to a specific service for the principal of
 	 *         the TicketGrantingTicket
 	 */
-	ServiceTicket grantServiceTicket(String id, Service service, AppsCasDetails casDetails,
+	ServiceTicket grantServiceTicket(String id, Service service, AppCasDetailEntity casDetails,
 			ExpirationPolicy expirationPolicy, boolean credentialProvided, boolean onlyTrackMostRecentSession);
 
 	/**

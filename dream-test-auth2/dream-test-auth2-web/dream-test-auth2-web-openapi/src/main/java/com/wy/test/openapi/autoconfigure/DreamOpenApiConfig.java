@@ -13,7 +13,7 @@ import com.wy.test.core.persistence.repository.LoginRepository;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.impl.TimeBasedOtpAuthn;
-import com.wy.test.persistence.service.UserInfoService;
+import com.wy.test.persistence.service.UserService;
 import com.wy.test.provider.authn.realm.jdbc.JdbcAuthenticationRealm;
 
 @AutoConfiguration
@@ -25,10 +25,10 @@ public class DreamOpenApiConfig implements InitializingBean {
 	@Bean
 	JdbcAuthenticationRealm authenticationRealm(PasswordEncoder passwordEncoder,
 			PasswordPolicyValidator passwordPolicyValidator, LoginRepository loginRepository,
-			LoginHistoryRepository loginHistoryRepository, UserInfoService userInfoService, JdbcTemplate jdbcTemplate) {
+			LoginHistoryRepository loginHistoryRepository, UserService userService, JdbcTemplate jdbcTemplate) {
 
 		JdbcAuthenticationRealm authenticationRealm = new JdbcAuthenticationRealm(passwordEncoder,
-				passwordPolicyValidator, loginRepository, loginHistoryRepository, userInfoService, jdbcTemplate);
+				passwordPolicyValidator, loginRepository, loginHistoryRepository, userService, jdbcTemplate);
 
 		_logger.debug("JdbcAuthenticationRealm inited.");
 		return authenticationRealm;

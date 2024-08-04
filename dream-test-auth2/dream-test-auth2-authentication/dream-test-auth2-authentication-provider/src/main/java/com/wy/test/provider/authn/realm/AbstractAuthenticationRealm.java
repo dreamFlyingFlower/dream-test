@@ -1,6 +1,7 @@
 package com.wy.test.provider.authn.realm;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,19 +11,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.wy.test.core.authn.SignPrincipal;
-import com.wy.test.core.entity.HistoryLogin;
-import com.wy.test.core.entity.Roles;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.HistoryLoginEntity;
+import com.wy.test.core.entity.RoleEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.persistence.repository.LoginHistoryRepository;
 import com.wy.test.core.persistence.repository.LoginRepository;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.persistence.service.UserInfoService;
+import com.wy.test.persistence.service.UserService;
 import com.wy.test.provider.authn.realm.ldap.LdapAuthenticationRealmService;
 
 import dream.flying.flower.framework.web.enums.AuthLoginType;
-import dream.flying.flower.helper.DateTimeHelper;
 
 /**
  * AbstractAuthenticationRealm.
@@ -40,13 +41,10 @@ public abstract class AbstractAuthenticationRealm {
 
 	protected LoginHistoryRepository loginHistoryRepository;
 
-	protected UserInfoService userInfoService;
+	protected UserService userService;
 
 	protected LdapAuthenticationRealmService ldapAuthenticationRealmService;
 
-	/**
-	 * 
-	 */
 	public AbstractAuthenticationRealm() {
 
 	}
@@ -63,13 +61,13 @@ public abstract class AbstractAuthenticationRealm {
 		return loginRepository;
 	}
 
-	public UserInfo loadUserInfo(String username, String password) {
+	public UserEntity loadUserInfo(String username, String password) {
 		return loginRepository.find(username, password);
 	}
 
-	public abstract boolean passwordMatches(UserInfo userInfo, String password);
+	public abstract boolean passwordMatches(UserEntity userInfo, String password);
 
-	public List<Roles> queryGroups(UserInfo userInfo) {
+	public List<RoleEntity> queryGroups(UserVO userInfo) {
 		return loginRepository.queryRoles(userInfo);
 	}
 
@@ -79,7 +77,7 @@ public abstract class AbstractAuthenticationRealm {
 	 * @param userInfo
 	 * @return ArrayList<GrantedAuthority>
 	 */
-	public ArrayList<GrantedAuthority> grantAuthority(UserInfo userInfo) {
+	public ArrayList<GrantedAuthority> grantAuthority(UserVO userInfo) {
 		return loginRepository.grantAuthority(userInfo);
 	}
 
@@ -102,9 +100,9 @@ public abstract class AbstractAuthenticationRealm {
 	 * @param code
 	 * @param message
 	 */
-	public boolean insertLoginHistory(UserInfo userInfo, AuthLoginType type, String provider, String code,
+	public boolean insertLoginHistory(UserVO userInfo, AuthLoginType type, String provider, String code,
 			String message) {
-		HistoryLogin historyLogin = new HistoryLogin();
+		HistoryLoginEntity historyLogin = new HistoryLoginEntity();
 		historyLogin.setSessionId(WebContext.genId());
 		historyLogin.setSessionStatus(7);
 		Authentication authentication = (Authentication) WebContext.getAttribute(WebConstants.AUTHENTICATION);
@@ -115,7 +113,7 @@ public abstract class AbstractAuthenticationRealm {
 
 		_logger.debug("user session id is {} . ", historyLogin.getSessionId());
 
-		userInfo.setLastLoginTime(DateTimeHelper.formatDateTime());
+		userInfo.setLastLoginTime(new Date());
 		userInfo.setLastLoginIp(WebContext.getRequestIpAddress());
 
 		Browser browser = resolveBrowser();

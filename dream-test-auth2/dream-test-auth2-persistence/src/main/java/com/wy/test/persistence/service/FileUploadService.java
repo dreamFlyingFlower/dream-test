@@ -1,25 +1,26 @@
 package com.wy.test.persistence.service;
 
-import org.dromara.mybatis.jpa.JpaService;
-import org.springframework.stereotype.Repository;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import com.wy.test.core.entity.FileUpload;
-import com.wy.test.persistence.mapper.FileUploadMapper;
+import org.springframework.http.ResponseEntity;
 
-@Repository
-public class FileUploadService extends JpaService<FileUpload> {
+import com.wy.test.core.entity.FileUploadEntity;
+import com.wy.test.core.entity.UserEntity;
+import com.wy.test.core.query.FileUploadQuery;
+import com.wy.test.core.vo.FileUploadVO;
 
-	public FileUploadService() {
-		super(FileUploadMapper.class);
-	}
+import dream.flying.flower.framework.mybatis.plus.service.BaseServices;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.connsec.db.service.BaseService#getMapper()
-	 */
-	@Override
-	public FileUploadMapper getMapper() {
-		return (FileUploadMapper) super.getMapper();
-	}
+/**
+ * 文件上传
+ *
+ * @author 飞花梦影
+ * @date 2024-08-01
+ * @git {@link https://github.com/dreamFlyingFlower}
+ */
+public interface FileUploadService extends BaseServices<FileUploadEntity, FileUploadVO, FileUploadQuery> {
+
+	ResponseEntity<?> upload(HttpServletRequest request, HttpServletResponse response, FileUploadVO fileUpload,
+			UserEntity currentUser);
 }

@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstProtocols;
+import com.wy.test.core.entity.AppJwtDetailEntity;
+import com.wy.test.core.entity.AppTokenDetailEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.AppsJwtDetails;
-import com.wy.test.core.entity.apps.AppsTokenBasedDetails;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.AppsTokenBasedDetailsService;
 
 import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
@@ -35,29 +35,29 @@ public class TokenBasedDetailsController extends BaseAppContorller {
 
 	@GetMapping(value = { "/init" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> init() {
-		AppsTokenBasedDetails tokenBasedDetails = new AppsTokenBasedDetails();
+		AppTokenDetailEntity tokenBasedDetails = new AppTokenDetailEntity();
 		tokenBasedDetails.setId(tokenBasedDetails.generateId());
 		tokenBasedDetails.setProtocol(ConstProtocols.TOKENBASED);
 		tokenBasedDetails.setSecret(ReciprocalHelpers.generateKey(ReciprocalHelpers.Algorithm.AES));
 		tokenBasedDetails.setAlgorithmKey(tokenBasedDetails.getSecret());
 		tokenBasedDetails.setUserPropertys("userPropertys");
-		return new Message<AppsTokenBasedDetails>(tokenBasedDetails).buildResponse();
+		return new Message<AppTokenDetailEntity>(tokenBasedDetails).buildResponse();
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		AppsTokenBasedDetails tokenBasedDetails = tokenBasedDetailsService.getAppDetails(id, false);
+		AppTokenDetailEntity tokenBasedDetails = tokenBasedDetailsService.getAppDetails(id, false);
 		decoderSecret(tokenBasedDetails);
 		String algorithmKey = passwordReciprocal.decoder(tokenBasedDetails.getAlgorithmKey());
 		tokenBasedDetails.setAlgorithmKey(algorithmKey);
 		tokenBasedDetails.transIconBase64();
-		return new Message<AppsTokenBasedDetails>(tokenBasedDetails).buildResponse();
+		return new Message<AppTokenDetailEntity>(tokenBasedDetails).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> add(@RequestBody AppsTokenBasedDetails tokenBasedDetails,
-			@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> add(@RequestBody AppTokenDetailEntity tokenBasedDetails,
+			@CurrentUser UserEntity currentUser) {
 		_logger.debug("-Add  :" + tokenBasedDetails);
 
 		transform(tokenBasedDetails);
@@ -65,35 +65,35 @@ public class TokenBasedDetailsController extends BaseAppContorller {
 		tokenBasedDetails.setAlgorithmKey(tokenBasedDetails.getSecret());
 		tokenBasedDetails.setInstId(currentUser.getInstId());
 		if (tokenBasedDetailsService.insert(tokenBasedDetails) && appsService.insertApp(tokenBasedDetails)) {
-			return new Message<AppsJwtDetails>(Message.SUCCESS).buildResponse();
+			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsJwtDetails>(Message.FAIL).buildResponse();
+			return new Message<AppJwtDetailEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@RequestBody AppsTokenBasedDetails tokenBasedDetails,
-			@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> update(@RequestBody AppTokenDetailEntity tokenBasedDetails,
+			@CurrentUser UserEntity currentUser) {
 		_logger.debug("-update  :" + tokenBasedDetails);
 		transform(tokenBasedDetails);
 		tokenBasedDetails.setAlgorithmKey(tokenBasedDetails.getSecret());
 		tokenBasedDetails.setInstId(currentUser.getInstId());
 		if (tokenBasedDetailsService.update(tokenBasedDetails) && appsService.updateApp(tokenBasedDetails)) {
-			return new Message<AppsJwtDetails>(Message.SUCCESS).buildResponse();
+			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsJwtDetails>(Message.FAIL).buildResponse();
+			return new Message<AppJwtDetailEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-delete  ids : {} ", ids);
 		if (tokenBasedDetailsService.deleteBatch(ids) && appsService.deleteBatch(ids)) {
-			return new Message<AppsJwtDetails>(Message.SUCCESS).buildResponse();
+			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsJwtDetails>(Message.FAIL).buildResponse();
+			return new Message<AppJwtDetailEntity>(Message.FAIL).buildResponse();
 		}
 	}
 

@@ -23,8 +23,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.wy.test.core.entity.Organizations;
-import com.wy.test.persistence.service.OrganizationsService;
+import com.wy.test.core.entity.OrgEntity;
+import com.wy.test.persistence.service.OrgService;
+import com.wy.test.persistence.service.orgService;
 import com.wy.test.web.apis.identity.scim.resources.ScimMeta;
 import com.wy.test.web.apis.identity.scim.resources.ScimOrganization;
 import com.wy.test.web.apis.identity.scim.resources.ScimParameters;
@@ -32,6 +33,7 @@ import com.wy.test.web.apis.identity.scim.resources.ScimSearchResult;
 
 import dream.flying.flower.helper.DateTimeHelper;
 import dream.flying.flower.lang.StrHelper;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This Controller is used to manage Organization
@@ -44,16 +46,15 @@ import dream.flying.flower.lang.StrHelper;
  */
 @RestController
 @RequestMapping(value = "/api/idm/SCIM/v2/Organizations")
+@Slf4j
 public class ScimOrganizationController {
 
-	final static Logger _logger = LoggerFactory.getLogger(ScimOrganizationController.class);
-
 	@Autowired
-	OrganizationsService organizationsService;
+	OrgService orgService;
 
 	@GetMapping(value = "/{id}")
 	public MappingJacksonValue get(@PathVariable String id, @RequestParam(required = false) String attributes) {
-		Organizations org = organizationsService.get(id);
+		OrgEntity org = orgService.get(id);
 		ScimOrganization scimOrg = org2ScimOrg(org);
 
 		return new MappingJacksonValue(scimOrg);
@@ -62,23 +63,23 @@ public class ScimOrganizationController {
 	@PostMapping
 	public MappingJacksonValue create(@RequestBody ScimOrganization scimOrg,
 			@RequestParam(required = false) String attributes, UriComponentsBuilder builder) throws IOException {
-		Organizations createOrg = scimOrg2Org(scimOrg);
-		organizationsService.insert(createOrg);
+		OrgEntity createOrg = scimOrg2Org(scimOrg);
+		orgService.insert(createOrg);
 		return get(createOrg.getId(), attributes);
 	}
 
 	@PutMapping(value = "/{id}")
 	public MappingJacksonValue replace(@PathVariable String id, @RequestBody ScimOrganization scimOrg,
 			@RequestParam(required = false) String attributes) throws IOException {
-		Organizations updateOrg = scimOrg2Org(scimOrg);
-		organizationsService.update(updateOrg);
+		OrgEntity updateOrg = scimOrg2Org(scimOrg);
+		orgService.update(updateOrg);
 		return get(id, attributes);
 	}
 
 	@DeleteMapping(value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable final String id) {
-		organizationsService.remove(id);
+		orgService.remove(id);
 	}
 
 	@GetMapping
@@ -89,14 +90,14 @@ public class ScimOrganizationController {
 	@PostMapping(value = "/.search")
 	public MappingJacksonValue searchWithPost(@ModelAttribute ScimParameters requestParameters) {
 		requestParameters.parse();
-		_logger.debug("requestParameters {} ", requestParameters);
-		Organizations queryModel = new Organizations();
+		log.debug("requestParameters {} ", requestParameters);
+		OrgEntity queryModel = new OrgEntity();
 		queryModel.setPageSize(requestParameters.getCount());
 		queryModel.calculate(requestParameters.getStartIndex());
 
-		JpaPageResults<Organizations> orgResults = organizationsService.fetchPageResults(queryModel);
+		JpaPageResults<OrgEntity> orgResults = orgService.fetchPageResults(queryModel);
 		List<ScimOrganization> resultList = new ArrayList<ScimOrganization>();
-		for (Organizations org : orgResults.getRows()) {
+		for (OrgEntity org : orgResults.getRows()) {
 			resultList.add(org2ScimOrg(org));
 		}
 		ScimSearchResult<ScimOrganization> scimSearchResult = new ScimSearchResult<ScimOrganization>(resultList,
@@ -105,7 +106,7 @@ public class ScimOrganizationController {
 		return new MappingJacksonValue(scimSearchResult);
 	}
 
-	public ScimOrganization org2ScimOrg(Organizations org) {
+	public ScimOrganization org2ScimOrg(OrgEntity org) {
 		ScimOrganization scimOrg = new ScimOrganization();
 		scimOrg.setId(org.getId());
 		scimOrg.setCode(org.getOrgCode());
@@ -145,8 +146,8 @@ public class ScimOrganizationController {
 		return scimOrg;
 	}
 
-	public Organizations scimOrg2Org(ScimOrganization scimOrg) {
-		Organizations org = new Organizations();
+	public OrgEntity scimOrg2Org(ScimOrganization scimOrg) {
+		OrgEntity org = new OrgEntity();
 		org.setId(scimOrg.getId());
 		org.setOrgCode(scimOrg.getCode());
 		org.setFullName(scimOrg.getFullName());

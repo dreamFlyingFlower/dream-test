@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
-import com.wy.test.core.entity.Institutions;
+import com.wy.test.core.entity.InstitutionEntity;
 import com.wy.test.core.persistence.repository.InstitutionsRepository;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 
@@ -54,7 +54,7 @@ public class WebInstRequestFilter extends GenericFilterBean {
 				host = host.split(":")[0];
 				log.trace("domain split {}", host);
 			}
-			Institutions institution = institutionsRepository.get(host);
+			InstitutionEntity institution = institutionsRepository.get(host);
 			log.trace("{}", institution);
 			request.getSession().setAttribute(WebConstants.CURRENT_INST, institution);
 

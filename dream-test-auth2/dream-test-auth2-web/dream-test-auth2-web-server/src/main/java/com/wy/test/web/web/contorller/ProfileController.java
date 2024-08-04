@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.FileUploadService;
 import com.wy.test.persistence.service.UserInfoService;
 
@@ -34,10 +34,10 @@ public class ProfileController {
 	FileUploadService fileUploadService;
 
 	@GetMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> get(@CurrentUser UserInfo currentUser) {
-		UserInfo userInfo = userInfoService.findByUsername(currentUser.getUsername());
+	public ResponseEntity<?> get(@CurrentUser UserEntity currentUser) {
+		UserEntity userInfo = userInfoService.findByUsername(currentUser.getUsername());
 		userInfo.trans();
-		return new Message<UserInfo>(userInfo).buildResponse();
+		return new Message<UserEntity>(userInfo).buildResponse();
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class ProfileController {
 	 */
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@RequestBody UserInfo userInfo, @CurrentUser UserInfo currentUser,
+	public ResponseEntity<?> update(@RequestBody UserEntity userInfo, @CurrentUser UserEntity currentUser,
 			BindingResult result) {
 		_logger.debug(userInfo.toString());
 
@@ -69,9 +69,9 @@ public class ProfileController {
 		}
 
 		if (userInfoService.updateProfile(userInfo) > 0) {
-			return new Message<UserInfo>(Message.SUCCESS).buildResponse();
+			return new Message<UserEntity>(Message.SUCCESS).buildResponse();
 		}
 
-		return new Message<UserInfo>(Message.FAIL).buildResponse();
+		return new Message<UserEntity>(Message.FAIL).buildResponse();
 	}
 }

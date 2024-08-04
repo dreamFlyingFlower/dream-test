@@ -16,9 +16,10 @@ import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.constants.ConstStatus;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.properties.DreamAuthServerProperties;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
@@ -26,6 +27,7 @@ import com.wy.test.otp.password.onetimepwd.MailOtpAuthnService;
 import com.wy.test.provider.authn.realm.AbstractAuthenticationRealm;
 
 import dream.flying.flower.framework.web.enums.AuthLoginType;
+import dream.flying.flower.generator.GeneratorStrategyContext;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -91,7 +93,7 @@ public abstract class AbstractAuthenticationProvider {
 	 * @param userInfo
 	 * @return
 	 */
-	public UsernamePasswordAuthenticationToken createOnlineTicket(LoginCredential credential, UserInfo userInfo) {
+	public UsernamePasswordAuthenticationToken createOnlineTicket(LoginCredential credential, UserVO userInfo) {
 		// create session
 		Session session = new Session();
 
@@ -131,16 +133,15 @@ public abstract class AbstractAuthenticationProvider {
 	}
 
 	/**
-	 * login user by j_username and j_cname first query user by j_cname if first step userinfo is null,query user from
-	 * system.
+	 * login user by j_username and j_cname first query user by j_cname if first
+	 * step userinfo is null,query user from system.
 	 * 
 	 * @param username String
 	 * @param password String
 	 * @return
 	 */
-	public UserInfo loadUserInfo(String username, String password) {
-		UserInfo userInfo = authenticationRealm.loadUserInfo(username, password);
-
+	public UserEntity loadUserInfo(String username, String password) {
+		UserEntity userInfo = authenticationRealm.loadUserInfo(username, password);
 		if (userInfo != null) {
 			if (userInfo.getUserType() == "SYSTEM") {
 				log.debug("SYSTEM User Login. ");
@@ -192,12 +193,13 @@ public abstract class AbstractAuthenticationProvider {
 		return true;
 	}
 
-	protected boolean statusValid(LoginCredential loginCredential, UserInfo userInfo) {
+	protected boolean statusValid(LoginCredential loginCredential, UserVO userInfo) {
 		if (null == userInfo) {
 			String i18nMessage = WebContext.getI18nValue("login.error.username");
 			log.debug("login user  " + loginCredential.getUsername() + " not in this System ." + i18nMessage);
-			UserInfo loginUser = new UserInfo(loginCredential.getUsername());
-			loginUser.setId(loginUser.generateId());
+			UserVO loginUser = new UserVO(loginCredential.getUsername());
+			GeneratorStrategyContext generatorStrategyContext = new GeneratorStrategyContext();
+			loginUser.setId(generatorStrategyContext.generate());
 			loginUser.setUsername(loginCredential.getUsername());
 			loginUser.setDisplayName("not exist");
 			loginUser.setLoginCount(0);

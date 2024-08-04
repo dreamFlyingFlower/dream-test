@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.wy.test.core.entity.Institutions;
+import com.wy.test.core.entity.InstitutionEntity;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.persistence.repository.InstitutionsRepository;
 import com.wy.test.core.properties.DreamAuthServerProperties;
@@ -57,14 +57,14 @@ public class InstitutionEndpoint {
 			log.trace("domain split {}", host);
 		}
 
-		Institutions inst = institutionsRepository.get(host);
+		InstitutionEntity inst = institutionsRepository.get(host);
 		if (inst != null) {
 			log.debug("inst {}", inst);
-			return new Message<Institutions>(inst).buildResponse();
+			return new Message<InstitutionEntity>(inst).buildResponse();
 		} else {
-			Institutions defaultInst = institutionsRepository.get("1");
+			InstitutionEntity defaultInst = institutionsRepository.get("1");
 			log.debug("default inst {}", inst);
-			return new Message<Institutions>(defaultInst).buildResponse();
+			return new Message<InstitutionEntity>(defaultInst).buildResponse();
 		}
 	}
 }

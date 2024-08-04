@@ -31,9 +31,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wy.test.authz.saml20.metadata.MetadataDescriptorUtil;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstProtocols;
+import com.wy.test.core.entity.AppSamlDetailEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.AppsSAML20Details;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.persistence.service.AppsSaml20DetailsService;
 
@@ -59,25 +59,25 @@ public class SAML20DetailsController extends BaseAppContorller {
 
 	@GetMapping(value = { "/init" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> init() {
-		AppsSAML20Details saml20Details = new AppsSAML20Details();
+		AppSamlDetailEntity saml20Details = new AppSamlDetailEntity();
 		saml20Details.setSecret(ReciprocalHelpers.generateKey(""));
 		saml20Details.setProtocol(ConstProtocols.SAML20);
 		saml20Details.setId(saml20Details.generateId());
-		return new Message<AppsSAML20Details>(saml20Details).buildResponse();
+		return new Message<AppSamlDetailEntity>(saml20Details).buildResponse();
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		AppsSAML20Details saml20Details = saml20DetailsService.getAppDetails(id, false);
+		AppSamlDetailEntity saml20Details = saml20DetailsService.getAppDetails(id, false);
 		decoderSecret(saml20Details);
 		saml20Details.transIconBase64();
 		// modelAndView.addObject("authzURI",applicationConfig.getAuthzUri());
-		return new Message<AppsSAML20Details>(saml20Details).buildResponse();
+		return new Message<AppSamlDetailEntity>(saml20Details).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> add(@RequestBody AppsSAML20Details saml20Details, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> add(@RequestBody AppSamlDetailEntity saml20Details, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-Add  :" + saml20Details);
 
 		try {
@@ -88,15 +88,15 @@ public class SAML20DetailsController extends BaseAppContorller {
 		saml20Details.setInstId(currentUser.getInstId());
 		saml20DetailsService.insert(saml20Details);
 		if (appsService.insertApp(saml20Details)) {
-			return new Message<AppsSAML20Details>(Message.SUCCESS).buildResponse();
+			return new Message<AppSamlDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsSAML20Details>(Message.FAIL).buildResponse();
+			return new Message<AppSamlDetailEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@RequestBody AppsSAML20Details saml20Details, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> update(@RequestBody AppSamlDetailEntity saml20Details, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-update  :" + saml20Details);
 		try {
 			transform(saml20Details);
@@ -106,24 +106,24 @@ public class SAML20DetailsController extends BaseAppContorller {
 		saml20Details.setInstId(currentUser.getInstId());
 		saml20DetailsService.update(saml20Details);
 		if (appsService.updateApp(saml20Details)) {
-			return new Message<AppsSAML20Details>(Message.SUCCESS).buildResponse();
+			return new Message<AppSamlDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsSAML20Details>(Message.FAIL).buildResponse();
+			return new Message<AppSamlDetailEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-delete  ids : {} ", ids);
 		if (saml20DetailsService.deleteBatch(ids) && appsService.deleteBatch(ids)) {
-			return new Message<AppsSAML20Details>(Message.SUCCESS).buildResponse();
+			return new Message<AppSamlDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsSAML20Details>(Message.FAIL).buildResponse();
+			return new Message<AppSamlDetailEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
-	protected AppsSAML20Details transform(AppsSAML20Details samlDetails) throws Exception {
+	protected AppSamlDetailEntity transform(AppSamlDetailEntity samlDetails) throws Exception {
 		super.transform(samlDetails);
 		ByteArrayInputStream bArrayInputStream = null;
 		if (StringUtils.isNotBlank(samlDetails.getMetaFileId())) {
@@ -183,7 +183,7 @@ public class SAML20DetailsController extends BaseAppContorller {
 		return samlDetails;
 	}
 
-	public AppsSAML20Details resolveMetaData(AppsSAML20Details samlDetails, InputStream inputStream) throws Exception {
+	public AppSamlDetailEntity resolveMetaData(AppSamlDetailEntity samlDetails, InputStream inputStream) throws Exception {
 		X509Certificate trustCert = null;
 		EntityDescriptor entityDescriptor;
 		try {

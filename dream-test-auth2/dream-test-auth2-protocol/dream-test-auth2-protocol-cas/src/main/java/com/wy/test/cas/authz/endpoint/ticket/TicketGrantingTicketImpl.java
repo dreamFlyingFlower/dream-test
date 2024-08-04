@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.wy.test.core.entity.apps.AppsCasDetails;
+import com.wy.test.core.entity.AppCasDetailEntity;
 
 /**
  * Concrete implementation of a TicketGrantingTicket. A TicketGrantingTicket is
@@ -118,7 +118,7 @@ public class TicketGrantingTicketImpl extends AbstractTicket implements TicketGr
 
 	@Override
 	public synchronized ServiceTicket grantServiceTicket(final String id, final Service service,
-			AppsCasDetails casDetails, final ExpirationPolicy expirationPolicy, final boolean credentialProvided,
+			AppCasDetailEntity casDetails, final ExpirationPolicy expirationPolicy, final boolean credentialProvided,
 			final boolean onlyTrackMostRecentSession) {
 		final ServiceTicket serviceTicket = new ServiceTicketImpl(authentication, casDetails);
 		return serviceTicket;

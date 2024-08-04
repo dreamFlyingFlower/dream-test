@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.cas.authz.endpoint.response.ServiceResponseBuilder;
-import com.wy.test.core.entity.apps.AppsCasDetails;
+import com.wy.test.core.entity.AppCasDetailEntity;
 import com.wy.test.core.web.WebConstants;
 
 public class CasDefaultAdapter extends AbstractAuthorizeAdapter {
@@ -39,7 +39,7 @@ public class CasDefaultAdapter extends AbstractAuthorizeAdapter {
 	@Override
 	public Object generateInfo() {
 		// user for return
-		String user = getValueByUserAttr(userInfo, ((AppsCasDetails) this.app).getCasUser());
+		String user = getValueByUserAttr(userInfo, ((AppCasDetailEntity) this.app).getCasUser());
 		_logger.debug("cas user {}", user);
 		serviceResponseBuilder.success().setUser(user);
 

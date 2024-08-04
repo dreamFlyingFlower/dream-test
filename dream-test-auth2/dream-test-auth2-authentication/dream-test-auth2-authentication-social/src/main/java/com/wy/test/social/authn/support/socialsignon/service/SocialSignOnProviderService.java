@@ -15,13 +15,13 @@ import org.springframework.jdbc.core.RowMapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.wy.test.core.constants.ConstTimeInterval;
-import com.wy.test.core.entity.SocialsProvider;
+import com.wy.test.core.entity.SocialProviderEntity;
 import com.wy.test.core.entity.SocialsProviderLogin;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.social.authn.support.socialsignon.token.RedisTokenStore;
+import com.wy.test.social.zhyd.request.AuthDreamRequest;
 import com.wy.test.social.zhyd.request.AuthFeishu2Request;
 import com.wy.test.social.zhyd.request.AuthHuaweiWeLinkRequest;
-import com.wy.test.social.zhyd.request.AuthDreamRequest;
 import com.wy.test.social.zhyd.request.AuthWeChatEnterpriseWebRequestCost;
 
 import me.zhyd.oauth.config.AuthConfig;
@@ -62,7 +62,7 @@ public class SocialSignOnProviderService {
 	protected static final Cache<String, SocialsProviderLogin> socialsProviderLoginStore =
 			Caffeine.newBuilder().expireAfterWrite(ConstTimeInterval.ONE_HOUR, TimeUnit.MINUTES).build();
 
-	HashMap<String, SocialsProvider> socialSignOnProviderMaps = new HashMap<String, SocialsProvider>();
+	HashMap<String, SocialProviderEntity> socialSignOnProviderMaps = new HashMap<String, SocialProviderEntity>();
 
 	private final JdbcTemplate jdbcTemplate;
 
@@ -72,7 +72,7 @@ public class SocialSignOnProviderService {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public SocialsProvider get(String instId, String provider) {
+	public SocialProviderEntity get(String instId, String provider) {
 		return socialSignOnProviderMaps.get(instId + "_" + provider);
 	}
 
@@ -195,18 +195,18 @@ public class SocialSignOnProviderService {
 	public SocialsProviderLogin loadSocials(String instId) {
 		SocialsProviderLogin socialsLogin = socialsProviderLoginStore.getIfPresent(instId);
 		if (socialsLogin == null) {
-			List<SocialsProvider> listSocialsProvider =
+			List<SocialProviderEntity> listSocialsProvider =
 					jdbcTemplate.query(DEFAULT_SELECT_STATEMENT, new SocialsProviderRowMapper(), instId);
 			_logger.trace("query SocialsProvider " + listSocialsProvider);
 
-			List<SocialsProvider> socialSignOnProviders = new ArrayList<SocialsProvider>();
+			List<SocialProviderEntity> socialSignOnProviders = new ArrayList<SocialProviderEntity>();
 			socialsLogin = new SocialsProviderLogin(socialSignOnProviders);
-			for (SocialsProvider socialsProvider : listSocialsProvider) {
+			for (SocialProviderEntity socialsProvider : listSocialsProvider) {
 				_logger.debug("Social Provider {} ({})", socialsProvider.getProvider(),
 						socialsProvider.getProviderName());
 
 				if (socialsProvider.getDisplay().equals("true")) {
-					socialSignOnProviders.add(new SocialsProvider(socialsProvider));
+					socialSignOnProviders.add(new SocialProviderEntity(socialsProvider));
 				}
 
 				if (socialsProvider.getScanCode().equalsIgnoreCase("true")) {
@@ -224,11 +224,11 @@ public class SocialSignOnProviderService {
 		return socialsLogin;
 	}
 
-	private final class SocialsProviderRowMapper implements RowMapper<SocialsProvider> {
+	private final class SocialsProviderRowMapper implements RowMapper<SocialProviderEntity> {
 
 		@Override
-		public SocialsProvider mapRow(ResultSet rs, int rowNum) throws SQLException {
-			SocialsProvider socialsProvider = new SocialsProvider();
+		public SocialProviderEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+			SocialProviderEntity socialsProvider = new SocialProviderEntity();
 			socialsProvider.setId(rs.getString("id"));
 			socialsProvider.setProvider(rs.getString("provider"));
 			socialsProvider.setProviderName(rs.getString("providername"));
@@ -241,7 +241,7 @@ public class SocialSignOnProviderService {
 			socialsProvider.setDisplay(rs.getString("display"));
 			socialsProvider.setSortIndex(rs.getInt("sortindex"));
 			socialsProvider.setScanCode(rs.getString("scancode"));
-			socialsProvider.setStatus(rs.getInt("status"));
+			socialsProvider.setStatus(rs.getString("status"));
 			socialsProvider.setInstId(rs.getString("instid"));
 			return socialsProvider;
 		}

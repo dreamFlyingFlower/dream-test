@@ -8,9 +8,10 @@ import org.springframework.security.core.AuthenticationException;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.core.entity.Institutions;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.InstitutionEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
@@ -52,15 +53,13 @@ public class MfaAuthenticationProvider extends AbstractAuthenticationProvider {
 			log.debug("authentication " + loginCredential);
 
 			@SuppressWarnings("unused")
-			Institutions inst = (Institutions) WebContext.getAttribute(WebConstants.CURRENT_INST);
+			InstitutionEntity inst = (InstitutionEntity) WebContext.getAttribute(WebConstants.CURRENT_INST);
 
 			emptyPasswordValid(loginCredential.getPassword());
 
-			UserInfo userInfo = null;
-
 			emptyUsernameValid(loginCredential.getUsername());
 
-			userInfo = loadUserInfo(loginCredential.getUsername(), loginCredential.getPassword());
+			UserEntity userInfo = loadUserInfo(loginCredential.getUsername(), loginCredential.getPassword());
 
 			statusValid(loginCredential, userInfo);
 			// mfa
@@ -99,10 +98,10 @@ public class MfaAuthenticationProvider extends AbstractAuthenticationProvider {
 	 * @param authType String
 	 * @param userInfo UserInfo
 	 */
-	protected void mfacaptchaValid(String otpCaptcha, UserInfo userInfo) {
+	protected void mfacaptchaValid(String otpCaptcha, UserEntity userInfo) {
 		// for one time password 2 factor
 		if (dreamLoginProperties.isMfa()) {
-			UserInfo validUserInfo = new UserInfo();
+			UserEntity validUserInfo = new UserEntity();
 			validUserInfo.setUsername(userInfo.getUsername());
 			validUserInfo.setSharedSecret(userInfo.getSharedSecret());
 			validUserInfo.setSharedCounter(userInfo.getSharedCounter());

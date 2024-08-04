@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.entity.Localization;
+import com.wy.test.core.entity.LocalizationEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.UserInfoAdjoint;
+import com.wy.test.core.entity.UserEntity;
+import com.wy.test.core.entity.UserAdjunctEntity;
 import com.wy.test.core.persistence.repository.LocalizationRepository;
 
 @Controller
@@ -37,10 +37,10 @@ public class LocalizationController {
 	 * @return
 	 */
 	@GetMapping(value = { "/forward/{property}" })
-	public ModelAndView forward(@PathVariable("property") String property, @CurrentUser UserInfo currentUser) {
-		Localization localization = localizationRepository.get(property, currentUser.getInstId());
+	public ModelAndView forward(@PathVariable("property") String property, @CurrentUser UserEntity currentUser) {
+		LocalizationEntity localization = localizationRepository.get(property, currentUser.getInstId());
 		if (localization == null)
-			localization = new Localization();
+			localization = new LocalizationEntity();
 		localization.setProperty(property);
 		localization.setInstId(currentUser.getInstId());
 		return new ModelAndView("localization/updateLocalization", "model", localization);
@@ -54,22 +54,22 @@ public class LocalizationController {
 	 */
 	@PostMapping(value = { "/update" })
 	@ResponseBody
-	public ResponseEntity<?> update(@ModelAttribute("localization") Localization localization,
-			@CurrentUser UserInfo currentUser, BindingResult result) {
+	public ResponseEntity<?> update(@ModelAttribute("localization") LocalizationEntity localization,
+			@CurrentUser UserEntity currentUser, BindingResult result) {
 		_logger.debug("update  localization : " + localization);
 		localization.setInstId(currentUser.getInstId());
 		if (StringUtils.isBlank(localization.getId())) {
 			localization.setId(localization.generateId());
 			if (localizationRepository.insert(localization)) {
-				return new Message<UserInfoAdjoint>(Message.SUCCESS).buildResponse();
+				return new Message<UserAdjunctEntity>(Message.SUCCESS).buildResponse();
 			} else {
-				return new Message<UserInfoAdjoint>(Message.FAIL).buildResponse();
+				return new Message<UserAdjunctEntity>(Message.FAIL).buildResponse();
 			}
 		} else {
 			if (localizationRepository.update(localization)) {
-				return new Message<UserInfoAdjoint>(Message.SUCCESS).buildResponse();
+				return new Message<UserAdjunctEntity>(Message.SUCCESS).buildResponse();
 			} else {
-				return new Message<UserInfoAdjoint>(Message.FAIL).buildResponse();
+				return new Message<UserAdjunctEntity>(Message.FAIL).buildResponse();
 			}
 		}
 	}

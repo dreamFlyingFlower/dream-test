@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.core.entity.apps.AppsTokenBasedDetails;
+import com.wy.test.core.vo.AppTokenDetailVO;
 
 import dream.flying.flower.helper.DateTimeHelper;
 
@@ -17,7 +17,7 @@ public class TokenBasedSimpleAdapter extends AbstractAuthorizeAdapter {
 
 	@Override
 	public Object generateInfo() {
-		AppsTokenBasedDetails details = (AppsTokenBasedDetails) app;
+		AppTokenDetailVO details = (AppTokenDetailVO) app;
 
 		String tokenUsername = userInfo.getUsername();
 
@@ -55,7 +55,7 @@ public class TokenBasedSimpleAdapter extends AbstractAuthorizeAdapter {
 	@Override
 	public ModelAndView authorize(ModelAndView modelAndView) {
 		modelAndView.setViewName("authorize/tokenbased_sso_submint");
-		AppsTokenBasedDetails details = (AppsTokenBasedDetails) app;
+		AppTokenDetailVO details = (AppTokenDetailVO) app;
 		modelAndView.addObject("action", details.getRedirectUri());
 
 		modelAndView.addObject("token", token);

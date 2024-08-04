@@ -1,10 +1,9 @@
 package com.wy.test.synchronizer.dingtalk;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
 import com.dingtalk.api.DefaultDingTalkClient;
@@ -13,8 +12,8 @@ import com.dingtalk.api.request.OapiV2UserListRequest;
 import com.dingtalk.api.response.OapiV2UserListResponse;
 import com.dingtalk.api.response.OapiV2UserListResponse.ListUserResponse;
 import com.wy.test.core.constants.ConstStatus;
-import com.wy.test.core.entity.SynchroRelated;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.SyncRelatedEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
@@ -30,9 +29,9 @@ public class DingtalkUsersService extends AbstractSynchronizerService implements
 	public void sync() {
 		log.info("Sync Dingtalk Users...");
 		try {
-			List<SynchroRelated> synchroRelateds = synchroRelatedService.findOrgs(this.synchronizer);
+			List<SyncRelatedEntity> synchroRelateds = synchroRelatedService.findOrgs(this.synchronizer);
 
-			for (SynchroRelated relatedOrg : synchroRelateds) {
+			for (SyncRelatedEntity relatedOrg : synchroRelateds) {
 				DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/v2/user/list");
 				OapiV2UserListRequest req = new OapiV2UserListRequest();
 				log.debug("DingTalk deptId : {}", relatedOrg.getOriginId());
@@ -49,17 +48,17 @@ public class DingtalkUsersService extends AbstractSynchronizerService implements
 					for (ListUserResponse user : rsp.getResult().getList()) {
 						log.debug("name : {} , {} , {}", user.getName(), user.getLoginId(), user.getUserid());
 
-						UserInfo userInfo = buildUserInfo(user, relatedOrg);
+						UserEntity userInfo = buildUserInfo(user, relatedOrg);
 						log.trace("userInfo {}", userInfo);
-						userInfo.setPassword(userInfo.getUsername() + UserInfo.DEFAULT_PASSWORD_SUFFIX);
+						userInfo.setPassword(userInfo.getUsername() + UserEntity.DEFAULT_PASSWORD_SUFFIX);
 						userInfoService.saveOrUpdate(userInfo);
 
-						SynchroRelated synchroRelated = new SynchroRelated(userInfo.getId(), userInfo.getUsername(),
-								userInfo.getDisplayName(), UserInfo.CLASS_TYPE, synchronizer.getId(),
-								synchronizer.getName(), user.getUnionid(), user.getName(), user.getUserid(), "",
-								synchronizer.getInstId());
+						SyncRelatedEntity synchroRelated = new SyncRelatedEntity(userInfo.getId(),
+								userInfo.getUsername(), userInfo.getDisplayName(), UserEntity.CLASS_TYPE,
+								synchronizer.getId(), synchronizer.getName(), user.getUnionid(), user.getName(),
+								user.getUserid(), "", synchronizer.getInstId());
 						synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated,
-								UserInfo.CLASS_TYPE);
+								UserEntity.CLASS_TYPE);
 
 						socialsAssociate(synchroRelated, "dingtalk");
 					}
@@ -72,8 +71,8 @@ public class DingtalkUsersService extends AbstractSynchronizerService implements
 
 	}
 
-	public UserInfo buildUserInfo(ListUserResponse user, SynchroRelated relatedOrg) {
-		UserInfo userInfo = new UserInfo();
+	public UserEntity buildUserInfo(ListUserResponse user, SyncRelatedEntity relatedOrg) {
+		UserEntity userInfo = new UserEntity();
 
 		userInfo.setUsername(user.getUserid());
 		userInfo.setNickName(user.getName());
@@ -81,7 +80,7 @@ public class DingtalkUsersService extends AbstractSynchronizerService implements
 		userInfo.setFormattedName(user.getName());
 
 		userInfo.setEmail(StringUtils.isBlank(user.getEmail()) ? user.getUserid() + "@dream.top" : user.getEmail());
-		userInfo.setEntryDate(new DateTime(user.getHiredDate()).toString(DateTimeFormat.forPattern("yyyy-MM-dd")));
+		userInfo.setEntryDate(new Date(user.getHiredDate()));
 		userInfo.setMobile(user.getMobile());
 
 		userInfo.setDepartmentId(relatedOrg.getObjectId() + "");
@@ -98,12 +97,11 @@ public class DingtalkUsersService extends AbstractSynchronizerService implements
 		}
 
 		userInfo.setInstId(this.synchronizer.getInstId());
-		userInfo.setDescription("dingtalk " + user.getRemark());
+		userInfo.setRemark("dingtalk " + user.getRemark());
 		return userInfo;
 	}
 
 	public void setAccess_token(String access_token) {
 		this.access_token = access_token;
 	}
-
 }

@@ -2,26 +2,38 @@ package com.wy.test.persistence.mapper;
 
 import java.util.List;
 
-import org.dromara.mybatis.jpa.IJpaMapper;
+import org.apache.ibatis.annotations.Mapper;
 
-import com.wy.test.core.entity.RoleMember;
-import com.wy.test.core.entity.Roles;
-import com.wy.test.core.entity.UserInfo;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wy.test.core.entity.RoleEntity;
+import com.wy.test.core.entity.RoleMemberEntity;
+import com.wy.test.core.entity.UserEntity;
+import com.wy.test.core.query.RoleMemberQuery;
+import com.wy.test.core.vo.RoleMemberVO;
 
-public interface RoleMemberMapper extends IJpaMapper<RoleMember> {
+import dream.flying.flower.framework.mybatis.plus.mapper.BaseMappers;
 
-	public List<RoleMember> memberInRole(RoleMember entity);
+/**
+ * 角色成员
+ *
+ * @author 飞花梦影
+ * @date 2024-08-01
+ * @git {@link https://github.com/dreamFlyingFlower}
+ */
+@Mapper
+public interface RoleMemberMapper extends BaseMappers<RoleMemberEntity, RoleMemberVO, RoleMemberQuery> {
 
-	public List<RoleMember> memberNotInRole(RoleMember entity);
+	List<RoleMemberEntity> memberInRole(RoleMemberEntity entity);
 
-	public List<Roles> rolesNoMember(RoleMember entity);
+	List<RoleMemberEntity> memberNotInRole(RoleMemberEntity entity);
 
-	public int addDynamicRoleMember(Roles dynamicRole);
+	Page<RoleEntity> rolesNoMember(Page<RoleEntity> page, RoleMemberQuery query);
 
-	public int deleteDynamicRoleMember(Roles dynamicRole);
+	int addDynamicRoleMember(RoleEntity dynamicRole);
 
-	public int deleteByRoleId(String roleId);
+	int deleteDynamicRoleMember(RoleEntity dynamicRole);
 
-	public List<UserInfo> queryMemberByRoleId(String roleId);
+	int deleteByRoleId(String roleId);
 
+	List<UserEntity> queryMemberByRoleId(String roleId);
 }

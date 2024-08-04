@@ -10,7 +10,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
 
 public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentResolver {
@@ -20,7 +21,7 @@ public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentR
 			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 		Authentication authentication =
 				(Authentication) webRequest.getAttribute(WebConstants.AUTHENTICATION, RequestAttributes.SCOPE_SESSION);
-		UserInfo userInfo = AuthorizationUtils.getUserInfo(authentication);
+		UserVO userInfo = AuthorizationUtils.getUserInfo(authentication);
 		if (userInfo != null) {
 			return userInfo;
 		}
@@ -29,8 +30,7 @@ public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentR
 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-		return parameter.getParameterType().isAssignableFrom(UserInfo.class)
+		return parameter.getParameterType().isAssignableFrom(UserEntity.class)
 				&& parameter.hasParameterAnnotation(CurrentUser.class);
 	}
-
 }

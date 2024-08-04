@@ -22,8 +22,8 @@ import com.wy.test.authz.saml20.binding.BindingAdapter;
 import com.wy.test.authz.saml20.provider.xml.AuthnResponseGenerator;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.AppsSAML20Details;
+import com.wy.test.core.entity.AppSamlDetailEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.web.WebConstants;
 
 @Controller
@@ -43,12 +43,12 @@ public class AssertionEndpoint {
 
 	@GetMapping(value = "/authz/saml20/assertion")
 	public ModelAndView assertion(HttpServletRequest request, HttpServletResponse response,
-			@CurrentUser UserInfo currentUser) throws Exception {
+			@CurrentUser UserEntity currentUser) throws Exception {
 		logger.debug("saml20 assertion start.");
 		bindingAdapter =
 				(BindingAdapter) request.getSession().getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP_SAMLV20_ADAPTER);
 		logger.debug("saml20 assertion get session samlv20Adapter " + bindingAdapter);
-		AppsSAML20Details saml20Details = bindingAdapter.getSaml20Details();
+		AppSamlDetailEntity saml20Details = bindingAdapter.getSaml20Details();
 		logger.debug("saml20Details " + saml20Details.getExtendAttr());
 		AuthnRequestInfo authnRequestInfo = bindingAdapter.getAuthnRequestInfo();
 

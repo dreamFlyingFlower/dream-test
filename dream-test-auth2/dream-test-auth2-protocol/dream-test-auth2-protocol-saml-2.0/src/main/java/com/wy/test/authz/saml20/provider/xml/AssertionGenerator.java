@@ -30,8 +30,8 @@ import com.wy.test.authz.saml.service.TimeService;
 import com.wy.test.authz.saml20.binding.BindingAdapter;
 import com.wy.test.authz.saml20.xml.IssuerGenerator;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.AppsSAML20Details;
+import com.wy.test.core.entity.AppSamlDetailEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.web.WebContext;
 
 public class AssertionGenerator {
@@ -62,9 +62,9 @@ public class AssertionGenerator {
 		conditionsGenerator = new ConditionsGenerator();
 	}
 
-	public Assertion generateAssertion(AppsSAML20Details saml20Details, BindingAdapter bindingAdapter,
+	public Assertion generateAssertion(AppSamlDetailEntity saml20Details, BindingAdapter bindingAdapter,
 			String assertionConsumerURL, String inResponseTo, String audienceUrl, int validInSeconds,
-			HashMap<String, String> attributeMap, UserInfo userInfo) {
+			HashMap<String, String> attributeMap, UserEntity userInfo) {
 
 		Assertion assertion = new AssertionBuilder().buildObject();
 		// Subject

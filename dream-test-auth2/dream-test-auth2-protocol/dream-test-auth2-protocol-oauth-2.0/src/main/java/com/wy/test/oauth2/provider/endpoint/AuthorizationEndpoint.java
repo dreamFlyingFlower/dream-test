@@ -39,10 +39,12 @@ import org.springframework.web.util.UriTemplate;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
+import com.wy.test.core.convert.AppConvert;
+import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.Apps;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
+import com.wy.test.core.vo.AppVO;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.oauth2.common.OAuth2AccessToken;
@@ -64,15 +66,18 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * <p>
- * Implementation of the Authorization Endpoint from the OAuth2 specification. Accepts authorization requests, and
- * handles user approval if the grant type is authorization code. The tokens themselves are obtained from the
- * {@link TokenEndpoint Token Endpoint}, except in the implicit grant type (where they come from the Authorization
- * Endpoint via <code>response_type=token</code>.
+ * Implementation of the Authorization Endpoint from the OAuth2 specification.
+ * Accepts authorization requests, and handles user approval if the grant type
+ * is authorization code. The tokens themselves are obtained from the
+ * {@link TokenEndpoint Token Endpoint}, except in the implicit grant type
+ * (where they come from the Authorization Endpoint via
+ * <code>response_type=token</code>.
  * </p>
  * 
  * <p>
- * This endpoint should be secured so that it is only accessible to fully authenticated users (as a minimum requirement)
- * since it represents a request from a valid user to act on his or her behalf.
+ * This endpoint should be secured so that it is only accessible to fully
+ * authenticated users (as a minimum requirement) since it represents a request
+ * from a valid user to act on his or her behalf.
  * </p>
  * 
  */
@@ -125,7 +130,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 	@GetMapping(value = { OAuth2Constants.ENDPOINT.ENDPOINT_AUTHORIZE,
 			OAuth2Constants.ENDPOINT.ENDPOINT_TENCENT_IOA_AUTHORIZE })
 	public ModelAndView authorize(Map<String, Object> model, @RequestParam Map<String, String> parameters,
-			@CurrentUser UserInfo currentUser, SessionStatus sessionStatus) {
+			@CurrentUser UserVO currentUser, SessionStatus sessionStatus) {
 
 		Principal principal = (Principal) AuthorizationUtils.getAuthentication();
 		// Pull out the authorization request first, using the OAuth2RequestFactory. All
@@ -196,10 +201,11 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 							getAuthorizationCodeResponse(authorizationRequest, (Authentication) principal));
 				}
 			}
-			Apps app = (Apps) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
+			AppVO app = (AppVO) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
 			// session中为空或者id不一致重新加载
 			if (app == null || !app.getId().equalsIgnoreCase(authorizationRequest.getClientId())) {
-				app = appsService.get(authorizationRequest.getClientId());
+				AppEntity appEntity = appService.getById(authorizationRequest.getClientId());
+				app = AppConvert.INSTANCE.convertt(appEntity);
 				WebContext.setAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP, app);
 			}
 
@@ -223,7 +229,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 	@PostMapping(value = { OAuth2Constants.ENDPOINT.ENDPOINT_AUTHORIZE + "/approval" },
 			params = OAuth2Utils.USER_OAUTH_APPROVAL)
 	public ResponseEntity<?> authorizeApproveOrDeny(@RequestParam Map<String, String> approvalParameters,
-			@CurrentUser UserInfo currentUser, SessionStatus sessionStatus) {
+			@CurrentUser UserVO currentUser, SessionStatus sessionStatus) {
 
 		Principal principal = (Principal) AuthorizationUtils.getAuthentication();
 		if (!(principal instanceof Authentication)) {

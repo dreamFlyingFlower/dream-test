@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.wy.test.core.entity.SocialsProvider;
+import com.wy.test.core.entity.SocialProviderEntity;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.social.authn.support.socialsignon.service.JdbcSocialsAssociateService;
 import com.wy.test.social.authn.support.socialsignon.service.SocialSignOnProviderService;
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SocialSignOnAutoConfiguration implements InitializingBean {
 
 	@Bean(name = "socialSignOnProviderService")
-	@ConditionalOnClass(SocialsProvider.class)
+	@ConditionalOnClass(SocialProviderEntity.class)
 	SocialSignOnProviderService socialSignOnProviderService(JdbcTemplate jdbcTemplate,
 			RedisConnectionFactory redisConnFactory) throws IOException {
 		SocialSignOnProviderService socialSignOnProviderService = new SocialSignOnProviderService(jdbcTemplate);

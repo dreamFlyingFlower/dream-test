@@ -12,9 +12,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.entity.HistoryLoginApps;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.entity.AppEntity;
+import com.wy.test.core.entity.HistoryLoginAppEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.AppsService;
@@ -43,14 +43,14 @@ public class HistorySignOnAppInterceptor implements AsyncHandlerInterceptor {
 			ModelAndView modelAndView) throws Exception {
 		_logger.debug("postHandle");
 
-		final Apps app = (Apps) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
+		final AppEntity app = (AppEntity) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
 
 		SignPrincipal principal = AuthorizationUtils.getPrincipal();
 		if (principal != null && app != null) {
-			final UserInfo userInfo = principal.getUserInfo();
+			final UserEntity userInfo = principal.getUserInfo();
 			String sessionId = principal.getSession().getId();
 			_logger.debug("sessionId : " + sessionId + " ,appId : " + app.getId());
-			HistoryLoginApps historyLoginApps = new HistoryLoginApps();
+			HistoryLoginAppEntity historyLoginApps = new HistoryLoginAppEntity();
 			historyLoginApps.setAppId(app.getId());
 			historyLoginApps.setSessionId(sessionId);
 			historyLoginApps.setAppName(app.getAppName());

@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServlet;
 import org.apache.commons.lang3.ArchUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.arch.Processor;
-import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.ApplicationContext;
@@ -51,8 +50,6 @@ public class InitializeContext extends HttpServlet {
 		super.init(config);
 
 		WebContext.applicationContext = applicationContext;
-
-		MybatisJpaContext.init(applicationContext);
 
 		// List Environment Variables
 		listEnvVars();

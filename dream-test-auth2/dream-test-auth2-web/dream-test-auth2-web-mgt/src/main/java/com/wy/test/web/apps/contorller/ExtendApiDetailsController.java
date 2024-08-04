@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstProtocols;
+import com.wy.test.core.entity.AppEntity;
+import com.wy.test.core.entity.AppExtendDetailEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.Apps;
-import com.wy.test.core.entity.apps.AppsExtendApiDetails;
+import com.wy.test.core.entity.UserEntity;
 
 import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
 
@@ -31,60 +31,60 @@ public class ExtendApiDetailsController extends BaseAppContorller {
 
 	@GetMapping(value = { "/init" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> init() {
-		AppsExtendApiDetails extendApiDetails = new AppsExtendApiDetails();
+		AppExtendDetailEntity extendApiDetails = new AppExtendDetailEntity();
 		extendApiDetails.setId(extendApiDetails.generateId());
 		extendApiDetails.setProtocol(ConstProtocols.EXTEND_API);
 		extendApiDetails.setSecret(ReciprocalHelpers.generateKey(""));
-		return new Message<AppsExtendApiDetails>(extendApiDetails).buildResponse();
+		return new Message<AppExtendDetailEntity>(extendApiDetails).buildResponse();
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		Apps application = appsService.get(id);
+		AppEntity application = appsService.get(id);
 		super.decoderSecret(application);
-		AppsExtendApiDetails extendApiDetails = new AppsExtendApiDetails();
+		AppExtendDetailEntity extendApiDetails = new AppExtendDetailEntity();
 		BeanUtils.copyProperties(application, extendApiDetails);
 		extendApiDetails.transIconBase64();
-		return new Message<AppsExtendApiDetails>(extendApiDetails).buildResponse();
+		return new Message<AppExtendDetailEntity>(extendApiDetails).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> add(@RequestBody AppsExtendApiDetails extendApiDetails,
-			@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> add(@RequestBody AppExtendDetailEntity extendApiDetails,
+			@CurrentUser UserEntity currentUser) {
 		_logger.debug("-Add  :" + extendApiDetails);
 
 		transform(extendApiDetails);
 		extendApiDetails.setInstId(currentUser.getInstId());
 		if (appsService.insertApp(extendApiDetails)) {
-			return new Message<AppsExtendApiDetails>(Message.SUCCESS).buildResponse();
+			return new Message<AppExtendDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsExtendApiDetails>(Message.FAIL).buildResponse();
+			return new Message<AppExtendDetailEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@RequestBody AppsExtendApiDetails extendApiDetails,
-			@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> update(@RequestBody AppExtendDetailEntity extendApiDetails,
+			@CurrentUser UserEntity currentUser) {
 		_logger.debug("-update  :" + extendApiDetails);
 		transform(extendApiDetails);
 		extendApiDetails.setInstId(currentUser.getInstId());
 		if (appsService.updateApp(extendApiDetails)) {
-			return new Message<AppsExtendApiDetails>(Message.SUCCESS).buildResponse();
+			return new Message<AppExtendDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsExtendApiDetails>(Message.FAIL).buildResponse();
+			return new Message<AppExtendDetailEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-delete  ids : {} ", ids);
 		if (appsService.deleteBatch(ids)) {
-			return new Message<AppsExtendApiDetails>(Message.SUCCESS).buildResponse();
+			return new Message<AppExtendDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsExtendApiDetails>(Message.FAIL).buildResponse();
+			return new Message<AppExtendDetailEntity>(Message.FAIL).buildResponse();
 		}
 	}
 

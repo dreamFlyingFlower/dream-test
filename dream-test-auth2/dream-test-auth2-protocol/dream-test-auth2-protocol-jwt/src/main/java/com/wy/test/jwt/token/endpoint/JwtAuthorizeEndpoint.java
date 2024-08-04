@@ -23,9 +23,9 @@ import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.constants.ContentType;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.Apps;
-import com.wy.test.core.entity.apps.AppsJwtDetails;
+import com.wy.test.core.entity.AppEntity;
+import com.wy.test.core.entity.AppJwtDetailEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.jwt.jwt.endpoint.adapter.JwtAdapter;
@@ -52,12 +52,12 @@ public class JwtAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 	@Operation(summary = "JWT应用ID认证接口", description = "应用ID", method = "GET")
 	@GetMapping("/authz/jwt/{id}")
 	public ModelAndView authorize(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable("id") String id, @CurrentUser UserInfo currentUser)
+			@PathVariable("id") String id, @CurrentUser UserEntity currentUser)
 			throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		ModelAndView modelAndView = new ModelAndView();
-		Apps application = getApp(id);
-		AppsJwtDetails jwtDetails = jwtDetailsService.getAppDetails(application.getId(), true);
+		AppEntity application = getApp(id);
+		AppJwtDetailEntity jwtDetails = jwtDetailsService.getAppDetails(application.getId(), true);
 		_logger.debug("" + jwtDetails);
 		jwtDetails.setAdapter(application.getAdapter());
 		jwtDetails.setIsAdapter(application.getIsAdapter());
@@ -93,7 +93,7 @@ public class JwtAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 	@ResponseBody
 	public String metadata(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("appid") String appId, @PathVariable("mediaType") String mediaType) {
-		AppsJwtDetails jwtDetails = jwtDetailsService.getAppDetails(appId, true);
+		AppJwtDetailEntity jwtDetails = jwtDetailsService.getAppDetails(appId, true);
 		if (jwtDetails != null) {
 			String jwkSetString = "";
 			if (!jwtDetails.getSignature().equalsIgnoreCase("none")) {

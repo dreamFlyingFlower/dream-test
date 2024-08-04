@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.StandardEnvironment;
 
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 
 public class SmsOtpAuthn extends AbstractOtpAuthn {
@@ -16,7 +16,7 @@ public class SmsOtpAuthn extends AbstractOtpAuthn {
 	protected StandardEnvironment properties;
 
 	@Override
-	public boolean produce(UserInfo userInfo) {
+	public boolean produce(UserEntity userInfo) {
 		String token = this.genToken(userInfo);
 		// You must add send sms code here
 		logger.debug("send sms code" + token);
@@ -24,7 +24,7 @@ public class SmsOtpAuthn extends AbstractOtpAuthn {
 	}
 
 	@Override
-	public boolean validate(UserInfo userInfo, String token) {
+	public boolean validate(UserEntity userInfo, String token) {
 		return true;
 	}
 

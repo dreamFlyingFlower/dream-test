@@ -4,8 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,44 +14,48 @@ import com.wy.test.authorize.endpoint.AuthorizeBaseEndpoint;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.entity.Accounts;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.convert.AppConvert;
+import com.wy.test.core.entity.AccountEntity;
+import com.wy.test.core.entity.AppEntity;
+import com.wy.test.core.entity.UserEntity;
 
 import dream.flying.flower.framework.core.enums.BooleanEnum;
 import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "2-8-ExtendApi接口文档模块")
 @Controller
+@Slf4j
 public class ExtendApiAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 
-	final static Logger _logger = LoggerFactory.getLogger(ExtendApiAuthorizeEndpoint.class);
+	@Autowired
+	private AppConvert appConvert;
 
 	@Operation(summary = "ExtendApi认证地址接口", description = "参数应用ID", method = "GET")
 	@GetMapping("/authz/api/{id}")
 	public ModelAndView authorize(HttpServletRequest request, @PathVariable("id") String id,
-			@CurrentUser UserInfo currentUser) {
+			@CurrentUser UserEntity currentUser) {
 
 		ModelAndView modelAndView = new ModelAndView("authorize/redirect_sso_submit");
 		modelAndView.addObject("errorCode", 0);
 		modelAndView.addObject("errorMessage", "");
 
-		Apps apps = getApp(id);
-		_logger.debug("" + apps);
+		AppEntity apps = getApp(id);
+		log.debug("" + apps);
 		if (BooleanEnum.isTrue(apps.getIsAdapter())) {
-			_logger.debug("Adapter {}", apps.getAdapter());
+			log.debug("Adapter {}", apps.getAdapter());
 			try {
 				AbstractAuthorizeAdapter adapter =
 						(AbstractAuthorizeAdapter) ReflectHelper.newInstance(apps.getAdapter());
-				Accounts account = getAccounts(apps, currentUser);
-				if (apps.getCredential().equalsIgnoreCase(Apps.CREDENTIALS.USER_DEFINED) && account == null) {
+				AccountEntity account = getAccounts(apps, currentUser);
+				if (apps.getCredential().equalsIgnoreCase(AppEntity.CREDENTIALS.USER_DEFINED) && account == null) {
 					return initCredentialView(id, "/authorize/api/" + id);
 				}
 
 				adapter.setPrincipal(AuthorizationUtils.getPrincipal());
-				adapter.setApp(apps);
+				adapter.setApp(appConvert.convertt(apps));
 				adapter.setAccount(account);
 
 				return adapter.authorize(modelAndView);
@@ -62,7 +65,7 @@ public class ExtendApiAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 			}
 			return null;
 		} else {
-			_logger.debug("redirect_uri {}", apps.getLoginUrl());
+			log.debug("redirect_uri {}", apps.getLoginUrl());
 			modelAndView.addObject("redirect_uri", apps.getLoginUrl());
 			return modelAndView;
 		}

@@ -4,25 +4,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.dromara.mybatis.jpa.IJpaMapper;
-import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.apache.ibatis.annotations.Mapper;
 
-public interface ReportMapper extends IJpaMapper<JpaEntity> {
+@Mapper
+public interface ReportMapper {
 
-	public Integer analysisDay(HashMap<String, Object> reportParameter);
+	Integer analysisDay(HashMap<String, Object> reportParameter);
 
-	public Integer analysisNewUsers(HashMap<String, Object> reportParameter);
+	Integer analysisNewUsers(HashMap<String, Object> reportParameter);
 
-	public Integer analysisOnlineUsers(HashMap<String, Object> reportParameter);
+	Integer analysisOnlineUsers(HashMap<String, Object> reportParameter);
 
-	public Integer analysisActiveUsers(HashMap<String, Object> reportParameter);
+	Integer analysisActiveUsers(HashMap<String, Object> reportParameter);
 
-	public List<Map<String, Object>> analysisDayHour(HashMap<String, Object> reportParameter);
+	List<Map<String, Object>> analysisDayHour(HashMap<String, Object> reportParameter);
 
-	public List<Map<String, Object>> analysisMonth(HashMap<String, Object> reportParameter);
+	List<Map<String, Object>> analysisMonth(HashMap<String, Object> reportParameter);
 
-	public List<Map<String, Object>> analysisBrowser(HashMap<String, Object> reportParameter);
+	List<Map<String, Object>> analysisBrowser(HashMap<String, Object> reportParameter);
 
-	public List<Map<String, Object>> analysisApp(HashMap<String, Object> reportParameter);
-
+	List<Map<String, Object>> analysisApp(HashMap<String, Object> reportParameter);
 }

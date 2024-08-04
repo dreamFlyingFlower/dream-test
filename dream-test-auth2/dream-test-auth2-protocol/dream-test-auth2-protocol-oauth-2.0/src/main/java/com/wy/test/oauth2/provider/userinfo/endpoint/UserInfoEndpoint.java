@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.authn.SignPrincipal;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.entity.AppEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 import com.wy.test.core.web.HttpResponseAdapter;
 import com.wy.test.oauth2.common.OAuth2Constants;
@@ -82,7 +82,7 @@ public class UserInfoEndpoint {
 			String client_id = oAuth2Authentication.getOAuth2Request().getClientId();
 			ClientDetails clientDetails = clientDetailsService.loadClientByClientId(client_id, true);
 
-			Apps app = appsService.get(client_id);
+			AppEntity app = appsService.get(client_id);
 
 			AbstractAuthorizeAdapter adapter;
 			if (BooleanEnum.isTrue(app.getIsAdapter())) {
@@ -116,9 +116,9 @@ public class UserInfoEndpoint {
 		return atfe;
 	}
 
-	public UserInfo queryUserInfo(String userId) {
+	public UserEntity queryUserInfo(String userId) {
 		_logger.debug("userId : " + userId);
-		UserInfo userInfo = (UserInfo) userInfoService.findByUsername(userId);
+		UserEntity userInfo = (UserEntity) userInfoService.findByUsername(userId);
 		return userInfo;
 	}
 

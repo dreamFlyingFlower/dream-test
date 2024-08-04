@@ -3,7 +3,7 @@ package com.wy.test.otp.password.onetimepwd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.otp.password.onetimepwd.token.AbstractOtpTokenStore;
 import com.wy.test.otp.password.onetimepwd.token.InMemoryOtpTokenStore;
 
@@ -58,11 +58,11 @@ public abstract class AbstractOtpAuthn {
 
 	}
 
-	public abstract boolean produce(UserInfo userInfo);
+	public abstract boolean produce(UserEntity userInfo);
 
-	public abstract boolean validate(UserInfo userInfo, String token);
+	public abstract boolean validate(UserEntity userInfo, String token);
 
-	protected String defaultProduce(UserInfo userInfo) {
+	protected String defaultProduce(UserEntity userInfo) {
 		return genToken(userInfo);
 	}
 
@@ -72,7 +72,7 @@ public abstract class AbstractOtpAuthn {
 	 * @param userInfo UserInfo
 	 * @return
 	 */
-	public String genToken(UserInfo userInfo) {
+	public String genToken(UserEntity userInfo) {
 		if (stringGenerator == null) {
 			stringGenerator = new StringGenerator(StringGenerator.DEFAULT_CODE_NUMBER, digits);
 		}

@@ -3,34 +3,33 @@ package com.wy.test.extend.adapter;
 import java.time.Instant;
 import java.util.HashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.core.entity.Accounts;
+import com.wy.test.core.entity.AccountEntity;
 import com.wy.test.core.entity.ExtraAttrs;
-import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.vo.AppVO;
 import com.wy.test.core.web.HttpRequestAdapter;
 
 import dream.flying.flower.digest.DigestHelper;
 import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.http.HttpsTrust;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * https://exmail.qq.com/qy_mng_logic/doc exmail sso
  * 
  */
+@Slf4j
 public class ExtendApiCndnsApiMailAdapter extends AbstractAuthorizeAdapter {
 
-	final static Logger _logger = LoggerFactory.getLogger(ExtendApiCndnsApiMailAdapter.class);
 	// sign no parameter
 	// sign=md5(action=getDomainInfo&appid=***&time=1579736456 + md5(token))
 	// sign with parameter
 	// sign=md5(action=getUserInfo&appid=***&email=admin@dream.org&time=1579736456
 	// + md5(token))
 
-	Accounts account;
+	AccountEntity account;
 
 	static String SIGN_STRING = "action=getDomainInfo&appid=%s%s";
 
@@ -56,8 +55,7 @@ public class ExtendApiCndnsApiMailAdapter extends AbstractAuthorizeAdapter {
 	@Override
 	public ModelAndView authorize(ModelAndView modelAndView) {
 		HttpsTrust.beforeConnection();
-
-		Apps details = (Apps) app;
+		AppVO details = app;
 		// extraAttrs from Applications
 		ExtraAttrs extraAttrs = null;
 		String action = "getWebMailUrl";
@@ -97,11 +95,10 @@ public class ExtendApiCndnsApiMailAdapter extends AbstractAuthorizeAdapter {
 			redirect_uri = authKey.get("webmailUrl");
 		}
 
-		_logger.debug("redirect_uri : " + redirect_uri);
+		log.debug("redirect_uri : " + redirect_uri);
 
 		modelAndView.addObject("redirect_uri", redirect_uri);
 
 		return modelAndView;
 	}
-
 }

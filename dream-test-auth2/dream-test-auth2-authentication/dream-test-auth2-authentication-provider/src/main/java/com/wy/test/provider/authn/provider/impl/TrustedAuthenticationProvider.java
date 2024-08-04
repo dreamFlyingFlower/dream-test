@@ -5,7 +5,7 @@ import org.springframework.security.core.Authentication;
 
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
@@ -37,7 +37,7 @@ public class TrustedAuthenticationProvider extends AbstractAuthenticationProvide
 
 	@Override
 	public Authentication doAuthenticate(LoginCredential loginCredential) {
-		UserInfo loadeduserInfo = loadUserInfo(loginCredential.getUsername(), "");
+		UserEntity loadeduserInfo = loadUserInfo(loginCredential.getUsername(), "");
 		statusValid(loginCredential, loadeduserInfo);
 		if (loadeduserInfo != null) {
 			// Validate PasswordPolicy

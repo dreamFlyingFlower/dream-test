@@ -3,8 +3,8 @@ package com.wy.test.synchronizer.workweixin;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.core.constants.ConstStatus;
-import com.wy.test.core.entity.Organizations;
-import com.wy.test.core.entity.SynchroRelated;
+import com.wy.test.core.entity.OrgEntity;
+import com.wy.test.core.entity.SyncRelatedEntity;
 import com.wy.test.core.web.HttpRequestAdapter;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
@@ -12,6 +12,7 @@ import com.wy.test.synchronizer.workweixin.entity.WorkWeixinDepts;
 import com.wy.test.synchronizer.workweixin.entity.WorkWeixinDeptsResponse;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
+import dream.flying.flower.generator.GeneratorStrategyContext;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -30,23 +31,24 @@ public class WorkweixinOrganizationService extends AbstractSynchronizerService i
 
 		try {
 			WorkWeixinDeptsResponse rsp = requestDepartmentList(access_token);
+			GeneratorStrategyContext generatorStrategyContext = new GeneratorStrategyContext();
 
 			for (WorkWeixinDepts dept : rsp.getDepartment()) {
 				log.debug("dept : " + dept.getId() + " " + dept.getName() + " " + dept.getParentid());
 				// root
 				if (dept.getId() == ROOT_DEPT_ID) {
-					Organizations rootOrganization = organizationsService.get(Organizations.ROOT_ORG_ID);
-					SynchroRelated rootSynchroRelated = buildSynchroRelated(rootOrganization, dept);
+					OrgEntity rootOrganization = organizationsService.getById(OrgEntity.ROOT_ORG_ID);
+					SyncRelatedEntity rootSynchroRelated = buildSynchroRelated(rootOrganization, dept);
 					synchroRelatedService.updateSynchroRelated(this.synchronizer, rootSynchroRelated,
-							Organizations.CLASS_TYPE);
+							OrgEntity.CLASS_TYPE);
 				} else {
 					// synchro Related
-					SynchroRelated synchroRelated = synchroRelatedService.findByOriginId(this.synchronizer,
-							dept.getId() + "", Organizations.CLASS_TYPE);
+					SyncRelatedEntity synchroRelated = synchroRelatedService.findByOriginId(this.synchronizer,
+							dept.getId() + "", OrgEntity.CLASS_TYPE);
 
-					Organizations organization = buildOrganization(dept);
+					OrgEntity organization = buildOrganization(dept);
 					if (synchroRelated == null) {
-						organization.setId(organization.generateId());
+						organization.setId(generatorStrategyContext.generate());
 						organizationsService.insert(organization);
 						log.debug("Organizations : " + organization);
 
@@ -56,8 +58,7 @@ public class WorkweixinOrganizationService extends AbstractSynchronizerService i
 						organizationsService.update(organization);
 					}
 
-					synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated,
-							Organizations.CLASS_TYPE);
+					synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated, OrgEntity.CLASS_TYPE);
 				}
 			}
 
@@ -67,10 +68,10 @@ public class WorkweixinOrganizationService extends AbstractSynchronizerService i
 
 	}
 
-	public SynchroRelated buildSynchroRelated(Organizations organization, WorkWeixinDepts dept) {
-		return new SynchroRelated(organization.getId(), organization.getOrgName(), organization.getOrgName(),
-				Organizations.CLASS_TYPE, synchronizer.getId(), synchronizer.getName(), dept.getId() + "",
-				dept.getName(), "", dept.getParentid() + "", synchronizer.getInstId());
+	public SyncRelatedEntity buildSynchroRelated(OrgEntity organization, WorkWeixinDepts dept) {
+		return new SyncRelatedEntity(organization.getId(), organization.getOrgName(), organization.getOrgName(),
+				OrgEntity.CLASS_TYPE, synchronizer.getId(), synchronizer.getName(), dept.getId() + "", dept.getName(),
+				"", dept.getParentid() + "", synchronizer.getInstId());
 	}
 
 	public WorkWeixinDeptsResponse requestDepartmentList(String access_token) {
@@ -85,11 +86,11 @@ public class WorkweixinOrganizationService extends AbstractSynchronizerService i
 		return deptsResponse;
 	}
 
-	public Organizations buildOrganization(WorkWeixinDepts dept) {
+	public OrgEntity buildOrganization(WorkWeixinDepts dept) {
 		// Parent
-		SynchroRelated synchroRelatedParent = synchroRelatedService.findByOriginId(this.synchronizer,
-				dept.getParentid() + "", Organizations.CLASS_TYPE);
-		Organizations org = new Organizations();
+		SyncRelatedEntity synchroRelatedParent =
+				synchroRelatedService.findByOriginId(this.synchronizer, dept.getParentid() + "", OrgEntity.CLASS_TYPE);
+		OrgEntity org = new OrgEntity();
 		org.setOrgName(dept.getName());
 		org.setOrgCode(dept.getId() + "");
 		org.setParentId(synchroRelatedParent.getObjectId());
@@ -97,7 +98,7 @@ public class WorkweixinOrganizationService extends AbstractSynchronizerService i
 		org.setSortIndex(dept.getOrder());
 		org.setInstId(this.synchronizer.getInstId());
 		org.setStatus(ConstStatus.ACTIVE);
-		org.setDescription("WorkWeixin");
+		org.setRemark("WorkWeixin");
 		return org;
 	}
 
@@ -108,5 +109,4 @@ public class WorkweixinOrganizationService extends AbstractSynchronizerService i
 	public void setAccess_token(String access_token) {
 		this.access_token = access_token;
 	}
-
 }

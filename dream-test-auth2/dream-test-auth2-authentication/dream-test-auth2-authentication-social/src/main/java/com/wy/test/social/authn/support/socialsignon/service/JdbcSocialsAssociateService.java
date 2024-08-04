@@ -12,7 +12,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.wy.test.core.constants.ConstDatabase;
-import com.wy.test.core.entity.SocialsAssociate;
+import com.wy.test.core.entity.SocialAssociateEntity;
+
+import dream.flying.flower.generator.GeneratorStrategyContext;
 
 public class JdbcSocialsAssociateService implements SocialsAssociateService {
 
@@ -43,22 +45,23 @@ public class JdbcSocialsAssociateService implements SocialsAssociateService {
 	}
 
 	@Override
-	public boolean insert(SocialsAssociate socialsAssociate) {
-		socialsAssociate.setId(socialsAssociate.generateId());
+	public boolean insert(SocialAssociateEntity socialsAssociate) {
+		GeneratorStrategyContext generatorStrategyContext = new GeneratorStrategyContext();
+		socialsAssociate.setId(generatorStrategyContext.generate());
 		jdbcTemplate.update(
 				ConstDatabase.compare(ConstDatabase.ORACLE) ? DEFAULT_DEFAULT_INSERT_STATEMENT_ORACLE
 						: DEFAULT_DEFAULT_INSERT_STATEMENT,
 				new Object[] { socialsAssociate.getId(), socialsAssociate.getUserId(), socialsAssociate.getUsername(),
 						socialsAssociate.getProvider(), socialsAssociate.getSocialUserId(),
 						socialsAssociate.getAccessToken(), socialsAssociate.getSocialUserInfo(),
-						socialsAssociate.getExAttribute(), socialsAssociate.getInstId() },
+						socialsAssociate.getExtendAttribute(), socialsAssociate.getInstId() },
 				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
 						Types.VARCHAR, Types.VARCHAR, Types.VARCHAR });
 		return true;
 	}
 
 	@Override
-	public boolean delete(SocialsAssociate socialsAssociate) {
+	public boolean delete(SocialAssociateEntity socialsAssociate) {
 		jdbcTemplate.update(DEFAULT_DEFAULT_DELETE_STATEMENT,
 				new Object[] { socialsAssociate.getUserId(), socialsAssociate.getProvider() },
 				new int[] { Types.VARCHAR, Types.VARCHAR });
@@ -66,8 +69,8 @@ public class JdbcSocialsAssociateService implements SocialsAssociateService {
 	}
 
 	@Override
-	public SocialsAssociate get(SocialsAssociate socialsAssociate) {
-		List<SocialsAssociate> listsocialsAssociate = jdbcTemplate.query(DEFAULT_DEFAULT_SIGNON_SELECT_STATEMENT,
+	public SocialAssociateEntity get(SocialAssociateEntity socialsAssociate) {
+		List<SocialAssociateEntity> listsocialsAssociate = jdbcTemplate.query(DEFAULT_DEFAULT_SIGNON_SELECT_STATEMENT,
 				new SocialsAssociateRowMapper(), socialsAssociate.getProvider(), socialsAssociate.getSocialUserId(),
 				socialsAssociate.getInstId());
 		_logger.debug("list socialsAssociate " + listsocialsAssociate);
@@ -75,27 +78,27 @@ public class JdbcSocialsAssociateService implements SocialsAssociateService {
 	}
 
 	@Override
-	public List<SocialsAssociate> query(SocialsAssociate socialsAssociate) {
-		List<SocialsAssociate> listsocialsAssociate = jdbcTemplate.query(DEFAULT_DEFAULT_BIND_SELECT_STATEMENT,
+	public List<SocialAssociateEntity> query(SocialAssociateEntity socialsAssociate) {
+		List<SocialAssociateEntity> listsocialsAssociate = jdbcTemplate.query(DEFAULT_DEFAULT_BIND_SELECT_STATEMENT,
 				new SocialsAssociateRowMapper(), socialsAssociate.getUserId());
 		_logger.debug("query bind  SocialSignOnUser " + listsocialsAssociate);
 		return listsocialsAssociate;
 	}
 
 	@Override
-	public boolean update(SocialsAssociate socialsAssociate) {
+	public boolean update(SocialAssociateEntity socialsAssociate) {
 		jdbcTemplate.update(DEFAULT_DEFAULT_UPDATE_STATEMENT,
 				new Object[] { socialsAssociate.getAccessToken(), socialsAssociate.getSocialUserInfo(),
-						socialsAssociate.getExAttribute(), new Date(), socialsAssociate.getId() },
+						socialsAssociate.getExtendAttribute(), new Date(), socialsAssociate.getId() },
 				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP, Types.VARCHAR });
 		return false;
 	}
 
-	private final class SocialsAssociateRowMapper implements RowMapper<SocialsAssociate> {
+	private final class SocialsAssociateRowMapper implements RowMapper<SocialAssociateEntity> {
 
 		@Override
-		public SocialsAssociate mapRow(ResultSet rs, int rowNum) throws SQLException {
-			SocialsAssociate socialsAssociate = new SocialsAssociate();
+		public SocialAssociateEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+			SocialAssociateEntity socialsAssociate = new SocialAssociateEntity();
 			socialsAssociate.setId(rs.getString(1));
 			socialsAssociate.setUserId(rs.getString(2));
 			socialsAssociate.setUsername(rs.getString(3));
@@ -103,12 +106,11 @@ public class JdbcSocialsAssociateService implements SocialsAssociateService {
 			socialsAssociate.setSocialUserId(rs.getString(5));
 			socialsAssociate.setAccessToken(rs.getString(6));
 			socialsAssociate.setSocialUserInfo(rs.getString(7));
-			socialsAssociate.setExAttribute(rs.getString(8));
-			socialsAssociate.setCreatedDate(rs.getString(9));
-			socialsAssociate.setUpdatedDate(rs.getString(10));
+			socialsAssociate.setExtendAttribute(rs.getString(8));
+			socialsAssociate.setCreateTime(rs.getDate(9));
+			socialsAssociate.setUpdateTime(rs.getDate(10));
 			socialsAssociate.setInstId(rs.getString(11));
 			return socialsAssociate;
 		}
 	}
-
 }

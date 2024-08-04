@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.entity.HistorySystemLogs;
+import com.wy.test.core.entity.HistorySysLogEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.HistorySystemLogsService;
 
 import dream.flying.flower.ConstDate;
@@ -46,11 +46,11 @@ public class SystemLogsController {
 	 */
 	@PostMapping(value = { "/systemLogs/fetch" })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute("historyLog") HistorySystemLogs historyLog,
-			@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> fetch(@ModelAttribute("historyLog") HistorySysLogEntity historyLog,
+			@CurrentUser UserEntity currentUser) {
 		_logger.debug("historys/historyLog/fetch {} ", historyLog);
 		historyLog.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<HistorySystemLogs>>(historySystemLogsService.fetchPageResults(historyLog))
+		return new Message<JpaPageResults<HistorySysLogEntity>>(historySystemLogsService.fetchPageResults(historyLog))
 				.buildResponse();
 	}
 

@@ -2,7 +2,6 @@ package com.wy.test.web.apis.identity.rest;
 
 import java.io.IOException;
 
-import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -24,8 +23,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.persistence.service.UserInfoService;
+import com.wy.test.core.entity.UserEntity;
+import com.wy.test.core.query.UserQuery;
+import com.wy.test.persistence.service.UserService;
 
 import dream.flying.flower.lang.StrHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -36,26 +36,26 @@ import lombok.extern.slf4j.Slf4j;
 public class RestUserInfoController {
 
 	@Autowired
-	@Qualifier("userInfoService")
-	private UserInfoService userInfoService;
+	@Qualifier("userService")
+	private UserService userService;
 
 	@GetMapping(value = "/{id}")
-	public UserInfo getUser(@PathVariable String id, @RequestParam(required = false) String attributes) {
+	public UserEntity getUser(@PathVariable String id, @RequestParam(required = false) String attributes) {
 		log.debug("UserInfo id {} , attributes {}", id, attributes);
-		UserInfo loadUserInfo = userInfoService.get(id);
+		UserEntity loadUserInfo = userService.getById(id);
 		loadUserInfo.setDecipherable(null);
 		return loadUserInfo;
 	}
 
 	@PostMapping
-	public UserInfo create(@RequestBody UserInfo userInfo, @RequestParam(required = false) String attributes,
+	public UserEntity create(@RequestBody UserEntity userInfo, @RequestParam(required = false) String attributes,
 			UriComponentsBuilder builder) throws IOException {
 		log.debug("UserInfo content {} , attributes {}", userInfo, attributes);
-		UserInfo loadUserInfo = userInfoService.findByUsername(userInfo.getUsername());
+		UserEntity loadUserInfo = userService.findByUsername(userInfo.getUsername());
 		if (loadUserInfo != null) {
-			userInfoService.update(userInfo);
+			userService.update(userInfo);
 		} else {
-			userInfoService.insert(userInfo);
+			userService.insert(userInfo);
 		}
 		return userInfo;
 	}
@@ -64,25 +64,25 @@ public class RestUserInfoController {
 	public String changePassword(@RequestParam(required = true) String username,
 			@RequestParam(required = true) String password, UriComponentsBuilder builder) throws IOException {
 		log.debug("UserInfo username {} , password {}", username, password);
-		UserInfo loadUserInfo = userInfoService.findByUsername(username);
+		UserEntity loadUserInfo = userService.findByUsername(username);
 		if (loadUserInfo != null) {
 			ChangePassword changePassword = new ChangePassword(loadUserInfo);
 			changePassword.setPassword(password);
 			changePassword.setDecipherable(loadUserInfo.getDecipherable());
-			userInfoService.changePassword(changePassword, true);
+			userService.changePassword(changePassword, true);
 		}
 		return "true";
 	}
 
 	@PutMapping(value = "/{id}")
-	public UserInfo replace(@PathVariable String id, @RequestBody UserInfo userInfo,
+	public UserEntity replace(@PathVariable String id, @RequestBody UserEntity userInfo,
 			@RequestParam(required = false) String attributes) throws IOException {
 		log.debug("UserInfo content {} , attributes {}", userInfo, attributes);
-		UserInfo loadUserInfo = userInfoService.findByUsername(userInfo.getUsername());
+		UserEntity loadUserInfo = userService.findByUsername(userInfo.getUsername());
 		if (loadUserInfo != null) {
-			userInfoService.update(userInfo);
+			userService.update(userInfo);
 		} else {
-			userInfoService.insert(userInfo);
+			userService.insert(userInfo);
 		}
 		return userInfo;
 	}
@@ -91,15 +91,15 @@ public class RestUserInfoController {
 	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable final String id) {
 		log.debug("UserInfo id {} ", id);
-		userInfoService.logicDelete(id);
+		userService.removeById(id);
 	}
 
 	@GetMapping(value = { "/.search" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> search(@ModelAttribute UserInfo userInfo) {
+	public ResponseEntity<?> search(@ModelAttribute UserQuery userInfo) {
 		if (StrHelper.isBlank(userInfo.getInstId())) {
 			userInfo.setInstId("1");
 		}
-		return new Message<JpaPageResults<UserInfo>>(userInfoService.fetchPageResults(userInfo)).buildResponse();
+		return new Message<>(userService.listPage(userInfo)).buildResponse();
 	}
 }

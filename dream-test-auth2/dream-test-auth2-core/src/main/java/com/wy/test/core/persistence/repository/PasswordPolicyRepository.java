@@ -27,7 +27,7 @@ import org.springframework.jdbc.core.RowMapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.wy.test.core.constants.ConstProperties;
-import com.wy.test.core.entity.PasswordPolicy;
+import com.wy.test.core.entity.PasswordPolicyEntity;
 
 public class PasswordPolicyRepository {
 
@@ -37,10 +37,10 @@ public class PasswordPolicyRepository {
 	public static final String topWeakPasswordPropertySource = "classpath:/top_weak_password.txt";
 
 	// Cache PasswordPolicy in memory ONE_HOUR
-	protected static final Cache<String, PasswordPolicy> passwordPolicyStore =
+	protected static final Cache<String, PasswordPolicyEntity> passwordPolicyStore =
 			Caffeine.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).build();
 
-	protected PasswordPolicy passwordPolicy;
+	protected PasswordPolicyEntity passwordPolicy;
 
 	protected JdbcTemplate jdbcTemplate;
 
@@ -59,7 +59,7 @@ public class PasswordPolicyRepository {
 	 * 
 	 * @return
 	 */
-	public PasswordPolicy getPasswordPolicy() {
+	public PasswordPolicyEntity getPasswordPolicy() {
 		passwordPolicy = passwordPolicyStore.getIfPresent(PASSWORD_POLICY_KEY);
 
 		if (passwordPolicy == null) {
@@ -135,11 +135,11 @@ public class PasswordPolicyRepository {
 		return passwordPolicyRuleList;
 	}
 
-	public class PasswordPolicyRowMapper implements RowMapper<PasswordPolicy> {
+	public class PasswordPolicyRowMapper implements RowMapper<PasswordPolicyEntity> {
 
 		@Override
-		public PasswordPolicy mapRow(ResultSet rs, int rowNum) throws SQLException {
-			PasswordPolicy passwordPolicy = new PasswordPolicy();
+		public PasswordPolicyEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+			PasswordPolicyEntity passwordPolicy = new PasswordPolicyEntity();
 			passwordPolicy.setId(rs.getString("id"));
 			passwordPolicy.setMinLength(rs.getInt("minlength"));
 			passwordPolicy.setMaxLength(rs.getInt("maxlength"));

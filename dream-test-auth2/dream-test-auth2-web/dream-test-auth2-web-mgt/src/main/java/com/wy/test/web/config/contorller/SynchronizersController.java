@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.Synchronizers;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.SyncEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.SynchronizersService;
@@ -37,30 +37,30 @@ public class SynchronizersController {
 
 	@GetMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> fetch(Synchronizers synchronizers, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> fetch(SyncEntity synchronizers, @CurrentUser UserEntity currentUser) {
 		_logger.debug("" + synchronizers);
 		synchronizers.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<Synchronizers>>(synchronizersService.fetchPageResults(synchronizers))
+		return new Message<JpaPageResults<SyncEntity>>(synchronizersService.fetchPageResults(synchronizers))
 				.buildResponse();
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		Synchronizers synchronizers = synchronizersService.get(id);
+		SyncEntity synchronizers = synchronizersService.get(id);
 		synchronizers.setCredentials(PasswordReciprocal.getInstance().decoder(synchronizers.getCredentials()));
-		return new Message<Synchronizers>(synchronizers).buildResponse();
+		return new Message<SyncEntity>(synchronizers).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@RequestBody Synchronizers synchronizers, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> update(@RequestBody SyncEntity synchronizers, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-update  :" + synchronizers);
 		synchronizers.setInstId(currentUser.getInstId());
 		synchronizers.setCredentials(PasswordReciprocal.getInstance().encode(synchronizers.getCredentials()));
 		if (synchronizersService.update(synchronizers)) {
-			return new Message<Synchronizers>(Message.SUCCESS).buildResponse();
+			return new Message<SyncEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<Synchronizers>(Message.FAIL).buildResponse();
+			return new Message<SyncEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
@@ -72,7 +72,7 @@ public class SynchronizersController {
 		String[] ids = StrHelper.split(id, ",");
 		try {
 			for (String sysId : ids) {
-				Synchronizers synchronizer = synchronizersService.get(sysId);
+				SyncEntity synchronizer = synchronizersService.get(sysId);
 				synchronizer.setCredentials(PasswordReciprocal.getInstance().decoder(synchronizer.getCredentials()));
 				_logger.debug("synchronizer " + synchronizer);
 				ISynchronizerService synchronizerService =
@@ -86,10 +86,10 @@ public class SynchronizersController {
 			}
 		} catch (Exception e) {
 			_logger.error("synchronizer Exception ", e);
-			return new Message<Synchronizers>(Message.FAIL).buildResponse();
+			return new Message<SyncEntity>(Message.FAIL).buildResponse();
 
 		}
-		return new Message<Synchronizers>(Message.SUCCESS).buildResponse();
+		return new Message<SyncEntity>(Message.SUCCESS).buildResponse();
 	}
 
 }

@@ -12,8 +12,8 @@ import org.opensaml.saml2.core.impl.SubjectConfirmationBuilder;
 import org.opensaml.saml2.core.impl.SubjectConfirmationDataBuilder;
 
 import com.wy.test.authz.saml.service.TimeService;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.AppsSAML20Details;
+import com.wy.test.core.entity.AppSamlDetailEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.web.WebContext;
 
 public class SubjectGenerator {
@@ -27,8 +27,8 @@ public class SubjectGenerator {
 		this.timeService = timeService;
 	}
 
-	public Subject generateSubject(AppsSAML20Details saml20Details, String assertionConsumerURL, String inResponseTo,
-			int validInSeconds, UserInfo userInfo) {
+	public Subject generateSubject(AppSamlDetailEntity saml20Details, String assertionConsumerURL, String inResponseTo,
+			int validInSeconds, UserEntity userInfo) {
 		String nameIdValue = userInfo.getUsername();
 		String nameIDType = NameIDType.UNSPECIFIED;
 		if (saml20Details.getNameidFormat().equalsIgnoreCase("persistent")) {

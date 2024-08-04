@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
@@ -58,36 +58,36 @@ public class RegisterController {
 
 		_logger.debug("Mobile Regex matches {}", mobileRegex.matcher(mobile).matches());
 		if (StrHelper.isNotBlank(mobile) && mobileRegex.matcher(mobile).matches()) {
-			UserInfo userInfo = new UserInfo();
+			UserEntity userInfo = new UserEntity();
 			userInfo.setUsername(mobile);
 			userInfo.setMobile(mobile);
 			AbstractOtpAuthn smsOtpAuthn = smsOtpAuthnService.getByInstId(WebContext.getInst().getId());
 			smsOtpAuthn.produce(userInfo);
-			return new Message<UserInfo>(userInfo).buildResponse();
+			return new Message<UserEntity>(userInfo).buildResponse();
 		}
 
-		return new Message<UserInfo>(Message.FAIL).buildResponse();
+		return new Message<UserEntity>(Message.FAIL).buildResponse();
 	}
 
 	// 直接注册
 	@PostMapping(value = { "/register" })
 	@ResponseBody
-	public ResponseEntity<?> register(@ModelAttribute UserInfo userInfo, @RequestParam String captcha)
+	public ResponseEntity<?> register(@ModelAttribute UserEntity userInfo, @RequestParam String captcha)
 			throws ServletException, IOException {
-		UserInfo validateUserInfo = new UserInfo();
+		UserEntity validateUserInfo = new UserEntity();
 		validateUserInfo.setUsername(userInfo.getMobile());
 		validateUserInfo.setMobile(userInfo.getMobile());
 		AbstractOtpAuthn smsOtpAuthn = smsOtpAuthnService.getByInstId(WebContext.getInst().getId());
 		if (smsOtpAuthn != null && smsOtpAuthn.validate(validateUserInfo, captcha)) {
-			UserInfo temp = userInfoService.findByEmailMobile(userInfo.getEmail());
+			UserEntity temp = userInfoService.findByEmailMobile(userInfo.getEmail());
 
 			if (temp != null) {
-				return new Message<UserInfo>(Message.FAIL).buildResponse();
+				return new Message<UserEntity>(Message.FAIL).buildResponse();
 			}
 
 			temp = userInfoService.findByUsername(userInfo.getUsername());
 			if (temp != null) {
-				return new Message<UserInfo>(Message.FAIL).buildResponse();
+				return new Message<UserEntity>(Message.FAIL).buildResponse();
 			}
 
 			// default InstId
@@ -101,10 +101,10 @@ public class RegisterController {
 			userInfo.setStatus(ConstStatus.INACTIVE);
 
 			if (userInfoService.insert(userInfo)) {
-				return new Message<UserInfo>().buildResponse();
+				return new Message<UserEntity>().buildResponse();
 			}
 		}
-		return new Message<UserInfo>(Message.FAIL).buildResponse();
+		return new Message<UserEntity>(Message.FAIL).buildResponse();
 	}
 
 }

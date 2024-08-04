@@ -1,19 +1,19 @@
 package com.wy.test.sms.password.sms;
 
-import java.sql.Types;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.core.entity.EmailSenders;
-import com.wy.test.core.entity.SmsProvider;
+import com.wy.test.core.entity.EmailSenderEntity;
+import com.wy.test.core.entity.SmsProviderEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.impl.MailOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.token.RedisOtpTokenStore;
-import com.wy.test.persistence.service.EmailSendersService;
+import com.wy.test.persistence.service.EmailSenderService;
 import com.wy.test.persistence.service.SmsProviderService;
 import com.wy.test.sms.password.sms.impl.SmsOtpAuthnAliyun;
 import com.wy.test.sms.password.sms.impl.SmsOtpAuthnTencentCloud;
@@ -28,29 +28,28 @@ public class SmsOtpAuthnService {
 
 	SmsProviderService smsProviderService;
 
-	EmailSendersService emailSendersService;
+	EmailSenderService emailSenderService;
 
 	RedisOtpTokenStore redisOptTokenStore;
 
-	public SmsOtpAuthnService(SmsProviderService smsProviderService, EmailSendersService emailSendersService) {
+	public SmsOtpAuthnService(SmsProviderService smsProviderService, EmailSenderService emailSenderService) {
 		this.smsProviderService = smsProviderService;
-		this.emailSendersService = emailSendersService;
+		this.emailSenderService = emailSenderService;
 	}
 
-	public SmsOtpAuthnService(SmsProviderService smsProviderService, EmailSendersService emailSendersService,
+	public SmsOtpAuthnService(SmsProviderService smsProviderService, EmailSenderService emailSenderService,
 			RedisOtpTokenStore redisOptTokenStore) {
 		this.smsProviderService = smsProviderService;
-		this.emailSendersService = emailSendersService;
+		this.emailSenderService = emailSenderService;
 		this.redisOptTokenStore = redisOptTokenStore;
 	}
 
 	public AbstractOtpAuthn getByInstId(String instId) {
 		AbstractOtpAuthn otpAuthn = smsAuthnStore.getIfPresent(instId);
 		if (otpAuthn == null) {
-			SmsProvider smsProvider = smsProviderService.findOne("where instid = ? ", new Object[] { instId },
-					new int[] { Types.VARCHAR });
+			SmsProviderEntity smsProvider = smsProviderService
+					.getOne(new LambdaQueryWrapper<SmsProviderEntity>().eq(SmsProviderEntity::getInstId, instId));
 			if (smsProvider != null) {
-
 				if (smsProvider.getProvider().equalsIgnoreCase("aliyun")) {
 					SmsOtpAuthnAliyun aliyun = new SmsOtpAuthnAliyun(smsProvider.getAppKey(),
 							PasswordReciprocal.getInstance().decoder(smsProvider.getAppSecret()),
@@ -76,8 +75,8 @@ public class SmsOtpAuthnService {
 					}
 					otpAuthn = yunxin;
 				} else if (smsProvider.getProvider().equalsIgnoreCase("email")) {
-					EmailSenders emailSender = emailSendersService.findOne("where instid = ? ", new Object[] { instId },
-							new int[] { Types.VARCHAR });
+					EmailSenderEntity emailSender = emailSenderService.getOne(
+							new LambdaQueryWrapper<EmailSenderEntity>().eq(EmailSenderEntity::getInstId, instId));
 
 					String credentials = PasswordReciprocal.getInstance().decoder(emailSender.getCredentials());
 					MailProperties mailProperties = new MailProperties();

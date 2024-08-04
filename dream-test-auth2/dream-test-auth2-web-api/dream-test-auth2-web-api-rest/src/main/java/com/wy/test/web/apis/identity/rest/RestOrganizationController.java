@@ -2,7 +2,6 @@ package com.wy.test.web.apis.identity.rest;
 
 import java.io.IOException;
 
-import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,8 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.Organizations;
-import com.wy.test.persistence.service.OrganizationsService;
+import com.wy.test.core.entity.OrgEntity;
+import com.wy.test.core.query.OrgQuery;
+import com.wy.test.persistence.service.OrgService;
 
 import dream.flying.flower.lang.StrHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -34,37 +34,37 @@ import lombok.extern.slf4j.Slf4j;
 public class RestOrganizationController {
 
 	@Autowired
-	OrganizationsService organizationsService;
+	OrgService orgService;
 
 	@GetMapping(value = "/{id}")
-	public Organizations getUser(@PathVariable String id, @RequestParam(required = false) String attributes) {
-		log.debug("Organizations id {} , attributes {}", id , attributes);
-		Organizations org = organizationsService.get(id);
+	public OrgEntity getUser(@PathVariable String id, @RequestParam(required = false) String attributes) {
+		log.debug("Organizations id {} , attributes {}", id, attributes);
+		OrgEntity org = orgService.getById(id);
 		return org;
 	}
 
 	@PostMapping
-	public Organizations create(@RequestBody Organizations org, @RequestParam(required = false) String attributes,
+	public OrgEntity create(@RequestBody OrgEntity org, @RequestParam(required = false) String attributes,
 			UriComponentsBuilder builder) throws IOException {
-		log.debug("Organizations content {} , attributes {}", org , attributes);
-		Organizations loadOrg = organizationsService.get(org.getId());
+		log.debug("Organizations content {} , attributes {}", org, attributes);
+		OrgEntity loadOrg = orgService.getById(org.getId());
 		if (loadOrg == null) {
-			organizationsService.insert(org);
+			orgService.insert(org);
 		} else {
-			organizationsService.update(org);
+			orgService.update(org);
 		}
 		return org;
 	}
 
 	@PutMapping(value = "/{id}")
-	public Organizations replace(@PathVariable String id, @RequestBody Organizations org,
+	public OrgEntity replace(@PathVariable String id, @RequestBody OrgEntity org,
 			@RequestParam(required = false) String attributes) throws IOException {
-		log.debug("Organizations id {} , content {} , attributes {}", id , org , attributes);
-		Organizations loadOrg = organizationsService.get(id);
+		log.debug("Organizations id {} , content {} , attributes {}", id, org, attributes);
+		OrgEntity loadOrg = orgService.getById(id);
 		if (loadOrg == null) {
-			organizationsService.insert(org);
+			orgService.insert(org);
 		} else {
-			organizationsService.update(org);
+			orgService.update(org);
 		}
 
 		return org;
@@ -73,16 +73,16 @@ public class RestOrganizationController {
 	@DeleteMapping(value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable final String id) {
-		log.debug("Organizations id {} ", id );
-		organizationsService.remove(id);
+		log.debug("Organizations id {} ", id);
+		orgService.removeById(id);
 	}
 
 	@GetMapping(value = { "/.search" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> search(@ModelAttribute Organizations org) {
+	public ResponseEntity<?> search(@ModelAttribute OrgQuery org) {
 		if (StrHelper.isBlank(org.getInstId())) {
 			org.setInstId("1");
 		}
-		return new Message<JpaPageResults<Organizations>>(organizationsService.fetchPageResults(org)).buildResponse();
+		return new Message<>(orgService.listPage(org)).buildResponse();
 	}
 }

@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.SmsProvider;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.SmsProviderEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.persistence.service.SmsProviderService;
 
@@ -31,17 +31,17 @@ public class SmsProviderController {
 	private SmsProviderService smsProviderService;
 
 	@GetMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> get(@CurrentUser UserInfo currentUser) {
-		SmsProvider smsProvider = smsProviderService.get(currentUser.getInstId());
+	public ResponseEntity<?> get(@CurrentUser UserEntity currentUser) {
+		SmsProviderEntity smsProvider = smsProviderService.get(currentUser.getInstId());
 		if (smsProvider != null && StringUtils.isNoneBlank(smsProvider.getId())) {
 			smsProvider.setAppSecret(PasswordReciprocal.getInstance().decoder(smsProvider.getAppSecret()));
 		}
-		return new Message<SmsProvider>(smsProvider).buildResponse();
+		return new Message<SmsProviderEntity>(smsProvider).buildResponse();
 	}
 
 	@PostMapping(value = { "/update" })
 	@ResponseBody
-	public ResponseEntity<?> update(@RequestBody SmsProvider smsProvider, @CurrentUser UserInfo currentUser,
+	public ResponseEntity<?> update(@RequestBody SmsProviderEntity smsProvider, @CurrentUser UserEntity currentUser,
 			BindingResult result) {
 		_logger.debug("update smsProvider : " + smsProvider);
 		smsProvider.setAppSecret(PasswordReciprocal.getInstance().encode(smsProvider.getAppSecret()));
@@ -54,9 +54,9 @@ public class SmsProviderController {
 			updateResult = smsProviderService.update(smsProvider);
 		}
 		if (updateResult) {
-			return new Message<SmsProvider>(Message.SUCCESS).buildResponse();
+			return new Message<SmsProviderEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<SmsProvider>(Message.FAIL).buildResponse();
+			return new Message<SmsProviderEntity>(Message.FAIL).buildResponse();
 		}
 	}
 }

@@ -10,7 +10,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.core.constants.ConstStatus;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
@@ -44,8 +44,8 @@ public class JdbcUsersService extends AbstractSynchronizerService implements ISy
 				long updateCount = 0;
 				long readCount = 0;
 				while (rs.next()) {
-					UserInfo user = buildUserInfo(rs);
-					UserInfo queryUser = this.userInfoService.findByUsername(user.getUsername());
+					UserEntity user = buildUserInfo(rs);
+					UserEntity queryUser = this.userInfoService.findByUsername(user.getUsername());
 					readCount++;
 					if (queryUser == null) {
 						if (user.getPassword().indexOf("{") > -1 && user.getPassword().indexOf("}") > -1) {
@@ -77,9 +77,9 @@ public class JdbcUsersService extends AbstractSynchronizerService implements ISy
 		}
 	}
 
-	public UserInfo buildUserInfo(ResultSet rs) throws SQLException {
+	public UserEntity buildUserInfo(ResultSet rs) throws SQLException {
 		TableMetaData meta = JdbcHelper.getMetaData(rs);
-		UserInfo user = new UserInfo();
+		UserEntity user = new UserEntity();
 		// basic
 		for (ColumnFieldMapper mapper : mapperList) {
 			if (meta.getColumnDetail().containsKey(mapper.getColumn())) {

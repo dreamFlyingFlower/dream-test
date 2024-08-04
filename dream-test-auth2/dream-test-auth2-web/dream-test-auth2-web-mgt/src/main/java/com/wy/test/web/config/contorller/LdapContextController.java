@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.entity.LdapContext;
+import com.wy.test.core.entity.LdapContextEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.persistence.ldap.ActiveDirectoryHelpers;
 import com.wy.test.core.persistence.ldap.LdapHelpers;
@@ -33,17 +33,17 @@ public class LdapContextController {
 	private LdapContextService ldapContextService;
 
 	@GetMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> get(@CurrentUser UserInfo currentUser) {
-		LdapContext ldapContext = ldapContextService.get(currentUser.getInstId());
+	public ResponseEntity<?> get(@CurrentUser UserEntity currentUser) {
+		LdapContextEntity ldapContext = ldapContextService.get(currentUser.getInstId());
 		if (ldapContext != null && StringUtils.isNoneBlank(ldapContext.getCredentials())) {
 			ldapContext.setCredentials(PasswordReciprocal.getInstance().decoder(ldapContext.getCredentials()));
 		}
-		return new Message<LdapContext>(ldapContext).buildResponse();
+		return new Message<LdapContextEntity>(ldapContext).buildResponse();
 	}
 
 	@PostMapping(value = { "/update" })
 	@ResponseBody
-	public ResponseEntity<?> update(@RequestBody LdapContext ldapContext, @CurrentUser UserInfo currentUser,
+	public ResponseEntity<?> update(@RequestBody LdapContextEntity ldapContext, @CurrentUser UserEntity currentUser,
 			BindingResult result) {
 		_logger.debug("update ldapContext : " + ldapContext);
 		ldapContext.setCredentials(PasswordReciprocal.getInstance().encode(ldapContext.getCredentials()));
@@ -56,15 +56,15 @@ public class LdapContextController {
 			updateResult = ldapContextService.update(ldapContext);
 		}
 		if (updateResult) {
-			return new Message<LdapContext>(Message.SUCCESS).buildResponse();
+			return new Message<LdapContextEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<LdapContext>(Message.FAIL).buildResponse();
+			return new Message<LdapContextEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@GetMapping(value = { "/test" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> test(@CurrentUser UserInfo currentUser) {
-		LdapContext ldapContext = ldapContextService.get(currentUser.getInstId());
+	public ResponseEntity<?> test(@CurrentUser UserEntity currentUser) {
+		LdapContextEntity ldapContext = ldapContextService.get(currentUser.getInstId());
 		if (ldapContext != null && StringUtils.isNoneBlank(ldapContext.getCredentials())) {
 			ldapContext.setCredentials(PasswordReciprocal.getInstance().decoder(ldapContext.getCredentials()));
 		}
@@ -83,9 +83,9 @@ public class LdapContextController {
 
 		if (ldapUtils.openConnection() != null) {
 			ldapUtils.close();
-			return new Message<LdapContext>(Message.SUCCESS).buildResponse();
+			return new Message<LdapContextEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<LdapContext>(Message.FAIL).buildResponse();
+			return new Message<LdapContextEntity>(Message.FAIL).buildResponse();
 		}
 	}
 }

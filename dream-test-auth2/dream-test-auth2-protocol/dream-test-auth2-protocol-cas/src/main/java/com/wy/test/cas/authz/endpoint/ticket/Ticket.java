@@ -5,7 +5,7 @@ import java.time.ZonedDateTime;
 
 import org.springframework.security.core.Authentication;
 
-import com.wy.test.core.entity.apps.AppsCasDetails;
+import com.wy.test.core.entity.AppCasDetailEntity;
 
 /**
  * Interface for the generic concept of a ticket.
@@ -80,6 +80,6 @@ public interface Ticket extends Serializable, Comparable<Ticket> {
 
 	ZonedDateTime getPreviousTimeUsed();
 
-	AppsCasDetails getCasDetails();
+	AppCasDetailEntity getCasDetails();
 
 }

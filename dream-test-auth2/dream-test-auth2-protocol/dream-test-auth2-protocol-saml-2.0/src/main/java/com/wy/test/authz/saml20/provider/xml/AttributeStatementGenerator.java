@@ -21,10 +21,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.wy.test.core.constants.ldap.ActiveDirectoryUser;
+import com.wy.test.core.entity.AppSamlDetailEntity;
 import com.wy.test.core.entity.ExtraAttr;
 import com.wy.test.core.entity.ExtraAttrs;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.AppsSAML20Details;
+import com.wy.test.core.entity.UserEntity;
 
 import dream.flying.flower.framework.core.enums.BooleanEnum;
 
@@ -38,14 +38,14 @@ public class AttributeStatementGenerator {
 
 	public static String COMMA_ISO8859_1 = "#44;"; // #44; ->,
 
-	public AttributeStatement generateAttributeStatement(AppsSAML20Details saml20Details,
-			ArrayList<GrantedAuthority> grantedAuthoritys, UserInfo userInfo) {
+	public AttributeStatement generateAttributeStatement(AppSamlDetailEntity saml20Details,
+			ArrayList<GrantedAuthority> grantedAuthoritys, UserEntity userInfo) {
 		return generateAttributeStatement(saml20Details, grantedAuthoritys, null, userInfo);
 
 	}
 
-	public AttributeStatement generateAttributeStatement(AppsSAML20Details saml20Details,
-			ArrayList<GrantedAuthority> grantedAuthoritys, HashMap<String, String> attributeMap, UserInfo userInfo) {
+	public AttributeStatement generateAttributeStatement(AppSamlDetailEntity saml20Details,
+			ArrayList<GrantedAuthority> grantedAuthoritys, HashMap<String, String> attributeMap, UserEntity userInfo) {
 
 		AttributeStatementBuilder attributeStatementBuilder =
 				(AttributeStatementBuilder) builderFactory.getBuilder(AttributeStatement.DEFAULT_ELEMENT_NAME);
@@ -121,7 +121,7 @@ public class AttributeStatementGenerator {
 		return xsStringValue;
 	}
 
-	public HashMap<String, String> putUserAttributes(HashMap<String, String> attributeMap, UserInfo userInfo) {
+	public HashMap<String, String> putUserAttributes(HashMap<String, String> attributeMap, UserEntity userInfo) {
 		attributeMap.put(ActiveDirectoryUser.USERNAME, userInfo.getUsername());
 		attributeMap.put(ActiveDirectoryUser.UID, userInfo.getUsername());
 

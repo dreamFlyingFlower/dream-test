@@ -4,15 +4,14 @@ import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.core.authn.SignPrincipal;
-import com.wy.test.core.entity.Accounts;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.entity.AccountEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
+import com.wy.test.core.vo.AppVO;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.binary.Base64Helper;
@@ -20,16 +19,18 @@ import dream.flying.flower.framework.core.enums.BooleanEnum;
 import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
 import dream.flying.flower.framework.web.crypto.cert.CertSigner;
 import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
+@Data
 public abstract class AbstractAuthorizeAdapter {
 
-	final static Logger _logger = LoggerFactory.getLogger(AbstractAuthorizeAdapter.class);
+	protected AppVO app;
 
-	protected Apps app;
+	protected UserVO userInfo;
 
-	protected UserInfo userInfo;
-
-	protected Accounts account;
+	protected AccountEntity account;
 
 	protected SignPrincipal principal;
 
@@ -45,20 +46,20 @@ public abstract class AbstractAuthorizeAdapter {
 			try {
 				byte[] signData = CertSigner.sign(data.toString().getBytes(), keyStoreLoader.getKeyStore(),
 						keyStoreLoader.getEntityName(), keyStoreLoader.getKeystorePassword());
-				_logger.debug("signed Token : " + data);
-				_logger.debug("signature : " + signData.toString());
+				log.debug("signed Token : " + data);
+				log.debug("signature : " + signData.toString());
 
 				return Base64Helper.encodeUrl(data.toString().getBytes("UTF-8")) + "."
 						+ Base64Helper.encodeUrl(signData);
 			} catch (UnsupportedEncodingException e) {
-				_logger.error("UnsupportedEncodingException ", e);
+				log.error("UnsupportedEncodingException ", e);
 			} catch (Exception e) {
-				_logger.error("Exception ", e);
+				log.error("Exception ", e);
 			}
-			_logger.debug("Token {}", data);
+			log.debug("Token {}", data);
 
 		} else {
-			_logger.debug("data not need sign .");
+			log.debug("data not need sign .");
 			return data;
 		}
 
@@ -68,8 +69,8 @@ public abstract class AbstractAuthorizeAdapter {
 	public Object encrypt(Object data, String algorithmKey, String algorithm) {
 
 		algorithmKey = PasswordReciprocal.getInstance().decoder(algorithmKey);
-		_logger.debug("algorithm : " + algorithm);
-		_logger.debug("algorithmKey : " + algorithmKey);
+		log.debug("algorithm : " + algorithm);
+		log.debug("algorithmKey : " + algorithmKey);
 		// Chinese , encode data to HEX
 		try {
 			data = new String(Hex.encodeHex(data.toString().getBytes("UTF-8")));
@@ -78,12 +79,12 @@ public abstract class AbstractAuthorizeAdapter {
 		}
 		byte[] encodeData = ReciprocalHelpers.encode(data.toString(), algorithmKey, algorithm);
 		String tokenString = Base64Helper.encodeUrlString(encodeData);
-		_logger.trace("Reciprocal then HEX  Token : " + tokenString);
+		log.trace("Reciprocal then HEX  Token : " + tokenString);
 
 		return tokenString;
 	}
 
-	public static String getValueByUserAttr(UserInfo userInfo, String userAttr) {
+	public static String getValueByUserAttr(UserEntity userInfo, String userAttr) {
 		String value = "";
 		if (StringUtils.isBlank(userAttr)) {
 			value = userInfo.getUsername();
@@ -120,13 +121,4 @@ public abstract class AbstractAuthorizeAdapter {
 		this.principal = principal;
 		this.userInfo = principal.getUserInfo();
 	}
-
-	public void setApp(Apps app) {
-		this.app = app;
-	}
-
-	public void setAccount(Accounts account) {
-		this.account = account;
-	}
-
 }

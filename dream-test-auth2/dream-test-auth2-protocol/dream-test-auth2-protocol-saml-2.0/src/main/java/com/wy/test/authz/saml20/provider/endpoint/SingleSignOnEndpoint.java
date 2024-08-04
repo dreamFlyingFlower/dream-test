@@ -24,7 +24,7 @@ import com.wy.test.authz.saml.common.AuthnRequestInfo;
 import com.wy.test.authz.saml20.binding.BindingAdapter;
 import com.wy.test.authz.saml20.binding.ExtractBindingAdapter;
 import com.wy.test.authz.saml20.xml.SAML2ValidatorSuite;
-import com.wy.test.core.entity.apps.AppsSAML20Details;
+import com.wy.test.core.entity.AppSamlDetailEntity;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.AppsSaml20DetailsService;
@@ -94,7 +94,7 @@ public class SingleSignOnEndpoint {
 	}
 
 	public void extractSaml20Detail(ExtractBindingAdapter extractBindingAdapter, String samlId) throws Exception {
-		AppsSAML20Details saml20Details = saml20DetailsService.getAppDetails(samlId, true);
+		AppSamlDetailEntity saml20Details = saml20DetailsService.getAppDetails(samlId, true);
 		WebContext.setAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP, saml20Details);
 		if (saml20Details == null) {
 			logger.error("Request SAML APPID [" + samlId + "] is not exist .");

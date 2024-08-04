@@ -7,13 +7,20 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.wy.test.core.authn.session.Session;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.vo.UserVO;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+@Data
+@ToString
+@NoArgsConstructor
 public class SignPrincipal implements UserDetails {
 
 	private static final long serialVersionUID = -110742975439268030L;
 
-	UserInfo userInfo;
+	UserVO userInfo;
 
 	UserDetails userDetails;
 
@@ -35,16 +42,7 @@ public class SignPrincipal implements UserDetails {
 
 	private boolean enabled;
 
-	/**
-	 * SigninPrincipal.
-	 */
-	public SignPrincipal() {
-	}
-
-	/**
-	 * SignPrincipal.
-	 */
-	public SignPrincipal(UserInfo userInfo) {
+	public SignPrincipal(UserVO userInfo) {
 		this.userInfo = userInfo;
 		this.authenticated = true;
 		this.accountNonExpired = true;
@@ -53,7 +51,7 @@ public class SignPrincipal implements UserDetails {
 		this.enabled = true;
 	}
 
-	public SignPrincipal(UserInfo userInfo, Session session) {
+	public SignPrincipal(UserVO userInfo, Session session) {
 		this.userInfo = userInfo;
 		this.authenticated = true;
 		this.accountNonExpired = true;
@@ -64,93 +62,14 @@ public class SignPrincipal implements UserDetails {
 		this.userInfo.setSessionId(session.getId());
 	}
 
-	/**
-	 * SigninPrincipal.
-	 */
 	public SignPrincipal(UserDetails userDetails) {
 		this.userDetails = userDetails;
 		this.authenticated = true;
 	}
 
-	public UserInfo getUserInfo() {
-		return userInfo;
-	}
-
-	public void setUserInfo(UserInfo userInfo) {
-		this.userInfo = userInfo;
-	}
-
-	public boolean isAuthenticated() {
-		return authenticated;
-	}
-
-	public void setAuthenticated(boolean authenticated) {
-		this.authenticated = authenticated;
-	}
-
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return grantedAuthority;
-	}
-
-	public ArrayList<GrantedAuthority> getGrantedAuthority() {
-		return grantedAuthority;
-	}
-
-	public UserDetails getUserDetails() {
-		return userDetails;
-	}
-
-	public void setUserDetails(UserDetails userDetails) {
-		this.userDetails = userDetails;
-	}
-
-	public void setGrantedAuthority(ArrayList<GrantedAuthority> grantedAuthority) {
-		this.grantedAuthority = grantedAuthority;
-	}
-
-	public Session getSession() {
-		return session;
-	}
-
-	public void setSession(Session session) {
-		this.session = session;
-	}
-
-	public boolean isRoleAdministrators() {
-		return roleAdministrators;
-	}
-
-	public void setRoleAdministrators(boolean roleAdministrators) {
-		this.roleAdministrators = roleAdministrators;
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return this.accountNonExpired;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return this.accountNonLocked;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return this.credentialsNonExpired;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return this.enabled;
-	}
-
-	public ArrayList<GrantedAuthority> getGrantedAuthorityApps() {
-		return grantedAuthorityApps;
-	}
-
-	public void setGrantedAuthorityApps(ArrayList<GrantedAuthority> grantedAuthorityApps) {
-		this.grantedAuthorityApps = grantedAuthorityApps;
 	}
 
 	@Override
@@ -170,36 +89,4 @@ public class SignPrincipal implements UserDetails {
 			return this.userDetails.getPassword();
 		}
 	}
-
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Principal [username=");
-		builder.append(getUsername());
-		builder.append(", userInfo=");
-		builder.append(userInfo);
-		builder.append(", userDetails=");
-		builder.append(userDetails);
-		builder.append(", session=");
-		builder.append(session);
-		builder.append(", grantedAuthority=");
-		builder.append(grantedAuthority);
-		builder.append(", grantedAuthorityApps=");
-		builder.append(grantedAuthorityApps);
-		builder.append(", authenticated=");
-		builder.append(authenticated);
-		builder.append(", roleAdministrators=");
-		builder.append(roleAdministrators);
-		builder.append(", accountNonExpired=");
-		builder.append(accountNonExpired);
-		builder.append(", accountNonLocked=");
-		builder.append(accountNonLocked);
-		builder.append(", credentialsNonExpired=");
-		builder.append(credentialsNonExpired);
-		builder.append(", enabled=");
-		builder.append(enabled);
-		builder.append("]");
-		return builder.toString();
-	}
-
 }

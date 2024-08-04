@@ -5,16 +5,16 @@ import java.util.HashMap;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 
-import com.wy.test.core.entity.Synchronizers;
+import com.wy.test.core.entity.SyncEntity;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.persistence.service.SynchronizersService;
+import com.wy.test.persistence.service.SyncService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SynchronizerJob implements Job {
 
-	SynchronizersService synchronizersService;
+	SyncService synchronizersService;
 
 	public static class JOBSTATUS {
 
@@ -29,7 +29,7 @@ public class SynchronizerJob implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) {
-		Synchronizers synchronizer = readSynchronizer(context);
+		SyncEntity synchronizer = readSynchronizer(context);
 		if (jobStatus.get(synchronizer.getId()) == null) {
 			// init
 			jobStatus.put(synchronizer.getId(), JOBSTATUS.STOP);
@@ -58,13 +58,13 @@ public class SynchronizerJob implements Job {
 		log.debug("SynchronizerJob is finished . ");
 	}
 
-	public Synchronizers readSynchronizer(JobExecutionContext context) {
-		Synchronizers jobSynchronizer = (Synchronizers) context.getMergedJobDataMap().get("synchronizer");
+	public SyncEntity readSynchronizer(JobExecutionContext context) {
+		SyncEntity jobSynchronizer = (SyncEntity) context.getMergedJobDataMap().get("synchronizer");
 		if (synchronizersService == null) {
-			synchronizersService = (SynchronizersService) WebContext.getBean("synchronizersService");
+			synchronizersService = (SyncService) WebContext.getBean("syncService");
 		}
 		// read synchronizer by id from database
-		Synchronizers synchronizer = synchronizersService.get(jobSynchronizer.getId());
+		SyncEntity synchronizer = synchronizersService.getById(jobSynchronizer.getId());
 		log.trace("synchronizer " + synchronizer);
 		return synchronizer;
 	}

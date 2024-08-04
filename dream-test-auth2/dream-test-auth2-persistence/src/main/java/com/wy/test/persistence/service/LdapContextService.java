@@ -1,26 +1,18 @@
 package com.wy.test.persistence.service;
 
-import org.dromara.mybatis.jpa.JpaService;
-import org.springframework.stereotype.Repository;
+import com.wy.test.core.entity.LdapContextEntity;
+import com.wy.test.core.query.LdapContextQuery;
+import com.wy.test.core.vo.LdapContextVO;
 
-import com.wy.test.core.entity.LdapContext;
-import com.wy.test.persistence.mapper.LdapContextMapper;
+import dream.flying.flower.framework.mybatis.plus.service.BaseServices;
 
-@Repository
-public class LdapContextService extends JpaService<LdapContext> {
-
-	public LdapContextService() {
-		super(LdapContextMapper.class);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.connsec.db.service.BaseService#getMapper()
-	 */
-	@Override
-	public LdapContextMapper getMapper() {
-		return (LdapContextMapper) super.getMapper();
-	}
+/**
+ * LDAP上下文
+ *
+ * @author 飞花梦影
+ * @date 2024-08-01
+ * @git {@link https://github.com/dreamFlyingFlower}
+ */
+public interface LdapContextService extends BaseServices<LdapContextEntity, LdapContextVO, LdapContextQuery> {
 
 }

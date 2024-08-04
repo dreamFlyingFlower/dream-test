@@ -1,9 +1,21 @@
 package com.wy.test.persistence.mapper;
 
-import org.dromara.mybatis.jpa.IJpaMapper;
+import org.apache.ibatis.annotations.Mapper;
 
-import com.wy.test.core.entity.PasswordPolicy;
+import com.wy.test.core.entity.PasswordPolicyEntity;
+import com.wy.test.core.query.PasswordPolicyQuery;
+import com.wy.test.core.vo.PasswordPolicyVO;
 
-public interface PasswordPolicyMapper extends IJpaMapper<PasswordPolicy> {
+import dream.flying.flower.framework.mybatis.plus.mapper.BaseMappers;
+
+/**
+ * 密码策略
+ *
+ * @author 飞花梦影
+ * @date 2024-08-01
+ * @git {@link https://github.com/dreamFlyingFlower}
+ */
+@Mapper
+public interface PasswordPolicyMapper extends BaseMappers<PasswordPolicyEntity, PasswordPolicyVO, PasswordPolicyQuery> {
 
 }

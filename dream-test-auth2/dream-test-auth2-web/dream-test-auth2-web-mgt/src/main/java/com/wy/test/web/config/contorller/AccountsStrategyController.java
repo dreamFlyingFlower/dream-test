@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.entity.AccountsStrategy;
+import com.wy.test.core.entity.AccountStrategyEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.AccountsService;
 import com.wy.test.persistence.service.AccountsStrategyService;
 
@@ -38,69 +38,69 @@ public class AccountsStrategyController {
 
 	@PostMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute AccountsStrategy accountsStrategy,
-			@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> fetch(@ModelAttribute AccountStrategyEntity accountsStrategy,
+			@CurrentUser UserEntity currentUser) {
 		accountsStrategy.setInstId(currentUser.getInstId());
-		JpaPageResults<AccountsStrategy> accountsStrategyList =
+		JpaPageResults<AccountStrategyEntity> accountsStrategyList =
 				accountsStrategyService.fetchPageResults(accountsStrategy);
-		for (AccountsStrategy strategy : accountsStrategyList.getRows()) {
+		for (AccountStrategyEntity strategy : accountsStrategyList.getRows()) {
 			strategy.transIconBase64();
 		}
 		_logger.debug("Accounts Strategy " + accountsStrategyList);
-		return new Message<JpaPageResults<AccountsStrategy>>(accountsStrategyList).buildResponse();
+		return new Message<JpaPageResults<AccountStrategyEntity>>(accountsStrategyList).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> query(@ModelAttribute AccountsStrategy accountsStrategy,
-			@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> query(@ModelAttribute AccountStrategyEntity accountsStrategy,
+			@CurrentUser UserEntity currentUser) {
 		_logger.debug("-query  :" + accountsStrategy);
 		if (CollectionUtils.isNotEmpty(accountsStrategyService.query(accountsStrategy))) {
-			return new Message<AccountsStrategy>(Message.SUCCESS).buildResponse();
+			return new Message<AccountStrategyEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AccountsStrategy>(Message.SUCCESS).buildResponse();
+			return new Message<AccountStrategyEntity>(Message.SUCCESS).buildResponse();
 		}
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		AccountsStrategy accountsStrategy = accountsStrategyService.get(id);
-		return new Message<AccountsStrategy>(accountsStrategy).buildResponse();
+		AccountStrategyEntity accountsStrategy = accountsStrategyService.get(id);
+		return new Message<AccountStrategyEntity>(accountsStrategy).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> insert(@RequestBody AccountsStrategy accountsStrategy, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> insert(@RequestBody AccountStrategyEntity accountsStrategy, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-Add  :" + accountsStrategy);
 
 		if (accountsStrategyService.insert(accountsStrategy)) {
 			accountsService.refreshByStrategy(accountsStrategy);
-			return new Message<AccountsStrategy>(Message.SUCCESS).buildResponse();
+			return new Message<AccountStrategyEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AccountsStrategy>(Message.FAIL).buildResponse();
+			return new Message<AccountStrategyEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@RequestBody AccountsStrategy accountsStrategy, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> update(@RequestBody AccountStrategyEntity accountsStrategy, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-update  :" + accountsStrategy);
 		if (accountsStrategyService.update(accountsStrategy)) {
 			accountsService.refreshByStrategy(accountsStrategy);
-			return new Message<AccountsStrategy>(Message.SUCCESS).buildResponse();
+			return new Message<AccountStrategyEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AccountsStrategy>(Message.FAIL).buildResponse();
+			return new Message<AccountStrategyEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-delete  ids : {} ", ids);
 		if (accountsStrategyService.deleteBatch(ids)) {
-			return new Message<AccountsStrategy>(Message.SUCCESS).buildResponse();
+			return new Message<AccountStrategyEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AccountsStrategy>(Message.FAIL).buildResponse();
+			return new Message<AccountStrategyEntity>(Message.FAIL).buildResponse();
 		}
 	}
 }

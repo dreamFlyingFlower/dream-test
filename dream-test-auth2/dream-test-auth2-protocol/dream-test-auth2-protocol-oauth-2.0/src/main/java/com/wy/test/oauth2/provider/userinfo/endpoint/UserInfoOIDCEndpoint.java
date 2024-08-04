@@ -36,7 +36,7 @@ import com.nimbusds.jwt.SignedJWT;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.constants.ContentType;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 import com.wy.test.core.web.HttpResponseAdapter;
 import com.wy.test.core.web.WebConstants;
@@ -105,7 +105,7 @@ public class UserInfoOIDCEndpoint {
 			ClientDetails clientDetails = clientDetailsService
 					.loadClientByClientId(oAuth2Authentication.getOAuth2Request().getClientId(), true);
 
-			UserInfo userInfo = queryUserInfo(principal);
+			UserEntity userInfo = queryUserInfo(principal);
 			String userJson = "";
 			Builder jwtClaimsSetBuilder = new JWTClaimsSet.Builder();
 
@@ -138,10 +138,10 @@ public class UserInfoOIDCEndpoint {
 
 				String gender;
 				switch (userInfo.getGender()) {
-				case UserInfo.GENDER.MALE:
+				case UserEntity.GENDER.MALE:
 					gender = "male";
 					break;
-				case UserInfo.GENDER.FEMALE:
+				case UserEntity.GENDER.FEMALE:
 					gender = "female";
 					break;
 				default:
@@ -265,8 +265,8 @@ public class UserInfoOIDCEndpoint {
 		return atfe;
 	}
 
-	public UserInfo queryUserInfo(String userId) {
-		return (UserInfo) userInfoService.findByUsername(userId);
+	public UserEntity queryUserInfo(String userId) {
+		return (UserEntity) userInfoService.findByUsername(userId);
 	}
 
 	public void setOauth20tokenServices(DefaultTokenServices oauth20tokenServices) {

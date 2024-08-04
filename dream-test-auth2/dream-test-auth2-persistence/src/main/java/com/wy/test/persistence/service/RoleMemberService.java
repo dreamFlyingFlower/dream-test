@@ -2,75 +2,31 @@ package com.wy.test.persistence.service;
 
 import java.util.List;
 
-import org.dromara.mybatis.jpa.JpaService;
-import org.dromara.mybatis.jpa.entity.JpaPageResults;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wy.test.core.entity.RoleEntity;
+import com.wy.test.core.entity.RoleMemberEntity;
+import com.wy.test.core.entity.UserEntity;
+import com.wy.test.core.query.RoleMemberQuery;
+import com.wy.test.core.vo.RoleMemberVO;
 
-import com.wy.test.core.entity.RoleMember;
-import com.wy.test.core.entity.Roles;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.persistence.mapper.RoleMemberMapper;
+import dream.flying.flower.framework.mybatis.plus.service.BaseServices;
 
-@Repository
-public class RoleMemberService extends JpaService<RoleMember> {
+/**
+ * 角色成员
+ *
+ * @author 飞花梦影
+ * @date 2024-08-01
+ * @git {@link https://github.com/dreamFlyingFlower}
+ */
+public interface RoleMemberService extends BaseServices<RoleMemberEntity, RoleMemberVO, RoleMemberQuery> {
 
-	final static Logger _logger = LoggerFactory.getLogger(RoleMemberService.class);
+	int addDynamicRoleMember(RoleEntity dynamicGroup);
 
-	public RoleMemberService() {
-		super(RoleMemberMapper.class);
-	}
+	int deleteDynamicRoleMember(RoleEntity dynamicGroup);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.connsec.db.service.BaseService#getMapper()
-	 */
-	@Override
-	public RoleMemberMapper getMapper() {
-		return (RoleMemberMapper) super.getMapper();
-	}
+	int deleteByRoleId(String groupId);
 
-	public int addDynamicRoleMember(Roles dynamicGroup) {
-		return getMapper().addDynamicRoleMember(dynamicGroup);
-	}
+	List<UserEntity> queryMemberByRoleId(String groupId);
 
-	public int deleteDynamicRoleMember(Roles dynamicGroup) {
-		return getMapper().deleteDynamicRoleMember(dynamicGroup);
-	}
-
-	public int deleteByRoleId(String groupId) {
-		return getMapper().deleteByRoleId(groupId);
-	}
-
-	public List<UserInfo> queryMemberByRoleId(String groupId) {
-		return getMapper().queryMemberByRoleId(groupId);
-	}
-
-	public JpaPageResults<Roles> rolesNoMember(RoleMember entity) {
-		entity.setPageResultSelectUUID(entity.generateId());
-		entity.setStartRow(calculateStartRow(entity.getPageNumber(), entity.getPageSize()));
-
-		entity.setPageable(true);
-		List<Roles> resultslist = null;
-		try {
-			resultslist = getMapper().rolesNoMember(entity);
-		} catch (Exception e) {
-			_logger.error("queryPageResults Exception ", e);
-		}
-		entity.setPageable(false);
-		Integer totalPage = resultslist.size();
-
-		Integer totalCount = 0;
-		if (entity.getPageNumber() == 1 && totalPage < entity.getPageSize()) {
-			totalCount = totalPage;
-		} else {
-			totalCount = parseCount(getMapper().fetchCount(entity));
-		}
-
-		return new JpaPageResults<Roles>(entity.getPageNumber(), entity.getPageSize(), totalPage, totalCount,
-				resultslist);
-	}
-
+	Page<RoleEntity> rolesNoMember(RoleMemberQuery query);
 }

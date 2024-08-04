@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstProtocols;
+import com.wy.test.core.entity.AppJwtDetailEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.AppsJwtDetails;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.AppsJwtDetailsService;
 
 import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
@@ -34,58 +34,58 @@ public class JwtDetailsController extends BaseAppContorller {
 
 	@GetMapping(value = { "/init" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> init() {
-		AppsJwtDetails jwtDetails = new AppsJwtDetails();
+		AppJwtDetailEntity jwtDetails = new AppJwtDetailEntity();
 		jwtDetails.setId(jwtDetails.generateId());
 		jwtDetails.setProtocol(ConstProtocols.JWT);
 		jwtDetails.setSecret(ReciprocalHelpers.generateKey(""));
 		jwtDetails.setUserPropertys("userPropertys");
-		return new Message<AppsJwtDetails>(jwtDetails).buildResponse();
+		return new Message<AppJwtDetailEntity>(jwtDetails).buildResponse();
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		AppsJwtDetails jwtDetails = jwtDetailsService.getAppDetails(id, false);
+		AppJwtDetailEntity jwtDetails = jwtDetailsService.getAppDetails(id, false);
 		decoderSecret(jwtDetails);
 		jwtDetails.transIconBase64();
-		return new Message<AppsJwtDetails>(jwtDetails).buildResponse();
+		return new Message<AppJwtDetailEntity>(jwtDetails).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> insert(@RequestBody AppsJwtDetails jwtDetails, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> insert(@RequestBody AppJwtDetailEntity jwtDetails, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-Add  :" + jwtDetails);
 
 		transform(jwtDetails);
 
 		jwtDetails.setInstId(currentUser.getInstId());
 		if (jwtDetailsService.insert(jwtDetails) && appsService.insertApp(jwtDetails)) {
-			return new Message<AppsJwtDetails>(Message.SUCCESS).buildResponse();
+			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsJwtDetails>(Message.FAIL).buildResponse();
+			return new Message<AppJwtDetailEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@RequestBody AppsJwtDetails jwtDetails, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> update(@RequestBody AppJwtDetailEntity jwtDetails, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-update  :" + jwtDetails);
 		transform(jwtDetails);
 		jwtDetails.setInstId(currentUser.getInstId());
 		if (jwtDetailsService.update(jwtDetails) && appsService.updateApp(jwtDetails)) {
-			return new Message<AppsJwtDetails>(Message.SUCCESS).buildResponse();
+			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsJwtDetails>(Message.FAIL).buildResponse();
+			return new Message<AppJwtDetailEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-delete  ids : {} ", ids);
 		if (jwtDetailsService.deleteBatch(ids) && appsService.deleteBatch(ids)) {
-			return new Message<AppsJwtDetails>(Message.SUCCESS).buildResponse();
+			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsJwtDetails>(Message.FAIL).buildResponse();
+			return new Message<AppJwtDetailEntity>(Message.FAIL).buildResponse();
 		}
 	}
 

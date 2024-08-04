@@ -25,10 +25,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.wy.test.core.entity.Roles;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.RoleEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.RoleMemberService;
-import com.wy.test.persistence.service.RolesService;
+import com.wy.test.persistence.service.RoleService;
 import com.wy.test.web.apis.identity.scim.resources.ScimGroup;
 import com.wy.test.web.apis.identity.scim.resources.ScimMemberRef;
 import com.wy.test.web.apis.identity.scim.resources.ScimMeta;
@@ -37,27 +37,27 @@ import com.wy.test.web.apis.identity.scim.resources.ScimSearchResult;
 
 import dream.flying.flower.helper.DateTimeHelper;
 import dream.flying.flower.lang.StrHelper;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
+@Slf4j
 @RequestMapping(value = "/api/idm/SCIM/v2/Groups")
 public class ScimGroupController {
 
-	final static Logger _logger = LoggerFactory.getLogger(ScimGroupController.class);
-
 	@Autowired
-	RolesService rolesService;
+	RoleService roleService;
 
 	@Autowired
 	RoleMemberService roleMemberService;
 
 	@GetMapping(value = "/{id}")
 	public MappingJacksonValue get(@PathVariable String id, @RequestParam(required = false) String attributes) {
-		Roles role = rolesService.get(id);
+		RoleEntity role = roleService.getById(id);
 		ScimGroup scimGroup = role2ScimGroup(role);
-		List<UserInfo> userList = roleMemberService.queryMemberByRoleId(id);
+		List<UserEntity> userList = roleMemberService.queryMemberByRoleId(id);
 		if (userList != null && userList.size() > 0) {
 			Set<ScimMemberRef> members = new HashSet<ScimMemberRef>();
-			for (UserInfo user : userList) {
+			for (UserEntity user : userList) {
 				members.add(new ScimMemberRef(user.getDisplayName(), user.getId()));
 			}
 			scimGroup.setMembers(members);
@@ -68,23 +68,23 @@ public class ScimGroupController {
 	@PostMapping
 	public MappingJacksonValue create(@RequestBody ScimGroup scimGroup,
 			@RequestParam(required = false) String attributes, UriComponentsBuilder builder) throws IOException {
-		Roles role = scimGroup2Role(scimGroup);
-		rolesService.insert(role);
+		RoleEntity role = scimGroup2Role(scimGroup);
+		roleService.save(role);
 		return get(role.getId(), attributes);
 	}
 
 	@PutMapping(value = "/{id}")
 	public MappingJacksonValue replace(@PathVariable String id, @RequestBody ScimGroup scimGroup,
 			@RequestParam(required = false) String attributes) throws IOException {
-		Roles role = scimGroup2Role(scimGroup);
-		rolesService.update(role);
+		RoleEntity role = scimGroup2Role(scimGroup);
+		roleService.updateById(role);
 		return get(role.getId(), attributes);
 	}
 
 	@DeleteMapping(value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable final String id) {
-		rolesService.remove(id);
+		roleService.removeById(id);
 	}
 
 	@GetMapping
@@ -95,14 +95,14 @@ public class ScimGroupController {
 	@PostMapping(value = "/.search")
 	public MappingJacksonValue searchWithPost(@ModelAttribute ScimParameters requestParameters) {
 		requestParameters.parse();
-		_logger.debug("requestParameters {} ", requestParameters);
-		Roles queryModel = new Roles();
+		log.debug("requestParameters {} ", requestParameters);
+		RoleEntity queryModel = new RoleEntity();
 		queryModel.setPageSize(requestParameters.getCount());
 		queryModel.calculate(requestParameters.getStartIndex());
 
-		JpaPageResults<Roles> orgResults = rolesService.fetchPageResults(queryModel);
+		JpaPageResults<RoleEntity> orgResults = roleService.fetchPageResults(queryModel);
 		List<ScimGroup> resultList = new ArrayList<ScimGroup>();
-		for (Roles group : orgResults.getRows()) {
+		for (RoleEntity group : orgResults.getRows()) {
 			resultList.add(role2ScimGroup(group));
 		}
 		ScimSearchResult<ScimGroup> scimSearchResult = new ScimSearchResult<ScimGroup>(resultList,
@@ -110,7 +110,7 @@ public class ScimGroupController {
 		return new MappingJacksonValue(scimSearchResult);
 	}
 
-	public ScimGroup role2ScimGroup(Roles group) {
+	public ScimGroup role2ScimGroup(RoleEntity group) {
 		ScimGroup scimGroup = new ScimGroup();
 		scimGroup.setId(group.getId());
 		scimGroup.setExternalId(group.getId());
@@ -128,8 +128,8 @@ public class ScimGroupController {
 		return scimGroup;
 	}
 
-	public Roles scimGroup2Role(ScimGroup scimGroup) {
-		Roles role = new Roles();
+	public RoleEntity scimGroup2Role(ScimGroup scimGroup) {
+		RoleEntity role = new RoleEntity();
 		role.setId(scimGroup.getId());
 		role.setRoleName(scimGroup.getDisplayName());
 		return role;

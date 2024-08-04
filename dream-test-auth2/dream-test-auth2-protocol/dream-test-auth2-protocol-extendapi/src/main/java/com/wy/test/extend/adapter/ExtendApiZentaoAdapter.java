@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.core.entity.Accounts;
+import com.wy.test.core.entity.AccountEntity;
 import com.wy.test.core.entity.ExtraAttrs;
-import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.vo.AppVO;
 
 import dream.flying.flower.digest.DigestHelper;
 
@@ -31,7 +31,7 @@ public class ExtendApiZentaoAdapter extends AbstractAuthorizeAdapter {
 
 	static String login_url_m_template = "account=%s&code=%s&time=%s&token=%s";
 
-	Accounts account;
+	AccountEntity account;
 
 	@Override
 	public Object generateInfo() {
@@ -45,7 +45,7 @@ public class ExtendApiZentaoAdapter extends AbstractAuthorizeAdapter {
 
 	@Override
 	public ModelAndView authorize(ModelAndView modelAndView) {
-		Apps details = (Apps) app;
+		AppVO details = app;
 		// extraAttrs from Applications
 		ExtraAttrs extraAttrs = null;
 		if (details.getIsExtendAttr() == 1) {

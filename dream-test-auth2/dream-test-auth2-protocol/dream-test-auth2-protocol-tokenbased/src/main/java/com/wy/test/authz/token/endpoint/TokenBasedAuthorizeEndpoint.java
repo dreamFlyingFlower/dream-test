@@ -6,7 +6,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,67 +16,74 @@ import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.authz.token.endpoint.adapter.TokenBasedDefaultAdapter;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.Apps;
-import com.wy.test.core.entity.apps.AppsTokenBasedDetails;
+import com.wy.test.core.convert.AppTokenDetailConvert;
+import com.wy.test.core.entity.AppEntity;
+import com.wy.test.core.entity.AppTokenDetailEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
+import com.wy.test.core.vo.AppTokenDetailVO;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.persistence.service.AppsTokenBasedDetailsService;
+import com.wy.test.persistence.service.AppTokenDetailService;
 
 import dream.flying.flower.framework.core.enums.BooleanEnum;
 import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "2-6-TokenBased接口文档模块")
 @Controller
 @Slf4j
+@AllArgsConstructor
 public class TokenBasedAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 
-	@Autowired
-	AppsTokenBasedDetailsService tokenBasedDetailsService;
+	AppTokenDetailService appTokenDetailService;
 
-	@Autowired
+	AppTokenDetailConvert appTokenDetailConvert;
+
 	DreamAuthServerProperties dreamServerProperties;
 
 	@Operation(summary = "TokenBased认证接口", description = "传递参数应用ID", method = "GET")
 	@GetMapping("/authz/tokenbased/{id}")
 	public ModelAndView authorize(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable("id") String id, @CurrentUser UserInfo currentUser)
+			@PathVariable("id") String id, @CurrentUser UserEntity currentUser)
 			throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		ModelAndView modelAndView = new ModelAndView();
 
-		AppsTokenBasedDetails tokenBasedDetails = null;
-		tokenBasedDetails = tokenBasedDetailsService.getAppDetails(id, true);
+		AppTokenDetailEntity tokenBasedDetails = null;
+		tokenBasedDetails = appTokenDetailService.getAppDetails(id, true);
 		log.debug("" + tokenBasedDetails);
 
-		Apps application = getApp(id);
-		tokenBasedDetails.setAdapter(application.getAdapter());
-		tokenBasedDetails.setIsAdapter(application.getIsAdapter());
+		AppEntity application = getApp(id);
+
+		AppTokenDetailVO appTokenDetailVO = appTokenDetailConvert.convertt(tokenBasedDetails);
+
+		appTokenDetailVO.setAdapter(application.getAdapter());
+		appTokenDetailVO.setIsAdapter(application.getIsAdapter());
 
 		AbstractAuthorizeAdapter adapter;
-		if (BooleanEnum.isTrue(tokenBasedDetails.getIsAdapter())) {
-			adapter = (AbstractAuthorizeAdapter) ReflectHelper.newInstance(tokenBasedDetails.getAdapter());
+		if (BooleanEnum.isTrue(appTokenDetailVO.getIsAdapter())) {
+			adapter = (AbstractAuthorizeAdapter) ReflectHelper.newInstance(appTokenDetailVO.getAdapter());
 		} else {
 			adapter = (AbstractAuthorizeAdapter) new TokenBasedDefaultAdapter();
 		}
 		adapter.setPrincipal(AuthorizationUtils.getPrincipal());
-		adapter.setApp(tokenBasedDetails);
+		adapter.setApp(appTokenDetailVO);
 
 		adapter.generateInfo();
 
-		adapter.encrypt(null, tokenBasedDetails.getAlgorithmKey(), tokenBasedDetails.getAlgorithm());
+		adapter.encrypt(null, appTokenDetailVO.getAlgorithmKey(), appTokenDetailVO.getAlgorithm());
 
-		if (tokenBasedDetails.getTokenType().equalsIgnoreCase("POST")) {
+		if (appTokenDetailVO.getTokenType().equalsIgnoreCase("POST")) {
 			return adapter.authorize(modelAndView);
 		} else {
-			log.debug("Cookie Name : {}", tokenBasedDetails.getCookieName());
+			log.debug("Cookie Name : {}", appTokenDetailVO.getCookieName());
 
-			Cookie cookie = new Cookie(tokenBasedDetails.getCookieName(), adapter.serialize());
+			Cookie cookie = new Cookie(appTokenDetailVO.getCookieName(), adapter.serialize());
 
-			Integer maxAge = tokenBasedDetails.getExpires();
+			Integer maxAge = appTokenDetailVO.getExpires();
 			log.debug("Cookie Max Age : {} seconds.", maxAge);
 			cookie.setMaxAge(maxAge);
 
@@ -90,11 +96,11 @@ public class TokenBasedAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 			log.debug("Sub Domain Name : .{}", dreamServerProperties.getBaseDomain());
 			response.addCookie(cookie);
 
-			if (tokenBasedDetails.getRedirectUri().indexOf(dreamServerProperties.getBaseDomain()) > -1) {
-				return WebContext.redirect(tokenBasedDetails.getRedirectUri());
+			if (appTokenDetailVO.getRedirectUri().indexOf(dreamServerProperties.getBaseDomain()) > -1) {
+				return WebContext.redirect(appTokenDetailVO.getRedirectUri());
 			} else {
 				log.error(
-						tokenBasedDetails.getRedirectUri() + " not in domain " + dreamServerProperties.getBaseDomain());
+						appTokenDetailVO.getRedirectUri() + " not in domain " + dreamServerProperties.getBaseDomain());
 				return null;
 			}
 		}

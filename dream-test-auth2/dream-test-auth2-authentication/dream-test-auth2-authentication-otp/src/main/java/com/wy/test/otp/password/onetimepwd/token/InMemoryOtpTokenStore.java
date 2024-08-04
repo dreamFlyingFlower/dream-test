@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.otp.password.onetimepwd.OneTimePassword;
 
 public class InMemoryOtpTokenStore extends AbstractOtpTokenStore {
@@ -21,7 +21,7 @@ public class InMemoryOtpTokenStore extends AbstractOtpTokenStore {
 			Caffeine.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).build();
 
 	@Override
-	public void store(UserInfo userInfo, String token, String receiver, String type) {
+	public void store(UserEntity userInfo, String token, String receiver, String type) {
 		DateTime currentDateTime = new DateTime();
 		OneTimePassword otp = new OneTimePassword();
 		otp.setId(userInfo.getUsername() + "_" + type + "_" + token);
@@ -35,7 +35,7 @@ public class InMemoryOtpTokenStore extends AbstractOtpTokenStore {
 	}
 
 	@Override
-	public boolean validate(UserInfo userInfo, String token, String type, int interval) {
+	public boolean validate(UserEntity userInfo, String token, String type, int interval) {
 		OneTimePassword otp = optTokenStore.getIfPresent(userInfo.getUsername() + "_" + type + "_" + token);
 		if (otp != null) {
 			DateTime currentdateTime = new DateTime();

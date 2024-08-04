@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.ReportService;
 
 /**
@@ -27,7 +27,7 @@ public class DashboardController {
 	ReportService reportService;
 
 	@GetMapping(value = { "/dashboard" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> dashboard(@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> dashboard(@CurrentUser UserEntity currentUser) {
 		_logger.debug("IndexController /dashboard.");
 		HashMap<String, Object> reportParameter = new HashMap<String, Object>();
 		reportParameter.put("instId", currentUser.getInstId());

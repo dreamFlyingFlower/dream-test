@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.security.core.Authentication;
 
 import com.wy.test.core.authn.SignPrincipal;
-import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.vo.AppVO;
 
 import dream.flying.flower.ConstDate;
 import dream.flying.flower.helper.DateTimeHelper;
@@ -14,7 +14,7 @@ import dream.flying.flower.helper.DateTimeHelper;
 public class DefaultSingleLogout extends SingleLogout {
 
 	@Override
-	public void sendRequest(Authentication authentication, Apps logoutApp) {
+	public void sendRequest(Authentication authentication, AppVO logoutApp) {
 		HashMap<String, Object> logoutParameters = new HashMap<String, Object>();
 		logoutParameters.put("id", UUID.randomUUID().toString());
 		logoutParameters.put("principal", authentication.getName());

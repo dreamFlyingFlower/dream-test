@@ -20,7 +20,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
-import com.wy.test.core.entity.Synchronizers;
+import com.wy.test.core.entity.SyncEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.properties.DreamAuthJobProperties;
 import com.wy.test.synchronizer.core.synchronizer.SynchronizerJob;
@@ -39,8 +39,8 @@ public class SynchronizerAutoConfiguration implements InitializingBean {
 
 		Scheduler scheduler = schedulerFactoryBean.getScheduler();
 		if (dreamAuthJobProperties.getCron().isEnabled()) {
-			List<Synchronizers> synchronizerList = querySynchronizers(jdbcTemplate);
-			for (Synchronizers synchronizer : synchronizerList) {
+			List<SyncEntity> synchronizerList = querySynchronizers(jdbcTemplate);
+			for (SyncEntity synchronizer : synchronizerList) {
 				if (synchronizer.getScheduler() != null && !synchronizer.getScheduler().equals("")
 						&& CronExpression.isValidExpression(synchronizer.getScheduler())) {
 					log.debug("synchronizer details : " + synchronizer);
@@ -51,7 +51,7 @@ public class SynchronizerAutoConfiguration implements InitializingBean {
 		return "schedulerSynchronizerJobs";
 	}
 
-	private void buildJob(Scheduler scheduler, Synchronizers synchronizer) throws SchedulerException {
+	private void buildJob(Scheduler scheduler, SyncEntity synchronizer) throws SchedulerException {
 		JobDetail jobDetail = JobBuilder.newJob(SynchronizerJob.class)
 				.withIdentity(synchronizer.getService() + "Job", "SynchronizerGroups").build();
 
@@ -68,13 +68,13 @@ public class SynchronizerAutoConfiguration implements InitializingBean {
 		scheduler.scheduleJob(jobDetail, cronTrigger);
 	}
 
-	public List<Synchronizers> querySynchronizers(JdbcTemplate jdbcTemplate) {
-		List<Synchronizers> synchronizerList =
-				jdbcTemplate.query(SYNCHRONIZERS_SELECT_STATEMENT, new RowMapper<Synchronizers>() {
+	public List<SyncEntity> querySynchronizers(JdbcTemplate jdbcTemplate) {
+		List<SyncEntity> synchronizerList =
+				jdbcTemplate.query(SYNCHRONIZERS_SELECT_STATEMENT, new RowMapper<SyncEntity>() {
 
 					@Override
-					public Synchronizers mapRow(ResultSet rs, int rowNum) throws SQLException {
-						Synchronizers synchronizer = new Synchronizers();
+					public SyncEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+						SyncEntity synchronizer = new SyncEntity();
 						synchronizer.setId(rs.getString("id"));
 						synchronizer.setName(rs.getString("name"));
 						synchronizer.setScheduler(rs.getString("scheduler"));
@@ -91,10 +91,10 @@ public class SynchronizerAutoConfiguration implements InitializingBean {
 						synchronizer.setOrgFilters(rs.getString("orgfilters"));
 						synchronizer.setOrgBasedn(rs.getString("orgbasedn"));
 						synchronizer.setMsadDomain(rs.getString("msaddomain"));
-						synchronizer.setSslSwitch(rs.getString("sslswitch"));
+						synchronizer.setSslSwitch(rs.getInt("sslswitch"));
 						synchronizer.setTrustStore(rs.getString("truststore"));
-						synchronizer.setStatus(rs.getString("status"));
-						synchronizer.setDescription(rs.getString("description"));
+						synchronizer.setStatus(rs.getInt("status"));
+						synchronizer.setRemark(rs.getString("description"));
 						synchronizer.setSyncStartTime(rs.getInt("syncstarttime"));
 						synchronizer.setService(rs.getString("service"));
 

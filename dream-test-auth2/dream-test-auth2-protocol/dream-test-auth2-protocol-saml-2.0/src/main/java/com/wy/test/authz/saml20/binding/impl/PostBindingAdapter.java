@@ -32,7 +32,7 @@ import com.wy.test.authz.saml.common.AuthnRequestInfo;
 import com.wy.test.authz.saml.common.TrustResolver;
 import com.wy.test.authz.saml20.binding.BindingAdapter;
 import com.wy.test.authz.saml20.binding.ExtractBindingAdapter;
-import com.wy.test.core.entity.apps.AppsSAML20Details;
+import com.wy.test.core.entity.AppSamlDetailEntity;
 
 import dream.flying.flower.framework.web.crypto.keystore.KeyStoreHelpers;
 import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
@@ -213,7 +213,7 @@ public class PostBindingAdapter implements BindingAdapter, InitializingBean {
 	}
 
 	@Override
-	public AppsSAML20Details getSaml20Details() {
+	public AppSamlDetailEntity getSaml20Details() {
 		return extractBindingAdapter.getSaml20Detail();
 	}
 }

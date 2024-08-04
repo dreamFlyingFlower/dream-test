@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
@@ -27,7 +27,7 @@ public class AuthorizeProtectedEndpoint {
 
 	@PostMapping("/authz/protected")
 	public ModelAndView authorizeProtected(@RequestParam("password") String password,
-			@RequestParam("redirect_uri") String redirect_uri, @CurrentUser UserInfo currentUser) {
+			@RequestParam("redirect_uri") String redirect_uri, @CurrentUser UserEntity currentUser) {
 		if (currentUser.getAppLoginPassword().equals(PasswordReciprocal.getInstance().encode(password))) {
 			WebContext.setAttribute(WebConstants.CURRENT_SINGLESIGNON_URI, redirect_uri);
 			return WebContext.redirect(redirect_uri);

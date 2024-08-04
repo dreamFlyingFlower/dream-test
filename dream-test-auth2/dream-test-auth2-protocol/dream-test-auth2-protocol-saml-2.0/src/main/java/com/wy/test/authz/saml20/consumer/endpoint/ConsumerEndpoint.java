@@ -53,7 +53,7 @@ import com.wy.test.authz.saml20.provider.xml.AuthnResponseGenerator;
 import com.wy.test.authz.saml20.xml.SAML2ValidatorSuite;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.core.entity.apps.AppsSAML20Details;
+import com.wy.test.core.entity.AppSamlDetailEntity;
 import com.wy.test.persistence.service.AppsSaml20DetailsService;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
@@ -208,7 +208,7 @@ public class ConsumerEndpoint {
 	@SuppressWarnings("unused")
 	private void initCredential(String appId) throws Exception {
 		// 1. 获取 sp keyStore
-		AppsSAML20Details saml20Details = saml20DetailsService.get(appId);
+		AppSamlDetailEntity saml20Details = saml20DetailsService.get(appId);
 		if (saml20Details == null) {
 			logger.error("appId[" + appId + "] not exists");
 			throw new Exception();

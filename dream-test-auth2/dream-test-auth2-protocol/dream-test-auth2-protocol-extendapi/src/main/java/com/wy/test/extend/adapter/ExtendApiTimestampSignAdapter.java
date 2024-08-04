@@ -2,17 +2,16 @@ package com.wy.test.extend.adapter;
 
 import java.time.Instant;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.core.entity.Accounts;
+import com.wy.test.core.entity.AccountEntity;
 import com.wy.test.core.entity.ExtraAttrs;
-import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.vo.AppVO;
 
 import dream.flying.flower.digest.DigestHelper;
 import dream.flying.flower.digest.enums.MessageDigestType;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 
@@ -21,15 +20,11 @@ import dream.flying.flower.digest.enums.MessageDigestType;
  * 
  * $code = 'dream'; $key = 'a5246932b0f371263c252384076cd3f0'; $timestamp =
  * '1557034496'; $token = md5($code . $key . $time);
- * 
- * @author shimingxy
- *
  */
+@Slf4j
 public class ExtendApiTimestampSignAdapter extends AbstractAuthorizeAdapter {
 
-	final static Logger _logger = LoggerFactory.getLogger(ExtendApiTimestampSignAdapter.class);
-
-	Accounts account;
+	AccountEntity account;
 
 	@Override
 	public Object generateInfo() {
@@ -43,7 +38,7 @@ public class ExtendApiTimestampSignAdapter extends AbstractAuthorizeAdapter {
 
 	@Override
 	public ModelAndView authorize(ModelAndView modelAndView) {
-		Apps details = (Apps) app;
+		AppVO details = app;
 
 		String code = details.getPrincipal();
 		String key = details.getCredentials();
@@ -68,12 +63,12 @@ public class ExtendApiTimestampSignAdapter extends AbstractAuthorizeAdapter {
 			}
 		}
 
-		_logger.debug("" + token);
+		log.debug("" + token);
 		String account = userInfo.getUsername();
 
 		String redirect_uri = String.format(details.getLoginUrl(), account, code, timestamp, token);
 
-		_logger.debug("redirect_uri : " + redirect_uri);
+		log.debug("redirect_uri : " + redirect_uri);
 
 		modelAndView.addObject("redirect_uri", redirect_uri);
 

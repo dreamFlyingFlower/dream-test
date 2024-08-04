@@ -11,12 +11,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.core.constants.ConstStatus;
-import com.wy.test.core.entity.Organizations;
+import com.wy.test.core.entity.OrgEntity;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
 import dream.flying.flower.db.JdbcHelper;
 import dream.flying.flower.db.TableMetaData;
+import dream.flying.flower.generator.GeneratorStrategyContext;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -39,8 +40,8 @@ public class JdbcOrganizationService extends AbstractSynchronizerService impleme
 				stmt = conn.createStatement();
 				rs = stmt.executeQuery(synchronizer.getOrgFilters());
 				while (rs.next()) {
-					Organizations org = buildOrganization(rs);
-					Organizations queryOrg = this.organizationsService.get(org.getId());
+					OrgEntity org = buildOrganization(rs);
+					OrgEntity queryOrg = this.organizationsService.getById(org.getId());
 					if (queryOrg == null) {
 						organizationsService.insert(org);
 					} else {
@@ -59,9 +60,9 @@ public class JdbcOrganizationService extends AbstractSynchronizerService impleme
 		}
 	}
 
-	public Organizations buildOrganization(ResultSet rs) throws SQLException {
+	public OrgEntity buildOrganization(ResultSet rs) throws SQLException {
 		TableMetaData meta = JdbcHelper.getMetaData(rs);
-		Organizations org = new Organizations();
+		OrgEntity org = new OrgEntity();
 
 		for (ColumnFieldMapper mapper : mapperList) {
 			if (meta.getColumnDetail().containsKey(mapper.getColumn())) {
@@ -80,8 +81,9 @@ public class JdbcOrganizationService extends AbstractSynchronizerService impleme
 				}
 			}
 		}
+		GeneratorStrategyContext generatorStrategyContext = new GeneratorStrategyContext();
 
-		org.setId(org.generateId());
+		org.setId(generatorStrategyContext.generate());
 		org.setInstId(this.synchronizer.getInstId());
 		if (meta.getColumnDetail().containsKey("status")) {
 			org.setStatus(rs.getInt("status"));

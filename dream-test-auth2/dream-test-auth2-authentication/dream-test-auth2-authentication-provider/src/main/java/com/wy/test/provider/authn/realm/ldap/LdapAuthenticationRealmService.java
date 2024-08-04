@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.core.entity.LdapContext;
+import com.wy.test.core.entity.LdapContextEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.persistence.ldap.ActiveDirectoryHelpers;
 import com.wy.test.core.persistence.ldap.LdapHelpers;
@@ -28,13 +28,13 @@ public class LdapAuthenticationRealmService {
 	public LdapAuthenticationRealm getByInstId(String instId) {
 		LdapAuthenticationRealm authenticationRealm = ldapRealmStore.getIfPresent(instId);
 		if (authenticationRealm == null) {
-			List<LdapContext> ldapContexts = ldapContextService.find("where instid = ? and status = 1 ",
+			List<LdapContextEntity> ldapContexts = ldapContextService.find("where instid = ? and status = 1 ",
 					new Object[] { instId }, new int[] { Types.VARCHAR });
 			authenticationRealm = new LdapAuthenticationRealm(false);
 			if (ldapContexts != null && ldapContexts.size() > 0) {
 				authenticationRealm.setLdapSupport(true);
 				List<IAuthenticationServer> ldapAuthenticationServers = new ArrayList<IAuthenticationServer>();
-				for (LdapContext ldapContext : ldapContexts) {
+				for (LdapContextEntity ldapContext : ldapContexts) {
 					if (ldapContext.getProduct().equalsIgnoreCase("ActiveDirectory")) {
 						ActiveDirectoryServer ldapServer = new ActiveDirectoryServer();
 						ActiveDirectoryHelpers ldapUtils =

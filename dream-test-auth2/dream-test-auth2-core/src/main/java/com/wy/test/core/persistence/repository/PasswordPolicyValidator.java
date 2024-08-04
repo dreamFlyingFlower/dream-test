@@ -18,12 +18,13 @@ import org.springframework.security.authentication.BadCredentialsException;
 import com.wy.test.core.constants.ConstPasswordSetType;
 import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.ChangePassword;
-import com.wy.test.core.entity.PasswordPolicy;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.PasswordPolicyEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordGen;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 
+import dream.flying.flower.helper.DateTimeHelper;
 import dream.flying.flower.lang.StrHelper;
 
 public class PasswordPolicyValidator {
@@ -102,9 +103,9 @@ public class PasswordPolicyValidator {
 	 * @param userInfo
 	 * @return boolean
 	 */
-	public boolean passwordPolicyValid(UserInfo userInfo) {
+	public boolean passwordPolicyValid(UserEntity userInfo) {
 
-		PasswordPolicy passwordPolicy = passwordPolicyRepository.getPasswordPolicy();
+		PasswordPolicyEntity passwordPolicy = passwordPolicyRepository.getPasswordPolicy();
 
 		DateTime currentdateTime = new DateTime();
 		/*
@@ -113,7 +114,7 @@ public class PasswordPolicyValidator {
 		if (userInfo.getBadPasswordCount() >= passwordPolicy.getAttempts()) {
 			_logger.debug("login Attempts is " + userInfo.getBadPasswordCount());
 			// duration
-			String badPasswordTimeString = userInfo.getBadPasswordTime().substring(0, 19);
+			String badPasswordTimeString = DateTimeHelper.formatDateTime(userInfo.getBadPasswordTime());
 			_logger.trace("bad Password Time " + badPasswordTimeString);
 
 			DateTime badPasswordTime =
@@ -146,8 +147,8 @@ public class PasswordPolicyValidator {
 		return true;
 	}
 
-	public void applyPasswordPolicy(UserInfo userInfo) {
-		PasswordPolicy passwordPolicy = passwordPolicyRepository.getPasswordPolicy();
+	public void applyPasswordPolicy(UserEntity userInfo) {
+		PasswordPolicyEntity passwordPolicy = passwordPolicyRepository.getPasswordPolicy();
 
 		DateTime currentdateTime = new DateTime();
 		// initial password need change
@@ -166,11 +167,12 @@ public class PasswordPolicyValidator {
 		}
 
 		/*
-		 * check password is Expired,Expiration is Expired date ,if Expiration equals 0,not need check
+		 * check password is Expired,Expiration is Expired date ,if Expiration equals
+		 * 0,not need check
 		 *
 		 */
 		if (passwordPolicy.getExpiration() > 0) {
-			String passwordLastSetTimeString = userInfo.getPasswordLastSetTime().substring(0, 19);
+			String passwordLastSetTimeString = DateTimeHelper.formatDateTime(userInfo.getPasswordLastSetTime());
 			_logger.info("last password set date {}", passwordLastSetTimeString);
 
 			DateTime changePwdDateTime =
@@ -194,7 +196,7 @@ public class PasswordPolicyValidator {
 	 * 
 	 * @param userInfo
 	 */
-	public void lockUser(UserInfo userInfo) {
+	public void lockUser(UserEntity userInfo) {
 		try {
 			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				if (userInfo.getIsLocked() == ConstStatus.ACTIVE) {
@@ -214,7 +216,7 @@ public class PasswordPolicyValidator {
 	 * 
 	 * @param userInfo
 	 */
-	public void unlockUser(UserInfo userInfo) {
+	public void unlockUser(UserEntity userInfo) {
 		try {
 			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				jdbcTemplate.update(UNLOCK_USER_UPDATE_STATEMENT,
@@ -232,7 +234,7 @@ public class PasswordPolicyValidator {
 	 * 
 	 * @param userInfo
 	 */
-	public void resetAttempts(UserInfo userInfo) {
+	public void resetAttempts(UserEntity userInfo) {
 		try {
 			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				jdbcTemplate.update(BADPASSWORDCOUNT_RESET_UPDATE_STATEMENT,
@@ -261,11 +263,11 @@ public class PasswordPolicyValidator {
 		}
 	}
 
-	public void plusBadPasswordCount(UserInfo userInfo) {
+	public void plusBadPasswordCount(UserEntity userInfo) {
 		if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 			userInfo.setBadPasswordCount(userInfo.getBadPasswordCount() + 1);
 			setBadPasswordCount(userInfo.getId(), userInfo.getBadPasswordCount());
-			PasswordPolicy passwordPolicy = passwordPolicyRepository.getPasswordPolicy();
+			PasswordPolicyEntity passwordPolicy = passwordPolicyRepository.getPasswordPolicy();
 			if (userInfo.getBadPasswordCount() >= passwordPolicy.getAttempts()) {
 				_logger.debug("Bad Password Count {} , Max Attempts {}", userInfo.getBadPasswordCount() + 1,
 						passwordPolicy.getAttempts());
@@ -274,7 +276,7 @@ public class PasswordPolicyValidator {
 		}
 	}
 
-	public void resetBadPasswordCount(UserInfo userInfo) {
+	public void resetBadPasswordCount(UserEntity userInfo) {
 		if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 			if (userInfo.getBadPasswordCount() > 0) {
 				setBadPasswordCount(userInfo.getId(), 0);
@@ -283,7 +285,7 @@ public class PasswordPolicyValidator {
 	}
 
 	public String generateRandomPassword() {
-		PasswordPolicy passwordPolicy = passwordPolicyRepository.getPasswordPolicy();
+		PasswordPolicyEntity passwordPolicy = passwordPolicyRepository.getPasswordPolicy();
 
 		PasswordGen passwordGen = new PasswordGen(passwordPolicy.getRandomPasswordLength());
 

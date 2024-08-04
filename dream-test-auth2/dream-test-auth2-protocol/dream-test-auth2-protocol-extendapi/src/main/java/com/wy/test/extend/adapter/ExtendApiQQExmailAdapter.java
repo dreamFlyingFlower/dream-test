@@ -4,27 +4,25 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.core.entity.Accounts;
+import com.wy.test.core.entity.AccountEntity;
 import com.wy.test.core.entity.ExtraAttrs;
-import com.wy.test.core.entity.apps.Apps;
+import com.wy.test.core.vo.AppVO;
 import com.wy.test.core.web.HttpRequestAdapter;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.http.HttpsTrust;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * https://exmail.qq.com/qy_mng_logic/doc exmail sso
  */
+@Slf4j
 public class ExtendApiQQExmailAdapter extends AbstractAuthorizeAdapter {
-
-	final static Logger _logger = LoggerFactory.getLogger(ExtendApiQQExmailAdapter.class);
 
 	// https://exmail.qq.com/qy_mng_logic/doc#10003
 	static String TOKEN_URI = "https://api.exmail.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s";
@@ -35,7 +33,7 @@ public class ExtendApiQQExmailAdapter extends AbstractAuthorizeAdapter {
 	final static Cache<String, String> tokenCache =
 			Caffeine.newBuilder().expireAfterWrite(7200, TimeUnit.SECONDS).build();
 
-	Accounts account;
+	AccountEntity account;
 
 	@Override
 	public Object generateInfo() {
@@ -46,14 +44,14 @@ public class ExtendApiQQExmailAdapter extends AbstractAuthorizeAdapter {
 	public ModelAndView authorize(ModelAndView modelAndView) {
 		HttpsTrust.beforeConnection();
 
-		Apps details = (Apps) app;
+		AppVO details = app;
 		// extraAttrs from Applications
 		ExtraAttrs extraAttrs = null;
 		if (details.getIsExtendAttr() == 1) {
 			extraAttrs = new ExtraAttrs(details.getExtendAttr());
 		}
 
-		_logger.debug("Extra Attrs {}", extraAttrs);
+		log.debug("Extra Attrs {}", extraAttrs);
 
 		String accessToken = getToken(details.getPrincipal(), details.getCredentials());
 
@@ -62,7 +60,7 @@ public class ExtendApiQQExmailAdapter extends AbstractAuthorizeAdapter {
 		if (exMailLoginUrl.errcode == 0) {
 			modelAndView.addObject("redirect_uri", exMailLoginUrl.getLogin_url());
 		} else {
-			_logger.error("Exception code {} , message {} , mapping message {} ,", exMailLoginUrl.getErrcode(),
+			log.error("Exception code {} , message {} , mapping message {} ,", exMailLoginUrl.getErrcode(),
 					exMailLoginUrl.getErrmsg(), exMailMsgMapper.get(exMailLoginUrl.getErrcode()));
 			// remove accessToken
 			tokenCache.invalidate(details.getPrincipal());
@@ -76,17 +74,17 @@ public class ExtendApiQQExmailAdapter extends AbstractAuthorizeAdapter {
 	public String getToken(String corpid, String corpsecret) {
 		String accessToken = tokenCache.getIfPresent(corpid);
 		if (accessToken == null) {
-			_logger.debug("corpid {} , corpsecret {}", corpid, corpsecret);
-			_logger.debug("get token url {}", String.format(TOKEN_URI, corpid, corpsecret));
+			log.debug("corpid {} , corpsecret {}", corpid, corpsecret);
+			log.debug("get token url {}", String.format(TOKEN_URI, corpid, corpsecret));
 			String responseBody = new HttpRequestAdapter().get(String.format(TOKEN_URI, corpid, corpsecret), null);
-			_logger.debug("Response Body {}", responseBody);
+			log.debug("Response Body {}", responseBody);
 			Token token = JsonHelpers.read(responseBody, Token.class);
 			if (token.getErrcode() == 0) {
-				_logger.debug("access_token {}", token);
+				log.debug("access_token {}", token);
 				accessToken = token.getAccess_token();
 				tokenCache.put(corpid, accessToken);
 			} else {
-				_logger.debug("Error Code {}", exMailMsgMapper.get(token.getErrcode()));
+				log.debug("Error Code {}", exMailMsgMapper.get(token.getErrcode()));
 				;
 			}
 		}
@@ -95,11 +93,11 @@ public class ExtendApiQQExmailAdapter extends AbstractAuthorizeAdapter {
 
 	public ExMailLoginUrl getLoginUrl(String accessToken, String userId) {
 		if (accessToken != null) {
-			_logger.debug("userId {}", userId);
+			log.debug("userId {}", userId);
 			String authKeyBody = new HttpRequestAdapter().get(String.format(AUTHKEY_URI, accessToken, userId), null);
 
 			ExMailLoginUrl exMailLoginUrl = JsonHelpers.read(authKeyBody, ExMailLoginUrl.class);
-			_logger.debug("LoginUrl {} ", exMailLoginUrl);
+			log.debug("LoginUrl {} ", exMailLoginUrl);
 			return exMailLoginUrl;
 		}
 		return new ExMailLoginUrl(-1, "access_token is null .");

@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.entity.HistoryLogin;
+import com.wy.test.core.entity.HistoryLoginEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.HistoryLoginService;
 
 import dream.flying.flower.ConstDate;
@@ -38,17 +38,17 @@ public class LoginHistoryController {
 	HistoryLoginService loginHistoryService;
 
 	/**
-	 * @param HistoryLogin
+	 * @param HistoryLoginEntity
 	 * @return
 	 */
 	@PostMapping(value = { "/loginHistory/fetch" })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute("historyLogin") HistoryLogin historyLogin,
-			@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> fetch(@ModelAttribute("historyLogin") HistoryLoginEntity historyLogin,
+			@CurrentUser UserEntity currentUser) {
 		_logger.debug("historys/loginHistory/fetch/ {}", historyLogin);
 		historyLogin.setInstId(currentUser.getInstId());
 		historyLogin.setUserId(currentUser.getId());
-		return new Message<JpaPageResults<HistoryLogin>>(loginHistoryService.fetchPageResults(historyLogin))
+		return new Message<JpaPageResults<HistoryLoginEntity>>(loginHistoryService.fetchPageResults(historyLogin))
 				.buildResponse();
 	}
 

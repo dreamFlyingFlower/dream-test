@@ -27,8 +27,8 @@ import com.wy.test.cas.authz.endpoint.ticket.ServiceTicketImpl;
 import com.wy.test.cas.authz.endpoint.ticket.TicketGrantingTicketImpl;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.AppsCasDetails;
+import com.wy.test.core.entity.AppCasDetailEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.web.HttpResponseConstants;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
@@ -107,7 +107,7 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 			TicketGrantingTicketImpl ticketGrantingTicketImpl =
 					(TicketGrantingTicketImpl) casTicketGrantingTicketServices.get(ticketGrantingTicket);
 
-			AppsCasDetails casDetails = casDetailsService.getAppDetails(casService, true);
+			AppCasDetailEntity casDetails = casDetailsService.getAppDetails(casService, true);
 
 			ServiceTicketImpl serviceTicket =
 					new ServiceTicketImpl(ticketGrantingTicketImpl.getAuthentication(), casDetails);
@@ -170,7 +170,7 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 			LoginCredential loginCredential = new LoginCredential(username, password, AuthLoginType.CASREST);
 
 			authenticationProvider.authenticate(loginCredential, false);
-			UserInfo userInfo = AuthorizationUtils.getUserInfo();
+			UserEntity userInfo = AuthorizationUtils.getUserInfo();
 			TicketGrantingTicketImpl ticketGrantingTicket =
 					new TicketGrantingTicketImpl("Random", AuthorizationUtils.getAuthentication(), null);
 

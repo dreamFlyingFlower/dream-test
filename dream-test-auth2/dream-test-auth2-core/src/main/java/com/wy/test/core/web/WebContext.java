@@ -14,8 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.LogFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.StandardEnvironment;
@@ -27,17 +25,17 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.wy.test.core.entity.Institutions;
+import com.wy.test.core.entity.InstitutionEntity;
 
 import dream.flying.flower.generator.GeneratorStrategyContext;
 import dream.flying.flower.helper.DateTimeHelper;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Application is common class for Web Application Context.
  */
+@Slf4j
 public final class WebContext {
-
-	final static Logger _logger = LoggerFactory.getLogger(WebContext.class);
 
 	public static StandardEnvironment properties;
 
@@ -142,7 +140,8 @@ public final class WebContext {
 	/**
 	 * get Http Context full Path,if port equals 80 or 443 is omitted.
 	 * 
-	 * @return String eg:http://192.168.1.20:9080/webcontext or http://www.website.com/webcontext
+	 * @return String eg:http://192.168.1.20:9080/webcontext or
+	 *         http://www.website.com/webcontext
 	 */
 	public static String getContextPath(HttpServletRequest request, boolean isContextPath) {
 		String fullRequestUrl = UrlUtils.buildFullRequestUrl(request);
@@ -153,7 +152,7 @@ public final class WebContext {
 			url.append(request.getContextPath());
 		}
 
-		_logger.trace("http ContextPath {}", url);
+		log.trace("http ContextPath {}", url);
 		return url.toString();
 	}
 
@@ -164,23 +163,23 @@ public final class WebContext {
 	 * @param request
 	 */
 	public static void printRequest(final HttpServletRequest request) {
-		_logger.info("getContextPath : {}", request.getContextPath());
-		_logger.info("getRequestURL : {} ", request.getRequestURL());
-		_logger.info("URL : {}", request.getRequestURI().substring(request.getContextPath().length()));
-		_logger.info("getMethod : {} ", request.getMethod());
+		log.info("getContextPath : {}", request.getContextPath());
+		log.info("getRequestURL : {} ", request.getRequestURL());
+		log.info("URL : {}", request.getRequestURI().substring(request.getContextPath().length()));
+		log.info("getMethod : {} ", request.getMethod());
 
 		Enumeration<String> headerNames = request.getHeaderNames();
 		while (headerNames.hasMoreElements()) {
 			String key = (String) headerNames.nextElement();
 			String value = request.getHeader(key);
-			_logger.info("Header key {} , value {}", key, value);
+			log.info("Header key {} , value {}", key, value);
 		}
 
 		Enumeration<String> parameterNames = request.getParameterNames();
 		while (parameterNames.hasMoreElements()) {
 			String key = (String) parameterNames.nextElement();
 			String value = request.getParameter(key);
-			_logger.info("Parameter {} , value {}", key, value);
+			log.info("Parameter {} , value {}", key, value);
 		}
 	}
 
@@ -242,13 +241,13 @@ public final class WebContext {
 		return getRequest().getParameter(name);
 	}
 
-	public static Institutions getInst() {
-		return (Institutions) getAttribute(WebConstants.CURRENT_INST);
+	public static InstitutionEntity getInst() {
+		return (InstitutionEntity) getAttribute(WebConstants.CURRENT_INST);
 	}
 
 	/**
-	 * get locale from Spring Resolver,if locale is null,get locale from Spring. SessionLocaleResolver this is from
-	 * internationalization
+	 * get locale from Spring Resolver,if locale is null,get locale from Spring.
+	 * SessionLocaleResolver this is from internationalization
 	 * 
 	 * @return Locale
 	 */

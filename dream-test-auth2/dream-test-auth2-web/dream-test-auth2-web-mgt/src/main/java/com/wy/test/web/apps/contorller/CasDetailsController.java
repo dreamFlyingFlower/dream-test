@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstProtocols;
+import com.wy.test.core.entity.AppCasDetailEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.AppsCasDetails;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.AppsCasDetailsService;
 
 import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
@@ -34,55 +34,55 @@ public class CasDetailsController extends BaseAppContorller {
 
 	@GetMapping(value = { "/init" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> init() {
-		AppsCasDetails casDetails = new AppsCasDetails();
+		AppCasDetailEntity casDetails = new AppCasDetailEntity();
 		casDetails.setId(casDetails.generateId());
 		casDetails.setProtocol(ConstProtocols.CAS);
 		casDetails.setSecret(ReciprocalHelpers.generateKey(""));
-		return new Message<AppsCasDetails>(casDetails).buildResponse();
+		return new Message<AppCasDetailEntity>(casDetails).buildResponse();
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		AppsCasDetails casDetails = casDetailsService.getAppDetails(id, false);
+		AppCasDetailEntity casDetails = casDetailsService.getAppDetails(id, false);
 		super.decoderSecret(casDetails);
 		casDetails.transIconBase64();
-		return new Message<AppsCasDetails>(casDetails).buildResponse();
+		return new Message<AppCasDetailEntity>(casDetails).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> insert(@RequestBody AppsCasDetails casDetails, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> insert(@RequestBody AppCasDetailEntity casDetails, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-Add  :" + casDetails);
 		transform(casDetails);
 		casDetails.setInstId(currentUser.getInstId());
 		if (casDetailsService.insert(casDetails) && appsService.insertApp(casDetails)) {
-			return new Message<AppsCasDetails>(Message.SUCCESS).buildResponse();
+			return new Message<AppCasDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsCasDetails>(Message.FAIL).buildResponse();
+			return new Message<AppCasDetailEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@RequestBody AppsCasDetails casDetails, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> update(@RequestBody AppCasDetailEntity casDetails, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-update  :" + casDetails);
 		transform(casDetails);
 		casDetails.setInstId(currentUser.getInstId());
 		if (casDetailsService.update(casDetails) && appsService.updateApp(casDetails)) {
-			return new Message<AppsCasDetails>(Message.SUCCESS).buildResponse();
+			return new Message<AppCasDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsCasDetails>(Message.FAIL).buildResponse();
+			return new Message<AppCasDetailEntity>(Message.FAIL).buildResponse();
 		}
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		_logger.debug("-delete  ids : {} ", ids);
 		if (casDetailsService.deleteBatch(ids) && appsService.deleteBatch(ids)) {
-			return new Message<AppsCasDetails>(Message.SUCCESS).buildResponse();
+			return new Message<AppCasDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppsCasDetails>(Message.FAIL).buildResponse();
+			return new Message<AppCasDetailEntity>(Message.FAIL).buildResponse();
 		}
 	}
 

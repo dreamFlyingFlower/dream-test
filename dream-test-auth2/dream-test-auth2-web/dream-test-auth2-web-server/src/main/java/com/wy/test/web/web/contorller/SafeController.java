@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstTimeInterval;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.UserInfoService;
@@ -33,7 +33,7 @@ public class SafeController {
 	private UserInfoService userInfoService;
 
 	@GetMapping(value = "/forward/setting")
-	public ModelAndView fowardSetting(@CurrentUser UserInfo currentUser) {
+	public ModelAndView fowardSetting(@CurrentUser UserEntity currentUser) {
 		ModelAndView modelAndView = new ModelAndView("safe/setting");
 		modelAndView.addObject("model", currentUser);
 		return modelAndView;
@@ -45,7 +45,7 @@ public class SafeController {
 			@RequestParam("authnType") String authnType, @RequestParam("mobile") String mobile,
 			@RequestParam("mobileVerify") String mobileVerify, @RequestParam("email") String email,
 			@RequestParam("emailVerify") String emailVerify, @RequestParam("theme") String theme,
-			@CurrentUser UserInfo currentUser) {
+			@CurrentUser UserEntity currentUser) {
 		currentUser.setAuthnType(Integer.parseInt(authnType));
 		userInfoService.updateAuthnType(currentUser);
 
@@ -59,6 +59,6 @@ public class SafeController {
 
 		userInfoService.updateEmail(currentUser);
 
-		return new Message<UserInfo>(Message.SUCCESS).buildResponse();
+		return new Message<UserEntity>(Message.SUCCESS).buildResponse();
 	}
 }

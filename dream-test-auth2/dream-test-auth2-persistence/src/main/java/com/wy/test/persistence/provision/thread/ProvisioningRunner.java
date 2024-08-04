@@ -4,23 +4,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.dromara.mybatis.jpa.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wy.test.core.entity.ChangePassword;
-import com.wy.test.core.entity.Connectors;
-import com.wy.test.core.entity.Organizations;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.ConnectorEntity;
+import com.wy.test.core.entity.OrgEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.web.HttpRequestAdapter;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.provision.ProvisionAction;
 import com.wy.test.persistence.provision.ProvisionMessage;
 import com.wy.test.persistence.provision.ProvisionTopic;
-import com.wy.test.persistence.service.ConnectorsService;
+import com.wy.test.persistence.service.ConnectorService;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.helper.DateTimeHelper;
@@ -42,21 +42,22 @@ public class ProvisioningRunner {
 
 	JdbcTemplate jdbcTemplate;
 
-	ConnectorsService connectorsService;
+	ConnectorService connectorService;
 
-	public ProvisioningRunner(ConnectorsService connectorsService, JdbcTemplate jdbcTemplate) {
-		this.connectorsService = connectorsService;
+	public ProvisioningRunner(ConnectorService connectorService, JdbcTemplate jdbcTemplate) {
+		this.connectorService = connectorService;
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	public void provisions() {
 		try {
-			List<Connectors> listConnectors = connectorsService.query(new Query().eq("status", 1).eq("justintime", 1));
+			List<ConnectorEntity> listConnectors = connectorService.list(new LambdaQueryWrapper<ConnectorEntity>()
+					.eq(ConnectorEntity::getStatus, 1).eq(ConnectorEntity::getJustInTime, 1));
 			List<ProvisionMessage> listProvisionMessage =
 					jdbcTemplate.query(PROVISION_SELECT_STATEMENT, new ProvisionMessageRowMapper());
 			for (ProvisionMessage msg : listProvisionMessage) {
 				_logger.debug("Provision message {}", msg);
-				for (Connectors connector : listConnectors) {
+				for (ConnectorEntity connector : listConnectors) {
 					_logger.debug("Provision message to connector {}", connector);
 					provision(msg, connector);
 				}
@@ -66,7 +67,7 @@ public class ProvisioningRunner {
 		}
 	}
 
-	public void provision(ProvisionMessage provisionMessage, Connectors connector) {
+	public void provision(ProvisionMessage provisionMessage, ConnectorEntity connector) {
 		if (Integer.parseInt(connector.getInstId()) == provisionMessage.getInstId()) {
 			String url = connector.getProviderUrl();
 			if (!url.endsWith("/")) {
@@ -76,7 +77,7 @@ public class ProvisioningRunner {
 			String objectId = "";
 			String objectName = "";
 			if (provisionMessage.getTopic().equalsIgnoreCase(ProvisionTopic.USERINFO_TOPIC)) {
-				UserInfo user = (UserInfo) SerializableHelper.deserializeHex(provisionMessage.getContent());
+				UserEntity user = (UserEntity) SerializableHelper.deserializeHex(provisionMessage.getContent());
 				user.setPassword(null);
 				user.setDecipherable(null);
 				objectId = user.getId();
@@ -94,8 +95,7 @@ public class ProvisioningRunner {
 				provisionLog(connector.getConnName(), "Password", provisionMessage.getActionType(), objectId,
 						objectName, resultMessage, provisionMessage.getInstId());
 			} else if (provisionMessage.getTopic().equalsIgnoreCase(ProvisionTopic.ORG_TOPIC)) {
-				Organizations organization =
-						(Organizations) SerializableHelper.deserializeHex(provisionMessage.getContent());
+				OrgEntity organization = (OrgEntity) SerializableHelper.deserializeHex(provisionMessage.getContent());
 				objectId = organization.getId();
 				objectName = organization.getOrgName();
 				resultMessage = provisionOrganization(organization, url, provisionMessage.getActionType(), connector);
@@ -136,14 +136,14 @@ public class ProvisioningRunner {
 		return "";
 	}
 
-	String provisionUser(UserInfo user, String baseUrl, String actionType, Connectors connector) {
+	String provisionUser(UserEntity user, String baseUrl, String actionType, ConnectorEntity connector) {
 		baseUrl = baseUrl + "Users/" + getActionType(actionType);
 		_logger.debug("URL {} ", baseUrl);
 		return new HttpRequestAdapter().addHeaderAuthorizationBasic(connector.getPrincipal(),
 				PasswordReciprocal.getInstance().decoder(connector.getCredentials())).post(baseUrl, user);
 	}
 
-	String provisionOrganization(Organizations organization, String baseUrl, String actionType, Connectors connector) {
+	String provisionOrganization(OrgEntity organization, String baseUrl, String actionType, ConnectorEntity connector) {
 		baseUrl = baseUrl + "Organizations/" + getActionType(actionType);
 		_logger.debug("URL {} ", baseUrl);
 		return new HttpRequestAdapter()
@@ -153,7 +153,7 @@ public class ProvisioningRunner {
 	}
 
 	String provisionChangePassword(ChangePassword changePassword, String baseUrl, String actionType,
-			Connectors connector) {
+			ConnectorEntity connector) {
 		baseUrl = baseUrl + "Users/changePassword";
 		_logger.debug("URL {} ", baseUrl);
 		return new HttpRequestAdapter()

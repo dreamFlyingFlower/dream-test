@@ -16,7 +16,7 @@ import org.springframework.jdbc.core.RowMapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.wy.test.core.constants.ConstTimeInterval;
-import com.wy.test.core.entity.Localization;
+import com.wy.test.core.entity.LocalizationEntity;
 
 public class LocalizationRepository {
 
@@ -79,7 +79,7 @@ public class LocalizationRepository {
 		String message = localizationStore.getIfPresent(code + "_" + locale.getLanguage() + "_" + inst);
 		if (message != null)
 			return message;
-		Localization localization = get(code, inst);
+		LocalizationEntity localization = get(code, inst);
 		if (localization != null) {
 			localizationStore.put(code + "_en_" + inst, localization.getLangEn());
 			localizationStore.put(code + "_zh_" + inst, localization.getLangZh());
@@ -98,16 +98,16 @@ public class LocalizationRepository {
 		this.institutionService = institutionService;
 	}
 
-	public boolean insert(Localization localization) {
+	public boolean insert(LocalizationEntity localization) {
 		return jdbcTemplate.update(INSERT_STATEMENT,
 				new Object[] { localization.getId(), localization.getProperty(), localization.getLangZh(),
-						localization.getLangEn(), localization.getStatus(), localization.getDescription(),
+						localization.getLangEn(), localization.getStatus(), localization.getRemark(),
 						localization.getInstId() },
 				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR,
 						Types.VARCHAR, }) > 0;
 	}
 
-	public boolean update(Localization localization) {
+	public boolean update(LocalizationEntity localization) {
 		jdbcTemplate.update(UPDATE_STATEMENT, localization.getLangZh(), localization.getLangEn(), localization.getId());
 		return true;
 	}
@@ -116,9 +116,9 @@ public class LocalizationRepository {
 		return jdbcTemplate.update(DELETE_STATEMENT, id) > 0;
 	}
 
-	public Localization get(String property, String instId) {
+	public LocalizationEntity get(String property, String instId) {
 		_logger.debug("load property from database , property {} ,instId {}", property, instId);
-		List<Localization> localizations =
+		List<LocalizationEntity> localizations =
 				jdbcTemplate.query(SELECT_STATEMENT, new LocalizationRowMapper(), property, property, instId);
 		return (localizations == null || localizations.size() == 0) ? null : localizations.get(0);
 	}
@@ -129,17 +129,17 @@ public class LocalizationRepository {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public class LocalizationRowMapper implements RowMapper<Localization> {
+	public class LocalizationRowMapper implements RowMapper<LocalizationEntity> {
 
 		@Override
-		public Localization mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Localization localization = new Localization();
+		public LocalizationEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+			LocalizationEntity localization = new LocalizationEntity();
 			localization.setId(rs.getString("id"));
 			localization.setProperty(rs.getString("property"));
 			localization.setLangZh(rs.getString("langzh"));
 			localization.setLangEn(rs.getString("langen"));
 			localization.setStatus(rs.getInt("status"));
-			localization.setDescription(rs.getString("description"));
+			localization.setRemark(rs.getString("description"));
 			localization.setInstId(rs.getString("instid"));
 			return localization;
 		}

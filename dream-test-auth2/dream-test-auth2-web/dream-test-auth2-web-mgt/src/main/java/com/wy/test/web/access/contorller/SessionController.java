@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.core.entity.HistoryLogin;
+import com.wy.test.core.entity.HistoryLoginEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.HistoryLoginService;
 import com.wy.test.persistence.service.HistorySystemLogsService;
 
@@ -56,17 +56,17 @@ public class SessionController {
 	 */
 	@GetMapping(value = { "/fetch" })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute("historyLogin") HistoryLogin historyLogin,
-			@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> fetch(@ModelAttribute("historyLogin") HistoryLoginEntity historyLogin,
+			@CurrentUser UserEntity currentUser) {
 		_logger.debug("history/session/fetch {}", historyLogin);
 		historyLogin.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<HistoryLogin>>(historyLoginService.queryOnlineSession(historyLogin))
+		return new Message<JpaPageResults<HistoryLoginEntity>>(historyLoginService.queryOnlineSession(historyLogin))
 				.buildResponse();
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/terminate")
-	public ResponseEntity<?> terminate(@RequestParam("ids") String ids, @CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> terminate(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		_logger.debug(ids);
 		boolean isTerminated = false;
 		try {
@@ -83,9 +83,9 @@ public class SessionController {
 		}
 
 		if (isTerminated) {
-			return new Message<HistoryLogin>(Message.SUCCESS).buildResponse();
+			return new Message<HistoryLoginEntity>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<HistoryLogin>(Message.ERROR).buildResponse();
+			return new Message<HistoryLoginEntity>(Message.ERROR).buildResponse();
 		}
 	}
 

@@ -10,8 +10,8 @@ import org.springframework.security.core.AuthenticationException;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.SessionManager;
-import com.wy.test.core.entity.Institutions;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.InstitutionEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
@@ -53,7 +53,7 @@ public class NormalAuthenticationProvider extends AbstractAuthenticationProvider
 
 			log.debug("authentication " + loginCredential);
 
-			Institutions inst = (Institutions) WebContext.getAttribute(WebConstants.CURRENT_INST);
+			InstitutionEntity inst = (InstitutionEntity) WebContext.getAttribute(WebConstants.CURRENT_INST);
 
 			if (dreamLoginProperties.isCaptcha()) {
 				captchaValid(loginCredential.getState(), loginCredential.getCaptcha());
@@ -67,7 +67,7 @@ public class NormalAuthenticationProvider extends AbstractAuthenticationProvider
 
 			emptyUsernameValid(loginCredential.getUsername());
 
-			UserInfo userInfo = loadUserInfo(loginCredential.getUsername(), loginCredential.getPassword());
+			UserEntity userInfo = loadUserInfo(loginCredential.getUsername(), loginCredential.getPassword());
 
 			statusValid(loginCredential, userInfo);
 

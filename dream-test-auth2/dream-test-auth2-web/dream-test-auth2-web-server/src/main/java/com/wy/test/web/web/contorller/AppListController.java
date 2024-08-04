@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstStatus;
-import com.wy.test.core.entity.Accounts;
+import com.wy.test.core.entity.AccountEntity;
+import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
-import com.wy.test.core.entity.apps.Apps;
-import com.wy.test.core.entity.apps.UserApps;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
+import com.wy.test.core.vo.UserApps;
 import com.wy.test.persistence.service.AccountsService;
 import com.wy.test.persistence.service.AppsService;
 import com.wy.test.persistence.service.UserInfoService;
@@ -50,7 +50,7 @@ public class AppListController {
 	@GetMapping(value = { "/appList" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
 	public ResponseEntity<?> appList(@RequestParam(value = "gridList", required = false) String gridList,
-			@CurrentUser UserInfo currentUser) {
+			@CurrentUser UserEntity currentUser) {
 		userInfoService.updateGridList(gridList, currentUser);
 		UserApps userApps = new UserApps();
 		userApps.setUsername(currentUser.getUsername());
@@ -66,35 +66,35 @@ public class AppListController {
 	@GetMapping(value = { "/account/get" })
 	@ResponseBody
 	public ResponseEntity<?> getAccount(@RequestParam("credential") String credential,
-			@RequestParam("appId") String appId, @CurrentUser UserInfo currentUser) {
-		Accounts account = null;
+			@RequestParam("appId") String appId, @CurrentUser UserEntity currentUser) {
+		AccountEntity account = null;
 
-		if (credential.equalsIgnoreCase(Apps.CREDENTIALS.USER_DEFINED)) {
-			List<Accounts> query = accountsService.query(new Accounts(currentUser.getId(), appId));
+		if (credential.equalsIgnoreCase(AppEntity.CREDENTIALS.USER_DEFINED)) {
+			List<AccountEntity> query = accountsService.query(new AccountEntity(currentUser.getId(), appId));
 
-			account = CollectionUtils.isNotEmpty(query) ? query.get(0) : new Accounts();
+			account = CollectionUtils.isNotEmpty(query) ? query.get(0) : new AccountEntity();
 			account.setRelatedPassword(PasswordReciprocal.getInstance().decoder(account.getRelatedPassword()));
 		} else {
-			account = new Accounts();
+			account = new AccountEntity();
 			account.setAppId(appId);
 			account.setUserId(currentUser.getId());
 			account.setUsername(currentUser.getUsername());
 			account.setDisplayName(currentUser.getDisplayName());
 		}
-		return new Message<Accounts>(account).buildResponse();
+		return new Message<AccountEntity>(account).buildResponse();
 
 	}
 
 	@PostMapping(value = { "/account/update" })
 	@ResponseBody
 	public ResponseEntity<?> updateAccount(@RequestParam("credential") String credential,
-			@ModelAttribute Accounts account, @CurrentUser UserInfo currentUser) {
-		Accounts appUsers = new Accounts();
-		if (credential.equalsIgnoreCase(Apps.CREDENTIALS.USER_DEFINED)) {
-			List<Accounts> query = accountsService.query(new Accounts(currentUser.getId(), account.getAppId()));
+			@ModelAttribute AccountEntity account, @CurrentUser UserEntity currentUser) {
+		AccountEntity appUsers = new AccountEntity();
+		if (credential.equalsIgnoreCase(AppEntity.CREDENTIALS.USER_DEFINED)) {
+			List<AccountEntity> query = accountsService.query(new AccountEntity(currentUser.getId(), account.getAppId()));
 			appUsers = CollectionUtils.isNotEmpty(query) ? query.get(0) : null;
 			if (appUsers == null) {
-				appUsers = new Accounts();
+				appUsers = new AccountEntity();
 				appUsers.setId(appUsers.generateId());
 				appUsers.setUserId(currentUser.getId());
 				appUsers.setUsername(currentUser.getUsername());
@@ -111,6 +111,6 @@ public class AppListController {
 			}
 		}
 
-		return new Message<Accounts>().buildResponse();
+		return new Message<AccountEntity>().buildResponse();
 	}
 }

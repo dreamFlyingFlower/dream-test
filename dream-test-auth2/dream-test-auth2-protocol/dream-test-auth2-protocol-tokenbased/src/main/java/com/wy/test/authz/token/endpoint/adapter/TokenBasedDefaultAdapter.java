@@ -3,27 +3,25 @@ package com.wy.test.authz.token.endpoint.adapter;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.core.entity.apps.AppsTokenBasedDetails;
+import com.wy.test.core.vo.AppTokenDetailVO;
 import com.wy.test.core.web.WebConstants;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.generator.StringGenerator;
 import dream.flying.flower.helper.DateTimeHelper;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class TokenBasedDefaultAdapter extends AbstractAuthorizeAdapter {
-
-	final static Logger _logger = LoggerFactory.getLogger(TokenBasedDefaultAdapter.class);
 
 	String token = "";
 
 	@Override
 	public Object generateInfo() {
-		AppsTokenBasedDetails details = (AppsTokenBasedDetails) app;
+		AppTokenDetailVO details = (AppTokenDetailVO) app;
 		HashMap<String, String> beanMap = new HashMap<String, String>();
 
 		beanMap.put("randomId", (new StringGenerator()).uuidGenerate());
@@ -69,7 +67,7 @@ public class TokenBasedDefaultAdapter extends AbstractAuthorizeAdapter {
 		beanMap.put("expires", DateTimeHelper.formatUtcDateTime(localDateTime.plusSeconds(details.getExpires())));
 
 		token = JsonHelpers.toString(beanMap);
-		_logger.debug("Token : {}", token);
+		log.debug("Token : {}", token);
 
 		return token;
 	}
@@ -83,7 +81,7 @@ public class TokenBasedDefaultAdapter extends AbstractAuthorizeAdapter {
 	@Override
 	public ModelAndView authorize(ModelAndView modelAndView) {
 		modelAndView.setViewName("authorize/tokenbased_sso_submint");
-		AppsTokenBasedDetails details = (AppsTokenBasedDetails) app;
+		AppTokenDetailVO details = (AppTokenDetailVO) app;
 		modelAndView.addObject("action", details.getRedirectUri());
 
 		modelAndView.addObject("token", token);
@@ -94,5 +92,4 @@ public class TokenBasedDefaultAdapter extends AbstractAuthorizeAdapter {
 	public String serialize() {
 		return token;
 	}
-
 }

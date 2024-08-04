@@ -1,17 +1,17 @@
 package com.wy.test.otp.password.onetimepwd;
 
-import java.sql.Types;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.core.entity.EmailSenders;
+import com.wy.test.core.entity.EmailSenderEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.otp.password.onetimepwd.impl.MailOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.token.RedisOtpTokenStore;
-import com.wy.test.persistence.service.EmailSendersService;
+import com.wy.test.persistence.service.EmailSenderService;
 
 import dream.flying.flower.framework.core.enums.BooleanEnum;
 
@@ -20,12 +20,12 @@ public class MailOtpAuthnService {
 	protected static final Cache<String, AbstractOtpAuthn> otpAuthnStore =
 			Caffeine.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).build();
 
-	EmailSendersService emailSendersService;
+	EmailSenderService emailSenderService;
 
 	RedisOtpTokenStore redisOptTokenStore;
 
-	public MailOtpAuthnService(EmailSendersService emailSendersService) {
-		this.emailSendersService = emailSendersService;
+	public MailOtpAuthnService(EmailSenderService emailSenderService) {
+		this.emailSenderService = emailSenderService;
 	}
 
 	public MailOtpAuthnService(RedisOtpTokenStore redisOptTokenStore) {
@@ -35,8 +35,8 @@ public class MailOtpAuthnService {
 	public AbstractOtpAuthn getMailOtpAuthn(String instId) {
 		AbstractOtpAuthn otpAuthn = otpAuthnStore.getIfPresent(instId);
 		if (otpAuthn == null) {
-			EmailSenders emailSender = emailSendersService.findOne("where instid = ? ", new Object[] { instId },
-					new int[] { Types.VARCHAR });
+			EmailSenderEntity emailSender = emailSenderService
+					.getOne(new LambdaQueryWrapper<EmailSenderEntity>().eq(EmailSenderEntity::getInstId, instId));
 
 			String credentials = PasswordReciprocal.getInstance().decoder(emailSender.getCredentials());
 

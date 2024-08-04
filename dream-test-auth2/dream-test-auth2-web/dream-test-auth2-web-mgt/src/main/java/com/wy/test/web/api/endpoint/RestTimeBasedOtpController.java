@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.persistence.service.UserInfoService;
 
@@ -30,7 +30,7 @@ public class RestTimeBasedOtpController {
 	@GetMapping(value = "/timebased/validate")
 	public boolean getUser(@RequestParam String username, @RequestParam String token) {
 
-		UserInfo validUserInfo = userInfoService.findByUsername(username);
+		UserEntity validUserInfo = userInfoService.findByUsername(username);
 		if (validUserInfo != null) {
 			if (timeBasedOtpAuthn.validate(validUserInfo, token)) {
 				return true;

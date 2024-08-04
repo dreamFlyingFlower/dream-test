@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthJwt;
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.core.entity.Institutions;
+import com.wy.test.core.entity.InstitutionEntity;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.web.WebConstants;
@@ -47,7 +47,7 @@ public class LoginEntryPoint {
 
 		HashMap<String, Object> model = new HashMap<String, Object>();
 		model.put("isRemeberMe", dreamLoginProperties.isRememberMe());
-		Institutions inst = (Institutions) WebContext.getAttribute(WebConstants.CURRENT_INST);
+		InstitutionEntity inst = (InstitutionEntity) WebContext.getAttribute(WebConstants.CURRENT_INST);
 		model.put("inst", inst);
 		if (dreamLoginProperties.isCaptcha()) {
 			model.put("captcha", "true");

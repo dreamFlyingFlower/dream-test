@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.entity.EmailSenders;
+import com.wy.test.core.entity.EmailSenderEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.persistence.service.EmailSendersService;
 
@@ -30,21 +30,21 @@ public class EmailSendersController {
 	private EmailSendersService emailSendersService;
 
 	@GetMapping(value = { "/get" })
-	public ResponseEntity<?> get(@CurrentUser UserInfo currentUser) {
-		EmailSenders emailSenders = emailSendersService.get(currentUser.getInstId());
+	public ResponseEntity<?> get(@CurrentUser UserEntity currentUser) {
+		EmailSenderEntity emailSenders = emailSendersService.get(currentUser.getInstId());
 		if (emailSenders != null && StringUtils.isNotBlank(emailSenders.getCredentials())) {
 			emailSenders.setCredentials(PasswordReciprocal.getInstance().decoder(emailSenders.getCredentials()));
 		} else {
-			emailSenders = new EmailSenders();
+			emailSenders = new EmailSenderEntity();
 			emailSenders.setProtocol("smtp");
 			emailSenders.setEncoding("utf-8");
 		}
-		return new Message<EmailSenders>(emailSenders).buildResponse();
+		return new Message<EmailSenderEntity>(emailSenders).buildResponse();
 	}
 
 	@PostMapping(value = { "/update" })
 	@ResponseBody
-	public ResponseEntity<?> update(@RequestBody EmailSenders emailSenders, @CurrentUser UserInfo currentUser,
+	public ResponseEntity<?> update(@RequestBody EmailSenderEntity emailSenders, @CurrentUser UserEntity currentUser,
 			BindingResult result) {
 		_logger.debug("update emailSenders : " + emailSenders);
 		emailSenders.setInstId(currentUser.getInstId());
@@ -52,15 +52,15 @@ public class EmailSendersController {
 		if (StringUtils.isBlank(emailSenders.getId())) {
 			emailSenders.setId(emailSenders.getInstId());
 			if (emailSendersService.insert(emailSenders)) {
-				return new Message<EmailSenders>(Message.SUCCESS).buildResponse();
+				return new Message<EmailSenderEntity>(Message.SUCCESS).buildResponse();
 			} else {
-				return new Message<EmailSenders>(Message.ERROR).buildResponse();
+				return new Message<EmailSenderEntity>(Message.ERROR).buildResponse();
 			}
 		} else {
 			if (emailSendersService.update(emailSenders)) {
-				return new Message<EmailSenders>(Message.SUCCESS).buildResponse();
+				return new Message<EmailSenderEntity>(Message.SUCCESS).buildResponse();
 			} else {
-				return new Message<EmailSenders>(Message.ERROR).buildResponse();
+				return new Message<EmailSenderEntity>(Message.ERROR).buildResponse();
 			}
 		}
 

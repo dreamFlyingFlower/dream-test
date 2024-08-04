@@ -12,7 +12,7 @@ import org.springframework.security.core.Authentication;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.jwt.AuthTokenService;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.web.WebContext;
 
@@ -42,7 +42,7 @@ public abstract class AbstractRemeberMeManager {
 			HttpServletResponse response) {
 		if (dreamLoginProperties.isRememberMe()) {
 			SignPrincipal principal = ((SignPrincipal) authentication.getPrincipal());
-			UserInfo userInfo = principal.getUserInfo();
+			UserEntity userInfo = principal.getUserInfo();
 			log.debug("Remeber Me ...");
 			RemeberMe remeberMe = new RemeberMe();
 			remeberMe.setId(WebContext.genId());
@@ -66,7 +66,7 @@ public abstract class AbstractRemeberMeManager {
 		return genRemeberMe(remeberMe);
 	}
 
-	public boolean removeRemeberMe(HttpServletResponse response, UserInfo currentUser) {
+	public boolean removeRemeberMe(HttpServletResponse response, UserEntity currentUser) {
 		remove(currentUser.getUsername());
 
 		return true;

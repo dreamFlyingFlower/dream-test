@@ -13,7 +13,7 @@ import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.wy.test.core.authn.SignPrincipal;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.framework.web.crypto.jwt.HMAC512Service;
@@ -33,7 +33,7 @@ public class AuthJwtService {
 	 */
 	public String genJwt(Authentication authentication, String issuer, int expires) {
 		SignPrincipal principal = ((SignPrincipal) authentication.getPrincipal());
-		UserInfo userInfo = principal.getUserInfo();
+		UserVO userInfo = principal.getUserInfo();
 		DateTime currentDateTime = DateTime.now();
 		String subject = principal.getUsername();
 		Date expirationTime = currentDateTime.plusSeconds(expires).toDate();

@@ -1,9 +1,5 @@
 package com.wy.test.core.entity;
 
-/**
- * @author Administrator
- *
- */
 public class ExtraAttr {
 
 	String attr;

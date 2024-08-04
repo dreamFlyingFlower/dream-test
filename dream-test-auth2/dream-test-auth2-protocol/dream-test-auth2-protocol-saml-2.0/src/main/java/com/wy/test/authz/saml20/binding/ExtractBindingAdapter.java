@@ -10,7 +10,7 @@ import org.opensaml.ws.security.SecurityPolicyResolver;
 import org.opensaml.xml.security.SecurityException;
 import org.opensaml.xml.security.credential.CredentialResolver;
 
-import com.wy.test.core.entity.apps.AppsSAML20Details;
+import com.wy.test.core.entity.AppSamlDetailEntity;
 
 import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
 
@@ -31,9 +31,9 @@ public interface ExtractBindingAdapter {
 
 	public void buildSecurityPolicyResolver(KeyStore trustKeyStore);
 
-	public void setSaml20Detail(AppsSAML20Details saml20Detail);
+	public void setSaml20Detail(AppSamlDetailEntity saml20Detail);
 
-	public AppsSAML20Details getSaml20Detail();
+	public AppSamlDetailEntity getSaml20Detail();
 
 	public KeyStoreLoader getKeyStoreLoader();
 

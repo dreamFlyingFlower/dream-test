@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.entity.HistoryConnector;
+import com.wy.test.core.entity.HistoryConnectorEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserInfo;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.HistoryConnectorService;
 
 import dream.flying.flower.ConstDate;
@@ -44,11 +44,11 @@ public class ConnectorHistoryController {
 	 */
 	@PostMapping(value = { "/connectorHistory/fetch" })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute("historyConnector") HistoryConnector historyConnector,
-			@CurrentUser UserInfo currentUser) {
+	public ResponseEntity<?> fetch(@ModelAttribute("historyConnector") HistoryConnectorEntity historyConnector,
+			@CurrentUser UserEntity currentUser) {
 		_logger.debug("historys/historyConnector/fetch/ {}", historyConnector);
 		historyConnector.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<HistoryConnector>>(historyConnectorService.fetchPageResults(historyConnector))
+		return new Message<JpaPageResults<HistoryConnectorEntity>>(historyConnectorService.fetchPageResults(historyConnector))
 				.buildResponse();
 	}
 

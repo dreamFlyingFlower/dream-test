@@ -4,27 +4,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import dream.flying.flower.framework.core.json.JsonHelpers;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ExtraAttrs {
-
-	final static Logger _logger = LoggerFactory.getLogger(ExtraAttrs.class);
 
 	ArrayList<ExtraAttr> extraAttrs;
 
-	/**
-	 * 
-	 */
 	public ExtraAttrs() {
 		super();
 	}
 
 	public ExtraAttrs(String arrayJsonString) {
 		String extraAttrsJsonString = "{\"extraAttrs\":" + arrayJsonString + "}";
-		_logger.debug("Extra Attrs Json String " + extraAttrsJsonString);
+		log.debug("Extra Attrs Json String " + extraAttrsJsonString);
 		ExtraAttrs extraAttrs = JsonHelpers.read(extraAttrsJsonString, ExtraAttrs.class);
 		this.extraAttrs = extraAttrs.getExtraAttrs();
 	}
@@ -57,7 +51,7 @@ public class ExtraAttrs {
 
 	public String toJsonString() {
 		String jsonString = JsonHelpers.toString(extraAttrs);
-		_logger.debug("jsonString " + jsonString);
+		log.debug("jsonString " + jsonString);
 		return jsonString;
 	}
 
@@ -66,7 +60,7 @@ public class ExtraAttrs {
 		for (ExtraAttr extraAttr : extraAttrs) {
 			extraAttrsHashMap.put(extraAttr.getAttr(), extraAttr.getValue());
 		}
-		_logger.debug("extraAttrs HashMap " + extraAttrsHashMap);
+		log.debug("extraAttrs HashMap " + extraAttrsHashMap);
 		return extraAttrsHashMap;
 	}
 
@@ -75,7 +69,7 @@ public class ExtraAttrs {
 		for (ExtraAttr extraAttr : extraAttrs) {
 			properties.put(extraAttr.getAttr(), extraAttr.getValue());
 		}
-		_logger.debug("extraAttrs HashMap " + properties);
+		log.debug("extraAttrs HashMap " + properties);
 		return properties;
 	}
 
@@ -95,5 +89,4 @@ public class ExtraAttrs {
 		builder.append("]");
 		return builder.toString();
 	}
-
 }
