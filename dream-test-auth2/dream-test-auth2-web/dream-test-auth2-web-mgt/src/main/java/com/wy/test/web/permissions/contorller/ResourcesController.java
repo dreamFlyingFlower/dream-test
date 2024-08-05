@@ -1,10 +1,8 @@
 package com.wy.test.web.permissions.contorller;
 
+import java.util.Arrays;
 import java.util.List;
 
-import org.dromara.mybatis.jpa.entity.JpaPageResults;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,44 +16,51 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstEntryType;
 import com.wy.test.core.constants.ConstOperateAction;
 import com.wy.test.core.constants.ConstOperateResult;
+import com.wy.test.core.convert.ResourceConvert;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.ResourceEntity;
 import com.wy.test.core.entity.UserEntity;
+import com.wy.test.core.vo.ResourceVO;
 import com.wy.test.core.web.component.TreeAttributes;
 import com.wy.test.core.web.component.TreeNode;
-import com.wy.test.persistence.service.HistorySystemLogsService;
-import com.wy.test.persistence.service.ResourcesService;
+import com.wy.test.persistence.service.HistorySysLogService;
+import com.wy.test.persistence.service.ResourceService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping(value = { "/permissions/resources" })
+@Slf4j
 public class ResourcesController {
 
-	final static Logger _logger = LoggerFactory.getLogger(ResourcesController.class);
+	@Autowired
+	ResourceService resourcesService;
 
 	@Autowired
-	ResourcesService resourcesService;
+	ResourceConvert resourceConvert;
 
 	@Autowired
-	HistorySystemLogsService systemLog;
+	HistorySysLogService systemLog;
 
 	@PostMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
 	public ResponseEntity<?> fetch(@ModelAttribute ResourceEntity resource, @CurrentUser UserEntity currentUser) {
-		_logger.debug("fetch {}", resource);
+		log.debug("fetch {}", resource);
 		resource.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<ResourceEntity>>(resourcesService.fetchPageResults(resource)).buildResponse();
+		return new Message<>(resourcesService.list(new LambdaQueryWrapper<>(resource))).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> query(@ModelAttribute ResourceEntity resource, @CurrentUser UserEntity currentUser) {
-		_logger.debug("-query  {}", resource);
+		log.debug("-query  {}", resource);
 		resource.setInstId(currentUser.getInstId());
-		List<ResourceEntity> resourceList = resourcesService.query(resource);
+		List<ResourceEntity> resourceList = resourcesService.list(new LambdaQueryWrapper<>(resource));
 		if (resourceList != null) {
 			return new Message<List<ResourceEntity>>(Message.SUCCESS, resourceList).buildResponse();
 		} else {
@@ -65,18 +70,18 @@ public class ResourcesController {
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		ResourceEntity resource = resourcesService.get(id);
+		ResourceEntity resource = resourcesService.getById(id);
 		return new Message<ResourceEntity>(resource).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> insert(@RequestBody ResourceEntity resource, @CurrentUser UserEntity currentUser) {
-		_logger.debug("-Add  :" + resource);
+		log.debug("-Add  :" + resource);
 		resource.setInstId(currentUser.getInstId());
-		if (resourcesService.insert(resource)) {
-			systemLog.insert(ConstEntryType.RESOURCE, resource, ConstOperateAction.CREATE,
-					ConstOperateResult.SUCCESS, currentUser);
+		if (resourcesService.save(resource)) {
+			systemLog.insert(ConstEntryType.RESOURCE, resource, ConstOperateAction.CREATE, ConstOperateResult.SUCCESS,
+					currentUser);
 			return new Message<ResourceEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<ResourceEntity>(Message.FAIL).buildResponse();
@@ -86,11 +91,11 @@ public class ResourcesController {
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> update(@RequestBody ResourceEntity resource, @CurrentUser UserEntity currentUser) {
-		_logger.debug("-update  :" + resource);
+		log.debug("-update  :" + resource);
 		resource.setInstId(currentUser.getInstId());
-		if (resourcesService.update(resource)) {
-			systemLog.insert(ConstEntryType.RESOURCE, resource, ConstOperateAction.UPDATE,
-					ConstOperateResult.SUCCESS, currentUser);
+		if (resourcesService.updateById(resource)) {
+			systemLog.insert(ConstEntryType.RESOURCE, resource, ConstOperateAction.UPDATE, ConstOperateResult.SUCCESS,
+					currentUser);
 			return new Message<ResourceEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<ResourceEntity>(Message.FAIL).buildResponse();
@@ -100,8 +105,8 @@ public class ResourcesController {
 	@ResponseBody
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
-		_logger.debug("-delete  ids : {} ", ids);
-		if (resourcesService.deleteBatch(ids)) {
+		log.debug("-delete  ids : {} ", ids);
+		if (resourcesService.removeByIds(Arrays.asList(ids.split(",")))) {
 			systemLog.insert(ConstEntryType.RESOURCE, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new Message<ResourceEntity>(Message.SUCCESS).buildResponse();
@@ -112,10 +117,11 @@ public class ResourcesController {
 
 	@ResponseBody
 	@PostMapping(value = { "/tree" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> tree(@ModelAttribute ResourceEntity resource, @CurrentUser UserEntity currentUser) {
-		_logger.debug("-query  {}", resource);
+	public ResponseEntity<?> tree(@ModelAttribute ResourceVO resource, @CurrentUser UserEntity currentUser) {
+		log.debug("-query  {}", resource);
 		resource.setInstId(currentUser.getInstId());
-		List<ResourceEntity> resourceList = resourcesService.query(resource);
+		List<ResourceEntity> resourceList =
+				resourcesService.list(new LambdaQueryWrapper<>(resourceConvert.convert(resource)));
 		if (resourceList != null) {
 			TreeAttributes treeAttributes = new TreeAttributes();
 			int nodeCount = 0;

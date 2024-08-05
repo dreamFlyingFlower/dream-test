@@ -27,12 +27,13 @@ import com.wy.test.cas.authz.endpoint.ticket.ServiceTicketImpl;
 import com.wy.test.cas.authz.endpoint.ticket.TicketGrantingTicketImpl;
 import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.entity.AppCasDetailEntity;
-import com.wy.test.core.entity.UserEntity;
+import com.wy.test.core.vo.AppCasDetailVO;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.HttpResponseConstants;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
 import dream.flying.flower.framework.web.enums.AuthLoginType;
+import dream.flying.flower.helper.DateTimeHelper;
 import dream.flying.flower.lang.StrHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -107,7 +108,7 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 			TicketGrantingTicketImpl ticketGrantingTicketImpl =
 					(TicketGrantingTicketImpl) casTicketGrantingTicketServices.get(ticketGrantingTicket);
 
-			AppCasDetailEntity casDetails = casDetailsService.getAppDetails(casService, true);
+			AppCasDetailVO casDetails = appCasDetailService.getAppDetails(casService, true);
 
 			ServiceTicketImpl serviceTicket =
 					new ServiceTicketImpl(ticketGrantingTicketImpl.getAuthentication(), casDetails);
@@ -170,7 +171,7 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 			LoginCredential loginCredential = new LoginCredential(username, password, AuthLoginType.CASREST);
 
 			authenticationProvider.authenticate(loginCredential, false);
-			UserEntity userInfo = AuthorizationUtils.getUserInfo();
+			UserVO userInfo = AuthorizationUtils.getUserInfo();
 			TicketGrantingTicketImpl ticketGrantingTicket =
 					new TicketGrantingTicketImpl("Random", AuthorizationUtils.getAuthentication(), null);
 
@@ -186,7 +187,7 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 			serviceResponseBuilder.setAttribute("firstName", userInfo.getGivenName());
 			serviceResponseBuilder.setAttribute("lastname", userInfo.getFamilyName());
 			serviceResponseBuilder.setAttribute("mobile", userInfo.getMobile());
-			serviceResponseBuilder.setAttribute("birthday", userInfo.getBirthDate());
+			serviceResponseBuilder.setAttribute("birthday", DateTimeHelper.formatDate(userInfo.getBirthDate()));
 			serviceResponseBuilder.setAttribute("gender", userInfo.getGender() + "");
 
 			// for work

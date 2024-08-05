@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.AccountEntity;
-import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
+import com.wy.test.core.vo.AppVO;
+import com.wy.test.core.vo.UserVO;
 
 import dream.flying.flower.generator.GeneratorStrategyContext;
 import dream.flying.flower.lang.StrHelper;
@@ -24,8 +25,8 @@ import dream.flying.flower.lang.StrHelper;
 public class AuthorizeCredentialEndpoint extends AuthorizeBaseEndpoint {
 
 	@GetMapping("/get/{appId}")
-	public ResponseEntity<?> get(@PathVariable("appId") String appId, @CurrentUser UserEntity currentUser) {
-		AppEntity app = getApp(appId);
+	public ResponseEntity<?> get(@PathVariable("appId") String appId, @CurrentUser UserVO currentUser) {
+		AppVO app = getApp(appId);
 		AccountEntity account = getAccounts(app, currentUser);
 		if (account == null) {
 			account = new AccountEntity();

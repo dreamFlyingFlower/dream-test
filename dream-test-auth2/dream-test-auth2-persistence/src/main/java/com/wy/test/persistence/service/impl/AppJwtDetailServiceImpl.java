@@ -26,12 +26,12 @@ import dream.flying.flower.framework.mybatis.plus.service.impl.AbstractServiceIm
 public class AppJwtDetailServiceImpl extends AbstractServiceImpl<AppJwtDetailEntity, AppJwtDetailVO, AppJwtDetailQuery,
 		AppJwtDetailConvert, AppJwtDetailMapper> implements AppJwtDetailService {
 
-	protected final static Cache<String, AppJwtDetailEntity> detailsCache =
+	protected final static Cache<String, AppJwtDetailVO> detailsCache =
 			Caffeine.newBuilder().expireAfterWrite(30, TimeUnit.MINUTES).maximumSize(200000).build();
 
 	@Override
-	public AppJwtDetailEntity getAppDetail(String id, boolean cached) {
-		AppJwtDetailEntity details = null;
+	public AppJwtDetailVO getAppDetails(String id, boolean cached) {
+		AppJwtDetailVO details = null;
 		if (cached) {
 			details = detailsCache.getIfPresent(id);
 			if (details == null) {

@@ -16,10 +16,10 @@ import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.convert.AppFormDetailConvert;
 import com.wy.test.core.entity.AccountEntity;
-import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.AppFormDetailEntity;
-import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.AppFormDetailVO;
+import com.wy.test.core.vo.AppVO;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.persistence.service.AppFormDetailService;
 import com.wy.test.protocol.formbased.adapter.FormDefaultAdapter;
 
@@ -45,15 +45,14 @@ public class FormAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 	@Operation(summary = "FormBased认证地址接口", description = "参数应用ID", method = "GET")
 	@GetMapping("/authz/formbased/{id}")
 	public ModelAndView authorize(HttpServletRequest request, @PathVariable("id") String id,
-			@CurrentUser UserEntity currentUser)
-			throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+			@CurrentUser UserVO currentUser) throws ClassNotFoundException, NoSuchMethodException, SecurityException,
+			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
 		AppFormDetailEntity formBasedDetails = appFormDetailService.getAppDetails(id, true);
 		log.debug("formBasedDetails {}", formBasedDetails);
 
 		AppFormDetailVO appFormDetailVO = appFormDetailConvert.convertt(formBasedDetails);
-		AppEntity application = getApp(id);
+		AppVO application = getApp(id);
 		appFormDetailVO.setAdapter(application.getAdapter());
 		appFormDetailVO.setIsAdapter(application.getIsAdapter());
 		ModelAndView modelAndView = null;

@@ -74,4 +74,7 @@ public class PasswordPolicyQuery extends AbstractQuery {
 
 	@Schema(description = "事件")
 	private Integer occurances;
+
+	@Schema(description = "机构ID")
+	private String instId;
 }

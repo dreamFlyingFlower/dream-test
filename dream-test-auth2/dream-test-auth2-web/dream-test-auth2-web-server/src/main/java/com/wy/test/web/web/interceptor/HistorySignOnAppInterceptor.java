@@ -3,8 +3,6 @@ package com.wy.test.web.web.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
@@ -14,22 +12,23 @@ import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.HistoryLoginAppEntity;
-import com.wy.test.core.entity.UserEntity;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.persistence.service.AppsService;
-import com.wy.test.persistence.service.HistoryLoginAppsService;
+import com.wy.test.persistence.service.AppService;
+import com.wy.test.persistence.service.HistoryLoginAppService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class HistorySignOnAppInterceptor implements AsyncHandlerInterceptor {
 
-	private static final Logger _logger = LoggerFactory.getLogger(HistorySignOnAppInterceptor.class);
+	@Autowired
+	private HistoryLoginAppService historyLoginAppsService;
 
 	@Autowired
-	HistoryLoginAppsService historyLoginAppsService;
-
-	@Autowired
-	protected AppsService appsService;
+	protected AppService appsService;
 
 	/**
 	 * postHandle .
@@ -41,15 +40,15 @@ public class HistorySignOnAppInterceptor implements AsyncHandlerInterceptor {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		_logger.debug("postHandle");
+		log.debug("postHandle");
 
 		final AppEntity app = (AppEntity) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
 
 		SignPrincipal principal = AuthorizationUtils.getPrincipal();
 		if (principal != null && app != null) {
-			final UserEntity userInfo = principal.getUserInfo();
+			final UserVO userInfo = principal.getUserInfo();
 			String sessionId = principal.getSession().getId();
-			_logger.debug("sessionId : " + sessionId + " ,appId : " + app.getId());
+			log.debug("sessionId : " + sessionId + " ,appId : " + app.getId());
 			HistoryLoginAppEntity historyLoginApps = new HistoryLoginAppEntity();
 			historyLoginApps.setAppId(app.getId());
 			historyLoginApps.setSessionId(sessionId);
@@ -62,6 +61,5 @@ public class HistorySignOnAppInterceptor implements AsyncHandlerInterceptor {
 			WebContext.removeAttribute(WebConstants.CURRENT_SINGLESIGNON_URI);
 			WebContext.removeAttribute(WebConstants.SINGLE_SIGN_ON_APP_ID);
 		}
-
 	}
 }

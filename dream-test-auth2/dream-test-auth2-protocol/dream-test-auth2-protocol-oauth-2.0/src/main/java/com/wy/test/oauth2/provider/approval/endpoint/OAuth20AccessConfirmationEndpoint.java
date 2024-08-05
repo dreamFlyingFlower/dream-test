@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -22,30 +20,30 @@ import org.springframework.web.servlet.ModelAndView;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 import com.wy.test.core.persistence.cache.MomentaryService;
 import com.wy.test.core.properties.DreamAuthServerProperties;
+import com.wy.test.core.vo.AppVO;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.oauth2.common.OAuth2Constants;
 import com.wy.test.oauth2.provider.AuthorizationRequest;
 import com.wy.test.oauth2.provider.ClientDetailsService;
-import com.wy.test.persistence.service.AppsService;
+import com.wy.test.persistence.service.AppService;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * Controller for retrieving the model for and displaying the confirmation page for access to a protected resource.
- *
- * @author Ryan Heaton
+ * Controller for retrieving the model for and displaying the confirmation page
+ * for access to a protected resource.
  */
 @Controller
+@Slf4j
 public class OAuth20AccessConfirmationEndpoint {
 
-	static final Logger _logger = LoggerFactory.getLogger(OAuth20AccessConfirmationEndpoint.class);
-
 	@Autowired
-	@Qualifier("appsService")
-	protected AppsService appsService;
+	@Qualifier("appService")
+	protected AppService appService;
 
 	@Autowired
 	@Qualifier("oauth20JdbcClientDetailsService")
@@ -77,7 +75,7 @@ public class OAuth20AccessConfirmationEndpoint {
 
 	@GetMapping(OAuth2Constants.ENDPOINT.ENDPOINT_APPROVAL_CONFIRM)
 	public ModelAndView getAccessConfirmation(@RequestParam Map<String, Object> model,
-			@CurrentUser UserEntity currentUser) {
+			@CurrentUser UserVO currentUser) {
 		try {
 			// Map<String, Object> model
 			AuthorizationRequest clientAuth =
@@ -105,13 +103,13 @@ public class OAuth20AccessConfirmationEndpoint {
 				model.put(OAuth2Constants.PARAMETER.APPROVAL_PROMPT, client.getApprovalPrompt());
 			}
 		} catch (Exception e) {
-			_logger.debug("OAuth Access Confirmation process error.", e);
+			log.debug("OAuth Access Confirmation process error.", e);
 		}
 
 		ModelAndView modelAndView = new ModelAndView("authorize/oauth_access_confirmation");
-		_logger.trace("Confirmation details ");
+		log.trace("Confirmation details ");
 		for (Object key : model.keySet()) {
-			_logger.trace("key " + key + "=" + model.get(key));
+			log.trace("key " + key + "=" + model.get(key));
 		}
 
 		model.put("authorizeApproveUri", dreamServerProperties.getFrontendUri() + "/#/authz/oauth2approve");
@@ -122,7 +120,7 @@ public class OAuth20AccessConfirmationEndpoint {
 
 	@GetMapping(OAuth2Constants.ENDPOINT.ENDPOINT_APPROVAL_CONFIRM + "/get/{oauth_approval}")
 	public ResponseEntity<?> getAccess(@PathVariable("oauth_approval") String oauth_approval,
-			@CurrentUser UserEntity currentUser) {
+			@CurrentUser UserVO currentUser) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		if (authTokenService.validateJwtToken(oauth_approval)) {
 			try {
@@ -130,7 +128,7 @@ public class OAuth20AccessConfirmationEndpoint {
 						(AuthorizationRequest) momentaryService.get(currentUser.getSessionId(), "authorizationRequest");
 				ClientDetails client = clientDetailsService.loadClientByClientId(clientAuth.getClientId(), true);
 
-				AppEntity app = appsService.get(client.getClientId(), true);
+				AppVO app = appService.get(client.getClientId(), true);
 				app.transIconBase64();
 
 				model.put("auth_request", clientAuth);
@@ -157,12 +155,12 @@ public class OAuth20AccessConfirmationEndpoint {
 					model.put(OAuth2Constants.PARAMETER.APPROVAL_PROMPT, client.getApprovalPrompt());
 				}
 			} catch (Exception e) {
-				_logger.debug("OAuth Access Confirmation process error.", e);
+				log.debug("OAuth Access Confirmation process error.", e);
 			}
 
-			_logger.trace("Confirmation details ");
+			log.trace("Confirmation details ");
 			for (Object key : model.keySet()) {
-				_logger.trace("key " + key + "=" + model.get(key));
+				log.trace("key " + key + "=" + model.get(key));
 			}
 		}
 		return new Message<Map<String, Object>>(model).buildResponse();

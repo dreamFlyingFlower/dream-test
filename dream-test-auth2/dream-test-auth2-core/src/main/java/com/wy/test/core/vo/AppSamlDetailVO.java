@@ -55,12 +55,12 @@ public class AppSamlDetailVO extends AppVO implements Serializable, TransPojo {
 
 	@Schema(description = "密钥存储")
 	@Size(max = 65535, message = "密钥存储最大长度不能超过65,535", groups = { ValidAdd.class, ValidEdit.class })
-	private Object keystore;
+	private byte[] keystore;
 
 	@Schema(description = "地址")
 	@NotBlank(message = "地址不能为空", groups = { ValidAdd.class })
 	@Size(max = 256, message = "地址最大长度不能超过256", groups = { ValidAdd.class, ValidEdit.class })
-	private String spacsUrl;
+	private String spAcsUrl;
 
 	@Schema(description = "发布者")
 	@Size(max = 256, message = "发布者最大长度不能超过256", groups = { ValidAdd.class, ValidEdit.class })

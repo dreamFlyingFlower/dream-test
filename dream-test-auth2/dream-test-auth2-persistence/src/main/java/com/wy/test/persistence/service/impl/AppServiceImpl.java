@@ -32,7 +32,7 @@ public class AppServiceImpl extends AbstractServiceImpl<AppEntity, AppVO, AppQue
 
 	public final static String DETAIL_SUFFIX = "_detail";
 
-	protected final static Cache<String, AppEntity> detailsCacheStore =
+	protected final static Cache<String, AppVO> detailsCacheStore =
 			Caffeine.newBuilder().expireAfterWrite(30, TimeUnit.MINUTES).build();
 
 	@Override
@@ -56,22 +56,24 @@ public class AppServiceImpl extends AbstractServiceImpl<AppEntity, AppVO, AppQue
 	}
 
 	@Override
-	public void put(String appId, AppEntity appDetails) {
+	public void put(String appId, AppVO appDetails) {
 		detailsCacheStore.put(appId + DETAIL_SUFFIX, appDetails);
 	}
 
 	@Override
-	public AppEntity get(String appId, boolean cached) {
+	public AppVO get(String appId, boolean cached) {
 		appId = appId.equalsIgnoreCase("dream_mgt") ? MGT_APP_ID : appId;
-		AppEntity appDetails = null;
+		AppVO appDetails = null;
 		if (cached) {
 			appDetails = detailsCacheStore.getIfPresent(appId + DETAIL_SUFFIX);
 			if (appDetails == null) {
-				appDetails = this.getById(appId);
+				AppEntity appEntity = this.getById(appId);
+				appDetails = baseConvert.convertt(appEntity);
 				detailsCacheStore.put(appId, appDetails);
 			}
 		} else {
-			appDetails = this.getById(appId);
+			AppEntity appEntity = this.getById(appId);
+			appDetails = baseConvert.convertt(appEntity);
 		}
 		return appDetails;
 	}

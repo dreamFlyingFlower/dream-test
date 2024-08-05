@@ -33,7 +33,7 @@ import com.wy.test.otp.password.onetimepwd.impl.MailOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.impl.TimeBasedOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.token.RedisOtpTokenStore;
 import com.wy.test.persistence.service.LdapContextService;
-import com.wy.test.persistence.service.UserInfoService;
+import com.wy.test.persistence.service.UserService;
 import com.wy.test.provider.authn.realm.jdbc.JdbcAuthenticationRealm;
 import com.wy.test.provider.authn.realm.ldap.LdapAuthenticationRealmService;
 import com.wy.test.provider.authn.support.kerberos.KerberosProxy;
@@ -64,13 +64,12 @@ public class DreamTestConfig implements InitializingBean {
 	@Bean
 	JdbcAuthenticationRealm authenticationRealm(PasswordEncoder passwordEncoder,
 			PasswordPolicyValidator passwordPolicyValidator, LoginRepository loginService,
-			LoginHistoryRepository loginHistoryService, UserInfoService userInfoService, JdbcTemplate jdbcTemplate,
+			LoginHistoryRepository loginHistoryService, UserService userService, JdbcTemplate jdbcTemplate,
 			MailOtpAuthnService otpAuthnService, LdapContextService ldapContextService) {
 		LdapAuthenticationRealmService ldapRealmService = new LdapAuthenticationRealmService(ldapContextService);
 		JdbcAuthenticationRealm authenticationRealm =
 				new JdbcAuthenticationRealm(passwordEncoder, passwordPolicyValidator, loginService, loginHistoryService,
-						userInfoService, jdbcTemplate, ldapRealmService);
-
+						userService, jdbcTemplate, ldapRealmService);
 		return authenticationRealm;
 	}
 

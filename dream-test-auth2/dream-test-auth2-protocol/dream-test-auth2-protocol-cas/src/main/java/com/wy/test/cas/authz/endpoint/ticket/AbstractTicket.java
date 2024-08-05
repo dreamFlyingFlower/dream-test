@@ -10,7 +10,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.Assert;
 
-import com.wy.test.core.entity.AppCasDetailEntity;
+import com.wy.test.core.vo.AppCasDetailVO;
 
 /**
  * Abstract implementation of a ticket that handles all ticket state for
@@ -55,7 +55,7 @@ public abstract class AbstractTicket implements Ticket {
 
 	protected Authentication authentication;
 
-	protected AppCasDetailEntity casDetails;
+	protected AppCasDetailVO casDetails;
 
 	/**
 	 * Instantiates a new abstract ticket.
@@ -132,7 +132,7 @@ public abstract class AbstractTicket implements Ticket {
 	}
 
 	@Override
-	public AppCasDetailEntity getCasDetails() {
+	public AppCasDetailVO getCasDetails() {
 		return this.casDetails;
 	}
 

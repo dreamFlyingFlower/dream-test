@@ -1,9 +1,8 @@
 package com.wy.test.web.access.contorller;
 
+import java.util.Arrays;
+
 import org.apache.commons.collections4.CollectionUtils;
-import org.dromara.mybatis.jpa.entity.JpaPageResults;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constants.ConstEntryType;
 import com.wy.test.core.constants.ConstOperateAction;
@@ -24,9 +24,10 @@ import com.wy.test.core.constants.ConstOperateResult;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.RoleEntity;
 import com.wy.test.core.entity.UserEntity;
-import com.wy.test.persistence.service.HistorySystemLogsService;
-import com.wy.test.persistence.service.RolesService;
+import com.wy.test.persistence.service.HistorySysLogService;
+import com.wy.test.persistence.service.RoleService;
 
+import dream.flying.flower.generator.GeneratorStrategyContext;
 import dream.flying.flower.lang.StrHelper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,20 +36,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RolesController {
 
-	final static Logger log = LoggerFactory.getLogger(RolesController.class);
+	@Autowired
+	RoleService rolesService;
 
 	@Autowired
-	RolesService rolesService;
-
-	@Autowired
-	HistorySystemLogsService systemLog;
+	HistorySysLogService systemLog;
 
 	@GetMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
 	public ResponseEntity<?> fetch(@ModelAttribute RoleEntity role, @CurrentUser UserEntity currentUser) {
 		log.debug("" + role);
 		role.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<RoleEntity>>(rolesService.fetchPageResults(role)).buildResponse();
+		return new Message<>(rolesService.list(new LambdaQueryWrapper<>(role))).buildResponse();
 	}
 
 	@ResponseBody
@@ -56,7 +55,7 @@ public class RolesController {
 	public ResponseEntity<?> query(@ModelAttribute RoleEntity role, @CurrentUser UserEntity currentUser) {
 		log.debug("-query  :" + role);
 		role.setInstId(currentUser.getInstId());
-		if (CollectionUtils.isNotEmpty(rolesService.query(role))) {
+		if (CollectionUtils.isNotEmpty(rolesService.list(role))) {
 			return new Message<RoleEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<RoleEntity>(Message.FAIL).buildResponse();
@@ -66,7 +65,7 @@ public class RolesController {
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id, @CurrentUser UserEntity currentUser) {
-		RoleEntity role = rolesService.get(id);
+		RoleEntity role = rolesService.getById(id);
 		return new Message<RoleEntity>(role).buildResponse();
 	}
 
@@ -75,11 +74,12 @@ public class RolesController {
 	public ResponseEntity<?> insert(@RequestBody RoleEntity role, @CurrentUser UserEntity currentUser) {
 		log.debug("-Add  :" + role);
 		role.setInstId(currentUser.getInstId());
-		role.setId(role.generateId());
+		GeneratorStrategyContext generatorStrategyContext = new GeneratorStrategyContext();
+		role.setId(generatorStrategyContext.generate());
 		if (StrHelper.isBlank(role.getRoleCode())) {
 			role.setRoleCode(role.getId());
 		}
-		if (rolesService.insert(role)) {
+		if (rolesService.save(role)) {
 			rolesService.refreshDynamicRoles(role);
 			systemLog.insert(ConstEntryType.ROLE, role, ConstOperateAction.CREATE, ConstOperateResult.SUCCESS,
 					currentUser);
@@ -97,7 +97,7 @@ public class RolesController {
 			role.setDefaultAllUser();
 		}
 		role.setInstId(currentUser.getInstId());
-		if (rolesService.update(role)) {
+		if (rolesService.updateById(role)) {
 			rolesService.refreshDynamicRoles(role);
 			systemLog.insert(ConstEntryType.ROLE, role, ConstOperateAction.UPDATE, ConstOperateResult.SUCCESS,
 					currentUser);
@@ -112,7 +112,7 @@ public class RolesController {
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete ids : {}", ids);
 		ids = ids.replaceAll("ROLE_ALL_USER", "-1").replaceAll("ROLE_ADMINISTRATORS", "-1");
-		if (rolesService.deleteBatch(ids)) {
+		if (rolesService.removeByIds(Arrays.asList(ids.split(",")))) {
 			systemLog.insert(ConstEntryType.ROLE, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new Message<RoleEntity>(Message.SUCCESS).buildResponse();

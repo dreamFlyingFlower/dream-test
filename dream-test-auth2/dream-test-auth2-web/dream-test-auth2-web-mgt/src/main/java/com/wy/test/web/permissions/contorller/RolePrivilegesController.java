@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,31 +18,34 @@ import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.RolePrivilegeEntity;
 import com.wy.test.core.entity.UserEntity;
-import com.wy.test.persistence.service.HistorySystemLogsService;
-import com.wy.test.persistence.service.RolePrivilegesService;
+import com.wy.test.persistence.service.HistorySysLogService;
+import com.wy.test.persistence.service.RolePrivilegeService;
 
+import dream.flying.flower.generator.GeneratorStrategyContext;
 import dream.flying.flower.lang.StrHelper;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping(value = { "/permissions/privileges" })
+@Slf4j
 public class RolePrivilegesController {
 
-	final static Logger _logger = LoggerFactory.getLogger(RolePrivilegesController.class);
+	@Autowired
+	RolePrivilegeService rolePrivilegesService;
 
 	@Autowired
-	RolePrivilegesService rolePrivilegesService;
-
-	@Autowired
-	HistorySystemLogsService systemLog;
+	HistorySysLogService systemLog;
 
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@RequestBody RolePrivilegeEntity rolePrivileges, @CurrentUser UserEntity currentUser) {
-		_logger.debug("-update  : " + rolePrivileges);
+	public ResponseEntity<?> update(@RequestBody RolePrivilegeEntity rolePrivileges,
+			@CurrentUser UserEntity currentUser) {
+		log.debug("-update  : " + rolePrivileges);
 		// have
 		RolePrivilegeEntity queryRolePrivileges =
 				new RolePrivilegeEntity(rolePrivileges.getAppId(), rolePrivileges.getRoleId(), currentUser.getInstId());
-		List<RolePrivilegeEntity> roleRolePrivilegesList = rolePrivilegesService.queryRolePrivileges(queryRolePrivileges);
+		List<RolePrivilegeEntity> roleRolePrivilegesList =
+				rolePrivilegesService.queryRolePrivileges(queryRolePrivileges);
 
 		HashMap<String, String> privilegeMap = new HashMap<String, String>();
 		for (RolePrivilegeEntity rolePrivilege : roleRolePrivilegesList) {
@@ -54,10 +55,11 @@ public class RolePrivilegesController {
 		ArrayList<RolePrivilegeEntity> newRolePrivilegesList = new ArrayList<RolePrivilegeEntity>();
 		String[] resourceIds = StrHelper.split(rolePrivileges.getResourceId(), ",");
 		HashMap<String, String> newPrivilegesMap = new HashMap<String, String>();
+		GeneratorStrategyContext generatorStrategyContext = new GeneratorStrategyContext();
 		for (String resourceId : resourceIds) {
-			RolePrivilegeEntity newRolePrivilege = new RolePrivilegeEntity(rolePrivileges.getAppId(), rolePrivileges.getRoleId(),
-					resourceId, currentUser.getInstId());
-			newRolePrivilege.setId(newRolePrivilege.generateId());
+			RolePrivilegeEntity newRolePrivilege = new RolePrivilegeEntity(rolePrivileges.getAppId(),
+					rolePrivileges.getRoleId(), resourceId, currentUser.getInstId());
+			newRolePrivilege.setId(generatorStrategyContext.generate());
 			newPrivilegesMap.put(newRolePrivilege.getUniqueId(), rolePrivileges.getAppId());
 
 			if (!rolePrivileges.getAppId().equalsIgnoreCase(resourceId)
@@ -75,12 +77,12 @@ public class RolePrivilegesController {
 			}
 		}
 		if (!deleteRolePrivilegesList.isEmpty()) {
-			_logger.debug("-remove  : " + deleteRolePrivilegesList);
+			log.debug("-remove  : " + deleteRolePrivilegesList);
 			rolePrivilegesService.deleteRolePrivileges(deleteRolePrivilegesList);
 		}
 
 		if (!newRolePrivilegesList.isEmpty() && rolePrivilegesService.insertRolePrivileges(newRolePrivilegesList)) {
-			_logger.debug("-insert  : " + newRolePrivilegesList);
+			log.debug("-insert  : " + newRolePrivilegesList);
 			return new Message<RolePrivilegeEntity>(Message.SUCCESS).buildResponse();
 
 		} else {
@@ -91,8 +93,9 @@ public class RolePrivilegesController {
 
 	@ResponseBody
 	@PostMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> get(@ModelAttribute RolePrivilegeEntity rolePrivileges, @CurrentUser UserEntity currentUser) {
-		_logger.debug("-get  :" + rolePrivileges);
+	public ResponseEntity<?> get(@ModelAttribute RolePrivilegeEntity rolePrivileges,
+			@CurrentUser UserEntity currentUser) {
+		log.debug("-get  :" + rolePrivileges);
 		// have
 		RolePrivilegeEntity queryRolePrivilege =
 				new RolePrivilegeEntity(rolePrivileges.getAppId(), rolePrivileges.getRoleId(), currentUser.getInstId());

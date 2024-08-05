@@ -4,9 +4,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.wy.test.web.apis.identity.scim.resources.ScimGroup;
-import com.wy.test.web.apis.identity.scim.resources.ScimMemberRef;
-import com.wy.test.web.apis.identity.scim.resources.ScimMeta;
+import com.wy.test.web.api.scim.resources.ScimGroup;
+import com.wy.test.web.api.scim.resources.ScimMemberRef;
+import com.wy.test.web.api.scim.resources.ScimMeta;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.framework.core.pretty.strategy.JsonPretty;

@@ -3,9 +3,6 @@ package com.wy.test.web.web.historys.contorller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.dromara.mybatis.jpa.entity.JpaPageResults;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +18,10 @@ import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.entity.HistoryLoginAppEntity;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
-import com.wy.test.persistence.service.HistoryLoginAppsService;
+import com.wy.test.persistence.service.HistoryLoginAppService;
 
 import dream.flying.flower.ConstDate;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 单点登录日志查询
@@ -32,12 +30,11 @@ import dream.flying.flower.ConstDate;
  */
 @Controller
 @RequestMapping(value = { "/historys" })
+@Slf4j
 public class LoginAppsHistoryController {
 
-	final static Logger _logger = LoggerFactory.getLogger(LoginAppsHistoryController.class);
-
 	@Autowired
-	protected HistoryLoginAppsService historyLoginAppsService;
+	protected HistoryLoginAppService historyLoginAppsService;
 
 	/**
 	 * @param loginAppsHistory
@@ -47,12 +44,11 @@ public class LoginAppsHistoryController {
 	@ResponseBody
 	public ResponseEntity<?> fetch(@ModelAttribute("historyLoginApp") HistoryLoginAppEntity historyLoginApp,
 			@CurrentUser UserEntity currentUser) {
-		_logger.debug("historys/loginAppsHistory/fetch/  {}", historyLoginApp);
+		log.debug("historys/loginAppsHistory/fetch/  {}", historyLoginApp);
 		historyLoginApp.setId(null);
 		historyLoginApp.setUserId(currentUser.getId());
 		historyLoginApp.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<HistoryLoginAppEntity>>(historyLoginAppsService.fetchPageResults(historyLoginApp))
-				.buildResponse();
+		return new Message<>(historyLoginAppsService.list(historyLoginApp)).buildResponse();
 	}
 
 	@InitBinder

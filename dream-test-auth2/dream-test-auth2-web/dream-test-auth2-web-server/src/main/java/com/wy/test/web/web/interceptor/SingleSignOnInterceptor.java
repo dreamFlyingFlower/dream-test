@@ -15,12 +15,12 @@ import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
+import com.wy.test.core.vo.AppVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.persistence.service.AppsCasDetailsService;
-import com.wy.test.persistence.service.AppsService;
+import com.wy.test.persistence.service.AppCasDetailService;
+import com.wy.test.persistence.service.AppService;
 
 import dream.flying.flower.binary.Base64Helper;
 import lombok.extern.slf4j.Slf4j;
@@ -39,10 +39,10 @@ public class SingleSignOnInterceptor implements AsyncHandlerInterceptor {
 	AuthTokenService authTokenService;
 
 	@Autowired
-	AppsService appsService;
+	AppService appsService;
 
 	@Autowired
-	AppsCasDetailsService casDetailsService;
+	AppCasDetailService casDetailsService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -64,7 +64,7 @@ public class SingleSignOnInterceptor implements AsyncHandlerInterceptor {
 		// 判断应用访问权限
 		if (AuthorizationUtils.isAuthenticated()) {
 			log.debug("preHandle {}", request.getRequestURI());
-			AppEntity app = (AppEntity) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
+			AppVO app = (AppVO) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
 			if (app == null) {
 
 				String requestURI = request.getRequestURI();

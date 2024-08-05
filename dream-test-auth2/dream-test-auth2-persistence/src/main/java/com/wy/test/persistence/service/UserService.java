@@ -29,7 +29,7 @@ public interface UserService extends BaseServices<UserEntity, UserVO, UserQuery>
 
 	UserVO findUserRelated(String userId);
 
-	boolean updateGridList(String gridList, UserEntity userInfo);
+	boolean updateGridList(String gridList, UserVO userInfo);
 
 	boolean updateProtectedApps(UserEntity userinfo);
 
@@ -39,7 +39,7 @@ public interface UserService extends BaseServices<UserEntity, UserVO, UserQuery>
 
 	UserEntity findByAppIdAndUsername(String appId, String username);
 
-	ChangePassword passwordEncoder(UserEntity userInfo);
+	ChangePassword passwordEncoder(UserVO userInfo);
 
 	ChangePassword passwordEncoder(ChangePassword changePassword);
 
@@ -100,7 +100,7 @@ public interface UserService extends BaseServices<UserEntity, UserVO, UserQuery>
 
 	boolean updateMobile(UserEntity userInfo);
 
-	int updateProfile(UserEntity userInfo);
+	int updateProfile(UserVO userInfo);
 
 	boolean updateStatus(UserEntity userInfo);
 }

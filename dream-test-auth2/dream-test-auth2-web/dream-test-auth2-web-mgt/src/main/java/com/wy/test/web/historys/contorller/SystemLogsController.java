@@ -3,9 +3,6 @@ package com.wy.test.web.historys.contorller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.dromara.mybatis.jpa.entity.JpaPageResults;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +18,10 @@ import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.entity.HistorySysLogEntity;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
-import com.wy.test.persistence.service.HistorySystemLogsService;
+import com.wy.test.persistence.service.HistorySysLogService;
 
 import dream.flying.flower.ConstDate;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 系统操作日志查询
@@ -31,12 +29,11 @@ import dream.flying.flower.ConstDate;
  */
 @Controller
 @RequestMapping(value = { "/historys" })
+@Slf4j
 public class SystemLogsController {
 
-	final static Logger _logger = LoggerFactory.getLogger(SystemLogsController.class);
-
 	@Autowired
-	HistorySystemLogsService historySystemLogsService;
+	HistorySysLogService historySystemLogsService;
 
 	/**
 	 * 查询操作日志
@@ -48,10 +45,9 @@ public class SystemLogsController {
 	@ResponseBody
 	public ResponseEntity<?> fetch(@ModelAttribute("historyLog") HistorySysLogEntity historyLog,
 			@CurrentUser UserEntity currentUser) {
-		_logger.debug("historys/historyLog/fetch {} ", historyLog);
+		log.debug("historys/historyLog/fetch {} ", historyLog);
 		historyLog.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<HistorySysLogEntity>>(historySystemLogsService.fetchPageResults(historyLog))
-				.buildResponse();
+		return new Message<>(historySystemLogsService.list(historyLog)).buildResponse();
 	}
 
 	@InitBinder

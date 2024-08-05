@@ -2,8 +2,6 @@ package com.wy.test.web.web.contorller;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +16,17 @@ import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.SocialAssociateEntity;
 import com.wy.test.core.entity.UserEntity;
-import com.wy.test.persistence.service.SocialsAssociatesService;
+import com.wy.test.persistence.service.SocialAssociateService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping(value = { "/config/socialsignon" })
+@Slf4j
 public class SocialSignOnListController {
 
-	final static Logger _logger = LoggerFactory.getLogger(SocialSignOnListController.class);
-
 	@Autowired
-	protected SocialsAssociatesService socialsAssociatesService;
+	protected SocialAssociateService socialsAssociatesService;
 
 	@GetMapping(value = { "/fetch" })
 	@ResponseBody
@@ -41,8 +40,8 @@ public class SocialSignOnListController {
 	@ResponseBody
 	@GetMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
-		_logger.debug("-delete  ids : {} ", ids);
-		if (socialsAssociatesService.deleteBatch(ids)) {
+		log.debug("-delete  ids : {} ", ids);
+		if (socialsAssociatesService.removeById(ids)) {
 			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppEntity>(Message.FAIL).buildResponse();

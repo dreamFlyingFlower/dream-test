@@ -54,7 +54,7 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity, UserVO, Use
 
 	@Override
 	public boolean insert(UserEntity userInfo) {
-		this.passwordEncoder(userInfo);
+		this.passwordEncoder(baseConvert.convertt(userInfo));
 		if (super.save(userInfo)) {
 			if (provisionService.getDreamServerProperties().isProvision()) {
 				UserVO loadUserInfo = findUserRelated(userInfo.getId());
@@ -68,7 +68,7 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity, UserVO, Use
 	@Override
 	public boolean insert(UserEntity userInfo, boolean passwordEncoder) {
 		if (passwordEncoder) {
-			this.passwordEncoder(userInfo);
+			this.passwordEncoder(baseConvert.convertt(userInfo));
 		}
 		if (super.save(userInfo)) {
 			if (provisionService.getDreamServerProperties().isProvision()) {
@@ -82,7 +82,7 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity, UserVO, Use
 
 	@Override
 	public boolean update(UserEntity userInfo) {
-		ChangePassword changePassword = this.passwordEncoder(userInfo);
+		ChangePassword changePassword = this.passwordEncoder(baseConvert.convertt(userInfo));
 		if (super.updateById(userInfo)) {
 			if (provisionService.getDreamServerProperties().isProvision()) {
 				UserVO loadUserInfo = findUserRelated(userInfo.getId());
@@ -135,7 +135,7 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity, UserVO, Use
 	}
 
 	@Override
-	public boolean updateGridList(String gridList, UserEntity userInfo) {
+	public boolean updateGridList(String gridList, UserVO userInfo) {
 		try {
 			if (gridList != null && !gridList.equals("")) {
 				userInfo.setGridList(Integer.parseInt(gridList));
@@ -195,7 +195,7 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity, UserVO, Use
 	}
 
 	@Override
-	public ChangePassword passwordEncoder(UserEntity userInfo) {
+	public ChangePassword passwordEncoder(UserVO userInfo) {
 		ChangePassword changePassword = null;
 		if (StrHelper.isNotBlank(userInfo.getPassword())) {
 			changePassword = new ChangePassword(userInfo);
@@ -310,7 +310,7 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity, UserVO, Use
 	public void changePasswordProvisioning(ChangePassword changePassworded) {
 		if (changePassworded != null && StrHelper.isNotBlank(changePassworded.getPassword())) {
 			UserEntity loadUserInfo = findByUsername(changePassworded.getUsername());
-			ChangePassword changePassword = new ChangePassword(loadUserInfo);
+			ChangePassword changePassword = new ChangePassword(baseConvert.convertt(loadUserInfo));
 			provisionService.send(ProvisionTopic.PASSWORD_TOPIC, changePassword, ProvisionAction.PASSWORD_ACTION);
 		}
 	}
@@ -405,7 +405,7 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity, UserVO, Use
 	}
 
 	@Override
-	public int updateProfile(UserEntity userInfo) {
+	public int updateProfile(UserVO userInfo) {
 		return baseMapper.updateProfile(userInfo);
 	}
 

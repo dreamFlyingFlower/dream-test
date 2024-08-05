@@ -1,23 +1,20 @@
 package com.wy.test.web.apps.contorller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.password.PasswordReciprocal;
-import com.wy.test.persistence.service.AppsService;
+import com.wy.test.core.vo.AppVO;
+import com.wy.test.persistence.service.AppService;
 import com.wy.test.persistence.service.FileUploadService;
-import com.wy.test.persistence.service.HistorySystemLogsService;
+import com.wy.test.persistence.service.HistorySysLogService;
 
 import dream.flying.flower.lang.StrHelper;
 
 public class BaseAppContorller {
 
-	final static Logger _logger = LoggerFactory.getLogger(BaseAppContorller.class);
-
 	@Autowired
-	protected AppsService appsService;
+	protected AppService appsService;
 
 	@Autowired
 	protected PasswordReciprocal passwordReciprocal;
@@ -26,13 +23,9 @@ public class BaseAppContorller {
 	protected FileUploadService fileUploadService;
 
 	@Autowired
-	HistorySystemLogsService systemLog;
+	HistorySysLogService systemLog;
 
-	public void setAppsService(AppsService appsService) {
-		this.appsService = appsService;
-	}
-
-	protected void transform(AppEntity application) {
+	protected void transform(AppVO application) {
 		encodeSharedPassword(application);
 		encodeSecret(application);
 		/*
@@ -43,29 +36,29 @@ public class BaseAppContorller {
 		 * upload icon Bytes
 		 */
 		if (StrHelper.isNotBlank(application.getIconId())) {
-			application.setIcon(fileUploadService.get(application.getIconId()).getUploaded());
-			fileUploadService.remove(application.getIconId());
+			application.setIcon(fileUploadService.getById(application.getIconId()).getUploaded());
+			fileUploadService.removeById(application.getIconId());
 		}
 
 	}
 
-	protected void encodeSharedPassword(AppEntity application) {
+	protected void encodeSharedPassword(AppVO application) {
 		if (StrHelper.isNotBlank(application.getSharedPassword())) {
 			application.setSharedPassword(PasswordReciprocal.getInstance().encode(application.getSharedPassword()));
 		}
 	}
 
-	protected void decoderSharedPassword(AppEntity application) {
+	protected void decoderSharedPassword(AppVO application) {
 		if (StrHelper.isNotBlank(application.getSharedPassword())) {
 			application.setSharedPassword(PasswordReciprocal.getInstance().decoder(application.getSharedPassword()));
 		}
 	}
 
-	protected void encoding(AppEntity application) {
+	protected void encoding(AppVO application) {
 
 	}
 
-	protected void encodeSecret(AppEntity application) {
+	protected void encodeSecret(AppVO application) {
 		if (StrHelper.isNotBlank(application.getSecret())) {
 			String encodeSecret = passwordReciprocal.encode(application.getSecret());
 			application.setSecret(encodeSecret);

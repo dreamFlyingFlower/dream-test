@@ -11,8 +11,8 @@ import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.entity.InstitutionEntity;
-import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
@@ -67,7 +67,7 @@ public class NormalAuthenticationProvider extends AbstractAuthenticationProvider
 
 			emptyUsernameValid(loginCredential.getUsername());
 
-			UserEntity userInfo = loadUserInfo(loginCredential.getUsername(), loginCredential.getPassword());
+			UserVO userInfo = loadUserInfo(loginCredential.getUsername(), loginCredential.getPassword());
 
 			statusValid(loginCredential, userInfo);
 

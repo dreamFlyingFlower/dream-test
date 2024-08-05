@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 import org.springframework.security.core.Authentication;
 
-import com.wy.test.core.entity.AppEntity;
+import com.wy.test.core.vo.AppVO;
 import com.wy.test.core.web.WebContext;
 
 public class Session implements Serializable {
@@ -27,7 +27,7 @@ public class Session implements Serializable {
 
 	public Authentication authentication;
 
-	private HashMap<String, AppEntity> authorizedApps = new HashMap<String, AppEntity>();
+	private HashMap<String, AppVO> authorizedApps = new HashMap<>();
 
 	public Session() {
 		super();
@@ -96,15 +96,15 @@ public class Session implements Serializable {
 		this.authentication = authentication;
 	}
 
-	public HashMap<String, AppEntity> getAuthorizedApps() {
+	public HashMap<String, AppVO> getAuthorizedApps() {
 		return authorizedApps;
 	}
 
-	public void setAuthorizedApps(HashMap<String, AppEntity> authorizedApps) {
+	public void setAuthorizedApps(HashMap<String, AppVO> authorizedApps) {
 		this.authorizedApps = authorizedApps;
 	}
 
-	public void setAuthorizedApp(AppEntity authorizedApp) {
+	public void setAuthorizedApp(AppVO authorizedApp) {
 		this.authorizedApps.put(authorizedApp.getId(), authorizedApp);
 	}
 

@@ -31,8 +31,8 @@ import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
-import com.wy.test.persistence.service.SocialsAssociatesService;
-import com.wy.test.persistence.service.UserInfoService;
+import com.wy.test.persistence.service.SocialAssociateService;
+import com.wy.test.persistence.service.UserService;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.provider.authn.support.kerberos.KerberosService;
 import com.wy.test.provider.authn.support.rememberme.AbstractRemeberMeManager;
@@ -63,11 +63,11 @@ public class LoginEntryPoint {
 
 	private final SocialSignOnProviderService socialSignOnProviderService;
 
-	private final SocialsAssociatesService socialsAssociatesService;
+	private final SocialAssociateService socialsAssociatesService;
 
 	private final KerberosService kerberosService;
 
-	private final UserInfoService userInfoService;
+	private final UserService userInfoService;
 
 	private final AbstractOtpAuthn tfaOtpAuthn;
 
@@ -162,7 +162,7 @@ public class LoginEntryPoint {
 			socialsAssociate.setSocialUserId(username);
 			socialsAssociate.setInstId(userInfo.getInstId());
 			// 插入dream和社交服务的用户映射表
-			socialsAssociatesService.insert(socialsAssociate);
+			socialsAssociatesService.save(socialsAssociate);
 
 			// 设置完成后，进行登录认证
 			LoginCredential loginCredential =

@@ -1,8 +1,5 @@
 package com.wy.test.web.web.contorller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,30 +11,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
+import com.wy.test.core.convert.UserConvert;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.persistence.service.FileUploadService;
-import com.wy.test.persistence.service.UserInfoService;
+import com.wy.test.persistence.service.UserService;
 
 import dream.flying.flower.lang.StrHelper;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping(value = { "/config/profile" })
+@Slf4j
+@AllArgsConstructor
 public class ProfileController {
 
-	static final Logger _logger = LoggerFactory.getLogger(ProfileController.class);
+	private UserService userInfoService;
 
-	@Autowired
-	private UserInfoService userInfoService;
+	private UserConvert userConvert;
 
-	@Autowired
-	FileUploadService fileUploadService;
+	private FileUploadService fileUploadService;
 
 	@GetMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@CurrentUser UserEntity currentUser) {
 		UserEntity userInfo = userInfoService.findByUsername(currentUser.getUsername());
-		userInfo.trans();
-		return new Message<UserEntity>(userInfo).buildResponse();
+		UserVO userVO = userConvert.convertt(userInfo);
+		userVO.trans();
+		return new Message<>(userVO).buildResponse();
 	}
 
 	/**
@@ -49,9 +51,9 @@ public class ProfileController {
 	 */
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> update(@RequestBody UserEntity userInfo, @CurrentUser UserEntity currentUser,
+	public ResponseEntity<?> update(@RequestBody UserVO userInfo, @CurrentUser UserEntity currentUser,
 			BindingResult result) {
-		_logger.debug(userInfo.toString());
+		log.debug(userInfo.toString());
 
 		// if(userInfo.getExtraAttributeValue()!=null){
 		// String []extraAttributeLabel=userInfo.getExtraAttributeName().split(",");
@@ -64,8 +66,8 @@ public class ProfileController {
 		// userInfo.setExtraAttribute(extraAttribute);
 		// }
 		if (StrHelper.isNotBlank(userInfo.getPictureId())) {
-			userInfo.setPicture(fileUploadService.get(userInfo.getPictureId()).getUploaded());
-			fileUploadService.remove(userInfo.getPictureId());
+			userInfo.setPicture(fileUploadService.getById(userInfo.getPictureId()).getUploaded());
+			fileUploadService.removeById(userInfo.getPictureId());
 		}
 
 		if (userInfoService.updateProfile(userInfo) > 0) {

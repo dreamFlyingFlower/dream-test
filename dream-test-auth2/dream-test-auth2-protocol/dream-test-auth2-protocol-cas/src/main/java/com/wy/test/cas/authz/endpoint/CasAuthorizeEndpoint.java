@@ -19,7 +19,7 @@ import com.wy.test.cas.authz.endpoint.ticket.CasConstants;
 import com.wy.test.cas.authz.endpoint.ticket.ServiceTicketImpl;
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.entity.AppCasDetailEntity;
+import com.wy.test.core.vo.AppCasDetailVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 
@@ -41,7 +41,7 @@ public class CasAuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 			@RequestParam(value = CasConstants.PARAMETER.SERVICE, required = false) String casService,
 			HttpServletRequest request, HttpServletResponse response) {
 
-		AppCasDetailEntity casDetails = casDetailsService.getAppDetails(casService, true);
+		AppCasDetailVO casDetails = appCasDetailService.getAppDetails(casService, true);
 
 		return buildCasModelAndView(request, response, casDetails, casService);
 	}
@@ -50,15 +50,13 @@ public class CasAuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 	@GetMapping(CasConstants.ENDPOINT.ENDPOINT_BASE + "/{id}")
 	public ModelAndView authorize(@PathVariable("id") String id, HttpServletRequest request,
 			HttpServletResponse response) {
-
-		AppCasDetailEntity casDetails = casDetailsService.getAppDetails(id, true);
-
+		AppCasDetailVO casDetails = appCasDetailService.getAppDetails(id, true);
 		return buildCasModelAndView(request, response, casDetails,
 				casDetails == null ? id : casDetails.getCallbackUrl());
 	}
 
 	private ModelAndView buildCasModelAndView(HttpServletRequest request, HttpServletResponse response,
-			AppCasDetailEntity casDetails, String casService) {
+			AppCasDetailVO casDetails, String casService) {
 		if (casDetails == null) {
 			_logger.debug("service {} not registered  ", casService);
 			ModelAndView modelAndView = new ModelAndView("authorize/cas_sso_submint");
@@ -91,8 +89,8 @@ public class CasAuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 	@GetMapping(CasConstants.ENDPOINT.ENDPOINT_SERVICE_TICKET_GRANTING)
 	public ModelAndView grantingTicket(Principal principal, HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView("authorize/cas_sso_submint");
-		AppCasDetailEntity casDetails =
-				(AppCasDetailEntity) WebContext.getAttribute(CasConstants.PARAMETER.ENDPOINT_CAS_DETAILS);
+		AppCasDetailVO casDetails =
+				(AppCasDetailVO) WebContext.getAttribute(CasConstants.PARAMETER.ENDPOINT_CAS_DETAILS);
 
 		ServiceTicketImpl serviceTicket = new ServiceTicketImpl(AuthorizationUtils.getAuthentication(), casDetails);
 

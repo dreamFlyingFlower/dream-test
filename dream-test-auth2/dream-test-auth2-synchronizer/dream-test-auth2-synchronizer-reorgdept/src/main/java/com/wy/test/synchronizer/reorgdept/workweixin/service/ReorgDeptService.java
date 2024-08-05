@@ -5,8 +5,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wy.test.core.constants.ConstStatus;
+import com.wy.test.core.convert.OrgConvert;
 import com.wy.test.core.entity.OrgEntity;
+import com.wy.test.core.vo.OrgVO;
 import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
@@ -18,16 +21,17 @@ public class ReorgDeptService extends AbstractSynchronizerService implements ISy
 
 	String rootParentOrgId = "-1";
 
+	private OrgConvert orgConvert;
+
 	@Override
 	public void sync() {
 		log.info("Sync Organizations ...");
 
 		try {
 			long responseCount = 0;
-			HashMap<String, OrgEntity> orgCastMap = new HashMap<String, OrgEntity>();
-			OrgEntity queryOrganization = new OrgEntity();
-			queryOrganization.setInstId(this.synchronizer.getInstId());
-			List<OrgEntity> listOrg = organizationsService.query(queryOrganization);
+			HashMap<String, OrgVO> orgCastMap = new HashMap<>();
+			List<OrgEntity> listOrg = organizationsService
+					.list(new LambdaQueryWrapper<OrgEntity>().eq(OrgEntity::getInstId, this.synchronizer.getInstId()));
 
 			buildNamePath(orgCastMap, listOrg);
 
@@ -49,12 +53,13 @@ public class ReorgDeptService extends AbstractSynchronizerService implements ISy
 	 * @param orgCastMap
 	 * @param listOrgCast
 	 */
-	public void buildNamePath(HashMap<String, OrgEntity> orgMap, List<OrgEntity> listOrg) {
-		OrgEntity tempOrg = null;
+	public void buildNamePath(HashMap<String, OrgVO> orgMap, List<OrgEntity> listOrg) {
+		List<OrgVO> orgVOs = orgConvert.convertt(listOrg);
+		OrgVO tempOrg = null;
 		// root org
-		for (int i = 0; i < listOrg.size(); i++) {
-			if (listOrg.get(i).getParentId().equals(rootParentOrgId)) {
-				tempOrg = listOrg.get(i);
+		for (int i = 0; i < orgVOs.size(); i++) {
+			if (orgVOs.get(i).getParentId().equals(rootParentOrgId)) {
+				tempOrg = orgVOs.get(i);
 				tempOrg.setReorgNamePath(true);
 				tempOrg.setNamePath("/" + tempOrg.getOrgName());
 				tempOrg.setCodePath("/" + tempOrg.getId());
@@ -65,10 +70,10 @@ public class ReorgDeptService extends AbstractSynchronizerService implements ISy
 		}
 
 		do {
-			for (int i = 0; i < listOrg.size(); i++) {
-				if (!listOrg.get(i).isReorgNamePath()) {
-					OrgEntity parentOrg = orgMap.get(listOrg.get(i).getParentId());
-					tempOrg = listOrg.get(i);
+			for (int i = 0; i < orgVOs.size(); i++) {
+				if (!orgVOs.get(i).isReorgNamePath()) {
+					OrgVO parentOrg = orgMap.get(orgVOs.get(i).getParentId());
+					tempOrg = orgVOs.get(i);
 					if (!tempOrg.isReorgNamePath() && parentOrg != null) {
 						tempOrg.setReorgNamePath(true);
 						tempOrg.setParentName(parentOrg.getOrgName());

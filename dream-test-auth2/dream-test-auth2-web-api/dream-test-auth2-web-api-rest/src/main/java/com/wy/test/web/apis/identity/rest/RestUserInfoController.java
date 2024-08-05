@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.wy.test.core.convert.UserConvert;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
@@ -38,6 +39,9 @@ public class RestUserInfoController {
 	@Autowired
 	@Qualifier("userService")
 	private UserService userService;
+
+	@Autowired
+	private UserConvert userConvert;
 
 	@GetMapping(value = "/{id}")
 	public UserEntity getUser(@PathVariable String id, @RequestParam(required = false) String attributes) {
@@ -66,7 +70,7 @@ public class RestUserInfoController {
 		log.debug("UserInfo username {} , password {}", username, password);
 		UserEntity loadUserInfo = userService.findByUsername(username);
 		if (loadUserInfo != null) {
-			ChangePassword changePassword = new ChangePassword(loadUserInfo);
+			ChangePassword changePassword = new ChangePassword(userConvert.convertt(loadUserInfo));
 			changePassword.setPassword(password);
 			changePassword.setDecipherable(loadUserInfo.getDecipherable());
 			userService.changePassword(changePassword, true);

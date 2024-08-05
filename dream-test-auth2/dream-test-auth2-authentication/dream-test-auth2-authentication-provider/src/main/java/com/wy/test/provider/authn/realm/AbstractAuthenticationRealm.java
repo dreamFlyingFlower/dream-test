@@ -13,7 +13,6 @@ import org.springframework.security.core.GrantedAuthority;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.entity.HistoryLoginEntity;
 import com.wy.test.core.entity.RoleEntity;
-import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.persistence.repository.LoginHistoryRepository;
 import com.wy.test.core.persistence.repository.LoginRepository;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
@@ -61,11 +60,11 @@ public abstract class AbstractAuthenticationRealm {
 		return loginRepository;
 	}
 
-	public UserEntity loadUserInfo(String username, String password) {
+	public UserVO loadUserInfo(String username, String password) {
 		return loginRepository.find(username, password);
 	}
 
-	public abstract boolean passwordMatches(UserEntity userInfo, String password);
+	public abstract boolean passwordMatches(UserVO userInfo, String password);
 
 	public List<RoleEntity> queryGroups(UserVO userInfo) {
 		return loginRepository.queryRoles(userInfo);

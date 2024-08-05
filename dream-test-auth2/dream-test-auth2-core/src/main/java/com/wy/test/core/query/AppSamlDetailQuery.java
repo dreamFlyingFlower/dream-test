@@ -40,7 +40,7 @@ public class AppSamlDetailQuery extends AbstractQuery {
 	private Object keystore;
 
 	@Schema(description = "地址")
-	private String spacsUrl;
+	private String spAcsUrl;
 
 	@Schema(description = "发布者")
 	private String issuer;

@@ -3,8 +3,6 @@ package com.wy.test.web.web.contorller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,16 +19,14 @@ import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.persistence.service.UserInfoService;
+import com.wy.test.persistence.service.UserService;
 
 @Controller
 @RequestMapping(value = { "/safe" })
 public class SafeController {
 
-	final static Logger _logger = LoggerFactory.getLogger(SafeController.class);
-
 	@Autowired
-	private UserInfoService userInfoService;
+	private UserService userService;
 
 	@GetMapping(value = "/forward/setting")
 	public ModelAndView fowardSetting(@CurrentUser UserEntity currentUser) {
@@ -47,17 +43,17 @@ public class SafeController {
 			@RequestParam("emailVerify") String emailVerify, @RequestParam("theme") String theme,
 			@CurrentUser UserEntity currentUser) {
 		currentUser.setAuthnType(Integer.parseInt(authnType));
-		userInfoService.updateAuthnType(currentUser);
+		userService.updateAuthnType(currentUser);
 
 		currentUser.setMobile(mobile);
-		userInfoService.updateMobile(currentUser);
+		userService.updateMobile(currentUser);
 
 		currentUser.setEmail(email);
 
 		currentUser.setTheme(theme);
 		WebContext.setCookie(response, null, WebConstants.THEME_COOKIE_NAME, theme, ConstTimeInterval.ONE_WEEK);
 
-		userInfoService.updateEmail(currentUser);
+		userService.updateEmail(currentUser);
 
 		return new Message<UserEntity>(Message.SUCCESS).buildResponse();
 	}

@@ -3,7 +3,6 @@ package com.wy.test.oauth2.provider.endpoint;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -73,7 +72,6 @@ public class OauthJwksEndpoint extends AbstractEndpoint {
 			return jwkSetKeyStore.toString(mediaType);
 		}
 
-		return appId + " not exist . \n" + MybatisJpaContext.version();
+		return appId + " not exist . \n";
 	}
-
 }

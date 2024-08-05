@@ -16,8 +16,8 @@ import com.wy.test.listener.ListenerParameter;
 import com.wy.test.listener.SessionListenerAdapter;
 import com.wy.test.persistence.provision.thread.ProvisioningRunner;
 import com.wy.test.persistence.provision.thread.ProvisioningRunnerThread;
-import com.wy.test.persistence.service.ConnectorsService;
-import com.wy.test.persistence.service.RolesService;
+import com.wy.test.persistence.service.ConnectorService;
+import com.wy.test.persistence.service.RoleService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,21 +35,21 @@ public class DreamMgtListenerConfig implements InitializingBean {
 	}
 
 	@Bean
-	String dynamicRolesListenerAdapter(Scheduler scheduler, RolesService rolesService,
+	String dynamicRolesListenerAdapter(Scheduler scheduler, RoleService roleService,
 			DreamAuthJobProperties dreamAuthJobProperties) throws SchedulerException {
 
 		ListenerAdapter.addListener(DynamicRolesListenerAdapter.class, scheduler,
-				new ListenerParameter().add("rolesService", rolesService).build(),
+				new ListenerParameter().add("roleService", roleService).build(),
 				dreamAuthJobProperties.getCron().getSchedule(), DynamicRolesListenerAdapter.class.getSimpleName());
 		log.debug("DynamicRoles ListenerAdapter inited .");
 		return "dynamicRolesListenerAdapter";
 	}
 
 	@Bean
-	String provisioningRunnerThread(ConnectorsService connectorsService, JdbcTemplate jdbcTemplate,
+	String provisioningRunnerThread(ConnectorService connectorService, JdbcTemplate jdbcTemplate,
 			DreamAuthServerProperties dreamServerProperties) throws SchedulerException {
 		if (dreamServerProperties.isProvision()) {
-			ProvisioningRunner runner = new ProvisioningRunner(connectorsService, jdbcTemplate);
+			ProvisioningRunner runner = new ProvisioningRunner(connectorService, jdbcTemplate);
 			ProvisioningRunnerThread runnerThread = new ProvisioningRunnerThread(runner);
 			runnerThread.start();
 			log.debug("provisioning Runner Thread .");

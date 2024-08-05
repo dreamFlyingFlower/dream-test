@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
-import com.wy.test.persistence.service.UserInfoService;
+import com.wy.test.persistence.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,14 +23,14 @@ public class RestTimeBasedOtpController {
 	protected AbstractOtpAuthn timeBasedOtpAuthn;
 
 	@Autowired
-	private UserInfoService userInfoService;
+	private UserService userService;
 
 	@Operation(summary = "基于时间令牌验证 API文档模块", description = "传递参数username和token", method = "GET")
 	@ResponseBody
 	@GetMapping(value = "/timebased/validate")
 	public boolean getUser(@RequestParam String username, @RequestParam String token) {
 
-		UserEntity validUserInfo = userInfoService.findByUsername(username);
+		UserEntity validUserInfo = userService.findByUsername(username);
 		if (validUserInfo != null) {
 			if (timeBasedOtpAuthn.validate(validUserInfo, token)) {
 				return true;

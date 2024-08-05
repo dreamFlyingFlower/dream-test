@@ -1,7 +1,5 @@
 package com.wy.test.autoconfigure;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -13,31 +11,32 @@ import com.wy.test.core.persistence.repository.LoginRepository;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.impl.TimeBasedOtpAuthn;
-import com.wy.test.persistence.service.UserInfoService;
+import com.wy.test.persistence.service.UserService;
 import com.wy.test.provider.authn.realm.jdbc.JdbcAuthenticationRealm;
 
-@AutoConfiguration
-public class DreamMgtConfig implements InitializingBean {
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Logger _logger = LoggerFactory.getLogger(DreamMgtConfig.class);
+@AutoConfiguration
+@Slf4j
+public class DreamMgtConfig implements InitializingBean {
 
 	// authenticationRealm for DreamMgtApplication
 	@Bean
 	JdbcAuthenticationRealm authenticationRealm(PasswordEncoder passwordEncoder,
 			PasswordPolicyValidator passwordPolicyValidator, LoginRepository loginRepository,
-			LoginHistoryRepository loginHistoryRepository, UserInfoService userInfoService, JdbcTemplate jdbcTemplate) {
+			LoginHistoryRepository loginHistoryRepository, UserService userService, JdbcTemplate jdbcTemplate) {
 
 		JdbcAuthenticationRealm authenticationRealm = new JdbcAuthenticationRealm(passwordEncoder,
-				passwordPolicyValidator, loginRepository, loginHistoryRepository, userInfoService, jdbcTemplate);
+				passwordPolicyValidator, loginRepository, loginHistoryRepository, userService, jdbcTemplate);
 
-		_logger.debug("JdbcAuthenticationRealm inited.");
+		log.debug("JdbcAuthenticationRealm inited.");
 		return authenticationRealm;
 	}
 
 	@Bean
 	AbstractOtpAuthn timeBasedOtpAuthn() {
 		AbstractOtpAuthn tfaOtpAuthn = new TimeBasedOtpAuthn();
-		_logger.debug("TimeBasedOtpAuthn inited.");
+		log.debug("TimeBasedOtpAuthn inited.");
 		return tfaOtpAuthn;
 	}
 
@@ -45,5 +44,4 @@ public class DreamMgtConfig implements InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 
 	}
-
 }

@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
@@ -18,16 +16,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.authn.SignPrincipal;
-import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
+import com.wy.test.core.vo.AppVO;
 import com.wy.test.core.web.HttpResponseAdapter;
 import com.wy.test.oauth2.common.OAuth2Constants;
 import com.wy.test.oauth2.provider.ClientDetailsService;
 import com.wy.test.oauth2.provider.OAuth2Authentication;
 import com.wy.test.oauth2.provider.token.DefaultTokenServices;
-import com.wy.test.persistence.service.AppsService;
-import com.wy.test.persistence.service.UserInfoService;
+import com.wy.test.persistence.service.AppService;
+import com.wy.test.persistence.service.UserService;
 
 import dream.flying.flower.framework.core.enums.BooleanEnum;
 import dream.flying.flower.framework.core.helper.TokenHelpers;
@@ -36,12 +34,12 @@ import dream.flying.flower.generator.StringGenerator;
 import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "2-1-OAuth v2.0 API文档模块")
 @Controller
+@Slf4j
 public class UserInfoEndpoint {
-
-	final static Logger _logger = LoggerFactory.getLogger(UserInfoEndpoint.class);
 
 	@Autowired
 	@Qualifier("oauth20JdbcClientDetailsService")
@@ -52,12 +50,12 @@ public class UserInfoEndpoint {
 	private DefaultTokenServices oauth20tokenServices;
 
 	@Autowired
-	@Qualifier("userInfoService")
-	private UserInfoService userInfoService;
+	@Qualifier("userService")
+	private UserService userService;
 
 	@Autowired
-	@Qualifier("appsService")
-	protected AppsService appsService;
+	@Qualifier("appService")
+	protected AppService appService;
 
 	@Autowired
 	protected HttpResponseAdapter httpResponseAdapter;
@@ -70,7 +68,7 @@ public class UserInfoEndpoint {
 			throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		String access_token = TokenHelpers.resolveAccessToken(request);
-		_logger.debug("access_token {}", access_token);
+		log.debug("access_token {}", access_token);
 		if (!StringGenerator.uuidMatches(access_token)) {
 			httpResponseAdapter.write(response, JsonHelpers.toString(accessTokenFormatError(access_token)), "json");
 		}
@@ -82,7 +80,7 @@ public class UserInfoEndpoint {
 			String client_id = oAuth2Authentication.getOAuth2Request().getClientId();
 			ClientDetails clientDetails = clientDetailsService.loadClientByClientId(client_id, true);
 
-			AppEntity app = appsService.get(client_id);
+			AppVO app = appService.get(client_id, true);
 
 			AbstractAuthorizeAdapter adapter;
 			if (BooleanEnum.isTrue(app.getIsAdapter())) {
@@ -90,7 +88,7 @@ public class UserInfoEndpoint {
 				try {
 					BeanUtils.setProperty(adapter, "clientDetails", clientDetails);
 				} catch (IllegalAccessException | InvocationTargetException e) {
-					_logger.error("setProperty error . ", e);
+					log.error("setProperty error . ", e);
 				}
 			} else {
 				adapter = (AbstractAuthorizeAdapter) new OAuthDefaultUserInfoAdapter(clientDetails);
@@ -117,17 +115,11 @@ public class UserInfoEndpoint {
 	}
 
 	public UserEntity queryUserInfo(String userId) {
-		_logger.debug("userId : " + userId);
-		UserEntity userInfo = (UserEntity) userInfoService.findByUsername(userId);
-		return userInfo;
+		log.debug("userId : " + userId);
+		return userService.findByUsername(userId);
 	}
 
 	public void setOauth20tokenServices(DefaultTokenServices oauth20tokenServices) {
 		this.oauth20tokenServices = oauth20tokenServices;
 	}
-
-	public void setUserInfoService(UserInfoService userInfoService) {
-		this.userInfoService = userInfoService;
-	}
-
 }

@@ -4,9 +4,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.cas.authz.endpoint.response.ServiceResponseBuilder;
-import com.wy.test.core.entity.AppCasDetailEntity;
+import com.wy.test.core.vo.AppCasDetailVO;
 import com.wy.test.core.web.WebConstants;
 
+import dream.flying.flower.helper.DateTimeHelper;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -30,7 +31,7 @@ public class CasPlainAdapter extends AbstractAuthorizeAdapter {
 	@Override
 	public Object generateInfo() {
 		// user for return
-		String user = getValueByUserAttr(userInfo, ((AppCasDetailEntity) this.app).getCasUser());
+		String user = getValueByUserAttr(userInfo, ((AppCasDetailVO) this.app).getCasUser());
 		log.debug("cas user {}", user);
 		serviceResponseBuilder.success().setUser(user);
 
@@ -41,7 +42,7 @@ public class CasPlainAdapter extends AbstractAuthorizeAdapter {
 		serviceResponseBuilder.setAttribute("firstName", userInfo.getGivenName());
 		serviceResponseBuilder.setAttribute("lastname", userInfo.getFamilyName());
 		serviceResponseBuilder.setAttribute("mobile", userInfo.getMobile());
-		serviceResponseBuilder.setAttribute("birthday", userInfo.getBirthDate());
+		serviceResponseBuilder.setAttribute("birthday", DateTimeHelper.formatDate(userInfo.getBirthDate()));
 		serviceResponseBuilder.setAttribute("gender", userInfo.getGender() + "");
 
 		// for work

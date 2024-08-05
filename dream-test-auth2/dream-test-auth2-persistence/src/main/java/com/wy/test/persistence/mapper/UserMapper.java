@@ -61,10 +61,10 @@ public interface UserMapper extends BaseMappers<UserEntity, UserVO, UserQuery> {
 
 	int updateMobile(UserEntity userInfo);
 
-	int updateProfile(UserEntity userInfo);
+	int updateProfile(UserVO userInfo);
 
 	@Update("update auth_user set gridlist =  #{gridList} where id = #{id}")
-	int updateGridList(UserEntity userInfo);
+	int updateGridList(UserVO userInfo);
 
 	@Update("update auth_user set status =  #{status} where id = #{id}")
 	int updateStatus(UserEntity userInfo);

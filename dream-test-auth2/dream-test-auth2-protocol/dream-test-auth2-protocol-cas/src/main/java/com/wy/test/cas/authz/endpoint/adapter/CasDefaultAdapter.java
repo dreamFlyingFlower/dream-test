@@ -3,18 +3,18 @@ package com.wy.test.cas.authz.endpoint.adapter;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.cas.authz.endpoint.response.ServiceResponseBuilder;
-import com.wy.test.core.entity.AppCasDetailEntity;
+import com.wy.test.core.vo.AppCasDetailVO;
 import com.wy.test.core.web.WebConstants;
 
-public class CasDefaultAdapter extends AbstractAuthorizeAdapter {
+import dream.flying.flower.helper.DateTimeHelper;
+import lombok.extern.slf4j.Slf4j;
 
-	final static Logger _logger = LoggerFactory.getLogger(CasDefaultAdapter.class);
+@Slf4j
+public class CasDefaultAdapter extends AbstractAuthorizeAdapter {
 
 	static String Charset_UTF8 = "UTF-8";
 
@@ -39,8 +39,8 @@ public class CasDefaultAdapter extends AbstractAuthorizeAdapter {
 	@Override
 	public Object generateInfo() {
 		// user for return
-		String user = getValueByUserAttr(userInfo, ((AppCasDetailEntity) this.app).getCasUser());
-		_logger.debug("cas user {}", user);
+		String user = getValueByUserAttr(userInfo, ((AppCasDetailVO) this.app).getCasUser());
+		log.debug("cas user {}", user);
 		serviceResponseBuilder.success().setUser(user);
 
 		// for user
@@ -50,7 +50,7 @@ public class CasDefaultAdapter extends AbstractAuthorizeAdapter {
 		serviceResponseBuilder.setAttribute("firstName", base64Attr(userInfo.getGivenName()));
 		serviceResponseBuilder.setAttribute("lastname", base64Attr(userInfo.getFamilyName()));
 		serviceResponseBuilder.setAttribute("mobile", userInfo.getMobile());
-		serviceResponseBuilder.setAttribute("birthday", userInfo.getBirthDate());
+		serviceResponseBuilder.setAttribute("birthday", DateTimeHelper.formatDate(userInfo.getBirthDate()));
 		serviceResponseBuilder.setAttribute("gender", userInfo.getGender() + "");
 
 		// for work
@@ -69,5 +69,4 @@ public class CasDefaultAdapter extends AbstractAuthorizeAdapter {
 	public void setServiceResponseBuilder(ServiceResponseBuilder serviceResponseBuilder) {
 		this.serviceResponseBuilder = serviceResponseBuilder;
 	}
-
 }

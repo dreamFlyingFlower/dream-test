@@ -115,6 +115,11 @@ public class AppSamlDetailEntity extends AbstractEntity {
 	private String metaUrl;
 
 	/**
+	 * 应用ID
+	 */
+	private String appId;
+
+	/**
 	 * 机构ID
 	 */
 	private String instId;

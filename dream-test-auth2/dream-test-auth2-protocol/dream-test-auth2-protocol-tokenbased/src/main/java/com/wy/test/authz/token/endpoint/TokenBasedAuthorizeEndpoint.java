@@ -17,11 +17,11 @@ import com.wy.test.authz.token.endpoint.adapter.TokenBasedDefaultAdapter;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.convert.AppTokenDetailConvert;
-import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.AppTokenDetailEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.vo.AppTokenDetailVO;
+import com.wy.test.core.vo.AppVO;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.AppTokenDetailService;
 
@@ -56,7 +56,7 @@ public class TokenBasedAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 		tokenBasedDetails = appTokenDetailService.getAppDetails(id, true);
 		log.debug("" + tokenBasedDetails);
 
-		AppEntity application = getApp(id);
+		AppVO application = getApp(id);
 
 		AppTokenDetailVO appTokenDetailVO = appTokenDetailConvert.convertt(tokenBasedDetails);
 

@@ -9,6 +9,7 @@ import com.wy.test.core.authn.LoginCredential;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
@@ -62,7 +63,7 @@ public class MobileAuthenticationProvider extends AbstractAuthenticationProvider
 
 			emptyUsernameValid(loginCredential.getUsername());
 
-			UserEntity userInfo = loadUserInfo(loginCredential.getUsername(), loginCredential.getPassword());
+			UserVO userInfo = loadUserInfo(loginCredential.getUsername(), loginCredential.getPassword());
 
 			statusValid(loginCredential, userInfo);
 
@@ -98,7 +99,7 @@ public class MobileAuthenticationProvider extends AbstractAuthenticationProvider
 	 * @param authType String
 	 * @param userInfo UserInfo
 	 */
-	protected void mobileCaptchaValid(String password, UserEntity userInfo) {
+	protected void mobileCaptchaValid(String password, UserVO userInfo) {
 		// for mobile password
 		if (dreamLoginProperties.isMfa()) {
 			UserEntity validUserInfo = new UserEntity();

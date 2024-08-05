@@ -408,6 +408,8 @@ public class UserVO implements Serializable, TransPojo {
 	@Size(max = 128, message = "工作-公司名称最大长度不能超过128", groups = { ValidAdd.class, ValidEdit.class })
 	private String workOfficeName;
 
+	private Date createTime;
+
 	/**
 	 * for extended Attribute from userType extraAttribute for database
 	 * extraAttributeName & extraAttributeValue for page submit
@@ -433,7 +435,7 @@ public class UserVO implements Serializable, TransPojo {
 	@Schema(description = "BASE64解析的图片")
 	private String pictureBase64;
 
-	@Schema(description = "图片地址")
+	@Schema(description = "文件上传ID")
 	private String pictureId;
 
 	@Schema(description = "机构ID")

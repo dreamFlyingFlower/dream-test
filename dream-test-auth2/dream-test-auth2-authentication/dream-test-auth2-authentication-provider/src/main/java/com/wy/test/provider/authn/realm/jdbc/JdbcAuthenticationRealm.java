@@ -7,13 +7,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.wy.test.core.constants.ConstStatus;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.PasswordPolicyEntity;
-import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.persistence.repository.LoginHistoryRepository;
 import com.wy.test.core.persistence.repository.LoginRepository;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
-import com.wy.test.persistence.service.UserInfoService;
 import com.wy.test.persistence.service.UserService;
 import com.wy.test.provider.authn.realm.AbstractAuthenticationRealm;
 import com.wy.test.provider.authn.realm.ldap.LdapAuthenticationRealm;
@@ -39,8 +38,8 @@ public class JdbcAuthenticationRealm extends AbstractAuthenticationRealm {
 	}
 
 	public JdbcAuthenticationRealm(PasswordEncoder passwordEncoder, PasswordPolicyValidator passwordPolicyValidator,
-			LoginRepository loginRepository, LoginHistoryRepository loginHistoryRepository,
-			UserService userService, JdbcTemplate jdbcTemplate) {
+			LoginRepository loginRepository, LoginHistoryRepository loginHistoryRepository, UserService userService,
+			JdbcTemplate jdbcTemplate) {
 
 		this.passwordEncoder = passwordEncoder;
 		this.passwordPolicyValidator = passwordPolicyValidator;
@@ -51,9 +50,8 @@ public class JdbcAuthenticationRealm extends AbstractAuthenticationRealm {
 	}
 
 	public JdbcAuthenticationRealm(PasswordEncoder passwordEncoder, PasswordPolicyValidator passwordPolicyValidator,
-			LoginRepository loginRepository, LoginHistoryRepository loginHistoryRepository,
-			UserService userService, JdbcTemplate jdbcTemplate,
-			LdapAuthenticationRealmService ldapAuthenticationRealmService) {
+			LoginRepository loginRepository, LoginHistoryRepository loginHistoryRepository, UserService userService,
+			JdbcTemplate jdbcTemplate, LdapAuthenticationRealmService ldapAuthenticationRealmService) {
 		this.passwordEncoder = passwordEncoder;
 		this.passwordPolicyValidator = passwordPolicyValidator;
 		this.loginRepository = loginRepository;
@@ -67,7 +65,7 @@ public class JdbcAuthenticationRealm extends AbstractAuthenticationRealm {
 	 * passwordMatches.
 	 */
 	@Override
-	public boolean passwordMatches(UserEntity userInfo, String password) {
+	public boolean passwordMatches(UserVO userInfo, String password) {
 		boolean passwordMatches = false;
 		// jdbc password check
 		// log.trace("password : "

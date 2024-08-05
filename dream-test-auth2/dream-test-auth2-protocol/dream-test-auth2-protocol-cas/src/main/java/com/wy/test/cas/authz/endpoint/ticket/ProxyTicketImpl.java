@@ -3,7 +3,7 @@ package com.wy.test.cas.authz.endpoint.ticket;
 import org.springframework.security.core.Authentication;
 
 import com.wy.test.cas.authz.endpoint.ticket.pgt.ProxyTicket;
-import com.wy.test.core.entity.AppCasDetailEntity;
+import com.wy.test.core.vo.AppCasDetailVO;
 
 /**
  * The {@link ProxyTicketImpl} is a concrete implementation of the
@@ -33,7 +33,7 @@ public class ProxyTicketImpl extends ServiceTicketImpl implements Ticket {
 
 	}
 
-	public ProxyTicketImpl(Authentication authentication, AppCasDetailEntity casDetails) {
+	public ProxyTicketImpl(Authentication authentication, AppCasDetailVO casDetails) {
 		this.authentication = authentication;
 		this.casDetails = casDetails;
 	}

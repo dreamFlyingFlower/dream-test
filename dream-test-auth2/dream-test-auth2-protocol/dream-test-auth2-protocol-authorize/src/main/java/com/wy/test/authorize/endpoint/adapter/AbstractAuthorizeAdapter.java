@@ -8,7 +8,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.entity.AccountEntity;
-import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.vo.AppVO;
 import com.wy.test.core.vo.UserVO;
@@ -84,7 +83,7 @@ public abstract class AbstractAuthorizeAdapter {
 		return tokenString;
 	}
 
-	public static String getValueByUserAttr(UserEntity userInfo, String userAttr) {
+	public static String getValueByUserAttr(UserVO userInfo, String userAttr) {
 		String value = "";
 		if (StringUtils.isBlank(userAttr)) {
 			value = userInfo.getUsername();

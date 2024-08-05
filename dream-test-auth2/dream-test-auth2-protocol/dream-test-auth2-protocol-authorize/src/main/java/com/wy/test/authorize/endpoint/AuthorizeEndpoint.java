@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.core.constants.ConstProtocols;
-import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.vo.AppVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
@@ -32,7 +31,7 @@ public class AuthorizeEndpoint extends AuthorizeBaseEndpoint {
 	@GetMapping("/authz/{id}")
 	public ModelAndView authorize(HttpServletRequest request, @PathVariable("id") String id) {
 		ModelAndView modelAndView = null;
-		AppEntity app = getApp(id);
+		AppVO app = getApp(id);
 		WebContext.setAttribute(WebConstants.SINGLE_SIGN_ON_APP_ID, app.getId());
 
 		if (app.getProtocol().equalsIgnoreCase(ConstProtocols.EXTEND_API)) {

@@ -135,6 +135,7 @@ public class AppVO implements Serializable, TransPojo {
 
 	private String iconBase64;
 
+	@Schema(description = "图片上传ID")
 	private String iconId;
 
 	private String instName;

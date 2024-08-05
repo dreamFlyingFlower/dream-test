@@ -21,6 +21,7 @@ import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.PasswordPolicyEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordGen;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 
@@ -103,7 +104,7 @@ public class PasswordPolicyValidator {
 	 * @param userInfo
 	 * @return boolean
 	 */
-	public boolean passwordPolicyValid(UserEntity userInfo) {
+	public boolean passwordPolicyValid(UserVO userInfo) {
 
 		PasswordPolicyEntity passwordPolicy = passwordPolicyRepository.getPasswordPolicy();
 
@@ -147,7 +148,7 @@ public class PasswordPolicyValidator {
 		return true;
 	}
 
-	public void applyPasswordPolicy(UserEntity userInfo) {
+	public void applyPasswordPolicy(UserVO userInfo) {
 		PasswordPolicyEntity passwordPolicy = passwordPolicyRepository.getPasswordPolicy();
 
 		DateTime currentdateTime = new DateTime();
@@ -196,7 +197,7 @@ public class PasswordPolicyValidator {
 	 * 
 	 * @param userInfo
 	 */
-	public void lockUser(UserEntity userInfo) {
+	public void lockUser(UserVO userInfo) {
 		try {
 			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				if (userInfo.getIsLocked() == ConstStatus.ACTIVE) {
@@ -234,7 +235,7 @@ public class PasswordPolicyValidator {
 	 * 
 	 * @param userInfo
 	 */
-	public void resetAttempts(UserEntity userInfo) {
+	public void resetAttempts(UserVO userInfo) {
 		try {
 			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 				jdbcTemplate.update(BADPASSWORDCOUNT_RESET_UPDATE_STATEMENT,
@@ -263,7 +264,7 @@ public class PasswordPolicyValidator {
 		}
 	}
 
-	public void plusBadPasswordCount(UserEntity userInfo) {
+	public void plusBadPasswordCount(UserVO userInfo) {
 		if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 			userInfo.setBadPasswordCount(userInfo.getBadPasswordCount() + 1);
 			setBadPasswordCount(userInfo.getId(), userInfo.getBadPasswordCount());
@@ -276,7 +277,7 @@ public class PasswordPolicyValidator {
 		}
 	}
 
-	public void resetBadPasswordCount(UserEntity userInfo) {
+	public void resetBadPasswordCount(UserVO userInfo) {
 		if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
 			if (userInfo.getBadPasswordCount() > 0) {
 				setBadPasswordCount(userInfo.getId(), 0);

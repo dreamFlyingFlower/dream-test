@@ -14,6 +14,7 @@ import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.framework.web.crypto.jwt.HMAC512Service;
@@ -42,7 +43,7 @@ public abstract class AbstractRemeberMeManager {
 			HttpServletResponse response) {
 		if (dreamLoginProperties.isRememberMe()) {
 			SignPrincipal principal = ((SignPrincipal) authentication.getPrincipal());
-			UserEntity userInfo = principal.getUserInfo();
+			UserVO userInfo = principal.getUserInfo();
 			log.debug("Remeber Me ...");
 			RemeberMe remeberMe = new RemeberMe();
 			remeberMe.setId(WebContext.genId());

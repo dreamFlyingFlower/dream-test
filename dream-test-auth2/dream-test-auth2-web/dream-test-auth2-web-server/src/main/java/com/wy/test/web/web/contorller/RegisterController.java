@@ -5,8 +5,6 @@ import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,16 +24,16 @@ import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
-import com.wy.test.persistence.service.UserInfoService;
+import com.wy.test.persistence.service.UserService;
 import com.wy.test.sms.password.sms.SmsOtpAuthnService;
 
 import dream.flying.flower.lang.StrHelper;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping(value = { "/signup" })
+@Slf4j
 public class RegisterController {
-
-	private static Logger _logger = LoggerFactory.getLogger(RegisterController.class);
 
 	Pattern mobileRegex = Pattern.compile("^[1][3,4,5,7,8][0-9]{9}$");
 
@@ -43,7 +41,7 @@ public class RegisterController {
 	AuthTokenService authTokenService;
 
 	@Autowired
-	private UserInfoService userInfoService;
+	private UserService userInfoService;
 
 	@Autowired
 	SmsOtpAuthnService smsOtpAuthnService;
@@ -54,9 +52,9 @@ public class RegisterController {
 	@ResponseBody
 	@GetMapping(value = { "/produceOtp" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> produceOtp(@RequestParam String mobile) {
-		_logger.debug("/signup/produceOtp Mobile {}: ", mobile);
+		log.debug("/signup/produceOtp Mobile {}: ", mobile);
 
-		_logger.debug("Mobile Regex matches {}", mobileRegex.matcher(mobile).matches());
+		log.debug("Mobile Regex matches {}", mobileRegex.matcher(mobile).matches());
 		if (StrHelper.isNotBlank(mobile) && mobileRegex.matcher(mobile).matches()) {
 			UserEntity userInfo = new UserEntity();
 			userInfo.setUsername(mobile);

@@ -15,5 +15,5 @@ import dream.flying.flower.framework.mybatis.plus.service.BaseServices;
  */
 public interface AppCasDetailService extends BaseServices<AppCasDetailEntity, AppCasDetailVO, AppCasDetailQuery> {
 
-	AppCasDetailEntity getAppDetails(String id, boolean cached);
+	AppCasDetailVO getAppDetails(String id, boolean cached);
 }

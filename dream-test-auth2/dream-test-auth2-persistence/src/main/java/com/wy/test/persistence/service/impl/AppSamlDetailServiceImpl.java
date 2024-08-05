@@ -26,12 +26,12 @@ import dream.flying.flower.framework.mybatis.plus.service.impl.AbstractServiceIm
 public class AppSamlDetailServiceImpl extends AbstractServiceImpl<AppSamlDetailEntity, AppSamlDetailVO,
 		AppSamlDetailQuery, AppSamlDetailConvert, AppSamlDetailMapper> implements AppSamlDetailService {
 
-	protected final static Cache<String, AppSamlDetailEntity> detailsCache =
+	protected final static Cache<String, AppSamlDetailVO> detailsCache =
 			Caffeine.newBuilder().expireAfterWrite(30, TimeUnit.MINUTES).maximumSize(200000).build();
 
 	@Override
-	public AppSamlDetailEntity getAppDetails(String id, boolean cached) {
-		AppSamlDetailEntity details = null;
+	public AppSamlDetailVO getAppDetails(String id, boolean cached) {
+		AppSamlDetailVO details = null;
 		if (cached) {
 			details = detailsCache.getIfPresent(id);
 			if (details == null) {

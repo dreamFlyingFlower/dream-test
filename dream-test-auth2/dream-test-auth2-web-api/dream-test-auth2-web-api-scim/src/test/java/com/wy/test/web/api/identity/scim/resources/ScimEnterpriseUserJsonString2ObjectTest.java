@@ -1,6 +1,6 @@
 package com.wy.test.web.api.identity.scim.resources;
 
-import com.wy.test.web.apis.identity.scim.resources.ScimEnterpriseUser;
+import com.wy.test.web.api.scim.resources.ScimEnterpriseUser;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.framework.core.pretty.strategy.JsonPretty;

@@ -16,6 +16,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.wy.test.core.constants.ConstRoles;
 import com.wy.test.core.constants.ConstStatus;
+import com.wy.test.core.convert.UserConvert;
 import com.wy.test.core.entity.RoleEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.UserVO;
@@ -71,7 +72,7 @@ public class LoginRepository {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public UserEntity find(String username, String password) {
+	public UserVO find(String username, String password) {
 		List<UserEntity> listUserInfo = null;
 		if (LOGIN_ATTRIBUTE_TYPE == 1) {
 			listUserInfo = findByUsername(username, password);
@@ -81,9 +82,9 @@ public class LoginRepository {
 			listUserInfo = findByUsernameOrMobileOrEmail(username, password);
 		}
 
-		UserEntity userInfo = null;
+		UserVO userInfo = null;
 		if (listUserInfo != null && listUserInfo.size() > 0) {
-			userInfo = listUserInfo.get(0);
+			userInfo = UserConvert.INSTANCE.convertt(listUserInfo.get(0));
 		}
 		_logger.debug("load UserInfo : " + userInfo);
 		return userInfo;

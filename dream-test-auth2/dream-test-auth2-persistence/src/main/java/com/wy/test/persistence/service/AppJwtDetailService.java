@@ -15,5 +15,5 @@ import dream.flying.flower.framework.mybatis.plus.service.BaseServices;
  */
 public interface AppJwtDetailService extends BaseServices<AppJwtDetailEntity, AppJwtDetailVO, AppJwtDetailQuery> {
 
-	AppJwtDetailEntity getAppDetail(String id, boolean cached);
+	AppJwtDetailVO getAppDetails(String id, boolean cached);
 }

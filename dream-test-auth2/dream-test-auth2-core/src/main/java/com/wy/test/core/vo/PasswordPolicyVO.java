@@ -89,6 +89,9 @@ public class PasswordPolicyVO implements Serializable, TransPojo {
 	@Schema(description = "随机密码长度")
 	private Integer randomPasswordLength;
 
+	@Schema(description = "机构ID")
+	private String instId;
+
 	@Schema(description = "策略消息")
 	List<String> policyMessages;
 

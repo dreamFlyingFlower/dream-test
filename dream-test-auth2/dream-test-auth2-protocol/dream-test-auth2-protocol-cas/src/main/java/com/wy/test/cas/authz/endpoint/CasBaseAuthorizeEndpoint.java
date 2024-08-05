@@ -10,18 +10,18 @@ import com.wy.test.cas.authz.endpoint.ticket.TicketServices;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.web.HttpRequestAdapter;
 import com.wy.test.core.web.HttpResponseAdapter;
-import com.wy.test.persistence.service.AppsCasDetailsService;
-import com.wy.test.persistence.service.UserInfoService;
+import com.wy.test.persistence.service.AppCasDetailService;
+import com.wy.test.persistence.service.UserService;
 
 public class CasBaseAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 
 	final static Logger _logger = LoggerFactory.getLogger(CasBaseAuthorizeEndpoint.class);
 
 	@Autowired
-	protected AppsCasDetailsService casDetailsService;
+	protected AppCasDetailService appCasDetailService;
 
 	@Autowired
-	protected UserInfoService userInfoService;
+	protected UserService userInfoService;
 
 	@Autowired
 	@Qualifier("casTicketServices")

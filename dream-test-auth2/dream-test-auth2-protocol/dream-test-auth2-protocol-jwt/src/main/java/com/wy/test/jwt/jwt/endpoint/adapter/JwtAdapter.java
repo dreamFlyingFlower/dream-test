@@ -21,7 +21,7 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.PlainJWT;
 import com.nimbusds.jwt.SignedJWT;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
-import com.wy.test.core.entity.AppJwtDetailEntity;
+import com.wy.test.core.vo.AppJwtDetailVO;
 import com.wy.test.core.web.WebConstants;
 
 import dream.flying.flower.framework.web.crypto.jwt.encryption.DefaultJwtEncryptionAndDecryptionHandler;
@@ -29,9 +29,9 @@ import dream.flying.flower.framework.web.crypto.jwt.sign.DefaultJwtSigningAndVal
 
 public class JwtAdapter extends AbstractAuthorizeAdapter {
 
-	final static Logger _logger = LoggerFactory.getLogger(JwtAdapter.class);
+	final static Logger log = LoggerFactory.getLogger(JwtAdapter.class);
 
-	AppJwtDetailEntity jwtDetails;
+	AppJwtDetailVO jwtDetails;
 
 	JWT jwtToken;
 
@@ -43,7 +43,7 @@ public class JwtAdapter extends AbstractAuthorizeAdapter {
 
 	}
 
-	public JwtAdapter(AppJwtDetailEntity jwtDetails) {
+	public JwtAdapter(AppJwtDetailVO jwtDetails) {
 		this.jwtDetails = jwtDetails;
 	}
 
@@ -51,9 +51,9 @@ public class JwtAdapter extends AbstractAuthorizeAdapter {
 	public Object generateInfo() {
 		DateTime currentDateTime = DateTime.now();
 		Date expirationTime = currentDateTime.plusSeconds(jwtDetails.getExpires()).toDate();
-		_logger.debug("expiration Time : {}", expirationTime);
+		log.debug("expiration Time : {}", expirationTime);
 		String subject = getValueByUserAttr(userInfo, jwtDetails.getSubject());
-		_logger.trace("jwt subject : {}", subject);
+		log.trace("jwt subject : {}", subject);
 
 		jwtClaims = new JWTClaimsSet.Builder().issuer(jwtDetails.getIssuer()).subject(subject)
 				.audience(Arrays.asList(jwtDetails.getId())).jwtID(UUID.randomUUID().toString())
@@ -64,7 +64,7 @@ public class JwtAdapter extends AbstractAuthorizeAdapter {
 				.claim(WebConstants.ONLINE_TICKET_NAME, principal.getSession().getFormattedId())
 				.claim("kid", jwtDetails.getId() + "_sig").claim("institution", userInfo.getInstId()).build();
 
-		_logger.trace("jwt Claims : {}", jwtClaims);
+		log.trace("jwt Claims : {}", jwtClaims);
 
 		jwtToken = new PlainJWT(jwtClaims);
 
@@ -83,11 +83,11 @@ public class JwtAdapter extends AbstractAuthorizeAdapter {
 				jwtSignerService.signJwt((SignedJWT) jwtToken);
 				return jwtToken;
 			} catch (NoSuchAlgorithmException e) {
-				_logger.error("NoSuchAlgorithmException", e);
+				log.error("NoSuchAlgorithmException", e);
 			} catch (InvalidKeySpecException e) {
-				_logger.error("InvalidKeySpecException", e);
+				log.error("InvalidKeySpecException", e);
 			} catch (JOSEException e) {
-				_logger.error("JOSEException", e);
+				log.error("JOSEException", e);
 			}
 		}
 		return data;
@@ -111,7 +111,7 @@ public class JwtAdapter extends AbstractAuthorizeAdapter {
 				// JWEHeader jweHeader = new JWEHeader(JWEAlgorithm.RSA1_5,
 				// EncryptionMethod.A128GCM);
 				JWEHeader jweHeader = new JWEHeader(jwtEncryptionService.getDefaultAlgorithm(jwtDetails.getAlgorithm()),
-						jwtEncryptionService.parseEncryptionMethod(jwtDetails.getEncryptionMethod()));
+						jwtEncryptionService.parseEncryptionMethod(jwtDetails.getEncryptionType()));
 				jweObject = new JWEObject(new JWEHeader.Builder(jweHeader).contentType("JWT") // required to indicate
 																								// nested JWT
 						.build(), payload);
@@ -119,7 +119,7 @@ public class JwtAdapter extends AbstractAuthorizeAdapter {
 				jwtEncryptionService.encryptJwt(jweObject);
 
 			} catch (NoSuchAlgorithmException | InvalidKeySpecException | JOSEException e) {
-				_logger.error("Encrypt Exception", e);
+				log.error("Encrypt Exception", e);
 			}
 		}
 		return data;
@@ -138,7 +138,7 @@ public class JwtAdapter extends AbstractAuthorizeAdapter {
 		return modelAndView;
 	}
 
-	public void setJwtDetails(AppJwtDetailEntity jwtDetails) {
+	public void setJwtDetails(AppJwtDetailVO jwtDetails) {
 		this.jwtDetails = jwtDetails;
 	}
 
@@ -150,8 +150,7 @@ public class JwtAdapter extends AbstractAuthorizeAdapter {
 		} else {
 			tokenString = jwtToken.serialize();
 		}
-		_logger.debug("jwt Token : {}", tokenString);
+		log.debug("jwt Token : {}", tokenString);
 		return tokenString;
 	}
-
 }

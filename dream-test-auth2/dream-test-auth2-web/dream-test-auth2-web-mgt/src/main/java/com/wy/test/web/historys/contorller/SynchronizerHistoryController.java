@@ -3,9 +3,6 @@ package com.wy.test.web.historys.contorller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.dromara.mybatis.jpa.entity.JpaPageResults;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
@@ -21,21 +18,21 @@ import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.entity.HistorySyncEntity;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
-import com.wy.test.persistence.service.HistorySynchronizerService;
+import com.wy.test.persistence.service.HistorySyncService;
 
 import dream.flying.flower.ConstDate;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 同步器日志查询
  */
 @Controller
 @RequestMapping(value = { "/historys" })
+@Slf4j
 public class SynchronizerHistoryController {
 
-	final static Logger _logger = LoggerFactory.getLogger(SynchronizerHistoryController.class);
-
 	@Autowired
-	HistorySynchronizerService historySynchronizerService;
+	HistorySyncService historySynchronizerService;
 
 	/**
 	 * @param historySynchronizer
@@ -45,10 +42,9 @@ public class SynchronizerHistoryController {
 	@ResponseBody
 	public ResponseEntity<?> fetch(@ModelAttribute("historySynchronizer") HistorySyncEntity historySynchronizer,
 			@CurrentUser UserEntity currentUser) {
-		_logger.debug("historys/synchronizerHistory/fetch/ {}", historySynchronizer);
+		log.debug("historys/synchronizerHistory/fetch/ {}", historySynchronizer);
 		historySynchronizer.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<HistorySyncEntity>>(
-				historySynchronizerService.fetchPageResults(historySynchronizer)).buildResponse();
+		return new Message<>(historySynchronizerService.list(historySynchronizer)).buildResponse();
 	}
 
 	@InitBinder

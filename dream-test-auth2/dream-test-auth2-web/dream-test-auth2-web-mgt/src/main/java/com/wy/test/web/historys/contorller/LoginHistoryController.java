@@ -3,9 +3,6 @@ package com.wy.test.web.historys.contorller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.dromara.mybatis.jpa.entity.JpaPageResults;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
@@ -24,15 +21,15 @@ import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.HistoryLoginService;
 
 import dream.flying.flower.ConstDate;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 登录日志查询
  */
 @Controller
 @RequestMapping(value = { "/historys" })
+@Slf4j
 public class LoginHistoryController {
-
-	final static Logger _logger = LoggerFactory.getLogger(LoginHistoryController.class);
 
 	@Autowired
 	HistoryLoginService loginHistoryService;
@@ -45,10 +42,9 @@ public class LoginHistoryController {
 	@ResponseBody
 	public ResponseEntity<?> fetch(@ModelAttribute("historyLogin") HistoryLoginEntity historyLogin,
 			@CurrentUser UserEntity currentUser) {
-		_logger.debug("historys/loginHistory/fetch/ {}", historyLogin);
+		log.debug("historys/loginHistory/fetch/ {}", historyLogin);
 		historyLogin.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<HistoryLoginEntity>>(loginHistoryService.fetchPageResults(historyLogin))
-				.buildResponse();
+		return new Message<>(loginHistoryService.list(historyLogin)).buildResponse();
 	}
 
 	@InitBinder

@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.wy.test.core.entity.UserEntity;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.provider.authn.realm.AbstractAuthenticationRealm;
 import com.wy.test.provider.authn.realm.IAuthenticationServer;
 
@@ -23,9 +23,6 @@ public class LdapAuthenticationRealm extends AbstractAuthenticationRealm {
 
 	private boolean ldapSupport;
 
-	/**
-	 * 
-	 */
 	public LdapAuthenticationRealm() {
 
 	}
@@ -42,7 +39,7 @@ public class LdapAuthenticationRealm extends AbstractAuthenticationRealm {
 	}
 
 	@Override
-	public boolean passwordMatches(UserEntity userInfo, String password) {
+	public boolean passwordMatches(UserVO userInfo, String password) {
 		boolean isAuthenticated = false;
 		for (final IAuthenticationServer ldapServer : this.ldapServers) {
 			String username = userInfo.getUsername();

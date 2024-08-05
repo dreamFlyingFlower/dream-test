@@ -16,7 +16,6 @@ import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.constants.ConstStatus;
-import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.vo.UserVO;
@@ -140,8 +139,8 @@ public abstract class AbstractAuthenticationProvider {
 	 * @param password String
 	 * @return
 	 */
-	public UserEntity loadUserInfo(String username, String password) {
-		UserEntity userInfo = authenticationRealm.loadUserInfo(username, password);
+	public UserVO loadUserInfo(String username, String password) {
+		UserVO userInfo = authenticationRealm.loadUserInfo(username, password);
 		if (userInfo != null) {
 			if (userInfo.getUserType() == "SYSTEM") {
 				log.debug("SYSTEM User Login. ");

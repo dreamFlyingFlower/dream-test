@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,31 +21,27 @@ import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.constants.ContentType;
-import com.wy.test.core.entity.AppEntity;
-import com.wy.test.core.entity.AppJwtDetailEntity;
 import com.wy.test.core.entity.UserEntity;
-import com.wy.test.core.properties.DreamAuthServerProperties;
+import com.wy.test.core.vo.AppJwtDetailVO;
+import com.wy.test.core.vo.AppVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.jwt.jwt.endpoint.adapter.JwtAdapter;
-import com.wy.test.persistence.service.AppsJwtDetailsService;
+import com.wy.test.persistence.service.AppJwtDetailService;
 
 import dream.flying.flower.framework.core.enums.BooleanEnum;
 import dream.flying.flower.framework.web.crypto.jose.keystore.JWKSetKeyStore;
 import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "2-5-JWT令牌接口")
 @Controller
+@Slf4j
 public class JwtAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 
-	final static Logger _logger = LoggerFactory.getLogger(JwtAuthorizeEndpoint.class);
-
 	@Autowired
-	AppsJwtDetailsService jwtDetailsService;
-
-	@Autowired
-	DreamAuthServerProperties dreamServerProperties;
+	private AppJwtDetailService appJwtDetailService;
 
 	@Operation(summary = "JWT应用ID认证接口", description = "应用ID", method = "GET")
 	@GetMapping("/authz/jwt/{id}")
@@ -56,9 +50,9 @@ public class JwtAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 			throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		ModelAndView modelAndView = new ModelAndView();
-		AppEntity application = getApp(id);
-		AppJwtDetailEntity jwtDetails = jwtDetailsService.getAppDetails(application.getId(), true);
-		_logger.debug("" + jwtDetails);
+		AppVO application = getApp(id);
+		AppJwtDetailVO jwtDetails = appJwtDetailService.getAppDetails(application.getId(), true);
+		log.debug("" + jwtDetails);
 		jwtDetails.setAdapter(application.getAdapter());
 		jwtDetails.setIsAdapter(application.getIsAdapter());
 
@@ -68,7 +62,7 @@ public class JwtAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 			try {
 				BeanUtils.setProperty(jwtAdapter, "jwtDetails", jwtDetails);
 			} catch (IllegalAccessException | InvocationTargetException e) {
-				_logger.error("setProperty error . ", e);
+				log.error("setProperty error . ", e);
 			}
 			adapter = (AbstractAuthorizeAdapter) jwtAdapter;
 		} else {
@@ -93,7 +87,7 @@ public class JwtAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 	@ResponseBody
 	public String metadata(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("appid") String appId, @PathVariable("mediaType") String mediaType) {
-		AppJwtDetailEntity jwtDetails = jwtDetailsService.getAppDetails(appId, true);
+		AppJwtDetailVO jwtDetails = appJwtDetailService.getAppDetails(appId, true);
 		if (jwtDetails != null) {
 			String jwkSetString = "";
 			if (!jwtDetails.getSignature().equalsIgnoreCase("none")) {

@@ -11,10 +11,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.entity.AccountEntity;
 import com.wy.test.core.entity.AppEntity;
-import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.vo.AppVO;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.AccountService;
@@ -34,8 +34,8 @@ public class AuthorizeBaseEndpoint {
 	@Autowired
 	protected AccountService accountService;
 
-	protected AppEntity getApp(String id) {
-		AppEntity app = (AppEntity) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
+	protected AppVO getApp(String id) {
+		AppVO app = (AppVO) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
 		if (StringUtils.isBlank(id)) {
 			log.error("parameter for app id " + id + "  is null.");
 		} else {
@@ -51,8 +51,8 @@ public class AuthorizeBaseEndpoint {
 		return app;
 	}
 
-	protected AccountEntity getAccounts(AppVO app, UserEntity userInfo) {
-		AppEntity loadApp = getApp(app.getId());
+	protected AccountEntity getAccounts(AppVO app, UserVO userInfo) {
+		AppVO loadApp = getApp(app.getId());
 
 		AccountEntity account = new AccountEntity(userInfo.getId(), loadApp.getId());
 		account.setUsername(userInfo.getUsername());

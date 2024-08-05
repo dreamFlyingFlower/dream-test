@@ -112,4 +112,9 @@ public class PasswordPolicyEntity extends AbstractEntity {
 	 * 随机密码长度
 	 */
 	private Integer randomPasswordLength;
+
+	/**
+	 * 机构ID
+	 */
+	private String instId;
 }

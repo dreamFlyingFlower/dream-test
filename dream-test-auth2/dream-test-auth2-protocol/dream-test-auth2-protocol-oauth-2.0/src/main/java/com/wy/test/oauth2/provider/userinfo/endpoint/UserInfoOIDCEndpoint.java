@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
@@ -36,6 +34,7 @@ import com.nimbusds.jwt.SignedJWT;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.constants.ContentType;
+import com.wy.test.core.convert.UserConvert;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 import com.wy.test.core.web.HttpResponseAdapter;
@@ -44,8 +43,8 @@ import com.wy.test.oauth2.common.OAuth2Constants;
 import com.wy.test.oauth2.provider.ClientDetailsService;
 import com.wy.test.oauth2.provider.OAuth2Authentication;
 import com.wy.test.oauth2.provider.token.DefaultTokenServices;
-import com.wy.test.persistence.service.AppsService;
-import com.wy.test.persistence.service.UserInfoService;
+import com.wy.test.persistence.service.AppService;
+import com.wy.test.persistence.service.UserService;
 
 import dream.flying.flower.framework.core.helper.TokenHelpers;
 import dream.flying.flower.framework.core.json.JsonHelpers;
@@ -54,12 +53,12 @@ import dream.flying.flower.framework.web.crypto.jwt.sign.DefaultJwtSigningAndVal
 import dream.flying.flower.generator.StringGenerator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "2-1-OAuth v2.0 API文档模块")
 @Controller
+@Slf4j
 public class UserInfoOIDCEndpoint {
-
-	final static Logger _logger = LoggerFactory.getLogger(UserInfoOIDCEndpoint.class);
 
 	@Autowired
 	@Qualifier("oauth20JdbcClientDetailsService")
@@ -70,12 +69,12 @@ public class UserInfoOIDCEndpoint {
 	private DefaultTokenServices oauth20tokenServices;
 
 	@Autowired
-	@Qualifier("userInfoService")
-	private UserInfoService userInfoService;
+	@Qualifier("userService")
+	private UserService userService;
 
 	@Autowired
-	@Qualifier("appsService")
-	protected AppsService appsService;
+	@Qualifier("appService")
+	protected AppService appService;
 
 	OAuthDefaultUserInfoAdapter defaultOAuthUserInfoAdapter = new OAuthDefaultUserInfoAdapter();
 
@@ -89,7 +88,7 @@ public class UserInfoOIDCEndpoint {
 	@ResponseBody
 	public String connect10aUserInfo(HttpServletRequest request, HttpServletResponse response) {
 		String access_token = TokenHelpers.resolveAccessToken(request);
-		_logger.debug("access_token {}", access_token);
+		log.debug("access_token {}", access_token);
 		if (!StringGenerator.uuidMatches(access_token)) {
 			return JsonHelpers.toString(accessTokenFormatError(access_token));
 		}
@@ -111,8 +110,9 @@ public class UserInfoOIDCEndpoint {
 
 			SignPrincipal authentication = (SignPrincipal) oAuth2Authentication.getUserAuthentication().getPrincipal();
 
-			String subject = AbstractAuthorizeAdapter.getValueByUserAttr(userInfo, clientDetails.getSubject());
-			_logger.debug("userId : {} , username : {} , displayName : {} , subject : {}", userInfo.getId(),
+			String subject = AbstractAuthorizeAdapter.getValueByUserAttr(UserConvert.INSTANCE.convertt(userInfo),
+					clientDetails.getSubject());
+			log.debug("userId : {} , username : {} , displayName : {} , subject : {}", userInfo.getId(),
 					userInfo.getUsername(), userInfo.getDisplayName(), subject);
 
 			jwtClaimsSetBuilder.claim("sub", subject);
@@ -150,7 +150,7 @@ public class UserInfoOIDCEndpoint {
 				jwtClaimsSetBuilder.claim("gender", gender);
 				jwtClaimsSetBuilder.claim("zoneinfo", userInfo.getTimeZone());
 				jwtClaimsSetBuilder.claim("locale", userInfo.getLocale());
-				jwtClaimsSetBuilder.claim("updated_time", userInfo.getModifiedDate());
+				jwtClaimsSetBuilder.claim("updated_time", userInfo.getUpdateTime());
 				jwtClaimsSetBuilder.claim("birthdate", userInfo.getBirthDate());
 			}
 
@@ -198,7 +198,7 @@ public class UserInfoOIDCEndpoint {
 					jwtSignerService = new DefaultJwtSigningAndValidationHandler(clientDetails.getSignatureKey(),
 							clientDetails.getClientId() + "_sig", clientDetails.getSignature());
 				} catch (Exception e) {
-					_logger.error("Couldn't create Jwt Signing Service", e);
+					log.error("Couldn't create Jwt Signing Service", e);
 				}
 
 				JWSAlgorithm signingAlg = jwtSignerService.getDefaultSigningAlgorithm();
@@ -238,7 +238,7 @@ public class UserInfoOIDCEndpoint {
 					jwtEncryptionService.encryptJwt(jweObject);
 					userJson = jweObject.serialize();
 				} catch (NoSuchAlgorithmException | InvalidKeySpecException | JOSEException e) {
-					_logger.error("Couldn't create Jwt Encryption Exception", e);
+					log.error("Couldn't create Jwt Encryption Exception", e);
 				}
 			} else {
 				// 不需要加密和签名 unsigned ID token
@@ -246,7 +246,7 @@ public class UserInfoOIDCEndpoint {
 				userJson = userInfoJWT.serialize();
 			}
 
-			_logger.trace("OpenID Connect Response {}", userJson);
+			log.trace("OpenID Connect Response {}", userJson);
 			return userJson;
 
 		} catch (OAuth2Exception e) {
@@ -266,14 +266,10 @@ public class UserInfoOIDCEndpoint {
 	}
 
 	public UserEntity queryUserInfo(String userId) {
-		return (UserEntity) userInfoService.findByUsername(userId);
+		return userService.findByUsername(userId);
 	}
 
 	public void setOauth20tokenServices(DefaultTokenServices oauth20tokenServices) {
 		this.oauth20tokenServices = oauth20tokenServices;
-	}
-
-	public void setUserInfoService(UserInfoService userInfoService) {
-		this.userInfoService = userInfoService;
 	}
 }

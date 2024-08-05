@@ -59,7 +59,7 @@ public class MfaAuthenticationProvider extends AbstractAuthenticationProvider {
 
 			emptyUsernameValid(loginCredential.getUsername());
 
-			UserEntity userInfo = loadUserInfo(loginCredential.getUsername(), loginCredential.getPassword());
+			UserVO userInfo = loadUserInfo(loginCredential.getUsername(), loginCredential.getPassword());
 
 			statusValid(loginCredential, userInfo);
 			// mfa
@@ -98,7 +98,7 @@ public class MfaAuthenticationProvider extends AbstractAuthenticationProvider {
 	 * @param authType String
 	 * @param userInfo UserInfo
 	 */
-	protected void mfacaptchaValid(String otpCaptcha, UserEntity userInfo) {
+	protected void mfacaptchaValid(String otpCaptcha, UserVO userInfo) {
 		// for one time password 2 factor
 		if (dreamLoginProperties.isMfa()) {
 			UserEntity validUserInfo = new UserEntity();

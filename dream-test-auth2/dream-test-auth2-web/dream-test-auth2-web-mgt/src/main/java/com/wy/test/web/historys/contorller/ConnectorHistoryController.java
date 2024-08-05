@@ -3,9 +3,6 @@ package com.wy.test.web.historys.contorller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.dromara.mybatis.jpa.entity.JpaPageResults;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +21,7 @@ import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.HistoryConnectorService;
 
 import dream.flying.flower.ConstDate;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 连接器日志查询
@@ -31,9 +29,8 @@ import dream.flying.flower.ConstDate;
  */
 @Controller
 @RequestMapping(value = { "/historys" })
+@Slf4j
 public class ConnectorHistoryController {
-
-	final static Logger _logger = LoggerFactory.getLogger(ConnectorHistoryController.class);
 
 	@Autowired
 	HistoryConnectorService historyConnectorService;
@@ -46,10 +43,9 @@ public class ConnectorHistoryController {
 	@ResponseBody
 	public ResponseEntity<?> fetch(@ModelAttribute("historyConnector") HistoryConnectorEntity historyConnector,
 			@CurrentUser UserEntity currentUser) {
-		_logger.debug("historys/historyConnector/fetch/ {}", historyConnector);
+		log.debug("historys/historyConnector/fetch/ {}", historyConnector);
 		historyConnector.setInstId(currentUser.getInstId());
-		return new Message<JpaPageResults<HistoryConnectorEntity>>(historyConnectorService.fetchPageResults(historyConnector))
-				.buildResponse();
+		return new Message<>(historyConnectorService.list(historyConnector)).buildResponse();
 	}
 
 	@InitBinder

@@ -26,7 +26,7 @@ public interface AppService extends BaseServices<AppEntity, AppVO, AppQuery> {
 
 	List<UserApps> queryMyApps(UserApps userApplications);
 
-	void put(String appId, AppEntity appDetails);
+	void put(String appId, AppVO appDetails);
 
-	AppEntity get(String appId, boolean cached);
+	AppVO get(String appId, boolean cached);
 }

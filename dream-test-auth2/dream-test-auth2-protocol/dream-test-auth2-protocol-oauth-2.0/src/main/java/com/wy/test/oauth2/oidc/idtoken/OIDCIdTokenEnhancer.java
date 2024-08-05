@@ -8,10 +8,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 import com.nimbusds.jose.JOSEException;
@@ -36,10 +32,10 @@ import com.wy.test.oauth2.provider.token.TokenEnhancer;
 
 import dream.flying.flower.framework.web.crypto.jwt.encryption.DefaultJwtEncryptionAndDecryptionHandler;
 import dream.flying.flower.framework.web.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class OIDCIdTokenEnhancer implements TokenEnhancer {
-
-	private final static Logger _logger = LoggerFactory.getLogger(OIDCIdTokenEnhancer.class);
 
 	public final static String ID_TOKEN_SCOPE = "openid";
 
@@ -74,7 +70,7 @@ public class OIDCIdTokenEnhancer implements TokenEnhancer {
 					signingAlg = jwtSignerService.getDefaultSigningAlgorithm();
 				}
 			} catch (Exception e) {
-				_logger.error("Couldn't create Jwt Signing Service", e);
+				log.error("Couldn't create Jwt Signing Service", e);
 			}
 
 			JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
@@ -97,29 +93,13 @@ public class OIDCIdTokenEnhancer implements TokenEnhancer {
 
 			// if the auth time claim was explicitly requested OR if the client always wants
 			// the auth time, put it in
-			if (request.getExtensions().containsKey("max_age") || (request.getExtensions().containsKey("idtoken")) // parse
-																													// the
-																													// ID
-																													// Token
-																													// claims
-																													// (#473)
-																													// --
-																													// for
-																													// now
-																													// assume
-																													// it
-																													// could
-																													// be
-																													// in
-																													// there
-			) {
-				DateTime loginDate = DateTime.parse(AuthorizationUtils.getUserInfo().getLastLoginTime(),
-						DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
-				builder.claim("auth_time", loginDate.getMillis() / 1000);
+			// parse the ID Token claims (#473) -- for now assume it could be in there
+			if (request.getExtensions().containsKey("max_age") || (request.getExtensions().containsKey("idtoken"))) {
+				builder.claim("auth_time", AuthorizationUtils.getUserInfo().getLastLoginTime().getTime() / 1000);
 			}
 
 			String nonce = request.getRequestParameters().get("nonce");
-			_logger.debug("getRequestParameters nonce {}", nonce);
+			log.debug("getRequestParameters nonce {}", nonce);
 			if (!Strings.isNullOrEmpty(nonce)) {
 				builder.claim("nonce", nonce);
 			}
@@ -132,7 +112,7 @@ public class OIDCIdTokenEnhancer implements TokenEnhancer {
 					Base64URL at_hash = IdTokenHashUtils.getAccessTokenHash(signingAlg, signed);
 					builder.claim("at_hash", at_hash);
 				}
-				_logger.debug("idClaims {}", builder.build());
+				log.debug("idClaims {}", builder.build());
 			}
 			String idTokenString = "";
 			if (StringUtils.isNotBlank(clientDetails.getSignature())
@@ -144,9 +124,9 @@ public class OIDCIdTokenEnhancer implements TokenEnhancer {
 					// sign it with the server's key
 					jwtSignerService.signJwt((SignedJWT) idToken);
 					idTokenString = idToken.serialize();
-					_logger.debug("idToken {}", idTokenString);
+					log.debug("idToken {}", idTokenString);
 				} catch (Exception e) {
-					_logger.error("Couldn't create Jwt Signing Exception", e);
+					log.error("Couldn't create Jwt Signing Exception", e);
 				}
 			} else if (StringUtils.isNotBlank(clientDetails.getAlgorithm())
 					&& !clientDetails.getAlgorithm().equalsIgnoreCase("none")) {
@@ -171,7 +151,7 @@ public class OIDCIdTokenEnhancer implements TokenEnhancer {
 					jwtEncryptionService.encryptJwt(jweObject);
 					idTokenString = jweObject.serialize();
 				} catch (NoSuchAlgorithmException | InvalidKeySpecException | JOSEException e) {
-					_logger.error("Couldn't create Jwt Encryption Exception", e);
+					log.error("Couldn't create Jwt Encryption Exception", e);
 				}
 			} else {
 				// not need a PlainJWT idToken
@@ -186,5 +166,4 @@ public class OIDCIdTokenEnhancer implements TokenEnhancer {
 		}
 		return accessToken;
 	}
-
 }

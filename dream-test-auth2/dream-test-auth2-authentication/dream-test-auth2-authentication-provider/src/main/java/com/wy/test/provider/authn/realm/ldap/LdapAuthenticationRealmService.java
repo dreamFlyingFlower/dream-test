@@ -1,10 +1,10 @@
 package com.wy.test.provider.authn.realm.ldap;
 
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.wy.test.core.entity.LdapContextEntity;
@@ -28,8 +28,8 @@ public class LdapAuthenticationRealmService {
 	public LdapAuthenticationRealm getByInstId(String instId) {
 		LdapAuthenticationRealm authenticationRealm = ldapRealmStore.getIfPresent(instId);
 		if (authenticationRealm == null) {
-			List<LdapContextEntity> ldapContexts = ldapContextService.find("where instid = ? and status = 1 ",
-					new Object[] { instId }, new int[] { Types.VARCHAR });
+			List<LdapContextEntity> ldapContexts = ldapContextService.list(new LambdaQueryWrapper<LdapContextEntity>()
+					.eq(LdapContextEntity::getInstId, instId).eq(LdapContextEntity::getStatus, 1));
 			authenticationRealm = new LdapAuthenticationRealm(false);
 			if (ldapContexts != null && ldapContexts.size() > 0) {
 				authenticationRealm.setLdapSupport(true);
@@ -49,9 +49,10 @@ public class LdapAuthenticationRealmService {
 
 					} else {
 						StandardLdapServer standardLdapServer = new StandardLdapServer();
-						LdapHelpers ldapUtils = new LdapHelpers(ldapContext.getProviderUrl(), ldapContext.getPrincipal(),
-								PasswordReciprocal.getInstance().decoder(ldapContext.getCredentials()),
-								ldapContext.getBasedn());
+						LdapHelpers ldapUtils =
+								new LdapHelpers(ldapContext.getProviderUrl(), ldapContext.getPrincipal(),
+										PasswordReciprocal.getInstance().decoder(ldapContext.getCredentials()),
+										ldapContext.getBasedn());
 						standardLdapServer.setLdapUtils(ldapUtils);
 						standardLdapServer.setFilterAttribute(ldapContext.getFilters());
 						if (ldapContext.getAccountMapping().equalsIgnoreCase("YES")) {
@@ -65,6 +66,5 @@ public class LdapAuthenticationRealmService {
 			ldapRealmStore.put(instId, authenticationRealm);
 		}
 		return authenticationRealm;
-
 	}
 }

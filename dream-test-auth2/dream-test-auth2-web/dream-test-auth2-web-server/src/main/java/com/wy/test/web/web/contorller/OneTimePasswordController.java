@@ -6,8 +6,6 @@ import java.util.HashMap;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,7 +21,7 @@ import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.otp.password.onetimepwd.algorithm.OtpKeyUriFormat;
 import com.wy.test.otp.password.onetimepwd.algorithm.OtpSecret;
 import com.wy.test.otp.password.onetimepwd.impl.TimeBasedOtpAuthn;
-import com.wy.test.persistence.service.UserInfoService;
+import com.wy.test.persistence.service.UserService;
 
 import dream.flying.flower.framework.core.crypto.Base32Helpers;
 import dream.flying.flower.framework.core.qrcode.QrCodeHelpers;
@@ -34,10 +32,8 @@ import lombok.SneakyThrows;
 @RequestMapping(value = { "/config" })
 public class OneTimePasswordController {
 
-	static final Logger _logger = LoggerFactory.getLogger(OneTimePasswordController.class);
-
 	@Autowired
-	private UserInfoService userInfoService;
+	private UserService userInfoService;
 
 	@Autowired
 	OtpKeyUriFormat otpKeyUriFormat;

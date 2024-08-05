@@ -7,8 +7,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,19 +24,19 @@ import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.constants.ConstProtocols;
-import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
+import com.wy.test.core.vo.AppVO;
+import com.wy.test.core.vo.UserVO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "1-3-单点注销接口文档模块")
 @Controller
+@Slf4j
 public class LogoutEndpoint {
-
-	private static Logger _logger = LoggerFactory.getLogger(LogoutEndpoint.class);
 
 	@Autowired
 	DreamAuthServerProperties dreamServerProperties;
@@ -55,18 +53,18 @@ public class LogoutEndpoint {
 	@Operation(summary = "前端注销接口", description = "前端注销接口", method = "GET")
 	@GetMapping(value = { "/logout" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> logout(@CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> logout(@CurrentUser UserVO currentUser) {
 		// if logined in have onlineTicket ,need remove or logout back
 		String sessionId = currentUser.getSessionId();
 		Session session = sessionManager.get(sessionId);
 		if (session != null) {
-			_logger.debug("/logout frontend clean Session id {}", session.getId());
-			Set<Entry<String, AppEntity>> entrySet = session.getAuthorizedApps().entrySet();
+			log.debug("/logout frontend clean Session id {}", session.getId());
+			Set<Entry<String, AppVO>> entrySet = session.getAuthorizedApps().entrySet();
 
-			Iterator<Entry<String, AppEntity>> iterator = entrySet.iterator();
+			Iterator<Entry<String, AppVO>> iterator = entrySet.iterator();
 			while (iterator.hasNext()) {
-				Entry<String, AppEntity> mapEntry = iterator.next();
-				_logger.debug("App Id : " + mapEntry.getKey() + " , " + mapEntry.getValue());
+				Entry<String, AppVO> mapEntry = iterator.next();
+				log.debug("App Id : " + mapEntry.getKey() + " , " + mapEntry.getValue());
 				if (mapEntry.getValue().getLogoutType() == LogoutType.BACK_CHANNEL) {
 					SingleLogout singleLogout;
 					if (mapEntry.getValue().getProtocol().equalsIgnoreCase(ConstProtocols.CAS)) {
@@ -88,7 +86,7 @@ public class LogoutEndpoint {
 	public ModelAndView forceLogout(HttpServletRequest request,
 			@RequestParam(value = "redirect_uri", required = false) String redirect_uri) {
 		// invalidate http session
-		_logger.debug("/force/logout http Session id {}", request.getSession().getId());
+		log.debug("/force/logout http Session id {}", request.getSession().getId());
 		request.getSession().invalidate();
 		StringBuffer logoutUrl = new StringBuffer("");
 		logoutUrl.append(dreamServerProperties.getFrontendUri()).append("/#/passport/logout");

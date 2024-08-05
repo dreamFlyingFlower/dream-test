@@ -3,6 +3,8 @@ package com.wy.test.core.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.wy.test.core.vo.UserVO;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -51,7 +53,7 @@ public class ChangePassword implements Serializable {
 		this.password = password;
 	}
 
-	public ChangePassword(UserEntity userInfo) {
+	public ChangePassword(UserVO userInfo) {
 		this.setId(userInfo.getId());
 		this.setUserId(userInfo.getId());
 		this.setUsername(userInfo.getUsername());

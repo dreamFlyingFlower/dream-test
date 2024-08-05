@@ -12,8 +12,8 @@ import org.springframework.security.oauth2.provider.NoSuchClientException;
 
 import com.wy.test.core.authn.SignPrincipal;
 import com.wy.test.core.authn.session.Session;
-import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.persistence.repository.LoginRepository;
+import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
@@ -25,7 +25,7 @@ public class OAuth2UserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		UserEntity userInfo;
+		UserVO userInfo;
 		try {
 			userInfo = loginRepository.find(username, "");
 		} catch (NoSuchClientException e) {
