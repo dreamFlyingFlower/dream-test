@@ -36,12 +36,12 @@ public class AppServiceImpl extends AbstractServiceImpl<AppEntity, AppVO, AppQue
 			Caffeine.newBuilder().expireAfterWrite(30, TimeUnit.MINUTES).build();
 
 	@Override
-	public boolean insertApp(AppEntity app) {
+	public boolean insertApp(AppVO app) {
 		return baseMapper.insertApp(app) > 0;
 	}
 
 	@Override
-	public boolean updateApp(AppEntity app) {
+	public boolean updateApp(AppVO app) {
 		return baseMapper.updateApp(app) > 0;
 	}
 

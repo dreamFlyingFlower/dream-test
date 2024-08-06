@@ -166,7 +166,7 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 	LocaleResolver cookieLocaleResolver(DreamAuthServerProperties dreamAuthServerProperties) {
 		log.debug("DomainName " + dreamAuthServerProperties.getDomain());
 		CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
-		cookieLocaleResolver.setCookieName("mxk_locale");
+		cookieLocaleResolver.setCookieName("dream_locale");
 		cookieLocaleResolver.setCookieDomain(dreamAuthServerProperties.getDomain());
 		cookieLocaleResolver.setCookieMaxAge((int) ConstTimeInterval.TWO_WEEK);
 		return cookieLocaleResolver;

@@ -8,8 +8,6 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -18,19 +16,20 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.wy.test.core.constants.ConstTimeInterval;
 import com.wy.test.core.entity.LocalizationEntity;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class LocalizationRepository {
 
-	private static Logger _logger = LoggerFactory.getLogger(LocalizationRepository.class);
-
 	private static final String INSERT_STATEMENT =
-			"insert into mxk_localization (id, property,langzh,langen,status,description,instid)values(?,?,?,?,?,?,?)";
+			"insert into auth_localization (id, property,langzh,langen,status,description,instid)values(?,?,?,?,?,?,?)";
 
-	private static final String UPDATE_STATEMENT = "update mxk_localization set langzh = ? , langen =? where id = ?";
+	private static final String UPDATE_STATEMENT = "update auth_localization set langzh = ? , langen =? where id = ?";
 
-	private static final String DELETE_STATEMENT = "delete from  mxk_localization where id = ?";
+	private static final String DELETE_STATEMENT = "delete from  auth_localization where id = ?";
 
 	private static final String SELECT_STATEMENT =
-			"select * from  mxk_localization where ( id = ? ) or (property = ? and instid = ?)";
+			"select * from  auth_localization where ( id = ? ) or (property = ? and instid = ?)";
 
 	private static final Pattern PATTERN_HTML = Pattern.compile("<[^>]+>", Pattern.CASE_INSENSITIVE);
 
@@ -67,7 +66,7 @@ public class LocalizationRepository {
 		if (htmlTag.equalsIgnoreCase("rtag")) {
 			message = clearHTMLToString(message);
 		}
-		_logger.trace("{} = {}", code, message);
+		log.trace("{} = {}", code, message);
 		return message == null ? "" : message;
 	}
 
@@ -117,7 +116,7 @@ public class LocalizationRepository {
 	}
 
 	public LocalizationEntity get(String property, String instId) {
-		_logger.debug("load property from database , property {} ,instId {}", property, instId);
+		log.debug("load property from database , property {} ,instId {}", property, instId);
 		List<LocalizationEntity> localizations =
 				jdbcTemplate.query(SELECT_STATEMENT, new LocalizationRowMapper(), property, property, instId);
 		return (localizations == null || localizations.size() == 0) ? null : localizations.get(0);

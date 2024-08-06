@@ -52,4 +52,14 @@ public class RoleMemberServiceImpl extends
 	public Page<RoleEntity> rolesNoMember(RoleMemberQuery query) {
 		return baseMapper.rolesNoMember(new Page<RoleEntity>(query.getPageIndex(), query.getPageSize()), query);
 	}
+
+	@Override
+	public List<RoleMemberEntity> memberInRole(RoleMemberQuery query) {
+		return baseMapper.memberInRole(query);
+	}
+
+	@Override
+	public List<RoleMemberEntity> memberNotInRole(RoleMemberQuery query) {
+		return baseMapper.memberNotInRole(query);
+	}
 }

@@ -18,5 +18,5 @@ import dream.flying.flower.framework.mybatis.plus.mapper.BaseMappers;
 @Mapper
 public interface AppTokenDetailMapper extends BaseMappers<AppTokenDetailEntity, AppTokenDetailVO, AppTokenDetailQuery> {
 
-	AppTokenDetailEntity getAppDetails(String id);
+	AppTokenDetailVO getAppDetails(String id);
 }

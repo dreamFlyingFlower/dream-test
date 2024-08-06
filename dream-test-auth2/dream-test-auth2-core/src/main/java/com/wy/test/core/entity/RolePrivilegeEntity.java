@@ -3,7 +3,7 @@ package com.wy.test.core.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.wy.test.core.web.WebContext;
 
-import dream.flying.flower.framework.mybatis.plus.entity.AbstractEntity;
+import dream.flying.flower.framework.mybatis.plus.entity.AbstractStringEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +25,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("auth_role_privilege")
-public class RolePrivilegeEntity extends AbstractEntity {
+public class RolePrivilegeEntity extends AbstractStringEntity {
 
 	private static final long serialVersionUID = 1L;
 

@@ -10,7 +10,7 @@ import com.wy.test.core.web.WebContext;
 public class LoginHistoryRepository {
 
 	private static final String HISTORY_LOGIN_INSERT_STATEMENT =
-			"insert into mxk_history_login (id , sessionid , userid , username , displayname , logintype , message , code , provider , sourceip , ipregion , iplocation, browser , platform , application , loginurl , sessionstatus ,instid)values( ? , ? , ? , ? , ? , ? , ? , ? , ?, ? , ? , ?, ? , ? , ?, ? , ? , ?)";
+			"insert into auth_history_login (id , sessionid , userid , username , displayname , logintype , message , code , provider , sourceip , ipregion , iplocation, browser , platform , application , loginurl , sessionstatus ,instid)values( ? , ? , ? , ? , ? , ? , ? , ? , ?, ? , ? , ?, ? , ? , ?, ? , ? , ?)";
 
 	protected JdbcTemplate jdbcTemplate;
 

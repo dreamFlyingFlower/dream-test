@@ -23,9 +23,9 @@ import dream.flying.flower.framework.mybatis.plus.mapper.BaseMappers;
 @Mapper
 public interface RoleMemberMapper extends BaseMappers<RoleMemberEntity, RoleMemberVO, RoleMemberQuery> {
 
-	List<RoleMemberEntity> memberInRole(RoleMemberEntity entity);
+	List<RoleMemberEntity> memberInRole(RoleMemberQuery entity);
 
-	List<RoleMemberEntity> memberNotInRole(RoleMemberEntity entity);
+	List<RoleMemberEntity> memberNotInRole(RoleMemberQuery entity);
 
 	Page<RoleEntity> rolesNoMember(Page<RoleEntity> page, RoleMemberQuery query);
 

@@ -17,7 +17,6 @@ import com.wy.test.authz.token.endpoint.adapter.TokenBasedDefaultAdapter;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
 import com.wy.test.core.convert.AppTokenDetailConvert;
-import com.wy.test.core.entity.AppTokenDetailEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.vo.AppTokenDetailVO;
@@ -52,13 +51,9 @@ public class TokenBasedAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		ModelAndView modelAndView = new ModelAndView();
 
-		AppTokenDetailEntity tokenBasedDetails = null;
-		tokenBasedDetails = appTokenDetailService.getAppDetails(id, true);
-		log.debug("" + tokenBasedDetails);
-
 		AppVO application = getApp(id);
-
-		AppTokenDetailVO appTokenDetailVO = appTokenDetailConvert.convertt(tokenBasedDetails);
+		AppTokenDetailVO appTokenDetailVO = appTokenDetailService.getAppDetails(id, true);
+		log.debug("" + appTokenDetailVO);
 
 		appTokenDetailVO.setAdapter(application.getAdapter());
 		appTokenDetailVO.setIsAdapter(application.getIsAdapter());

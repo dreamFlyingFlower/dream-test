@@ -4,8 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -26,19 +24,19 @@ import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.helper.DateTimeHelper;
 import dream.flying.flower.lang.SerializableHelper;
 import dream.flying.flower.result.Result;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ProvisioningRunner {
 
-	private static final Logger _logger = LoggerFactory.getLogger(ProvisioningRunner.class);
-
 	static final String PROVISION_SELECT_STATEMENT =
-			"select * from mxk_history_provisions where connected = 0 order by sendtime asc limit 500";
+			"select * from auth_history_provisions where connected = 0 order by sendtime asc limit 500";
 
 	static final String PROVISION_UPDATE_STATEMENT =
-			"update mxk_history_provisions set connected = connected + 1  where  id = ?";
+			"update auth_history_provisions set connected = connected + 1  where  id = ?";
 
 	static final String PROVISION_LOG_INSERT_STATEMENT =
-			"insert into mxk_history_connector(id,conname,topic,actiontype,sourceid,sourcename,synctime,result,instid) values (? , ? , ? , ? , ? , ?  , ?  , ?  , ? )";
+			"insert into auth_history_connector(id,conname,topic,actiontype,sourceid,sourcename,synctime,result,instid) values (? , ? , ? , ? , ? , ?  , ?  , ?  , ? )";
 
 	JdbcTemplate jdbcTemplate;
 
@@ -56,14 +54,14 @@ public class ProvisioningRunner {
 			List<ProvisionMessage> listProvisionMessage =
 					jdbcTemplate.query(PROVISION_SELECT_STATEMENT, new ProvisionMessageRowMapper());
 			for (ProvisionMessage msg : listProvisionMessage) {
-				_logger.debug("Provision message {}", msg);
+				log.debug("Provision message {}", msg);
 				for (ConnectorEntity connector : listConnectors) {
-					_logger.debug("Provision message to connector {}", connector);
+					log.debug("Provision message to connector {}", connector);
 					provision(msg, connector);
 				}
 			}
 		} catch (Exception e) {
-			_logger.error("provisions Exception", e);
+			log.error("provisions Exception", e);
 		}
 	}
 
@@ -138,14 +136,14 @@ public class ProvisioningRunner {
 
 	String provisionUser(UserEntity user, String baseUrl, String actionType, ConnectorEntity connector) {
 		baseUrl = baseUrl + "Users/" + getActionType(actionType);
-		_logger.debug("URL {} ", baseUrl);
+		log.debug("URL {} ", baseUrl);
 		return new HttpRequestAdapter().addHeaderAuthorizationBasic(connector.getPrincipal(),
 				PasswordReciprocal.getInstance().decoder(connector.getCredentials())).post(baseUrl, user);
 	}
 
 	String provisionOrganization(OrgEntity organization, String baseUrl, String actionType, ConnectorEntity connector) {
 		baseUrl = baseUrl + "Organizations/" + getActionType(actionType);
-		_logger.debug("URL {} ", baseUrl);
+		log.debug("URL {} ", baseUrl);
 		return new HttpRequestAdapter()
 				.addHeaderAuthorizationBasic(connector.getPrincipal(),
 						PasswordReciprocal.getInstance().decoder(connector.getCredentials()))
@@ -155,7 +153,7 @@ public class ProvisioningRunner {
 	String provisionChangePassword(ChangePassword changePassword, String baseUrl, String actionType,
 			ConnectorEntity connector) {
 		baseUrl = baseUrl + "Users/changePassword";
-		_logger.debug("URL {} ", baseUrl);
+		log.debug("URL {} ", baseUrl);
 		return new HttpRequestAdapter()
 				.addHeaderAuthorizationBasic(connector.getPrincipal(),
 						PasswordReciprocal.getInstance().decoder(connector.getCredentials()))

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wy.test.persistence.mapper.AppAdapterMapper">
+
+	<sql id="where_contition">
+		<if test="id != null and id != ''">
+			AND id = #{id}
+		</if>
+		<if test="name != null and name != ''">
+			AND name LIKE '%${name}%'
+		</if>
+		<if test="protocol != null and protocol != ''">
+			AND protocol = #{protocol}
+		</if>
+	</sql>
+
+	<select id="queryPageResults" resultType="AppAdapterVO">
+		SELECT
+		*
+		FROM
+		auth_app_adapter
+		<where>
+			<include refid="where_contition" />
+		</where>
+		ORDER BY sort_index DESC
+	</select>
+</mapper>

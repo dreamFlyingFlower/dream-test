@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -15,12 +13,13 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.wy.test.core.entity.InstitutionEntity;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class InstitutionsRepository {
 
-	private static Logger _logger = LoggerFactory.getLogger(InstitutionsRepository.class);
-
 	private static final String SELECT_STATEMENT =
-			"select * from  mxk_institutions where id = ? or domain = ? or consoledomain = ?";
+			"select * from  auth_institution where id = ? or domain = ? or consoledomain = ?";
 
 	private static final String DEFAULT_INSTID = "1";
 
@@ -37,7 +36,7 @@ public class InstitutionsRepository {
 	}
 
 	public InstitutionEntity get(String instIdOrDomain) {
-		_logger.trace(" instId {}", instIdOrDomain);
+		log.trace(" instId {}", instIdOrDomain);
 		InstitutionEntity inst = getByInstIdOrDomain(instIdOrDomain);
 		if (inst == null) {// use default inst
 			inst = getByInstIdOrDomain(DEFAULT_INSTID);
@@ -47,7 +46,7 @@ public class InstitutionsRepository {
 	}
 
 	private InstitutionEntity getByInstIdOrDomain(String instIdOrDomain) {
-		_logger.trace(" instId {}", instIdOrDomain);
+		log.trace(" instId {}", instIdOrDomain);
 		InstitutionEntity inst = institutionsStore
 				.getIfPresent(mapper.get(instIdOrDomain) == null ? DEFAULT_INSTID : mapper.get(instIdOrDomain));
 		if (inst == null) {

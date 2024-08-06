@@ -1,5 +1,6 @@
 package com.wy.test.persistence.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wy.test.core.entity.RolePermissionEntity;
 import com.wy.test.core.query.RolePermissionQuery;
 import com.wy.test.core.vo.RolePermissionVO;
@@ -16,4 +17,7 @@ import dream.flying.flower.framework.mybatis.plus.service.BaseServices;
 public interface RolePermissionService
 		extends BaseServices<RolePermissionEntity, RolePermissionVO, RolePermissionQuery> {
 
+	Page<RolePermissionVO> appsInRole(RolePermissionQuery query);
+
+	Page<RolePermissionVO> appsNotInRole(RolePermissionQuery query);
 }

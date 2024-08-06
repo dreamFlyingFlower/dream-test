@@ -1,9 +1,8 @@
 package com.wy.test.persistence.mapper;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wy.test.core.entity.RolePermissionEntity;
 import com.wy.test.core.query.RolePermissionQuery;
 import com.wy.test.core.vo.RolePermissionVO;
@@ -20,7 +19,7 @@ import dream.flying.flower.framework.mybatis.plus.mapper.BaseMappers;
 @Mapper
 public interface RolePermissionMapper extends BaseMappers<RolePermissionEntity, RolePermissionVO, RolePermissionQuery> {
 
-	List<RolePermissionEntity> appsInRole(RolePermissionEntity entity);
+	Page<RolePermissionVO> appsInRole(Page<RolePermissionEntity> page, RolePermissionQuery query);
 
-	List<RolePermissionEntity> appsNotInRole(RolePermissionEntity entity);
+	Page<RolePermissionVO> appsNotInRole(Page<RolePermissionEntity> page, RolePermissionQuery query);
 }

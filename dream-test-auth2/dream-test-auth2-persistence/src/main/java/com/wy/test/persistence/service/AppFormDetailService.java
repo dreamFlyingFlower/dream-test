@@ -15,5 +15,5 @@ import dream.flying.flower.framework.mybatis.plus.service.BaseServices;
  */
 public interface AppFormDetailService extends BaseServices<AppFormDetailEntity, AppFormDetailVO, AppFormDetailQuery> {
 
-	AppFormDetailEntity getAppDetails(String id, boolean cached);
+	AppFormDetailVO getAppDetails(String id, boolean cached);
 }

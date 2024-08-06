@@ -86,7 +86,7 @@ public abstract class AbstractRemeberMeManager {
 
 		JWTClaimsSet remeberMeJwtClaims = new JWTClaimsSet.Builder().issuer("").subject(remeberMe.getUsername())
 				.jwtID(remeberMe.getId()).issueTime(remeberMe.getLastLoginTime())
-				.expirationTime(remeberMe.getExpirationTime()).claim("kid", HMAC512Service.MXK_AUTH_JWK).build();
+				.expirationTime(remeberMe.getExpirationTime()).claim("kid", HMAC512Service.DREAM_AUTH_JWK).build();
 
 		return authTokenService.signedJWT(remeberMeJwtClaims);
 	}

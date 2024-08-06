@@ -2,7 +2,7 @@ package com.wy.test.core.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 
-import dream.flying.flower.framework.mybatis.plus.entity.AbstractEntity;
+import dream.flying.flower.framework.mybatis.plus.entity.AbstractStringEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +24,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("auth_ldap_context")
-public class LdapContextEntity extends AbstractEntity {
+public class LdapContextEntity extends AbstractStringEntity {
 
 	private static final long serialVersionUID = -5726518661912505397L;
 

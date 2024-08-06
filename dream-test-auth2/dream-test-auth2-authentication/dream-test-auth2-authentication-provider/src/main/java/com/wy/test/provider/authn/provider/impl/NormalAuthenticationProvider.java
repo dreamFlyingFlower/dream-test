@@ -55,7 +55,7 @@ public class NormalAuthenticationProvider extends AbstractAuthenticationProvider
 
 			InstitutionEntity inst = (InstitutionEntity) WebContext.getAttribute(WebConstants.CURRENT_INST);
 
-			if (dreamLoginProperties.isCaptcha()) {
+			if (dreamLoginProperties.getCaptcha().isEnabled()) {
 				captchaValid(loginCredential.getState(), loginCredential.getCaptcha());
 
 			} else if (!inst.getCaptcha().equalsIgnoreCase("NONE")) {

@@ -18,16 +18,16 @@ public class JdbcRemeberMeManager extends AbstractRemeberMeManager {
 	private static final Logger _logger = LoggerFactory.getLogger(JdbcRemeberMeManager.class);
 
 	private static final String DEFAULT_DEFAULT_INSERT_STATEMENT =
-			"insert into  mxk_remember_me(id, userid,username,lastlogintime,expirationtime)values( ? , ? , ? , ? , ?)";
+			"insert into  auth_remember_me(id, userid,username,lastlogintime,expirationtime)values( ? , ? , ? , ? , ?)";
 
 	private static final String DEFAULT_DEFAULT_SELECT_STATEMENT =
-			"select id, userid,username,lastlogintime,expirationtime  from mxk_remember_me "
+			"select id, userid,username,lastlogintime,expirationtime  from auth_remember_me "
 					+ " where id = ?  and username = ?";
 
-	private static final String DEFAULT_DEFAULT_DELETE_STATEMENT = "delete from  mxk_remember_me where  username = ?";
+	private static final String DEFAULT_DEFAULT_DELETE_STATEMENT = "delete from  auth_remember_me where  username = ?";
 
 	private static final String DEFAULT_DEFAULT_UPDATE_STATEMENT =
-			"update mxk_remember_me  set  lastlogintime = ? , expirationtime = ?  where id = ?";
+			"update auth_remember_me  set  lastlogintime = ? , expirationtime = ?  where id = ?";
 
 	private final JdbcTemplate jdbcTemplate;
 

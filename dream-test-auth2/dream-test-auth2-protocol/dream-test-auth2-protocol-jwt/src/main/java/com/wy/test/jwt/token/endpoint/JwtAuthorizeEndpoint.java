@@ -82,7 +82,7 @@ public class JwtAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 	}
 
 	@Operation(summary = "JWT JWK元数据接口", description = "参数mxk_metadata_APPID", method = "GET")
-	@RequestMapping(value = "/metadata/jwt/" + WebConstants.MXK_METADATA_PREFIX + "{appid}.{mediaType}",
+	@RequestMapping(value = "/metadata/jwt/" + WebConstants.DREAM_METADATA_PREFIX + "{appid}.{mediaType}",
 			method = { RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody
 	public String metadata(HttpServletRequest request, HttpServletResponse response,

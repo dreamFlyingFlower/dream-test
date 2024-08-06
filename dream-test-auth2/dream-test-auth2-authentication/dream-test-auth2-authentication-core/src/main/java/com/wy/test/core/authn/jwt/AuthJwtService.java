@@ -4,8 +4,6 @@ import java.text.ParseException;
 import java.util.Date;
 
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 
 import com.nimbusds.jose.JWSAlgorithm;
@@ -18,10 +16,10 @@ import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.framework.web.crypto.jwt.HMAC512Service;
 import dream.flying.flower.lang.StrHelper;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class AuthJwtService {
-
-	private static final Logger _logger = LoggerFactory.getLogger(AuthJwtService.class);
 
 	HMAC512Service hmac512Service;
 
@@ -37,12 +35,12 @@ public class AuthJwtService {
 		DateTime currentDateTime = DateTime.now();
 		String subject = principal.getUsername();
 		Date expirationTime = currentDateTime.plusSeconds(expires).toDate();
-		_logger.trace("jwt subject : {} , expiration Time : {}", subject, expirationTime);
+		log.trace("jwt subject : {} , expiration Time : {}", subject, expirationTime);
 
 		JWTClaimsSet jwtClaims = new JWTClaimsSet.Builder().issuer(issuer).subject(subject)
 				.jwtID(principal.getSession().getId()).issueTime(currentDateTime.toDate())
 				.expirationTime(expirationTime).claim("locale", userInfo.getLocale())
-				.claim("kid", HMAC512Service.MXK_AUTH_JWK).claim("institution", userInfo.getInstId()).build();
+				.claim("kid", HMAC512Service.DREAM_AUTH_JWK).claim("institution", userInfo.getInstId()).build();
 
 		return signedJWT(jwtClaims);
 	}
@@ -56,7 +54,7 @@ public class AuthJwtService {
 	public String genJwt(String subject, String issuer, int expires) {
 		DateTime currentDateTime = DateTime.now();
 		Date expirationTime = currentDateTime.plusSeconds(expires).toDate();
-		_logger.trace("jwt subject : {} , expiration Time : {}", subject, expirationTime);
+		log.trace("jwt subject : {} , expiration Time : {}", subject, expirationTime);
 
 		JWTClaimsSet jwtClaims = new JWTClaimsSet.Builder().issuer(issuer).subject(subject).jwtID(WebContext.genId())
 				.issueTime(currentDateTime.toDate()).expirationTime(expirationTime).build();
@@ -71,7 +69,7 @@ public class AuthJwtService {
 	 */
 	public String genRandomJwt(int expires) {
 		Date expirationTime = DateTime.now().plusSeconds(expires).toDate();
-		_logger.trace("expiration Time : {}", expirationTime);
+		log.trace("expiration Time : {}", expirationTime);
 
 		JWTClaimsSet jwtClaims =
 				new JWTClaimsSet.Builder().jwtID(WebContext.genId()).expirationTime(expirationTime).build();
@@ -80,7 +78,7 @@ public class AuthJwtService {
 	}
 
 	public String signedJWT(JWTClaimsSet jwtClaims) {
-		_logger.trace("jwt Claims : {}", jwtClaims);
+		log.trace("jwt Claims : {}", jwtClaims);
 		SignedJWT jwtToken = new SignedJWT(new JWSHeader(JWSAlgorithm.HS512), jwtClaims);
 		return hmac512Service.sign(jwtToken.getPayload());
 	}
@@ -97,24 +95,24 @@ public class AuthJwtService {
 				JWTClaimsSet claims = resolve(authToken);
 				boolean isExpiration = claims.getExpirationTime().after(DateTime.now().toDate());
 				boolean isVerify = hmac512Service.verify(authToken);
-				_logger.debug("JWT Validate {} ", isVerify && isExpiration);
+				log.debug("JWT Validate {} ", isVerify && isExpiration);
 
 				if (!(isVerify && isExpiration)) {
-					_logger.debug("HMAC Verify {} , now {} , ExpirationTime {} , is not Expiration : {}", isVerify,
+					log.debug("HMAC Verify {} , now {} , ExpirationTime {} , is not Expiration : {}", isVerify,
 							DateTime.now().toDate(), claims.getExpirationTime(), isExpiration);
 				}
 				return isVerify && isExpiration;
 			}
 		} catch (ParseException e) {
-			_logger.error("authToken {}", authToken);
-			_logger.error("ParseException ", e);
+			log.error("authToken {}", authToken);
+			log.error("ParseException ", e);
 		}
 		return false;
 	}
 
 	public JWTClaimsSet resolve(String authToken) throws ParseException {
 		SignedJWT signedJWT = SignedJWT.parse(authToken);
-		_logger.trace("jwt Claims : {}", signedJWT.getJWTClaimsSet());
+		log.trace("jwt Claims : {}", signedJWT.getJWTClaimsSet());
 		return signedJWT.getJWTClaimsSet();
 	}
 

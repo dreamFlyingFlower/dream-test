@@ -22,9 +22,9 @@ import dream.flying.flower.framework.mybatis.plus.mapper.BaseMappers;
 @Mapper
 public interface AppMapper extends BaseMappers<AppEntity, AppVO, AppQuery> {
 
-	int insertApp(AppEntity app);
+	int insertApp(AppVO app);
 
-	int updateApp(AppEntity app);
+	int updateApp(AppVO app);
 
 	@Update("update auth_app set extendattr=#{extendAttr} where id = #{id}")
 	int updateExtendAttr(AppEntity app);

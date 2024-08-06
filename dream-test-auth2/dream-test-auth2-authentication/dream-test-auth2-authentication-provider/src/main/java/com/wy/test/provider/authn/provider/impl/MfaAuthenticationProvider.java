@@ -100,7 +100,7 @@ public class MfaAuthenticationProvider extends AbstractAuthenticationProvider {
 	 */
 	protected void mfacaptchaValid(String otpCaptcha, UserVO userInfo) {
 		// for one time password 2 factor
-		if (dreamLoginProperties.isMfa()) {
+		if (dreamLoginProperties.getMfa().isEnabled()) {
 			UserEntity validUserInfo = new UserEntity();
 			validUserInfo.setUsername(userInfo.getUsername());
 			validUserInfo.setSharedSecret(userInfo.getSharedSecret());

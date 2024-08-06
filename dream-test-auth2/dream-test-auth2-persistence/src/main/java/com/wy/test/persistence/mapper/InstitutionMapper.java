@@ -20,6 +20,6 @@ import dream.flying.flower.framework.mybatis.plus.mapper.BaseMappers;
 @Mapper
 public interface InstitutionMapper extends BaseMappers<InstitutionEntity, InstitutionVO, InstitutionQuery> {
 
-	@Select("select * from  mxk_institutions where domain = #{value} and status = " + ConstStatus.ACTIVE)
+	@Select("select * from  auth_institution where domain = #{value} and status = " + ConstStatus.ACTIVE)
 	InstitutionEntity findByDomain(String domain);
 }

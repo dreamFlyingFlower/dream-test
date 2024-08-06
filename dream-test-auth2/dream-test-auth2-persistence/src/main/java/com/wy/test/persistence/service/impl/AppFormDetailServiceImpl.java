@@ -26,12 +26,12 @@ import dream.flying.flower.framework.mybatis.plus.service.impl.AbstractServiceIm
 public class AppFormDetailServiceImpl extends AbstractServiceImpl<AppFormDetailEntity, AppFormDetailVO,
 		AppFormDetailQuery, AppFormDetailConvert, AppFormDetailMapper> implements AppFormDetailService {
 
-	protected final static Cache<String, AppFormDetailEntity> detailsCache =
+	protected final static Cache<String, AppFormDetailVO> detailsCache =
 			Caffeine.newBuilder().expireAfterWrite(30, TimeUnit.MINUTES).maximumSize(200000).build();
 
 	@Override
-	public AppFormDetailEntity getAppDetails(String id, boolean cached) {
-		AppFormDetailEntity details = null;
+	public AppFormDetailVO getAppDetails(String id, boolean cached) {
+		AppFormDetailVO details = null;
 		if (cached) {
 			details = detailsCache.getIfPresent(id);
 			if (details == null) {

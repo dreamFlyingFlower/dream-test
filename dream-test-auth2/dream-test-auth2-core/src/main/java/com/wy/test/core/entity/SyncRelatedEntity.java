@@ -2,7 +2,7 @@ package com.wy.test.core.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 
-import dream.flying.flower.framework.mybatis.plus.entity.AbstractEntity;
+import dream.flying.flower.framework.mybatis.plus.entity.AbstractStringEntity;
 import dream.flying.flower.helper.DateTimeHelper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,7 +25,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("auth_sync_related")
-public class SyncRelatedEntity extends AbstractEntity {
+public class SyncRelatedEntity extends AbstractStringEntity {
 
 	private static final long serialVersionUID = 1L;
 

@@ -1,0 +1,26 @@
+dream:
+  auth:
+    otp:
+        sms:
+            aliyun:
+                accesskeyid: 94395d754eb55693043f5d6a2b772ef4
+                accesssecret: 05d5485357bc
+                templatecode: 14860095
+                signname: dream
+            yunxin:
+                appkey: 94395d754eb55693043f5d6a2b772ef4
+                appsecret: 05d5485357bc
+                templateid: 14860095
+            tencentcloud:
+                secretid: 94395d754eb55693043f5d6a2b772ef4
+                secretkey: 05d5485357bc
+                smssdkappid: 1486220095
+                templateid: 14860095
+                sign: 1486009522
+        keyuri:
+            format:
+                type:totp
+                digits:6
+                issuer:dream
+                domain:${dream.server.domain}
+                period:30

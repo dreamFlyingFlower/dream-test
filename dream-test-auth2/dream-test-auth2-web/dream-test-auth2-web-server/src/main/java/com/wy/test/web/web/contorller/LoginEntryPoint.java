@@ -106,7 +106,7 @@ public class LoginEntryPoint {
 		HashMap<String, Object> model = new HashMap<String, Object>();
 		model.put("isRemeberMe", dreamLoginProperties.isRememberMe());
 		model.put("isKerberos", dreamLoginProperties.getKerberos().isEnabled());
-		if (dreamLoginProperties.isMfa()) {
+		if (dreamLoginProperties.getMfa().isEnabled()) {
 			model.put("otpType", tfaOtpAuthn.getOtpType());
 			model.put("otpInterval", tfaOtpAuthn.getInterval());
 		}
@@ -117,7 +117,7 @@ public class LoginEntryPoint {
 
 		InstitutionEntity inst = (InstitutionEntity) WebContext.getAttribute(WebConstants.CURRENT_INST);
 		model.put("inst", inst);
-		if (dreamLoginProperties.isCaptcha()) {
+		if (dreamLoginProperties.getCaptcha().isEnabled()) {
 			model.put("captcha", "true");
 		} else {
 			model.put("captcha", inst.getCaptcha());

@@ -60,7 +60,7 @@ public class SamlMetadataEndpoint {
 	private Credential signingCredential;
 
 	@Operation(summary = "SAML 2.0 元数据接口", description = "参数mxk_metadata_APPID", method = "GET")
-	@RequestMapping(value = "/" + WebConstants.MXK_METADATA_PREFIX + "{appid}.xml", produces = "application/xml",
+	@RequestMapping(value = "/" + WebConstants.DREAM_METADATA_PREFIX + "{appid}.xml", produces = "application/xml",
 			method = { RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody
 	public String metadata(HttpServletRequest request, HttpServletResponse response,
@@ -112,7 +112,7 @@ public class SamlMetadataEndpoint {
 
 			descriptor.getManageNameIDServices()
 					.add(metadataGenerator.getManageNameIDService(WebContext.getContextPath(true) + "/metadata/saml20/"
-							+ WebConstants.MXK_METADATA_PREFIX + appId + ".xml"));
+							+ WebConstants.DREAM_METADATA_PREFIX + appId + ".xml"));
 
 			descriptor.getKeyDescriptors().add(metadataGenerator.generateEncryptionKeyDescriptor(signingCredential));
 

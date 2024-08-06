@@ -29,4 +29,8 @@ public interface RoleMemberService extends BaseServices<RoleMemberEntity, RoleMe
 	List<UserEntity> queryMemberByRoleId(String groupId);
 
 	Page<RoleEntity> rolesNoMember(RoleMemberQuery query);
+
+	List<RoleMemberEntity> memberInRole(RoleMemberQuery query);
+
+	List<RoleMemberEntity> memberNotInRole(RoleMemberQuery query);
 }

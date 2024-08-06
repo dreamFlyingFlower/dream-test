@@ -18,15 +18,6 @@ import lombok.Data;
 public class DreamAuthLoginProperties {
 
 	/**
-	 * 是否启动验证码
-	 */
-	private boolean captcha;
-
-	private boolean mfa;
-
-	private String mfaType;
-
-	/**
 	 * 是否启动记住我
 	 */
 	private boolean rememberMe;
@@ -37,11 +28,31 @@ public class DreamAuthLoginProperties {
 
 	private boolean basicEnabled = false;
 
+	private Captcha captcha = new Captcha();
+
+	private Mfa mfa = new Mfa();
+
 	private HttpHeader httpHeader = new HttpHeader();
 
 	private Kerberos kerberos = new Kerberos();
 
 	private Jwt jwt = new Jwt();
+
+	@Data
+	public static class Captcha {
+
+		private boolean enabled;
+
+		private String type;
+	}
+
+	@Data
+	public static class Mfa {
+
+		private boolean enabled;
+
+		private String type;
+	}
 
 	@Data
 	public static class HttpHeader {

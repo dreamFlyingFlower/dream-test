@@ -101,7 +101,7 @@ public class MobileAuthenticationProvider extends AbstractAuthenticationProvider
 	 */
 	protected void mobileCaptchaValid(String password, UserVO userInfo) {
 		// for mobile password
-		if (dreamLoginProperties.isMfa()) {
+		if (dreamLoginProperties.getMfa().isEnabled()) {
 			UserEntity validUserInfo = new UserEntity();
 			validUserInfo.setUsername(userInfo.getUsername());
 			validUserInfo.setId(userInfo.getId());

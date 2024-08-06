@@ -2,7 +2,7 @@ package com.wy.test.social.zhyd.request;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.wy.test.social.zhyd.config.AuthMxkDefaultSource;
+import com.wy.test.social.zhyd.config.AuthDefaultSource;
 import com.xkcoding.http.support.HttpHeader;
 
 import dream.flying.flower.lang.StrHelper;
@@ -34,11 +34,11 @@ import me.zhyd.oauth.utils.UrlBuilder;
 public class AuthFeishu2Request extends AuthDefaultRequest {
 
 	public AuthFeishu2Request(AuthConfig config) {
-		super(config, AuthMxkDefaultSource.FEISHU2);
+		super(config, AuthDefaultSource.FEISHU2);
 	}
 
 	public AuthFeishu2Request(AuthConfig config, AuthStateCache authStateCache) {
-		super(config, AuthMxkDefaultSource.FEISHU2, authStateCache);
+		super(config, AuthDefaultSource.FEISHU2, authStateCache);
 	}
 
 	/**

@@ -2,7 +2,7 @@ package com.wy.test.core.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 
-import dream.flying.flower.framework.mybatis.plus.entity.AbstractEntity;
+import dream.flying.flower.framework.mybatis.plus.entity.AbstractStringEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +22,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @TableName("auth_app_extend_detail")
-public class AppExtendDetailEntity extends AbstractEntity {
+public class AppExtendDetailEntity extends AbstractStringEntity {
 
 	private static final long serialVersionUID = 2839361625399070453L;
 

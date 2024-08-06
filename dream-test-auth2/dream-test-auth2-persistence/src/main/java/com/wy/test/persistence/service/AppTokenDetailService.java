@@ -16,5 +16,5 @@ import dream.flying.flower.framework.mybatis.plus.service.BaseServices;
 public interface AppTokenDetailService
 		extends BaseServices<AppTokenDetailEntity, AppTokenDetailVO, AppTokenDetailQuery> {
 
-	AppTokenDetailEntity getAppDetails(String id, boolean cached);
+	AppTokenDetailVO getAppDetails(String id, boolean cached);
 }

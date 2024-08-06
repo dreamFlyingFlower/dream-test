@@ -38,7 +38,7 @@ public class OauthJwksEndpoint extends AbstractEndpoint {
 	}
 
 	@Operation(summary = "OAuth JWk 元数据接口", description = "参数mxk_metadata_APPID", method = "GET")
-	@RequestMapping(value = "/metadata/oauth/v20/" + WebConstants.MXK_METADATA_PREFIX + "{appid}.{mediaType}",
+	@RequestMapping(value = "/metadata/oauth/v20/" + WebConstants.DREAM_METADATA_PREFIX + "{appid}.{mediaType}",
 			method = { RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody
 	public String metadata(HttpServletRequest request, HttpServletResponse response,

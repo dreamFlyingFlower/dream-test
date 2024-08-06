@@ -26,12 +26,12 @@ import dream.flying.flower.framework.mybatis.plus.service.impl.AbstractServiceIm
 public class AppTokenDetailServiceImpl extends AbstractServiceImpl<AppTokenDetailEntity, AppTokenDetailVO,
 		AppTokenDetailQuery, AppTokenDetailConvert, AppTokenDetailMapper> implements AppTokenDetailService {
 
-	protected final static Cache<String, AppTokenDetailEntity> detailsCache =
+	protected final static Cache<String, AppTokenDetailVO> detailsCache =
 			Caffeine.newBuilder().expireAfterWrite(30, TimeUnit.MINUTES).maximumSize(200000).build();
 
 	@Override
-	public AppTokenDetailEntity getAppDetails(String id, boolean cached) {
-		AppTokenDetailEntity details = null;
+	public AppTokenDetailVO getAppDetails(String id, boolean cached) {
+		AppTokenDetailVO details = null;
 		if (cached) {
 			details = detailsCache.getIfPresent(id);
 			if (details == null) {

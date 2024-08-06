@@ -21,22 +21,22 @@ public class JdbcSocialsAssociateService implements SocialsAssociateService {
 	private static final Logger _logger = LoggerFactory.getLogger(JdbcSocialsAssociateService.class);
 
 	private static final String DEFAULT_DEFAULT_INSERT_STATEMENT =
-			"insert into  mxk_socials_associate(id, userid , username , provider , socialuserid , accesstoken , socialuserinfo , exattribute , instid)values( ? , ? , ? , ? , ?, ? , ? , ?, ?)";
+			"insert into  auth_social_associate(id, userid , username , provider , socialuserid , accesstoken , socialuserinfo , exattribute , instid)values( ? , ? , ? , ? , ?, ? , ? , ?, ?)";
 
 	private static final String DEFAULT_DEFAULT_INSERT_STATEMENT_ORACLE =
-			"insert into  mxk_socials_associate(id, userid , username , provider , socialuserid , accesstoken , socialuserinfo , exattribute , instid)values( ? , ? , ? , ? , ?, ? , ? , ?, ?)";
+			"insert into  auth_social_associate(id, userid , username , provider , socialuserid , accesstoken , socialuserinfo , exattribute , instid)values( ? , ? , ? , ? , ?, ? , ? , ?, ?)";
 
 	private static final String DEFAULT_DEFAULT_SIGNON_SELECT_STATEMENT =
-			"select id, userid , username , provider , socialuserid , accesstoken , socialuserinfo , exattribute , createddate , updateddate , instid from mxk_socials_associate where provider = ?  and socialuserid = ? and instId = ?";
+			"select id, userid , username , provider , socialuserid , accesstoken , socialuserinfo , exattribute , createddate , updateddate , instid from auth_social_associate where provider = ?  and socialuserid = ? and instId = ?";
 
 	private static final String DEFAULT_DEFAULT_BIND_SELECT_STATEMENT =
-			"select id, userid , username , provider , socialuserid , accesstoken , socialuserinfo , exattribute , createddate , updateddate , instid from mxk_socials_associate where userid = ?";
+			"select id, userid , username , provider , socialuserid , accesstoken , socialuserinfo , exattribute , createddate , updateddate , instid from auth_social_associate where userid = ?";
 
 	private static final String DEFAULT_DEFAULT_DELETE_STATEMENT =
-			"delete from  mxk_socials_associate where  userid = ? and provider = ?";
+			"delete from  auth_social_associate where  userid = ? and provider = ?";
 
 	private static final String DEFAULT_DEFAULT_UPDATE_STATEMENT =
-			"update mxk_socials_associate  set accesstoken  = ? , socialuserinfo = ? , exattribute = ? ,updateddate = ?  where id = ?";
+			"update auth_social_associate  set accesstoken  = ? , socialuserinfo = ? , exattribute = ? ,updateddate = ?  where id = ?";
 
 	private final JdbcTemplate jdbcTemplate;
 

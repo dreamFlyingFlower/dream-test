@@ -57,7 +57,7 @@ public class SocialSignOnProviderService {
 	private static Logger _logger = LoggerFactory.getLogger(SocialSignOnProviderService.class);
 
 	private static final String DEFAULT_SELECT_STATEMENT =
-			"select * from mxk_socials_provider where instid = ? and status = 1  order by sortindex";
+			"select * from auth_social_provider where instid = ? and status = 1  order by sortindex";
 
 	protected static final Cache<String, SocialsProviderLogin> socialsProviderLoginStore =
 			Caffeine.newBuilder().expireAfterWrite(ConstTimeInterval.ONE_HOUR, TimeUnit.MINUTES).build();

@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,40 +20,40 @@ import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.UserVO;
 
 import dream.flying.flower.lang.StrHelper;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class LoginRepository {
 
-	private static Logger _logger = LoggerFactory.getLogger(LoginRepository.class);
-
 	private static final String LOCK_USER_UPDATE_STATEMENT =
-			"update mxk_userinfo set islocked = ?  , unlocktime = ? where id = ?";
+			"update auth_user set islocked = ?  , unlocktime = ? where id = ?";
 
 	private static final String UNLOCK_USER_UPDATE_STATEMENT =
-			"update mxk_userinfo set islocked = ? , unlocktime = ? where id = ?";
+			"update auth_user set islocked = ? , unlocktime = ? where id = ?";
 
 	private static final String BADPASSWORDCOUNT_UPDATE_STATEMENT =
-			"update mxk_userinfo set badpasswordcount = ? , badpasswordtime = ?  where id = ?";
+			"update auth_user set badpasswordcount = ? , badpasswordtime = ?  where id = ?";
 
 	private static final String BADPASSWORDCOUNT_RESET_UPDATE_STATEMENT =
-			"update mxk_userinfo set badpasswordcount = ? , islocked = ? ,unlocktime = ?  where id = ?";
+			"update auth_user set badpasswordcount = ? , islocked = ? ,unlocktime = ?  where id = ?";
 
 	private static final String LOGIN_USERINFO_UPDATE_STATEMENT =
-			"update mxk_userinfo set lastlogintime = ?  , lastloginip = ? , logincount = ?, online = "
+			"update auth_user set lastlogintime = ?  , lastloginip = ? , logincount = ?, online = "
 					+ UserEntity.ONLINE.ONLINE + "  where id = ?";
 
 	private static final String ROLES_SELECT_STATEMENT =
-			"select distinct r.id,r.rolecode,r.rolename from mxk_userinfo u,mxk_roles r,mxk_role_member rm where u.id = ?  and u.id=rm.memberid and rm.roleid=r.id ";
+			"select distinct r.id,r.rolecode,r.rolename from auth_user u,auth_role r,auth_role_member rm where u.id = ?  and u.id=rm.memberid and rm.roleid=r.id ";
 
-	private static final String DEFAULT_USERINFO_SELECT_STATEMENT = "select * from  mxk_userinfo where username = ? ";
+	private static final String DEFAULT_USERINFO_SELECT_STATEMENT = "select * from  auth_user where username = ? ";
 
 	private static final String DEFAULT_USERINFO_SELECT_STATEMENT_USERNAME_MOBILE =
-			"select * from  mxk_userinfo where (username = ? or mobile = ?)";
+			"select * from  auth_user where (username = ? or mobile = ?)";
 
 	private static final String DEFAULT_USERINFO_SELECT_STATEMENT_USERNAME_MOBILE_EMAIL =
-			"select * from  mxk_userinfo where (username = ? or mobile = ? or email = ?) ";
+			"select * from  auth_user where (username = ? or mobile = ? or email = ?) ";
 
 	private static final String DEFAULT_MYAPPS_SELECT_STATEMENT =
-			"select distinct app.id,app.appname from mxk_apps app,mxk_role_permissions pm,mxk_roles r  where app.id=pm.appid and app.status =	1 and pm.roleid=r.id and r.id in(%s)";
+			"select distinct app.id,app.appname from auth_app app,auth_role_permission pm,auth_role r  where app.id=pm.appid and app.status =	1 and pm.roleid=r.id and r.id in(%s)";
 
 	protected JdbcTemplate jdbcTemplate;
 
@@ -86,7 +84,7 @@ public class LoginRepository {
 		if (listUserInfo != null && listUserInfo.size() > 0) {
 			userInfo = UserConvert.INSTANCE.convertt(listUserInfo.get(0));
 		}
-		_logger.debug("load UserInfo : " + userInfo);
+		log.debug("load UserInfo : " + userInfo);
 		return userInfo;
 	}
 
@@ -118,7 +116,7 @@ public class LoginRepository {
 				userInfo.setIsLocked(ConstStatus.LOCK);
 			}
 		} catch (Exception e) {
-			_logger.error("lockUser Exception", e);
+			log.error("lockUser Exception", e);
 		}
 	}
 
@@ -136,7 +134,7 @@ public class LoginRepository {
 				userInfo.setIsLocked(ConstStatus.ACTIVE);
 			}
 		} catch (Exception e) {
-			_logger.error("unlockUser Exception", e);
+			log.error("unlockUser Exception", e);
 		}
 	}
 
@@ -154,7 +152,7 @@ public class LoginRepository {
 				userInfo.setIsLocked(ConstStatus.ACTIVE);
 			}
 		} catch (Exception e) {
-			_logger.error("resetBadPasswordCountAndLockout Exception", e);
+			log.error("resetBadPasswordCountAndLockout Exception", e);
 		}
 	}
 
@@ -174,7 +172,7 @@ public class LoginRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			_logger.error(e.getMessage());
+			log.error(e.getMessage());
 		}
 	}
 
@@ -194,7 +192,7 @@ public class LoginRepository {
 					}
 				});
 
-		_logger.debug("list Authorized Apps  " + listAuthorizedApps);
+		log.debug("list Authorized Apps  " + listAuthorizedApps);
 		return listAuthorizedApps;
 	}
 
@@ -210,7 +208,7 @@ public class LoginRepository {
 			}
 		}, userInfo.getId());
 
-		_logger.debug("list Roles  " + listRoles);
+		log.debug("list Roles  " + listRoles);
 		return listRoles;
 	}
 
@@ -236,7 +234,7 @@ public class LoginRepository {
 				grantedAuthority.add(new SimpleGrantedAuthority(role.getRoleCode()));
 			}
 		}
-		_logger.debug("Authority : " + grantedAuthority);
+		log.debug("Authority : " + grantedAuthority);
 
 		return grantedAuthority;
 	}

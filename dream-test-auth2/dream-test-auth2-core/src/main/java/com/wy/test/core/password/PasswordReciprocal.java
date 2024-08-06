@@ -1,17 +1,19 @@
 package com.wy.test.core.password;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
 
 /**
- * PasswordReciprocal.
+ * PasswordReciprocal
  * 
  * @author 飞花梦影
  * @date 2024-07-14 21:37:28
  * @git {@link https://github.com/dreamFlyingFlower}
  */
+@Configuration
 public class PasswordReciprocal implements PasswordEncoder {
 
 	public static int PREFFIX_LENGTH = 7;
