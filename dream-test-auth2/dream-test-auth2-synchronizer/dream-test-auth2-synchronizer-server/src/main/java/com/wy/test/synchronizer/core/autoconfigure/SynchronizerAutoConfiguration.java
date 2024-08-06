@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SynchronizerAutoConfiguration implements InitializingBean {
 
-	public static final String SYNCHRONIZERS_SELECT_STATEMENT = "select * from mxk_synchronizers where status ='1'";
+	public static final String SYNCHRONIZERS_SELECT_STATEMENT = "select * from auth_sync where status ='1'";
 
 	@Bean(name = "schedulerSynchronizerJobs")
 	String schedulerSynchronizerJobs(JdbcTemplate jdbcTemplate, SchedulerFactoryBean schedulerFactoryBean,

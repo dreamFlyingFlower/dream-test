@@ -48,7 +48,7 @@ public class PasswordPolicyRepository {
 
 	private static final String PASSWORD_POLICY_KEY = "PASSWORD_POLICY_KEY";
 
-	private static final String PASSWORD_POLICY_SELECT_STATEMENT = "select * from mxk_password_policy ";
+	private static final String PASSWORD_POLICY_SELECT_STATEMENT = "select * from auth_password_policy ";
 
 	public PasswordPolicyRepository(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;

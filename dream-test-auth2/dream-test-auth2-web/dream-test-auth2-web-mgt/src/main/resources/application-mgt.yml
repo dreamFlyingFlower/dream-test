@@ -25,8 +25,10 @@ dream:
       secret: 7heM-14BtxjyKPuH3ITIm7q2-ps5MuBirWCsrrdbzzSAOuSPrbQYiaJ54AeA0uH2XdkYy3hHAkTFIsieGkyqxOJZ_dQzrCbaYISH9rhUZAKYx8tUY0wkE4ArOC6LqHDJarR6UIcMsARakK9U4dhoOPO1cj74XytemI-w6ACYfzRUn_Rn4e-CQMcnD1C56oNEukwalf06xVgXl41h6K8IBEzLVod58y_VfvFn-NGWpNG0fy_Qxng6dg8Dgva2DobvzMN2eejHGLGB-x809MvC4zbG7CKNVlcrzMYDt2Gt2sOVDrt2l9YqJNfgaLFjrOEVw5cuXemGkX1MvHj6TAsbLg
       refresh-secret: 7heM-14BtxjyKPuH3ITIm7q2-ps5MuBirWCsrrdbzzSAOuSPrbQYiaJ54AeA0uH2XdkYy3hHAkTFIsieGkyqxOJZ_dQzrCbaYISH9rhUZAKYx8tUY0wkE4ArOC6LqHDJarR6UIcMsARakK9U4dhoOPO1cj74XytemI-w6ACYfzRUn_Rn4e-CQMcnD1C56oNEukwalf06xVgXl41h6K8IBEzLVod58y_VfvFn-NGWpNG0fy_Qxng6dg8Dgva2DobvzMN2eejHGLGB-x809MvC4zbG7CKNVlcrzMYDt2Gt2sOVDrt2l9YqJNfgaLFjrOEVw5cuXemGkX1MvHj6TAsbLg
     login:
-      captcha: ${LOGIN_CAPTCHA:true}
-      mfa: false
+      captcha: 
+        enabled: ${LOGIN_CAPTCHA:true}
+      mfa: 
+        enabled: false
       ws-federation: false
       remember-me: false
       remember-me-validity: 0
@@ -177,7 +179,7 @@ spring:
 mybatis:
     dialect: mysql
     type-aliases-package: org.dream.entity,org.dream.entity.apps,
-    mapper-locations: classpath*:/org/dream/persistence/mapper/xml/${mybatis.dialect}/*.xml
+    mapper-locations: classpath*:mapper/*.xml
     table-column-snowflake-datacenter-id: 1
     table-column-snowflake-machine-id: 1
     table-column-escape: false

@@ -81,7 +81,7 @@ public class JwtAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 		return adapter.authorize(modelAndView);
 	}
 
-	@Operation(summary = "JWT JWK元数据接口", description = "参数mxk_metadata_APPID", method = "GET")
+	@Operation(summary = "JWT JWK元数据接口", description = "参数auth_metadata_APPID", method = "GET")
 	@RequestMapping(value = "/metadata/jwt/" + WebConstants.DREAM_METADATA_PREFIX + "{appid}.{mediaType}",
 			method = { RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody

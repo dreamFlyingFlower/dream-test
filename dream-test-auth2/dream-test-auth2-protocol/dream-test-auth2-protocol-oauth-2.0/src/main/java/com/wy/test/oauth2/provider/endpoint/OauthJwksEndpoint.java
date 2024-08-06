@@ -28,7 +28,7 @@ public class OauthJwksEndpoint extends AbstractEndpoint {
 
 	final static Logger _logger = LoggerFactory.getLogger(OauthJwksEndpoint.class);
 
-	@Operation(summary = "OAuth JWk 元数据接口", description = "参数mxk_metadata_APPID", method = "GET")
+	@Operation(summary = "OAuth JWk 元数据接口", description = "参数auth_metadata_APPID", method = "GET")
 	@RequestMapping(value = OAuth2Constants.ENDPOINT.ENDPOINT_BASE + "/jwks",
 			method = { RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody
@@ -37,7 +37,7 @@ public class OauthJwksEndpoint extends AbstractEndpoint {
 		return metadata(request, response, client_id, null);
 	}
 
-	@Operation(summary = "OAuth JWk 元数据接口", description = "参数mxk_metadata_APPID", method = "GET")
+	@Operation(summary = "OAuth JWk 元数据接口", description = "参数auth_metadata_APPID", method = "GET")
 	@RequestMapping(value = "/metadata/oauth/v20/" + WebConstants.DREAM_METADATA_PREFIX + "{appid}.{mediaType}",
 			method = { RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody

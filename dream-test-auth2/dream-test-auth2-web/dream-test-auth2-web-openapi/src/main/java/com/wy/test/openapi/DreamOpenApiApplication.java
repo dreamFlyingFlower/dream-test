@@ -16,12 +16,12 @@ import org.springframework.context.annotation.ComponentScan;
 
 import com.wy.test.core.web.InitializeContext;
 
-@ComponentScan(basePackages = { "org.dream.authn", "org.dream.configuration", "org.dream.entity",
-		"org.dream.entity.apps", "org.dream.entity.userinfo", "org.dream.web.apis.identity.kafka",
-		"org.dream.web.apis.identity.rest", "org.dream.web.apis.identity.scim", "org.dream.persistence",
-		"org.dream.provision", "org.dream.web", "org.dream.web.api.endpoint", "org.dream.web.contorller",
-		"org.dream.web.endpoint", "org.dream.web.interceptor", })
-@MapperScan("org.dream.persistence.mapper,")
+@ComponentScan(basePackages = { "com.wy.test.authn", "com.wy.test.configuration", "com.wy.test.entity",
+		"com.wy.test.entity.apps", "com.wy.test.entity.userinfo", "com.wy.test.web.apis.identity.kafka",
+		"com.wy.test.web.apis.identity.rest", "com.wy.test.web.apis.identity.scim", "com.wy.test.persistence",
+		"com.wy.test.provision", "org.dream.web", "com.wy.test.web.api.endpoint", "com.wy.test.web.contorller",
+		"com.wy.test.web.endpoint", "com.wy.test.web.interceptor", })
+@MapperScan("com.wy.test.persistence.mapper,")
 @SpringBootApplication
 public class DreamOpenApiApplication extends SpringBootServletInitializer {
 

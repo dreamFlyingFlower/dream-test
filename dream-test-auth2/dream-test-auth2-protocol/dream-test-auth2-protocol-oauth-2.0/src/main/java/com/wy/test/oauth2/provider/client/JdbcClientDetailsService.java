@@ -56,23 +56,23 @@ public class JdbcClientDetailsService implements ClientDetailsService, ClientReg
 	private static final String CLIENT_FIELDS = "client_secret, " + CLIENT_FIELDS_FOR_UPDATE;
 
 	private static final String BASE_FIND_STATEMENT =
-			"select client_id, " + CLIENT_FIELDS + " from mxk_apps_oauth_client_details";
+			"select client_id, " + CLIENT_FIELDS + " from auth_app_oauth_client_detail";
 
 	private static final String DEFAULT_FIND_STATEMENT = BASE_FIND_STATEMENT + " order by client_id";
 
 	private static final String DEFAULT_SELECT_STATEMENT = BASE_FIND_STATEMENT + " where client_id = ?";
 
-	private static final String DEFAULT_INSERT_STATEMENT = "insert into mxk_apps_oauth_client_details (" + CLIENT_FIELDS
+	private static final String DEFAULT_INSERT_STATEMENT = "insert into auth_app_oauth_client_detail (" + CLIENT_FIELDS
 			+ ", client_id) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-	private static final String DEFAULT_UPDATE_STATEMENT = "update mxk_apps_oauth_client_details " + "set "
+	private static final String DEFAULT_UPDATE_STATEMENT = "update auth_app_oauth_client_detail " + "set "
 			+ CLIENT_FIELDS_FOR_UPDATE.replaceAll(", ", "=?, ") + "=? where client_id = ?";
 
 	private static final String DEFAULT_UPDATE_SECRET_STATEMENT =
-			"update mxk_apps_oauth_client_details " + "set client_secret = ? where client_id = ?";
+			"update auth_app_oauth_client_detail " + "set client_secret = ? where client_id = ?";
 
 	private static final String DEFAULT_DELETE_STATEMENT =
-			"delete from mxk_apps_oauth_client_details where client_id = ?";
+			"delete from auth_app_oauth_client_detail where client_id = ?";
 
 	private RowMapper<ClientDetails> rowMapper = new ClientDetailsRowMapper();
 

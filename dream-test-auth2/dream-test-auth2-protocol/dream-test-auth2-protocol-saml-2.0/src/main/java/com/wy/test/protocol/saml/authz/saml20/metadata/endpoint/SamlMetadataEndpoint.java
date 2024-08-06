@@ -59,7 +59,7 @@ public class SamlMetadataEndpoint {
 
 	private Credential signingCredential;
 
-	@Operation(summary = "SAML 2.0 元数据接口", description = "参数mxk_metadata_APPID", method = "GET")
+	@Operation(summary = "SAML 2.0 元数据接口", description = "参数auth_metadata_APPID", method = "GET")
 	@RequestMapping(value = "/" + WebConstants.DREAM_METADATA_PREFIX + "{appid}.xml", produces = "application/xml",
 			method = { RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody
