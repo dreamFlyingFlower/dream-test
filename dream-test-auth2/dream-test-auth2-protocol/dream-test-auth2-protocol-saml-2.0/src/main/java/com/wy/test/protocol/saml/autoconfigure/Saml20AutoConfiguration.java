@@ -18,8 +18,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.wy.test.core.entity.Saml20Metadata;
-import com.wy.test.core.properties.DreamAuthSamlIdpProperties;
-import com.wy.test.core.properties.DreamAuthSamlIssueProperties;
 import com.wy.test.core.properties.DreamAuthSamlProperties;
 import com.wy.test.protocol.saml.authz.saml.common.EndpointGenerator;
 import com.wy.test.protocol.saml.authz.saml.service.IDService;
@@ -111,10 +109,10 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 */
 	@Bean(name = "authnResponseGenerator")
 	AuthnResponseGenerator authnResponseGenerator(TimeService timeService, IDService idService,
-			DreamAuthSamlIdpProperties dreamAuthSamlIdpProperties) {
-		log.debug("issuerEntityName " + dreamAuthSamlIdpProperties.getIssuer());
+			DreamAuthSamlProperties dreamAuthSamlProperties) {
+		log.debug("issuerEntityName " + dreamAuthSamlProperties.getIdp().getIssuer());
 		AuthnResponseGenerator generator =
-				new AuthnResponseGenerator(dreamAuthSamlIdpProperties.getIssuer(), timeService, idService);
+				new AuthnResponseGenerator(dreamAuthSamlProperties.getIdp().getIssuer(), timeService, idService);
 		return generator;
 	}
 
@@ -124,8 +122,8 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 * @return issuerEntityName
 	 */
 	@Bean(name = "issuerEntityName")
-	String issuerEntityName(DreamAuthSamlIdpProperties dreamAuthSamlIdpProperties) {
-		return dreamAuthSamlIdpProperties.getIssuer();
+	String issuerEntityName(DreamAuthSamlProperties dreamAuthSamlProperties) {
+		return dreamAuthSamlProperties.getIdp().getIssuer();
 	}
 
 	/**
@@ -143,7 +141,7 @@ public class Saml20AutoConfiguration implements InitializingBean {
 		metadata.setContactType(dreamAuthSamlProperties.getMetadata().getContactType());
 		metadata.setGivenName(dreamAuthSamlProperties.getMetadata().getGivenName());
 		metadata.setSurName(dreamAuthSamlProperties.getMetadata().getSurName());
-		metadata.setEmailAddress(dreamAuthSamlProperties.getMetadata().getEmailAddress());
+		metadata.setEmailAddress(dreamAuthSamlProperties.getMetadata().getEmail());
 		metadata.setPhoneNumber(dreamAuthSamlProperties.getMetadata().getPhoneNumber());
 		return metadata;
 	}
@@ -232,10 +230,10 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 * @return issueInstantRule
 	 */
 	@Bean(name = "issueInstantRule")
-	IssueInstantRule issueInstantRule(DreamAuthSamlIssueProperties dreamAuthSamlIssueProperties) {
+	IssueInstantRule issueInstantRule(DreamAuthSamlProperties dreamAuthSamlProperties) {
 		IssueInstantRule decoder =
-				new IssueInstantRule(dreamAuthSamlIssueProperties.getInstant().getCheckClockSkewInSeconds(),
-						dreamAuthSamlIssueProperties.getInstant().getCheckValidityTimeInSeconds());
+				new IssueInstantRule(dreamAuthSamlProperties.getIssue().getInstantCheckClockSkewInSeconds(),
+						dreamAuthSamlProperties.getIssue().getInstantCheckValidityTimeInSeconds());
 		decoder.setRequiredRule(true);
 		return decoder;
 	}
@@ -247,9 +245,9 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 */
 	@Bean(name = "openHTTPPostSimpleSignDecoder")
 	OpenHTTPPostSimpleSignDecoder openHTTPPostSimpleSignDecoder(BasicParserPool samlParserPool,
-			DreamAuthSamlIdpProperties dreamAuthSamlIdpProperties) {
+			DreamAuthSamlProperties dreamAuthSamlProperties) {
 		OpenHTTPPostSimpleSignDecoder decoder = new OpenHTTPPostSimpleSignDecoder(samlParserPool);
-		decoder.setReceiverEndpoint(dreamAuthSamlIdpProperties.getReceiver().getEndpoint());
+		decoder.setReceiverEndpoint(dreamAuthSamlProperties.getIdp().getReceiverEndpoint());
 		return decoder;
 	}
 
@@ -260,9 +258,9 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 */
 	@Bean(name = "openHTTPPostDecoder")
 	OpenHTTPPostDecoder openHTTPPostDecoder(BasicParserPool samlParserPool,
-			DreamAuthSamlIdpProperties dreamAuthSamlIdpProperties) {
+			DreamAuthSamlProperties dreamAuthSamlProperties) {
 		OpenHTTPPostDecoder decoder = new OpenHTTPPostDecoder(samlParserPool);
-		decoder.setReceiverEndpoint(dreamAuthSamlIdpProperties.getReceiver().getEndpoint());
+		decoder.setReceiverEndpoint(dreamAuthSamlProperties.getIdp().getReceiverEndpoint());
 		return decoder;
 	}
 
@@ -273,9 +271,9 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 */
 	@Bean(name = "openHTTPRedirectDecoder")
 	OpenHTTPRedirectDecoder openHTTPRedirectDecoder(BasicParserPool samlParserPool,
-			DreamAuthSamlIdpProperties dreamAuthSamlIdpProperties) {
+			DreamAuthSamlProperties dreamAuthSamlProperties) {
 		OpenHTTPRedirectDecoder decoder = new OpenHTTPRedirectDecoder(samlParserPool);
-		decoder.setReceiverEndpoint(dreamAuthSamlIdpProperties.getReceiver().getEndpoint());
+		decoder.setReceiverEndpoint(dreamAuthSamlProperties.getIdp().getReceiverEndpoint());
 		return decoder;
 	}
 
@@ -316,10 +314,10 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 */
 	@Bean(name = "postSimpleSignBindingAdapter")
 	PostSimpleSignBindingAdapter postSimpleSignBindingAdapter(VelocityEngine velocityEngine,
-			DreamAuthSamlIdpProperties dreamAuthSamlIdpProperties) {
+			DreamAuthSamlProperties dreamAuthSamlProperties) {
 		PostSimpleSignBindingAdapter adapter = new PostSimpleSignBindingAdapter();
 		adapter.setVelocityEngine(velocityEngine);
-		adapter.setIssuerEntityName(dreamAuthSamlIdpProperties.getIssuer());
+		adapter.setIssuerEntityName(dreamAuthSamlProperties.getIdp().getIssuer());
 		return adapter;
 	}
 
@@ -330,10 +328,10 @@ public class Saml20AutoConfiguration implements InitializingBean {
 	 */
 	@Bean(name = "postBindingAdapter")
 	PostBindingAdapter postBindingAdapter(VelocityEngine velocityEngine,
-			DreamAuthSamlIdpProperties dreamAuthSamlIdpProperties) {
+			DreamAuthSamlProperties dreamAuthSamlProperties) {
 		PostBindingAdapter adapter = new PostBindingAdapter();
 		adapter.setVelocityEngine(velocityEngine);
-		adapter.setIssuerEntityName(dreamAuthSamlIdpProperties.getIssuer());
+		adapter.setIssuerEntityName(dreamAuthSamlProperties.getIdp().getIssuer());
 		return adapter;
 	}
 

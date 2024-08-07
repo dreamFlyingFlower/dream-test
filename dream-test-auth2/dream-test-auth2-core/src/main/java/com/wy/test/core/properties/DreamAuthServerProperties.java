@@ -39,6 +39,8 @@ public class DreamAuthServerProperties {
 
 	private String frontendUri = "http://sso.dream.top:4200";
 
+	private Integer frontendPort = 4200;
+
 	private StoreType storeType = StoreType.INMEMORY;
 
 	private boolean provision = false;

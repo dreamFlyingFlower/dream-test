@@ -33,7 +33,8 @@ public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 		String wsFederationWA = request.getParameter(WsFederationConstants.WA);
 		String wsFederationWResult = request.getParameter(WsFederationConstants.WRESULT);
 
-		if (!enable || isAuthenticated || !dreamLoginProperties.isWsFederation() || wsFederationWA == null) {
+		if (!enable || isAuthenticated || !dreamLoginProperties.getWsFederation().isEnabled()
+				|| wsFederationWA == null) {
 			return true;
 		}
 
@@ -56,7 +57,7 @@ public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 
 		// for WsFederation Login
 		log.debug("WsFederation : " + wsFederationWA + " , wsFederationWResult : " + wsFederationWResult);
-		if (dreamLoginProperties.isWsFederation() && StrHelper.isNotEmpty(wsFederationWA)
+		if (dreamLoginProperties.getWsFederation().isEnabled() && StrHelper.isNotEmpty(wsFederationWA)
 				&& wsFederationWA.equalsIgnoreCase(WsFederationConstants.WSIGNIN)) {
 			log.debug("wresult : {}" + wsFederationWResult);
 

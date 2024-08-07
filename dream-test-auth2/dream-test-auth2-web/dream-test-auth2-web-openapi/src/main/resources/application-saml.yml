@@ -1,0 +1,33 @@
+dream:
+  auth:
+    saml:
+      max-parser-pool-size: 2
+      assertion:
+        validity-time-in-seconds: 90
+      replay:
+        cache-life-in-millis: 14400000
+      issue:
+        instant-check-clock-skew-in-seconds: 90
+        instant-check-validity-time-in-seconds: 300
+      idp:
+        keystore: classpath:config/samlServerKeystore.jks
+        keystore-password: dream
+        keystore-private-key-password: dream
+        issuing-entity-id: dream.top
+        issuer: ${dream.auth.server.authz.uri}/saml
+        receiver-endpoint: https://sso.dream.top/
+      sp:
+        keystore: classpath:config/samlClientKeystore.jks
+        keystore-password: dream
+        keystore-private-key-password: dream
+        issuing-entity-id: client.dream.top
+      metadata:
+          org-name: dream
+          org-display-name: dream
+          org-url: https://github.com/dreamFlyingFlower
+          contact-type: technical
+          company: dream
+          given-name: dream
+          sur-name: dream
+          email: mygodness30@sina.com
+          phone-number: 4008981111

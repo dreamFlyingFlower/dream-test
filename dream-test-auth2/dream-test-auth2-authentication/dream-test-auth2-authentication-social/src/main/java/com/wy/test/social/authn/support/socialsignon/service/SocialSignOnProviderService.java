@@ -24,6 +24,7 @@ import com.wy.test.social.zhyd.request.AuthFeishu2Request;
 import com.wy.test.social.zhyd.request.AuthHuaweiWeLinkRequest;
 import com.wy.test.social.zhyd.request.AuthWeChatEnterpriseWebRequestCost;
 
+import lombok.extern.slf4j.Slf4j;
 import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.model.AuthResponse;
 import me.zhyd.oauth.model.AuthUser;
@@ -52,9 +53,8 @@ import me.zhyd.oauth.request.AuthWeChatEnterpriseQrcodeRequest;
 import me.zhyd.oauth.request.AuthWeChatOpenRequest;
 import me.zhyd.oauth.request.AuthWeiboRequest;
 
+@Slf4j
 public class SocialSignOnProviderService {
-
-	private static Logger _logger = LoggerFactory.getLogger(SocialSignOnProviderService.class);
 
 	private static final String DEFAULT_SELECT_STATEMENT =
 			"select * from auth_social_provider where instid = ? and status = 1  order by sortindex";
@@ -162,11 +162,11 @@ public class SocialSignOnProviderService {
 	public String getAccountId(String provider, AuthResponse<?> authResponse) throws Exception {
 		if (authResponse.getData() != null) {
 			AuthUser authUser = (AuthUser) authResponse.getData();
-			_logger.debug("AuthUser[{},{},{},{},{},{},{},{},{},{},{},{}]", authUser.getUuid(), authUser.getUsername(),
+			log.debug("AuthUser[{},{},{},{},{},{},{},{},{},{},{},{}]", authUser.getUuid(), authUser.getUsername(),
 					authUser.getNickname(), authUser.getGender(), authUser.getEmail(), authUser.getCompany(),
 					authUser.getBlog(), authUser.getLocation(), authUser.getRemark(), authUser.getSource(),
 					authUser.getBlog(), authUser.getAvatar());
-			_logger.debug("RawUserInfo {}", authUser.getRawUserInfo());
+			log.debug("RawUserInfo {}", authUser.getRawUserInfo());
 			if (provider.equalsIgnoreCase("WeChatOpen")) {
 				return authUser.getUuid();
 			} else if (provider.equalsIgnoreCase("sinaweibo")) {
@@ -197,12 +197,12 @@ public class SocialSignOnProviderService {
 		if (socialsLogin == null) {
 			List<SocialProviderEntity> listSocialsProvider =
 					jdbcTemplate.query(DEFAULT_SELECT_STATEMENT, new SocialsProviderRowMapper(), instId);
-			_logger.trace("query SocialsProvider " + listSocialsProvider);
+			log.trace("query SocialsProvider " + listSocialsProvider);
 
 			List<SocialProviderEntity> socialSignOnProviders = new ArrayList<SocialProviderEntity>();
 			socialsLogin = new SocialsProviderLogin(socialSignOnProviders);
 			for (SocialProviderEntity socialsProvider : listSocialsProvider) {
-				_logger.debug("Social Provider {} ({})", socialsProvider.getProvider(),
+				log.debug("Social Provider {} ({})", socialsProvider.getProvider(),
 						socialsProvider.getProviderName());
 
 				if (socialsProvider.getDisplay().equals("true")) {
@@ -217,7 +217,7 @@ public class SocialSignOnProviderService {
 				socialSignOnProviderMaps.put(instId + "_" + socialsProvider.getProvider(), socialsProvider);
 			}
 
-			_logger.debug("social SignOn Providers Login {}", socialsLogin);
+			log.debug("social SignOn Providers Login {}", socialsLogin);
 
 			socialsProviderLoginStore.put(instId, socialsLogin);
 		}

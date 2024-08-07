@@ -1,0 +1,68 @@
+dream:
+  auth:
+    app:
+      name: Dream-OpenApi
+      title: Dream-OpenApi
+      formatted-version: 1.0.0
+      issuer: CN=ConSec,CN=COM,CN=SH
+    server:
+      scheme: http
+      domain: ${SERVER_DOMAIN:dream.top}
+      sub-domain: sso.${dream.auth.server.domain}
+      name: ${dream.auth.server.scheme}://${dream.auth.server.domain}
+      uri: ${dream.auth.server.name}:${server.port}${server.servlet.context-path}
+      default-uri: ${dream.auth.server.uri}/dream/main
+      mgt-uri: ${dream.auth.server.uri}
+      authz-uri: https://${dream.auth.server.domain}/dream
+      store-type: ${SERVER_STORE_TYPE:0}
+      provision: ${SERVER_PROVISION:false}
+    jwk:
+      issuer: ${dream.auth.server.uri}
+      expires: 900
+      secret: 7heM-14BtxjyKPuH3ITIm7q2-ps5MuBirWCsrrdbzzSAOuSPrbQYiaJ54AeA0uH2XdkYy3hHAkTFIsieGkyqxOJZ_dQzrCbaYISH9rhUZAKYx8tUY0wkE4ArOC6LqHDJarR6UIcMsARakK9U4dhoOPO1cj74XytemI-w6ACYfzRUn_Rn4e-CQMcnD1C56oNEukwalf06xVgXl41h6K8IBEzLVod58y_VfvFn-NGWpNG0fy_Qxng6dg8Dgva2DobvzMN2eejHGLGB-x809MvC4zbG7CKNVlcrzMYDt2Gt2sOVDrt2l9YqJNfgaLFjrOEVw5cuXemGkX1MvHj6TAsbLg
+      refresh-secret: 7heM-14BtxjyKPuH3ITIm7q2-ps5MuBirWCsrrdbzzSAOuSPrbQYiaJ54AeA0uH2XdkYy3hHAkTFIsieGkyqxOJZ_dQzrCbaYISH9rhUZAKYx8tUY0wkE4ArOC6LqHDJarR6UIcMsARakK9U4dhoOPO1cj74XytemI-w6ACYfzRUn_Rn4e-CQMcnD1C56oNEukwalf06xVgXl41h6K8IBEzLVod58y_VfvFn-NGWpNG0fy_Qxng6dg8Dgva2DobvzMN2eejHGLGB-x809MvC4zbG7CKNVlcrzMYDt2Gt2sOVDrt2l9YqJNfgaLFjrOEVw5cuXemGkX1MvHj6TAsbLg
+    crypto:
+      # plain,bcrypt,pbkdf2,scrypt,md4,md5,sha1,sha256,sha384,sha512,sm3,ldap
+      password-type: bcrypt
+    login:
+      captcha:
+        enabled: ${LOGIN_CAPTCHA:true}
+      mfa:
+        enabled: true
+      kerberos:
+        enabled: false
+      ws-federation:
+        enabled: false
+      remember-me: false
+      remember-me-validity: 0
+      jwt:
+        enabled: ${LOGIN_JWT:true}
+        issuer: ${LOGIN_JWT_ISSUER:${dream.auth.server.authz-uri}}
+    ip:
+      white: false
+      
+    otp:
+      policy:
+        type: totp
+        digits: 6
+        issuer: ${OTP_POLICY_ISSUER:dream}
+        domain: ${dream.auth.server.domain}
+        period: 30
+        
+    oidc:
+      metadata:
+        issuer: ${dream.auth.server.authz.uri}
+        authorization-endpoint: ${dream.auth.server.authz.uri}/authz/oauth/v20/authorize
+        token-endpoint: ${dream.auth.server.authz.uri}/authz/oauth/v20/token
+        userinfo-endpoint: ${dream.auth.server.authz.uri}/api/connect/userinfo
+
+    job:
+      cron:
+        enabled: true
+        schedule: 0 0 0/1 * * ?
+
+    swagger:
+      enabled: true
+      title: 单点登录认证系统API文档
+      description: 单点登录认证系统API文档
+      version: ${dream.auth.app.formatted-version}

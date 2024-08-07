@@ -6,8 +6,6 @@ import java.sql.Types;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -15,10 +13,10 @@ import com.wy.test.core.constants.ConstDatabase;
 import com.wy.test.core.entity.SocialAssociateEntity;
 
 import dream.flying.flower.generator.GeneratorStrategyContext;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class JdbcSocialsAssociateService implements SocialsAssociateService {
-
-	private static final Logger _logger = LoggerFactory.getLogger(JdbcSocialsAssociateService.class);
 
 	private static final String DEFAULT_DEFAULT_INSERT_STATEMENT =
 			"insert into  auth_social_associate(id, userid , username , provider , socialuserid , accesstoken , socialuserinfo , exattribute , instid)values( ? , ? , ? , ? , ?, ? , ? , ?, ?)";
@@ -73,7 +71,7 @@ public class JdbcSocialsAssociateService implements SocialsAssociateService {
 		List<SocialAssociateEntity> listsocialsAssociate = jdbcTemplate.query(DEFAULT_DEFAULT_SIGNON_SELECT_STATEMENT,
 				new SocialsAssociateRowMapper(), socialsAssociate.getProvider(), socialsAssociate.getSocialUserId(),
 				socialsAssociate.getInstId());
-		_logger.debug("list socialsAssociate " + listsocialsAssociate);
+		log.debug("list socialsAssociate " + listsocialsAssociate);
 		return (listsocialsAssociate.size() > 0) ? listsocialsAssociate.get(0) : null;
 	}
 
@@ -81,7 +79,7 @@ public class JdbcSocialsAssociateService implements SocialsAssociateService {
 	public List<SocialAssociateEntity> query(SocialAssociateEntity socialsAssociate) {
 		List<SocialAssociateEntity> listsocialsAssociate = jdbcTemplate.query(DEFAULT_DEFAULT_BIND_SELECT_STATEMENT,
 				new SocialsAssociateRowMapper(), socialsAssociate.getUserId());
-		_logger.debug("query bind  SocialSignOnUser " + listsocialsAssociate);
+		log.debug("query bind  SocialSignOnUser " + listsocialsAssociate);
 		return listsocialsAssociate;
 	}
 

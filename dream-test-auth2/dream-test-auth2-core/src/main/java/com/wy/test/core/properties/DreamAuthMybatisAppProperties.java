@@ -6,26 +6,22 @@ import org.springframework.context.annotation.Configuration;
 import lombok.Data;
 
 /**
- * SAML配置
+ * Mybatis相关配置
  *
  * @author 飞花梦影
  * @date 2024-07-30 09:14:00
  * @git {@link https://github.com/dreamFlyingFlower}
  */
 @Data
-@ConfigurationProperties("dream.auth.saml2.idp")
+@ConfigurationProperties("dream.auth.mybatis")
 @Configuration
-public class DreamAuthSamlIdpProperties {
+public class DreamAuthMybatisAppProperties {
 
-	private String issuer;
+	private String dialect = "mysql";
 
-	private Receiver receiver = new Receiver();
+	private Integer tableColumnSnowflakeDatacenterId = 1;
 
-	@Data
-	public static class Receiver {
+	private Integer tableColumnSnowflakeMachineId = 1;
 
-		private boolean enabled = false;
-
-		private String endpoint;
-	}
+	private Boolean tableColumnEscape = false;
 }

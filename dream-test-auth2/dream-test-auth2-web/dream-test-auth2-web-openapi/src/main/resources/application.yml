@@ -1,49 +1,49 @@
-server: 
-  port: 5550
+server:
+  port: ${SERVER_PORT:9525}
   servlet:
-    context-path: /dream
+    context-path: /dream-open
     encoding:
       enabled: true
       force: true
       charset: UTF-8
-  ssl:
-    enabled: true
-    key-alias: dream
-    key-store: dreamserver.keystore
-    key-store-password: dream
-    key-store-type: JKS
-    
+
+mybatis:
+  type-aliases-package: com.wy.test.entity,com.wy.test.entity.vo
+  mapper-locations: classpath*:mapper/*.xml
+
 spring:
   application:
-    name: cloud-security
-  profiles: 
-    active: dev
-  devtools:
-    restart:
-      enabled: true
+    name: dream-openapi
+  main:
+    banner-mode: log
+  profiles:
+    active: ${SERVER_PROFILES:dream-openapi}
   servlet:
     multipart:
       enabled: true
       max-file-size: 4194304
+
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/dream_auth?autoReconnect=true&useUnicode=true&useSSL=false&characterEncoding=UTF8&serverTimezone=GMT%2B8
-    username: root
-    password: 123456
+    username: ${DATABASE_USER:root}
+    password: ${DATABASE_PWD:dream}
+    url: jdbc:mysql://${DATABASE_HOST:localhost}:${DATABASE_PORT:3306}/${DATABASE_NAME:dream}?autoReconnect=true&characterEncoding=UTF-8&serverTimezone=UTC
+
   redis:
-    host: localhost
-    port: 6379
-    password: password
+    host: ${REDIS_HOST:127.0.0.1}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PWD:password}
     timeout: 10000
     jedis:
       pool:
         max-wait: 1000
         max-idle: 200
     lettuce:
-      pool: 
+      pool:
         max-active: -1
         min-idle: 0
+
   mail:
     default-encoding: utf-8
     host: ${MAIL_HOST:smtp.163.com}
@@ -55,10 +55,18 @@ spring:
       ssl: true
       sender: ${MAIL_SENDER:dream@163.com}
       mailotp-message-subject: dream One Time PassWord
-      mailotp-message-template: "{0} You Token is {1} , it validity in {2}  minutes."
+      mailotp-message-template: "{0} You Token is {1} , it validity in {2}  minutes"
       mailotp-message-type: html
       mailotp-message-validity: 300
-
+      
+  boot:
+    admin:
+      client:
+        enabled: ${SPRING_BOOT_ADMIN_ENABLED:false}
+        url: ${SPRING_BOOT_ADMIN_URL:http://127.0.0.1:9528}
+        username: ${SPRING_BOOT_ADMIN_USERNAME:}
+        password: ${SPRING_BOOT_ADMIN_PASSWORD:}
+      
   freemarker:
     template-loader-path: classpath:/templates/views
     cache: false
@@ -69,27 +77,6 @@ spring:
     expose-session-attributes: false
     request-context-attribute: request
     suffix: .ftl
-
-  messages:
-    basename: classpath:messages/message
-    encoding: UTF-8
-
-  main:
-    banner-mode: log
-    allow-bean-definition-overriding: true
-
-  kafka:
-    bootstrap-servers: localhost:9092
-    producer:
-      retries: 0
-      acks: 1
-      batch-size: 16384
-      buffer-memory: 33554432
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      properties:
-        linger:
-          ms: 0
 
 management:
   endpoints:
@@ -110,7 +97,21 @@ management:
       mail:
         enabled: false
 
-mybatis:
-  type-aliases-package: com.wy.test.core.entity,com.wy.test.core.vo,com.wy.test.core.query
-  mapper-locations:
-  - classpath*:mapper/*.xml
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+    showExtensions: true
+  api-docs.path: /v3/api-docs
+  group-configs: 
+    - group: default
+      paths-to-match: /*
+      packages-to-scan: org.dream
+      
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+    swagger-model-name: "实体类列表"

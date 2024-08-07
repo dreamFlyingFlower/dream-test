@@ -79,8 +79,8 @@ public class DreamAuthMvcConfig implements WebMvcConfigurer {
 			log.debug("add Http Header Entry Point");
 		}
 
-		if (dreamAuthLoginProperties.isBasicEnabled()) {
-			registry.addInterceptor(new BasicEntryPoint(dreamAuthLoginProperties.isBasicEnabled()))
+		if (dreamAuthLoginProperties.getBasic().isEnabled()) {
+			registry.addInterceptor(new BasicEntryPoint(dreamAuthLoginProperties.getBasic().isEnabled()))
 					.addPathPatterns("/*");
 			log.debug("add Basic Entry Point");
 		}

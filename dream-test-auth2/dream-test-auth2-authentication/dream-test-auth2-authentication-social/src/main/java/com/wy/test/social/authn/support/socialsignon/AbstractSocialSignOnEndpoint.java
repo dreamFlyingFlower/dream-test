@@ -1,7 +1,5 @@
 package com.wy.test.social.authn.support.socialsignon;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -14,13 +12,13 @@ import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.social.authn.support.socialsignon.service.SocialSignOnProviderService;
 import com.wy.test.social.authn.support.socialsignon.service.SocialsAssociateService;
 
+import lombok.extern.slf4j.Slf4j;
 import me.zhyd.oauth.model.AuthCallback;
 import me.zhyd.oauth.model.AuthResponse;
 import me.zhyd.oauth.request.AuthRequest;
 
+@Slf4j
 public class AbstractSocialSignOnEndpoint {
-
-	final static Logger _logger = LoggerFactory.getLogger(AbstractSocialSignOnEndpoint.class);
 
 	protected AuthRequest authRequest;
 
@@ -45,14 +43,14 @@ public class AbstractSocialSignOnEndpoint {
 	protected AuthRequest buildAuthRequest(String instId, String provider, String baseUrl) {
 		try {
 			SocialProviderEntity socialSignOnProvider = socialSignOnProviderService.get(instId, provider);
-			_logger.debug("socialSignOn Provider : " + socialSignOnProvider);
+			log.debug("socialSignOn Provider : " + socialSignOnProvider);
 
 			if (socialSignOnProvider != null) {
 				authRequest = socialSignOnProviderService.getAuthRequest(instId, provider, baseUrl);
 				return authRequest;
 			}
 		} catch (Exception e) {
-			_logger.debug("buildAuthRequest Exception ", e);
+			log.debug("buildAuthRequest Exception ", e);
 		}
 		return null;
 	}
@@ -66,14 +64,14 @@ public class AbstractSocialSignOnEndpoint {
 		authCallback.setAuthorization_code(WebContext.getRequest().getParameter("authorization_code"));
 		authCallback.setOauth_verifier(WebContext.getRequest().getParameter("oauthVerifier"));
 		authCallback.setState(WebContext.getRequest().getParameter("state"));
-		_logger.debug(
+		log.debug(
 				"Callback OAuth code {}, auth_code {}, oauthToken {}, authorization_code {}, oauthVerifier {} , state {}",
 				authCallback.getCode(), authCallback.getAuth_code(), authCallback.getOauth_token(),
 				authCallback.getAuthorization_code(), authCallback.getOauth_verifier(), authCallback.getState());
 
 		if (authRequest == null) {// if authRequest is null renew one
 			authRequest = socialSignOnProviderService.getAuthRequest(instId, provider, baseUrl);
-			_logger.debug("session authRequest is null , renew one");
+			log.debug("session authRequest is null , renew one");
 		}
 
 		// State time out, re set
@@ -82,7 +80,7 @@ public class AbstractSocialSignOnEndpoint {
 		}
 
 		AuthResponse<?> authResponse = authRequest.login(authCallback);
-		_logger.debug("Response  : " + authResponse.getData());
+		log.debug("Response  : " + authResponse.getData());
 		socialsAssociate = new SocialAssociateEntity();
 		socialsAssociate.setProvider(provider);
 		socialsAssociate.setSocialUserId(socialSignOnProviderService.getAccountId(provider, authResponse));
@@ -90,5 +88,4 @@ public class AbstractSocialSignOnEndpoint {
 
 		return socialsAssociate;
 	}
-
 }

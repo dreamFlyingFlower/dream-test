@@ -29,7 +29,8 @@ dream:
         enabled: ${LOGIN_CAPTCHA:true}
       mfa: 
         enabled: false
-      ws-federation: false
+      ws-federation: 
+        enabled: false
       remember-me: false
       remember-me-validity: 0
       kerberos: 
@@ -37,8 +38,8 @@ dream:
       jwt:
         enabled: ${LOGIN_JWT:true}
         issuer: ${LOGIN_JWT_ISSUER:${dream.server.authz.uri}}
-    ipaddress:
-        whitelist:false
+    ip:
+      white: false
     otp:
       policy:
         type: totp
@@ -52,7 +53,7 @@ dream:
         authorizationEndpoint: ${dream.server.authz.uri}/authz/oauth/v20/authorize
         tokenEndpoint: ${dream.server.authz.uri}/authz/oauth/v20/token
         userinfoEndpoint: ${dream.server.authz.uri}/api/connect/userinfo
-    saml2:
+    saml:
       max-parser-pool-size: 2
       replay:
         cache-life-in-millis: 14400000
@@ -64,68 +65,52 @@ dream:
         company: dreamTop
         given-name: dream
         sur-name: dream
-        email-address: dreamsupport@163.com
+        email: mygodness30@sina.com
         phone-number: 4008981111
       idp:
         issuer: ${dream.server.authz.uri}/saml
-        receiver:
-          endpoint: https\://sso.dream.top/
-        keystore:
-          path: classpath\:config/samlServerKeystore.jks
-          password: dream
-          private:
-            key:
-              password:dream
-        issuing:
-          entity:
-            id: dream.top
+        receiver-endpoint: https://sso.dream.top/
+        keystore: classpath:config/samlServerKeystore.jks
+        keystore-password: dream
+        keystore-private-key-password: dream
+        issuing-entity-id: dream.top
       issue:
-        instant:
-          check-clock-skew-in-seconds: 90
-          check-validity-time-in-seconds: 300
-        v20:
-            assertion:
-                validity:
-                    time:
-                        ins:
-                            seconds:90
-            sp:
-                keystore:
-                    path: classpath\:config/samlClientKeystore.jks
-                    password: dream
-                    private:
-                        key:
-                            password:dream
-                issuing:
-                    entity:
-                        id:client.dream.org
+          instant-check-clock-skew-in-seconds: 90
+          instant-check-validity-time-in-seconds: 300
+      assertion:
+        validity-time-in-seconds: 90
+      sp:
+        keystore: classpath:config/samlClientKeystore.jks
+        keystore-password: dream
+        keystore-private-key-password: dream
+        issuing-entity-id: client.dream.org
     job:
       cron:
         enabled: true
         schedule: 0 0 0/1 * * ?
     swagger:
       enabled: true
-      title: dream\u5355\u70b9\u767b\u5f55\u8ba4\u8bc1\u7cfb\u7edfAPI\u6587\u6863
-      description: dream\u5355\u70b9\u767b\u5f55\u8ba4\u8bc1\u7cfb\u7edfAPI\u6587\u6863
-      version: ${application.formatted-version}
+      title: 单点登录认证系统API文档
+      description: 单点登录认证系统API文档
+      version: ${dream.auth.app.formatted-version}
+    mybatis:
+      dialect: mysql
+      table-column-snowflake-datacenter-id: 1
+      table-column-snowflake-machine-id: 1
 
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 4194304
+
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DATABASE_USER:root}
     password: ${DATABASE_PWD:dream}
     url: jdbc:mysql://${DATABASE_HOST:localhost}:${DATABASE_PORT:3306}/${DATABASE_NAME:dream}?autoReconnect=true&characterEncoding=UTF-8&serverTimezone=UTC
-    # highgo
-    # driver-class-name: com.highgo.jdbc.Driver
-    # username: root
-    # password: 123456
-    # url: jdbc:highgo://192.168.56.107:5866/highgo?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
-    # postgresql
-    # driver-class-name: org.postgresql.Driver
-    # username: root
-    # password: 123456
-    # url: jdbc:postgresql://localhost/dream?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+
   redis:
     host: ${REDIS_HOST:127.0.0.1}
     port: ${REDIS_PORT:6379}
@@ -139,6 +124,7 @@ spring:
       pool:
         max-active: -1
         min-idle: 0
+
   mail:
     default-encoding: utf-8
     host: ${MAIL_HOST:smtp.163.com}
@@ -155,6 +141,7 @@ spring:
         template: "{0} You Token is {1} , it validity in {2}  minutes."
         type: html
         validity: 300
+
   boot:
     admin:
       client:
@@ -162,6 +149,7 @@ spring:
         url: ${SPRING_BOOT_ADMIN_URL:http://127.0.0.1:9528}
         username: ${SPRING_BOOT_ADMIN_USERNAME:}
         password: ${SPRING_BOOT_ADMIN_PASSWORD:}
+
   freemarker:
     template-loader-path: classpath:/templates/views
     cache: false
@@ -172,22 +160,13 @@ spring:
     expose-session-attributes: false
     request-context-attribute: request
     suffix: .ftl
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 4194304
+
+
 mybatis:
-    dialect: mysql
     type-aliases-package: org.dream.entity,org.dream.entity.apps,
     mapper-locations: classpath*:mapper/*.xml
-    table-column-snowflake-datacenter-id: 1
-    table-column-snowflake-machine-id: 1
-    table-column-escape: false
-    table-column-case: lowercase
 
 management:
-  security:
-    enabled: false
   endpoints:
     web:
       exposure:
@@ -212,7 +191,7 @@ springdoc:
     enabled: true
     tags-sorter: alpha
     operations-sorter: alpha
-    showExtensions: true
+    show-extensions: true
   api-docs:
     path: /v3/api-docs
   group-configs: 
@@ -222,5 +201,5 @@ springdoc:
 knife4j:
   enable: true
   setting:
-      language:zh_cn
-      swagger-model-name:\u5B9E\u4F53\u7C7B\u5217\u8868
+      language: zh_cn
+      swagger-model-name: "实体类列表"

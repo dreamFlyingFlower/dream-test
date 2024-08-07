@@ -7,16 +7,17 @@ dream:
       formatted-version: 1.0.0
       issuer: CN=ConSec,CN=COM,CN=SH
     server:
-      domain: dream.top
+      scheme: http
+      domain: ${SERVER_DOMAIN:dream.top}
       sub-domain: sso.${dream.auth.server.domain}
-      name: http://${dream.auth.server.domain.sub}
-      uri: ${dream.server.name}/dream
-      default-uri: ${dream.server.prefix.uri}/dream/appList
-      mgt-uri: ${dream.server.name}:9521/dream-mgt/login
+      name: ${dream.auth.server.scheme}://${dream.auth.server.domain.sub}
+      uri: ${dream.auth.server.name}/dream
+      default-uri: ${dream.auth.server.uri}/dream/appList
+      mgt-uri: ${dream.auth.server.name}:9521/dream-mgt/login
     login:
       default-uri: appList
       captcha:
-        enabled: true
+        enabled: ${LOGIN_CAPTCHA:true}
         # text or arithmetic
         type: text
       mfa:
@@ -46,135 +47,16 @@ dream:
         identifier: http://adfs.dream.top/adfs/services/trust
         url: https://adfs.dream.top/adfs/ls/
         principal: upn
-        relyingParty: urn:federation:connsec
-        signingCertificate: adfs-signing.crt
+        relying-party: urn:federation:connsec
+        signing-certificate: adfs-signing.crt
         tolerance: 10000
         upn-suffix: dream.org
-        logoutUrl: https://adfs.dream.top/adfs/ls/?wa=wsignout1.0
+        logout-url: https://adfs.dream.top/adfs/ls/?wa=wsignout1.0
     ip:
-        white: false
+      white: false
     oidc:
-        metadata:
-            issuer: ${dream.server.name}/dream
-            authorizationEndpoint: ${dream.server.name}/dream/authz/oauth/v20/authorize
-            tokenEndpoint: ${dream.server.name}/dream/authz/oauth/v20/token
-            userinfoEndpoint: ${dream.server.name}/dream/api/connect/userinfo
-    saml:
-        v20:
-            max:
-                parser:
-                    pool:
-                        size: 2
-            assertion:
-                validity:
-                    time:
-                        ins:
-                            seconds: 90
-            replay:
-                cache:
-                    life:
-                        in:
-                            millis: 14400000
-            issue:
-                instant:
-                    check:
-                        clock:
-                            skew:
-                                in:
-                                    seconds: 90
-                        validity:
-                            time:
-                                in:
-                                    seconds: 300
-            idp:
-                keystore:
-                    password: dream
-                    private:
-                        key:
-                            password: dream
-                issuing:
-                    entity:
-                        id: dream.top
-                issuer: https://sso.dream.top/dream/saml
-                receiver:
-                    endpoint: https\://sso.dream.top/
-            sp:
-                keystore:
-                    password: dream
-                    private:
-                        key:
-                            password: dream
-                issuing:
-                    entity:
-                        id: client.dream.org
-            metadata:
-                orgName: dream
-                orgDisplayName: dream
-                orgURL: https://github.com/shimingxy/dream
-                contactType: technical
-                company: dream
-                givenName: dream
-                surName: dream
-                emailAddress: shimingxy@163.com
-                telephoneNumber: 4008981111
-    socialsignon:
-        sinaweibo:
-            provider:
-                name: \u65B0\u6D6A\u5FAE\u535A
-            icon: images/social/sinaweibo.png
-            client:
-                id: 3379757634
-                secret: 1adfdf9800299037bcab9d1c238664ba
-            account:
-                id:id
-            sortorder: 1
-        google:
-            provider:
-                name:Google
-            icon: images/social/google.png
-            client:
-                id: 519914515488.apps.googleusercontent.com
-                secret: 3aTW3Iw7e11QqMnHxciCaXTt
-            account:
-                id:id
-            sortorder: 2
-        qq:
-            provider:
-                name: QQ
-            icon: images/social/qq.png
-            client:
-                id: 101225363
-                secret: 8577d75e0eb4a91ac549cc8be3371bfd
-            account:
-                id:openid
-            sortorder: 4
-        dingtalk:
-            provider:
-                name:dingtalk
-            icon: images/social/dingtalk.png
-            client:
-                id: dingoawf2jyiwh2uzqnphg
-                secret: Crm7YJbMKfRlvG2i1SHpg4GHVpqF_oXiEjhmRQyiSiuzNRWpbFh9i0UjDTfhOoN9
-            account:
-                id:openid
-            sortorder: 5
-        microsoft:
-            provider:
-                name: Microsoft
-            icon: images/social/live.png
-            client:
-                id: 24aa73b6-7928-4e64-bd64-d8682e650f95
-                secret: PF[_AthtjVrtWVO2mNy@CJxY1@Z8FNf5
-            account:
-                id:id
-            sortorder: 6
-        facebook:
-            provider:
-                name: facebook
-            icon: images/social/facebook.png
-            client:
-                id: appKey
-                secret: appSecret
-            account:
-                id: id
-            sortorder: 7
+      metadata:
+        issuer: ${dream.auth.server.name}/dream
+        authorization-endpoint: ${dream.auth.server.name}/dream/authz/oauth/v20/authorize
+        token-endpoint: ${dream.auth.server.name}/dream/authz/oauth/v20/token
+        userinfo-endpoint: ${dream.auth.server.name}/dream/api/connect/userinfo

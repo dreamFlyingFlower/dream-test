@@ -1,0 +1,51 @@
+dream:
+  auth:
+    social-sign:
+      weibo:
+        provider: weibo
+        name: "新浪微博"
+        icon: images/social/sinaweibo.png
+        client-id: 3379757634
+        client-secret: 1adfdf9800299037bcab9d1c238664ba
+        account-id: id
+        sort-order: 1
+      google:
+        provider: google
+        name: Google
+        icon: images/social/google.png
+        client-id: 519914515488.apps.googleusercontent.com
+        client-secret: 3aTW3Iw7e11QqMnHxciCaXTt
+        account-id: id
+        sort-order: 2
+      qq:
+        provider: qq
+        name: QQ
+        icon: images/social/qq.png
+        client-id: 101225363
+        client-secret: 8577d75e0eb4a91ac549cc8be3371bfd
+        account-id: openid
+        sort-order: 4
+      ding-talk:
+        provider: dingtalk
+        name: dingtalk
+        icon: images/social/dingtalk.png
+        client-id: dingoawf2jyiwh2uzqnphg
+        client-secret: Crm7YJbMKfRlvG2i1SHpg4GHVpqF_oXiEjhmRQyiSiuzNRWpbFh9i0UjDTfhOoN9
+        account-id: openid
+        sort-order: 5
+      microsoft:
+        provider: microsoft
+        name: Microsoft
+        icon: images/social/live.png
+        client-id: 24aa73b6-7928-4e64-bd64-d8682e650f95
+        client-secret: PF[_AthtjVrtWVO2mNy@CJxY1@Z8FNf5
+        account-id: id
+        sort-order: 6
+      facebook:
+        provider: facebook
+        name: Facebook
+        icon: images/social/facebook.png
+        client-id: appKey
+        client-secret: appSecret
+        account-id: id
+        sort-order: 7

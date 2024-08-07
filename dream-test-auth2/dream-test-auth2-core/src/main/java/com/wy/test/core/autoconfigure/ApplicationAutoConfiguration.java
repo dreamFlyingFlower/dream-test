@@ -33,6 +33,7 @@ import com.wy.test.core.persistence.repository.InstitutionsRepository;
 import com.wy.test.core.persistence.repository.LocalizationRepository;
 import com.wy.test.core.properties.DreamAuthCryptoProperties;
 import com.wy.test.core.properties.DreamAuthIdProperties;
+import com.wy.test.core.properties.DreamAuthSamlProperties;
 import com.wy.test.core.properties.DreamAuthStoreProperties;
 import com.wy.test.core.web.WebContext;
 
@@ -106,13 +107,11 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	KeyStoreLoader keyStoreLoader(@Value("${dream.saml.v20.idp.issuing.entity.id}") String entityName,
-			@Value("${dream.saml.v20.idp.keystore.password}") String keystorePassword,
-			@Value("${dream.saml.v20.idp.keystore}") Resource keystoreFile) {
+	KeyStoreLoader keyStoreLoader(DreamAuthSamlProperties dreamAuthSamlProperties) {
 		KeyStoreLoader keyStoreLoader = new KeyStoreLoader();
-		keyStoreLoader.setEntityName(entityName);
-		keyStoreLoader.setKeystorePassword(keystorePassword);
-		keyStoreLoader.setKeystoreFile(keystoreFile);
+		keyStoreLoader.setEntityName(dreamAuthSamlProperties.getIdp().getIssuingEntityId());
+		keyStoreLoader.setKeystorePassword(dreamAuthSamlProperties.getIdp().getKeystorePassword());
+		keyStoreLoader.setKeystoreFile(dreamAuthSamlProperties.getIdp().getKeystore());
 		return keyStoreLoader;
 	}
 
@@ -122,13 +121,11 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	KeyStoreLoader spKeyStoreLoader(@Value("${dream.saml.v20.sp.issuing.entity.id}") String entityName,
-			@Value("${dream.saml.v20.sp.keystore.password}") String keystorePassword,
-			@Value("${dream.saml.v20.sp.keystore}") Resource keystoreFile) {
+	KeyStoreLoader spKeyStoreLoader(DreamAuthSamlProperties dreamAuthSamlProperties) {
 		KeyStoreLoader keyStoreLoader = new KeyStoreLoader();
-		keyStoreLoader.setEntityName(entityName);
-		keyStoreLoader.setKeystorePassword(keystorePassword);
-		keyStoreLoader.setKeystoreFile(keystoreFile);
+		keyStoreLoader.setEntityName(dreamAuthSamlProperties.getSp().getIssuingEntityId());
+		keyStoreLoader.setKeystorePassword(dreamAuthSamlProperties.getSp().getKeystorePassword());
+		keyStoreLoader.setKeystoreFile(dreamAuthSamlProperties.getSp().getKeystore());
 		return keyStoreLoader;
 	}
 
@@ -138,8 +135,8 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	 * @return
 	 */
 	@Bean
-	String spIssuingEntityName(@Value("${dream.saml.v20.sp.issuing.entity.id}") String spIssuingEntityName) {
-		return spIssuingEntityName;
+	String spIssuingEntityName(DreamAuthSamlProperties dreamAuthSamlProperties) {
+		return dreamAuthSamlProperties.getSp().getIssuingEntityId();
 	}
 
 	/**
