@@ -1,8 +1,5 @@
 package com.wy.test.sms.password.sms.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.common.profile.HttpProfile;
@@ -12,17 +9,20 @@ import com.tencentcloudapi.sms.v20190711.models.SendSmsResponse;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.sms.password.sms.SmsOtpAuthn;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
- * 腾讯云短信验证.
+ * 腾讯云短信验证
+ *
+ * @author 飞花梦影
+ * @date 2024-08-07 15:22:23
+ * @git {@link https://github.com/dreamFlyingFlower}
  */
+@Slf4j
 public class SmsOtpAuthnTencentCloud extends SmsOtpAuthn {
 
-	private static final Logger logger = LoggerFactory.getLogger(SmsOtpAuthnTencentCloud.class);
-
-	//
 	String secretId;
 
-	//
 	String secretKey;
 
 	// 短信SDKAPPID
@@ -72,14 +72,14 @@ public class SmsOtpAuthnTencentCloud extends SmsOtpAuthn {
 
 				SendSmsResponse resp = client.SendSms(req);
 
-				logger.debug("responseString " + SendSmsRequest.toJsonString(resp));
+				log.debug("responseString " + SendSmsRequest.toJsonString(resp));
 				if (resp.getSendStatusSet()[0].getCode().equalsIgnoreCase("Ok")) {
 					this.optTokenStore.store(userInfo, token, userInfo.getMobile(), OtpTypes.SMS);
 					return true;
 				}
 
 			} catch (Exception e) {
-				logger.error(" produce code error ", e);
+				log.error(" produce code error ", e);
 			}
 		}
 		return false;
@@ -129,5 +129,4 @@ public class SmsOtpAuthnTencentCloud extends SmsOtpAuthn {
 	public void setSign(String sign) {
 		this.sign = sign;
 	}
-
 }

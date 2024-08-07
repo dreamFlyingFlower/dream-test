@@ -28,7 +28,7 @@ import com.wy.test.core.properties.DreamAuthOtpProperties;
 import com.wy.test.core.properties.DreamAuthStoreProperties;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.MailOtpAuthnService;
-import com.wy.test.otp.password.onetimepwd.algorithm.OtpKeyUriFormat;
+import com.wy.test.otp.password.onetimepwd.algorithm.OtpKeyUri;
 import com.wy.test.otp.password.onetimepwd.impl.MailOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.impl.TimeBasedOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.token.RedisOtpTokenStore;
@@ -52,8 +52,8 @@ import lombok.extern.slf4j.Slf4j;
 public class DreamTestConfig implements InitializingBean {
 
 	@Bean
-	OtpKeyUriFormat otpKeyUriFormat(DreamAuthOtpProperties dreamAuthOtpProperties) {
-		OtpKeyUriFormat otpKeyUriFormat = new OtpKeyUriFormat(dreamAuthOtpProperties.getPolicy().getType(),
+	OtpKeyUri otpKeyUriFormat(DreamAuthOtpProperties dreamAuthOtpProperties) {
+		OtpKeyUri otpKeyUriFormat = new OtpKeyUri(dreamAuthOtpProperties.getPolicy().getType(),
 				dreamAuthOtpProperties.getPolicy().getIssuer(), dreamAuthOtpProperties.getPolicy().getDomain(),
 				dreamAuthOtpProperties.getPolicy().getDigits(), dreamAuthOtpProperties.getPolicy().getPeriod());
 		log.debug("OTP KeyUri Format " + otpKeyUriFormat);

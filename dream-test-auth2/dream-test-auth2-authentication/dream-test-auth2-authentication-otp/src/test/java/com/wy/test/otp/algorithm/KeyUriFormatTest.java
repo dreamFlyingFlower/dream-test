@@ -5,7 +5,7 @@ import java.io.File;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
-import com.wy.test.otp.password.onetimepwd.algorithm.OtpKeyUriFormat;
+import com.wy.test.otp.password.onetimepwd.algorithm.OtpKeyUri;
 
 import dream.flying.flower.framework.core.qrcode.QrCodeHelpers;
 
@@ -13,8 +13,8 @@ public class KeyUriFormatTest {
 
 	public static void main(String[] args) {
 		try {
-			OtpKeyUriFormat kuf =
-					new OtpKeyUriFormat(OtpKeyUriFormat.Types.TOTP, "GIWVWOL7EI5WLVZPDMROEPSTFBEVO77Q", "connsec.com");
+			OtpKeyUri kuf =
+					new OtpKeyUri(OtpKeyUri.Types.TOTP, "GIWVWOL7EI5WLVZPDMROEPSTFBEVO77Q", "connsec.com");
 			kuf.setPeriod(60);
 			String path = "D:\\totp.png";
 			BitMatrix byteMatrix;

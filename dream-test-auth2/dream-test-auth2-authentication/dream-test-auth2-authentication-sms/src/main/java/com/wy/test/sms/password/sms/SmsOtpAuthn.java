@@ -2,16 +2,15 @@ package com.wy.test.sms.password.sms;
 
 import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.env.StandardEnvironment;
 
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 
-public class SmsOtpAuthn extends AbstractOtpAuthn {
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Logger logger = LoggerFactory.getLogger(SmsOtpAuthn.class);
+@Slf4j
+public class SmsOtpAuthn extends AbstractOtpAuthn {
 
 	protected StandardEnvironment properties;
 
@@ -19,7 +18,7 @@ public class SmsOtpAuthn extends AbstractOtpAuthn {
 	public boolean produce(UserEntity userInfo) {
 		String token = this.genToken(userInfo);
 		// You must add send sms code here
-		logger.debug("send sms code" + token);
+		log.debug("send sms code" + token);
 		return true;
 	}
 

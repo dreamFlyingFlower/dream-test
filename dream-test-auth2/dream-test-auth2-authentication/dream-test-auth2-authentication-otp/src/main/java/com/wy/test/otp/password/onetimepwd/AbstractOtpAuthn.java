@@ -1,30 +1,24 @@
 package com.wy.test.otp.password.onetimepwd;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.otp.password.onetimepwd.token.AbstractOtpTokenStore;
 import com.wy.test.otp.password.onetimepwd.token.InMemoryOtpTokenStore;
 
 import dream.flying.flower.generator.StringGenerator;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * AbstractOTPAuthn.
- * 
- * @author Administrator
- *
  */
+@Slf4j
 public abstract class AbstractOtpAuthn {
-
-	private static final Logger logger = LoggerFactory.getLogger(AbstractOtpAuthn.class);
 
 	protected AbstractOtpTokenStore optTokenStore = new InMemoryOtpTokenStore();
 
 	// 验证码有效間隔
 	protected int interval = 30;
 
-	// 验证码长度，范围4～10，默认为6
+	// 验证码长度,范围4～10,默认为6
 	protected int digits = 6;
 
 	protected String crypto = "HmacSHA1";
@@ -55,7 +49,6 @@ public abstract class AbstractOtpAuthn {
 		public static String RSA_OTP = "RSA";
 
 		public static String CAP_OTP = "CAP";
-
 	}
 
 	public abstract boolean produce(UserEntity userInfo);
@@ -77,7 +70,7 @@ public abstract class AbstractOtpAuthn {
 			stringGenerator = new StringGenerator(StringGenerator.DEFAULT_CODE_NUMBER, digits);
 		}
 		String token = stringGenerator.randomGenerate();
-		logger.debug("Generator token " + token);
+		log.debug("Generator token " + token);
 		return token;
 	}
 
@@ -158,5 +151,4 @@ public abstract class AbstractOtpAuthn {
 	public void setDefaultEncoding(String defaultEncoding) {
 		this.defaultEncoding = defaultEncoding;
 	}
-
 }

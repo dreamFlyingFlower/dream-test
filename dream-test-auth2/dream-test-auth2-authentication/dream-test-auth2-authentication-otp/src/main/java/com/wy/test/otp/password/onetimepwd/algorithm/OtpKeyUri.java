@@ -1,6 +1,6 @@
 package com.wy.test.otp.password.onetimepwd.algorithm;
 
-public class OtpKeyUriFormat {
+public class OtpKeyUri {
 
 	public class Types {
 
@@ -30,7 +30,7 @@ public class OtpKeyUriFormat {
 
 	String account;
 
-	public OtpKeyUriFormat() {
+	public OtpKeyUri() {
 
 	}
 
@@ -38,7 +38,7 @@ public class OtpKeyUriFormat {
 	 * @param type
 	 * @param secret
 	 */
-	public OtpKeyUriFormat(String type, String secret) {
+	public OtpKeyUri(String type, String secret) {
 		this.type = type;
 		this.secret = secret;
 	}
@@ -48,13 +48,13 @@ public class OtpKeyUriFormat {
 	 * @param secret
 	 * @param issuer
 	 */
-	public OtpKeyUriFormat(String type, String secret, String issuer) {
+	public OtpKeyUri(String type, String secret, String issuer) {
 		this.type = type;
 		this.secret = secret;
 		this.issuer = issuer;
 	}
 
-	public OtpKeyUriFormat(String crypto, String type, String secret, String issuer, String domain, int digits,
+	public OtpKeyUri(String crypto, String type, String secret, String issuer, String domain, int digits,
 			Long counter, int period, String account) {
 		super();
 		this.crypto = crypto;
@@ -68,7 +68,7 @@ public class OtpKeyUriFormat {
 		this.account = account;
 	}
 
-	public OtpKeyUriFormat(String type, String issuer, String domain, int digits, int period) {
+	public OtpKeyUri(String type, String issuer, String domain, int digits, int period) {
 		super();
 		this.type = type;
 		this.issuer = issuer;

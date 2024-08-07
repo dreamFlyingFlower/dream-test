@@ -3,6 +3,8 @@ package com.wy.test.core.properties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import com.wy.test.core.enums.StoreType;
+
 import lombok.Data;
 
 /**
@@ -23,6 +25,8 @@ public class DreamAuthServerProperties {
 
 	private String domain;
 
+	private String subDomain;
+
 	private String name;
 
 	private String uri;
@@ -34,6 +38,8 @@ public class DreamAuthServerProperties {
 	private String authzUri;
 
 	private String frontendUri = "http://sso.dream.top:4200";
+
+	private StoreType storeType = StoreType.INMEMORY;
 
 	private boolean provision = false;
 }

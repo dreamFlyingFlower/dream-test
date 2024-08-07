@@ -21,8 +21,26 @@ public class DreamAuthOtpProperties {
 
 	private Policy policy = new Policy();
 
+	private Keyuri keyuri = new Keyuri();
+
 	@Data
 	public static class Policy {
+
+		private boolean enabled = false;
+
+		private String type = "totp";
+
+		private String domain = "dream.top";
+
+		private String issuer = "dream";
+
+		private int digits = 6;
+
+		private int period = 30;
+	}
+
+	@Data
+	public static class Keyuri {
 
 		private boolean enabled = false;
 
