@@ -6,8 +6,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.common.ExpiringOAuth2RefreshToken;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 
@@ -20,13 +18,13 @@ import com.wy.test.oauth2.provider.token.DefaultAuthenticationKeyGenerator;
 import com.wy.test.oauth2.provider.token.TokenStore;
 
 import dream.flying.flower.lang.SerializableHelper;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author efenderbosch
  */
+@Slf4j
 public class RedisTokenStore implements TokenStore {
-
-	static final Logger _logger = LoggerFactory.getLogger(RedisTokenStore.class);
 
 	private static final String PREFIX = "AUTH_OAUTH_V20_";
 
@@ -91,7 +89,7 @@ public class RedisTokenStore implements TokenStore {
 
 	@Override
 	public OAuth2Authentication readAuthentication(String token) {
-		_logger.trace("read Authentication by token " + token + " , token key " + AUTH + token);
+		log.trace("read Authentication by token " + token + " , token key " + AUTH + token);
 		RedisConnection conn = getConnection();
 		try {
 			OAuth2Authentication auth = conn.getObject(AUTH + token);
@@ -123,11 +121,11 @@ public class RedisTokenStore implements TokenStore {
 		String authToAccessKey = (AUTH_TO_ACCESS + authenticationKeyGenerator.extractKey(authentication));
 		String approvalKey = (UNAME_TO_ACCESS + getApprovalKey(authentication));
 		String clientId = (CLIENT_ID_TO_ACCESS + authentication.getOAuth2Request().getClientId());
-		_logger.trace("accessKey " + accessKey);
-		_logger.trace("authKey " + authKey);
-		_logger.trace("authToAccessKey " + authToAccessKey);
-		_logger.trace("approvalKey " + approvalKey);
-		_logger.trace("clientId " + clientId);
+		log.trace("accessKey " + accessKey);
+		log.trace("authKey " + authKey);
+		log.trace("authToAccessKey " + authToAccessKey);
+		log.trace("approvalKey " + approvalKey);
+		log.trace("clientId " + clientId);
 
 		RedisConnection conn = getConnection();
 		try {
@@ -152,10 +150,10 @@ public class RedisTokenStore implements TokenStore {
 				String refresh = (token.getRefreshToken().getValue());
 				String auth = (token.getValue());
 				String refreshToAccessKey = (REFRESH_TO_ACCESS + token.getRefreshToken().getValue());
-				_logger.trace("refreshToAccessKey " + refreshToAccessKey);
+				log.trace("refreshToAccessKey " + refreshToAccessKey);
 				conn.set(refreshToAccessKey, auth);
 				String accessToRefreshKey = (ACCESS_TO_REFRESH + token.getValue());
-				_logger.trace("accessToRefreshKey " + accessToRefreshKey);
+				log.trace("accessToRefreshKey " + accessToRefreshKey);
 				conn.set(accessToRefreshKey, refresh);
 				if (refreshToken instanceof ExpiringOAuth2RefreshToken) {
 					ExpiringOAuth2RefreshToken expiringRefreshToken = (ExpiringOAuth2RefreshToken) refreshToken;
@@ -327,7 +325,7 @@ public class RedisTokenStore implements TokenStore {
 	@Override
 	public Collection<OAuth2AccessToken> findTokensByClientIdAndUserName(String clientId, String userName) {
 		String approvalKey = (UNAME_TO_ACCESS + getApprovalKey(clientId, userName));
-		_logger.trace("approvalKey " + approvalKey);
+		log.trace("approvalKey " + approvalKey);
 		List<String> stringList = null;
 		RedisConnection conn = getConnection();
 		try {
@@ -350,7 +348,7 @@ public class RedisTokenStore implements TokenStore {
 	@Override
 	public Collection<OAuth2AccessToken> findTokensByClientId(String clientId) {
 		String key = (CLIENT_ID_TO_ACCESS + clientId);
-		_logger.trace("TokensByClientId  " + key);
+		log.trace("TokensByClientId  " + key);
 		List<String> stringList = null;
 		RedisConnection conn = getConnection();
 		try {

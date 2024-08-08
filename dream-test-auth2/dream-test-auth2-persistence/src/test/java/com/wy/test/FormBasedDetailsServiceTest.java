@@ -19,7 +19,7 @@
 //
 //public class FormBasedDetailsServiceTest {
 //
-//	private static final Logger _logger = LoggerFactory.getLogger(FormBasedDetailsServiceTest.class);
+//	private static final Logger log = LoggerFactory.getLogger(FormBasedDetailsServiceTest.class);
 //
 //	public static ApplicationContext context;
 //
@@ -32,7 +32,7 @@
 //
 //	@Test
 //	public void insert() throws Exception {
-//		_logger.info("insert...");
+//		log.info("insert...");
 //
 //		AppsFormBasedDetails formBasedDetails = new AppsFormBasedDetails();
 //
@@ -45,17 +45,17 @@
 //
 //	@Test
 //	public void get() throws Exception {
-//		_logger.info("get...");
+//		log.info("get...");
 //		AppsFormBasedDetails formBasedDetails = service.get("850379a1-7923-4f6b-90be-d363b2dfd2ca");
 //
-//		_logger.info("formBasedDetails " + formBasedDetails);
+//		log.info("formBasedDetails " + formBasedDetails);
 //
 //	}
 //
 //	@Test
 //	public void remove() throws Exception {
 //
-//		_logger.info("remove...");
+//		log.info("remove...");
 //		AppsFormBasedDetails formBasedDetails = new AppsFormBasedDetails();
 //		formBasedDetails.setId("921d3377-937a-4578-b1e2-92fb23b5e512");
 //		service.remove(formBasedDetails.getId());
@@ -64,7 +64,7 @@
 //
 //	@Test
 //	public void batchDelete() throws Exception {
-//		_logger.info("batchDelete...");
+//		log.info("batchDelete...");
 //		List<String> idList = new ArrayList<String>();
 //		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
 //		idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
@@ -76,35 +76,35 @@
 //	@Test
 //	public void queryPageResults() throws Exception {
 //
-//		_logger.info("queryPageResults...");
+//		log.info("queryPageResults...");
 //		AppsFormBasedDetails formBasedDetails = new AppsFormBasedDetails();
 //		formBasedDetails.setPageNumber(2);
-//		_logger.info("queryPageResults " + service.queryPageResults(formBasedDetails));
+//		log.info("queryPageResults " + service.queryPageResults(formBasedDetails));
 //	}
 //
 //	@Test
 //	public void queryPageResultsByMapperId() throws Exception {
 //
-//		_logger.info("queryPageResults by mapperId...");
+//		log.info("queryPageResults by mapperId...");
 //		AppsFormBasedDetails formBasedDetails = new AppsFormBasedDetails();
 //
 //		formBasedDetails.setPageNumber(2);
 //
-//		_logger.info("queryPageResults by mapperId " + service.queryPageResults("queryPageResults1", formBasedDetails));
+//		log.info("queryPageResults by mapperId " + service.queryPageResults("queryPageResults1", formBasedDetails));
 //
 //	}
 //
 //	@Test
 //	public void findAll() throws Exception {
-//		_logger.info("findAll...");
-//		_logger.info("findAll " + service.findAll());
+//		log.info("findAll...");
+//		log.info("findAll " + service.findAll());
 //	}
 //
 //	@Before
 //	public void initSpringContext() {
 //		if (context != null)
 //			return;
-//		_logger.info("init Spring Context...");
+//		log.info("init Spring Context...");
 //		SimpleDateFormat sdf_ymdhms = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //		String startTime = sdf_ymdhms.format(new Date());
 //
@@ -116,14 +116,14 @@
 //			e.printStackTrace();
 //		}
 //
-//		_logger.info("-- --Init Start at " + startTime + " , End at  " + sdf_ymdhms.format(new Date()));
+//		log.info("-- --Init Start at " + startTime + " , End at  " + sdf_ymdhms.format(new Date()));
 //	}
 //
 //	// Initialization ApplicationContext for Project
 //	public void init() {
-//		_logger.info("init ...");
+//		log.info("init ...");
 //
-//		_logger.info("Application dir " + System.getProperty("user.dir"));
+//		log.info("Application dir " + System.getProperty("user.dir"));
 //		context = new ClassPathXmlApplicationContext(new String[] { "spring/applicationContext.xml" });
 //		MybatisJpaContext.init(context);
 //		getservice();

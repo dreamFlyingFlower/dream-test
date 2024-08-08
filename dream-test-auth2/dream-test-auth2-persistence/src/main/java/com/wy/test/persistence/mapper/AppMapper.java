@@ -3,7 +3,6 @@ package com.wy.test.persistence.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Update;
 
 import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.query.AppQuery;
@@ -21,13 +20,6 @@ import dream.flying.flower.framework.mybatis.plus.mapper.BaseMappers;
  */
 @Mapper
 public interface AppMapper extends BaseMappers<AppEntity, AppVO, AppQuery> {
-
-	int insertApp(AppVO app);
-
-	int updateApp(AppVO app);
-
-	@Update("update auth_app set extendattr=#{extendAttr} where id = #{id}")
-	int updateExtendAttr(AppEntity app);
 
 	List<UserApps> queryMyApps(UserApps userApplications);
 }

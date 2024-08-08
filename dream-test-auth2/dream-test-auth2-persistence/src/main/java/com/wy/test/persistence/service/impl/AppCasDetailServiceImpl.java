@@ -28,18 +28,18 @@ import lombok.AllArgsConstructor;
 public class AppCasDetailServiceImpl extends AbstractServiceImpl<AppCasDetailEntity, AppCasDetailVO, AppCasDetailQuery,
 		AppCasDetailConvert, AppCasDetailMapper> implements AppCasDetailService {
 
-	protected final static Cache<String, AppCasDetailVO> detailsCache =
+	protected final static Cache<String, AppCasDetailVO> DETAILS_CACHE =
 			Caffeine.newBuilder().expireAfterWrite(30, TimeUnit.MINUTES).maximumSize(200000).build();
 
 	@Override
 	public AppCasDetailVO getAppDetails(String id, boolean cached) {
 		AppCasDetailVO details = null;
 		if (cached) {
-			details = detailsCache.getIfPresent(id);
+			details = DETAILS_CACHE.getIfPresent(id);
 			if (details == null) {
 				details = baseMapper.getAppDetails(id);
 				if (details != null) {
-					detailsCache.put(id, details);
+					DETAILS_CACHE.put(id, details);
 				}
 			}
 		} else {

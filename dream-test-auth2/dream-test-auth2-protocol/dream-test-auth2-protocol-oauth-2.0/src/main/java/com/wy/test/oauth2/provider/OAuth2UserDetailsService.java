@@ -2,8 +2,6 @@ package com.wy.test.oauth2.provider;
 
 import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,9 +15,10 @@ import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
 
-public class OAuth2UserDetailsService implements UserDetailsService {
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Logger _logger = LoggerFactory.getLogger(OAuth2UserDetailsService.class);
+@Slf4j
+public class OAuth2UserDetailsService implements UserDetailsService {
 
 	LoginRepository loginRepository;
 
@@ -46,10 +45,10 @@ public class OAuth2UserDetailsService implements UserDetailsService {
 		for (GrantedAuthority administratorsAuthority : AbstractAuthenticationProvider.grantedAdministratorsAuthoritys) {
 			if (grantedAuthoritys.contains(administratorsAuthority)) {
 				principal.setRoleAdministrators(true);
-				_logger.trace("ROLE ADMINISTRATORS Authentication .");
+				log.trace("ROLE ADMINISTRATORS Authentication .");
 			}
 		}
-		_logger.debug("Granted Authority " + grantedAuthoritys);
+		log.debug("Granted Authority " + grantedAuthoritys);
 
 		principal.setGrantedAuthorityApps(grantedAuthoritys);
 

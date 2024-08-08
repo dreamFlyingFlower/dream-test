@@ -3,16 +3,13 @@ package com.wy.test.core.persistence.redis;
 import java.io.Serializable;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import dream.flying.flower.lang.SerializableHelper;
+import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Pipeline;
 
+@Slf4j
 public class RedisConnection {
-
-	private static final Logger _logger = LoggerFactory.getLogger(RedisConnection.class);
 
 	Jedis conn;
 
@@ -45,7 +42,7 @@ public class RedisConnection {
 		if (value instanceof Serializable) {
 			set(key, SerializableHelper.serializeHex((Serializable) value));
 		} else {
-			_logger.error("value must implements of Serializable .");
+			log.error("value must implements of Serializable .");
 		}
 	}
 
@@ -53,7 +50,7 @@ public class RedisConnection {
 		if (value instanceof Serializable) {
 			setex(key, seconds, SerializableHelper.serializeHex((Serializable) value));
 		} else {
-			_logger.error("value must implements of Serializable .");
+			log.error("value must implements of Serializable .");
 		}
 	}
 
@@ -63,13 +60,13 @@ public class RedisConnection {
 	 * @param value
 	 */
 	public void setex(String key, long seconds, String value) {
-		_logger.trace("setex key {} ...", key);
+		log.trace("setex key {} ...", key);
 		if (seconds == 0) {
 			conn.setex(key, RedisConnectionFactory.DEFAULT_CONFIG.DEFAULT_LIFETIME, value);
 		} else {
 			conn.setex(key, seconds, value);
 		}
-		_logger.trace("setex successful .");
+		log.trace("setex successful .");
 	}
 
 	/**
@@ -77,7 +74,7 @@ public class RedisConnection {
 	 * @return String
 	 */
 	public String get(String key) {
-		_logger.trace("get key {} ...", key);
+		log.trace("get key {} ...", key);
 		String value = null;
 		if (key != null) {
 			value = conn.get(key);
@@ -101,12 +98,12 @@ public class RedisConnection {
 	}
 
 	public void expire(String key, long seconds) {
-		_logger.trace("expire key {} , {}", key, seconds);
+		log.trace("expire key {} , {}", key, seconds);
 		conn.expire(key, seconds);
 	}
 
 	public void delete(String key) {
-		_logger.trace("del key {}", key);
+		log.trace("del key {}", key);
 		conn.del(key);
 	}
 

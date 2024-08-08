@@ -11,8 +11,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
@@ -63,29 +61,26 @@ import com.wy.test.oauth2.provider.request.DefaultOAuth2RequestValidator;
 import dream.flying.flower.helper.UrlHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
- * Implementation of the Authorization Endpoint from the OAuth2 specification.
- * Accepts authorization requests, and handles user approval if the grant type
- * is authorization code. The tokens themselves are obtained from the
- * {@link TokenEndpoint Token Endpoint}, except in the implicit grant type
- * (where they come from the Authorization Endpoint via
- * <code>response_type=token</code>.
+ * Implementation of the Authorization Endpoint from the OAuth2 specification. Accepts authorization requests, and
+ * handles user approval if the grant type is authorization code. The tokens themselves are obtained from the
+ * {@link TokenEndpoint Token Endpoint}, except in the implicit grant type (where they come from the Authorization
+ * Endpoint via <code>response_type=token</code>.
  * </p>
  * 
  * <p>
- * This endpoint should be secured so that it is only accessible to fully
- * authenticated users (as a minimum requirement) since it represents a request
- * from a valid user to act on his or her behalf.
+ * This endpoint should be secured so that it is only accessible to fully authenticated users (as a minimum requirement)
+ * since it represents a request from a valid user to act on his or her behalf.
  * </p>
  * 
  */
 @Tag(name = "2-1-OAuth v2.0 API文档模块")
 @Controller
+@Slf4j
 public class AuthorizationEndpoint extends AbstractEndpoint {
-
-	final static Logger _logger = LoggerFactory.getLogger(AuthorizationEndpoint.class);
 
 	private static final String OAUTH_V20_AUTHORIZATION_URL = "" + OAuth2Constants.ENDPOINT.ENDPOINT_AUTHORIZE
 			+ "?client_id=%s&response_type=code&redirect_uri=%s&approval_prompt=auto";
@@ -112,7 +107,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 	public ModelAndView authorize(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("id") String id) {
 		ClientDetails clientDetails = getClientDetailsService().loadClientByClientId(id, true);
-		_logger.debug("" + clientDetails);
+		log.debug("" + clientDetails);
 		String authorizationUrl = "";
 		try {
 			authorizationUrl = String.format(OAUTH_V20_AUTHORIZATION_URL, clientDetails.getClientId(),
@@ -121,7 +116,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 			e.printStackTrace();
 		}
 
-		_logger.debug("authorizationUrl {}", authorizationUrl);
+		log.debug("authorizationUrl {}", authorizationUrl);
 
 		return WebContext.redirect(authorizationUrl);
 	}
@@ -323,7 +318,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 		try {
 			String successfulRedirect =
 					getSuccessfulRedirect(authorizationRequest, generateCode(authorizationRequest, authUser));
-			_logger.debug("successfulRedirect " + successfulRedirect);
+			log.debug("successfulRedirect " + successfulRedirect);
 			return successfulRedirect;
 		} catch (OAuth2Exception e) {
 			return getUnsuccessfulRedirect(authorizationRequest, e, false);

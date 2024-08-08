@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.apache.commons.codec.binary.Hex;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
@@ -15,10 +13,10 @@ import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.algorithm.TimeBasedOTP;
 
 import dream.flying.flower.framework.core.crypto.Base32Helpers;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class TimeBasedOtpAuthn extends AbstractOtpAuthn {
-
-	private static final Logger _logger = LoggerFactory.getLogger(TimeBasedOtpAuthn.class);
 
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -39,7 +37,7 @@ public class TimeBasedOtpAuthn extends AbstractOtpAuthn {
 
 	@Override
 	public boolean validate(UserEntity userInfo, String token) {
-		_logger.debug("utcTime : " + dateFormat.format(new Date()));
+		log.debug("utcTime : " + dateFormat.format(new Date()));
 		long currentTimeSeconds = System.currentTimeMillis() / 1000;
 		String sharedSecret = PasswordReciprocal.getInstance().decoder(userInfo.getSharedSecret());
 		byte[] byteSharedSecret = Base32Helpers.decode(sharedSecret);
@@ -55,8 +53,8 @@ public class TimeBasedOtpAuthn extends AbstractOtpAuthn {
 			timeBasedToken = TimeBasedOTP.genOTPHmacSHA512(hexSharedSecret,
 					Long.toHexString(currentTimeSeconds / interval).toUpperCase() + "", digits + "");
 		}
-		_logger.debug("token : " + token);
-		_logger.debug("timeBasedToken : " + timeBasedToken);
+		log.debug("token : " + token);
+		log.debug("timeBasedToken : " + timeBasedToken);
 		if (token.equalsIgnoreCase(timeBasedToken)) {
 			return true;
 		}

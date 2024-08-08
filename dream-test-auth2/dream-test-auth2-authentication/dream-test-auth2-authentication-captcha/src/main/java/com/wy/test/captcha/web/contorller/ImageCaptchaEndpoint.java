@@ -3,8 +3,6 @@ package com.wy.test.captcha.web.contorller;
 import java.awt.image.BufferedImage;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +16,18 @@ import com.wy.test.core.entity.Message;
 import com.wy.test.core.persistence.cache.MomentaryService;
 
 import dream.flying.flower.helper.ImageHelper;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * ImageCaptchaEndpoint Producer captcha.
+ * 验证码生产者
  * 
+ * @author 飞花梦影
+ * @date 2024-08-08 11:31:55
+ * @git {@link https://github.com/dreamFlyingFlower}
  */
 @Controller
+@Slf4j
 public class ImageCaptchaEndpoint {
-
-	private static final Logger _logger = LoggerFactory.getLogger(ImageCaptchaEndpoint.class);
 
 	@Autowired
 	private Producer captchaProducer;
@@ -35,7 +36,7 @@ public class ImageCaptchaEndpoint {
 	protected MomentaryService momentaryService;
 
 	@Autowired
-	AuthTokenService authTokenService;
+	protected AuthTokenService authTokenService;
 
 	/**
 	 * captcha image Producer.
@@ -69,18 +70,18 @@ public class ImageCaptchaEndpoint {
 				state = authTokenService.genRandomJwt();
 			}
 			kaptchaKey = authTokenService.resolveJWTID(state);
-			_logger.trace("kaptchaKey {} , Captcha Text is {}", kaptchaKey, kaptchaValue);
+			log.trace("kaptchaKey {} , Captcha Text is {}", kaptchaKey, kaptchaValue);
 
 			momentaryService.put("", kaptchaKey, kaptchaValue);
 			// create the image with the text
 			BufferedImage bufferedImage = captchaProducer.createImage(kaptchaText);
 			String b64Image = ImageHelper.encodeImage(bufferedImage);
 
-			_logger.trace("b64Image {}", b64Image);
+			log.trace("b64Image {}", b64Image);
 
 			return new Message<ImageCaptcha>(new ImageCaptcha(state, b64Image)).buildResponse();
 		} catch (Exception e) {
-			_logger.error("captcha Producer Error " + e.getMessage());
+			log.error("captcha Producer Error " + e.getMessage());
 		}
 		return new Message<Object>(Message.FAIL).buildResponse();
 	}

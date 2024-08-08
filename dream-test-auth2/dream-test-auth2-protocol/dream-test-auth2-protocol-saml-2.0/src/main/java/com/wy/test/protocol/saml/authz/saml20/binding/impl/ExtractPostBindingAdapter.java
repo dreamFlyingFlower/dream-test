@@ -15,8 +15,6 @@ import org.opensaml.ws.security.SecurityPolicyResolver;
 import org.opensaml.ws.transport.http.HttpServletRequestAdapter;
 import org.opensaml.xml.security.SecurityException;
 import org.opensaml.xml.security.credential.CredentialResolver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.wy.test.core.vo.AppSamlDetailVO;
@@ -24,10 +22,10 @@ import com.wy.test.protocol.saml.authz.saml.common.TrustResolver;
 import com.wy.test.protocol.saml.authz.saml20.binding.ExtractBindingAdapter;
 
 import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ExtractPostBindingAdapter implements ExtractBindingAdapter, InitializingBean {
-
-	private final static Logger _logger = LoggerFactory.getLogger(ExtractPostBindingAdapter.class);
 
 	static final String SAML_REQUEST_POST_PARAM_NAME = "SAMLRequest";
 
@@ -85,7 +83,7 @@ public class ExtractPostBindingAdapter implements ExtractBindingAdapter, Initial
 		messageContext.setSecurityPolicyResolver(securityPolicyResolver);
 
 		decoder.decode(messageContext);
-		_logger.debug("decode successed ");
+		log.debug("decode successed ");
 		return messageContext;
 
 	}
@@ -102,7 +100,7 @@ public class ExtractPostBindingAdapter implements ExtractBindingAdapter, Initial
 
 	@Override
 	public void buildSecurityPolicyResolver(KeyStore trustKeyStore) {
-		_logger.debug("EntityName {}, KeystorePassword {}", keyStoreLoader.getEntityName(),
+		log.debug("EntityName {}, KeystorePassword {}", keyStoreLoader.getEntityName(),
 				keyStoreLoader.getKeystorePassword());
 
 		TrustResolver trustResolver = new TrustResolver(trustKeyStore, keyStoreLoader.getEntityName(),

@@ -1,7 +1,5 @@
 package com.wy.test.core.authn.web;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
@@ -10,13 +8,13 @@ import org.springframework.security.core.context.SecurityContextImpl;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 
-/**
- * SecurityContext Session for Request , use
- * SecurityContextHolderAwareRequestFilter
- */
-public class SessionSecurityContextHolderStrategy implements SecurityContextHolderStrategy {
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Logger _logger = LoggerFactory.getLogger(SessionSecurityContextHolderStrategy.class);
+/**
+ * SecurityContext Session for Request , use SecurityContextHolderAwareRequestFilter
+ */
+@Slf4j
+public class SessionSecurityContextHolderStrategy implements SecurityContextHolderStrategy {
 
 	@Override
 	public void clearContext() {
@@ -33,7 +31,7 @@ public class SessionSecurityContextHolderStrategy implements SecurityContextHold
 				ctx.setAuthentication(authentication);
 			}
 		} catch (Exception e) {
-			_logger.trace("a session ", e);
+			log.trace("a session ", e);
 		}
 
 		return ctx;
@@ -48,5 +46,4 @@ public class SessionSecurityContextHolderStrategy implements SecurityContextHold
 	public SecurityContext createEmptyContext() {
 		return new SecurityContextImpl();
 	}
-
 }

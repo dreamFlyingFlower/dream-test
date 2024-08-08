@@ -1,7 +1,5 @@
 package com.wy.test.cas.authz.endpoint;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -14,8 +12,6 @@ import com.wy.test.persistence.service.AppCasDetailService;
 import com.wy.test.persistence.service.UserService;
 
 public class CasBaseAuthorizeEndpoint extends AuthorizeBaseEndpoint {
-
-	final static Logger _logger = LoggerFactory.getLogger(CasBaseAuthorizeEndpoint.class);
 
 	@Autowired
 	protected AppCasDetailService appCasDetailService;

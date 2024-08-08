@@ -18,10 +18,6 @@ import dream.flying.flower.framework.mybatis.plus.service.BaseServices;
  */
 public interface AppService extends BaseServices<AppEntity, AppVO, AppQuery> {
 
-	boolean insertApp(AppVO app);
-
-	boolean updateApp(AppVO app);
-
 	boolean updateExtendAttr(AppEntity app);
 
 	List<UserApps> queryMyApps(UserApps userApplications);

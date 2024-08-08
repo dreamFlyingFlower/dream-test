@@ -2,8 +2,6 @@ package com.wy.test.mgt.web.apps.contorller;
 
 import java.util.Arrays;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +24,12 @@ import com.wy.test.core.vo.AppVO;
 
 import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
 import dream.flying.flower.generator.GeneratorStrategyContext;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping(value = { "/apps/extendapi" })
+@Slf4j
 public class ExtendApiDetailController extends BaseAppContorller {
-
-	final static Logger _logger = LoggerFactory.getLogger(ExtendApiDetailController.class);
 
 	@GetMapping(value = { "/init" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> init() {
@@ -45,7 +43,7 @@ public class ExtendApiDetailController extends BaseAppContorller {
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		AppVO application = appsService.getInfo(id);
+		AppVO application = appService.getInfo(id);
 		super.decoderSecret(application);
 		AppExtendDetailVO extendApiDetails = new AppExtendDetailVO();
 		BeanUtils.copyProperties(application, extendApiDetails);
@@ -56,11 +54,11 @@ public class ExtendApiDetailController extends BaseAppContorller {
 	@ResponseBody
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> add(@RequestBody AppExtendDetailVO extendApiDetails, @CurrentUser UserEntity currentUser) {
-		_logger.debug("-Add  :" + extendApiDetails);
+		log.debug("-Add  :" + extendApiDetails);
 
 		transform(extendApiDetails);
 		extendApiDetails.setInstId(currentUser.getInstId());
-		if (appsService.insertApp(extendApiDetails)) {
+		if (null != appService.add(extendApiDetails)) {
 			return new Message<AppExtendDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppExtendDetailEntity>(Message.FAIL).buildResponse();
@@ -71,10 +69,10 @@ public class ExtendApiDetailController extends BaseAppContorller {
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> update(@RequestBody AppExtendDetailVO extendApiDetails,
 			@CurrentUser UserEntity currentUser) {
-		_logger.debug("-update  :" + extendApiDetails);
+		log.debug("-update  :" + extendApiDetails);
 		transform(extendApiDetails);
 		extendApiDetails.setInstId(currentUser.getInstId());
-		if (appsService.updateApp(extendApiDetails)) {
+		if (appService.edit(extendApiDetails)) {
 			return new Message<AppExtendDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppExtendDetailEntity>(Message.FAIL).buildResponse();
@@ -84,8 +82,8 @@ public class ExtendApiDetailController extends BaseAppContorller {
 	@ResponseBody
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
-		_logger.debug("-delete  ids : {} ", ids);
-		if (appsService.removeByIds(Arrays.asList(ids.split(",")))) {
+		log.debug("-delete  ids : {} ", ids);
+		if (appService.removeByIds(Arrays.asList(ids.split(",")))) {
 			return new Message<AppExtendDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppExtendDetailEntity>(Message.FAIL).buildResponse();

@@ -2,8 +2,6 @@ package com.wy.test.core.authn.web;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,12 +20,12 @@ import com.wy.test.core.entity.Message;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.lang.StrHelper;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping(value = "/auth")
+@Slf4j
 public class AuthTokenRefreshPoint {
-
-	private static final Logger _logger = LoggerFactory.getLogger(AuthTokenRefreshPoint.class);
 
 	@Autowired
 	AuthTokenService authTokenService;
@@ -41,28 +39,28 @@ public class AuthTokenRefreshPoint {
 	@GetMapping(value = { "/token/refresh" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> refresh(HttpServletRequest request,
 			@RequestParam(name = "refresh_token", required = false) String refreshToken) {
-		_logger.debug("try to refresh token ");
-		_logger.trace("refresh token {} ", refreshToken);
-		if (_logger.isTraceEnabled()) {
+		log.debug("try to refresh token ");
+		log.trace("refresh token {} ", refreshToken);
+		if (log.isTraceEnabled()) {
 			WebContext.printRequest(request);
 		}
 		try {
 			if (StrHelper.isNotBlank(refreshToken) && refreshTokenService.validateJwtToken(refreshToken)) {
 				String sessionId = refreshTokenService.resolveJWTID(refreshToken);
-				_logger.trace("Try to  refresh sessionId [{}]", sessionId);
+				log.trace("Try to  refresh sessionId [{}]", sessionId);
 				Session session = sessionManager.refresh(sessionId);
 				if (session != null) {
 					AuthJwt authJwt = authTokenService.genAuthJwt(session.getAuthentication());
-					_logger.trace("Grant new token {}", authJwt);
+					log.trace("Grant new token {}", authJwt);
 					return new Message<AuthJwt>(authJwt).buildResponse();
 				} else {
-					_logger.debug("Session is timeout , sessionId [{}]", sessionId);
+					log.debug("Session is timeout , sessionId [{}]", sessionId);
 				}
 			} else {
-				_logger.debug("refresh token is not validate .");
+				log.debug("refresh token is not validate .");
 			}
 		} catch (Exception e) {
-			_logger.error("Refresh Exception !", e);
+			log.error("Refresh Exception !", e);
 		}
 		return new ResponseEntity<>("Refresh Token Fail !", HttpStatus.UNAUTHORIZED);
 	}

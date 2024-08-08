@@ -1,11 +1,9 @@
 package com.wy.test.persistence.provision.thread;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ProvisioningRunnerThread extends Thread {
-
-	private static final Logger _logger = LoggerFactory.getLogger(ProvisioningRunnerThread.class);
 
 	ProvisioningRunner runner;
 
@@ -19,11 +17,11 @@ public class ProvisioningRunnerThread extends Thread {
 		while (true) {
 			try {
 				Thread.sleep(60 * 1000);
-				_logger.trace("Provisioning start ...");
+				log.trace("Provisioning start ...");
 				runner.provisions();
-				_logger.trace("Provisioning end , wait for next .");
+				log.trace("Provisioning end , wait for next .");
 			} catch (InterruptedException e) {
-				_logger.error("InterruptedException", e);
+				log.error("InterruptedException", e);
 			}
 		}
 	}

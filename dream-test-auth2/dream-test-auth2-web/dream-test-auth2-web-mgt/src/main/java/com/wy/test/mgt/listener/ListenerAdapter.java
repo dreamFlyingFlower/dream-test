@@ -10,12 +10,11 @@ import org.quartz.JobExecutionContext;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.TriggerBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ListenerAdapter {
-
-	private static final Logger _logger = LoggerFactory.getLogger(ListenerAdapter.class);
 
 	JobExecutionContext context;
 
@@ -43,7 +42,7 @@ public class ListenerAdapter {
 
 	public static void addListener(Class<? extends Job> jobClass, Scheduler scheduler, JobDataMap jobDataMap,
 			String cronSchedule, String identity) throws SchedulerException {
-		_logger.debug("Cron {}  , Job schedule {}  ", cronSchedule, identity);
+		log.debug("Cron {}  , Job schedule {}  ", cronSchedule, identity);
 
 		JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(identity, identity + "Group").build();
 

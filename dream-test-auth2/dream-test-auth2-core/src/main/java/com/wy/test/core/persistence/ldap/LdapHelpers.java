@@ -11,12 +11,10 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class LdapHelpers {
-
-	private static final Logger _logger = LoggerFactory.getLogger(LdapHelpers.class);
 
 	public class Product {
 
@@ -103,10 +101,10 @@ public class LdapHelpers {
 		DirContext ctx = null;
 		try {
 			ctx = new InitialDirContext(properties);
-			_logger.info("connect to ldap " + providerUrl + " seccessful.");
+			log.info("connect to ldap " + providerUrl + " seccessful.");
 		} catch (NamingException e) {
-			_logger.error("connect to ldap " + providerUrl + " fail.");
-			_logger.error(e.getMessage());
+			log.error("connect to ldap " + providerUrl + " fail.");
+			log.error(e.getMessage());
 		}
 		return ctx;
 	}
@@ -114,10 +112,10 @@ public class LdapHelpers {
 	protected void initEnvironment() {
 		// LDAP
 		if (props == null) {
-			_logger.debug("PROVIDER_URL {}", providerUrl);
-			_logger.debug("SECURITY_PRINCIPAL {}", principal);
+			log.debug("PROVIDER_URL {}", providerUrl);
+			log.debug("SECURITY_PRINCIPAL {}", principal);
 			// no log credentials
-			// _logger.trace("SECURITY_CREDENTIALS {}" , credentials);
+			// log.trace("SECURITY_CREDENTIALS {}" , credentials);
 			props = new Properties();
 			props.setProperty(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
 			props.setProperty(Context.URL_PKG_PREFIXES, "com.sun.jndi.url");
@@ -169,7 +167,7 @@ public class LdapHelpers {
 				ctx.close();
 			} catch (Exception e) {
 				e.printStackTrace();
-				_logger.error(e.getMessage());
+				log.error(e.getMessage());
 			} finally {
 				ctx = null;
 			}
@@ -306,7 +304,7 @@ public class LdapHelpers {
 			}
 		} catch (NamingException e) {
 			e.printStackTrace();
-			_logger.error(e.getMessage());
+			log.error(e.getMessage());
 		}
 		return values.toString();
 	}
@@ -325,7 +323,7 @@ public class LdapHelpers {
 			}
 		} catch (NamingException e) {
 			e.printStackTrace();
-			_logger.error(e.getMessage());
+			log.error(e.getMessage());
 		}
 		return values.toString();
 	}

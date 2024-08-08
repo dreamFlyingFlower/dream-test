@@ -3,8 +3,6 @@ package com.wy.test.extend;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,12 +14,12 @@ import com.wy.test.extend.adapter.netease.NeteaseRSATool;
 import dream.flying.flower.framework.core.pretty.strategy.JsonPretty;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "2-8-ExtendApi接口文档模块-元数据")
 @Controller
+@Slf4j
 public class ExtendApiMetadata {
-
-	final static Logger _logger = LoggerFactory.getLogger(ExtendApiMetadata.class);
 
 	@Operation(summary = "netease qiye mail RSA Key", description = "网易企业邮箱RSA Key生成器", method = "GET")
 	@RequestMapping(value = "/metadata/netease/qiye/mail/rsa/gen", method = { RequestMethod.POST, RequestMethod.GET })

@@ -6,8 +6,6 @@ import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -17,17 +15,13 @@ import com.wy.test.core.enums.StoreType;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 
 import dream.flying.flower.helper.DateTimeHelper;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * SessionManager Level 1 in memory,store in Caffeine Level 2 in Redis user
- * session status in database
- * 
- * @author shimh
- *
+ * SessionManager Level 1 in memory,store in Caffeine Level 2 in Redis user session status in database
  */
+@Slf4j
 public class SessionManagerFactory implements SessionManager {
-
-	private static final Logger _logger = LoggerFactory.getLogger(SessionManagerFactory.class);
 
 	private static final String DEFAULT_DEFAULT_SELECT_STATEMENT =
 			"select id,sessionid,userId,username,displayname,logintime from auth_history_login where sessionstatus = 1";
@@ -56,11 +50,11 @@ public class SessionManagerFactory implements SessionManager {
 		this.validitySeconds = validitySeconds;
 		this.jdbcTemplate = jdbcTemplate;
 		this.inMemorySessionManager = new InMemorySessionManager(validitySeconds);
-		_logger.debug("InMemorySessionManager");
+		log.debug("InMemorySessionManager");
 		if (storeType == StoreType.REDIS) {
 			isRedis = true;
 			this.redisSessionManager = new RedisSessionManager(redisConnFactory, validitySeconds);
-			_logger.debug("RedisSessionManager");
+			log.debug("RedisSessionManager");
 		}
 	}
 
@@ -129,13 +123,13 @@ public class SessionManagerFactory implements SessionManager {
 	}
 
 	private void profileLastLogoffTime(String userId, String lastLogoffTime) {
-		_logger.trace("userId {} , lastlogofftime {}", userId, lastLogoffTime);
+		log.trace("userId {} , lastlogofftime {}", userId, lastLogoffTime);
 		jdbcTemplate.update(LOGOUT_USERINFO_UPDATE_STATEMENT, new Object[] { lastLogoffTime, userId },
 				new int[] { Types.TIMESTAMP, Types.VARCHAR });
 	}
 
 	private void sessionLogoff(String sessionId, String lastLogoffTime) {
-		_logger.trace("sessionId {} , lastlogofftime {}", sessionId, lastLogoffTime);
+		log.trace("sessionId {} , lastlogofftime {}", sessionId, lastLogoffTime);
 		jdbcTemplate.update(HISTORY_LOGOUT_UPDATE_STATEMENT, new Object[] { lastLogoffTime, sessionId },
 				new int[] { Types.VARCHAR, Types.VARCHAR });
 	}
@@ -143,7 +137,7 @@ public class SessionManagerFactory implements SessionManager {
 	@Override
 	public void terminate(String sessionId, String userId, String username) {
 		String lastLogoffTime = DateTimeHelper.formatDateTime();
-		_logger.trace("{} user {} terminate session {} .", lastLogoffTime, username, sessionId);
+		log.trace("{} user {} terminate session {} .", lastLogoffTime, username, sessionId);
 		this.profileLastLogoffTime(userId, lastLogoffTime);
 		this.sessionLogoff(sessionId, lastLogoffTime);
 		this.remove(sessionId);

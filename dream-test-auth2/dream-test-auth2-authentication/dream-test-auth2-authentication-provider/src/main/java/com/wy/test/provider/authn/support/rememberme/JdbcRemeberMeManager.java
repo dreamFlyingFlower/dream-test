@@ -5,17 +5,16 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
 
-public class JdbcRemeberMeManager extends AbstractRemeberMeManager {
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Logger _logger = LoggerFactory.getLogger(JdbcRemeberMeManager.class);
+@Slf4j
+public class JdbcRemeberMeManager extends AbstractRemeberMeManager {
 
 	private static final String DEFAULT_DEFAULT_INSERT_STATEMENT =
 			"insert into  auth_remember_me(id, userid,username,lastlogintime,expirationtime)values( ? , ? , ? , ? , ?)";
@@ -70,7 +69,7 @@ public class JdbcRemeberMeManager extends AbstractRemeberMeManager {
 						return remeberMe;
 					}
 				}, remeberMe.getId(), remeberMe.getUsername());
-		_logger.debug("listRemeberMe " + listRemeberMe);
+		log.debug("listRemeberMe " + listRemeberMe);
 		return (listRemeberMe.size() > 0) ? listRemeberMe.get(0) : null;
 	}
 

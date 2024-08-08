@@ -3,18 +3,15 @@ package com.wy.test.otp.password.onetimepwd.impl;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.algorithm.HOTP;
 
 import dream.flying.flower.framework.core.crypto.Base32Helpers;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class HotpOtpAuthn extends AbstractOtpAuthn {
-
-	private static final Logger _logger = LoggerFactory.getLogger(HotpOtpAuthn.class);
 
 	boolean addChecksum;
 
@@ -31,14 +28,14 @@ public class HotpOtpAuthn extends AbstractOtpAuthn {
 
 	@Override
 	public boolean validate(UserEntity userInfo, String token) {
-		_logger.debug("SharedCounter : " + userInfo.getSharedCounter());
+		log.debug("SharedCounter : " + userInfo.getSharedCounter());
 		byte[] byteSharedSecret = Base32Helpers.decode(userInfo.getSharedSecret());
 		String hotpToken;
 		try {
 			hotpToken = HOTP.generateOTP(byteSharedSecret, Long.parseLong(userInfo.getSharedCounter()), digits,
 					addChecksum, truncation);
-			_logger.debug("token : " + token);
-			_logger.debug("hotpToken : " + hotpToken);
+			log.debug("token : " + token);
+			log.debug("hotpToken : " + hotpToken);
 			if (token.equalsIgnoreCase(hotpToken)) {
 				return true;
 			}

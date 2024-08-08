@@ -6,8 +6,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,12 +23,12 @@ import dream.flying.flower.framework.core.pretty.strategy.JsonPretty;
 import dream.flying.flower.lang.StrHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "2-1-OAuth v2.0 API文档模块")
 @Controller
+@Slf4j
 public class OpenidConfigurationEndpoint extends AbstractEndpoint {
-
-	final static Logger _logger = LoggerFactory.getLogger(OpenidConfigurationEndpoint.class);
 
 	@Operation(summary = "OpenID Connect metadata 元数据接口", description = "参数client_id", method = "GET,POST")
 	@RequestMapping(value = { OAuth2Constants.ENDPOINT.ENDPOINT_BASE + "/.well-known/openid-configuration" },
@@ -48,7 +46,7 @@ public class OpenidConfigurationEndpoint extends AbstractEndpoint {
 	public String configurationMetadata(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("instId") String instId,
 			@RequestParam(value = "client_id", required = false) String client_id) {
-		_logger.debug("instId {} , client_id {}", instId, client_id);
+		log.debug("instId {} , client_id {}", instId, client_id);
 
 		String baseUrl = WebContext.getContextPath(true);
 
@@ -58,7 +56,7 @@ public class OpenidConfigurationEndpoint extends AbstractEndpoint {
 			try {
 				clientDetails = getClientDetailsService().loadClientByClientId(client_id, true);
 			} catch (Exception e) {
-				_logger.error("getClientDetailsService", e);
+				log.error("getClientDetailsService", e);
 			}
 		}
 

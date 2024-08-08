@@ -1,8 +1,6 @@
 package com.wy.test.mgt.web.config.contorller;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +21,12 @@ import com.wy.test.core.persistence.ldap.ActiveDirectoryHelpers;
 import com.wy.test.core.persistence.ldap.LdapHelpers;
 import com.wy.test.persistence.service.LdapContextService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
 @RequestMapping(value = { "/config/ldapcontext" })
+@Slf4j
 public class LdapContextController {
-
-	final static Logger _logger = LoggerFactory.getLogger(LdapContextController.class);
 
 	@Autowired
 	private LdapContextService ldapContextService;
@@ -45,7 +44,7 @@ public class LdapContextController {
 	@ResponseBody
 	public ResponseEntity<?> update(@RequestBody LdapContextEntity ldapContext, @CurrentUser UserEntity currentUser,
 			BindingResult result) {
-		_logger.debug("update ldapContext : " + ldapContext);
+		log.debug("update ldapContext : " + ldapContext);
 		ldapContext.setCredentials(PasswordReciprocal.getInstance().encode(ldapContext.getCredentials()));
 		ldapContext.setInstId(currentUser.getInstId());
 		boolean updateResult = false;

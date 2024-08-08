@@ -5,17 +5,16 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.wy.test.core.vo.UserVO;
 import com.wy.test.provider.authn.realm.AbstractAuthenticationRealm;
 import com.wy.test.provider.authn.realm.IAuthenticationServer;
 
-public class LdapAuthenticationRealm extends AbstractAuthenticationRealm {
+import lombok.extern.slf4j.Slf4j;
 
-	private final static Logger _logger = LoggerFactory.getLogger(LdapAuthenticationRealm.class);
+@Slf4j
+public class LdapAuthenticationRealm extends AbstractAuthenticationRealm {
 
 	@NotNull
 	@Size(min = 1)
@@ -46,11 +45,11 @@ public class LdapAuthenticationRealm extends AbstractAuthenticationRealm {
 			if (ldapServer.isMapping()) {// if ldap Context accountMapping equals YES
 				username = userInfo.getWindowsAccount();
 			}
-			_logger.debug("Attempting to authenticate {} at {}", username, ldapServer);
+			log.debug("Attempting to authenticate {} at {}", username, ldapServer);
 			try {
 				isAuthenticated = ldapServer.authenticate(username, password);
 			} catch (Exception e) {
-				_logger.debug("Attempting Authenticated fail .");
+				log.debug("Attempting Authenticated fail .");
 			}
 			if (isAuthenticated) {
 				return true;

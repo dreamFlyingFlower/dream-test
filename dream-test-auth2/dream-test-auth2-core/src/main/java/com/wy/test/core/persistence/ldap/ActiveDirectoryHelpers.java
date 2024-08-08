@@ -6,12 +6,10 @@ import javax.naming.Context;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ActiveDirectoryHelpers extends LdapHelpers {
-
-	private final static Logger _logger = LoggerFactory.getLogger(ActiveDirectoryHelpers.class);
 
 	protected String domain;
 
@@ -46,10 +44,10 @@ public class ActiveDirectoryHelpers extends LdapHelpers {
 	@Override
 	protected void initEnvironment() {
 		if (props == null) {
-			_logger.debug("PROVIDER_URL {}", providerUrl);
-			_logger.debug("SECURITY_PRINCIPAL {}", principal);
+			log.debug("PROVIDER_URL {}", providerUrl);
+			log.debug("SECURITY_PRINCIPAL {}", principal);
 			// no log credentials
-			// _logger.trace("SECURITY_CREDENTIALS {}" , credentials);
+			// log.trace("SECURITY_CREDENTIALS {}" , credentials);
 			// LDAP
 			props = new Properties();
 			props.setProperty(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
@@ -65,14 +63,14 @@ public class ActiveDirectoryHelpers extends LdapHelpers {
 				activeDirectoryDomain = domain;
 			}
 
-			_logger.info("PROVIDER_DOMAIN:" + activeDirectoryDomain + " for " + domain);
+			log.info("PROVIDER_DOMAIN:" + activeDirectoryDomain + " for " + domain);
 			String activeDirectoryPrincipal = activeDirectoryDomain + "\\" + principal;
-			_logger.debug("Active Directory SECURITY_PRINCIPAL : " + activeDirectoryPrincipal);
+			log.debug("Active Directory SECURITY_PRINCIPAL : " + activeDirectoryPrincipal);
 			props.setProperty(Context.SECURITY_PRINCIPAL, activeDirectoryPrincipal);
 			props.setProperty(Context.SECURITY_CREDENTIALS, credentials);
 
 			if (ssl && providerUrl.toLowerCase().startsWith("ldaps")) {
-				_logger.info("ldaps security protocol.");
+				log.info("ldaps security protocol.");
 				System.setProperty("javax.net.ssl.trustStore", trustStore);
 				System.setProperty("javax.net.ssl.trustStorePassword", trustStorePassword);
 				props.put(Context.SECURITY_PROTOCOL, "ssl");

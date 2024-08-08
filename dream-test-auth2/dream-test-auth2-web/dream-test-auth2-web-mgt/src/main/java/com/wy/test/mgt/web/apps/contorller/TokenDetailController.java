@@ -67,7 +67,7 @@ public class TokenDetailController extends BaseAppContorller {
 		transform(tokenBasedDetails);
 		tokenBasedDetails.setAlgorithmKey(tokenBasedDetails.getSecret());
 		tokenBasedDetails.setInstId(currentUser.getInstId());
-		if (null != tokenBasedDetailsService.add(tokenBasedDetails) && appsService.insertApp(tokenBasedDetails)) {
+		if (null != tokenBasedDetailsService.add(tokenBasedDetails) && null != appService.add(tokenBasedDetails)) {
 			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppJwtDetailEntity>(Message.FAIL).buildResponse();
@@ -82,7 +82,7 @@ public class TokenDetailController extends BaseAppContorller {
 		transform(tokenBasedDetails);
 		tokenBasedDetails.setAlgorithmKey(tokenBasedDetails.getSecret());
 		tokenBasedDetails.setInstId(currentUser.getInstId());
-		if (tokenBasedDetailsService.edit(tokenBasedDetails) && appsService.updateApp(tokenBasedDetails)) {
+		if (tokenBasedDetailsService.edit(tokenBasedDetails) && appService.edit(tokenBasedDetails)) {
 			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppJwtDetailEntity>(Message.FAIL).buildResponse();
@@ -94,11 +94,10 @@ public class TokenDetailController extends BaseAppContorller {
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete  ids : {} ", ids);
 		if (tokenBasedDetailsService.removeByIds(Arrays.asList(ids.split(",")))
-				&& appsService.removeByIds(Arrays.asList(ids.split(",")))) {
+				&& appService.removeByIds(Arrays.asList(ids.split(",")))) {
 			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppJwtDetailEntity>(Message.FAIL).buildResponse();
 		}
 	}
-
 }

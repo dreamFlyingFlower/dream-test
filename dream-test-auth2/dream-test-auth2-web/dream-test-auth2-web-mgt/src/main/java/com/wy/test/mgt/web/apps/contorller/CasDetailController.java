@@ -62,7 +62,7 @@ public class CasDetailController extends BaseAppContorller {
 		log.debug("-Add  :" + casDetails);
 		transform(casDetails);
 		casDetails.setInstId(currentUser.getInstId());
-		if (appCasDetailService.save(appCasDetailConvert.convert(casDetails)) && appsService.insertApp(casDetails)) {
+		if (appCasDetailService.save(appCasDetailConvert.convert(casDetails)) && null != appService.add(casDetails)) {
 			return new Message<AppCasDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppCasDetailEntity>(Message.FAIL).buildResponse();
@@ -75,8 +75,7 @@ public class CasDetailController extends BaseAppContorller {
 		log.debug("-update  :" + casDetails);
 		transform(casDetails);
 		casDetails.setInstId(currentUser.getInstId());
-		if (appCasDetailService.updateById(appCasDetailConvert.convert(casDetails))
-				&& appsService.updateApp(casDetails)) {
+		if (appCasDetailService.updateById(appCasDetailConvert.convert(casDetails)) && appService.edit(casDetails)) {
 			return new Message<AppCasDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppCasDetailEntity>(Message.FAIL).buildResponse();
@@ -88,7 +87,7 @@ public class CasDetailController extends BaseAppContorller {
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete  ids : {} ", ids);
 		if (appCasDetailService.removeByIds(Arrays.asList(ids.split(",")))
-				&& appsService.removeByIds(Arrays.asList(ids.split(",")))) {
+				&& appService.removeByIds(Arrays.asList(ids.split(",")))) {
 			return new Message<>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<>(Message.FAIL).buildResponse();

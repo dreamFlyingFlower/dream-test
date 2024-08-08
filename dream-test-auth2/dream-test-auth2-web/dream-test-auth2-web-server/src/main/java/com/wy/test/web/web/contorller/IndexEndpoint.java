@@ -1,24 +1,27 @@
 package com.wy.test.web.web.contorller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.core.web.WebContext;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
- * Index
+ * 首页
+ *
+ * @author 飞花梦影
+ * @date 2024-08-08 11:46:23
+ * @git {@link https://github.com/dreamFlyingFlower}
  */
 @Controller
+@Slf4j
 public class IndexEndpoint {
-
-	private static Logger _logger = LoggerFactory.getLogger(IndexEndpoint.class);
 
 	@GetMapping(value = { "/" })
 	public ModelAndView index() {
-		_logger.debug("IndexEndpoint /.");
+		log.debug("IndexEndpoint /.");
 		return new ModelAndView("index").addObject("appVersion",
 				WebContext.properties.getProperty("application.formatted-version"));
 	}

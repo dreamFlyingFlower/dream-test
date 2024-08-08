@@ -26,8 +26,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -35,11 +33,11 @@ import com.wy.test.core.constants.ContentType;
 
 import dream.flying.flower.framework.core.helper.TokenHelpers;
 import dream.flying.flower.framework.core.json.JsonHelpers;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class HttpRequestAdapter {
-
-	private static final Logger _logger = LoggerFactory.getLogger(HttpRequestAdapter.class);
 
 	private String mediaType = ContentType.APPLICATION_FORM;
 
@@ -103,7 +101,7 @@ public class HttpRequestAdapter {
 				stringEntity.setContentType(ContentType.APPLICATION_JSON);
 				httpMethod.setEntity(stringEntity);
 			}
-			_logger.trace("Post Message \n{} ", httpMethod.getEntity().toString());
+			log.trace("Post Message \n{} ", httpMethod.getEntity().toString());
 		}
 
 		try {
@@ -135,7 +133,7 @@ public class HttpRequestAdapter {
 		StringEntity stringEntity = new StringEntity(jsonString, "UTF-8");
 		stringEntity.setContentType(ContentType.APPLICATION_JSON);
 		httpMethod.setEntity(stringEntity);
-		_logger.debug("Post Message \n{} ", httpMethod.getEntity().toString());
+		log.debug("Post Message \n{} ", httpMethod.getEntity().toString());
 
 		try {
 			// httpClient对象执行put请求,并返回响应参数对象
@@ -166,7 +164,7 @@ public class HttpRequestAdapter {
 		StringEntity stringEntity = new StringEntity(jsonString, "UTF-8");
 		stringEntity.setContentType(ContentType.APPLICATION_JSON);
 		httpMethod.setEntity(stringEntity);
-		_logger.debug("Put Message \n{} ", httpMethod.getEntity().toString());
+		log.debug("Put Message \n{} ", httpMethod.getEntity().toString());
 
 		try {
 			// httpClient对象执行put请求,并返回响应参数对象
@@ -238,8 +236,8 @@ public class HttpRequestAdapter {
 		HttpEntity entity = httpResponse.getEntity();
 		String content = EntityUtils.toString(entity);
 		HttpStatus httpStatus = HttpStatus.valueOf(httpResponse.getStatusLine().getStatusCode());
-		_logger.debug("Http Response HttpStatus {} ", httpStatus);
-		_logger.trace("Http Response Content {} ", content);
+		log.debug("Http Response HttpStatus {} ", httpStatus);
+		log.trace("Http Response Content {} ", content);
 		return content;
 	}
 
@@ -255,7 +253,7 @@ public class HttpRequestAdapter {
 			Iterator<Entry<String, String>> iterator = entrySet.iterator();
 			while (iterator.hasNext()) {
 				Entry<String, String> mapEntry = iterator.next();
-				_logger.trace("Name " + mapEntry.getKey() + " , Value " + mapEntry.getValue());
+				log.trace("Name " + mapEntry.getKey() + " , Value " + mapEntry.getValue());
 				httpRequest.addHeader(mapEntry.getKey(), mapEntry.getValue());
 			}
 		}
@@ -269,7 +267,7 @@ public class HttpRequestAdapter {
 		Iterator<Entry<String, Object>> iterator = entrySet.iterator();
 		while (iterator.hasNext()) {
 			Entry<String, Object> mapEntry = iterator.next();
-			_logger.debug("Name " + mapEntry.getKey() + " , Value " + mapEntry.getValue());
+			log.debug("Name " + mapEntry.getKey() + " , Value " + mapEntry.getValue());
 			nvps.add(new BasicNameValuePair(mapEntry.getKey(), mapEntry.getValue().toString()));
 		}
 
@@ -308,5 +306,4 @@ public class HttpRequestAdapter {
 			}
 		}
 	}
-
 }

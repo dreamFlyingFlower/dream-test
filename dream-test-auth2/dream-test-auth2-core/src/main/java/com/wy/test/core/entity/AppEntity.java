@@ -57,9 +57,19 @@ public class AppEntity extends AbstractStringEntity {
 	private String appName;
 
 	/**
+	 * 图标
+	 */
+	private byte[] icon;
+
+	/**
 	 * 应用登录地址
 	 */
 	private String loginUrl;
+
+	/**
+	 * 单点登录协议
+	 */
+	private String protocol;
 
 	/**
 	 * 应用类型
@@ -70,25 +80,6 @@ public class AppEntity extends AbstractStringEntity {
 	 * 应用密钥
 	 */
 	private String secret;
-
-	/**
-	 * 单点登录协议
-	 */
-	private String protocol;
-
-	/**
-	 * 图标
-	 */
-	private byte[] icon;
-
-	/**
-	 * 是否可见
-	 */
-	@JsonFormat(shape = JsonFormat.Shape.STRING)
-	private Integer visible;
-
-	// 引导方式 IDP OR SP,default is IDP
-	private String inducer;
 
 	/**
 	 * 供应商
@@ -111,18 +102,6 @@ public class AppEntity extends AbstractStringEntity {
 
 	private String sysUserAttr;
 
-	/*
-	 * 获取第三方token凭证
-	 */
-	private String principal;
-
-	private String credentials;
-
-	private String logoutUrl;
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING)
-	private Integer logoutType;
-
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	private Integer isExtendAttr;
 
@@ -131,9 +110,8 @@ public class AppEntity extends AbstractStringEntity {
 	private String userPropertys;
 
 	/**
-	 * Signature for client verify create by SignaturePublicKey &
-	 * SignaturePrivateKey issuer is domain name subject is app id append domain
-	 * name
+	 * Signature for client verify create by SignaturePublicKey & SignaturePrivateKey issuer is domain name subject is
+	 * app id append domain name
 	 */
 	private Integer isSignature;
 
@@ -145,6 +123,27 @@ public class AppEntity extends AbstractStringEntity {
 	private String adapterName;
 
 	private String adapter;
+
+	/**
+	 * 获取第三方token凭证
+	 */
+	private String principal;
+
+	private String credentials;
+
+	/**
+	 * 是否可见
+	 */
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
+	private Integer visible;
+
+	// 引导方式 IDP OR SP,default is IDP
+	private String inducer;
+
+	private String logoutUrl;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
+	private Integer logoutType;
 
 	private String frequently;
 

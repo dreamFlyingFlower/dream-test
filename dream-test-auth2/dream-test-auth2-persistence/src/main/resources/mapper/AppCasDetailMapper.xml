@@ -8,12 +8,12 @@
 		FROM
 		auth_app_cas_detail cd,
 		auth_app app
-		WHERE app.instid = cd.instid
+		WHERE
+		app.instid = cd.instid
 		AND cd.id = app.id
-		AND (
-		APP.id = #{value}
-		OR LOWER(cd.service) =
-		LOWER(SUBSTRING(#{value},1,LENGTH(cd.service)))
+		AND
+		(
+		APP.id = #{id} OR LOWER(cd.service) = LOWER(SUBSTRING(#{id},1,LENGTH(cd.service)))
 		)
 	</select>
 </mapper>

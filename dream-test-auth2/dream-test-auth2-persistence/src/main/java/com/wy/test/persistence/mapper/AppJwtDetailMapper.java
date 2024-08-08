@@ -18,5 +18,4 @@ import dream.flying.flower.framework.mybatis.plus.mapper.BaseMappers;
 @Mapper
 public interface AppJwtDetailMapper extends BaseMappers<AppJwtDetailEntity, AppJwtDetailVO, AppJwtDetailQuery> {
 
-	AppJwtDetailVO getAppDetails(String id);
 }

@@ -13,7 +13,7 @@ import dream.flying.flower.lang.StrHelper;
 public class BaseAppContorller {
 
 	@Autowired
-	protected AppService appsService;
+	protected AppService appService;
 
 	@Autowired
 	protected PasswordReciprocal passwordReciprocal;

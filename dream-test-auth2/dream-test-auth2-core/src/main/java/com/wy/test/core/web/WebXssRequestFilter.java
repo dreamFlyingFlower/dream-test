@@ -11,13 +11,12 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.text.StringEscapeUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.GenericFilterBean;
 
-public class WebXssRequestFilter extends GenericFilterBean {
+import lombok.extern.slf4j.Slf4j;
 
-	final static Logger _logger = LoggerFactory.getLogger(GenericFilterBean.class);
+@Slf4j
+public class WebXssRequestFilter extends GenericFilterBean {
 
 	final static ConcurrentHashMap<String, String> skipUrlMap = new ConcurrentHashMap<String, String>();
 
@@ -53,10 +52,10 @@ public class WebXssRequestFilter extends GenericFilterBean {
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		_logger.trace("WebXssRequestFilter");
+		log.trace("WebXssRequestFilter");
 		boolean isWebXss = false;
 		HttpServletRequest request = ((HttpServletRequest) servletRequest);
-		if (_logger.isTraceEnabled()) {
+		if (log.isTraceEnabled()) {
 			WebContext.printRequest(request);
 		}
 		if (skipUrlMap.containsKey(request.getRequestURI().substring(request.getContextPath().length()))) {
@@ -70,13 +69,13 @@ public class WebXssRequestFilter extends GenericFilterBean {
 				}
 
 				String value = request.getParameter(key);
-				_logger.trace("parameter name " + key + " , value " + value);
+				log.trace("parameter name " + key + " , value " + value);
 				String tempValue = value;
 				if (!StringEscapeUtils.escapeHtml4(tempValue).equals(value)
 						|| tempValue.toLowerCase().indexOf("script") > -1
 						|| tempValue.toLowerCase().replace(" ", "").indexOf("eval(") > -1) {
 					isWebXss = true;
-					_logger.error("parameter name " + key + " , value " + value + ", contains dangerous content ! ");
+					log.error("parameter name " + key + " , value " + value + ", contains dangerous content ! ");
 					break;
 				}
 			}
@@ -85,5 +84,4 @@ public class WebXssRequestFilter extends GenericFilterBean {
 			chain.doFilter(request, response);
 		}
 	}
-
 }

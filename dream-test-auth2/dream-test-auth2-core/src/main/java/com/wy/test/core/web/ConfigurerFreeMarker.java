@@ -5,8 +5,6 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -17,11 +15,11 @@ import com.wy.test.core.web.tag.FreemarkerTag;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class ConfigurerFreeMarker implements ApplicationContextAware {
-
-	private static final Logger _logger = LoggerFactory.getLogger(ConfigurerFreeMarker.class);
 
 	ApplicationContext applicationContext;
 
@@ -34,7 +32,7 @@ public class ConfigurerFreeMarker implements ApplicationContextAware {
 		Map<String, Object> map = this.applicationContext.getBeansWithAnnotation(FreemarkerTag.class);
 		for (String key : map.keySet()) {
 			configuration.setSharedVariable(key, map.get(key));
-			_logger.trace("FreeMarker Template " + key);
+			log.trace("FreeMarker Template " + key);
 		}
 
 	}
@@ -42,7 +40,5 @@ public class ConfigurerFreeMarker implements ApplicationContextAware {
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
-
 	}
-
 }

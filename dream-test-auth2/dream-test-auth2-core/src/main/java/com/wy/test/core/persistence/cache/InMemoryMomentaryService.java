@@ -2,15 +2,13 @@ package com.wy.test.core.persistence.cache;
 
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
-public class InMemoryMomentaryService implements MomentaryService {
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Logger _logger = LoggerFactory.getLogger(InMemoryMomentaryService.class);
+@Slf4j
+public class InMemoryMomentaryService implements MomentaryService {
 
 	protected static Cache<String, Object> momentaryStore =
 			Caffeine.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).maximumSize(200000).build();
@@ -21,7 +19,7 @@ public class InMemoryMomentaryService implements MomentaryService {
 
 	@Override
 	public void put(String sessionId, String name, Object value) {
-		_logger.trace("key {}, value {}", getSessionKey(sessionId, name), value);
+		log.trace("key {}, value {}", getSessionKey(sessionId, name), value);
 		momentaryStore.put(getSessionKey(sessionId, name), value);
 	}
 
@@ -29,13 +27,13 @@ public class InMemoryMomentaryService implements MomentaryService {
 	public Object remove(String sessionId, String name) {
 		Object value = momentaryStore.getIfPresent(getSessionKey(sessionId, name));
 		momentaryStore.invalidate(getSessionKey(sessionId, name));
-		_logger.trace("key {}, value {}", getSessionKey(sessionId, name), value);
+		log.trace("key {}, value {}", getSessionKey(sessionId, name), value);
 		return value;
 	}
 
 	@Override
 	public Object get(String sessionId, String name) {
-		_logger.trace("key {}", getSessionKey(sessionId, name));
+		log.trace("key {}", getSessionKey(sessionId, name));
 		return momentaryStore.getIfPresent(getSessionKey(sessionId, name));
 	}
 

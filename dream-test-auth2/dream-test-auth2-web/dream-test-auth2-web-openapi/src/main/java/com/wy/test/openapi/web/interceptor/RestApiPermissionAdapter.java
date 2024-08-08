@@ -6,8 +6,6 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,14 +20,18 @@ import com.wy.test.oauth2.provider.token.DefaultTokenServices;
 import dream.flying.flower.framework.core.helper.TokenHeader;
 import dream.flying.flower.framework.core.helper.TokenHelpers;
 import dream.flying.flower.lang.StrHelper;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * basic认证Interceptor处理.
+ * basic认证Interceptor处理
+ *
+ * @author 飞花梦影
+ * @date 2024-08-08 11:47:12
+ * @git {@link https://github.com/dreamFlyingFlower}
  */
 @Component
+@Slf4j
 public class RestApiPermissionAdapter implements AsyncHandlerInterceptor {
-
-	private static final Logger _logger = LoggerFactory.getLogger(RestApiPermissionAdapter.class);
 
 	@Autowired
 	DefaultTokenServices oauth20TokenServices;
@@ -42,15 +44,13 @@ public class RestApiPermissionAdapter implements AsyncHandlerInterceptor {
 	/*
 	 * 请求前处理 (non-Javadoc)
 	 * 
-	 * @see
-	 * org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(
-	 * javax.servlet.http.HttpServletRequest,
-	 * javax.servlet.http.HttpServletResponse, java.lang.Object)
+	 * @see org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(
+	 * javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object)
 	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		_logger.trace("Rest API Permission Adapter pre handle");
+		log.trace("Rest API Permission Adapter pre handle");
 		TokenHeader headerCredential = TokenHelpers.resolve(request);
 
 		// 判断应用的AppId和Secret
@@ -65,18 +65,18 @@ public class RestApiPermissionAdapter implements AsyncHandlerInterceptor {
 							.authenticate(authRequest);
 				}
 			} else {
-				_logger.trace("Authentication bearer {}", headerCredential.getCredential());
+				log.trace("Authentication bearer {}", headerCredential.getCredential());
 				OAuth2Authentication oauth2Authentication =
 						oauth20TokenServices.loadAuthentication(headerCredential.getCredential());
 
 				if (oauth2Authentication != null) {
-					_logger.trace("Authentication token {}", oauth2Authentication.getPrincipal().toString());
+					log.trace("Authentication token {}", oauth2Authentication.getPrincipal().toString());
 					authenticationToken = new UsernamePasswordAuthenticationToken(
 							new User(oauth2Authentication.getPrincipal().toString(), "CLIENT_SECRET",
 									oauth2Authentication.getAuthorities()),
 							"PASSWORD", oauth2Authentication.getAuthorities());
 				} else {
-					_logger.trace("Authentication token is null ");
+					log.trace("Authentication token is null ");
 				}
 			}
 
@@ -86,7 +86,7 @@ public class RestApiPermissionAdapter implements AsyncHandlerInterceptor {
 			}
 		}
 
-		_logger.trace("No Authentication ... forward to /login");
+		log.trace("No Authentication ... forward to /login");
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/login");
 		dispatcher.forward(request, response);
 

@@ -1,14 +1,12 @@
 package com.wy.test.provider.authn.realm.ldap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.wy.test.core.persistence.ldap.ActiveDirectoryHelpers;
 import com.wy.test.provider.authn.realm.IAuthenticationServer;
 
-public final class ActiveDirectoryServer implements IAuthenticationServer {
+import lombok.extern.slf4j.Slf4j;
 
-	private final static Logger _logger = LoggerFactory.getLogger(ActiveDirectoryServer.class);
+@Slf4j
+public final class ActiveDirectoryServer implements IAuthenticationServer {
 
 	ActiveDirectoryHelpers activeDirectoryUtils;
 
@@ -19,9 +17,7 @@ public final class ActiveDirectoryServer implements IAuthenticationServer {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.connsec.web.authentication.realm.IAuthenticationServer#authenticate(java.
-	 * lang.String, java.lang.String)
+	 * @see com.connsec.web.authentication.realm.IAuthenticationServer#authenticate(java. lang.String, java.lang.String)
 	 */
 	@Override
 	public boolean authenticate(String username, String password) {
@@ -29,7 +25,7 @@ public final class ActiveDirectoryServer implements IAuthenticationServer {
 				username, password, activeDirectoryUtils.getDomain());
 		ldapPassWordValid.openConnection();
 		if (ldapPassWordValid.getCtx() != null) {
-			_logger.debug("Active Directory user " + username + "  is validate .");
+			log.debug("Active Directory user " + username + "  is validate .");
 			ldapPassWordValid.close();
 			return true;
 		}

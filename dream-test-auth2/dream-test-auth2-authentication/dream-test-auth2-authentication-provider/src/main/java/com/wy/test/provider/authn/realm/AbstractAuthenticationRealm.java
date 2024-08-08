@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,14 +21,13 @@ import com.wy.test.persistence.service.UserService;
 import com.wy.test.provider.authn.realm.ldap.LdapAuthenticationRealmService;
 
 import dream.flying.flower.framework.web.enums.AuthLoginType;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * AbstractAuthenticationRealm.
- * 
  */
+@Slf4j
 public abstract class AbstractAuthenticationRealm {
-
-	private static Logger _logger = LoggerFactory.getLogger(AbstractAuthenticationRealm.class);
 
 	protected JdbcTemplate jdbcTemplate;
 
@@ -110,7 +107,7 @@ public abstract class AbstractAuthenticationRealm {
 			historyLogin.setSessionId(userInfo.getSessionId());
 		}
 
-		_logger.debug("user session id is {} . ", historyLogin.getSessionId());
+		log.debug("user session id is {} . ", historyLogin.getSessionId());
 
 		userInfo.setLastLoginTime(new Date());
 		userInfo.setLastLoginIp(WebContext.getRequestIpAddress());

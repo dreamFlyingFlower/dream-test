@@ -42,23 +42,23 @@ import org.springframework.core.io.Resource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Helper class that does the heavy lifting with the openSaml library.
- *
  */
+@Slf4j
 public final class WsFederationUtils {
 
 	/**
 	 * Initialized the openSaml library.
 	 */
 	static {
-		final Logger _logger = LoggerFactory.getLogger(WsFederationUtils.class);
-
 		try {
 			// Initialize the library
 			DefaultBootstrap.bootstrap();
 		} catch (final ConfigurationException ex) {
-			_logger.error(ex.getMessage());
+			log.error(ex.getMessage());
 		}
 	}
 
@@ -69,17 +69,16 @@ public final class WsFederationUtils {
 	}
 
 	/**
-	 * createCredentialFromToken converts a SAML 1.1 assertion to a
-	 * WSFederationCredential.
+	 * createCredentialFromToken converts a SAML 1.1 assertion to a WSFederationCredential.
 	 *
 	 * @param assertion the provided assertion
 	 * @return an equivalent credential.
 	 */
 	public static WsFederationCredential createCredentialFromToken(final AssertionImpl assertion) {
-		final Logger _logger = LoggerFactory.getLogger(WsFederationUtils.class);
+		final Logger log = LoggerFactory.getLogger(WsFederationUtils.class);
 
 		final DateTime retrievedOn = new DateTime().withZone(DateTimeZone.UTC);
-		_logger.debug("createCredentialFromToken: retrieved on {}", retrievedOn.toString());
+		log.debug("createCredentialFromToken: retrieved on {}", retrievedOn.toString());
 
 		final WsFederationCredential credential = new WsFederationCredential();
 		credential.setRetrievedOn(retrievedOn);
@@ -102,7 +101,7 @@ public final class WsFederationUtils {
 		// retrieve an attributes from the assertion
 		final HashMap<String, Object> attributes = new HashMap<String, Object>();
 		for (Attribute item : assertion.getAttributeStatements().get(0).getAttributes()) {
-			_logger.debug("createCredentialFromToken: processed attribute: {}", item.getAttributeName());
+			log.debug("createCredentialFromToken: processed attribute: {}", item.getAttributeName());
 
 			if (item.getAttributeValues().size() == 1) {
 				attributes.put(item.getAttributeName(), ((XSAny) item.getAttributeValues().get(0)).getTextContent());
@@ -122,7 +121,7 @@ public final class WsFederationUtils {
 		}
 		credential.setAttributes(attributes);
 
-		_logger.debug("createCredentialFromToken: {}", credential.toString());
+		log.debug("createCredentialFromToken: {}", credential.toString());
 
 		return credential;
 	}
@@ -134,7 +133,7 @@ public final class WsFederationUtils {
 	 * @return an X509 credential
 	 */
 	public static BasicX509Credential getSigningCredential(final Resource resource) {
-		final Logger _logger = LoggerFactory.getLogger(WsFederationUtils.class);
+		final Logger log = LoggerFactory.getLogger(WsFederationUtils.class);
 
 		BasicX509Credential publicCredential;
 
@@ -147,7 +146,7 @@ public final class WsFederationUtils {
 			try {
 				inputStream.close();
 			} catch (final IOException ex) {
-				_logger.warn("Error closing the signing cert file: {}", ex.getMessage());
+				log.warn("Error closing the signing cert file: {}", ex.getMessage());
 			}
 
 			// get the public key from the certificate
@@ -162,35 +161,34 @@ public final class WsFederationUtils {
 			publicCredential.setPublicKey(publicKey);
 
 		} catch (final CertificateException ex) {
-			_logger.error("Error retrieving the signing cert: {}", ex.getMessage());
+			log.error("Error retrieving the signing cert: {}", ex.getMessage());
 			return null;
 
 		} catch (final InvalidKeySpecException ex) {
-			_logger.error("Error retrieving the signing cert: {}", ex.getMessage());
+			log.error("Error retrieving the signing cert: {}", ex.getMessage());
 			return null;
 
 		} catch (final NoSuchAlgorithmException ex) {
-			_logger.error("Error retrieving the signing cert: {}", ex.getMessage());
+			log.error("Error retrieving the signing cert: {}", ex.getMessage());
 			return null;
 
 		} catch (final IOException ex) {
-			_logger.error("Error retrieving the signing cert: " + ex.getMessage());
+			log.error("Error retrieving the signing cert: " + ex.getMessage());
 			return null;
 		}
 
-		_logger.debug("getSigningCredential: key retrieved.");
+		log.debug("getSigningCredential: key retrieved.");
 		return publicCredential;
 	}
 
 	/**
-	 * parseTokenFromString converts a raw wresult and extracts it into an
-	 * assertion.
+	 * parseTokenFromString converts a raw wresult and extracts it into an assertion.
 	 *
 	 * @param wresult the raw token returned by the IdP
 	 * @return an assertion
 	 */
 	public static AssertionImpl parseTokenFromString(final String wresult) {
-		final Logger _logger = LoggerFactory.getLogger(WsFederationUtils.class);
+		final Logger log = LoggerFactory.getLogger(WsFederationUtils.class);
 
 		RequestSecurityTokenResponseImpl rsToken;
 
@@ -206,15 +204,15 @@ public final class WsFederationUtils {
 			rsToken = (RequestSecurityTokenResponseImpl) unmarshaller.unmarshall(metadataRoot);
 
 		} catch (final UnmarshallingException ex) {
-			_logger.warn(ex.getMessage());
+			log.warn(ex.getMessage());
 			return null;
 
 		} catch (final XMLParserException ex) {
-			_logger.warn(ex.getMessage());
+			log.warn(ex.getMessage());
 			return null;
 
 		} catch (final UnsupportedEncodingException ex) {
-			_logger.warn(ex.getMessage());
+			log.warn(ex.getMessage());
 			return null;
 		}
 
@@ -223,9 +221,9 @@ public final class WsFederationUtils {
 		final AssertionImpl assertion = (AssertionImpl) rst.get(0).getSecurityTokens().get(0);
 
 		if (assertion == null) {
-			_logger.debug("parseTokenFromString: assertion null");
+			log.debug("parseTokenFromString: assertion null");
 		} else {
-			_logger.debug("parseTokenFromString: {}", assertion.toString());
+			log.debug("parseTokenFromString: {}", assertion.toString());
 		}
 
 		return assertion;
@@ -239,7 +237,7 @@ public final class WsFederationUtils {
 	 * @return true if the assertion's signature is valid, otherwise false
 	 */
 	public static boolean validateSignature(final AssertionImpl assertion, final List<BasicX509Credential> x509Creds) {
-		final Logger _logger = LoggerFactory.getLogger(WsFederationUtils.class);
+		final Logger log = LoggerFactory.getLogger(WsFederationUtils.class);
 
 		SignatureValidator signatureValidator;
 
@@ -247,7 +245,7 @@ public final class WsFederationUtils {
 			try {
 				signatureValidator = new SignatureValidator(cred);
 			} catch (final Exception ex) {
-				_logger.warn(ex.getMessage());
+				log.warn(ex.getMessage());
 				break;
 			}
 
@@ -257,15 +255,15 @@ public final class WsFederationUtils {
 			// try to validate
 			try {
 				signatureValidator.validate(signature);
-				_logger.debug("validateSignature: Signature is valid.");
+				log.debug("validateSignature: Signature is valid.");
 				return true;
 
 			} catch (final ValidationException ex) {
-				_logger.warn("validateSignature: Signature is NOT valid.");
-				_logger.warn(ex.getMessage());
+				log.warn("validateSignature: Signature is NOT valid.");
+				log.warn(ex.getMessage());
 			}
 		}
-		_logger.warn("validateSignature: Signature doesn't match any signing credential.");
+		log.warn("validateSignature: Signature doesn't match any signing credential.");
 		return false;
 	}
 }

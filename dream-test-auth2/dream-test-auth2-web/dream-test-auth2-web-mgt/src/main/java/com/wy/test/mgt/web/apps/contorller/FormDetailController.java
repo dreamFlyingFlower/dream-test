@@ -60,7 +60,7 @@ public class FormDetailController extends BaseAppContorller {
 
 		transform(formBasedDetails);
 		formBasedDetails.setInstId(currentUser.getInstId());
-		if (null != appFormDetailService.add(formBasedDetails) && appsService.insertApp(formBasedDetails)) {
+		if (null != appFormDetailService.add(formBasedDetails) && null != appService.add(formBasedDetails)) {
 			return new Message<AppFormDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppFormDetailEntity>(Message.FAIL).buildResponse();
@@ -74,7 +74,7 @@ public class FormDetailController extends BaseAppContorller {
 		log.debug("-update  :" + formBasedDetails);
 		transform(formBasedDetails);
 		formBasedDetails.setInstId(currentUser.getInstId());
-		if (appFormDetailService.edit(formBasedDetails) && appsService.updateApp(formBasedDetails)) {
+		if (appFormDetailService.edit(formBasedDetails) && appService.edit(formBasedDetails)) {
 			return new Message<AppFormDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppFormDetailEntity>(Message.FAIL).buildResponse();
@@ -86,7 +86,7 @@ public class FormDetailController extends BaseAppContorller {
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete  ids : {} ", ids);
 		if (appFormDetailService.removeByIds(Arrays.asList(ids.split(",")))
-				&& appsService.removeByIds(Arrays.asList(ids.split(",")))) {
+				&& appService.removeByIds(Arrays.asList(ids.split(",")))) {
 			return new Message<AppFormDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppFormDetailEntity>(Message.FAIL).buildResponse();

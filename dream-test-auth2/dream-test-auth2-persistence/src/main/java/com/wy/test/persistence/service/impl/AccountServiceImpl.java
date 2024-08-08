@@ -50,7 +50,7 @@ public class AccountServiceImpl
 
 	private final ProvisionService provisionService;
 
-	private final UserService userInfoService;
+	private final UserService userService;
 
 	private final AccountStrategyService accountStrategyService;
 
@@ -60,7 +60,7 @@ public class AccountServiceImpl
 	public boolean insert(AccountEntity account) {
 		if (super.save(account)) {
 			if (provisionService.getDreamServerProperties().isProvision()) {
-				UserVO loadUserInfo = userInfoService.findUserRelated(account.getUserId());
+				UserVO loadUserInfo = userService.findUserRelated(account.getUserId());
 				AccountVO accountVO = baseConvert.convertt(account);
 				accountVO.setUserInfo(loadUserInfo);
 				accountVO.setOrgCast(orgCastService
@@ -77,7 +77,7 @@ public class AccountServiceImpl
 	public boolean update(AccountEntity account) {
 		if (super.updateById(account)) {
 			if (provisionService.getDreamServerProperties().isProvision()) {
-				UserVO loadUserInfo = userInfoService.findUserRelated(account.getUserId());
+				UserVO loadUserInfo = userService.findUserRelated(account.getUserId());
 				AccountVO accountVO = baseConvert.convertt(account);
 				accountVO.setUserInfo(loadUserInfo);
 				accountVO.setOrgCast(orgCastService
@@ -91,8 +91,9 @@ public class AccountServiceImpl
 	}
 
 	@Override
-	public boolean updateStatus(AccountEntity accounts) {
-		return this.baseMapper.updateStatus(accounts) > 0;
+	public boolean updateStatus(AccountEntity accountEntity) {
+		return lambdaUpdate().set(AccountEntity::getStatus, accountEntity.getStatus())
+				.eq(AccountEntity::getId, accountEntity.getId()).update();
 	}
 
 	@Override
@@ -102,7 +103,7 @@ public class AccountServiceImpl
 		if (super.removeById(id)) {
 			UserVO loadUserInfo = null;
 			if (provisionService.getDreamServerProperties().isProvision()) {
-				loadUserInfo = userInfoService.findUserRelated(account.getUserId());
+				loadUserInfo = userService.findUserRelated(account.getUserId());
 				accountVO.setUserInfo(loadUserInfo);
 				provisionService.send(ProvisionTopic.ACCOUNT_TOPIC, account, ProvisionAction.DELETE_ACTION);
 			}
@@ -130,7 +131,7 @@ public class AccountServiceImpl
 			account.setUsername(user.getUsername());
 			account.setDisplayName(user.getDisplayName());
 			account.setRelatedUsername(generateAccount(user, strategy));
-			account.setRelatedPassword(PasswordReciprocal.getInstance().encode(userInfoService.randomPassword()));
+			account.setRelatedPassword(PasswordReciprocal.getInstance().encode(userService.randomPassword()));
 
 			account.setInstId(strategy.getInstId());
 			account.setCreateType("automatic");
@@ -163,13 +164,9 @@ public class AccountServiceImpl
 	}
 
 	@Override
-	public List<AccountEntity> queryByAppIdAndDate(AccountEntity account) {
-		return baseMapper.queryByAppIdAndDate(account);
-	}
-
-	@Override
 	public List<AccountEntity> queryByAppIdAndAccount(String appId, String relatedUsername) {
-		return baseMapper.queryByAppIdAndAccount(appId, relatedUsername);
+		return baseMapper.selectList(lambdaQuery().eq(AccountEntity::getAppId, appId)
+				.eq(AccountEntity::getRelatedUsername, relatedUsername));
 	}
 
 	@Override
@@ -177,18 +174,18 @@ public class AccountServiceImpl
 		String shortAccount = generateAccount(userInfo, accountsStrategy, true);
 		String account = generateAccount(userInfo, accountsStrategy, false);
 		String accountResult = shortAccount;
-		List<AccountEntity> AccountsList = baseMapper.queryByAppIdAndAccount(accountsStrategy.getAppId(),
-				shortAccount + accountsStrategy.getSuffixes());
+		List<AccountEntity> AccountsList =
+				queryByAppIdAndAccount(accountsStrategy.getAppId(), shortAccount + accountsStrategy.getSuffixes());
 		if (!AccountsList.isEmpty()) {
 			if (accountsStrategy.getMapping().equalsIgnoreCase("email")) {
 				accountResult = account;
-				AccountsList = baseMapper.queryByAppIdAndAccount(accountsStrategy.getAppId(),
-						account + accountsStrategy.getSuffixes());
+				AccountsList =
+						queryByAppIdAndAccount(accountsStrategy.getAppId(), account + accountsStrategy.getSuffixes());
 			}
 			if (!AccountsList.isEmpty()) {
 				for (int i = 1; i < 100; i++) {
 					accountResult = account + i;
-					AccountsList = baseMapper.queryByAppIdAndAccount(accountsStrategy.getAppId(),
+					AccountsList = queryByAppIdAndAccount(accountsStrategy.getAppId(),
 							accountResult + accountsStrategy.getSuffixes());
 					if (AccountsList.isEmpty())
 						break;

@@ -3,8 +3,6 @@ package com.wy.test.oauth2.provider.endpoint;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,12 +19,12 @@ import com.wy.test.oauth2.common.OAuth2Constants;
 import dream.flying.flower.framework.web.crypto.jose.keystore.JWKSetKeyStore;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "2-1-OAuth v2.0 API文档模块")
 @Controller
+@Slf4j
 public class OauthJwksEndpoint extends AbstractEndpoint {
-
-	final static Logger _logger = LoggerFactory.getLogger(OauthJwksEndpoint.class);
 
 	@Operation(summary = "OAuth JWk 元数据接口", description = "参数auth_metadata_APPID", method = "GET")
 	@RequestMapping(value = OAuth2Constants.ENDPOINT.ENDPOINT_BASE + "/jwks",
@@ -48,7 +46,7 @@ public class OauthJwksEndpoint extends AbstractEndpoint {
 		try {
 			clientDetails = getClientDetailsService().loadClientByClientId(appId, true);
 		} catch (Exception e) {
-			_logger.error("getClientDetailsService", e);
+			log.error("getClientDetailsService", e);
 		}
 		if (clientDetails != null) {
 			String jwkSetString = "";

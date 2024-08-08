@@ -5,14 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import dream.flying.flower.framework.core.json.JsonHelpers;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class RemoteKerberosService implements KerberosService {
-
-	private static Logger _logger = LoggerFactory.getLogger(RemoteKerberosService.class);
 
 	List<KerberosProxy> kerberosProxys;
 
@@ -34,9 +31,9 @@ public class RemoteKerberosService implements KerberosService {
 			userDomainUrl.put("redirectUri", kerberosProxy.getRedirectUri());
 			userDomainUrlList.add(userDomainUrl);
 		}
-		_logger.debug("" + userDomainUrlList);
+		log.debug("" + userDomainUrlList);
 		String userDomainUrlJson = JsonHelpers.toString(userDomainUrlList);
-		_logger.debug("userDomain Url Json " + userDomainUrlJson);
+		log.debug("userDomain Url Json " + userDomainUrlJson);
 		return userDomainUrlJson;
 	}
 }

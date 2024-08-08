@@ -6,8 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,15 +26,15 @@ import dream.flying.flower.lang.StrHelper;
 import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * https://apereo.github.io/cas/6.2.x/protocol/CAS-Protocol-Specification.html
  */
 @Tag(name = "2-3-CAS API文档模块")
 @Controller
+@Slf4j
 public class Cas30AuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
-
-	final static Logger _logger = LoggerFactory.getLogger(Cas30AuthorizeEndpoint.class);
 
 	@Operation(summary = "CAS 3.0 ticket验证接口", description = "通过ticket获取当前登录用户信息", method = "POST")
 	@GetMapping(value = CasConstants.ENDPOINT.ENDPOINT_SERVICE_VALIDATE_V3)
@@ -47,7 +45,7 @@ public class Cas30AuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 			@RequestParam(value = CasConstants.PARAMETER.RENEW, required = false) String renew,
 			@RequestParam(value = CasConstants.PARAMETER.FORMAT, required = false,
 					defaultValue = HttpResponseConstants.FORMAT_TYPE.XML) String format) {
-		_logger.debug("serviceValidate " + " ticket " + ticket + " , service " + service + " , pgtUrl " + pgtUrl
+		log.debug("serviceValidate " + " ticket " + ticket + " , service " + service + " , pgtUrl " + pgtUrl
 				+ " , renew " + renew + " , format " + format);
 
 		Ticket storedTicket = null;
@@ -88,7 +86,7 @@ public class Cas30AuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 				} catch (IllegalAccessException | InvocationTargetException | ClassNotFoundException
 						| NoSuchMethodException | SecurityException | InstantiationException
 						| IllegalArgumentException e) {
-					_logger.error("setProperty error . ", e);
+					log.error("setProperty error . ", e);
 				}
 			}
 		} else {
@@ -107,7 +105,7 @@ public class Cas30AuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 			@RequestParam(value = CasConstants.PARAMETER.TARGET_SERVICE) String targetService,
 			@RequestParam(value = CasConstants.PARAMETER.FORMAT, required = false,
 					defaultValue = HttpResponseConstants.FORMAT_TYPE.XML) String format) {
-		_logger.debug("proxy " + " pgt " + pgt + " , targetService " + targetService + " , format " + format);
+		log.debug("proxy " + " pgt " + pgt + " , targetService " + targetService + " , format " + format);
 		ProxyServiceResponseBuilder proxyServiceResponseBuilder = new ProxyServiceResponseBuilder();
 		ProxyGrantingTicketImpl proxyGrantingTicketImpl =
 				(ProxyGrantingTicketImpl) casProxyGrantingTicketServices.get(pgt);
@@ -132,8 +130,8 @@ public class Cas30AuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 			@RequestParam(value = CasConstants.PARAMETER.RENEW, required = false) String renew,
 			@RequestParam(value = CasConstants.PARAMETER.FORMAT, required = false,
 					defaultValue = HttpResponseConstants.FORMAT_TYPE.XML) String format) {
-		_logger.debug("proxyValidate " + " ticket " + ticket + " , service " + service + " , pgtUrl " + pgtUrl
-				+ " , renew " + renew + " , format " + format);
+		log.debug("proxyValidate " + " ticket " + ticket + " , service " + service + " , pgtUrl " + pgtUrl + " , renew "
+				+ renew + " , format " + format);
 
 		Ticket storedTicket = null;
 		if (ticket.startsWith(CasConstants.PREFIX.PROXY_TICKET_PREFIX)) {
@@ -158,7 +156,7 @@ public class Cas30AuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 				} catch (IllegalAccessException | InvocationTargetException | ClassNotFoundException
 						| NoSuchMethodException | SecurityException | InstantiationException
 						| IllegalArgumentException e) {
-					_logger.error("setProperty error . ", e);
+					log.error("setProperty error . ", e);
 				}
 			}
 		} else {

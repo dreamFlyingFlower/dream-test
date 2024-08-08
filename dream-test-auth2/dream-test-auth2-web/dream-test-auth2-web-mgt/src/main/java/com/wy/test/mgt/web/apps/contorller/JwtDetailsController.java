@@ -2,8 +2,6 @@ package com.wy.test.mgt.web.apps.contorller;
 
 import java.util.Arrays;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +24,12 @@ import com.wy.test.persistence.service.AppJwtDetailService;
 
 import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
 import dream.flying.flower.generator.GeneratorStrategyContext;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping(value = { "/apps/jwt" })
+@Slf4j
 public class JwtDetailsController extends BaseAppContorller {
-
-	final static Logger _logger = LoggerFactory.getLogger(JwtDetailsController.class);
 
 	@Autowired
 	AppJwtDetailService jwtDetailsService;
@@ -58,10 +56,10 @@ public class JwtDetailsController extends BaseAppContorller {
 	@ResponseBody
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> insert(@RequestBody AppJwtDetailVO jwtDetails, @CurrentUser UserEntity currentUser) {
-		_logger.debug("-Add  :" + jwtDetails);
+		log.debug("-Add  :" + jwtDetails);
 		transform(jwtDetails);
 		jwtDetails.setInstId(currentUser.getInstId());
-		if (null != jwtDetailsService.add(jwtDetails) && appsService.insertApp(jwtDetails)) {
+		if (null != jwtDetailsService.add(jwtDetails) && null != appService.add(jwtDetails)) {
 			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppJwtDetailEntity>(Message.FAIL).buildResponse();
@@ -71,10 +69,10 @@ public class JwtDetailsController extends BaseAppContorller {
 	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> update(@RequestBody AppJwtDetailVO jwtDetails, @CurrentUser UserEntity currentUser) {
-		_logger.debug("-update  :" + jwtDetails);
+		log.debug("-update  :" + jwtDetails);
 		transform(jwtDetails);
 		jwtDetails.setInstId(currentUser.getInstId());
-		if (jwtDetailsService.edit(jwtDetails) && appsService.updateApp(jwtDetails)) {
+		if (jwtDetailsService.edit(jwtDetails) && appService.edit(jwtDetails)) {
 			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<>(Message.FAIL).buildResponse();
@@ -84,9 +82,9 @@ public class JwtDetailsController extends BaseAppContorller {
 	@ResponseBody
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
-		_logger.debug("-delete  ids : {} ", ids);
+		log.debug("-delete  ids : {} ", ids);
 		if (jwtDetailsService.removeByIds(Arrays.asList(ids.split(",")))
-				&& appsService.removeByIds(Arrays.asList(ids.split(",")))) {
+				&& appService.removeByIds(Arrays.asList(ids.split(",")))) {
 			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppJwtDetailEntity>(Message.FAIL).buildResponse();

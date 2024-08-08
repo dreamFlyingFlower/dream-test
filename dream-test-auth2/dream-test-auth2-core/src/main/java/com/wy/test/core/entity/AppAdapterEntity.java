@@ -2,6 +2,8 @@ package com.wy.test.core.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import dream.flying.flower.db.annotation.Sort;
+import dream.flying.flower.db.enums.SortType;
 import dream.flying.flower.framework.mybatis.plus.entity.AbstractStringEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,6 +48,7 @@ public class AppAdapterEntity extends AbstractStringEntity {
 	/**
 	 * 排序
 	 */
+	@Sort(direction = SortType.DESC)
 	private Integer sortIndex;
 
 	/**

@@ -32,22 +32,13 @@ public class AppServiceImpl extends AbstractServiceImpl<AppEntity, AppVO, AppQue
 
 	public final static String DETAIL_SUFFIX = "_detail";
 
-	protected final static Cache<String, AppVO> detailsCacheStore =
+	protected final static Cache<String, AppVO> DETAILS_CACHE =
 			Caffeine.newBuilder().expireAfterWrite(30, TimeUnit.MINUTES).build();
 
 	@Override
-	public boolean insertApp(AppVO app) {
-		return baseMapper.insertApp(app) > 0;
-	}
-
-	@Override
-	public boolean updateApp(AppVO app) {
-		return baseMapper.updateApp(app) > 0;
-	}
-
-	@Override
 	public boolean updateExtendAttr(AppEntity app) {
-		return baseMapper.updateExtendAttr(app) > 0;
+		return lambdaUpdate().set(AppEntity::getExtendAttr, app.getExtendAttr()).eq(AppEntity::getId, app.getId())
+				.update();
 	}
 
 	@Override
@@ -57,7 +48,7 @@ public class AppServiceImpl extends AbstractServiceImpl<AppEntity, AppVO, AppQue
 
 	@Override
 	public void put(String appId, AppVO appDetails) {
-		detailsCacheStore.put(appId + DETAIL_SUFFIX, appDetails);
+		DETAILS_CACHE.put(appId + DETAIL_SUFFIX, appDetails);
 	}
 
 	@Override
@@ -65,15 +56,14 @@ public class AppServiceImpl extends AbstractServiceImpl<AppEntity, AppVO, AppQue
 		appId = appId.equalsIgnoreCase("dream_mgt") ? MGT_APP_ID : appId;
 		AppVO appDetails = null;
 		if (cached) {
-			appDetails = detailsCacheStore.getIfPresent(appId + DETAIL_SUFFIX);
+			appDetails = DETAILS_CACHE.getIfPresent(appId + DETAIL_SUFFIX);
 			if (appDetails == null) {
 				AppEntity appEntity = this.getById(appId);
 				appDetails = baseConvert.convertt(appEntity);
-				detailsCacheStore.put(appId, appDetails);
+				DETAILS_CACHE.put(appId, appDetails);
 			}
 		} else {
-			AppEntity appEntity = this.getById(appId);
-			appDetails = baseConvert.convertt(appEntity);
+			appDetails = baseConvert.convertt(this.getById(appId));
 		}
 		return appDetails;
 	}

@@ -3,9 +3,6 @@ package com.wy.test.persistence.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 import com.wy.test.core.entity.AccountEntity;
 import com.wy.test.core.entity.AccountStrategyEntity;
@@ -28,13 +25,4 @@ public interface AccountMapper extends BaseMappers<AccountEntity, AccountVO, Acc
 	List<UserEntity> queryUserNotInStrategy(AccountStrategyEntity strategy);
 
 	long deleteByStrategy(AccountStrategyEntity strategy);
-
-	List<AccountEntity> queryByAppIdAndDate(AccountEntity account);
-
-	@Select("select * from auth_account where appid=#{appId} and	relatedusername=#{relatedUsername}")
-	List<AccountEntity> queryByAppIdAndAccount(@Param("appId") String appId,
-			@Param("relatedUsername") String relatedUsername);
-
-	@Update("update auth_account set status = #{status}  where id= #{id}")
-	int updateStatus(AccountEntity accounts);
 }

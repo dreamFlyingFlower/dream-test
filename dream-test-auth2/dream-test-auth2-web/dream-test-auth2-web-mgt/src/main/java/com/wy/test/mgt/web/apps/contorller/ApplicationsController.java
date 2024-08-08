@@ -56,7 +56,7 @@ public class ApplicationsController extends BaseAppContorller {
 	@ResponseBody
 	public ResponseEntity<?> fetch(@ModelAttribute AppQuery apps, @CurrentUser UserEntity currentUser) {
 		apps.setInstId(currentUser.getInstId());
-		Page<AppVO> appsList = appsService.page(apps);
+		Page<AppVO> appsList = appService.page(apps);
 		for (AppVO app : appsList.getRecords()) {
 			app.transIconBase64();
 			app.setSecret(null);
@@ -70,7 +70,7 @@ public class ApplicationsController extends BaseAppContorller {
 	@GetMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> query(@ModelAttribute AppEntity apps, @CurrentUser UserEntity currentUser) {
 		log.debug("-query  :" + apps);
-		if (CollectionUtils.isNotEmpty(appsService.list(apps))) {
+		if (CollectionUtils.isNotEmpty(appService.list(apps))) {
 			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
@@ -79,7 +79,7 @@ public class ApplicationsController extends BaseAppContorller {
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		AppVO apps = appsService.getInfo(id);
+		AppVO apps = appService.getInfo(id);
 		decoderSecret(apps);
 		apps.transIconBase64();
 		return new Message<>(apps).buildResponse();
@@ -91,7 +91,7 @@ public class ApplicationsController extends BaseAppContorller {
 		log.debug("-Add  :" + apps);
 		transform(apps);
 		apps.setInstId(currentUser.getInstId());
-		if (null != appsService.add(apps)) {
+		if (null != appService.add(apps)) {
 			return new Message<>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<>(Message.FAIL).buildResponse();
@@ -104,7 +104,7 @@ public class ApplicationsController extends BaseAppContorller {
 		log.debug("-update  :" + apps);
 		transform(apps);
 		apps.setInstId(currentUser.getInstId());
-		if (appsService.edit(apps)) {
+		if (appService.edit(apps)) {
 			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppEntity>(Message.FAIL).buildResponse();
@@ -115,7 +115,7 @@ public class ApplicationsController extends BaseAppContorller {
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete  ids : {} ", ids);
-		if (appsService.removeByIds(Arrays.asList(ids.split(",")))) {
+		if (appService.removeByIds(Arrays.asList(ids.split(",")))) {
 			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppEntity>(Message.FAIL).buildResponse();
@@ -126,7 +126,7 @@ public class ApplicationsController extends BaseAppContorller {
 	@PostMapping(value = { "/updateExtendAttr" })
 	public ResponseEntity<?> updateExtendAttr(@RequestBody AppEntity app) {
 		log.debug("-updateExtendAttr  id : {} , ExtendAttr : {}", app.getId(), app.getExtendAttr());
-		if (appsService.updateExtendAttr(app)) {
+		if (appService.updateExtendAttr(app)) {
 			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppEntity>(Message.FAIL).buildResponse();

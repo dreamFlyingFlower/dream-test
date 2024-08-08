@@ -4,8 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.ProviderManager;
@@ -27,12 +25,12 @@ import dream.flying.flower.framework.core.helper.TokenHelpers;
 import dream.flying.flower.framework.core.json.JsonHelpers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "2-1-OAuth v2.0 API文档模块")
 @Controller
+@Slf4j
 public class IntrospectEndpoint {
-
-	final static Logger _logger = LoggerFactory.getLogger(IntrospectEndpoint.class);
 
 	@Autowired
 	@Qualifier("oauth20JdbcClientDetailsService")
@@ -54,7 +52,7 @@ public class IntrospectEndpoint {
 			method = { RequestMethod.POST, RequestMethod.GET })
 	public void introspect(HttpServletRequest request, HttpServletResponse response) {
 		String access_token = TokenHelpers.resolveAccessToken(request);
-		_logger.debug("access_token {}", access_token);
+		log.debug("access_token {}", access_token);
 
 		OAuth2Authentication oAuth2Authentication = null;
 		Introspection introspection = new Introspection(access_token);
@@ -74,7 +72,7 @@ public class IntrospectEndpoint {
 				}
 			}
 		} catch (OAuth2Exception e) {
-			_logger.error("OAuth2Exception ", e);
+			log.error("OAuth2Exception ", e);
 		}
 
 		httpResponseAdapter.write(response, JsonHelpers.toString(introspection), "json");

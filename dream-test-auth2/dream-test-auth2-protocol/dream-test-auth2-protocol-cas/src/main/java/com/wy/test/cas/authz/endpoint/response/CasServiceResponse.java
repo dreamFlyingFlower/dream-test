@@ -3,14 +3,9 @@ package com.wy.test.cas.authz.endpoint.response;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.wy.test.core.web.HttpResponseConstants;
 
 public class CasServiceResponse {
-
-	final static Logger _logger = LoggerFactory.getLogger(CasServiceResponse.class);
 
 	protected String code;
 
@@ -106,5 +101,4 @@ public class CasServiceResponse {
 	public String serviceResponseBuilder() {
 		return null;
 	}
-
 }

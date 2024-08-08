@@ -2,26 +2,23 @@ package com.wy.test.provider.authn.support.wsfederation;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * This will remove the @example.org from the upn local accounts. Other IdP
- * should have the upn un-altered to prevent users collusions in CAS-based
- * applications.
+ * This will remove the @example.org from the upn local accounts. Other IdP should have the upn un-altered to prevent
+ * users collusions in CAS-based applications.
  * 
  */
+@Slf4j
 public class WsFedAttributeMutatorImpl implements WsFederationAttributeMutator {
-
-	private static final Logger _logger = LoggerFactory.getLogger(WsFedAttributeMutatorImpl.class);
 
 	@Override
 	public void modifyAttributes(Map<String, Object> attributes, String upnSuffix) {
 		if (attributes.containsKey("upn")) {
 			attributes.put("upn", attributes.get("upn").toString().replace("@" + upnSuffix, ""));
-			_logger.debug(String.format("modifyAttributes: upn modified (%s)", attributes.get("upn").toString()));
+			log.debug(String.format("modifyAttributes: upn modified (%s)", attributes.get("upn").toString()));
 		} else {
-			_logger.warn("modifyAttributes: upn attribute not found");
+			log.warn("modifyAttributes: upn attribute not found");
 		}
 
 		attributeMapping(attributes, "surname", "LastName");
@@ -32,13 +29,11 @@ public class WsFedAttributeMutatorImpl implements WsFederationAttributeMutator {
 
 	private void attributeMapping(Map<String, Object> attributes, String oldName, String newName) {
 		if (attributes.containsKey(oldName)) {
-			_logger.debug(
-					String.format("attributeRemapping: %s -> %s (%s)", oldName, newName, attributes.get(oldName)));
+			log.debug(String.format("attributeRemapping: %s -> %s (%s)", oldName, newName, attributes.get(oldName)));
 			attributes.put(newName, attributes.get(oldName));
 			attributes.remove(oldName);
 		} else {
-			_logger.debug(String.format("attributeRemapping: attribute not found (%s)", oldName));
+			log.debug(String.format("attributeRemapping: attribute not found (%s)", oldName));
 		}
 	}
-
 }

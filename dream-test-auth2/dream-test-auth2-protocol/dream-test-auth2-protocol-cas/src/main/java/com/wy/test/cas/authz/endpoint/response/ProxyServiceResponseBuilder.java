@@ -2,6 +2,9 @@ package com.wy.test.cas.authz.endpoint.response;
 
 import com.wy.test.core.web.HttpResponseConstants;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ProxyServiceResponseBuilder extends ServiceResponseBuilder {
 
 	public ProxyServiceResponseBuilder() {
@@ -16,7 +19,7 @@ public class ProxyServiceResponseBuilder extends ServiceResponseBuilder {
 		} else {
 			responseString = serviceResponseJsonBuilder();
 		}
-		_logger.trace("Response String : " + responseString);
+		log.trace("Response String : " + responseString);
 		return responseString;
 	}
 

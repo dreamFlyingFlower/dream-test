@@ -15,8 +15,6 @@
 //
 //public class AccountsServiceTest {
 //
-//	private static final Logger _logger = LoggerFactory.getLogger(AccountsServiceTest.class);
-//
 //	public static ApplicationContext context;
 //
 //	public static AccountsService service;
@@ -28,34 +26,34 @@
 //
 //	@Test
 //	public void get() throws Exception {
-//		_logger.info("get...");
+//		log.info("get...");
 //		Accounts accounts = service.get("26b1c864-ae81-4b1f-9355-74c4c699cb6b");
 //
-//		_logger.info("accounts " + accounts);
+//		log.info("accounts " + accounts);
 //
 //	}
 //
 //	@Test
 //	public void load() throws Exception {
-//		_logger.info("get...");
+//		log.info("get...");
 //		Accounts queryAccounts =
 //				new Accounts("7BF5315CA1004CDB8E614B0361C4D46B", "fe86db85-5475-4494-b5aa-dbd3b886ff64");
 //
-//		_logger.info("accounts " + queryAccounts);
+//		log.info("accounts " + queryAccounts);
 //
 //	}
 //
 //	@Test
 //	public void findAll() throws Exception {
-//		_logger.info("findAll...");
-//		_logger.info("findAll " + service.findAll());
+//		log.info("findAll...");
+//		log.info("findAll " + service.findAll());
 //	}
 //
 //	@Before
 //	public void initSpringContext() {
 //		if (context != null)
 //			return;
-//		_logger.info("init Spring Context...");
+//		log.info("init Spring Context...");
 //		SimpleDateFormat sdf_ymdhms = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //		String startTime = sdf_ymdhms.format(new Date());
 //
@@ -67,14 +65,14 @@
 //			e.printStackTrace();
 //		}
 //
-//		_logger.info("-- --Init Start at " + startTime + " , End at  " + sdf_ymdhms.format(new Date()));
+//		log.info("-- --Init Start at " + startTime + " , End at  " + sdf_ymdhms.format(new Date()));
 //	}
 //
 //	// Initialization ApplicationContext for Project
 //	public void init() {
-//		_logger.info("init ...");
+//		log.info("init ...");
 //
-//		_logger.info("Application dir " + System.getProperty("user.dir"));
+//		log.info("Application dir " + System.getProperty("user.dir"));
 //		context = new ClassPathXmlApplicationContext(new String[] { "spring/applicationContext.xml" });
 //		MybatisJpaContext.init(context);
 //		getservice();

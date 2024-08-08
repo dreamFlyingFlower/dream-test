@@ -1,11 +1,10 @@
 package com.wy.test.social.zhyd.request;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
 
+import lombok.extern.slf4j.Slf4j;
 import me.zhyd.oauth.cache.AuthStateCache;
 import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.config.AuthDefaultSource;
@@ -20,9 +19,8 @@ import me.zhyd.oauth.utils.AuthScopeUtils;
 import me.zhyd.oauth.utils.HttpUtils;
 import me.zhyd.oauth.utils.UrlBuilder;
 
+@Slf4j
 public class AuthWeChatEnterpriseWebRequestCost extends AbstractAuthWeChatEnterpriseRequest {
-
-	final static Logger _logger = LoggerFactory.getLogger(AuthWeChatEnterpriseWebRequestCost.class);
 
 	public AuthWeChatEnterpriseWebRequestCost(AuthConfig config) {
 		super(config, AuthDefaultSource.WECHAT_ENTERPRISE_WEB);
@@ -57,7 +55,7 @@ public class AuthWeChatEnterpriseWebRequestCost extends AbstractAuthWeChatEnterp
 					throw new AuthException(AuthResponseStatus.UNIDENTIFIED_PLATFORM, this.source);
 				}
 			}
-			_logger.debug("get userid:{}", userId);
+			log.debug("get userid:{}", userId);
 			// 根据userid判断是否是上下游的企业微信扫码，下游企业微信扫码返回userid是企业id/用户id,无法获取用户详情会报错400058
 			if (userId.indexOf("/") == -1) {
 				try {
@@ -69,7 +67,7 @@ public class AuthWeChatEnterpriseWebRequestCost extends AbstractAuthWeChatEnterp
 							.gender(AuthUserGender.getWechatRealGender(userDetail.getString("gender"))).token(authToken)
 							.source(this.source.toString()).build();
 				} catch (Exception e) {
-					_logger.error("get userDetail error:{}", e.getMessage());
+					log.error("get userDetail error:{}", e.getMessage());
 				}
 			}
 			return AuthUser.builder().uuid(userId).build();

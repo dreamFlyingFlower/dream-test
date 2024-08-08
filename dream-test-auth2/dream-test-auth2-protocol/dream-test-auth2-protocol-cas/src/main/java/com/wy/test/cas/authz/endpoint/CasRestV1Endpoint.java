@@ -3,8 +3,6 @@ package com.wy.test.cas.authz.endpoint;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
@@ -37,15 +35,15 @@ import dream.flying.flower.helper.DateTimeHelper;
 import dream.flying.flower.lang.StrHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * https://apereo.github.io/cas/6.2.x/protocol/REST-Protocol.html
  */
 @Tag(name = "2-4-CAS REST API文档模块")
 @Controller
+@Slf4j
 public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
-
-	final static Logger _logger = LoggerFactory.getLogger(CasRestV1Endpoint.class);
 
 	@Autowired
 	@Qualifier("authenticationProvider")
@@ -69,7 +67,7 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 			// authenticationProvider.authenticate(loginCredential, false);
 			Authentication authentication = authenticationProvider.authenticate(loginCredential);
 			if (authentication == null) {
-				_logger.debug("Bad Credentials Exception");
+				log.debug("Bad Credentials Exception");
 				return new ResponseEntity<>("Bad Credentials", HttpStatus.BAD_REQUEST);
 			}
 
@@ -81,16 +79,16 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 					dreamServerProperties.getUri() + CasConstants.ENDPOINT.ENDPOINT_REST_TICKET_V1 + "/" + ticket;
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("location", location);
-			_logger.trace("ticket {}", ticket);
-			_logger.trace("location {}", location);
+			log.trace("ticket {}", ticket);
+			log.trace("location {}", location);
 			return new ResponseEntity<>("Location: " + location, headers, HttpStatus.CREATED);
 
 		} catch (final AuthenticationException e) {
-			_logger.error("BadCredentialsException ", e);
+			log.error("BadCredentialsException ", e);
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (final Exception e) {
 
-			_logger.error("Exception ", e);
+			log.error("Exception ", e);
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -202,13 +200,12 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 
 			return new ResponseEntity<>(serviceResponseBuilder.serviceResponseBuilder(), headers, HttpStatus.OK);
 		} catch (final AuthenticationException e) {
-			_logger.error("BadCredentialsException ", e);
+			log.error("BadCredentialsException ", e);
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (final Exception e) {
 
-			_logger.error("Exception ", e);
+			log.error("Exception ", e);
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
 }

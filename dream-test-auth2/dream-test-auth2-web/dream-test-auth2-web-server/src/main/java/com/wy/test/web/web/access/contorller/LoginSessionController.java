@@ -3,8 +3,6 @@ package com.wy.test.web.web.access.contorller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
@@ -26,16 +24,19 @@ import com.wy.test.persistence.service.HistoryLoginService;
 import dream.flying.flower.ConstDate;
 import dream.flying.flower.lang.StrHelper;
 import dream.flying.flower.result.Result;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * 登录会话管理.
- * 
+ * 登录会话管理
+ *
+ * @author 飞花梦影
+ * @date 2024-08-08 11:46:06
+ * @git {@link https://github.com/dreamFlyingFlower}
  */
 @RestController
 @RequestMapping(value = { "/access/session" })
+@Slf4j
 public class LoginSessionController {
-
-	static final Logger _logger = LoggerFactory.getLogger(LoginSessionController.class);
 
 	@Autowired
 	HistoryLoginService historyLoginService;
@@ -52,7 +53,7 @@ public class LoginSessionController {
 	@GetMapping(value = { "/fetch" })
 	public ResponseEntity<?> fetch(@ModelAttribute("historyLogin") HistoryLoginEntity historyLogin,
 			@CurrentUser UserEntity currentUser) {
-		_logger.debug("history/session/fetch {}", historyLogin);
+		log.debug("history/session/fetch {}", historyLogin);
 		historyLogin.setUserId(currentUser.getId());
 		historyLogin.setInstId(currentUser.getInstId());
 		return ResponseEntity.ok(Result.ok(historyLoginService.queryOnlineSession(historyLogin)));
@@ -60,11 +61,11 @@ public class LoginSessionController {
 
 	@GetMapping(value = "/terminate")
 	public ResponseEntity<?> terminate(@RequestParam("ids") String ids, @CurrentUser UserVO currentUser) {
-		_logger.debug(ids);
+		log.debug(ids);
 		boolean isTerminated = false;
 		try {
 			for (String sessionId : StrHelper.split(ids, ",")) {
-				_logger.trace("terminate session Id {} ", sessionId);
+				log.trace("terminate session Id {} ", sessionId);
 				if (currentUser.getSessionId().contains(sessionId)) {
 					continue;// skip current session
 				}
@@ -73,7 +74,7 @@ public class LoginSessionController {
 			}
 			isTerminated = true;
 		} catch (Exception e) {
-			_logger.debug("terminate Exception .", e);
+			log.debug("terminate Exception .", e);
 		}
 
 		if (isTerminated) {

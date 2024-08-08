@@ -18,8 +18,6 @@ import org.passay.UsernameRule;
 import org.passay.WhitespaceRule;
 import org.passay.dictionary.Dictionary;
 import org.passay.dictionary.DictionaryBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -29,9 +27,10 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.wy.test.core.constants.ConstProperties;
 import com.wy.test.core.entity.PasswordPolicyEntity;
 
-public class PasswordPolicyRepository {
+import lombok.extern.slf4j.Slf4j;
 
-	private static Logger _logger = LoggerFactory.getLogger(PasswordPolicyRepository.class);
+@Slf4j
+public class PasswordPolicyRepository {
 
 	// Dictionary topWeakPassword Source
 	public static final String topWeakPasswordPropertySource = "classpath:/top_weak_password.txt";
@@ -65,7 +64,7 @@ public class PasswordPolicyRepository {
 		if (passwordPolicy == null) {
 			passwordPolicy =
 					jdbcTemplate.queryForObject(PASSWORD_POLICY_SELECT_STATEMENT, new PasswordPolicyRowMapper());
-			_logger.debug("query PasswordPolicy : " + passwordPolicy);
+			log.debug("query PasswordPolicy : " + passwordPolicy);
 			passwordPolicyStore.put(PASSWORD_POLICY_KEY, passwordPolicy);
 
 			// RandomPasswordLength =(MaxLength +MinLength)/2

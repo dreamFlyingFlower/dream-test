@@ -2,185 +2,41 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wy.test.persistence.mapper.AppMapper">
 
-	<sql id="where_condition">
-		<if test="id != null and id != ''">
-			AND id = #{id}
-		</if>
-		<if test="appName != null and appName != ''">
-			AND appname LIKE '%${appName}%'
-		</if>
-		<if test="protocol != null and protocol != ''">
-			AND protocol = #{protocol}
-		</if>
-		<if test="credential != null and credential != ''">
-			AND credential = #{credential}
-		</if>
-		<if test="category != null and category != ''">
-			AND category = #{category}
-		</if>
-		<if test="vendor != null and vendor != ''">
-			AND vendor = #{vendor}
-		</if>
-	</sql>
-
-	<select id="queryPageResults" resultType="AppVO">
-		select
-		*
-		from
-		auth_app
-		where instid = #{instId}
-		<include refid="where_condition" />
-		order by sortindex
-	</select>
-
-
-	<insert id="insertApp" parameterType="Apps">
-		insert into auth_apps(
-		id,
-		appname,
-		icon,
-		loginurl,
-		protocol,
-		category,
-		secret,
-		description,
-		vendor,
-		vendorurl,
-		credential,
-		sharedusername,
-		sharedpassword,
-		systemuserattr,
-		isextendattr,
-		extendattr,
-		userpropertys,
-		issignature,
-		isadapter,
-		adapterid,
-		adaptername,
-		adapter,
-		principal,
-		credentials,
-		visible,
-		sortindex,
-		createdby,
-		createddate,
-		status,
-		logouturl,
-		logouttype,
-		instid
-		)values(
-		#{id},
-		#{appName},
-		#{icon},
-		#{loginUrl},
-		#{protocol},
-		#{category},
-		#{secret},
-		#{description},
-		#{vendor} ,
-		#{vendorUrl},
-		#{credential},
-		#{sharedUsername},
-		#{sharedPassword},
-		#{systemUserAttr},
-		#{isExtendAttr},
-		#{extendAttr},
-		#{userPropertys},
-		#{isSignature},
-		#{isAdapter},
-		#{adapterId},
-		#{adapterName},
-		#{adapter},
-		#{principal},
-		#{credentials},
-		#{visible},
-		#{sortIndex},
-		#{createdBy},
-		#{createdDate} ,
-		#{status},
-		#{logoutUrl},
-		#{logoutType},
-		#{instId}
-		)
-	</insert>
-
-	<update id="updateApp" parameterType="Apps">
-		update auth_apps set
-		appname = #{appName},
-		<if test="icon != null">
-			icon = #{icon},
-		</if>
-		loginurl = #{loginUrl},
-		protocol = #{protocol},
-		category = #{category},
-		secret = #{secret},
-		description = #{description},
-		vendor = #{vendor},
-		vendorurl = #{vendorUrl},
-		credential = #{credential},
-		sharedusername = #{sharedUsername},
-		sharedpassword = #{sharedPassword},
-		systemuserattr = #{systemUserAttr},
-		isextendattr = #{isExtendAttr},
-		<!-- extendattr = #{extendAttr}, -->
-		userpropertys = #{userPropertys},
-		issignature = #{isSignature},
-		<if test="adapter != null">
-			isadapter = #{isAdapter},
-			adapterid = #{adapterId},
-			adaptername = #{adapterName},
-			adapter = #{adapter},
-		</if>
-		<if test="inducer != null and inducer != ''">
-			inducer = #{inducer},
-		</if>
-		principal = #{principal},
-		credentials = #{credentials},
-		visible = #{visible},
-		sortindex = #{sortIndex},
-		modifiedby = #{modifiedBy},
-		modifieddate = #{modifiedDate},
-		status = #{status},
-		logouturl = #{logoutUrl},
-		logouttype = #{logoutType}
-		where
-		ID = #{id}
-	</update>
-
 	<select id="queryMyApps" parameterType="UserApps" resultType="UserApps">
-		select distinct
+		SELECT DISTINCT
 		app.*
-		from
-		auth_apps app,auth_role_permission p,auth_role r
-		where
+		FROM
+		auth_app app,auth_role_permission p,auth_role r
+		WHERE
 		app.id = p.appid
-		and p.roleid = r.id
-		and app.instid = #{instId}
-		and p.instid = #{instId}
-		and r.instid = #{instId}
-		and app.visible != 0
-		and r.id in(
+		AND p.roleid = r.id
+		AND app.instid = #{instId}
+		AND p.instid = #{instId}
+		AND r.instid = #{instId}
+		AND app.visible != 0
+		AND r.id in
+		(
 		<!-- ROLE_ALL_USER -->
-		select id as roleid
-		from auth_role
-		where rolecode = 'ROLE_ALL_USER'
-		union
+		SELECT id as roleid
+		FROM auth_role
+		WHERE rolecode = 'ROLE_ALL_USER'
+		UNION
 		<!-- role member -->
-		select
+		SELECT
 		rm.roleid
-		from
+		FROM
 		auth_role_member rm,auth_user u
-		where rm.memberid = u.id
+		WHERE rm.memberid = u.id
 		<if test="userId != null and userId != ''">
-			and u.id = #{userId}
+			AND u.id = #{userId}
 		</if>
 		<if test="username != null and username != ''">
-			and u.username = #{username}
+			AND u.username = #{username}
 		</if>
 		)
 		<if test="appName != null and appName != ''">
-			and app_name = #{appName}
+			AND app_name = #{appName}
 		</if>
-		order by sortindex
+		ORDER BY sort_index ASC
 	</select>
 </mapper>

@@ -3,14 +3,12 @@ package com.wy.test.cas.authz.endpoint.response;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.wy.test.core.web.HttpResponseConstants;
 
-public class ServiceResponseBuilder extends CasServiceResponse {
+import lombok.extern.slf4j.Slf4j;
 
-	final static Logger _logger = LoggerFactory.getLogger(ServiceResponseBuilder.class);
+@Slf4j
+public class ServiceResponseBuilder extends CasServiceResponse {
 
 	@Override
 	public String serviceResponseBuilder() {
@@ -21,7 +19,7 @@ public class ServiceResponseBuilder extends CasServiceResponse {
 			responseString = serviceResponseJsonBuilder();
 		}
 
-		_logger.trace("Response String : " + responseString);
+		log.trace("Response String : " + responseString);
 		return responseString;
 	}
 

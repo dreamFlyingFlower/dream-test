@@ -35,8 +35,6 @@ public interface AccountService extends BaseServices<AccountEntity, AccountVO, A
 
 	long deleteByStrategy(AccountStrategyEntity strategy);
 
-	List<AccountEntity> queryByAppIdAndDate(AccountEntity account);
-
 	List<AccountEntity> queryByAppIdAndAccount(String appId, String relatedUsername);
 
 	String generateAccount(UserEntity userInfo, AccountStrategyEntity accountsStrategy);

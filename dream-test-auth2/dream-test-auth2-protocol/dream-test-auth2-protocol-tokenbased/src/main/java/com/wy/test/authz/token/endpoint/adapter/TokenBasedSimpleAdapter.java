@@ -1,7 +1,5 @@
 package com.wy.test.authz.token.endpoint.adapter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
@@ -10,8 +8,6 @@ import com.wy.test.core.vo.AppTokenDetailVO;
 import dream.flying.flower.helper.DateTimeHelper;
 
 public class TokenBasedSimpleAdapter extends AbstractAuthorizeAdapter {
-
-	final static Logger _logger = LoggerFactory.getLogger(TokenBasedSimpleAdapter.class);
 
 	String token = "";
 

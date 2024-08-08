@@ -2,12 +2,10 @@ package com.wy.test.core.util;
 
 import java.io.UnsupportedEncodingException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class PathHelpers {
-
-	private static final Logger _logger = LoggerFactory.getLogger(PathHelpers.class);
 
 	private static PathHelpers instance = null;
 
@@ -37,7 +35,7 @@ public class PathHelpers {
 	public PathHelpers() {
 		try {
 			classPath = java.net.URLDecoder.decode(PathHelpers.class.getResource(PATH_FILE_NAME).getFile(), "UTF-8");
-			_logger.trace("PathUtils() PathUtils " + classPath);
+			log.trace("PathUtils() PathUtils " + classPath);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

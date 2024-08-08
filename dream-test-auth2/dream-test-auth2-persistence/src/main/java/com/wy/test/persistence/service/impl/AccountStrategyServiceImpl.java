@@ -1,12 +1,11 @@
 package com.wy.test.persistence.service.impl;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.wy.test.core.convert.AccountStrategyConvert;
 import com.wy.test.core.entity.AccountStrategyEntity;
-import com.wy.test.core.entity.RoleEntity;
+import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.query.AccountStrategyQuery;
 import com.wy.test.core.vo.AccountStrategyVO;
 import com.wy.test.persistence.mapper.AccountStrategyMapper;
@@ -28,12 +27,13 @@ public class AccountStrategyServiceImpl extends AbstractServiceImpl<AccountStrat
 		AccountStrategyQuery, AccountStrategyConvert, AccountStrategyMapper> implements AccountStrategyService {
 
 	@Override
-	public List<RoleEntity> queryDynamicGroups(RoleEntity groups) {
-		return baseMapper.queryDynamicGroups(groups);
-	}
+	protected MPJLambdaWrapper<AccountStrategyEntity> buildQueryWrapper(AccountStrategyQuery query) {
+		MPJLambdaWrapper<AccountStrategyEntity> mpjLambdaWrapper = super.buildQueryWrapper(query);
 
-	@Override
-	public boolean deleteById(String groupId) {
-		return this.removeById(groupId);
+		mpjLambdaWrapper.selectAll(AccountStrategyEntity.class)
+				.innerJoin(AppEntity.class, AppEntity::getId, AccountStrategyEntity::getAppId)
+				.selectAs(AppEntity::getIcon, "appIcon");
+
+		return super.buildQueryWrapper(query);
 	}
 }

@@ -2,8 +2,6 @@ package com.wy.test.mgt.web.contorller;
 
 import java.util.HashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,20 +13,25 @@ import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.ReportService;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
- * Index
+ * 首页
+ *
+ * @author 飞花梦影
+ * @date 2024-08-08 11:49:37
+ * @git {@link https://github.com/dreamFlyingFlower}
  */
 @Controller
+@Slf4j
 public class DashboardController {
-
-	private static Logger _logger = LoggerFactory.getLogger(DashboardController.class);
 
 	@Autowired
 	ReportService reportService;
 
 	@GetMapping(value = { "/dashboard" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> dashboard(@CurrentUser UserEntity currentUser) {
-		_logger.debug("IndexController /dashboard.");
+		log.debug("IndexController /dashboard.");
 		HashMap<String, Object> reportParameter = new HashMap<String, Object>();
 		reportParameter.put("instId", currentUser.getInstId());
 

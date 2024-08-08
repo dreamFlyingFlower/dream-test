@@ -17,7 +17,7 @@
 //
 //public class AppsServiceTest {
 //
-//	private static final Logger _logger = LoggerFactory.getLogger(AppsServiceTest.class);
+//	private static final Logger log = LoggerFactory.getLogger(AppsServiceTest.class);
 //
 //	public static ApplicationContext context;
 //
@@ -30,12 +30,12 @@
 //
 //	@Test
 //	public void get() throws Exception {
-//		_logger.info("get...");
+//		log.info("get...");
 //		Apps a = new Apps();
 //		a.setPageNumber(2);
 //		a.setPageSize(10);
 //		getservice().queryPageResults(a);
-//		// _logger.info("apps "+);
+//		// log.info("apps "+);
 //
 //	}
 //
@@ -43,7 +43,7 @@
 //	public void initSpringContext() {
 //		if (context != null)
 //			return;
-//		_logger.info("init Spring Context...");
+//		log.info("init Spring Context...");
 //		SimpleDateFormat sdf_ymdhms = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //		String startTime = sdf_ymdhms.format(new Date());
 //
@@ -55,14 +55,14 @@
 //			e.printStackTrace();
 //		}
 //
-//		_logger.info("-- --Init Start at " + startTime + " , End at  " + sdf_ymdhms.format(new Date()));
+//		log.info("-- --Init Start at " + startTime + " , End at  " + sdf_ymdhms.format(new Date()));
 //	}
 //
 //	// Initialization ApplicationContext for Project
 //	public void init() {
-//		_logger.info("init ...");
+//		log.info("init ...");
 //
-//		_logger.info("Application dir " + System.getProperty("user.dir"));
+//		log.info("Application dir " + System.getProperty("user.dir"));
 //		context = new ClassPathXmlApplicationContext(new String[] { "spring/applicationContext.xml" });
 //		MybatisJpaContext.init(context);
 //		getservice();

@@ -1,8 +1,6 @@
 package com.wy.test.mgt.web.config.contorller;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,17 +16,17 @@ import org.springframework.web.servlet.ModelAndView;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.entity.LocalizationEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.entity.UserAdjunctEntity;
+import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.persistence.repository.LocalizationRepository;
 
 import dream.flying.flower.generator.GeneratorStrategyContext;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping(value = { "/localization" })
+@Slf4j
 public class LocalizationController {
-
-	final static Logger _logger = LoggerFactory.getLogger(LocalizationController.class);
 
 	@Autowired
 	private LocalizationRepository localizationRepository;
@@ -58,7 +56,7 @@ public class LocalizationController {
 	@ResponseBody
 	public ResponseEntity<?> update(@ModelAttribute("localization") LocalizationEntity localization,
 			@CurrentUser UserEntity currentUser, BindingResult result) {
-		_logger.debug("update  localization : " + localization);
+		log.debug("update  localization : " + localization);
 		localization.setInstId(currentUser.getInstId());
 		if (StringUtils.isBlank(localization.getId())) {
 			GeneratorStrategyContext generatorStrategyContext = new GeneratorStrategyContext();
@@ -76,5 +74,4 @@ public class LocalizationController {
 			}
 		}
 	}
-
 }

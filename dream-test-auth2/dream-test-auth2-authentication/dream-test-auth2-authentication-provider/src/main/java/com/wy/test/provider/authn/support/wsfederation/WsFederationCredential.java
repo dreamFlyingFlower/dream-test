@@ -3,16 +3,14 @@ package com.wy.test.provider.authn.support.wsfederation;
 import java.util.Map;
 
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This class represents the basic elements of the WsFederation token.
- *
  */
+@Slf4j
 public final class WsFederationCredential {
-
-	private final Logger _logger = LoggerFactory.getLogger(WsFederationCredential.class);
 
 	private String audience;
 
@@ -105,8 +103,7 @@ public final class WsFederationCredential {
 	}
 
 	/**
-	 * toString produces a human readable representation of the
-	 * WsFederationCredential.
+	 * toString produces a human readable representation of the WsFederationCredential.
 	 *
 	 * @return a human readable representation of the WsFederationCredential
 	 */
@@ -128,35 +125,34 @@ public final class WsFederationCredential {
 	/**
 	 * isValid validates the credential.
 	 *
-	 * @param expectedAudience the audience that the token was issued to (CAS
-	 *        Server)
+	 * @param expectedAudience the audience that the token was issued to (CAS Server)
 	 * @param expectedIssuer the issuer of the token (the IdP)
 	 * @param timeDrift the amount of acceptable time drift
 	 * @return true if the credentials are valid, otherwise false
 	 */
 	public boolean isValid(final String expectedAudience, final String expectedIssuer, final int timeDrift) {
 		if (!this.getAudience().equalsIgnoreCase(expectedAudience)) {
-			_logger.warn(".isValid: audience is invalid: {}", this.getAudience());
+			log.warn(".isValid: audience is invalid: {}", this.getAudience());
 			return false;
 		}
 
 		if (!this.getIssuer().equalsIgnoreCase(expectedIssuer)) {
-			_logger.warn(".isValid: issuer is invalid: {}", this.getIssuer());
+			log.warn(".isValid: issuer is invalid: {}", this.getIssuer());
 			return false;
 		}
 
 		if (this.getIssuedOn().isBefore(this.getRetrievedOn().minusMillis(timeDrift))
 				|| this.getIssuedOn().isAfter(this.getRetrievedOn().plusMillis(timeDrift))) {
-			_logger.warn(".isValid: Ticket outside of drift.");
+			log.warn(".isValid: Ticket outside of drift.");
 			return false;
 		}
 
 		if (this.getRetrievedOn().isAfter(this.getNotOnOrAfter())) {
-			_logger.warn(".isValid: ticket is too late.");
+			log.warn(".isValid: ticket is too late.");
 			return false;
 		}
 
-		_logger.debug(".isValid: credential is valid.");
+		log.debug(".isValid: credential is valid.");
 		return true;
 	}
 }

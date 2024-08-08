@@ -1,18 +1,16 @@
 package com.wy.test.otp.password.onetimepwd.impl;
 
 import org.apache.commons.codec.binary.Hex;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.otp.password.onetimepwd.algorithm.TimeBasedOTP;
 
 import dream.flying.flower.framework.core.crypto.Base32Helpers;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class CounterBasedOtpAuthn extends AbstractOtpAuthn {
-
-	private static final Logger _logger = LoggerFactory.getLogger(CounterBasedOtpAuthn.class);
 
 	public CounterBasedOtpAuthn() {
 		otpType = OtpTypes.HOTP_OTP;
@@ -25,7 +23,7 @@ public class CounterBasedOtpAuthn extends AbstractOtpAuthn {
 
 	@Override
 	public boolean validate(UserEntity userInfo, String token) {
-		_logger.debug("SharedCounter : " + userInfo.getSharedCounter());
+		log.debug("SharedCounter : " + userInfo.getSharedCounter());
 		byte[] byteSharedSecret = Base32Helpers.decode(userInfo.getSharedSecret());
 		String hexSharedSecret = Hex.encodeHexString(byteSharedSecret);
 		String counterBasedToken = "";
@@ -39,8 +37,8 @@ public class CounterBasedOtpAuthn extends AbstractOtpAuthn {
 					TimeBasedOTP.genOTPHmacSHA512(hexSharedSecret, userInfo.getSharedCounter(), "" + digits);
 		}
 
-		_logger.debug("token : " + token);
-		_logger.debug("counterBasedToken : " + counterBasedToken);
+		log.debug("token : " + token);
+		log.debug("counterBasedToken : " + counterBasedToken);
 		if (token.equalsIgnoreCase(counterBasedToken)) {
 			return true;
 		}

@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -19,10 +17,10 @@ import com.nimbusds.jwt.SignedJWT;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.framework.web.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class JwtLoginService {
-
-	private static final Logger _logger = LoggerFactory.getLogger(JwtLoginService.class);
 
 	String issuer;
 
@@ -34,18 +32,18 @@ public class JwtLoginService {
 	}
 
 	public String buildLoginJwt() {
-		_logger.debug("build Login JWT .");
+		log.debug("build Login JWT .");
 
 		DateTime currentDateTime = DateTime.now();
 		Date expirationTime = currentDateTime.plusMinutes(5).toDate();
-		_logger.debug("Expiration Time : " + expirationTime);
+		log.debug("Expiration Time : " + expirationTime);
 		JWTClaimsSet jwtClaims = new JWTClaimsSet.Builder().subject(WebContext.getSession().getId())
 				.expirationTime(expirationTime).issuer(getIssuer()).issueTime(currentDateTime.toDate())
 				.jwtID(UUID.randomUUID().toString()).build();
 
 		JWT jwtToken = new PlainJWT(jwtClaims);
 
-		_logger.info("JWT Claims : " + jwtClaims.toString());
+		log.info("JWT Claims : " + jwtClaims.toString());
 
 		JWSAlgorithm signingAlg = jwtSignerValidationService.getDefaultSigningAlgorithm();
 
@@ -54,7 +52,7 @@ public class JwtLoginService {
 		jwtSignerValidationService.signJwt((SignedJWT) jwtToken);
 
 		String tokenString = jwtToken.serialize();
-		_logger.debug("JWT Token : " + tokenString);
+		log.debug("JWT Token : " + tokenString);
 		return tokenString;
 	}
 
@@ -72,23 +70,23 @@ public class JwtLoginService {
 				boolean isIssuerMatches = jwtClaimsSet.getIssuer().equals(getIssuer());
 				boolean isExpiration = (new DateTime()).isBefore(jwtClaimsSet.getExpirationTime().getTime());
 
-				_logger.debug("Signed JWT {}", signedJWT.getPayload());
-				_logger.debug("Subject is {}", jwtClaimsSet.getSubject());
-				_logger.debug("ExpirationTime  Validation {}", isExpiration);
-				_logger.debug("JWT ClaimsSet Issuer {}, Metadata Issuer {}, Issuer is matches {}",
-						jwtClaimsSet.getIssuer(), getIssuer(), isIssuerMatches);
+				log.debug("Signed JWT {}", signedJWT.getPayload());
+				log.debug("Subject is {}", jwtClaimsSet.getSubject());
+				log.debug("ExpirationTime  Validation {}", isExpiration);
+				log.debug("JWT ClaimsSet Issuer {}, Metadata Issuer {}, Issuer is matches {}", jwtClaimsSet.getIssuer(),
+						getIssuer(), isIssuerMatches);
 
 				if (isIssuerMatches && isExpiration) {
 					return signedJWT;
 				}
 			} else {
-				_logger.debug("JWT Signer Verify false.");
+				log.debug("JWT Signer Verify false.");
 			}
 		} catch (java.text.ParseException e) {
 			// Invalid signed JWT encoding
-			_logger.error("Invalid signed JWT encoding ", e);
+			log.error("Invalid signed JWT encoding ", e);
 		} catch (JOSEException e) {
-			_logger.error("JOSEException ", e);
+			log.error("JOSEException ", e);
 		}
 		return null;
 	}

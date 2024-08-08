@@ -1,16 +1,14 @@
 package com.wy.test.core.persistence.cache;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.wy.test.core.persistence.redis.RedisConnection;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class RedisMomentaryService implements MomentaryService {
 
-	private static final Logger _logger = LoggerFactory.getLogger(RedisMomentaryService.class);
-
-	protected int validitySeconds = 60 * 5; // default 5 minutes.
+	protected int validitySeconds = 60 * 5;
 
 	RedisConnectionFactory connectionFactory;
 
@@ -36,7 +34,7 @@ public class RedisMomentaryService implements MomentaryService {
 	public void put(String sessionId, String name, Object value) {
 		RedisConnection conn = connectionFactory.getConnection();
 		conn.setexObject(getSessionKey(sessionId, name), validitySeconds, value);
-		_logger.trace("key {}, validitySeconds {}, value {}", getSessionKey(sessionId, name), validitySeconds, value);
+		log.trace("key {}, validitySeconds {}, value {}", getSessionKey(sessionId, name), validitySeconds, value);
 		conn.close();
 	}
 
@@ -44,7 +42,7 @@ public class RedisMomentaryService implements MomentaryService {
 	public Object get(String sessionId, String name) {
 		RedisConnection conn = connectionFactory.getConnection();
 		Object value = conn.getObject(getSessionKey(sessionId, name));
-		_logger.trace("key {}, value {}", getSessionKey(sessionId, name), value);
+		log.trace("key {}, value {}", getSessionKey(sessionId, name), value);
 		conn.close();
 		return value;
 	}
@@ -55,7 +53,7 @@ public class RedisMomentaryService implements MomentaryService {
 		Object value = conn.getObject(getSessionKey(sessionId, name));
 		conn.delete(getSessionKey(sessionId, name));
 		conn.close();
-		_logger.trace("key {}, value {}", getSessionKey(sessionId, name), value);
+		log.trace("key {}, value {}", getSessionKey(sessionId, name), value);
 		return value;
 	}
 

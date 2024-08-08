@@ -2,19 +2,16 @@ package com.wy.test.oauth2.provider.userinfo.endpoint;
 
 import java.util.HashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.entity.apps.oauth2.provider.ClientDetails;
 import com.wy.test.core.web.WebConstants;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.generator.StringGenerator;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class OAuthDefaultUserInfoAdapter extends AbstractAuthorizeAdapter {
-
-	final static Logger _logger = LoggerFactory.getLogger(OAuthDefaultUserInfoAdapter.class);
 
 	ClientDetails clientDetails;
 
@@ -28,7 +25,7 @@ public class OAuthDefaultUserInfoAdapter extends AbstractAuthorizeAdapter {
 	@Override
 	public Object generateInfo() {
 		String subject = AbstractAuthorizeAdapter.getValueByUserAttr(userInfo, clientDetails.getSubject());
-		_logger.debug("userId : {} , username : {} , displayName : {} , subject : {}", userInfo.getId(),
+		log.debug("userId : {} , username : {} , displayName : {} , subject : {}", userInfo.getId(),
 				userInfo.getUsername(), userInfo.getDisplayName(), subject);
 
 		HashMap<String, Object> beanMap = new HashMap<String, Object>();

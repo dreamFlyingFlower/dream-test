@@ -6,8 +6,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,15 +23,15 @@ import com.wy.test.core.web.WebContext;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * https://apereo.github.io/cas/6.2.x/protocol/CAS-Protocol.html
  */
 @Tag(name = "2-3-CAS API文档模块")
 @Controller
+@Slf4j
 public class CasAuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
-
-	final static Logger _logger = LoggerFactory.getLogger(CasAuthorizeEndpoint.class);
 
 	@Operation(summary = "CAS页面跳转service认证接口", description = "传递参数service", method = "GET")
 	@GetMapping(CasConstants.ENDPOINT.ENDPOINT_LOGIN)
@@ -58,16 +56,16 @@ public class CasAuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 	private ModelAndView buildCasModelAndView(HttpServletRequest request, HttpServletResponse response,
 			AppCasDetailVO casDetails, String casService) {
 		if (casDetails == null) {
-			_logger.debug("service {} not registered  ", casService);
+			log.debug("service {} not registered  ", casService);
 			ModelAndView modelAndView = new ModelAndView("authorize/cas_sso_submint");
 			modelAndView.addObject("errorMessage", casService);
 			return modelAndView;
 		}
 
-		_logger.debug("Detail {}", casDetails);
+		log.debug("Detail {}", casDetails);
 		Map<String, String> parameterMap = WebContext.getRequestParameterMap(request);
 		String service = casService;
-		_logger.debug("CAS Parameter service = {}", service);
+		log.debug("CAS Parameter service = {}", service);
 		if (casService.indexOf("?") > -1) {
 			service = casService.substring(casService.indexOf("?") + 1);
 			if (service.indexOf("=") > -1) {
@@ -76,7 +74,7 @@ public class CasAuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 					parameterMap.put(parameterValues[0], parameterValues[1]);
 				}
 			}
-			_logger.debug("CAS service with Parameter : {}", parameterMap);
+			log.debug("CAS service with Parameter : {}", parameterMap);
 		}
 		WebContext.setAttribute(CasConstants.PARAMETER.PARAMETER_MAP, parameterMap);
 		WebContext.setAttribute(CasConstants.PARAMETER.ENDPOINT_CAS_DETAILS, casDetails);
@@ -94,9 +92,9 @@ public class CasAuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 
 		ServiceTicketImpl serviceTicket = new ServiceTicketImpl(AuthorizationUtils.getAuthentication(), casDetails);
 
-		_logger.trace("CAS start create ticket ... ");
+		log.trace("CAS start create ticket ... ");
 		String ticket = ticketServices.createTicket(serviceTicket, casDetails.getExpires());
-		_logger.trace("CAS ticket {} created . ", ticket);
+		log.trace("CAS ticket {} created . ", ticket);
 
 		StringBuffer callbackUrl = new StringBuffer(casDetails.getCallbackUrl());
 		if (casDetails.getCallbackUrl().indexOf("?") == -1) {
@@ -127,20 +125,20 @@ public class CasAuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 		}
 
 		if (casDetails.getLogoutType() == LogoutType.BACK_CHANNEL) {
-			_logger.debug("CAS LogoutType BACK_CHANNEL ... ");
+			log.debug("CAS LogoutType BACK_CHANNEL ... ");
 			String sessionId = AuthorizationUtils.getPrincipal().getSession().getId();
-			_logger.trace("get session by id {} . ", sessionId);
+			log.trace("get session by id {} . ", sessionId);
 			Session session = sessionManager.get(sessionId);
-			_logger.trace("current session {}  ", session);
+			log.trace("current session {}  ", session);
 			// set cas ticket as OnlineTicketId
 			casDetails.setOnlineTicket(ticket);
 			session.setAuthorizedApp(casDetails);
-			_logger.trace("session store ticket  {} .", ticket);
+			log.trace("session store ticket  {} .", ticket);
 			sessionManager.create(sessionId, session);
-			_logger.debug("CAS LogoutType session store ticket to AuthorizedApp .");
+			log.debug("CAS LogoutType session store ticket to AuthorizedApp .");
 		}
 
-		_logger.debug("redirect to CAS Client URL {}", callbackUrl);
+		log.debug("redirect to CAS Client URL {}", callbackUrl);
 		modelAndView.addObject("callbackUrl", callbackUrl.toString());
 		return modelAndView;
 	}

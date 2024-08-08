@@ -1,9 +1,6 @@
 package com.wy.test.persistence.service;
 
-import java.util.List;
-
 import com.wy.test.core.entity.AccountStrategyEntity;
-import com.wy.test.core.entity.RoleEntity;
 import com.wy.test.core.query.AccountStrategyQuery;
 import com.wy.test.core.vo.AccountStrategyVO;
 
@@ -19,7 +16,4 @@ import dream.flying.flower.framework.mybatis.plus.service.BaseServices;
 public interface AccountStrategyService
 		extends BaseServices<AccountStrategyEntity, AccountStrategyVO, AccountStrategyQuery> {
 
-	List<RoleEntity> queryDynamicGroups(RoleEntity roleEntity);
-
-	boolean deleteById(String groupId);
 }

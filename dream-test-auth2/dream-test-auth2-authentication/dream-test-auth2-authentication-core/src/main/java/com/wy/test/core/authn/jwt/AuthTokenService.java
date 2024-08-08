@@ -3,8 +3,6 @@ package com.wy.test.core.authn.jwt;
 import java.text.ParseException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 
 import com.nimbusds.jose.JOSEException;
@@ -13,10 +11,10 @@ import com.wy.test.core.properties.DreamAuthJwkProperties;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.framework.web.crypto.jwt.HMAC512Service;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class AuthTokenService extends AuthJwtService {
-
-	private static final Logger _logger = LoggerFactory.getLogger(AuthTokenService.class);
 
 	DreamAuthJwkProperties dreamJwkProperties;
 
@@ -50,7 +48,7 @@ public class AuthTokenService extends AuthJwtService {
 	public AuthJwt genAuthJwt(Authentication authentication) {
 		if (authentication != null) {
 			String refreshToken = refreshTokenService.genRefreshToken(authentication);
-			_logger.trace("generate JWT Token");
+			log.trace("generate JWT Token");
 			String accessToken = genJwt(authentication);
 			AuthJwt authJwt = new AuthJwt(accessToken, authentication, dreamJwkProperties.getExpires(), refreshToken);
 			return authJwt;
@@ -99,16 +97,15 @@ public class AuthTokenService extends AuthJwtService {
 			String jwtId = resolveJWTID(state);
 			if (StringUtils.isNotBlank(jwtId) && StringUtils.isNotBlank(captcha)) {
 				Object momentaryCaptcha = momentaryService.get("", jwtId);
-				_logger.debug("captcha : {}, momentary Captcha : {}", captcha, momentaryCaptcha);
+				log.debug("captcha : {}, momentary Captcha : {}", captcha, momentaryCaptcha);
 				if (!StringUtils.isBlank(captcha) && captcha.equals(momentaryCaptcha.toString())) {
 					momentaryService.remove("", jwtId);
 					return true;
 				}
 			}
 		} catch (ParseException e) {
-			_logger.debug("Exception ", e);
+			log.debug("Exception ", e);
 		}
 		return false;
 	}
-
 }

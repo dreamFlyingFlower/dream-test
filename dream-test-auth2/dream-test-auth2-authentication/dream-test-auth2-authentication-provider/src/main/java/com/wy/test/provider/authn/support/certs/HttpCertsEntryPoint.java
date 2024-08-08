@@ -5,18 +5,16 @@ import java.security.cert.X509Certificate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
 import com.wy.test.provider.authn.provider.AbstractAuthenticationProvider;
-import com.wy.test.provider.authn.support.httpheader.HttpHeaderEntryPoint;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class HttpCertsEntryPoint implements AsyncHandlerInterceptor {
-
-	private static final Logger _logger = LoggerFactory.getLogger(HttpHeaderEntryPoint.class);
 
 	static String CERTIFICATE_ATTRIBUTE = "javax.servlet.request.X509Certificate";
 
@@ -36,14 +34,14 @@ public class HttpCertsEntryPoint implements AsyncHandlerInterceptor {
 			return true;
 		}
 
-		_logger.debug("Certificate Login Start ...");
-		_logger.debug("Request url : " + request.getRequestURL());
-		_logger.debug("Request URI : " + request.getRequestURI());
-		_logger.trace("Request ContextPath : " + request.getContextPath());
-		_logger.trace("Request ServletPath : " + request.getServletPath());
-		_logger.trace("RequestSessionId : " + request.getRequestedSessionId());
-		_logger.trace("isRequestedSessionIdValid : " + request.isRequestedSessionIdValid());
-		_logger.trace("getSession : " + request.getSession(false));
+		log.debug("Certificate Login Start ...");
+		log.debug("Request url : " + request.getRequestURL());
+		log.debug("Request URI : " + request.getRequestURI());
+		log.trace("Request ContextPath : " + request.getContextPath());
+		log.trace("Request ServletPath : " + request.getServletPath());
+		log.trace("RequestSessionId : " + request.getRequestedSessionId());
+		log.trace("isRequestedSessionIdValid : " + request.isRequestedSessionIdValid());
+		log.trace("getSession : " + request.getSession(false));
 
 		X509Certificate[] certificates = (X509Certificate[]) request.getAttribute(CERTIFICATE_ATTRIBUTE); // 2.2 spec
 		if (certificates == null) {
@@ -52,24 +50,24 @@ public class HttpCertsEntryPoint implements AsyncHandlerInterceptor {
 
 		for (X509Certificate cert : certificates) {
 			cert.checkValidity();
-			_logger.debug("cert validated");
-			_logger.debug("cert infos " + cert.toString());
-			_logger.debug("Version " + cert.getVersion());
-			_logger.debug("SerialNumber " + cert.getSerialNumber().toString(16));
-			_logger.debug("SubjectDN " + cert.getSubjectDN());
-			_logger.debug("IssuerDN " + cert.getIssuerDN());
-			_logger.debug("NotBefore " + cert.getNotBefore());
-			_logger.debug("SigAlgName " + cert.getSigAlgName());
+			log.debug("cert validated");
+			log.debug("cert infos " + cert.toString());
+			log.debug("Version " + cert.getVersion());
+			log.debug("SerialNumber " + cert.getSerialNumber().toString(16));
+			log.debug("SubjectDN " + cert.getSubjectDN());
+			log.debug("IssuerDN " + cert.getIssuerDN());
+			log.debug("NotBefore " + cert.getNotBefore());
+			log.debug("SigAlgName " + cert.getSigAlgName());
 			byte[] sign = cert.getSignature();
-			_logger.debug("Signature ");
+			log.debug("Signature ");
 			for (int j = 0; j < sign.length; j++) {
-				_logger.debug(sign[j] + ",");
+				log.debug(sign[j] + ",");
 			}
 			java.security.PublicKey pk = cert.getPublicKey();
 			byte[] pkenc = pk.getEncoded();
-			_logger.debug("PublicKey ");
+			log.debug("PublicKey ");
 			for (int j = 0; j < pkenc.length; j++) {
-				_logger.debug(pkenc[j] + ",");
+				log.debug(pkenc[j] + ",");
 			}
 		}
 		return true;

@@ -3,16 +3,14 @@ package com.wy.test.core.authn.session;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.wy.test.core.entity.HistoryLoginEntity;
 import com.wy.test.core.persistence.redis.RedisConnection;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 
-public class RedisSessionManager implements SessionManager {
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Logger _logger = LoggerFactory.getLogger(RedisSessionManager.class);
+@Slf4j
+public class RedisSessionManager implements SessionManager {
 
 	protected int validitySeconds = 60 * 30; // default 30 minutes.
 
@@ -46,15 +44,15 @@ public class RedisSessionManager implements SessionManager {
 
 	@Override
 	public void create(String sessionId, Session session) {
-		_logger.debug("store session key {} .", sessionId);
+		log.debug("store session key {} .", sessionId);
 		session.setExpiredTime(session.getLastAccessTime().plusSeconds(validitySeconds));
 		RedisConnection conn = connectionFactory.getConnection();
-		_logger.trace("store session {} ...", sessionId);
+		log.trace("store session {} ...", sessionId);
 		conn.setexObject(getKey(sessionId), validitySeconds, session);
-		_logger.debug("store session {} successful .", sessionId);
-		_logger.trace("close conn ...");
+		log.debug("store session {} successful .", sessionId);
+		log.trace("close conn ...");
 		conn.close();
-		_logger.trace("close conn successful .");
+		log.trace("close conn successful .");
 	}
 
 	@Override
@@ -87,7 +85,7 @@ public class RedisSessionManager implements SessionManager {
 	public Session refresh(String sessionId, LocalDateTime refreshTime) {
 		Session session = get(sessionId);
 		if (session != null) {
-			_logger.debug("refresh session Id {} at {}", sessionId, refreshTime);
+			log.debug("refresh session Id {} at {}", sessionId, refreshTime);
 			session.setLastAccessTime(refreshTime);
 			create(sessionId, session);
 		}
@@ -99,7 +97,7 @@ public class RedisSessionManager implements SessionManager {
 		Session session = get(sessionId);
 		if (session != null) {
 			LocalDateTime currentTime = LocalDateTime.now();
-			_logger.debug("refresh session Id {} at time {}", sessionId, currentTime);
+			log.debug("refresh session Id {} at time {}", sessionId, currentTime);
 			session.setLastAccessTime(currentTime);
 			create(sessionId, session);
 		}
@@ -116,5 +114,4 @@ public class RedisSessionManager implements SessionManager {
 	public void terminate(String sessionId, String userId, String username) {
 		// not need implement
 	}
-
 }

@@ -11,8 +11,6 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.core.constants.ConstStatus;
@@ -26,18 +24,18 @@ import com.wy.test.synchronizer.core.synchronizer.AbstractSynchronizerService;
 import com.wy.test.synchronizer.core.synchronizer.ISynchronizerService;
 
 import dream.flying.flower.generator.GeneratorStrategyContext;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class ActiveDirectoryOrganizationService extends AbstractSynchronizerService implements ISynchronizerService {
-
-	final static Logger _logger = LoggerFactory.getLogger(ActiveDirectoryOrganizationService.class);
 
 	ActiveDirectoryHelpers ldapUtils;
 
 	@Override
 	public void sync() {
 		loadOrgsByInstId(this.synchronizer.getInstId(), OrgEntity.ROOT_ORG_ID);
-		_logger.info("Sync ActiveDirectory Organizations ...");
+		log.info("Sync ActiveDirectory Organizations ...");
 		try {
 			ArrayList<OrgEntity> orgsList = queryActiveDirectory();
 			int maxLevel = 0;
@@ -53,7 +51,7 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 								organization.getNamePath().substring(0, organization.getNamePath().lastIndexOf("/"));
 
 						if (orgsNamePathMap.get(organization.getNamePath()) != null) {
-							_logger.info("org  " + orgsNamePathMap.get(organization.getNamePath()).getNamePath()
+							log.info("org  " + orgsNamePathMap.get(organization.getNamePath()).getNamePath()
 									+ " exists.");
 							continue;
 						}
@@ -65,7 +63,7 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 						organization.setParentId(parentOrg.getId());
 						organization.setParentName(parentOrg.getOrgName());
 						organization.setCodePath(parentOrg.getCodePath() + "/" + organization.getId());
-						_logger.info("parentNamePath " + parentNamePath + " , namePah " + organization.getNamePath());
+						log.info("parentNamePath " + parentNamePath + " , namePah " + organization.getNamePath());
 
 						// synchro Related
 						SyncRelatedEntity synchroRelated = synchroRelatedService.findByOriginId(this.synchronizer,
@@ -73,7 +71,7 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 						if (synchroRelated == null) {
 							organization.setId(generatorStrategyContext.generate());
 							organizationsService.insert(organization);
-							_logger.debug("Organizations : " + organization);
+							log.debug("Organizations : " + organization);
 
 							synchroRelated = buildSynchroRelated(organization, organization.getLdapDn(),
 									organization.getOrgName());
@@ -98,7 +96,7 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 
 			// ldapUtils.close();
 		} catch (NamingException e) {
-			_logger.error("NamingException ", e);
+			log.error("NamingException ", e);
 		}
 
 	}
@@ -121,17 +119,17 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 			if (obj instanceof SearchResult) {
 				SearchResult sr = (SearchResult) obj;
 				if (sr.getNameInNamespace().contains("OU=Domain Controllers") || StringUtils.isEmpty(sr.getName())) {
-					_logger.info("Skip '' or 'OU=Domain Controllers' .");
+					log.info("Skip '' or 'OU=Domain Controllers' .");
 					continue;
 				}
-				_logger.debug("Sync OrganizationalUnit {} , name [{}] , NameInNamespace [{}]", (++recordCount),
+				log.debug("Sync OrganizationalUnit {} , name [{}] , NameInNamespace [{}]", (++recordCount),
 						sr.getName(), sr.getNameInNamespace());
 
 				HashMap<String, Attribute> attributeMap = new HashMap<String, Attribute>();
 				NamingEnumeration<? extends Attribute> attrs = sr.getAttributes().getAll();
 				while (null != attrs && attrs.hasMoreElements()) {
 					Attribute objAttrs = attrs.nextElement();
-					_logger.trace("attribute {} : {}", objAttrs.getID(),
+					log.trace("attribute {} : {}", objAttrs.getID(),
 							ActiveDirectoryHelpers.getAttrStringValue(objAttrs));
 					attributeMap.put(objAttrs.getID().toLowerCase(), objAttrs);
 				}
@@ -181,10 +179,10 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 			org.setInstId(this.synchronizer.getInstId());
 			org.setStatus(ConstStatus.ACTIVE);
 
-			_logger.debug("Organization " + org);
+			log.debug("Organization " + org);
 			return org;
 		} catch (NamingException e) {
-			_logger.error("NamingException ", e);
+			log.error("NamingException ", e);
 		}
 		return null;
 	}

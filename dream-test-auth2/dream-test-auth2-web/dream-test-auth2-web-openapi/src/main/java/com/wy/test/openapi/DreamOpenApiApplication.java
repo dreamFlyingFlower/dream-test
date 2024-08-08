@@ -4,8 +4,6 @@ import javax.servlet.ServletException;
 
 import org.joda.time.DateTime;
 import org.mybatis.spring.annotation.MapperScan;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
@@ -16,6 +14,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 import com.wy.test.core.web.InitializeContext;
 
+import lombok.extern.slf4j.Slf4j;
+
 @ComponentScan(basePackages = { "com.wy.test.authn", "com.wy.test.configuration", "com.wy.test.entity",
 		"com.wy.test.entity.apps", "com.wy.test.entity.userinfo", "com.wy.test.web.apis.identity.kafka",
 		"com.wy.test.web.apis.identity.rest", "com.wy.test.web.apis.identity.scim", "com.wy.test.persistence",
@@ -23,12 +23,11 @@ import com.wy.test.core.web.InitializeContext;
 		"com.wy.test.web.endpoint", "com.wy.test.web.interceptor", })
 @MapperScan("com.wy.test.persistence.mapper,")
 @SpringBootApplication
+@Slf4j
 public class DreamOpenApiApplication extends SpringBootServletInitializer {
 
-	private static final Logger _logger = LoggerFactory.getLogger(DreamOpenApiApplication.class);
-
 	public static void main(String[] args) {
-		_logger.info("Start dream OpenApi Application ...");
+		log.info("Start dream OpenApi Application ...");
 
 		ConfigurableApplicationContext applicationContext = SpringApplication.run(DreamOpenApiApplication.class, args);
 		InitializeContext initWebContext = new InitializeContext(applicationContext);
@@ -36,11 +35,11 @@ public class DreamOpenApiApplication extends SpringBootServletInitializer {
 		try {
 			initWebContext.init(null);
 		} catch (ServletException e) {
-			_logger.error("Exception ", e);
+			log.error("Exception ", e);
 		}
-		_logger.info("dream OpenApi at {}", new DateTime());
-		_logger.info("dream OpenApi Server Port {}", applicationContext.getBean(ServerProperties.class).getPort());
-		_logger.info("dream OpenApi started.");
+		log.info("dream OpenApi at {}", new DateTime());
+		log.info("dream OpenApi Server Port {}", applicationContext.getBean(ServerProperties.class).getPort());
+		log.info("dream OpenApi started.");
 	}
 
 	@Override

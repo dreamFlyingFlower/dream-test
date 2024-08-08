@@ -1,0 +1,24 @@
+spring:
+  application:
+    # 必须定义,否则无法找到默认的配置文件
+    name: dream-openapi
+  main:
+    web-application-type: reactive
+  cloud:
+    nacos:
+      config:
+        enabled: ${NACOS_CONFIG_ENABLED:false}
+        server-addr: ${NACOS_CONFIG_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_CONFIG_NAMESPACE:namespace-dream-auth}
+        username: ${NACOS_CONFIG_USERNAME:nacos}
+        password: ${NACOS_CONFIG_PASSWORD:nacos}
+        group: dream-auth
+        file-extension: yml
+      discovery:
+        enabled: ${NACOS_DISCOVERY_ENABLED:false}
+        server-addr: ${NACOS_CONFIG_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_DISCOVERY_NAMESPACE:namespace-dream-auth}
+        username: ${NACOS_CONFIG_USERNAME:nacos}
+        password: ${NACOS_CONFIG_PASSWORD:nacos}
+        group: dream-auth
+        register-enabled: ${NACOS_DISCOVERY_REGISTER_ENABLED:false}

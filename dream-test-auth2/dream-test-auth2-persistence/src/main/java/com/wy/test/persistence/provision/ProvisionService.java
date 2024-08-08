@@ -2,8 +2,6 @@ package com.wy.test.persistence.provision;
 
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -12,11 +10,11 @@ import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.persistence.provision.thread.ProvisioningThread;
 
 import dream.flying.flower.helper.DateTimeHelper;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class ProvisionService {
-
-	private static final Logger _logger = LoggerFactory.getLogger(ProvisionService.class);
 
 	@Autowired
 	DreamAuthServerProperties dreamServerProperties;
@@ -43,11 +41,11 @@ public class ProvisionService {
 			// sand msg to provision topic
 			Thread thread = null;
 			if (dreamServerProperties.isProvision()) {
-				_logger.trace("message...");
+				log.trace("message...");
 				thread = new ProvisioningThread(jdbcTemplate, message);
 				thread.start();
 			} else {
-				_logger.trace("no send message...");
+				log.trace("no send message...");
 			}
 		}
 	}

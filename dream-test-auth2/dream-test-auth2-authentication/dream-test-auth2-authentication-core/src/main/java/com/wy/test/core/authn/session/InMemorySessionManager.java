@@ -4,16 +4,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.wy.test.core.entity.HistoryLoginEntity;
 
-public class InMemorySessionManager implements SessionManager {
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Logger _logger = LoggerFactory.getLogger(InMemorySessionManager.class);
+@Slf4j
+public class InMemorySessionManager implements SessionManager {
 
 	static final long CACHE_MAXIMUM_SIZE = 2000000;
 
@@ -53,7 +51,7 @@ public class InMemorySessionManager implements SessionManager {
 	public Session refresh(String sessionId, LocalDateTime refreshTime) {
 		Session session = get(sessionId);
 		if (session != null) {
-			_logger.debug("refresh session Id {} at refreshTime {}", sessionId, refreshTime);
+			log.debug("refresh session Id {} at refreshTime {}", sessionId, refreshTime);
 			session.setLastAccessTime(refreshTime);
 			// put new session
 			create(sessionId, session);
@@ -67,7 +65,7 @@ public class InMemorySessionManager implements SessionManager {
 
 		if (session != null) {
 			LocalDateTime currentTime = LocalDateTime.now();
-			_logger.debug("refresh session Id {} at time {}", sessionId, currentTime);
+			log.debug("refresh session Id {} at time {}", sessionId, currentTime);
 			session.setLastAccessTime(currentTime);
 			// sessionId then renew one
 			create(sessionId, session);

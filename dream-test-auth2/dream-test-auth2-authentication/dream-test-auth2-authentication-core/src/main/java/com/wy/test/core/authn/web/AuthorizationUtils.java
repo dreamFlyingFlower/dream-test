@@ -5,8 +5,6 @@ import java.text.ParseException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 
 import com.wy.test.core.authn.SignPrincipal;
@@ -18,10 +16,10 @@ import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.framework.core.helper.TokenHelpers;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class AuthorizationUtils {
-
-	private static final Logger _logger = LoggerFactory.getLogger(AuthorizationUtils.class);
 
 	public static final class BEARERTYPE {
 
@@ -35,10 +33,10 @@ public class AuthorizationUtils {
 		Cookie authCookie = WebContext.getCookie(request, BEARERTYPE.CONGRESS);
 		if (authCookie != null) {
 			String authorization = authCookie.getValue();
-			_logger.trace("Try congress authenticate .");
+			log.trace("Try congress authenticate .");
 			doJwtAuthenticate(BEARERTYPE.CONGRESS, authorization, authTokenService, sessionManager);
 		} else {
-			_logger.debug("cookie is null , clear authentication .");
+			log.debug("cookie is null , clear authentication .");
 			clearAuthentication();
 		}
 	}
@@ -47,7 +45,7 @@ public class AuthorizationUtils {
 			SessionManager sessionManager) throws ParseException {
 		String authorization = TokenHelpers.resolveBearer(request);
 		if (authorization != null) {
-			_logger.trace("Try Authorization authenticate .");
+			log.trace("Try Authorization authenticate .");
 			doJwtAuthenticate(BEARERTYPE.AUTHORIZATION, authorization, authTokenService, sessionManager);
 		}
 
@@ -61,16 +59,16 @@ public class AuthorizationUtils {
 				Session session = sessionManager.get(sessionId);
 				if (session != null) {
 					setAuthentication(session.getAuthentication());
-					_logger.debug("{} Automatic authenticated .", bearerType);
+					log.debug("{} Automatic authenticated .", bearerType);
 				} else {
 					// time out
-					_logger.debug("Session timeout .");
+					log.debug("Session timeout .");
 					clearAuthentication();
 				}
 			}
 		} else {
 			// token invalidate
-			_logger.debug("Token invalidate .");
+			log.debug("Token invalidate .");
 			clearAuthentication();
 		}
 	}

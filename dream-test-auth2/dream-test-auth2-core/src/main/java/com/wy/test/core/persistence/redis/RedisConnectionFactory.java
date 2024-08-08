@@ -1,15 +1,12 @@
 package com.wy.test.core.persistence.redis;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+@Slf4j
 public class RedisConnectionFactory {
-
-	private static final Logger _logger = LoggerFactory.getLogger(RedisConnectionFactory.class);
 
 	public static class DEFAULT_CONFIG {
 
@@ -75,7 +72,7 @@ public class RedisConnectionFactory {
 
 	public void initConnectionFactory() {
 		if (jedisPool == null) {
-			_logger.debug("init Jedis Pool .");
+			log.debug("init Jedis Pool .");
 			try {
 				if (this.hostName == null || hostName.equals("")) {
 					hostName = DEFAULT_CONFIG.DEFAULT_ADDRESS;
@@ -91,35 +88,35 @@ public class RedisConnectionFactory {
 					this.password = null;
 				}
 				jedisPool = new JedisPool(poolConfig, hostName, port, timeOut, password);
-				_logger.debug("init Jedis Pool successful .");
+				log.debug("init Jedis Pool successful .");
 			} catch (Exception e) {
 				e.printStackTrace();
-				_logger.error("Exception", e);
+				log.error("Exception", e);
 			}
 		}
 	}
 
 	public synchronized RedisConnection getConnection() {
 		initConnectionFactory();
-		_logger.trace("get connection .");
+		log.trace("get connection .");
 		RedisConnection redisConnection = new RedisConnection(this);
-		_logger.trace("return connection .");
+		log.trace("return connection .");
 		return redisConnection;
 	}
 
 	public Jedis open() {
-		_logger.trace("get jedisPool Resource ...");
+		log.trace("get jedisPool Resource ...");
 		Jedis jedis = jedisPool.getResource();
-		_logger.trace("return jedisPool Resource .");
+		log.trace("return jedisPool Resource .");
 		return jedis;
 
 	}
 
 	public void close(Jedis conn) {
 		// jedisPool.returnResource(conn);
-		_logger.trace("close conn .");
+		log.trace("close conn .");
 		conn.close();
-		_logger.trace("closed conn .");
+		log.trace("closed conn .");
 	}
 
 	public String getHostName() {

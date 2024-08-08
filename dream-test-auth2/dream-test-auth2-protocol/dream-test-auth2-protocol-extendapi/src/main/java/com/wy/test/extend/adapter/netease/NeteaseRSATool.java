@@ -17,12 +17,11 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class NeteaseRSATool {
-
-	final static Logger _logger = LoggerFactory.getLogger(NeteaseRSATool.class);
 
 	private static final char[] bcdLookup =
 			{ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
@@ -60,7 +59,7 @@ public class NeteaseRSATool {
 		KeyPairGenerator rsaKeyGen = null;
 		KeyPair rsaKeyPair = null;
 		try {
-			_logger.trace("Generating a pair of RSA key ... ");
+			log.trace("Generating a pair of RSA key ... ");
 			rsaKeyGen = KeyPairGenerator.getInstance("RSA");
 			SecureRandom random = new SecureRandom();
 			random.setSeed(System.currentTimeMillis());
@@ -73,11 +72,11 @@ public class NeteaseRSATool {
 
 			pubKey = bytesToHexStr(rsaPublic.getEncoded());
 			priKey = bytesToHexStr(rsaPrivate.getEncoded());
-			_logger.trace("pubKey: {}", pubKey);
-			_logger.trace("priKey: {}", priKey);
-			_logger.trace("1024-bit RSA key GENERATED.");
+			log.trace("pubKey: {}", pubKey);
+			log.trace("priKey: {}", priKey);
+			log.trace("1024-bit RSA key GENERATED.");
 		} catch (Exception e) {
-			_logger.error("Exception genRSAKeyPair:" + e);
+			log.error("Exception genRSAKeyPair:" + e);
 		}
 	}
 

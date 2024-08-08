@@ -1,8 +1,6 @@
 package com.wy.test.mgt.web.config.contorller;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +19,12 @@ import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.persistence.service.SmsProviderService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
 @RequestMapping(value = { "/config/smsprovider" })
+@Slf4j
 public class SmsProviderController {
-
-	final static Logger _logger = LoggerFactory.getLogger(SmsProviderController.class);
 
 	@Autowired
 	private SmsProviderService smsProviderService;
@@ -43,7 +42,7 @@ public class SmsProviderController {
 	@ResponseBody
 	public ResponseEntity<?> update(@RequestBody SmsProviderEntity smsProvider, @CurrentUser UserEntity currentUser,
 			BindingResult result) {
-		_logger.debug("update smsProvider : " + smsProvider);
+		log.debug("update smsProvider : " + smsProvider);
 		smsProvider.setAppSecret(PasswordReciprocal.getInstance().encode(smsProvider.getAppSecret()));
 		smsProvider.setInstId(currentUser.getInstId());
 		boolean updateResult = false;

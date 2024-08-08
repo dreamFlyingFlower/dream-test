@@ -1,7 +1,5 @@
 package com.wy.test.core.autoconfigure;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -18,10 +16,11 @@ import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.core.properties.DreamAuthJwkProperties;
 import com.wy.test.core.properties.DreamAuthStoreProperties;
 
-@AutoConfiguration
-public class TokenAutoConfiguration implements InitializingBean {
+import lombok.extern.slf4j.Slf4j;
 
-	private static final Logger _logger = LoggerFactory.getLogger(TokenAutoConfiguration.class);
+@AutoConfiguration
+@Slf4j
+public class TokenAutoConfiguration implements InitializingBean {
 
 	@Bean
 	AuthTokenService authTokenService(DreamAuthJwkProperties dreamJwkProperties,
@@ -29,7 +28,7 @@ public class TokenAutoConfiguration implements InitializingBean {
 			AuthRefreshTokenService refreshTokenService, DreamAuthStoreProperties dreamAuthRedisProperties)
 			throws JOSEException {
 		CongressService congressService;
-		_logger.debug("cache persistence {}", dreamAuthRedisProperties.getStoreType());
+		log.debug("cache persistence {}", dreamAuthRedisProperties.getStoreType());
 		if (StoreType.REDIS == dreamAuthRedisProperties.getStoreType()) {
 			congressService = new RedisCongressService(redisConnFactory);
 		} else {

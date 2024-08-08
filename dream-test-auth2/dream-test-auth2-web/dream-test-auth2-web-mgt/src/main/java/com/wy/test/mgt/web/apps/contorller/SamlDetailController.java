@@ -92,7 +92,7 @@ public class SamlDetailController extends BaseAppContorller {
 		}
 		saml20Details.setInstId(currentUser.getInstId());
 		saml20DetailsService.save(appSamlDetailConvert.convert(saml20Details));
-		if (appsService.insertApp(saml20Details)) {
+		if (null != appService.add(saml20Details)) {
 			return new Message<AppSamlDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppSamlDetailEntity>(Message.FAIL).buildResponse();
@@ -110,7 +110,7 @@ public class SamlDetailController extends BaseAppContorller {
 		}
 		saml20Details.setInstId(currentUser.getInstId());
 		saml20DetailsService.edit(saml20Details);
-		if (appsService.updateApp(saml20Details)) {
+		if (appService.edit(saml20Details)) {
 			return new Message<AppSamlDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppSamlDetailEntity>(Message.FAIL).buildResponse();
@@ -122,7 +122,7 @@ public class SamlDetailController extends BaseAppContorller {
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete  ids : {} ", ids);
 		if (saml20DetailsService.removeByIds(Arrays.asList(ids.split(",")))
-				&& appsService.removeByIds(Arrays.asList(ids.split(",")))) {
+				&& appService.removeByIds(Arrays.asList(ids.split(",")))) {
 			return new Message<AppSamlDetailEntity>(Message.SUCCESS).buildResponse();
 		} else {
 			return new Message<AppSamlDetailEntity>(Message.FAIL).buildResponse();
