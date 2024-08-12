@@ -29,7 +29,7 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import com.wy.test.core.constants.ContentType;
+import com.wy.test.core.constant.ContentType;
 
 import dream.flying.flower.framework.core.helper.TokenHelpers;
 import dream.flying.flower.framework.core.json.JsonHelpers;

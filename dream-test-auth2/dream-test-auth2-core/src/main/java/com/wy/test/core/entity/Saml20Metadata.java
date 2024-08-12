@@ -15,19 +15,6 @@ public class Saml20Metadata implements Serializable {
 
 	private static final long serialVersionUID = -3992005168513078437L;
 
-	public static final class ContactPersonType {
-
-		public static final String TECHNICAL = "technical";
-
-		public static final String SUPPORT = "support";
-
-		public static final String ADMINISTRATIVE = "administrative";
-
-		public static final String BILLING = "billing";
-
-		public static final String OTHER = "other";
-	}
-
 	/**
 	 * 机构名称
 	 */

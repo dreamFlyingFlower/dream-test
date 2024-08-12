@@ -15,7 +15,7 @@ import com.wy.test.core.authn.jwt.AuthTokenService;
 import com.wy.test.core.authn.session.Session;
 import com.wy.test.core.authn.session.SessionManager;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.constants.ConstStatus;
+import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.vo.UserVO;

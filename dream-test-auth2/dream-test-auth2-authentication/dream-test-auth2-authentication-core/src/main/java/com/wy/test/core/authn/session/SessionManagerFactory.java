@@ -10,10 +10,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.wy.test.core.entity.HistoryLoginEntity;
-import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.enums.StoreType;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 
+import dream.flying.flower.enums.YesNoEnum;
 import dream.flying.flower.helper.DateTimeHelper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,7 +27,7 @@ public class SessionManagerFactory implements SessionManager {
 			"select id,sessionid,userId,username,displayname,logintime from auth_history_login where sessionstatus = 1";
 
 	private static final String LOGOUT_USERINFO_UPDATE_STATEMENT =
-			"update auth_user set lastlogofftime = ? , online = " + UserEntity.ONLINE.OFFLINE + "  where id = ?";
+			"update auth_user set lastlogofftime = ? , online = " + YesNoEnum.NO.getCode() + "  where id = ?";
 
 	private static final String HISTORY_LOGOUT_UPDATE_STATEMENT =
 			"update auth_history_login set logouttime = ? ,sessionstatus = 7 where  sessionid = ?";

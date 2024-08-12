@@ -7,10 +7,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.wy.test.core.constants.ConstStatus;
+import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.convert.RoleConvert;
 import com.wy.test.core.entity.InstitutionEntity;
 import com.wy.test.core.entity.RoleEntity;
+import com.wy.test.core.enums.RoleCategory;
 import com.wy.test.core.query.RoleQuery;
 import com.wy.test.core.vo.RoleVO;
 import com.wy.test.persistence.mapper.RoleMapper;
@@ -60,7 +61,7 @@ public class RoleServiceImpl extends AbstractServiceImpl<RoleEntity, RoleVO, Rol
 
 	@Override
 	public void refreshDynamicRoles(RoleEntity dynamicRole) {
-		if (dynamicRole.getCategory().equals(RoleEntity.Category.DYNAMIC)) {
+		if (dynamicRole.getCategory().equalsIgnoreCase(RoleCategory.DYNAMIC.name())) {
 			boolean isDynamicTimeSupport = false;
 			boolean isBetweenEffectiveTime = false;
 			if (StrHelper.isNotBlank(dynamicRole.getResumeTime()) && StrHelper.isNotBlank(dynamicRole.getSuspendTime())

@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Component;
 
-import com.wy.test.core.constants.ContentType;
+import com.wy.test.core.constant.ContentType;
 
 @Component
 public class HttpResponseAdapter {

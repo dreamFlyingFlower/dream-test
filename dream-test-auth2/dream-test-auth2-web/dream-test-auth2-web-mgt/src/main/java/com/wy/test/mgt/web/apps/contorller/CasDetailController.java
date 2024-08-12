@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstProtocols;
+import com.wy.test.core.constant.ConstProtocols;
 import com.wy.test.core.convert.AppCasDetailConvert;
 import com.wy.test.core.entity.AppCasDetailEntity;
 import com.wy.test.core.entity.Message;

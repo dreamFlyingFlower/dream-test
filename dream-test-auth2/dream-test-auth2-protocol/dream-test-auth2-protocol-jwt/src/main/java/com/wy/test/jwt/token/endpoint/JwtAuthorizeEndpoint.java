@@ -20,7 +20,7 @@ import com.wy.test.authorize.endpoint.AuthorizeBaseEndpoint;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.authn.annotation.CurrentUser;
 import com.wy.test.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.constants.ContentType;
+import com.wy.test.core.constant.ContentType;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.AppJwtDetailVO;
 import com.wy.test.core.vo.AppVO;

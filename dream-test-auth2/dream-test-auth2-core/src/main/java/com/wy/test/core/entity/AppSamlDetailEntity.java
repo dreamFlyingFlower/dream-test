@@ -123,19 +123,4 @@ public class AppSamlDetailEntity extends AbstractStringEntity {
 	 * 机构ID
 	 */
 	private String instId;
-
-	public static final class BindingType {
-
-		public static final String Redirect_Post = "Redirect-Post";
-
-		public static final String Post_Post = "Post-Post";
-
-		public static final String IdpInit_Post = "IdpInit-Post";
-
-		public static final String Redirect_PostSimpleSign = "Redirect-PostSimpleSign";
-
-		public static final String Post_PostSimpleSign = "Post-PostSimpleSign";
-
-		public static final String IdpInit_PostSimpleSign = "IdpInit-PostSimpleSign";
-	}
 }

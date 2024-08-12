@@ -3,7 +3,7 @@ package com.wy.test.persistence.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
-import com.wy.test.core.constants.ConstStatus;
+import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.entity.InstitutionEntity;
 import com.wy.test.core.query.InstitutionQuery;
 import com.wy.test.core.vo.InstitutionVO;

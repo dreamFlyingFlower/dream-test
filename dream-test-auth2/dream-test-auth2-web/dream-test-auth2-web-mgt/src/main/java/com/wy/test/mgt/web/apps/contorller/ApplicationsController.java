@@ -26,7 +26,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.gen.OctetSequenceKeyGenerator;
 import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstProtocols;
+import com.wy.test.core.constant.ConstProtocols;
 import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;

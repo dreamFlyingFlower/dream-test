@@ -25,7 +25,7 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.wy.test.core.constants.ConstDatabase;
+import com.wy.test.core.constant.ConstDatabase;
 import com.wy.test.core.util.PathHelpers;
 
 import lombok.extern.slf4j.Slf4j;

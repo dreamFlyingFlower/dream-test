@@ -4,7 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.wy.test.core.constants.ConstTimeInterval;
+import com.wy.test.core.constant.ConstTimeInterval;
 
 public class RedisTokenStore {
 

@@ -2,7 +2,7 @@ package com.wy.test.otp.password.onetimepwd.token;
 
 import org.joda.time.DateTime;
 
-import com.wy.test.core.constants.ConstTimeInterval;
+import com.wy.test.core.constant.ConstTimeInterval;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.persistence.redis.RedisConnection;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;

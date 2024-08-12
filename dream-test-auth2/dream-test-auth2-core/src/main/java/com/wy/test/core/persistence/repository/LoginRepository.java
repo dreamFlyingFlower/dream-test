@@ -12,13 +12,14 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import com.wy.test.core.constants.ConstRoles;
-import com.wy.test.core.constants.ConstStatus;
+import com.wy.test.core.constant.ConstRoles;
+import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.convert.UserConvert;
 import com.wy.test.core.entity.RoleEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.UserVO;
 
+import dream.flying.flower.enums.YesNoEnum;
 import dream.flying.flower.lang.StrHelper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,7 +40,7 @@ public class LoginRepository {
 
 	private static final String LOGIN_USERINFO_UPDATE_STATEMENT =
 			"update auth_user set lastlogintime = ?  , lastloginip = ? , logincount = ?, online = "
-					+ UserEntity.ONLINE.ONLINE + "  where id = ?";
+					+ YesNoEnum.YES.getCode() + "  where id = ?";
 
 	private static final String ROLES_SELECT_STATEMENT =
 			"select distinct r.id,r.rolecode,r.rolename from auth_user u,auth_role r,auth_role_member rm where u.id = ?  and u.id=rm.memberid and rm.roleid=r.id ";

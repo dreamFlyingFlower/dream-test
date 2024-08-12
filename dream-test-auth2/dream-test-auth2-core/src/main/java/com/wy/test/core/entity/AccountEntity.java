@@ -28,8 +28,6 @@ public class AccountEntity extends AbstractStringEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final String DEFAULT_PASSWORD_SUFFIX = UserEntity.DEFAULT_PASSWORD_SUFFIX;
-
 	/**
 	 * 用户ID
 	 */

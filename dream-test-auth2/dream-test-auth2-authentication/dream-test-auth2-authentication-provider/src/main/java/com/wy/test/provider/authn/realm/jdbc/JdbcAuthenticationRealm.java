@@ -4,7 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.wy.test.core.constants.ConstStatus;
+import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.PasswordPolicyEntity;
 import com.wy.test.core.persistence.repository.LoginHistoryRepository;

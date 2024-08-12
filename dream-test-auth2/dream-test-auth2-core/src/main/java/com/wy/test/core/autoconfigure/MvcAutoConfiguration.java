@@ -37,7 +37,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import com.wy.test.core.constants.ConstTimeInterval;
+import com.wy.test.core.constant.ConstTimeInterval;
 import com.wy.test.core.entity.xml.UserInfoXML;
 import com.wy.test.core.persistence.repository.InstitutionsRepository;
 import com.wy.test.core.properties.DreamAuthServerProperties;

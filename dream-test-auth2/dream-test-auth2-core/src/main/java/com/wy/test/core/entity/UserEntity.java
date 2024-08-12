@@ -31,10 +31,6 @@ public class UserEntity extends AbstractStringEntity {
 
 	private static final long serialVersionUID = -3601222345418102072L;
 
-	public static final String CLASS_TYPE = "UserInfo";
-
-	public static final String DEFAULT_PASSWORD_SUFFIX = "dream@888";
-
 	/**
 	 * 登录名
 	 */
@@ -307,8 +303,7 @@ public class UserEntity extends AbstractStringEntity {
 	private String sharedCounter;
 
 	/**
-	 * 用户类型:"Employee", "Supplier","Dealer","Contractor",Partner,Customer "Intern",
-	 * "Temp", "External", and "Unknown" .
+	 * 用户类型:"Employee", "Supplier","Dealer","Contractor",Partner,Customer "Intern", "Temp", "External", and "Unknown" .
 	 */
 	private String userType;
 
@@ -373,8 +368,8 @@ public class UserEntity extends AbstractStringEntity {
 	private String theme;
 
 	/**
-	 * for extended Attribute from userType extraAttribute for database
-	 * extraAttributeName & extraAttributeValue for page submit
+	 * for extended Attribute from userType extraAttribute for database extraAttributeName & extraAttributeValue for
+	 * page submit
 	 */
 	private String extraAttribute;
 
@@ -522,109 +517,6 @@ public class UserEntity extends AbstractStringEntity {
 	 * 离职日期
 	 */
 	private Date quitDate;
-
-	public static class ONLINE {
-
-		// 在线
-		public static final int ONLINE = 1;
-
-		// 下线
-		public static final int OFFLINE = 0;
-	}
-
-	public static class MARRIED {
-
-		// 未知
-		public static final int UNKNOWN = 0;
-
-		// 单身
-		public static final int SINGLE = 1;
-
-		// 结婚
-		public static final int MARRIED = 2;
-
-		// 离异
-		public static final int DIVORCE = 3;
-
-		// 丧偶
-		public static final int WIDOWED = 4;
-
-	}
-
-	public static class GENDER {
-
-		// 未知
-		public static final int UNKNOWN = 0;
-
-		// 女性
-		public static final int FEMALE = 1;
-
-		// 男性
-		public static final int MALE = 2;
-	}
-
-	public static class IDTYPE {
-
-		// 未知
-		public static final int UNKNOWN = 0;
-
-		// 身份证
-		public static final int IDCARD = 1;
-
-		// 护照
-		public static final int PASSPORT = 2;
-
-		// 学生证
-		public static final int STUDENTCARD = 3;
-
-		// 军人证
-		public static final int MILITARYCARD = 4;
-	}
-
-	public static class AUTHNTYPE {
-
-		// 用户名密码
-		public static final int NORMAL = 1;
-
-		// 手机
-		public static final int MOBILE = 2;
-
-		// 短信
-		public static final int SMS = 3;
-
-		// 邮箱
-		public static final int EMAIL = 4;
-
-		public static final int TIMEBASED_OPT = 5;
-
-		public static final int COUNTERBASED_OPT = 6;
-
-		public static final int HOTP_OPT = 7;
-
-		public static final int RSA_OPT = 8;
-
-		// 证书
-		public static final int CERTIFICATE = 9;
-
-		// usb证书
-		public static final int USBKEY = 10;
-
-	}
-
-	public static class EMPLOYMENTSTATUS {
-
-		// 在册人员
-		public static final int ACTIVE = 1;
-
-		// 离职人员
-		public static final int WITHDRAWN = 2;
-
-		// 停薪留职人员
-		public static final int INACTIVE = 3;
-
-		// 退休人员
-		public static final int RETIREE = 4;
-	}
 
 	public UserEntity(String username) {
 		super();

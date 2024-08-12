@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wy.test.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.core.entity.AccountEntity;
-import com.wy.test.core.entity.AppEntity;
+import com.wy.test.core.enums.CredentialType;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.vo.AppVO;
@@ -58,25 +58,23 @@ public class AuthorizeBaseEndpoint {
 		account.setUsername(userInfo.getUsername());
 		account.setAppName(app.getAppName());
 
-		if (loadApp.getCredential().equalsIgnoreCase(AppEntity.CREDENTIALS.USER_DEFINED)) {
+		if (loadApp.getCredential().equalsIgnoreCase(CredentialType.USER_DEFINED.name())) {
 			List<AccountEntity> query = accountService.list(new LambdaQueryWrapper<AccountEntity>()
 					.eq(AccountEntity::getUserId, userInfo.getId()).eq(AccountEntity::getAppId, loadApp.getId()));
 			account = CollectionUtils.isNotEmpty(query) ? query.get(0) : null;
 			if (account != null) {
 				account.setRelatedPassword(PasswordReciprocal.getInstance().decoder(account.getRelatedPassword()));
 			}
-
-		} else if (loadApp.getCredential().equalsIgnoreCase(AppEntity.CREDENTIALS.SHARED)) {
+		} else if (loadApp.getCredential().equalsIgnoreCase(CredentialType.SHARED.name())) {
 			account.setRelatedUsername(loadApp.getSharedUsername());
 			account.setRelatedPassword(PasswordReciprocal.getInstance().decoder(loadApp.getSharedPassword()));
-		} else if (loadApp.getCredential().equalsIgnoreCase(AppEntity.CREDENTIALS.SYSTEM)) {
+		} else if (loadApp.getCredential().equalsIgnoreCase(CredentialType.SYSTEM.name())) {
 			account.setUsername(AbstractAuthorizeAdapter.getValueByUserAttr(userInfo, loadApp.getSysUserAttr()));
 			// decoder database stored encode password
 			account.setRelatedPassword(PasswordReciprocal.getInstance().decoder(userInfo.getDecipherable()));
-		} else if (loadApp.getCredential().equalsIgnoreCase(AppEntity.CREDENTIALS.NONE)) {
+		} else if (loadApp.getCredential().equalsIgnoreCase(CredentialType.NONE.name())) {
 			account.setUsername(userInfo.getUsername());
 			account.setRelatedPassword(userInfo.getUsername());
-
 		}
 		return account;
 	}

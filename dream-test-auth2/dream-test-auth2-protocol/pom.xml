@@ -17,11 +17,11 @@
 	<modules>
 		<module>dream-test-auth2-protocol-authorize</module>
 		<module>dream-test-auth2-protocol-cas</module>
-		<module>dream-test-auth2-protocol-extendapi</module>
-		<module>dream-test-auth2-protocol-formbased</module>
+		<module>dream-test-auth2-protocol-extend</module>
+		<module>dream-test-auth2-protocol-form</module>
 		<module>dream-test-auth2-protocol-jwt</module>
-		<module>dream-test-auth2-protocol-oauth-2.0</module>
-		<module>dream-test-auth2-protocol-saml-2.0</module>
-		<module>dream-test-auth2-protocol-tokenbased</module>
+		<module>dream-test-auth2-protocol-oauth2</module>
+		<module>dream-test-auth2-protocol-saml2</module>
+		<module>dream-test-auth2-protocol-token</module>
 	</modules>
 </project>

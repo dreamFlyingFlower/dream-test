@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>dream.flying.flower</groupId>
+		<artifactId>dream-test</artifactId>
+		<version>0.0.1</version>
+		<relativePath />
+	</parent>
+
+	<artifactId>dream-test-auth2-sync</artifactId>
+	<packaging>pom</packaging>
+	<name>dream-test-auth2-sync</name>
+	<description>study for spring security auth</description>
+
+	<modules>
+		<module>dream-test-auth2-sync-azure</module>
+		<module>dream-test-auth2-sync-core</module>
+		<module>dream-test-auth2-sync-dingtalk</module>
+		<module>dream-test-auth2-sync-feishu</module>
+		<module>dream-test-auth2-sync-jdbc</module>
+		<module>dream-test-auth2-sync-ldap</module>
+		<module>dream-test-auth2-sync-reorgdept</module>
+		<module>dream-test-auth2-sync-weixin</module>
+	</modules>
+</project>

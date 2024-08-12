@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstEntryType;
-import com.wy.test.core.constants.ConstOperateAction;
-import com.wy.test.core.constants.ConstOperateResult;
+import com.wy.test.core.constant.ConstEntryType;
+import com.wy.test.core.constant.ConstOperateAction;
+import com.wy.test.core.constant.ConstOperateResult;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.RoleEntity;
 import com.wy.test.core.entity.UserEntity;

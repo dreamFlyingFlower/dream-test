@@ -5,16 +5,20 @@ import java.util.HashMap;
 import java.util.Properties;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Slf4j
 public class ExtraAttrs {
 
 	ArrayList<ExtraAttr> extraAttrs;
-
-	public ExtraAttrs() {
-		super();
-	}
 
 	public ExtraAttrs(String arrayJsonString) {
 		String extraAttrsJsonString = "{\"extraAttrs\":" + arrayJsonString + "}";
@@ -71,22 +75,5 @@ public class ExtraAttrs {
 		}
 		log.debug("extraAttrs HashMap " + properties);
 		return properties;
-	}
-
-	public ArrayList<ExtraAttr> getExtraAttrs() {
-		return extraAttrs;
-	}
-
-	public void setExtraAttrs(ArrayList<ExtraAttr> extraAttrs) {
-		this.extraAttrs = extraAttrs;
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("ExtraAttrs [extraAttrs=");
-		builder.append(extraAttrs);
-		builder.append("]");
-		return builder.toString();
 	}
 }

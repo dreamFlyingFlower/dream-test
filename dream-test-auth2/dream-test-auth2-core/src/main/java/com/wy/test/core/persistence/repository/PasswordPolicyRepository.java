@@ -24,7 +24,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.core.constants.ConstProperties;
+import com.wy.test.core.constant.ConstProperties;
 import com.wy.test.core.entity.PasswordPolicyEntity;
 
 import lombok.extern.slf4j.Slf4j;

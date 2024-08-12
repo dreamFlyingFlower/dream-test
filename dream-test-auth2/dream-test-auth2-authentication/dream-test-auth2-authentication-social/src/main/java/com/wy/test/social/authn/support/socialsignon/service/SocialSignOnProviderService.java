@@ -7,14 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.wy.test.core.constants.ConstTimeInterval;
+import com.wy.test.core.constant.ConstTimeInterval;
 import com.wy.test.core.entity.SocialProviderEntity;
 import com.wy.test.core.entity.SocialsProviderLogin;
 import com.wy.test.core.password.PasswordReciprocal;

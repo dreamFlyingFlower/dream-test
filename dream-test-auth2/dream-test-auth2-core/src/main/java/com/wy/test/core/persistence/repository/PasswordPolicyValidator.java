@@ -14,11 +14,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 
-import com.wy.test.core.constants.ConstPasswordSetType;
-import com.wy.test.core.constants.ConstStatus;
+import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.PasswordPolicyEntity;
 import com.wy.test.core.entity.UserEntity;
+import com.wy.test.core.enums.PasswordSetType;
 import com.wy.test.core.password.PasswordGen;
 import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
@@ -155,16 +155,16 @@ public class PasswordPolicyValidator {
 		// initial password need change
 		if (userInfo.getLoginCount() <= 0) {
 			WebContext.getSession().setAttribute(WebConstants.CURRENT_USER_PASSWORD_SET_TYPE,
-					ConstPasswordSetType.INITIAL_PASSWORD);
+					PasswordSetType.INITIAL_PASSWORD.ordinal());
 		}
 
-		if (userInfo.getPasswordSetType() != ConstPasswordSetType.PASSWORD_NORMAL) {
+		if (userInfo.getPasswordSetType() != PasswordSetType.PASSWORD_NORMAL.ordinal()) {
 			WebContext.getSession().setAttribute(WebConstants.CURRENT_USER_PASSWORD_SET_TYPE,
 					userInfo.getPasswordSetType());
 			return;
 		} else {
 			WebContext.getSession().setAttribute(WebConstants.CURRENT_USER_PASSWORD_SET_TYPE,
-					ConstPasswordSetType.PASSWORD_NORMAL);
+					PasswordSetType.PASSWORD_NORMAL.ordinal());
 		}
 
 		/*
@@ -184,7 +184,7 @@ public class PasswordPolicyValidator {
 					intDuration, passwordPolicy.getExpiration(), intDuration <= passwordPolicy.getExpiration());
 			if (intDuration > passwordPolicy.getExpiration()) {
 				WebContext.getSession().setAttribute(WebConstants.CURRENT_USER_PASSWORD_SET_TYPE,
-						ConstPasswordSetType.PASSWORD_EXPIRED);
+						PasswordSetType.PASSWORD_EXPIRED.ordinal());
 			}
 		}
 

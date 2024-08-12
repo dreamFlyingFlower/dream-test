@@ -28,10 +28,6 @@ public class OrgEntity extends AbstractStringEntity {
 
 	private static final long serialVersionUID = -7477102351005000328L;
 
-	public static final String CLASS_TYPE = "Organization";
-
-	public static final String ROOT_ORG_ID = "1";
-
 	/**
 	 * 组织机构编码
 	 */

@@ -28,15 +28,6 @@ public class RoleEntity extends AbstractStringEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	public class Category {
-
-		public static final String DYNAMIC = "dynamic";
-
-		public static final String STATIC = "static";
-
-		public static final String APP = "app";
-	}
-
 	/**
 	 * 角色编码
 	 */

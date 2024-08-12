@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.core.constants.ContentType;
+import com.wy.test.core.constant.ContentType;
 
 @Controller
 public class MetadataEndpoint {

@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 import org.springframework.util.StringUtils;
 
 import com.fhs.core.trans.vo.TransPojo;
-import com.wy.test.core.entity.apps.oauth2.provider.client.BaseClientDetails;
+import com.wy.test.core.entity.oauth2.client.BaseClientDetails;
 
 import dream.flying.flower.framework.web.valid.ValidAdd;
 import dream.flying.flower.framework.web.valid.ValidEdit;

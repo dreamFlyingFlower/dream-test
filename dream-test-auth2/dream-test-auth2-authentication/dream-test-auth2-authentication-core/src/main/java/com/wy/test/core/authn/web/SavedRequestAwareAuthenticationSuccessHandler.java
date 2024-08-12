@@ -18,8 +18,6 @@ import org.springframework.util.StringUtils;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * An authentication success strategy which can make use of the {@link DefaultSavedRequest} which may have been stored
  * in the session by the {@link ExceptionTranslationFilter}. When such a request is intercepted and requires
@@ -44,7 +42,6 @@ import lombok.extern.slf4j.Slf4j;
  * @author Luke Taylor
  * @since 3.0
  */
-@Slf4j
 public class SavedRequestAwareAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
 	private RequestCache requestCache = new HttpSessionRequestCache();

@@ -21,36 +21,36 @@
 
 		<dependency>
 			<groupId>dream.flying.flower</groupId>
-			<artifactId>dream-test-auth2-protocol-oauth-2.0</artifactId>
+			<artifactId>dream-test-auth2-protocol-oauth2</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>dream.flying.flower</groupId>
-			<artifactId>dream-test-auth2-protocol-saml-2.0</artifactId>
+			<artifactId>dream-test-auth2-protocol-saml2</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>dream.flying.flower</groupId>
-			<artifactId>dream-test-auth2-synchronizer-activedirectory</artifactId>
+			<artifactId>dream-test-auth2-sync-azure</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>dream.flying.flower</groupId>
-			<artifactId>dream-test-auth2-synchronizer-dingtalk</artifactId>
+			<artifactId>dream-test-auth2-sync-dingtalk</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>dream.flying.flower</groupId>
-			<artifactId>dream-test-auth2-synchronizer-feishu</artifactId>
+			<artifactId>dream-test-auth2-sync-feishu</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>dream.flying.flower</groupId>
-			<artifactId>dream-test-auth2-synchronizer-jdbc</artifactId>
+			<artifactId>dream-test-auth2-sync-jdbc</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>dream.flying.flower</groupId>
-			<artifactId>dream-test-auth2-synchronizer-ldap</artifactId>
+			<artifactId>dream-test-auth2-sync-ldap</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>dream.flying.flower</groupId>
-			<artifactId>dream-test-auth2-synchronizer-workweixin</artifactId>
+			<artifactId>dream-test-auth2-sync-weixin</artifactId>
 		</dependency>
 
 		<dependency>

@@ -9,7 +9,7 @@ import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import com.wy.test.core.constants.ConstDatabase;
+import com.wy.test.core.constant.ConstDatabase;
 import com.wy.test.core.entity.SocialAssociateEntity;
 
 import dream.flying.flower.generator.GeneratorStrategyContext;

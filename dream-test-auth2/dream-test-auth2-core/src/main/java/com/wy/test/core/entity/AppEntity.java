@@ -29,28 +29,6 @@ public class AppEntity extends AbstractStringEntity {
 
 	private static final long serialVersionUID = 1773969303999177999L;
 
-	public static final class CREDENTIALS {
-
-		public static final String USER_DEFINED = "user_defined";
-
-		public static final String SHARED = "shared";
-
-		public static final String SYSTEM = "system";
-
-		public static final String NONE = "none";
-	}
-
-	public static final class VISIBLE {
-
-		public static final int HIDDEN = 0;
-
-		public static final int ALL = 1;
-
-		public static final int INTERNET = 2;
-
-		public static final int INTRANET = 3;
-	}
-
 	/**
 	 * 应用名称
 	 */

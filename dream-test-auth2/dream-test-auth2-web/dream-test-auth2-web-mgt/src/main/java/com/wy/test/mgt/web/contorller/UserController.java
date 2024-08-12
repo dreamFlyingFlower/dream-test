@@ -35,15 +35,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
 import com.wy.test.core.authn.annotation.CurrentUser;
-import com.wy.test.core.constants.ConstEntryType;
-import com.wy.test.core.constants.ConstOperateAction;
-import com.wy.test.core.constants.ConstOperateResult;
-import com.wy.test.core.constants.ConstPasswordSetType;
+import com.wy.test.core.constant.ConstEntryType;
+import com.wy.test.core.constant.ConstOperateAction;
+import com.wy.test.core.constant.ConstOperateResult;
 import com.wy.test.core.convert.UserConvert;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.ExcelImport;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
+import com.wy.test.core.enums.PasswordSetType;
 import com.wy.test.core.query.UserQuery;
 import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebContext;
@@ -188,7 +188,7 @@ public class UserController {
 	public ResponseEntity<?> changePassword(@RequestBody ChangePassword changePassword,
 			@CurrentUser UserEntity currentUser) {
 		log.debug("UserId {}", changePassword.getUserId());
-		changePassword.setPasswordSetType(ConstPasswordSetType.PASSWORD_NORMAL);
+		changePassword.setPasswordSetType(PasswordSetType.PASSWORD_NORMAL.ordinal());
 		if (userInfoService.changePassword(changePassword, true)) {
 			systemLog.insert(ConstEntryType.USERINFO, changePassword, ConstOperateAction.CHANGE_PASSWORD,
 					ConstOperateResult.SUCCESS, currentUser);

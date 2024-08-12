@@ -7,7 +7,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import com.fhs.core.trans.vo.TransPojo;
-import com.wy.test.core.constants.ConstServiceMessage;
+import com.wy.test.core.constant.ConstServiceMessage;
 import com.wy.test.core.exception.PasswordPolicyException;
 import com.wy.test.core.web.WebContext;
 

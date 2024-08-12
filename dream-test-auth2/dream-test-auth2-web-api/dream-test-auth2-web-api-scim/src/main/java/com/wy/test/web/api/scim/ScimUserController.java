@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.wy.test.core.constants.ConstStatus;
+import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.entity.RoleEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.RoleService;

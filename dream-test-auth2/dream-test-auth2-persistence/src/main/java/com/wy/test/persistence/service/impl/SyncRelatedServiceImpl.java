@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.wy.test.core.constant.ConstOrg;
 import com.wy.test.core.convert.SyncRelatedConvert;
-import com.wy.test.core.entity.OrgEntity;
 import com.wy.test.core.entity.SyncEntity;
 import com.wy.test.core.entity.SyncRelatedEntity;
 import com.wy.test.core.query.SyncRelatedQuery;
@@ -38,7 +38,7 @@ public class SyncRelatedServiceImpl extends
 	public List<SyncRelatedEntity> findOrgs(SyncEntity synchronizer) {
 		return list(lambdaQuery().eq(SyncRelatedEntity::getInstId, synchronizer.getInstId())
 				.eq(SyncRelatedEntity::getSyncId, synchronizer.getId())
-				.eq(SyncRelatedEntity::getObjectType, OrgEntity.CLASS_TYPE));
+				.eq(SyncRelatedEntity::getObjectType, ConstOrg.CLASS_TYPE));
 	}
 
 	@Override
