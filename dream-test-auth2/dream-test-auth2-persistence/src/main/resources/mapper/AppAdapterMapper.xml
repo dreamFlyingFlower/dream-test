@@ -2,4 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wy.test.persistence.mapper.AppAdapterMapper">
 
+	<sql id="baseColumns">
+		a.id,
+		a.name,
+		a.protocol,
+		a.adapter_class,
+		a.sort_index,
+		a.remark,
+		a.create_user,
+		a.create_time,
+		a.update_user,
+		a.update_time,
+		a.deleted
+	</sql>
+
 </mapper>

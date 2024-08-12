@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wy.test.persistence.mapper.InstitutionMapper">
+
+	<resultMap id="institutionMap" type="com.wy.test.core.entity.InstitutionEntity">
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="fullName" column="full_name" />
+		<result property="division" column="division" />
+		<result property="country" column="country" />
+		<result property="region" column="region" />
+		<result property="locality" column="locality" />
+		<result property="street" column="street" />
+		<result property="address" column="address" />
+		<result property="contact" column="contact" />
+		<result property="postalCode" column="postal_code" />
+		<result property="phone" column="phone" />
+		<result property="fax" column="fax" />
+		<result property="email" column="email" />
+		<result property="logo" column="logo" />
+		<result property="domain" column="domain" />
+		<result property="frontTitle" column="front_title" />
+		<result property="consoleDomain" column="console_domain" />
+		<result property="consoleTitle" column="console_title" />
+		<result property="captcha" column="captcha" />
+		<result property="defaultUri" column="default_uri" />
+		<result property="remark" column="remark" />
+		<result property="sortIndex" column="sort_index" />
+		<result property="instId" column="inst_id" />
+		<result property="status" column="status" />
+		<result property="createUser" column="create_user" />
+		<result property="createTime" column="create_time" />
+		<result property="updateUser" column="update_user" />
+		<result property="updateTime" column="update_time" />
+		<result property="deleted" column="deleted" />
+	</resultMap>
+
+	<sql id="baseColumns">
+		a.id,
+		a.name,
+		a.full_name,
+		a.division,
+		a.country,
+		a.region,
+		a.locality,
+		a.street,
+		a.address,
+		a.contact,
+		a.postal_code,
+		a.phone,
+		a.fax,
+		a.email,
+		a.logo,
+		a.domain,
+		a.front_title,
+		a.console_domain,
+		a.console_title,
+		a.captcha,
+		a.default_uri,
+		a.remark,
+		a.sort_index,
+		a.inst_id,
+		a.status,
+		a.create_user,
+		a.create_time,
+		a.update_user,
+		a.update_time,
+		a.deleted
+	</sql>
+
+</mapper>

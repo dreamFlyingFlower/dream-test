@@ -1,5 +1,7 @@
 package com.wy.test.core.entity;
 
+import com.baomidou.mybatisplus.annotation.SqlCondition;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import dream.flying.flower.framework.mybatis.plus.entity.AbstractStringEntity;
@@ -28,6 +30,7 @@ public class ConnectorEntity extends AbstractStringEntity {
 
 	private static final long serialVersionUID = 4660258495864814777L;
 
+	@TableField(condition = SqlCondition.LIKE)
 	private String connName;
 
 	private String scheduler;

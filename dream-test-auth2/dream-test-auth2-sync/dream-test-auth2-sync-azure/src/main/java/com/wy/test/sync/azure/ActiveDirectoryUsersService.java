@@ -21,8 +21,8 @@ import com.wy.test.core.entity.SyncRelatedEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.persistence.ldap.ActiveDirectoryHelpers;
 import com.wy.test.core.persistence.ldap.LdapHelpers;
-import com.wy.test.sync.core.synchronizer.AbstractSynchronizerService;
-import com.wy.test.sync.core.synchronizer.ISynchronizerService;
+import com.wy.test.sync.core.synchronizer.AbstractSyncProcessor;
+import com.wy.test.sync.core.synchronizer.SyncProcessor;
 
 import dream.flying.flower.digest.DigestHelper;
 import dream.flying.flower.generator.GeneratorStrategyContext;
@@ -30,19 +30,19 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class ActiveDirectoryUsersService extends AbstractSynchronizerService implements ISynchronizerService {
+public class ActiveDirectoryUsersService extends AbstractSyncProcessor implements SyncProcessor {
 
 	ActiveDirectoryHelpers ldapUtils;
 
 	@Override
 	public void sync() {
 		log.info("Sync ActiveDirectory Users...");
-		loadOrgsByInstId(this.synchronizer.getInstId(), ConstCommon.ROOT_ORG_ID);
+		loadOrgsByInstId(this.syncEntity.getInstId(), ConstCommon.ROOT_ORG_ID);
 		try {
 			SearchControls constraints = new SearchControls();
 			constraints.setSearchScope(ldapUtils.getSearchScope());
 			String filter =
-					StringUtils.isNotBlank(this.getSynchronizer().getUserFilters()) ? getSynchronizer().getUserFilters()
+					StringUtils.isNotBlank(this.getSyncEntity().getUserFilters()) ? getSyncEntity().getUserFilters()
 							: "(&(objectClass=User))";
 			NamingEnumeration<SearchResult> results =
 					ldapUtils.getConnection().search(ldapUtils.getBaseDN(), filter, constraints);
@@ -79,10 +79,10 @@ public class ActiveDirectoryUsersService extends AbstractSynchronizerService imp
 
 						SyncRelatedEntity synchroRelated = new SyncRelatedEntity(userInfo.getId(),
 								userInfo.getUsername(), userInfo.getDisplayName(), ConstUser.CLASS_TYPE,
-								synchronizer.getId(), synchronizer.getName(), originId, userInfo.getDisplayName(), "",
-								"", synchronizer.getInstId());
+								syncEntity.getId(), syncEntity.getName(), originId, userInfo.getDisplayName(), "", "",
+								syncEntity.getInstId());
 
-						synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated,
+						synchroRelatedService.updateSynchroRelated(this.syncEntity, synchroRelated,
 								ConstUser.CLASS_TYPE);
 					}
 				}
@@ -175,16 +175,16 @@ public class ActiveDirectoryUsersService extends AbstractSynchronizerService imp
 			userInfo.setUserType("EMPLOYEE");
 			userInfo.setTimeZone("Asia/Shanghai");
 			userInfo.setStatus(ConstStatus.ACTIVE);
-			userInfo.setInstId(this.synchronizer.getInstId());
+			userInfo.setInstId(this.syncEntity.getInstId());
 
 			HistorySyncEntity historySynchronizer = new HistorySyncEntity();
 			historySynchronizer.setId(generatorStrategyContext.generate());
-			historySynchronizer.setSyncId(this.synchronizer.getId());
-			historySynchronizer.setSyncName(this.synchronizer.getName());
+			historySynchronizer.setSyncId(this.syncEntity.getId());
+			historySynchronizer.setSyncName(this.syncEntity.getName());
 			historySynchronizer.setObjectId(userInfo.getId());
 			historySynchronizer.setObjectName(userInfo.getUsername());
 			historySynchronizer.setObjectType(OrgEntity.class.getSimpleName());
-			historySynchronizer.setInstId(synchronizer.getInstId());
+			historySynchronizer.setInstId(syncEntity.getInstId());
 			historySynchronizer.setResult("success");
 			this.historySynchronizerService.save(historySynchronizer);
 

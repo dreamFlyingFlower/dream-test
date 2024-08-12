@@ -18,15 +18,15 @@ import com.wy.test.core.constant.ConstOrg;
 import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.entity.OrgEntity;
 import com.wy.test.core.entity.SyncRelatedEntity;
-import com.wy.test.sync.core.synchronizer.AbstractSynchronizerService;
-import com.wy.test.sync.core.synchronizer.ISynchronizerService;
+import com.wy.test.sync.core.synchronizer.AbstractSyncProcessor;
+import com.wy.test.sync.core.synchronizer.SyncProcessor;
 
 import dream.flying.flower.generator.GeneratorStrategyContext;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class DingtalkOrganizationService extends AbstractSynchronizerService implements ISynchronizerService {
+public class DingtalkOrganizationService extends AbstractSyncProcessor implements SyncProcessor {
 
 	static Long ROOT_DEPT_ID = 1L;
 
@@ -48,7 +48,7 @@ public class DingtalkOrganizationService extends AbstractSynchronizerService imp
 					buildSynchroRelated(rootOrganization, rootDeptRsp.getResult().getDeptId() + "",
 							rootDeptRsp.getResult().getName(), rootDeptRsp.getResult().getParentId() + "");
 
-			synchroRelatedService.updateSynchroRelated(this.synchronizer, rootSynchroRelated, ConstOrg.CLASS_TYPE);
+			synchroRelatedService.updateSynchroRelated(this.syncEntity, rootSynchroRelated, ConstOrg.CLASS_TYPE);
 
 			GeneratorStrategyContext generatorStrategyContext = new GeneratorStrategyContext();
 			while (deptsQueue.element() != null) {
@@ -61,7 +61,7 @@ public class DingtalkOrganizationService extends AbstractSynchronizerService imp
 					deptsQueue.add(dept.getDeptId());
 
 					// synchro Related
-					SyncRelatedEntity synchroRelated = synchroRelatedService.findByOriginId(this.synchronizer,
+					SyncRelatedEntity synchroRelated = synchroRelatedService.findByOriginId(this.syncEntity,
 							dept.getDeptId() + "", ConstOrg.CLASS_TYPE);
 
 					OrgEntity organization = buildOrganization(dept);
@@ -78,7 +78,7 @@ public class DingtalkOrganizationService extends AbstractSynchronizerService imp
 						organizationsService.update(organization);
 					}
 
-					synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated, ConstOrg.CLASS_TYPE);
+					synchroRelatedService.updateSynchroRelated(this.syncEntity, synchroRelated, ConstOrg.CLASS_TYPE);
 
 					log.debug("Organizations : " + organization);
 				}
@@ -113,14 +113,14 @@ public class DingtalkOrganizationService extends AbstractSynchronizerService imp
 
 	public SyncRelatedEntity buildSynchroRelated(OrgEntity organization, String deptId, String name, String parentId) {
 		return new SyncRelatedEntity(organization.getId(), organization.getOrgName(), organization.getOrgName(),
-				ConstOrg.CLASS_TYPE, synchronizer.getId(), synchronizer.getName(), deptId + "", name, "", parentId,
-				synchronizer.getInstId());
+				ConstOrg.CLASS_TYPE, syncEntity.getId(), syncEntity.getName(), deptId + "", name, "", parentId,
+				syncEntity.getInstId());
 	}
 
 	public OrgEntity buildOrganization(DeptBaseResponse dept) {
 		// Parent
 		SyncRelatedEntity synchroRelatedParent =
-				synchroRelatedService.findByOriginId(this.synchronizer, dept.getParentId() + "", ConstOrg.CLASS_TYPE);
+				synchroRelatedService.findByOriginId(this.syncEntity, dept.getParentId() + "", ConstOrg.CLASS_TYPE);
 		OrgEntity org = new OrgEntity();
 		org.setId(dept.getDeptId() + "");
 		org.setOrgCode(dept.getDeptId() + "");
@@ -130,7 +130,7 @@ public class DingtalkOrganizationService extends AbstractSynchronizerService imp
 			org.setParentId(synchroRelatedParent.getObjectId());
 			org.setParentName(synchroRelatedParent.getObjectName());
 		}
-		org.setInstId(this.synchronizer.getInstId());
+		org.setInstId(this.syncEntity.getInstId());
 		org.setStatus(ConstStatus.ACTIVE);
 		org.setRemark("dingtalk");
 		return org;

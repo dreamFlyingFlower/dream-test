@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wy.test.persistence.mapper.HistoryEventMapper">
+
+	<resultMap id="historyEventMap" type="com.wy.test.core.entity.HistoryEventEntity">
+		<result property="id" column="id" />
+		<result property="eventName" column="event_name" />
+		<result property="dataType" column="data_type" />
+		<result property="dataCount" column="data_count" />
+		<result property="executeTime" column="execute_time" />
+		<result property="instId" column="inst_id" />
+		<result property="createUser" column="create_user" />
+		<result property="createTime" column="create_time" />
+		<result property="updateUser" column="update_user" />
+		<result property="updateTime" column="update_time" />
+		<result property="deleted" column="deleted" />
+	</resultMap>
+
+	<sql id="baseColumns">
+		a.id,
+		a.event_name,
+		a.data_type,
+		a.data_count,
+		a.execute_time,
+		a.inst_id,
+		a.create_user,
+		a.create_time,
+		a.update_user,
+		a.update_time,
+		a.deleted
+	</sql>
+
+</mapper>

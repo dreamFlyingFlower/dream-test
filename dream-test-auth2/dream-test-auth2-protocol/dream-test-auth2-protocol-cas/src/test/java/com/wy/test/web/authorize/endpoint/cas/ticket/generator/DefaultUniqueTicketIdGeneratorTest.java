@@ -1,6 +1,6 @@
 package com.wy.test.web.authorize.endpoint.cas.ticket.generator;
 
-import com.wy.test.cas.authz.endpoint.ticket.generator.DefaultUniqueTicketIdGenerator;
+import com.wy.test.protocol.cas.endpoint.ticket.generator.DefaultUniqueTicketIdGenerator;
 
 public class DefaultUniqueTicketIdGeneratorTest {
 

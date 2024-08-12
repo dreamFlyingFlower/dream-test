@@ -1,5 +1,7 @@
 package com.wy.test.core.entity;
 
+import com.baomidou.mybatisplus.annotation.SqlCondition;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import dream.flying.flower.framework.mybatis.plus.entity.AbstractStringEntity;
@@ -36,6 +38,7 @@ public class RoleEntity extends AbstractStringEntity {
 	/**
 	 * 角色名称
 	 */
+	@TableField(condition = SqlCondition.LIKE)
 	private String roleName;
 
 	/**

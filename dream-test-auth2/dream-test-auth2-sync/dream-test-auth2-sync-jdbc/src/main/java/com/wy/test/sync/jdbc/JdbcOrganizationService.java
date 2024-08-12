@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.entity.OrgEntity;
-import com.wy.test.sync.core.synchronizer.AbstractSynchronizerService;
-import com.wy.test.sync.core.synchronizer.ISynchronizerService;
+import com.wy.test.sync.core.synchronizer.AbstractSyncProcessor;
+import com.wy.test.sync.core.synchronizer.SyncProcessor;
 
 import dream.flying.flower.db.JdbcHelper;
 import dream.flying.flower.db.TableMetaData;
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class JdbcOrganizationService extends AbstractSynchronizerService implements ISynchronizerService {
+public class JdbcOrganizationService extends AbstractSyncProcessor implements SyncProcessor {
 
 	static ArrayList<ColumnFieldMapper> mapperList = new ArrayList<ColumnFieldMapper>();
 
@@ -32,13 +32,13 @@ public class JdbcOrganizationService extends AbstractSynchronizerService impleme
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			if (StringUtils.isNotBlank(synchronizer.getOrgFilters())) {
-				log.info("Sync Org Filters {}", synchronizer.getOrgFilters());
-				conn = JdbcHelper.connect(synchronizer.getProviderUrl(), synchronizer.getPrincipal(),
-						synchronizer.getCredentials(), synchronizer.getDriverClass());
+			if (StringUtils.isNotBlank(syncEntity.getOrgFilters())) {
+				log.info("Sync Org Filters {}", syncEntity.getOrgFilters());
+				conn = JdbcHelper.connect(syncEntity.getProviderUrl(), syncEntity.getPrincipal(),
+						syncEntity.getCredentials(), syncEntity.getDriverClass());
 
 				stmt = conn.createStatement();
-				rs = stmt.executeQuery(synchronizer.getOrgFilters());
+				rs = stmt.executeQuery(syncEntity.getOrgFilters());
 				while (rs.next()) {
 					OrgEntity org = buildOrganization(rs);
 					OrgEntity queryOrg = this.organizationsService.getById(org.getId());
@@ -84,7 +84,7 @@ public class JdbcOrganizationService extends AbstractSynchronizerService impleme
 		GeneratorStrategyContext generatorStrategyContext = new GeneratorStrategyContext();
 
 		org.setId(generatorStrategyContext.generate());
-		org.setInstId(this.synchronizer.getInstId());
+		org.setInstId(this.syncEntity.getInstId());
 		if (meta.getColumnDetail().containsKey("status")) {
 			org.setStatus(rs.getInt("status"));
 		} else {

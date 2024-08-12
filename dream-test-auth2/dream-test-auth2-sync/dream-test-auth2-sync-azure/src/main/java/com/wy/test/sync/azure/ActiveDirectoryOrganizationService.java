@@ -22,21 +22,21 @@ import com.wy.test.core.entity.OrgEntity;
 import com.wy.test.core.entity.SyncRelatedEntity;
 import com.wy.test.core.persistence.ldap.ActiveDirectoryHelpers;
 import com.wy.test.core.persistence.ldap.LdapHelpers;
-import com.wy.test.sync.core.synchronizer.AbstractSynchronizerService;
-import com.wy.test.sync.core.synchronizer.ISynchronizerService;
+import com.wy.test.sync.core.synchronizer.AbstractSyncProcessor;
+import com.wy.test.sync.core.synchronizer.SyncProcessor;
 
 import dream.flying.flower.generator.GeneratorStrategyContext;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class ActiveDirectoryOrganizationService extends AbstractSynchronizerService implements ISynchronizerService {
+public class ActiveDirectoryOrganizationService extends AbstractSyncProcessor implements SyncProcessor {
 
 	ActiveDirectoryHelpers ldapUtils;
 
 	@Override
 	public void sync() {
-		loadOrgsByInstId(this.synchronizer.getInstId(), ConstCommon.ROOT_ORG_ID);
+		loadOrgsByInstId(this.syncEntity.getInstId(), ConstCommon.ROOT_ORG_ID);
 		log.info("Sync ActiveDirectory Organizations ...");
 		try {
 			ArrayList<OrgEntity> orgsList = queryActiveDirectory();
@@ -68,7 +68,7 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 						log.info("parentNamePath " + parentNamePath + " , namePah " + organization.getNamePath());
 
 						// synchro Related
-						SyncRelatedEntity synchroRelated = synchroRelatedService.findByOriginId(this.synchronizer,
+						SyncRelatedEntity synchroRelated = synchroRelatedService.findByOriginId(this.syncEntity,
 								organization.getLdapDn(), ConstOrg.CLASS_TYPE);
 						if (synchroRelated == null) {
 							organization.setId(generatorStrategyContext.generate());
@@ -82,15 +82,15 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 							organizationsService.update(organization);
 						}
 
-						synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated,
+						synchroRelatedService.updateSynchroRelated(this.syncEntity, synchroRelated,
 								ConstOrg.CLASS_TYPE);
 
 						orgsNamePathMap.put(organization.getNamePath(), organization);
 
 						HistorySyncEntity historySynchronizer = new HistorySyncEntity(
-								generatorStrategyContext.generate(), this.synchronizer.getId(),
-								this.synchronizer.getName(), organization.getId(), organization.getOrgName(),
-								OrgEntity.class.getSimpleName(), new Date(), "success", synchronizer.getInstId());
+								generatorStrategyContext.generate(), this.syncEntity.getId(),
+								this.syncEntity.getName(), organization.getId(), organization.getOrgName(),
+								OrgEntity.class.getSimpleName(), new Date(), "success", syncEntity.getInstId());
 						this.historySynchronizerService.save(historySynchronizer);
 					}
 				}
@@ -107,7 +107,7 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 		SearchControls constraints = new SearchControls();
 		constraints.setSearchScope(ldapUtils.getSearchScope());
 		String filter = "(&(objectClass=OrganizationalUnit))";
-		if (StringUtils.isNotBlank(this.getSynchronizer().getOrgFilters())) {
+		if (StringUtils.isNotBlank(this.getSyncEntity().getOrgFilters())) {
 			// filter = this.getSynchronizer().getFilters();
 		}
 
@@ -147,8 +147,8 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 
 	public SyncRelatedEntity buildSynchroRelated(OrgEntity organization, String ldapDN, String name) {
 		return new SyncRelatedEntity(organization.getId(), organization.getOrgName(), organization.getOrgName(),
-				ConstOrg.CLASS_TYPE, synchronizer.getId(), synchronizer.getName(), ldapDN, name, "",
-				organization.getParentId(), synchronizer.getInstId());
+				ConstOrg.CLASS_TYPE, syncEntity.getId(), syncEntity.getName(), ldapDN, name, "",
+				organization.getParentId(), syncEntity.getInstId());
 	}
 
 	public OrgEntity buildOrganization(HashMap<String, Attribute> attributeMap, String name, String nameInNamespace) {
@@ -178,7 +178,7 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 			org.setStreet(LdapHelpers.getAttributeStringValue(OrganizationalUnit.STREET, attributeMap));
 			org.setPostalCode(LdapHelpers.getAttributeStringValue(OrganizationalUnit.POSTALCODE, attributeMap));
 			org.setRemark(LdapHelpers.getAttributeStringValue(OrganizationalUnit.DESCRIPTION, attributeMap));
-			org.setInstId(this.synchronizer.getInstId());
+			org.setInstId(this.syncEntity.getInstId());
 			org.setStatus(ConstStatus.ACTIVE);
 
 			log.debug("Organization " + org);
@@ -196,5 +196,4 @@ public class ActiveDirectoryOrganizationService extends AbstractSynchronizerServ
 	public void setLdapUtils(ActiveDirectoryHelpers ldapUtils) {
 		this.ldapUtils = ldapUtils;
 	}
-
 }

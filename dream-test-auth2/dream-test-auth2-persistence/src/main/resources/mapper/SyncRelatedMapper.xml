@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wy.test.persistence.mapper.SyncRelatedMapper">
+
+	<resultMap id="syncRelatedMap" type="com.wy.test.core.entity.SyncRelatedEntity">
+		<result property="id" column="id" />
+		<result property="objectId" column="object_id" />
+		<result property="objectName" column="object_name" />
+		<result property="objectDisplayName" column="object_display_name" />
+		<result property="objectType" column="object_type" />
+		<result property="syncId" column="sync_id" />
+		<result property="syncName" column="sync_name" />
+		<result property="originId" column="origin_id" />
+		<result property="originId2" column="origin_id2" />
+		<result property="originId3" column="origin_id3" />
+		<result property="syncTime" column="sync_time" />
+		<result property="originName" column="origin_name" />
+		<result property="instId" column="inst_id" />
+		<result property="createUser" column="create_user" />
+		<result property="createTime" column="create_time" />
+		<result property="updateUser" column="update_user" />
+		<result property="updateTime" column="update_time" />
+		<result property="deleted" column="deleted" />
+	</resultMap>
+
+	<sql id="baseColumns">
+		a.id,
+		a.object_id,
+		a.object_name,
+		a.object_display_name,
+		a.object_type,
+		a.sync_id,
+		a.sync_name,
+		a.origin_id,
+		a.origin_id2,
+		a.origin_id3,
+		a.sync_time,
+		a.origin_name,
+		a.inst_id,
+		a.create_user,
+		a.create_time,
+		a.update_user,
+		a.update_time,
+		a.deleted
+	</sql>
+
+	<select id="listPage" resultType="com.dream.auth.vo.SyncRelatedVO">
+		SELECT
+		<include refid="baseColumns" />
+		FROM auth_sync_related a
+		<where>
+			a.deleted = 0
+			<if test=" query.id != null ">
+				AND a.id = #{query.id}
+			</if>
+			<if test=" query.objectId != null and query.objectId != '' ">
+				AND a.object_id = #{query.objectId}
+			</if>
+			<if test=" query.objectName != null and query.objectName != '' ">
+				AND a.object_name = #{query.objectName}
+			</if>
+			<if test=" query.objectDisplayName != null and query.objectDisplayName != '' ">
+				AND a.object_display_name = #{query.objectDisplayName}
+			</if>
+			<if test=" query.objectType != null and query.objectType != '' ">
+				AND a.object_type = #{query.objectType}
+			</if>
+			<if test=" query.syncId != null ">
+				AND a.sync_id = #{query.syncId}
+			</if>
+			<if test=" query.syncName != null and query.syncName != '' ">
+				AND a.sync_name = #{query.syncName}
+			</if>
+			<if test=" query.originId != null and query.originId != '' ">
+				AND a.origin_id = #{query.originId}
+			</if>
+			<if test=" query.originId2 != null and query.originId2 != '' ">
+				AND a.origin_id2 = #{query.originId2}
+			</if>
+			<if test=" query.originId3 != null and query.originId3 != '' ">
+				AND a.origin_id3 = #{query.originId3}
+			</if>
+			<if test=" query.syncTime != null and query.syncTime != '' ">
+				AND a.sync_time = #{query.syncTime}
+			</if>
+			<if test=" query.originName != null and query.originName != '' ">
+				AND a.origin_name = #{query.originName}
+			</if>
+			<if test=" query.instId != null ">
+				AND a.inst_id = #{query.instId}
+			</if>
+		</where>
+		<choose>
+			<when test=" query.order != null and query.order != '' ">
+				ORDER BY a.${query.order}
+				<choose>
+					<when test="query.asc != null and query.asc.toString() == 'true'">
+						ASC
+					</when>
+					<otherwise>DESC</otherwise>
+				</choose>
+			</when>
+			<otherwise>ORDER BY a.id DESC</otherwise>
+		</choose>
+	</select>
+
+</mapper>

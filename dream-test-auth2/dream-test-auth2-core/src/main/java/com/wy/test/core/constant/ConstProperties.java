@@ -12,5 +12,4 @@ public class ConstProperties {
 		}
 		return propertySource.replace(".", "-" + active + ".").replaceAll("classpath:", "");
 	}
-
 }

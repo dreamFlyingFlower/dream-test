@@ -20,22 +20,22 @@ import com.wy.test.core.entity.HistorySyncEntity;
 import com.wy.test.core.entity.OrgEntity;
 import com.wy.test.core.entity.SyncRelatedEntity;
 import com.wy.test.core.persistence.ldap.LdapHelpers;
-import com.wy.test.sync.core.synchronizer.AbstractSynchronizerService;
-import com.wy.test.sync.core.synchronizer.ISynchronizerService;
+import com.wy.test.sync.core.synchronizer.AbstractSyncProcessor;
+import com.wy.test.sync.core.synchronizer.SyncProcessor;
 
 import dream.flying.flower.generator.GeneratorStrategyContext;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class LdapOrganizationService extends AbstractSynchronizerService implements ISynchronizerService {
+public class LdapOrganizationService extends AbstractSyncProcessor implements SyncProcessor {
 
 	LdapHelpers ldapUtils;
 
 	@Override
 	public void sync() {
 		log.info("Sync Ldap Organizations ...");
-		loadOrgsByInstId(this.synchronizer.getInstId(), ConstCommon.ROOT_ORG_ID);
+		loadOrgsByInstId(this.syncEntity.getInstId(), ConstCommon.ROOT_ORG_ID);
 		try {
 			ArrayList<OrgEntity> orgsList = queryLdap();
 			int maxLevel = 0;
@@ -66,7 +66,7 @@ public class LdapOrganizationService extends AbstractSynchronizerService impleme
 						log.info("parentNamePath " + parentNamePath + " , namePah " + organization.getNamePath());
 
 						// synchro Related
-						SyncRelatedEntity synchroRelated = synchroRelatedService.findByOriginId(this.synchronizer,
+						SyncRelatedEntity synchroRelated = synchroRelatedService.findByOriginId(this.syncEntity,
 								organization.getLdapDn(), ConstOrg.CLASS_TYPE);
 						if (synchroRelated == null) {
 
@@ -81,7 +81,7 @@ public class LdapOrganizationService extends AbstractSynchronizerService impleme
 							organizationsService.update(organization);
 						}
 
-						synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated,
+						synchroRelatedService.updateSynchroRelated(this.syncEntity, synchroRelated,
 								ConstOrg.CLASS_TYPE);
 
 						orgsNamePathMap.put(organization.getNamePath(), organization);
@@ -89,12 +89,12 @@ public class LdapOrganizationService extends AbstractSynchronizerService impleme
 						log.info("Organizations " + organization);
 						HistorySyncEntity historySynchronizer = new HistorySyncEntity();
 						historySynchronizer.setId(generatorStrategyContext.generate());
-						historySynchronizer.setSyncId(this.synchronizer.getId());
-						historySynchronizer.setSyncName(this.synchronizer.getName());
+						historySynchronizer.setSyncId(this.syncEntity.getId());
+						historySynchronizer.setSyncName(this.syncEntity.getName());
 						historySynchronizer.setObjectId(organization.getId());
 						historySynchronizer.setObjectName(organization.getOrgName());
 						historySynchronizer.setObjectType(OrgEntity.class.getSimpleName());
-						historySynchronizer.setInstId(synchronizer.getInstId());
+						historySynchronizer.setInstId(syncEntity.getInstId());
 						historySynchronizer.setResult("success");
 						this.historySynchronizerService.save(historySynchronizer);
 					}
@@ -111,8 +111,8 @@ public class LdapOrganizationService extends AbstractSynchronizerService impleme
 		SearchControls constraints = new SearchControls();
 		constraints.setSearchScope(ldapUtils.getSearchScope());
 		String filter = "(&(objectClass=OrganizationalUnit))";
-		if (StringUtils.isNotBlank(this.getSynchronizer().getOrgFilters())) {
-			filter = this.getSynchronizer().getOrgFilters();
+		if (StringUtils.isNotBlank(this.getSyncEntity().getOrgFilters())) {
+			filter = this.getSyncEntity().getOrgFilters();
 		}
 		NamingEnumeration<SearchResult> results =
 				ldapUtils.getConnection().search(ldapUtils.getBaseDN(), filter, constraints);
@@ -146,8 +146,8 @@ public class LdapOrganizationService extends AbstractSynchronizerService impleme
 
 	public SyncRelatedEntity buildSynchroRelated(OrgEntity organization, String ldapDN, String name) {
 		return new SyncRelatedEntity(organization.getId(), organization.getOrgName(), organization.getOrgName(),
-				ConstOrg.CLASS_TYPE, synchronizer.getId(), synchronizer.getName(), ldapDN, name, "",
-				organization.getParentId(), synchronizer.getInstId());
+				ConstOrg.CLASS_TYPE, syncEntity.getId(), syncEntity.getName(), ldapDN, name, "",
+				organization.getParentId(), syncEntity.getInstId());
 	}
 
 	public OrgEntity buildOrganization(HashMap<String, Attribute> attributeMap, String name, String nameInNamespace) {
@@ -181,7 +181,7 @@ public class LdapOrganizationService extends AbstractSynchronizerService impleme
 			org.setPhone(LdapHelpers.getAttributeStringValue(OrganizationalUnit.TELEPHONENUMBER, attributeMap));
 			org.setFax(LdapHelpers.getAttributeStringValue(OrganizationalUnit.FACSIMILETELEPHONENUMBER, attributeMap));
 			org.setRemark(LdapHelpers.getAttributeStringValue(OrganizationalUnit.DESCRIPTION, attributeMap));
-			org.setInstId(this.synchronizer.getInstId());
+			org.setInstId(this.syncEntity.getInstId());
 			org.setStatus(ConstStatus.ACTIVE);
 			log.info("org " + org);
 			return org;

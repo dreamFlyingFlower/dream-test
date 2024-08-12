@@ -5,7 +5,7 @@ import java.io.File;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
-import com.wy.test.otp.password.onetimepwd.algorithm.OtpKeyUri;
+import com.wy.test.authentication.otp.password.onetimepwd.algorithm.OtpKeyUri;
 
 import dream.flying.flower.framework.core.qrcode.QrCodeHelpers;
 

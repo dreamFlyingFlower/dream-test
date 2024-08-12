@@ -2,6 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wy.test.persistence.mapper.UserAdjunctMapper">
 
+	<sql id="baseColumns">
+		a.id,
+		a.user_id,
+		a.org_name,
+		a.department_id,
+		a.department,
+		a.job_title,
+		a.job_level,
+		a.manager_id,
+		a.manager,
+		a.assistant_id,
+		a.assistant,
+		a.entry_date,
+		a.start_work_date,
+		a.quit_date,
+		a.sort_order,
+		a.work_email,
+		a.work_phone_number,
+		a.work_country,
+		a.work_division,
+		a.work_region,
+		a.work_locality,
+		a.work_street_address,
+		a.work_address_formatted,
+		a.work_postal_code,
+		a.work_fax,
+		a.cost_center,
+		a.remark,
+		a.inst_id,
+		a.create_user,
+		a.create_time,
+		a.update_user,
+		a.update_time,
+		a.deleted
+	</sql>
+
 	<sql id="where_contition">
 		<if test="id != null and id != ''">
 			and id = #{id}

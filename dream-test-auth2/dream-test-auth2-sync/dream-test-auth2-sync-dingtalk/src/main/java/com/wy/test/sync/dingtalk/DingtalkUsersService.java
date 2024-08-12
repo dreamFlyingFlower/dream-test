@@ -15,14 +15,14 @@ import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.constant.ConstUser;
 import com.wy.test.core.entity.SyncRelatedEntity;
 import com.wy.test.core.entity.UserEntity;
-import com.wy.test.sync.core.synchronizer.AbstractSynchronizerService;
-import com.wy.test.sync.core.synchronizer.ISynchronizerService;
+import com.wy.test.sync.core.synchronizer.AbstractSyncProcessor;
+import com.wy.test.sync.core.synchronizer.SyncProcessor;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class DingtalkUsersService extends AbstractSynchronizerService implements ISynchronizerService {
+public class DingtalkUsersService extends AbstractSyncProcessor implements SyncProcessor {
 
 	String access_token;
 
@@ -30,7 +30,7 @@ public class DingtalkUsersService extends AbstractSynchronizerService implements
 	public void sync() {
 		log.info("Sync Dingtalk Users...");
 		try {
-			List<SyncRelatedEntity> synchroRelateds = synchroRelatedService.findOrgs(this.synchronizer);
+			List<SyncRelatedEntity> synchroRelateds = synchroRelatedService.findOrgs(this.syncEntity);
 
 			for (SyncRelatedEntity relatedOrg : synchroRelateds) {
 				DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/v2/user/list");
@@ -56,9 +56,9 @@ public class DingtalkUsersService extends AbstractSynchronizerService implements
 
 						SyncRelatedEntity synchroRelated = new SyncRelatedEntity(userInfo.getId(),
 								userInfo.getUsername(), userInfo.getDisplayName(), ConstUser.CLASS_TYPE,
-								synchronizer.getId(), synchronizer.getName(), user.getUnionid(), user.getName(),
-								user.getUserid(), "", synchronizer.getInstId());
-						synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated,
+								syncEntity.getId(), syncEntity.getName(), user.getUnionid(), user.getName(),
+								user.getUserid(), "", syncEntity.getInstId());
+						synchroRelatedService.updateSynchroRelated(this.syncEntity, synchroRelated,
 								ConstUser.CLASS_TYPE);
 
 						socialsAssociate(synchroRelated, "dingtalk");
@@ -97,7 +97,7 @@ public class DingtalkUsersService extends AbstractSynchronizerService implements
 			userInfo.setStatus(ConstStatus.INACTIVE);
 		}
 
-		userInfo.setInstId(this.synchronizer.getInstId());
+		userInfo.setInstId(this.syncEntity.getInstId());
 		userInfo.setRemark("dingtalk " + user.getRemark());
 		return userInfo;
 	}

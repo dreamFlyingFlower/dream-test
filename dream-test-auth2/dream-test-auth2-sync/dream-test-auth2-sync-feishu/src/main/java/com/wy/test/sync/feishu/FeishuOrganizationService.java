@@ -12,8 +12,8 @@ import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.entity.OrgEntity;
 import com.wy.test.core.entity.SyncRelatedEntity;
 import com.wy.test.core.web.HttpRequestAdapter;
-import com.wy.test.sync.core.synchronizer.AbstractSynchronizerService;
-import com.wy.test.sync.core.synchronizer.ISynchronizerService;
+import com.wy.test.sync.core.synchronizer.AbstractSyncProcessor;
+import com.wy.test.sync.core.synchronizer.SyncProcessor;
 import com.wy.test.sync.feishu.entity.FeishuDepts;
 import com.wy.test.sync.feishu.entity.FeishuDeptsResponse;
 
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class FeishuOrganizationService extends AbstractSynchronizerService implements ISynchronizerService {
+public class FeishuOrganizationService extends AbstractSyncProcessor implements SyncProcessor {
 
 	String access_token;
 
@@ -46,7 +46,7 @@ public class FeishuOrganizationService extends AbstractSynchronizerService imple
 		OrgEntity rootOrganization = organizationsService.getById(ConstCommon.ROOT_ORG_ID);
 		SyncRelatedEntity rootSynchroRelated = buildSynchroRelated(rootOrganization, rspRoot.getData().getDepartment());
 
-		synchroRelatedService.updateSynchroRelated(this.synchronizer, rootSynchroRelated, ConstOrg.CLASS_TYPE);
+		synchroRelatedService.updateSynchroRelated(this.syncEntity, rootSynchroRelated, ConstOrg.CLASS_TYPE);
 
 		// child
 		try {
@@ -58,7 +58,7 @@ public class FeishuOrganizationService extends AbstractSynchronizerService imple
 								dept.getParent_department_id(), dept.getName(), dept.getOpen_department_id());
 						deptsQueue.add(dept.getOpen_department_id());
 						// synchro Related
-						SyncRelatedEntity synchroRelated = synchroRelatedService.findByOriginId(this.synchronizer,
+						SyncRelatedEntity synchroRelated = synchroRelatedService.findByOriginId(this.syncEntity,
 								dept.getOpen_department_id(), ConstOrg.CLASS_TYPE);
 						OrgEntity organization = buildOrganization(dept);
 						if (synchroRelated == null) {
@@ -73,7 +73,7 @@ public class FeishuOrganizationService extends AbstractSynchronizerService imple
 							organizationsService.update(organization);
 						}
 
-						synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated,
+						synchroRelatedService.updateSynchroRelated(this.syncEntity, synchroRelated,
 								ConstOrg.CLASS_TYPE);
 					}
 				}
@@ -110,13 +110,13 @@ public class FeishuOrganizationService extends AbstractSynchronizerService imple
 
 	public SyncRelatedEntity buildSynchroRelated(OrgEntity org, FeishuDepts dept) {
 		return new SyncRelatedEntity(org.getId(), org.getOrgName(), org.getOrgName(), ConstOrg.CLASS_TYPE,
-				synchronizer.getId(), synchronizer.getName(), dept.getOpen_department_id(), dept.getName(),
-				dept.getDepartment_id(), dept.getParent_department_id(), synchronizer.getInstId());
+				syncEntity.getId(), syncEntity.getName(), dept.getOpen_department_id(), dept.getName(),
+				dept.getDepartment_id(), dept.getParent_department_id(), syncEntity.getInstId());
 	}
 
 	public OrgEntity buildOrganization(FeishuDepts dept) {
 		// Parent
-		SyncRelatedEntity synchroRelatedParent = synchroRelatedService.findByOriginId(this.synchronizer,
+		SyncRelatedEntity synchroRelatedParent = synchroRelatedService.findByOriginId(this.syncEntity,
 				dept.getParent_department_id(), ConstOrg.CLASS_TYPE);
 
 		OrgEntity org = new OrgEntity();
@@ -126,7 +126,7 @@ public class FeishuOrganizationService extends AbstractSynchronizerService imple
 		org.setParentId(synchroRelatedParent.getObjectId());
 		org.setParentName(synchroRelatedParent.getObjectName());
 		org.setSortIndex(Integer.parseInt(dept.getOrder()));
-		org.setInstId(this.synchronizer.getInstId());
+		org.setInstId(this.syncEntity.getInstId());
 		org.setStatus(ConstStatus.ACTIVE);
 		org.setRemark("Feishu");
 		return org;

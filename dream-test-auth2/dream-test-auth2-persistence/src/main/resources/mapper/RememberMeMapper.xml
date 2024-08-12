@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wy.test.persistence.mapper.RememberMeMapper">
+
+	<resultMap id="rememberMeMap" type="com.wy.test.core.entity.RememberMeEntity">
+		<result property="id" column="id" />
+		<result property="userId" column="user_id" />
+		<result property="username" column="username" />
+		<result property="lastLoginTime" column="last_login_time" />
+		<result property="expirationTime" column="expiration_time" />
+		<result property="createUser" column="create_user" />
+		<result property="createTime" column="create_time" />
+		<result property="updateUser" column="update_user" />
+		<result property="updateTime" column="update_time" />
+		<result property="deleted" column="deleted" />
+	</resultMap>
+
+	<sql id="baseColumns">
+		a.id,
+		a.user_id,
+		a.username,
+		a.last_login_time,
+		a.expiration_time,
+		a.create_user,
+		a.create_time,
+		a.update_user,
+		a.update_time,
+		a.deleted
+	</sql>
+
+</mapper>

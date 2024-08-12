@@ -10,8 +10,8 @@ import com.wy.test.core.constant.ConstUser;
 import com.wy.test.core.entity.SyncRelatedEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.web.HttpRequestAdapter;
-import com.wy.test.sync.core.synchronizer.AbstractSynchronizerService;
-import com.wy.test.sync.core.synchronizer.ISynchronizerService;
+import com.wy.test.sync.core.synchronizer.AbstractSyncProcessor;
+import com.wy.test.sync.core.synchronizer.SyncProcessor;
 import com.wy.test.sync.feishu.entity.FeishuUsers;
 import com.wy.test.sync.feishu.entity.FeishuUsersResponse;
 
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class FeishuUsersService extends AbstractSynchronizerService implements ISynchronizerService {
+public class FeishuUsersService extends AbstractSyncProcessor implements SyncProcessor {
 
 	String access_token;
 
@@ -33,7 +33,7 @@ public class FeishuUsersService extends AbstractSynchronizerService implements I
 	public void sync() {
 		log.info("Sync Feishu Users...");
 		try {
-			List<SyncRelatedEntity> synchroRelateds = synchroRelatedService.findOrgs(this.synchronizer);
+			List<SyncRelatedEntity> synchroRelateds = synchroRelatedService.findOrgs(this.syncEntity);
 
 			for (SyncRelatedEntity relatedOrg : synchroRelateds) {
 				HttpRequestAdapter request = new HttpRequestAdapter();
@@ -49,12 +49,11 @@ public class FeishuUsersService extends AbstractSynchronizerService implements I
 						userInfo.setPassword(userInfo.getUsername() + ConstUser.DEFAULT_PASSWORD_SUFFIX);
 						userInfoService.saveOrUpdate(userInfo);
 
-						SyncRelatedEntity synchroRelated =
-								new SyncRelatedEntity(userInfo.getId(), userInfo.getUsername(),
-										userInfo.getDisplayName(), ConstUser.CLASS_TYPE, synchronizer.getId(),
-										synchronizer.getName(), feiShuUser.getOpen_id(), feiShuUser.getName(),
-										feiShuUser.getUser_id(), feiShuUser.getUnion_id(), synchronizer.getInstId());
-						synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated,
+						SyncRelatedEntity synchroRelated = new SyncRelatedEntity(userInfo.getId(),
+								userInfo.getUsername(), userInfo.getDisplayName(), ConstUser.CLASS_TYPE,
+								syncEntity.getId(), syncEntity.getName(), feiShuUser.getOpen_id(), feiShuUser.getName(),
+								feiShuUser.getUser_id(), feiShuUser.getUnion_id(), syncEntity.getInstId());
+						synchroRelatedService.updateSynchroRelated(this.syncEntity, synchroRelated,
 								ConstUser.CLASS_TYPE);
 
 						synchroRelated.setOriginId(feiShuUser.getUnion_id());
@@ -101,7 +100,7 @@ public class FeishuUsersService extends AbstractSynchronizerService implements I
 		} else {
 			userInfo.setStatus(ConstStatus.INACTIVE);
 		}
-		userInfo.setInstId(this.synchronizer.getInstId());
+		userInfo.setInstId(this.syncEntity.getInstId());
 		return userInfo;
 	}
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wy.test.persistence.mapper.HistoryProvisionMapper">
+
+	<resultMap id="historyProvisionMap" type="com.wy.test.core.entity.HistoryProvisionEntity">
+		<result property="id" column="id" />
+		<result property="topic" column="topic" />
+		<result property="actionType" column="action_type" />
+	</resultMap>
+
+	<sql id="baseColumns">
+		a.id,
+		a.topic,
+		a.action_type
+	</sql>
+
+</mapper>

@@ -1,7 +1,7 @@
 package com.wy.test.web.authorize.endpoint.response;
 
-import com.wy.test.cas.authz.endpoint.response.ProxyServiceResponseBuilder;
-import com.wy.test.cas.authz.endpoint.response.ServiceResponseBuilder;
+import com.wy.test.protocol.cas.endpoint.response.ProxyServiceResponseBuilder;
+import com.wy.test.protocol.cas.endpoint.response.ServiceResponseBuilder;
 
 import dream.flying.flower.framework.core.pretty.strategy.JsonPretty;
 import dream.flying.flower.framework.core.pretty.strategy.XmlPretty;

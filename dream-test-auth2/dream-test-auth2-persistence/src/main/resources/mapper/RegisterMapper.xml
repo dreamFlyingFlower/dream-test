@@ -2,6 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wy.test.persistence.mapper.RegisterMapper">
 
+	<sql id="baseColumns">
+		a.id,
+		a.display_name,
+		a.work_email,
+		a.work_phone,
+		a.employees,
+		a.inst_name,
+		a.status,
+		a.create_user,
+		a.create_time,
+		a.update_user,
+		a.update_time,
+		a.deleted
+	</sql>
+
 	<select id="findByEmail" parameterType="string" resultType="RegisterVO">
 		select
 		*

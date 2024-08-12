@@ -39,5 +39,4 @@ public final class ConstOperateAction {
 		statusActon.put(ConstStatus.UNLOCK, UNLOCK);
 		statusActon.put(ConstStatus.DELETE, DELETE);
 	}
-
 }

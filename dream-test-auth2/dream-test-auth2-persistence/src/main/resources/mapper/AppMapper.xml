@@ -2,6 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wy.test.persistence.mapper.AppMapper">
 
+	<sql id="baseColumns">
+		a.id,
+		a.app_name,
+		a.login_url,
+		a.category,
+		a.secret,
+		a.protocol
+	</sql>
+
 	<select id="queryMyApps" parameterType="UserApps" resultType="UserApps">
 		SELECT DISTINCT
 		app.*
@@ -10,7 +19,8 @@
 		WHERE
 		app.id = p.appid
 		AND p.roleid = r.id
-		AND app.instid = #{instId}
+		AND
+		app.instid = #{instId}
 		AND p.instid = #{instId}
 		AND r.instid = #{instId}
 		AND app.visible != 0

@@ -5,13 +5,13 @@ import org.springframework.stereotype.Service;
 
 import com.taobao.api.ApiException;
 import com.wy.test.core.entity.SyncEntity;
-import com.wy.test.sync.core.synchronizer.ISynchronizerService;
+import com.wy.test.sync.core.synchronizer.SyncProcessor;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class DingtalkSynchronizerService implements ISynchronizerService {
+public class DingtalkSynchronizerService implements SyncProcessor {
 
 	SyncEntity synchronizer;
 

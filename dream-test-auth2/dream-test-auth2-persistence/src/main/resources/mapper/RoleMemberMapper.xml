@@ -2,6 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wy.test.persistence.mapper.RoleMemberMapper">
 
+	<sql id="baseColumns">
+		a.id,
+		a.role_id,
+		a.member_id,
+		a.type,
+		a.inst_id,
+		a.create_user,
+		a.create_time,
+		a.update_user,
+		a.update_time,
+		a.deleted
+	</sql>
+
 	<sql id="where_contition">
 		<if test="id != null and id != ''">
 			and id = #{id}
@@ -46,7 +59,8 @@
 		from
 		auth_user u,
 		auth_role r,
-		auth_role_member rm
+		auth_role_member
+		rm
 		where u.instid = #{instId}
 		and r.instid = #{instId}
 		and rm.instid = #{instId}
@@ -137,7 +151,8 @@
 		rm.roleid
 		from auth_role_member rm,auth_user u
 		where
-		rm.memberid = u.id
+		rm.memberid
+		= u.id
 		<if test="username != null and username != ''">
 			and u.username = #{username}
 		</if>
@@ -267,7 +282,8 @@
 
 	<delete id="deleteByRoleId" parameterType="string">
 		delete from auth_role_member rm
-		where rm.roleid = #{value} and roleId !=
+		where rm.roleid = #{value} and roleId
+		!=
 		'ROLE_ALL_USER'
 	</delete>
 

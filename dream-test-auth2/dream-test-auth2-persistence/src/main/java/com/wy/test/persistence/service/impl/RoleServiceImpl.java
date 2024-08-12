@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.convert.RoleConvert;
 import com.wy.test.core.entity.InstitutionEntity;
@@ -43,8 +44,9 @@ public class RoleServiceImpl extends AbstractServiceImpl<RoleEntity, RoleVO, Rol
 	private final InstitutionService institutionService;
 
 	@Override
-	public List<RoleEntity> queryDynamicRoles(RoleEntity groups) {
-		return this.baseMapper.queryDynamicRoles(groups);
+	public List<RoleEntity> queryDynamicRoles(RoleEntity roleEntity) {
+		return this.baseMapper.selectList(new QueryWrapper<RoleEntity>(roleEntity).lambda().eq(RoleEntity::getCategory,
+				RoleCategory.DYNAMIC.name()));
 	}
 
 	@Override

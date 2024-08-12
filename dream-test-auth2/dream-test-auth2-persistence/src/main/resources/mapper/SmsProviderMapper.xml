@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wy.test.persistence.mapper.SmsProviderMapper">
+
+	<resultMap id="smsProviderMap" type="com.wy.test.core.entity.SmsProviderEntity">
+		<result property="id" column="id" />
+		<result property="provider" column="provider" />
+		<result property="message" column="message" />
+		<result property="appKey" column="app_key" />
+		<result property="appSecret" column="app_secret" />
+		<result property="templateId" column="template_id" />
+		<result property="signName" column="sign_name" />
+		<result property="smsSdkAppId" column="sms_sdk_app_id" />
+		<result property="instId" column="inst_id" />
+		<result property="remark" column="remark" />
+		<result property="status" column="status" />
+		<result property="createUser" column="create_user" />
+		<result property="createTime" column="create_time" />
+		<result property="updateUser" column="update_user" />
+		<result property="updateTime" column="update_time" />
+		<result property="deleted" column="deleted" />
+	</resultMap>
+
+	<sql id="baseColumns">
+		a.id,
+		a.provider,
+		a.message,
+		a.app_key,
+		a.app_secret,
+		a.template_id,
+		a.sign_name,
+		a.sms_sdk_app_id,
+		a.inst_id,
+		a.remark,
+		a.status,
+		a.create_user,
+		a.create_time,
+		a.update_user,
+		a.update_time,
+		a.deleted
+	</sql>
+
+	<select id="listPage" resultType="com.dream.auth.vo.SmsProviderVO">
+		SELECT
+		<include refid="baseColumns" />
+		FROM auth_sms_provider a
+		<where>
+			a.deleted = 0
+			<if test=" query.id != null ">
+				AND a.id = #{query.id}
+			</if>
+			<if test=" query.provider != null and query.provider != '' ">
+				AND a.provider = #{query.provider}
+			</if>
+			<if test=" query.message != null and query.message != '' ">
+				AND a.message = #{query.message}
+			</if>
+			<if test=" query.appKey != null and query.appKey != '' ">
+				AND a.app_key = #{query.appKey}
+			</if>
+			<if test=" query.appSecret != null and query.appSecret != '' ">
+				AND a.app_secret = #{query.appSecret}
+			</if>
+			<if test=" query.templateId != null and query.templateId != '' ">
+				AND a.template_id = #{query.templateId}
+			</if>
+			<if test=" query.signName != null and query.signName != '' ">
+				AND a.sign_name = #{query.signName}
+			</if>
+			<if test=" query.smsSdkAppId != null and query.smsSdkAppId != '' ">
+				AND a.sms_sdk_app_id = #{query.smsSdkAppId}
+			</if>
+			<if test=" query.instId != null ">
+				AND a.inst_id = #{query.instId}
+			</if>
+			<if test=" query.remark != null and query.remark != '' ">
+				AND a.remark = #{query.remark}
+			</if>
+			<if test=" query.status != null ">
+				AND a.status = #{query.status}
+			</if>
+		</where>
+		<choose>
+			<when test=" query.order != null and query.order != '' ">
+				ORDER BY a.${query.order}
+				<choose>
+					<when test="query.asc != null and query.asc.toString() == 'true'">
+						ASC
+					</when>
+					<otherwise>DESC</otherwise>
+				</choose>
+			</when>
+			<otherwise>ORDER BY a.id DESC</otherwise>
+		</choose>
+	</select>
+
+</mapper>

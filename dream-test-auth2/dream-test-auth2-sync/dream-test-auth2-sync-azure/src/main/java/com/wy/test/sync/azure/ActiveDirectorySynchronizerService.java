@@ -5,13 +5,13 @@ import org.springframework.stereotype.Service;
 
 import com.wy.test.core.entity.SyncEntity;
 import com.wy.test.core.persistence.ldap.ActiveDirectoryHelpers;
-import com.wy.test.sync.core.synchronizer.ISynchronizerService;
+import com.wy.test.sync.core.synchronizer.SyncProcessor;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class ActiveDirectorySynchronizerService implements ISynchronizerService {
+public class ActiveDirectorySynchronizerService implements SyncProcessor {
 
 	SyncEntity synchronizer;
 

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.entity.UserEntity;
-import com.wy.test.sync.core.synchronizer.AbstractSynchronizerService;
-import com.wy.test.sync.core.synchronizer.ISynchronizerService;
+import com.wy.test.sync.core.synchronizer.AbstractSyncProcessor;
+import com.wy.test.sync.core.synchronizer.SyncProcessor;
 
 import dream.flying.flower.db.JdbcHelper;
 import dream.flying.flower.db.TableMetaData;
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class JdbcUsersService extends AbstractSynchronizerService implements ISynchronizerService {
+public class JdbcUsersService extends AbstractSyncProcessor implements SyncProcessor {
 
 	static ArrayList<ColumnFieldMapper> mapperList = new ArrayList<ColumnFieldMapper>();
 
@@ -33,13 +33,13 @@ public class JdbcUsersService extends AbstractSynchronizerService implements ISy
 		ResultSet rs = null;
 
 		try {
-			if (StrHelper.isNotBlank(synchronizer.getOrgFilters())) {
-				log.info("Sync User Filters {}", synchronizer.getOrgFilters());
-				conn = JdbcHelper.connect(synchronizer.getProviderUrl(), synchronizer.getPrincipal(),
-						synchronizer.getCredentials(), synchronizer.getDriverClass());
+			if (StrHelper.isNotBlank(syncEntity.getOrgFilters())) {
+				log.info("Sync User Filters {}", syncEntity.getOrgFilters());
+				conn = JdbcHelper.connect(syncEntity.getProviderUrl(), syncEntity.getPrincipal(),
+						syncEntity.getCredentials(), syncEntity.getDriverClass());
 
 				stmt = conn.createStatement();
-				rs = stmt.executeQuery(synchronizer.getUserFilters());
+				rs = stmt.executeQuery(syncEntity.getUserFilters());
 				long insertCount = 0;
 				long updateCount = 0;
 				long readCount = 0;
@@ -104,7 +104,7 @@ public class JdbcUsersService extends AbstractSynchronizerService implements ISy
 		} else {
 			user.setStatus(ConstStatus.ACTIVE);
 		}
-		user.setInstId(this.synchronizer.getInstId());
+		user.setInstId(this.syncEntity.getInstId());
 
 		// password
 		if (meta.getColumnDetail().containsKey("password")) {

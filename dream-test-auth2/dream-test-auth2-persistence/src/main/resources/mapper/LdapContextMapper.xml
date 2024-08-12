@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wy.test.persistence.mapper.LdapContextMapper">
+
+	<resultMap id="ldapContextMap" type="com.wy.test.core.entity.LdapContextEntity">
+		<result property="id" column="id" />
+		<result property="product" column="product" />
+		<result property="sslSwitch" column="ssl_switch" />
+		<result property="providerUrl" column="provider_url" />
+		<result property="principal" column="principal" />
+		<result property="credentials" column="credentials" />
+		<result property="basedn" column="basedn" />
+		<result property="filters" column="filters" />
+		<result property="trustStore" column="trust_store" />
+		<result property="trustStorePassword" column="trust_store_password" />
+		<result property="msadDomain" column="msad_domain" />
+		<result property="accountMapping" column="account_mapping" />
+		<result property="instId" column="inst_id" />
+		<result property="remark" column="remark" />
+		<result property="status" column="status" />
+		<result property="createUser" column="create_user" />
+		<result property="createTime" column="create_time" />
+		<result property="updateUser" column="update_user" />
+		<result property="updateTime" column="update_time" />
+		<result property="deleted" column="deleted" />
+	</resultMap>
+
+	<sql id="baseColumns">
+		a.id,
+		a.product,
+		a.ssl_switch,
+		a.provider_url,
+		a.principal,
+		a.credentials,
+		a.basedn,
+		a.filters,
+		a.trust_store,
+		a.trust_store_password,
+		a.msad_domain,
+		a.account_mapping,
+		a.inst_id,
+		a.remark,
+		a.status,
+		a.create_user,
+		a.create_time,
+		a.update_user,
+		a.update_time,
+		a.deleted
+	</sql>
+
+</mapper>

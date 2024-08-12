@@ -19,8 +19,8 @@ import com.wy.test.core.entity.OrgEntity;
 import com.wy.test.core.entity.SyncRelatedEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.persistence.ldap.LdapHelpers;
-import com.wy.test.sync.core.synchronizer.AbstractSynchronizerService;
-import com.wy.test.sync.core.synchronizer.ISynchronizerService;
+import com.wy.test.sync.core.synchronizer.AbstractSyncProcessor;
+import com.wy.test.sync.core.synchronizer.SyncProcessor;
 
 import dream.flying.flower.digest.DigestHelper;
 import dream.flying.flower.generator.GeneratorStrategyContext;
@@ -28,20 +28,19 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class LdapUsersService extends AbstractSynchronizerService implements ISynchronizerService {
+public class LdapUsersService extends AbstractSyncProcessor implements SyncProcessor {
 
 	LdapHelpers ldapUtils;
 
 	@Override
 	public void sync() {
 		log.info("Sync Ldap Users ...");
-		loadOrgsByInstId(this.synchronizer.getInstId(), ConstCommon.ROOT_ORG_ID);
+		loadOrgsByInstId(this.syncEntity.getInstId(), ConstCommon.ROOT_ORG_ID);
 		try {
 			SearchControls constraints = new SearchControls();
 			constraints.setSearchScope(ldapUtils.getSearchScope());
-			String filter =
-					StringUtils.isNotBlank(this.getSynchronizer().getUserFilters()) ? getSynchronizer().getUserFilters()
-							: "(&(objectClass=inetOrgPerson))";
+			String filter = StringUtils.isNotBlank(this.syncEntity.getUserFilters()) ? syncEntity.getUserFilters()
+					: "(&(objectClass=inetOrgPerson))";
 			log.debug(" User filter {} ", filter);
 			NamingEnumeration<SearchResult> results =
 					ldapUtils.getConnection().search(ldapUtils.getBaseDN(), filter, constraints);
@@ -65,12 +64,11 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 					UserEntity userInfo = buildUserInfo(attributeMap, sr.getName(), sr.getNameInNamespace());
 					userInfo.setPassword(userInfo.getUsername() + ConstUser.DEFAULT_PASSWORD_SUFFIX);
 					userInfoService.saveOrUpdate(userInfo);
-					SyncRelatedEntity synchroRelated =
-							new SyncRelatedEntity(userInfo.getId(), userInfo.getUsername(), userInfo.getDisplayName(),
-									ConstUser.CLASS_TYPE, synchronizer.getId(), synchronizer.getName(), originId,
-									userInfo.getDisplayName(), "", "", synchronizer.getInstId());
+					SyncRelatedEntity synchroRelated = new SyncRelatedEntity(userInfo.getId(), userInfo.getUsername(),
+							userInfo.getDisplayName(), ConstUser.CLASS_TYPE, syncEntity.getId(), syncEntity.getName(),
+							originId, userInfo.getDisplayName(), "", "", syncEntity.getInstId());
 
-					synchroRelatedService.updateSynchroRelated(this.synchronizer, synchroRelated, ConstUser.CLASS_TYPE);
+					synchroRelatedService.updateSynchroRelated(this.syncEntity, synchroRelated, ConstUser.CLASS_TYPE);
 					log.info("userInfo " + userInfo);
 				}
 			}
@@ -79,7 +77,6 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public void postSync(UserEntity userInfo) {
@@ -169,16 +166,16 @@ public class LdapUsersService extends AbstractSynchronizerService implements ISy
 			userInfo.setUserType("EMPLOYEE");
 			userInfo.setTimeZone("Asia/Shanghai");
 			userInfo.setStatus(1);
-			userInfo.setInstId(this.synchronizer.getInstId());
+			userInfo.setInstId(this.syncEntity.getInstId());
 
 			HistorySyncEntity historySynchronizer = new HistorySyncEntity();
 			historySynchronizer.setId(generatorStrategyContext.generate());
-			historySynchronizer.setSyncId(this.synchronizer.getId());
-			historySynchronizer.setSyncName(this.synchronizer.getName());
+			historySynchronizer.setSyncId(this.syncEntity.getId());
+			historySynchronizer.setSyncName(this.syncEntity.getName());
 			historySynchronizer.setObjectId(userInfo.getId());
 			historySynchronizer.setObjectName(userInfo.getUsername());
 			historySynchronizer.setObjectType(OrgEntity.class.getSimpleName());
-			historySynchronizer.setInstId(synchronizer.getInstId());
+			historySynchronizer.setInstId(syncEntity.getInstId());
 			historySynchronizer.setResult("success");
 			this.historySynchronizerService.save(historySynchronizer);
 		} catch (NamingException e) {

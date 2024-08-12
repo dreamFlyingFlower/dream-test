@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wy.test.persistence.mapper.UserWorkMapper">
+
+	<resultMap id="userWorkMap" type="com.wy.test.core.entity.UserWorkEntity">
+		<result property="id" column="id" />
+		<result property="userId" column="user_id" />
+		<result property="employeeNumber" column="employee_number" />
+		<result property="organization" column="organization" />
+		<result property="departmentId" column="department_id" />
+		<result property="department" column="department" />
+		<result property="jobTitle" column="job_title" />
+		<result property="jobLevel" column="job_level" />
+		<result property="managerId" column="manager_id" />
+		<result property="manager" column="manager" />
+		<result property="assistantId" column="assistant_id" />
+		<result property="assistant" column="assistant" />
+		<result property="entryDate" column="entry_date" />
+		<result property="startWorkDate" column="start_work_date" />
+		<result property="quitDate" column="quit_date" />
+		<result property="workEmail" column="work_email" />
+		<result property="workPhoneNumber" column="work_phone_number" />
+		<result property="workCountry" column="work_country" />
+		<result property="workRegion" column="work_region" />
+		<result property="workLocality" column="work_locality" />
+		<result property="workStreetAddress" column="work_street_address" />
+		<result property="workAddressFormatted" column="work_address_formatted" />
+		<result property="workPostalCode" column="work_postal_code" />
+		<result property="workFax" column="work_fax" />
+		<result property="workOfficeName" column="work_office_name" />
+		<result property="remark" column="remark" />
+		<result property="createUser" column="create_user" />
+		<result property="createTime" column="create_time" />
+		<result property="updateUser" column="update_user" />
+		<result property="updateTime" column="update_time" />
+		<result property="deleted" column="deleted" />
+	</resultMap>
+
+	<sql id="baseColumns">
+		a.id,
+		a.user_id,
+		a.employee_number,
+		a.organization,
+		a.department_id,
+		a.department,
+		a.job_title,
+		a.job_level,
+		a.manager_id,
+		a.manager,
+		a.assistant_id,
+		a.assistant,
+		a.entry_date,
+		a.start_work_date,
+		a.quit_date,
+		a.work_email,
+		a.work_phone_number,
+		a.work_country,
+		a.work_region,
+		a.work_locality,
+		a.work_street_address,
+		a.work_address_formatted,
+		a.work_postal_code,
+		a.work_fax,
+		a.work_office_name,
+		a.remark,
+		a.create_user,
+		a.create_time,
+		a.update_user,
+		a.update_time,
+		a.deleted
+	</sql>
+
+</mapper>
