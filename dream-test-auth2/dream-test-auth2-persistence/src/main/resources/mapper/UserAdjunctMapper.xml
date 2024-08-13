@@ -47,7 +47,7 @@
 		</if>
 	</sql>
 
-	<select id="queryPageResults" resultType="UserAdjunctVO">
+	<select id="queryPageResults" resultType="com.wy.test.core.vo.UserAdjunctVO">
 		select
 		*
 		from

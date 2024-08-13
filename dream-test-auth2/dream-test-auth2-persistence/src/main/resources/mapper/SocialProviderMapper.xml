@@ -31,7 +31,7 @@
 		</if>
 	</sql>
 
-	<select id="queryPageResults" parameterType="SocialsProvider" resultType="SocialsProvider">
+	<select id="queryPageResults" resultType="com.wy.test.core.vo.SocialProviderVO">
 		select
 		*
 		from

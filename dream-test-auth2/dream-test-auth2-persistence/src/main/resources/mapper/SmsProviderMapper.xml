@@ -41,7 +41,7 @@
 		a.deleted
 	</sql>
 
-	<select id="listPage" resultType="com.dream.auth.vo.SmsProviderVO">
+	<select id="listPage" resultType="com.wy.test.core.vo.SmsProviderVO">
 		SELECT
 		<include refid="baseColumns" />
 		FROM auth_sms_provider a

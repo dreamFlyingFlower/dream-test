@@ -16,7 +16,7 @@
 		a.deleted
 	</sql>
 
-	<select id="getAppDetails" resultType="AppCasDetailVO">
+	<select id="getAppDetails" resultType="com.wy.test.core.vo.AppCasDetailVO">
 		SELECT
 		*
 		FROM

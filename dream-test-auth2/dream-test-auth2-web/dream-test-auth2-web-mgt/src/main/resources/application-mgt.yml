@@ -108,8 +108,8 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DATABASE_USER:root}
-    password: ${DATABASE_PWD:dream}
-    url: jdbc:mysql://${DATABASE_HOST:localhost}:${DATABASE_PORT:3306}/${DATABASE_NAME:dream}?autoReconnect=true&characterEncoding=UTF-8&serverTimezone=UTC
+    password: ${DATABASE_PWD:123456}
+    url: jdbc:mysql://${DATABASE_HOST:localhost}:${DATABASE_PORT:3306}/${DATABASE_NAME:dream_auth}?autoReconnect=true&characterEncoding=UTF-8&serverTimezone=UTC
 
   redis:
     host: ${REDIS_HOST:127.0.0.1}
@@ -162,8 +162,8 @@ spring:
     suffix: .ftl
 
 
-mybatis:
-    type-aliases-package: org.dream.entity,org.dream.entity.apps,
+mybatis-plus:
+    type-aliases-package: com.wy.test.core.entity,com.wy.test.core.vo,com.wy.test.core.query
     mapper-locations: classpath*:mapper/*.xml
 
 management:
@@ -197,7 +197,7 @@ springdoc:
   group-configs: 
     - group: default
       paths-to-match: /*
-      packages-to-scan: org.dream
+      packages-to-scan: com.wy.test
 knife4j:
   enable: true
   setting:

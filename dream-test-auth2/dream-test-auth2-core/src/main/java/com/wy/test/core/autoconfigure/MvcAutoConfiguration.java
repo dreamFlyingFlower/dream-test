@@ -10,6 +10,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.endpoint.ApiVersion;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -46,6 +47,7 @@ import com.wy.test.core.web.WebXssRequestFilter;
 
 import lombok.extern.slf4j.Slf4j;
 
+@EnableConfigurationProperties(DreamAuthServerProperties.class)
 @AutoConfiguration
 @Slf4j
 public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer {

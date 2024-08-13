@@ -2,6 +2,7 @@ package com.wy.test.authentication.provider.autoconfigure;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -67,16 +68,19 @@ public class AuthnProviderAutoConfiguration implements InitializingBean {
 	}
 
 	@Bean
+	@ConditionalOnMissingBean
 	PasswordPolicyValidator passwordPolicyValidator(JdbcTemplate jdbcTemplate, MessageSource messageSource) {
 		return new PasswordPolicyValidator(jdbcTemplate, messageSource);
 	}
 
 	@Bean
+	@ConditionalOnMissingBean
 	LoginRepository loginRepository(JdbcTemplate jdbcTemplate) {
 		return new LoginRepository(jdbcTemplate);
 	}
 
 	@Bean
+	@ConditionalOnMissingBean
 	LoginHistoryRepository loginHistoryRepository(JdbcTemplate jdbcTemplate) {
 		return new LoginHistoryRepository(jdbcTemplate);
 	}

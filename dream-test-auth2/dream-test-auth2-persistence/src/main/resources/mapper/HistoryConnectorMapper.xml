@@ -55,7 +55,7 @@
 		</if>
 	</sql>
 
-	<select id="queryPageResults" resultType="HistoryConnectorVO">
+	<select id="queryPageResults" resultType="com.wy.test.core.vo.HistoryConnectorVO">
 		select
 		*
 		from auth_history_connector

@@ -20,7 +20,7 @@
 		a.deleted
 	</sql>
 
-	<select id="queryByUser" parameterType="UserInfo" resultType="SocialsAssociate">
+	<select id="queryByUser" resultType="com.wy.test.core.vo.SocialAssociateVO">
 		select
 		p.provider,
 		p.providerName,

@@ -47,7 +47,7 @@
 		</if>
 	</sql>
 
-	<select id="queryPageResults" resultType="HistorySysLogVO">
+	<select id="queryPageResults" resultType="com.wy.test.core.vo.HistorySysLogVO">
 		select *
 		from auth_history_sys_log
 		where instid = #{instId}

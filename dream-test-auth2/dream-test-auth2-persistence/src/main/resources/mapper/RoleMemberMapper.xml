@@ -24,7 +24,7 @@
 		</if>
 	</sql>
 
-	<select id="memberInRole" parameterType="RoleMember" resultType="RoleMember">
+	<select id="memberInRole" resultType="com.wy.test.core.vo.RoleMemberVO">
 		select distinct
 		rm.id as id,
 		r.id as roleid,
@@ -82,7 +82,7 @@
 		and rm.memberid = u.id
 	</select>
 
-	<select id="memberNotInRole" parameterType="RoleMember" resultType="RoleMember">
+	<select id="memberNotInRole" resultType="com.wy.test.core.vo.RoleMemberVO">
 		select distinct
 		u.id,
 		u.username,
@@ -140,7 +140,8 @@
 		</if>
 	</select>
 
-	<select id="rolesNoMember" parameterType="RoleMemberQuery" resultType="Roles">
+	<select id="rolesNoMember" parameterType="com.wy.test.core.query.RoleMemberQuery"
+		resultType="com.wy.test.core.vo.RoleVO">
 		select distinct
 		r.*
 		from
@@ -166,7 +167,7 @@
 	</select>
 
 	<!-- ROLE_MEMBER ROLE Member -->
-	<select id="roleMemberInRole" parameterType="RoleMember" resultType="Roles">
+	<select id="roleMemberInRole" resultType="com.wy.test.core.vo.RoleVO">
 		select distinct
 		ig.*
 		from
@@ -188,7 +189,7 @@
 		</if>
 	</select>
 
-	<update id="addDynamicRoleMember" parameterType="Roles">
+	<update id="addDynamicRoleMember" parameterType="com.wy.test.core.vo.RoleVO">
 		insert into auth_role_member(
 		id,
 		roleid,
@@ -218,7 +219,7 @@
 		</if>
 	</update>
 
-	<delete id="deleteDynamicRoleMember" parameterType="Roles">
+	<delete id="deleteDynamicRoleMember" parameterType="com.wy.test.core.vo.RoleVO">
 		delete from auth_role_member rm
 		where type = 'user-dynamic'
 		and rm.roleid=#{id}
@@ -236,7 +237,7 @@
 		)
 	</delete>
 
-	<select id="queryMemberByRoleId" parameterType="string" resultType="UserInfo">
+	<select id="queryMemberByRoleId" parameterType="string" resultType="com.wy.test.core.vo.UserVO">
 		select distinct
 		r.roleId,
 		r.roleName,

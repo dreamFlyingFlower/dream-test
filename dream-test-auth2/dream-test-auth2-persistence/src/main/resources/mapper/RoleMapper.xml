@@ -22,7 +22,7 @@
 		a.deleted
 	</sql>
 
-	<select id="queryRolesByUserId" parameterType="string" resultType="Roles">
+	<select id="queryRolesByUserId" parameterType="string" resultType="com.wy.test.core.vo.RoleVO">
 		select distinct
 		r.*
 		from

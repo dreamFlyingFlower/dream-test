@@ -295,7 +295,7 @@
 		id = #{id}
 	</update>
 
-	<select id="findDeptsByUserId" resultType="OrgVO">
+	<select id="findDeptsByUserId" resultType="com.wy.test.core.vo.OrgVO">
 		select o.* , 1 isPrimary from
 		auth_org o,auth_user u
 		where o.instid =
@@ -315,7 +315,7 @@
 		ua.userid=#{value}
 	</select>
 
-	<select id="findAdjointsByUserId" resultType="UserAdjunctVO">
+	<select id="findAdjointsByUserId" resultType="com.wy.test.core.vo.UserAdjunctVO">
 		select
 		*
 		from auth_user_adjunct

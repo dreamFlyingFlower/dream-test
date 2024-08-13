@@ -62,7 +62,7 @@
 		order by sortindex,id
 	</select>
 
-	<select id="queryPageResults" resultType="OrgVO">
+	<select id="queryPageResults" resultType="com.wy.test.core.vo.OrgVO">
 		select
 		*
 		from auth_org

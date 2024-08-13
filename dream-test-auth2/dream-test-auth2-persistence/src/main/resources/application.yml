@@ -110,7 +110,7 @@ management:
       mail:
         enabled: false
 
-mybatis:
+mybatis-plus:
   type-aliases-package: com.wy.test.core.entity,com.wy.test.core.vo,com.wy.test.core.query
   mapper-locations:
   - classpath*:mapper/*.xml

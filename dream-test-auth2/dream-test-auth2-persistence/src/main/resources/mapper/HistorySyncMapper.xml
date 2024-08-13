@@ -40,7 +40,7 @@
 		</if>
 	</sql>
 
-	<select id="queryPageResults" resultType="HistorySyncVO">
+	<select id="queryPageResults" resultType="com.wy.test.core.vo.HistorySyncVO">
 		select
 		*
 		from auth_history_sync

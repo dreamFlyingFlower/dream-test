@@ -49,7 +49,7 @@
 		</if>
 	</sql>
 
-	<select id="queryPageResults" resultType="HistoryLoginAppVO">
+	<select id="queryPageResults" resultType="com.wy.test.core.vo.HistoryLoginAppVO">
 		select
 		id,
 		sessionid,

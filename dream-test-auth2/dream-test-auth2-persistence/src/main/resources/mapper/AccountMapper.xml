@@ -23,7 +23,7 @@
 		a.deleted
 	</sql>
 
-	<select id="queryUserNotInStrategy" resultType="UserVO">
+	<select id="queryUserNotInStrategy" resultType="com.wy.test.core.vo.UserVO">
 		SELECT
 		*
 		FROM auth_user u

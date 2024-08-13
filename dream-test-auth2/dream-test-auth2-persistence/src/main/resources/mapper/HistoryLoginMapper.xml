@@ -63,7 +63,7 @@
 		</if>
 	</sql>
 
-	<select id="queryPageResults" resultType="HistoryLoginVO">
+	<select id="queryPageResults" resultType="com.wy.test.core.vo.HistoryLoginVO">
 		select
 		id,
 		sessionid,
@@ -88,7 +88,7 @@
 		order by logintime desc
 	</select>
 
-	<select id="queryOnlineSession" resultType="HistoryLoginVO">
+	<select id="queryOnlineSession" resultType="com.wy.test.core.vo.HistoryLoginVO">
 		select
 		sessionid id,
 		sessionid,

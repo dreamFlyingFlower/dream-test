@@ -40,7 +40,7 @@
 		</if>
 	</sql>
 
-	<select id="queryPageResults" parameterType="Resources" resultType="Resources">
+	<select id="queryPageResults" resultType="com.wy.test.core.vo.ResourceVO">
 		select
 		res.*,app.appname
 		from
@@ -54,7 +54,7 @@
 		order by res.sortindex
 	</select>
 
-	<update id="logisticDelete" parameterType="Resources">
+	<update id="logisticDelete" parameterType="com.wy.test.core.vo.ResourceVO">
 		update auth_resource set
 		status = '2'
 		where instid = #{instId}

@@ -17,7 +17,7 @@
 		a.deleted
 	</sql>
 
-	<select id="findByEmail" parameterType="string" resultType="RegisterVO">
+	<select id="findByEmail" parameterType="string" resultType="com.wy.test.core.vo.RegisterVO">
 		select
 		*
 		from

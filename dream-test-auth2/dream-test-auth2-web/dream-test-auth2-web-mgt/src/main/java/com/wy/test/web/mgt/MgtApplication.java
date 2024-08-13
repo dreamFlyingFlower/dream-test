@@ -25,13 +25,13 @@ import lombok.extern.slf4j.Slf4j;
  * @git {@link https://github.com/dreamFlyingFlower}
  */
 @MapperScan("com.wy.test.persistence.mapper")
-@ComponentScan(basePackages = { "com.wy.test.authn", "com.wy.test.configuration", "com.wy.test.entity",
-		"com.wy.test.entity.apps", "com.wy.test.entity.userinfo", "com.wy.test.web.apis.identity.kafka",
-		"com.wy.test.web.apis.identity.rest", "com.wy.test.web.apis.identity.scim", "com.wy.test.persistence",
-		"com.wy.test.provision", "com.wy.test.sync", "com.wy.test.web", "com.wy.test.web.access.contorller",
-		"com.wy.test.web.api.endpoint", "com.wy.test.web.apps.contorller", "com.wy.test.web.contorller",
-		"com.wy.test.web.endpoint", "com.wy.test.web.interceptor", "com.wy.test.web.permission.contorller",
-		"com.wy.test.web.tag" })
+@ComponentScan(basePackages = { "com.wy.test.authentication.authn", "com.wy.test.configuration",
+		"com.wy.test.core.convert", "com.wy.test.web.apis.identity.kafka", "com.wy.test.web.apis.identity.rest",
+		"com.wy.test.web.apis.identity.scim", "com.wy.test.persistence", "com.wy.test.provision", "com.wy.test.sync",
+		"com.wy.test.web.mgt.listener", "com.wy.test.web.mgt.access.contorller", "com.wy.test.web.mgt.api.endpoint",
+		"com.wy.test.web.mgt.app.contorller", "com.wy.test.web.mgt.config.controller", "com.wy.test.web.mgt.contorller",
+		"com.wy.test.web.mgt.history.controller", "com.wy.test.web.mgt.endpoint", "com.wy.test.web.mgt.interceptor",
+		"com.wy.test.web.mgt.permission.contorller" })
 @SpringBootApplication
 @Slf4j
 public class MgtApplication extends SpringBootServletInitializer {
