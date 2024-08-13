@@ -5,8 +5,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>dream.flying.flower</groupId>
-		<artifactId>dream-test-auth2</artifactId>
+		<artifactId>dream-test</artifactId>
 		<version>0.0.1</version>
+		<relativePath />
 	</parent>
 	<artifactId>dream-test-auth2-persistence</artifactId>
 	<name>dream-test-auth2-persistence</name>

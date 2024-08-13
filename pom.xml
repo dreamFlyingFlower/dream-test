@@ -7,13 +7,150 @@
 		<groupId>dream.flying.flower</groupId>
 		<artifactId>dream-parent</artifactId>
 		<version>0.0.1</version>
-		<relativePath />
 	</parent>
 
 	<artifactId>dream-test</artifactId>
 	<packaging>pom</packaging>
 	<name>dream-test</name>
 	<description>the test for myself</description>
+
+	<properties>
+		<dream-test-auth2.version>0.0.1</dream-test-auth2.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-core</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-persistence</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-authentication-captcha</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-authentication-core</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-authentication-otp</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-authentication-provider</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-authentication-sms</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-authentication-social</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-protocol-authorize</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-protocol-cas</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-protocol-extend</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-protocol-form</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-protocol-jwt</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-protocol-oauth2</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-protocol-saml2</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-protocol-token</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-sync-azure</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-sync-core</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-sync-dingtalk</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-sync-feishu</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-sync-jdbc</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-sync-ldap</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-sync-weixin</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-web-api-rest</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dream.flying.flower</groupId>
+				<artifactId>dream-test-auth2-web-api-scim</artifactId>
+				<version>${dream-test-auth2.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<modules>
 		<module>dream-test2</module>

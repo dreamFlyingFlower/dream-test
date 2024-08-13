@@ -2,7 +2,6 @@ package com.wy.test.web.apis.identity.rest;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +25,15 @@ import com.wy.test.core.query.OrgQuery;
 import com.wy.test.persistence.service.OrgService;
 
 import dream.flying.flower.lang.StrHelper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping(value = { "/api/idm/Organization" })
 @Slf4j
+@AllArgsConstructor
 public class RestOrganizationController {
 
-	@Autowired
 	OrgService orgService;
 
 	@GetMapping(value = "/{id}")

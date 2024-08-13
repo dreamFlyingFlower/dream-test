@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.core.convert.OrgConvert;
@@ -18,6 +17,7 @@ import com.wy.test.persistence.provision.ProvisionTopic;
 import com.wy.test.persistence.service.OrgService;
 
 import dream.flying.flower.framework.mybatis.plus.service.impl.AbstractServiceImpl;
+import lombok.AllArgsConstructor;
 
 /**
  * 组织机构
@@ -27,10 +27,10 @@ import dream.flying.flower.framework.mybatis.plus.service.impl.AbstractServiceIm
  * @git {@link https://github.com/dreamFlyingFlower}
  */
 @Service
+@AllArgsConstructor
 public class OrgServiceImpl extends AbstractServiceImpl<OrgEntity, OrgVO, OrgQuery, OrgConvert, OrgMapper>
 		implements OrgService {
 
-	@Autowired
 	ProvisionService provisionService;
 
 	@Override
