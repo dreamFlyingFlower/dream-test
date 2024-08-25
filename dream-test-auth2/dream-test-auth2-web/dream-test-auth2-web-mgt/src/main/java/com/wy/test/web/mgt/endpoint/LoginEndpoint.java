@@ -1,34 +1,41 @@
-package com.wy.test.web.mgt.contorller;
+package com.wy.test.web.mgt.endpoint;
 
 import java.util.HashMap;
 
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.wy.test.authentication.core.authn.LoginCredential;
 import com.wy.test.authentication.core.authn.jwt.AuthJwt;
 import com.wy.test.authentication.core.authn.jwt.AuthTokenService;
 import com.wy.test.authentication.provider.authn.provider.AbstractAuthenticationProvider;
 import com.wy.test.core.entity.InstitutionEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
 
+import dream.flying.flower.framework.web.controller.BaseResponseController;
+import dream.flying.flower.result.Result;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Controller
+/**
+ * 登录
+ *
+ * @author 飞花梦影
+ * @date 2024-08-25 16:13:31
+ * @git {@link https://github.com/dreamFlyingFlower}
+ */
+@RestController
 @RequestMapping(value = "/login")
 @Slf4j
 @AllArgsConstructor
-public class LoginEntryPoint {
+public class LoginEndpoint implements BaseResponseController {
 
 	private final AuthTokenService authTokenService;
 
@@ -36,16 +43,11 @@ public class LoginEntryPoint {
 
 	private final DreamAuthLoginProperties dreamLoginProperties;
 
-	/**
-	 * init login
-	 * 
-	 * @return
-	 */
-	@GetMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping("get")
 	public ResponseEntity<?> get() {
 		log.debug("/login.");
 
-		HashMap<String, Object> model = new HashMap<String, Object>();
+		HashMap<String, Object> model = new HashMap<>();
 		model.put("isRemeberMe", dreamLoginProperties.isRememberMe());
 		InstitutionEntity inst = (InstitutionEntity) WebContext.getAttribute(WebConstants.CURRENT_INST);
 		model.put("inst", inst);
@@ -55,24 +57,23 @@ public class LoginEntryPoint {
 			model.put("captcha", inst.getCaptcha());
 		}
 		model.put("state", authTokenService.genRandomJwt());
-		return new Message<HashMap<String, Object>>(model).buildResponse();
+		return ok(model);
 	}
 
-	@PostMapping(value = { "/signin" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping("signin")
 	public ResponseEntity<?> signin(@RequestBody LoginCredential loginCredential) {
-		Message<AuthJwt> authJwtMessage = new Message<AuthJwt>(Message.FAIL);
-		if (authTokenService.validateJwtToken(loginCredential.getState())) {
-			Authentication authentication = authenticationProvider.authenticate(loginCredential);
-			if (authentication != null) {
-				AuthJwt authJwt = authTokenService.genAuthJwt(authentication);
-				authJwtMessage = new Message<AuthJwt>(authJwt);
-			} else {// fail
-				String errorMsg = WebContext.getAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE) == null ? ""
-						: WebContext.getAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE).toString();
-				authJwtMessage.setMessage(Message.FAIL, errorMsg);
-				log.debug("login fail , message {}", errorMsg);
-			}
+		if (!authTokenService.validateJwtToken(loginCredential.getState())) {
+			return ResponseEntity.ok(Result.error());
 		}
-		return authJwtMessage.buildResponse();
+		Authentication authentication = authenticationProvider.authenticate(loginCredential);
+		if (authentication != null) {
+			AuthJwt authJwt = authTokenService.genAuthJwt(authentication);
+			return ResponseEntity.ok(Result.ok(authJwt));
+		} else {
+			String errorMsg = WebContext.getAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE) == null ? ""
+					: WebContext.getAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE).toString();
+			log.debug("login fail , message {}", errorMsg);
+			return error(errorMsg);
+		}
 	}
 }

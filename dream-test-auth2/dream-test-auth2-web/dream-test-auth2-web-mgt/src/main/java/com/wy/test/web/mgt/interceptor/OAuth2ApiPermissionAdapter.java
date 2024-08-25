@@ -32,15 +32,17 @@ public class OAuth2ApiPermissionAdapter implements AsyncHandlerInterceptor {
 	protected PasswordReciprocal passwordReciprocal;
 
 	@Autowired
-	private DefaultTokenServices oauth20TokenServices;
+	protected DefaultTokenServices oauth2TokenServices;
 
 	static ConcurrentHashMap<String, String> navigationsMap = null;
 
 	/*
 	 * 请求前处理 (non-Javadoc)
 	 * 
-	 * @see org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(
-	 * javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object)
+	 * @see
+	 * org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(
+	 * javax.servlet.http.HttpServletRequest,
+	 * javax.servlet.http.HttpServletResponse, java.lang.Object)
 	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -49,7 +51,7 @@ public class OAuth2ApiPermissionAdapter implements AsyncHandlerInterceptor {
 		String accessToken = TokenHelpers.resolveAccessToken(request);
 		log.trace("access_token {} ", accessToken);
 		try {
-			OAuth2Authentication authentication = oauth20TokenServices.loadAuthentication(accessToken);
+			OAuth2Authentication authentication = oauth2TokenServices.loadAuthentication(accessToken);
 			// 判断应用的accessToken信息
 			if (authentication != null) {
 				log.trace("authentication " + authentication);

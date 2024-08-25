@@ -17,11 +17,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -31,7 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Lists;
 import com.wy.test.authentication.core.authn.annotation.CurrentUser;
@@ -55,49 +52,42 @@ import dream.flying.flower.framework.core.excel.ExcelContentHelpers;
 import dream.flying.flower.framework.core.json.JsonHelpers;
 import dream.flying.flower.helper.DateTimeHelper;
 import dream.flying.flower.lang.StrHelper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Controller
+@RestController
 @RequestMapping(value = { "/users" })
 @Slf4j
+@RequiredArgsConstructor
 public class UserController {
 
-	@Autowired
-	private UserService userInfoService;
+	private final UserService userInfoService;
 
-	@Autowired
-	FileUploadService fileUploadService;
+	private final FileUploadService fileUploadService;
 
-	@Autowired
-	HistorySysLogService systemLog;
+	private final HistorySysLogService systemLog;
 
-	@PostMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	@ResponseBody
+	@PostMapping("fetch")
 	public ResponseEntity<?> fetch(@ModelAttribute UserQuery userInfo, @CurrentUser UserEntity currentUser) {
 		log.debug("" + userInfo);
 		userInfo.setInstId(currentUser.getInstId());
 		return new Message<>(userInfoService.listPage(userInfo)).buildResponse();
 	}
 
-	@ResponseBody
-	@PostMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping("query")
 	public ResponseEntity<?> query(@ModelAttribute UserEntity userInfo, @CurrentUser UserEntity currentUser) {
 		log.debug("-query  :" + userInfo);
-		if (CollectionUtils.isNotEmpty(userInfoService.list(userInfo))) {
-			return new Message<>(Message.SUCCESS).buildResponse();
-		} else {
-			return new Message<>(Message.SUCCESS).buildResponse();
-		}
+		return new Message<>(userInfoService.list(userInfo)).buildResponse();
 	}
 
-	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping("get/{id}")
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
 		UserVO userInfo = userInfoService.getInfo(id);
 		userInfo.trans();
 		return new Message<>(userInfo).buildResponse();
 	}
 
-	@GetMapping(value = { "/getByUsername/{username}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping("getByUsername/{username}")
 	public ResponseEntity<?> getByUsername(@PathVariable("username") String username) {
 		UserEntity userInfo = userInfoService.findByUsername(username);
 		UserVO userVO = UserConvert.INSTANCE.convertt(userInfo);
@@ -105,9 +95,8 @@ public class UserController {
 		return new Message<>(userVO).buildResponse();
 	}
 
-	@ResponseBody
-	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> insert(@RequestBody UserVO userInfo, @CurrentUser UserEntity currentUser) {
+	@PostMapping("add")
+	public ResponseEntity<?> add(@RequestBody UserVO userInfo, @CurrentUser UserEntity currentUser) {
 		log.debug("-Add  :" + userInfo);
 		userInfo.setId(WebContext.genId());
 		userInfo.setInstId(currentUser.getInstId());
@@ -124,8 +113,7 @@ public class UserController {
 		}
 	}
 
-	@ResponseBody
-	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping("update")
 	public ResponseEntity<?> update(@RequestBody UserVO userInfo, @CurrentUser UserEntity currentUser) {
 		log.debug("-update  :" + userInfo);
 		log.info(userInfo.getExtraAttributeName());
@@ -150,8 +138,7 @@ public class UserController {
 		}
 	}
 
-	@ResponseBody
-	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping("delete")
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete  ids : {} ", ids);
 
@@ -164,8 +151,7 @@ public class UserController {
 		}
 	}
 
-	@ResponseBody
-	@PostMapping(value = "/randomPassword", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping("randomPassword")
 	public ResponseEntity<?> randomPassword() {
 		return new Message<Object>(Message.SUCCESS, (Object) userInfoService.randomPassword()).buildResponse();
 	}
@@ -183,8 +169,7 @@ public class UserController {
 		}
 	}
 
-	@ResponseBody
-	@PostMapping(value = "/changePassword", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping("changePassword")
 	public ResponseEntity<?> changePassword(@RequestBody ChangePassword changePassword,
 			@CurrentUser UserEntity currentUser) {
 		log.debug("UserId {}", changePassword.getUserId());
@@ -198,8 +183,7 @@ public class UserController {
 		}
 	}
 
-	@PostMapping(value = { "/updateStatus" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	@ResponseBody
+	@PostMapping("updateStatus")
 	public ResponseEntity<?> updateStatus(@ModelAttribute UserEntity userInfo, @CurrentUser UserEntity currentUser) {
 		log.debug("" + userInfo);
 		UserEntity loadUserInfo = userInfoService.getById(userInfo.getId());
@@ -215,7 +199,7 @@ public class UserController {
 		}
 	}
 
-	@PostMapping(value = "/import")
+	@PostMapping("import")
 	public ResponseEntity<?> importingUsers(@ModelAttribute("excelImportFile") ExcelImport excelImportFile,
 			@CurrentUser UserEntity currentUser) {
 		if (excelImportFile.isExcelNotEmpty()) {

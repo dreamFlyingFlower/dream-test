@@ -1,4 +1,4 @@
-package com.wy.test.web.mgt.contorller;
+package com.wy.test.web.mgt.endpoint;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +24,5 @@ public class IndexEndpoint {
 		log.debug("IndexEndpoint /.");
 		return new ModelAndView("index").addObject("appVersion",
 				WebContext.properties.getProperty("application.formatted-version"));
-
 	}
 }

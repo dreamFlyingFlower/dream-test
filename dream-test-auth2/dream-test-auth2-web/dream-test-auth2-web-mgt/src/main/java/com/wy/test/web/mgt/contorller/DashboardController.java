@@ -3,16 +3,15 @@ package com.wy.test.web.mgt.contorller;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.wy.test.authentication.core.authn.annotation.CurrentUser;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.ReportService;
 
+import dream.flying.flower.framework.web.controller.BaseResponseController;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -22,17 +21,17 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2024-08-08 11:49:37
  * @git {@link https://github.com/dreamFlyingFlower}
  */
-@Controller
+@RestController
 @Slf4j
-public class DashboardController {
+public class DashboardController implements BaseResponseController {
 
 	@Autowired
 	ReportService reportService;
 
-	@GetMapping(value = { "/dashboard" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping("dashboard")
 	public ResponseEntity<?> dashboard(@CurrentUser UserEntity currentUser) {
 		log.debug("IndexController /dashboard.");
-		HashMap<String, Object> reportParameter = new HashMap<String, Object>();
+		HashMap<String, Object> reportParameter = new HashMap<>();
 		reportParameter.put("instId", currentUser.getInstId());
 
 		reportParameter.put("dayCount", reportService.analysisDay(reportParameter));
@@ -46,7 +45,6 @@ public class DashboardController {
 
 		reportParameter.put("reportBrowser", reportService.analysisBrowser(reportParameter));
 		reportParameter.put("reportApp", reportService.analysisApp(reportParameter));
-		return new Message<HashMap<?, ?>>(reportParameter).buildResponse();
+		return ok(reportParameter);
 	}
-
 }

@@ -53,7 +53,6 @@ public class SessionListenerAdapter extends ListenerAdapter implements Job, Seri
 			jobStatus = JOBSTATUS.ERROR;
 			log.error("Exception ", e);
 		}
-
 	}
 
 	@Override

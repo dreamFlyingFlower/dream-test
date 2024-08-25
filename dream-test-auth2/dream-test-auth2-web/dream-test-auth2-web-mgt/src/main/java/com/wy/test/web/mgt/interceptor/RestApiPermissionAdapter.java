@@ -6,7 +6,6 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.User;
@@ -20,6 +19,7 @@ import com.wy.test.protocol.oauth2.provider.token.DefaultTokenServices;
 import dream.flying.flower.framework.core.helper.TokenHeader;
 import dream.flying.flower.framework.core.helper.TokenHelpers;
 import dream.flying.flower.lang.StrHelper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -31,21 +31,22 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class RestApiPermissionAdapter implements AsyncHandlerInterceptor {
 
-	@Autowired
-	DefaultTokenServices oauth20TokenServices;
-
-	@Autowired
-	ProviderManager oauth20ClientAuthenticationManager;
-
 	static ConcurrentHashMap<String, String> navigationsMap = null;
+
+	final DefaultTokenServices oauth2TokenServices;
+
+	final ProviderManager oauth2ClientAuthenticationManager;
 
 	/*
 	 * 请求前处理 (non-Javadoc)
 	 * 
-	 * @see org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(
-	 * javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object)
+	 * @see
+	 * org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(
+	 * javax.servlet.http.HttpServletRequest,
+	 * javax.servlet.http.HttpServletResponse, java.lang.Object)
 	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -61,13 +62,13 @@ public class RestApiPermissionAdapter implements AsyncHandlerInterceptor {
 						&& StrHelper.isNotBlank(headerCredential.getCredential())) {
 					UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
 							headerCredential.getUsername(), headerCredential.getCredential());
-					authenticationToken = (UsernamePasswordAuthenticationToken) oauth20ClientAuthenticationManager
+					authenticationToken = (UsernamePasswordAuthenticationToken) oauth2ClientAuthenticationManager
 							.authenticate(authRequest);
 				}
 			} else {
 				log.trace("Authentication bearer {}", headerCredential.getCredential());
 				OAuth2Authentication oauth2Authentication =
-						oauth20TokenServices.loadAuthentication(headerCredential.getCredential());
+						oauth2TokenServices.loadAuthentication(headerCredential.getCredential());
 
 				if (oauth2Authentication != null) {
 					log.trace("Authentication token {}", oauth2Authentication.getPrincipal().toString());
