@@ -9,13 +9,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.authentication.core.authn.annotation.CurrentUser;
 import com.wy.test.core.constant.ConstEntryType;
@@ -56,16 +54,14 @@ public class AccountController {
 	HistorySysLogService systemLog;
 
 	@PostMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute AccountEntity accounts, @CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> fetch(AccountEntity accounts, @CurrentUser UserEntity currentUser) {
 		log.debug("" + accounts);
 		accounts.setInstId(currentUser.getInstId());
 		return new Message<>(accountsService.list(accounts)).buildResponse();
 	}
 
-	@ResponseBody
 	@PostMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> query(@ModelAttribute AccountEntity account, @CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> query(AccountEntity account, @CurrentUser UserEntity currentUser) {
 		log.debug("-query  :" + account);
 		account.setInstId(currentUser.getInstId());
 		List<AccountVO> accountVOs = accountsService.list(account);
@@ -83,7 +79,6 @@ public class AccountController {
 		return new Message<AccountEntity>(account).buildResponse();
 	}
 
-	@ResponseBody
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> insert(@RequestBody AccountEntity account, @CurrentUser UserEntity currentUser) {
 		log.debug("-Add  :" + account);
@@ -98,7 +93,6 @@ public class AccountController {
 		}
 	}
 
-	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> update(@RequestBody AccountEntity account, @CurrentUser UserEntity currentUser) {
 		log.debug("-update  :" + account);
@@ -114,8 +108,7 @@ public class AccountController {
 	}
 
 	@PostMapping(value = { "/updateStatus" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	@ResponseBody
-	public ResponseEntity<?> updateStatus(@ModelAttribute AccountEntity accounts, @CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> updateStatus(AccountEntity accounts, @CurrentUser UserEntity currentUser) {
 		log.debug("" + accounts);
 		AccountEntity loadAccount = accountsService.getById(accounts.getId());
 		accounts.setInstId(currentUser.getInstId());
@@ -134,7 +127,6 @@ public class AccountController {
 		}
 	}
 
-	@ResponseBody
 	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete ids : {} ", ids);
@@ -149,9 +141,8 @@ public class AccountController {
 
 	}
 
-	@ResponseBody
 	@PostMapping(value = "/generate")
-	public ResponseEntity<?> generate(@ModelAttribute AccountEntity account) {
+	public ResponseEntity<?> generate(AccountEntity account) {
 		AccountStrategyEntity accountsStrategy = accountsStrategyService.getById(account.getStrategyId());
 		UserEntity userInfo = userInfoService.getById(account.getUserId());
 		return new Message<>(Message.SUCCESS, (Object) accountsService.generateAccount(userInfo, accountsStrategy))

@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -84,12 +83,12 @@ public class ScimGroupController {
 	}
 
 	@GetMapping
-	public MappingJacksonValue searchWithGet(@ModelAttribute ScimParameters requestParameters) {
+	public MappingJacksonValue searchWithGet(ScimParameters requestParameters) {
 		return searchWithPost(requestParameters);
 	}
 
 	@PostMapping(value = "/.search")
-	public MappingJacksonValue searchWithPost(@ModelAttribute ScimParameters requestParameters) {
+	public MappingJacksonValue searchWithPost(ScimParameters requestParameters) {
 		requestParameters.parse();
 		log.debug("requestParameters {} ", requestParameters);
 

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -53,8 +52,7 @@ public class SessionController {
 	 */
 	@GetMapping(value = { "/fetch" })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute("historyLogin") HistoryLoginEntity historyLogin,
-			@CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> fetch(HistoryLoginEntity historyLogin, @CurrentUser UserEntity currentUser) {
 		log.debug("history/session/fetch {}", historyLogin);
 		historyLogin.setInstId(currentUser.getInstId());
 		return new Message<>(historyLoginService.queryOnlineSession(historyLogin)).buildResponse();

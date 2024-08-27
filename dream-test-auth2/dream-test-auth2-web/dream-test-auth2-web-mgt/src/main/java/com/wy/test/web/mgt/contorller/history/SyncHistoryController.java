@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,6 +20,7 @@ import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.HistorySyncService;
 
 import dream.flying.flower.ConstDate;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -40,7 +40,7 @@ public class SyncHistoryController {
 	 */
 	@PostMapping(value = { "/synchronizerHistory/fetch" })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute("historySynchronizer") HistorySyncEntity historySynchronizer,
+	public ResponseEntity<?> fetch(@RequestBody HistorySyncEntity historySynchronizer,
 			@CurrentUser UserEntity currentUser) {
 		log.debug("historys/synchronizerHistory/fetch/ {}", historySynchronizer);
 		historySynchronizer.setInstId(currentUser.getInstId());

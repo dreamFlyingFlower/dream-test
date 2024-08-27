@@ -8,7 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,8 +35,7 @@ public class SocialProviderController {
 
 	@GetMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute SocialProviderQuery socialsProvider,
-			@CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> fetch(SocialProviderQuery socialsProvider, @CurrentUser UserEntity currentUser) {
 		log.debug("" + socialsProvider);
 		socialsProvider.setInstId(currentUser.getInstId());
 		return new Message<>(socialsProviderService.listPage(socialsProvider)).buildResponse();
@@ -45,14 +43,13 @@ public class SocialProviderController {
 
 	@ResponseBody
 	@GetMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> query(@ModelAttribute SocialProviderEntity socialsProvider,
-			@CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> query(SocialProviderEntity socialsProvider, @CurrentUser UserEntity currentUser) {
 		log.debug("-query  :" + socialsProvider);
 		socialsProvider.setInstId(currentUser.getInstId());
 		if (CollectionUtils.isNotEmpty(socialsProviderService.list(socialsProvider))) {
-			return new Message<SocialProviderEntity>(Message.SUCCESS).buildResponse();
+			return new Message<>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<SocialProviderEntity>(Message.SUCCESS).buildResponse();
+			return new Message<>(Message.SUCCESS).buildResponse();
 		}
 	}
 
@@ -60,7 +57,7 @@ public class SocialProviderController {
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
 		SocialProviderEntity socialsProvider = socialsProviderService.getById(id);
 		socialsProvider.setClientSecret(PasswordReciprocal.getInstance().decoder(socialsProvider.getClientSecret()));
-		return new Message<SocialProviderEntity>(socialsProvider).buildResponse();
+		return new Message<>(socialsProvider).buildResponse();
 	}
 
 	@ResponseBody
@@ -71,9 +68,9 @@ public class SocialProviderController {
 		socialsProvider.setInstId(currentUser.getInstId());
 		socialsProvider.setClientSecret(PasswordReciprocal.getInstance().encode(socialsProvider.getClientSecret()));
 		if (socialsProviderService.save(socialsProvider)) {
-			return new Message<SocialProviderEntity>(Message.SUCCESS).buildResponse();
+			return new Message<>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<SocialProviderEntity>(Message.FAIL).buildResponse();
+			return new Message<>(Message.FAIL).buildResponse();
 		}
 	}
 
@@ -85,9 +82,9 @@ public class SocialProviderController {
 		socialsProvider.setInstId(currentUser.getInstId());
 		socialsProvider.setClientSecret(PasswordReciprocal.getInstance().encode(socialsProvider.getClientSecret()));
 		if (socialsProviderService.updateById(socialsProvider)) {
-			return new Message<SocialProviderEntity>(Message.SUCCESS).buildResponse();
+			return new Message<>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<SocialProviderEntity>(Message.FAIL).buildResponse();
+			return new Message<>(Message.FAIL).buildResponse();
 		}
 	}
 
@@ -96,9 +93,9 @@ public class SocialProviderController {
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete  ids : {} ", ids);
 		if (socialsProviderService.removeByIds(Arrays.asList(ids.split(",")))) {
-			return new Message<SocialProviderEntity>(Message.SUCCESS).buildResponse();
+			return new Message<>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<SocialProviderEntity>(Message.FAIL).buildResponse();
+			return new Message<>(Message.FAIL).buildResponse();
 		}
 	}
 }

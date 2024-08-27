@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,7 +56,7 @@ public class OrgController {
 
 	@PostMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute OrgQuery org, @CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> fetch(OrgQuery org, @CurrentUser UserEntity currentUser) {
 		log.debug("fetch {}", org);
 		org.setInstId(currentUser.getInstId());
 		return new Message<>(organizationsService.listPage(org)).buildResponse();
@@ -65,7 +64,7 @@ public class OrgController {
 
 	@ResponseBody
 	@PostMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> query(@ModelAttribute OrgEntity org, @CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> query(OrgEntity org, @CurrentUser UserEntity currentUser) {
 		log.debug("-query  {}", org);
 		org.setInstId(currentUser.getInstId());
 		List<OrgVO> orgList = organizationsService.list(org);
@@ -125,7 +124,7 @@ public class OrgController {
 
 	@ResponseBody
 	@PostMapping(value = { "/tree" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> tree(@ModelAttribute OrgEntity organization, @CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> tree(OrgEntity organization, @CurrentUser UserEntity currentUser) {
 		log.debug("-query  {}", organization);
 		organization.setInstId(currentUser.getInstId());
 		List<OrgVO> orgList = organizationsService.list(organization);
@@ -163,7 +162,7 @@ public class OrgController {
 	}
 
 	@PostMapping(value = "/import")
-	public ResponseEntity<?> importingOrganizations(@ModelAttribute("excelImportFile") ExcelImport excelImportFile,
+	public ResponseEntity<?> importingOrganizations(@RequestParam("excelImportFile") ExcelImport excelImportFile,
 			@CurrentUser UserEntity currentUser) {
 		if (excelImportFile.isExcelNotEmpty()) {
 			try {

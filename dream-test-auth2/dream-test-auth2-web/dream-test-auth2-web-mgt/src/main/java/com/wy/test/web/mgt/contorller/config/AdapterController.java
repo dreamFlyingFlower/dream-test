@@ -8,7 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,14 +34,14 @@ public class AdapterController {
 
 	@PostMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute AppAdapterQuery appsAdapter) {
+	public ResponseEntity<?> fetch(@RequestBody AppAdapterQuery appsAdapter) {
 		log.debug("" + appsAdapter);
 		return new Message<>(appsAdaptersService.listPage(appsAdapter)).buildResponse();
 	}
 
 	@ResponseBody
 	@PostMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> query(@ModelAttribute AppAdapterQuery appsAdapter, @CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> query(@RequestBody AppAdapterQuery appsAdapter, @CurrentUser UserEntity currentUser) {
 		log.debug("-query  :" + appsAdapter);
 		if (CollectionUtils.isNotEmpty(appsAdaptersService.list(appsAdapter))) {
 			return new Message<AppAdapterEntity>(Message.SUCCESS).buildResponse();

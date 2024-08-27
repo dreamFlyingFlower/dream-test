@@ -22,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,14 +67,14 @@ public class UserController {
 	private final HistorySysLogService systemLog;
 
 	@PostMapping("fetch")
-	public ResponseEntity<?> fetch(@ModelAttribute UserQuery userInfo, @CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> fetch(@RequestBody UserQuery userInfo, @CurrentUser UserEntity currentUser) {
 		log.debug("" + userInfo);
 		userInfo.setInstId(currentUser.getInstId());
 		return new Message<>(userInfoService.listPage(userInfo)).buildResponse();
 	}
 
 	@PostMapping("query")
-	public ResponseEntity<?> query(@ModelAttribute UserEntity userInfo, @CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> query(@RequestBody UserEntity userInfo, @CurrentUser UserEntity currentUser) {
 		log.debug("-query  :" + userInfo);
 		return new Message<>(userInfoService.list(userInfo)).buildResponse();
 	}
@@ -184,7 +183,7 @@ public class UserController {
 	}
 
 	@PostMapping("updateStatus")
-	public ResponseEntity<?> updateStatus(@ModelAttribute UserEntity userInfo, @CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> updateStatus(@RequestBody UserEntity userInfo, @CurrentUser UserEntity currentUser) {
 		log.debug("" + userInfo);
 		UserEntity loadUserInfo = userInfoService.getById(userInfo.getId());
 		userInfo.setInstId(currentUser.getInstId());
@@ -200,7 +199,7 @@ public class UserController {
 	}
 
 	@PostMapping("import")
-	public ResponseEntity<?> importingUsers(@ModelAttribute("excelImportFile") ExcelImport excelImportFile,
+	public ResponseEntity<?> importingUsers(@RequestParam ExcelImport excelImportFile,
 			@CurrentUser UserEntity currentUser) {
 		if (excelImportFile.isExcelNotEmpty()) {
 			try {

@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,8 +40,7 @@ public class RolePermissionController {
 
 	@GetMapping(value = { "/appsInRole" })
 	@ResponseBody
-	public ResponseEntity<?> appsInRole(@ModelAttribute RolePermissionQuery rolePermission,
-			@CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> appsInRole(RolePermissionQuery rolePermission, @CurrentUser UserEntity currentUser) {
 		rolePermission.setInstId(currentUser.getInstId());
 		Page<RolePermissionVO> rolePermissions = rolePermissionssService.appsInRole(rolePermission);
 		if (rolePermissions != null && rolePermissions.getRecords() != null) {
@@ -55,7 +53,7 @@ public class RolePermissionController {
 
 	@GetMapping(value = { "/appsNotInRole" })
 	@ResponseBody
-	public ResponseEntity<?> appsNotInRole(@ModelAttribute RolePermissionQuery rolePermission,
+	public ResponseEntity<?> appsNotInRole(@RequestBody RolePermissionQuery rolePermission,
 			@CurrentUser UserEntity currentUser) {
 		rolePermission.setInstId(currentUser.getInstId());
 		Page<RolePermissionVO> rolePermissions = rolePermissionssService.appsNotInRole(rolePermission);

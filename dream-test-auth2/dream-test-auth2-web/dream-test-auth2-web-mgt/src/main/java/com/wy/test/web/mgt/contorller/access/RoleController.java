@@ -8,7 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,7 +43,7 @@ public class RoleController {
 
 	@GetMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute RoleEntity role, @CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> fetch(RoleEntity role, @CurrentUser UserEntity currentUser) {
 		log.debug("" + role);
 		role.setInstId(currentUser.getInstId());
 		return new Message<>(rolesService.list(new LambdaQueryWrapper<>(role))).buildResponse();
@@ -52,13 +51,13 @@ public class RoleController {
 
 	@ResponseBody
 	@GetMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> query(@ModelAttribute RoleEntity role, @CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> query(RoleEntity role, @CurrentUser UserEntity currentUser) {
 		log.debug("-query  :" + role);
 		role.setInstId(currentUser.getInstId());
 		if (CollectionUtils.isNotEmpty(rolesService.list(role))) {
-			return new Message<RoleEntity>(Message.SUCCESS).buildResponse();
+			return new Message<>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<RoleEntity>(Message.FAIL).buildResponse();
+			return new Message<>(Message.FAIL).buildResponse();
 		}
 
 	}

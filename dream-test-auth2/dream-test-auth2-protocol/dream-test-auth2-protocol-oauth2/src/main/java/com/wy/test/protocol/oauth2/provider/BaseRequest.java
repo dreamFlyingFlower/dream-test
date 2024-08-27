@@ -115,7 +115,6 @@ abstract class BaseRequest implements Serializable {
 			 * easy to fix. It happens when an AuthorizationRequest gets bound accidentally
 			 * from request parameters using
 			 * 
-			 * @ModelAttribute.
 			 */
 			if (value.contains(" ") || value.contains(",")) {
 				scope = OAuth2Utils.parseParameterList(value);

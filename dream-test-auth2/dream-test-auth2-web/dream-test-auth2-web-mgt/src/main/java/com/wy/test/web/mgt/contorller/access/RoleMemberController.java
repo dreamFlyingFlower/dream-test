@@ -3,16 +3,14 @@ package com.wy.test.web.mgt.contorller.access;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.wy.test.authentication.core.authn.annotation.CurrentUser;
 import com.wy.test.core.entity.Message;
@@ -28,8 +26,8 @@ import com.wy.test.persistence.service.UserService;
 import dream.flying.flower.lang.StrHelper;
 import lombok.extern.slf4j.Slf4j;
 
-@Controller
-@RequestMapping(value = { "/access/rolemembers" })
+@RestController
+@RequestMapping("access/rolemembers")
 @Slf4j
 public class RoleMemberController {
 
@@ -42,54 +40,39 @@ public class RoleMemberController {
 	@Autowired
 	UserService userInfoService;
 
-	@Autowired
+	// @Autowired
 	// HistorySystemLogsService systemLog;
 
-	@GetMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	@ResponseBody
+	@GetMapping("fetch")
 	public ResponseEntity<?> fetch(@ModelAttribute RoleMemberEntity roleMember, @CurrentUser UserEntity currentUser) {
 		log.debug("fetch " + roleMember);
 		roleMember.setInstId(currentUser.getInstId());
 		return new Message<>(roleMemberService.list(roleMember)).buildResponse();
 	}
 
-	@GetMapping(value = { "/memberInRole" })
-	@ResponseBody
-	public ResponseEntity<?> memberInRole(@ModelAttribute RoleMemberQuery roleMember,
-			@CurrentUser UserEntity currentUser) {
+	@GetMapping("memberInRole")
+	public ResponseEntity<?> memberInRole(RoleMemberQuery roleMember, @CurrentUser UserEntity currentUser) {
 		log.debug("roleMember : " + roleMember);
 		roleMember.setInstId(currentUser.getInstId());
 		return new Message<>(roleMemberService.memberInRole(roleMember)).buildResponse();
 	}
 
-	@GetMapping(value = { "/memberNotInRole" })
-	@ResponseBody
-	public ResponseEntity<?> memberNotInRole(@ModelAttribute RoleMemberQuery roleMember,
-			@CurrentUser UserEntity currentUser) {
+	@GetMapping("memberNotInRole")
+	public ResponseEntity<?> memberNotInRole(RoleMemberQuery roleMember, @CurrentUser UserEntity currentUser) {
 		roleMember.setInstId(currentUser.getInstId());
 		return new Message<>(roleMemberService.memberNotInRole(roleMember)).buildResponse();
 	}
 
-	@GetMapping(value = { "/rolesNoMember" })
-	@ResponseBody
-	public ResponseEntity<?> rolesNoMember(@ModelAttribute RoleMemberQuery roleMember,
-			@CurrentUser UserEntity currentUser) {
+	@GetMapping("rolesNoMember")
+	public ResponseEntity<?> rolesNoMember(RoleMemberQuery roleMember, @CurrentUser UserEntity currentUser) {
 		roleMember.setInstId(currentUser.getInstId());
 		return new Message<>(roleMemberService.rolesNoMember(roleMember)).buildResponse();
 	}
 
-	/**
-	 * Members add to the Role
-	 * 
-	 * @param roleMember
-	 * @param currentUser
-	 * @return
-	 */
-	@PostMapping(value = { "/add" })
-	@ResponseBody
+	@PostMapping("add")
 	public ResponseEntity<?> addRoleMember(@RequestBody RoleMemberVO roleMember, @CurrentUser UserEntity currentUser) {
 		if (roleMember == null || roleMember.getRoleId() == null) {
-			return new Message<RoleMemberEntity>(Message.FAIL).buildResponse();
+			return new Message<>(Message.FAIL).buildResponse();
 		}
 		String roleId = roleMember.getRoleId();
 
@@ -110,25 +93,17 @@ public class RoleMemberController {
 				result = null == roleMemberService.add(newRoleMember);
 			}
 			if (result) {
-				return new Message<RoleMemberEntity>(Message.SUCCESS).buildResponse();
+				return new Message<>(Message.SUCCESS).buildResponse();
 			}
 		}
-		return new Message<RoleMemberEntity>(Message.FAIL).buildResponse();
+		return new Message<>(Message.FAIL).buildResponse();
 	}
 
-	/**
-	 * Member add to Roles
-	 * 
-	 * @param roleMember
-	 * @param currentUser
-	 * @return
-	 */
-	@PostMapping(value = { "/addMember2Roles" })
-	@ResponseBody
+	@PostMapping("addMember2Roles")
 	public ResponseEntity<?> addMember2Roles(@RequestBody RoleMemberVO roleMember,
 			@CurrentUser UserEntity currentUser) {
 		if (roleMember == null || StrHelper.isBlank(roleMember.getUsername())) {
-			return new Message<RoleMemberEntity>(Message.FAIL).buildResponse();
+			return new Message<>(Message.FAIL).buildResponse();
 		}
 		UserEntity userInfo = userInfoService.findByUsername(roleMember.getUsername());
 
@@ -146,20 +121,19 @@ public class RoleMemberController {
 				result = null == roleMemberService.add(newRoleMember);
 			}
 			if (result) {
-				return new Message<RoleMemberEntity>(Message.SUCCESS).buildResponse();
+				return new Message<>(Message.SUCCESS).buildResponse();
 			}
 		}
-		return new Message<RoleMemberEntity>(Message.FAIL).buildResponse();
+		return new Message<>(Message.FAIL).buildResponse();
 	}
 
-	@ResponseBody
-	@PostMapping(value = { "/delete" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping("delete")
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete ids : {}", ids);
 		if (roleMemberService.removeByIds(Arrays.asList(ids.split(",")))) {
-			return new Message<RoleMemberEntity>(Message.SUCCESS).buildResponse();
+			return new Message<>(Message.SUCCESS).buildResponse();
 		} else {
-			return new Message<RoleMemberEntity>(Message.FAIL).buildResponse();
+			return new Message<>(Message.FAIL).buildResponse();
 		}
 	}
 }

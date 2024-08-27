@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,6 +27,7 @@ import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.UserService;
 
 import dream.flying.flower.lang.StrHelper;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -70,7 +70,7 @@ public class RegisterController {
 	// 直接注册
 	@PostMapping(value = { "/register" })
 	@ResponseBody
-	public ResponseEntity<?> register(@ModelAttribute UserEntity userInfo, @RequestParam String captcha)
+	public ResponseEntity<?> register(@RequestBody UserEntity userInfo, @RequestParam String captcha)
 			throws ServletException, IOException {
 		UserEntity validateUserInfo = new UserEntity();
 		validateUserInfo.setUsername(userInfo.getMobile());

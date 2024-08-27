@@ -8,7 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +40,7 @@ public class AccountStrategyController {
 
 	@PostMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute AccountStrategyQuery accountsStrategy,
+	public ResponseEntity<?> fetch(@RequestBody AccountStrategyQuery accountsStrategy,
 			@CurrentUser UserEntity currentUser) {
 		accountsStrategy.setInstId(currentUser.getInstId());
 		Page<AccountStrategyVO> page = accountsStrategyService.page(accountsStrategy);
@@ -54,7 +53,7 @@ public class AccountStrategyController {
 
 	@ResponseBody
 	@PostMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> query(@ModelAttribute AccountStrategyEntity accountsStrategy,
+	public ResponseEntity<?> query(@RequestBody AccountStrategyEntity accountsStrategy,
 			@CurrentUser UserEntity currentUser) {
 		log.debug("-query  :" + accountsStrategy);
 		if (CollectionUtils.isNotEmpty(accountsStrategyService.list(accountsStrategy))) {

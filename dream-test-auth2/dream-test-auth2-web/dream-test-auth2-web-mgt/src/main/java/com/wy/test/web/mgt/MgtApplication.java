@@ -11,7 +11,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
 
 import com.wy.test.core.web.InitializeContext;
 
@@ -25,14 +24,12 @@ import lombok.extern.slf4j.Slf4j;
  * @git {@link https://github.com/dreamFlyingFlower}
  */
 @MapperScan("com.wy.test.persistence.mapper")
-@ComponentScan(basePackages = { "com.wy.test.authentication.authn", "com.wy.test.configuration",
+@SpringBootApplication(scanBasePackages = { "com.wy.test.persistence", "com.wy.test.persistence.service",
+		"com.wy.test.persistence.service.impl", "com.wy.test.authentication.authn", "com.wy.test.configuration",
 		"com.wy.test.core.convert", "com.wy.test.web.apis.identity.kafka", "com.wy.test.web.apis.identity.rest",
-		"com.wy.test.web.apis.identity.scim", "com.wy.test.persistence", "com.wy.test.provision", "com.wy.test.sync",
-		"com.wy.test.web.mgt.listener", "com.wy.test.web.mgt.access.contorller", "com.wy.test.web.mgt.api.endpoint",
-		"com.wy.test.web.mgt.app.contorller", "com.wy.test.web.mgt.config.controller", "com.wy.test.web.mgt.contorller",
-		"com.wy.test.web.mgt.history.controller", "com.wy.test.web.mgt.endpoint", "com.wy.test.web.mgt.interceptor",
-		"com.wy.test.web.mgt.permission.contorller" })
-@SpringBootApplication
+		"com.wy.test.web.apis.identity.scim", "com.wy.test.provision", "com.wy.test.sync",
+		"com.wy.test.web.mgt.listener", "com.wy.test.web.mgt.contorller", "com.wy.test.web.mgt.endpoint",
+		"com.wy.test.web.mgt.interceptor" })
 @Slf4j
 public class MgtApplication extends SpringBootServletInitializer {
 

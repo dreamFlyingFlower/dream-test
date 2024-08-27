@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,7 +53,7 @@ public class AppController extends BaseAppContorller {
 
 	@GetMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute AppQuery apps, @CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> fetch(AppQuery apps, @CurrentUser UserEntity currentUser) {
 		apps.setInstId(currentUser.getInstId());
 		Page<AppVO> appsList = appService.page(apps);
 		for (AppVO app : appsList.getRecords()) {
@@ -68,7 +67,7 @@ public class AppController extends BaseAppContorller {
 
 	@ResponseBody
 	@GetMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> query(@ModelAttribute AppEntity apps, @CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> query(AppEntity apps, @CurrentUser UserEntity currentUser) {
 		log.debug("-query  :" + apps);
 		if (CollectionUtils.isNotEmpty(appService.list(apps))) {
 			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
@@ -148,25 +147,32 @@ public class AppController extends BaseAppContorller {
 		} else if (type.equals("blowfish")) {
 			secret = ReciprocalHelpers.generateKey(ReciprocalHelpers.Algorithm.Blowfish);
 		} else if (type.equalsIgnoreCase("RS256") || type.equalsIgnoreCase("RS384") || type.equalsIgnoreCase("RS512")) {
-			RSAKey rsaJWK = new RSAKeyGenerator(2048).keyID(id + "_sig").keyUse(KeyUse.SIGNATURE)
-					.algorithm(new JWSAlgorithm(type.toUpperCase(), Requirement.OPTIONAL)).generate();
+			RSAKey rsaJWK = new RSAKeyGenerator(2048).keyID(id + "_sig")
+					.keyUse(KeyUse.SIGNATURE)
+					.algorithm(new JWSAlgorithm(type.toUpperCase(), Requirement.OPTIONAL))
+					.generate();
 			secret = rsaJWK.toJSONString();
 		} else if (type.equalsIgnoreCase("HS256") || type.equalsIgnoreCase("HS384") || type.equalsIgnoreCase("HS512")) {
-			OctetSequenceKey octKey = new OctetSequenceKeyGenerator(2048).keyID(id + "_sig").keyUse(KeyUse.SIGNATURE)
-					.algorithm(new JWSAlgorithm(type.toUpperCase(), Requirement.OPTIONAL)).generate();
+			OctetSequenceKey octKey = new OctetSequenceKeyGenerator(2048).keyID(id + "_sig")
+					.keyUse(KeyUse.SIGNATURE)
+					.algorithm(new JWSAlgorithm(type.toUpperCase(), Requirement.OPTIONAL))
+					.generate();
 			secret = octKey.toJSONString();
 		} else if (type.equalsIgnoreCase("RSA1_5") || type.equalsIgnoreCase("RSA_OAEP")
 				|| type.equalsIgnoreCase("RSA-OAEP-256")) {
-			RSAKey rsaJWK = new RSAKeyGenerator(2048).keyID(id + "_enc").keyUse(KeyUse.ENCRYPTION)
-					.algorithm(new JWEAlgorithm(type.toUpperCase(), Requirement.OPTIONAL)).generate();
+			RSAKey rsaJWK = new RSAKeyGenerator(2048).keyID(id + "_enc")
+					.keyUse(KeyUse.ENCRYPTION)
+					.algorithm(new JWEAlgorithm(type.toUpperCase(), Requirement.OPTIONAL))
+					.generate();
 			secret = rsaJWK.toJSONString();
 		} else if (type.equalsIgnoreCase("A128KW") || type.equalsIgnoreCase("A192KW") || type.equalsIgnoreCase("A256KW")
 				|| type.equalsIgnoreCase("A128GCMKW") || type.equalsIgnoreCase("A192GCMKW")
 				|| type.equalsIgnoreCase("A256GCMKW")) {
 			int keyLength = Integer.parseInt(type.substring(1, 4));
-			OctetSequenceKey octKey =
-					new OctetSequenceKeyGenerator(keyLength).keyID(id + "_enc").keyUse(KeyUse.ENCRYPTION)
-							.algorithm(new JWEAlgorithm(type.toUpperCase(), Requirement.OPTIONAL)).generate();
+			OctetSequenceKey octKey = new OctetSequenceKeyGenerator(keyLength).keyID(id + "_enc")
+					.keyUse(KeyUse.ENCRYPTION)
+					.algorithm(new JWEAlgorithm(type.toUpperCase(), Requirement.OPTIONAL))
+					.generate();
 			secret = octKey.toJSONString();
 		} else {
 			secret = ReciprocalHelpers.generateKey("");

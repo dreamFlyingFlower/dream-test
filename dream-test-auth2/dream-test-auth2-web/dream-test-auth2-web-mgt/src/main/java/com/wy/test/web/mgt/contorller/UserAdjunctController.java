@@ -5,11 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.authentication.core.authn.annotation.CurrentUser;
@@ -20,6 +18,7 @@ import com.wy.test.core.query.UserAdjunctQuery;
 import com.wy.test.persistence.service.UserAdjunctService;
 
 import dream.flying.flower.result.Result;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -38,9 +37,7 @@ public class UserAdjunctController {
 	}
 
 	@PostMapping(value = { "/grid" })
-	@ResponseBody
-	public Result<?> queryDataGrid(@ModelAttribute("userInfoAdjoint") UserAdjunctQuery userInfoAdjoint,
-			@CurrentUser UserEntity currentUser) {
+	public Result<?> queryDataGrid(@RequestBody UserAdjunctQuery userInfoAdjoint, @CurrentUser UserEntity currentUser) {
 		log.debug("" + userInfoAdjoint);
 		userInfoAdjoint.setInstId(currentUser.getInstId());
 		return userAdjunctService.listPage(userInfoAdjoint);
@@ -61,9 +58,8 @@ public class UserAdjunctController {
 		return modelAndView;
 	}
 
-	@ResponseBody
 	@PostMapping(value = { "/add" })
-	public ResponseEntity<?> insert(@ModelAttribute("userInfoAdjoint") UserAdjunctEntity userInfoAdjoint,
+	public ResponseEntity<?> insert(@RequestBody UserAdjunctEntity userInfoAdjoint,
 			@CurrentUser UserEntity currentUser) {
 		log.debug("-Add  :" + userInfoAdjoint);
 		userInfoAdjoint.setInstId(currentUser.getInstId());
@@ -80,9 +76,9 @@ public class UserAdjunctController {
 	 * @param group
 	 * @return
 	 */
-	@ResponseBody
+
 	@PostMapping(value = { "/query" })
-	public ResponseEntity<?> query(@ModelAttribute("userInfoAdjoint") UserAdjunctEntity userInfoAdjoint,
+	public ResponseEntity<?> query(@RequestBody UserAdjunctEntity userInfoAdjoint,
 			@CurrentUser UserEntity currentUser) {
 		log.debug("-query  :" + userInfoAdjoint);
 		userInfoAdjoint.setInstId(currentUser.getInstId());
@@ -101,9 +97,9 @@ public class UserAdjunctController {
 	 * @param group
 	 * @return
 	 */
-	@ResponseBody
+
 	@PostMapping(value = { "/update" })
-	public ResponseEntity<?> update(@ModelAttribute("userInfoAdjoint") UserAdjunctEntity userInfoAdjoint,
+	public ResponseEntity<?> update(@RequestBody UserAdjunctEntity userInfoAdjoint,
 			@CurrentUser UserEntity currentUser) {
 		log.debug("-update  userInfoAdjoint :" + userInfoAdjoint);
 		userInfoAdjoint.setInstId(currentUser.getInstId());
@@ -115,9 +111,8 @@ public class UserAdjunctController {
 
 	}
 
-	@ResponseBody
 	@PostMapping(value = { "/delete" })
-	public ResponseEntity<?> delete(@ModelAttribute("userInfoAdjoint") UserAdjunctEntity userInfoAdjoint) {
+	public ResponseEntity<?> delete(@RequestBody UserAdjunctEntity userInfoAdjoint) {
 		log.debug("-delete  group :" + userInfoAdjoint);
 		if (userAdjunctService.removeById(userInfoAdjoint.getId())) {
 			return new Message<UserAdjunctEntity>(Message.SUCCESS).buildResponse();

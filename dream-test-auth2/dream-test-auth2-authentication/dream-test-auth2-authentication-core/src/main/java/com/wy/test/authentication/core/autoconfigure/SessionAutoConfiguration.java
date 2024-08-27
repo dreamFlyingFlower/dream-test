@@ -5,6 +5,7 @@ import java.time.Duration;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -18,6 +19,7 @@ import com.wy.test.core.properties.DreamAuthStoreProperties;
 import lombok.extern.slf4j.Slf4j;
 
 @AutoConfiguration
+@EnableConfigurationProperties(DreamAuthStoreProperties.class)
 @Slf4j
 public class SessionAutoConfiguration implements InitializingBean {
 

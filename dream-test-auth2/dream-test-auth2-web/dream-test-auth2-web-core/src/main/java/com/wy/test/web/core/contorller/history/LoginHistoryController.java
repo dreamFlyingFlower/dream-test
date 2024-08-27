@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,6 +20,7 @@ import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.HistoryLoginService;
 
 import dream.flying.flower.ConstDate;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -40,8 +40,7 @@ public class LoginHistoryController {
 	 */
 	@PostMapping(value = { "/loginHistory/fetch" })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute("historyLogin") HistoryLoginEntity historyLogin,
-			@CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> fetch(@RequestBody HistoryLoginEntity historyLogin, @CurrentUser UserEntity currentUser) {
 		log.debug("historys/loginHistory/fetch/ {}", historyLogin);
 		historyLogin.setInstId(currentUser.getInstId());
 		historyLogin.setUserId(currentUser.getId());

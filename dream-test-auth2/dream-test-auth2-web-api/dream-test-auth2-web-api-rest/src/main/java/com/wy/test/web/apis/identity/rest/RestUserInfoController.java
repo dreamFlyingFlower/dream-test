@@ -3,20 +3,16 @@ package com.wy.test.web.apis.identity.rest;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -32,18 +28,17 @@ import dream.flying.flower.lang.StrHelper;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping(value = { "/api/idm/Users" })
+@RequestMapping("api/idm/Users")
 @Slf4j
 public class RestUserInfoController {
 
 	@Autowired
-	@Qualifier("userService")
 	private UserService userService;
 
 	@Autowired
 	private UserConvert userConvert;
 
-	@GetMapping(value = "/{id}")
+	@GetMapping("{id}")
 	public UserEntity getUser(@PathVariable String id, @RequestParam(required = false) String attributes) {
 		log.debug("UserInfo id {} , attributes {}", id, attributes);
 		UserEntity loadUserInfo = userService.getById(id);
@@ -64,7 +59,7 @@ public class RestUserInfoController {
 		return userInfo;
 	}
 
-	@PostMapping(value = "/changePassword")
+	@PostMapping("changePassword")
 	public String changePassword(@RequestParam(required = true) String username,
 			@RequestParam(required = true) String password, UriComponentsBuilder builder) throws IOException {
 		log.debug("UserInfo username {} , password {}", username, password);
@@ -78,7 +73,7 @@ public class RestUserInfoController {
 		return "true";
 	}
 
-	@PutMapping(value = "/{id}")
+	@PutMapping("{id}")
 	public UserEntity replace(@PathVariable String id, @RequestBody UserEntity userInfo,
 			@RequestParam(required = false) String attributes) throws IOException {
 		log.debug("UserInfo content {} , attributes {}", userInfo, attributes);
@@ -91,16 +86,15 @@ public class RestUserInfoController {
 		return userInfo;
 	}
 
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable final String id) {
 		log.debug("UserInfo id {} ", id);
 		userService.removeById(id);
 	}
 
-	@GetMapping(value = { "/.search" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	@ResponseBody
-	public ResponseEntity<?> search(@ModelAttribute UserQuery userInfo) {
+	@GetMapping(".search")
+	public ResponseEntity<?> search(UserQuery userInfo) {
 		if (StrHelper.isBlank(userInfo.getInstId())) {
 			userInfo.setInstId("1");
 		}

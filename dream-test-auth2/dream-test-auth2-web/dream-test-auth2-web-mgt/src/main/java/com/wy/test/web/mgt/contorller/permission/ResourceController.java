@@ -8,7 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,7 +48,7 @@ public class ResourceController {
 
 	@PostMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<?> fetch(@ModelAttribute ResourceEntity resource, @CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> fetch(@RequestBody ResourceEntity resource, @CurrentUser UserEntity currentUser) {
 		log.debug("fetch {}", resource);
 		resource.setInstId(currentUser.getInstId());
 		return new Message<>(resourcesService.list(new LambdaQueryWrapper<>(resource))).buildResponse();
@@ -57,7 +56,7 @@ public class ResourceController {
 
 	@ResponseBody
 	@PostMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> query(@ModelAttribute ResourceEntity resource, @CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> query(@RequestBody ResourceEntity resource, @CurrentUser UserEntity currentUser) {
 		log.debug("-query  {}", resource);
 		resource.setInstId(currentUser.getInstId());
 		List<ResourceEntity> resourceList = resourcesService.list(new LambdaQueryWrapper<>(resource));
@@ -117,7 +116,7 @@ public class ResourceController {
 
 	@ResponseBody
 	@PostMapping(value = { "/tree" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> tree(@ModelAttribute ResourceVO resource, @CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> tree(@RequestBody ResourceVO resource, @CurrentUser UserEntity currentUser) {
 		log.debug("-query  {}", resource);
 		resource.setInstId(currentUser.getInstId());
 		List<ResourceEntity> resourceList =

@@ -8,7 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,6 +27,7 @@ import com.wy.test.persistence.service.AppService;
 import com.wy.test.persistence.service.UserService;
 
 import dream.flying.flower.generator.GeneratorStrategyContext;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @Controller
 public class AppListController {
@@ -70,8 +70,9 @@ public class AppListController {
 		AccountEntity account = null;
 
 		if (credential.equalsIgnoreCase(CredentialType.USER_DEFINED.name())) {
-			List<AccountEntity> query = accountService.list(new LambdaQueryWrapper<AccountEntity>()
-					.eq(AccountEntity::getUserId, currentUser.getId()).eq(AccountEntity::getAppId, appId));
+			List<AccountEntity> query = accountService
+					.list(new LambdaQueryWrapper<AccountEntity>().eq(AccountEntity::getUserId, currentUser.getId())
+							.eq(AccountEntity::getAppId, appId));
 
 			account = CollectionUtils.isNotEmpty(query) ? query.get(0) : new AccountEntity();
 			account.setRelatedPassword(PasswordReciprocal.getInstance().decoder(account.getRelatedPassword()));
@@ -89,11 +90,12 @@ public class AppListController {
 	@PostMapping(value = { "/account/update" })
 	@ResponseBody
 	public ResponseEntity<?> updateAccount(@RequestParam("credential") String credential,
-			@ModelAttribute AccountEntity account, @CurrentUser UserEntity currentUser) {
+			@RequestBody AccountEntity account, @CurrentUser UserEntity currentUser) {
 		AccountEntity appUsers = new AccountEntity();
 		if (credential.equalsIgnoreCase(CredentialType.USER_DEFINED.name())) {
-			List<AccountEntity> query = accountService.list(new LambdaQueryWrapper<AccountEntity>()
-					.eq(AccountEntity::getUserId, currentUser.getId()).eq(AccountEntity::getAppId, account.getAppId()));
+			List<AccountEntity> query = accountService
+					.list(new LambdaQueryWrapper<AccountEntity>().eq(AccountEntity::getUserId, currentUser.getId())
+							.eq(AccountEntity::getAppId, account.getAppId()));
 			appUsers = CollectionUtils.isNotEmpty(query) ? query.get(0) : null;
 			if (appUsers == null) {
 				appUsers = new AccountEntity();

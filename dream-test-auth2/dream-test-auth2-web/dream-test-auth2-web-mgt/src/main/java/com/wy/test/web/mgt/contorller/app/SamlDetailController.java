@@ -46,7 +46,7 @@ import dream.flying.flower.generator.GeneratorStrategyContext;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@RequestMapping(value = { "/apps/saml20" })
+@RequestMapping("apps/saml20")
 @Slf4j
 public class SamlDetailController extends BaseAppContorller {
 
@@ -199,8 +199,14 @@ public class SamlDetailController extends BaseAppContorller {
 			throw new Exception("metadata  file resolve error", e);
 		}
 		SPSSODescriptor sPSSODescriptor = entityDescriptor.getSPSSODescriptor(SAMLConstants.SAML20P_NS);
-		String b64Encoder = sPSSODescriptor.getKeyDescriptors().get(0).getKeyInfo().getX509Datas().get(0)
-				.getX509Certificates().get(0).getValue();
+		String b64Encoder = sPSSODescriptor.getKeyDescriptors()
+				.get(0)
+				.getKeyInfo()
+				.getX509Datas()
+				.get(0)
+				.getX509Certificates()
+				.get(0)
+				.getValue();
 
 		trustCert = X509CertHelpers.loadCertFromB64Encoded(b64Encoder);
 

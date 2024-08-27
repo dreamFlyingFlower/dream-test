@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -93,8 +92,7 @@ public class RolePrivilegeController {
 
 	@ResponseBody
 	@PostMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> get(@ModelAttribute RolePrivilegeEntity rolePrivileges,
-			@CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> get(@RequestBody RolePrivilegeEntity rolePrivileges, @CurrentUser UserEntity currentUser) {
 		log.debug("-get  :" + rolePrivileges);
 		// have
 		RolePrivilegeEntity queryRolePrivilege =

@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -42,6 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @SuppressWarnings("deprecation")
 @AutoConfiguration
+@EnableConfigurationProperties({ DreamAuthCryptoProperties.class, DreamAuthSamlProperties.class })
 @Slf4j
 public class ApplicationAutoConfiguration implements InitializingBean {
 

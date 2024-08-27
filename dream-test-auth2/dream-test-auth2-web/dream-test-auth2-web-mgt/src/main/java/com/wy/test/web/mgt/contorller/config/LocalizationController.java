@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +20,7 @@ import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.persistence.repository.LocalizationRepository;
 
 import dream.flying.flower.generator.GeneratorStrategyContext;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -54,8 +54,8 @@ public class LocalizationController {
 	 */
 	@PostMapping(value = { "/update" })
 	@ResponseBody
-	public ResponseEntity<?> update(@ModelAttribute("localization") LocalizationEntity localization,
-			@CurrentUser UserEntity currentUser, BindingResult result) {
+	public ResponseEntity<?> update(@RequestBody LocalizationEntity localization, @CurrentUser UserEntity currentUser,
+			BindingResult result) {
 		log.debug("update  localization : " + localization);
 		localization.setInstId(currentUser.getInstId());
 		if (StringUtils.isBlank(localization.getId())) {
