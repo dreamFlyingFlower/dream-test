@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @AutoConfiguration
 @Slf4j
-public class Oauth20ClientAutoConfiguration implements InitializingBean {
+public class OAuth2ClientAutoConfiguration implements InitializingBean {
 
 	@Bean
 	JdbcClientDetailsService oauth20JdbcClientDetailsService(DataSource dataSource,

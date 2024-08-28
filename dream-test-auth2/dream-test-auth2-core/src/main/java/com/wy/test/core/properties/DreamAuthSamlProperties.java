@@ -64,11 +64,14 @@ public class DreamAuthSamlProperties {
 
 		private boolean enabled = false;
 
-		private Resource keystore = new ClassPathResource("classpath:config/samlServerKeystore.jks");
+		/** JKS文件存储路径,若写在配置文件,需要添加classpath:前缀 */
+		private Resource keystore = new ClassPathResource("config/samlServerKeystore.jks");
 
-		private String keystorePassword = "dream";
+		private String alias = "AuthServerKey";
 
-		private String keystorePrivateKeyPassword = "dream";
+		private String keystorePassword = "DreamFlyingFlower";
+
+		private String keystorePrivateKeyPassword = "DreamFlyingFlower";
 
 		private String issuingEntityId = "dream.top";
 
@@ -82,11 +85,14 @@ public class DreamAuthSamlProperties {
 
 		private boolean enabled = false;
 
-		private Resource keystore = new ClassPathResource("classpath:config/samlClientKeystore.jks");
+		/** JKS文件存储路径,若写在配置文件,需要添加classpath:前缀 */
+		private Resource keystore = new ClassPathResource("config/samlClientKeystore.jks");
 
-		private String keystorePassword = "dream";
+		private String alias = "AuthClientKey";
 
-		private String keystorePrivateKeyPassword = "dream";
+		private String keystorePassword = "DreamFlyingFlower";
+
+		private String keystorePrivateKeyPassword = "DreamFlyingFlower";
 
 		private String issuingEntityId = "client.dream.org";
 	}

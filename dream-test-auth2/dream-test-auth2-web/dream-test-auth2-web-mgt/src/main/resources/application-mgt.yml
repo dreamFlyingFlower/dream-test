@@ -70,9 +70,7 @@ dream:
       idp:
         issuer: ${dream.server.authz.uri}/saml
         receiver-endpoint: https://sso.dream.top/
-        keystore: classpath:config/samlServerKeystore.jks
-        keystore-password: dream
-        keystore-private-key-password: dream
+#        keystore: classpath:config/samlServerKeystore.jks
         issuing-entity-id: dream.top
       issue:
           instant-check-clock-skew-in-seconds: 90
@@ -80,9 +78,7 @@ dream:
       assertion:
         validity-time-in-seconds: 90
       sp:
-        keystore: classpath:config/samlClientKeystore.jks
-        keystore-password: dream
-        keystore-private-key-password: dream
+#        keystore: classpath:config/samlClientKeystore.jks
         issuing-entity-id: client.dream.org
     job:
       cron:

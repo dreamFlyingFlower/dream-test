@@ -11,8 +11,8 @@ dream:
         instant-check-validity-time-in-seconds: 300
       idp:
         keystore: classpath:config/samlServerKeystore.jks
-        keystore-password: dream
-        keystore-private-key-password: dream
+        keystore-password: DreamFlyingFlower
+        keystore-private-key-password: DreamFlyingFlower
         issuing-entity-id: dream.top
         issuer: ${dream.auth.server.authz.uri}/saml
         receiver-endpoint: https://sso.dream.top/

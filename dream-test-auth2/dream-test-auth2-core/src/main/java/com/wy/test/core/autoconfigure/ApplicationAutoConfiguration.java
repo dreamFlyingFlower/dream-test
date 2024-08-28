@@ -42,8 +42,9 @@ import dream.flying.flower.generator.SnowFlakeGenerator;
 import lombok.extern.slf4j.Slf4j;
 
 @SuppressWarnings("deprecation")
+@EnableConfigurationProperties({ DreamAuthCryptoProperties.class, DreamAuthSamlProperties.class,
+		DreamAuthIdProperties.class })
 @AutoConfiguration
-@EnableConfigurationProperties({ DreamAuthCryptoProperties.class, DreamAuthSamlProperties.class })
 @Slf4j
 public class ApplicationAutoConfiguration implements InitializingBean {
 

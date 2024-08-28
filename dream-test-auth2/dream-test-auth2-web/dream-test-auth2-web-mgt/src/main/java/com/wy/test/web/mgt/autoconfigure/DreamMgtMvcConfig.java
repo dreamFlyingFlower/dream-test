@@ -56,23 +56,33 @@ public class DreamMgtMvcConfig implements WebMvcConfigurer {
 
 		permissionInterceptor.setMgmt(true);
 
-		registry.addInterceptor(permissionInterceptor).addPathPatterns("/dashboard/**").addPathPatterns("/orgs/**")
-				.addPathPatterns("/users/**").addPathPatterns("/apps/**").addPathPatterns("/session/**")
+		registry.addInterceptor(permissionInterceptor)
+				.addPathPatterns("/dashboard/**")
+				.addPathPatterns("/orgs/**")
+				.addPathPatterns("/users/**")
+				.addPathPatterns("/apps/**")
+				.addPathPatterns("/session/**")
 				.addPathPatterns("/accounts/**")
 
-				.addPathPatterns("/access/**").addPathPatterns("/access/**/**")
+				.addPathPatterns("/access/**")
+				.addPathPatterns("/access/**/**")
 
-				.addPathPatterns("/permissions/**").addPathPatterns("/permissions/**/**")
+				.addPathPatterns("/permissions/**")
+				.addPathPatterns("/permissions/**/**")
 
-				.addPathPatterns("/config/**").addPathPatterns("/config/**/**")
+				.addPathPatterns("/config/**")
+				.addPathPatterns("/config/**/**")
 
-				.addPathPatterns("/historys/**").addPathPatterns("/historys/**/**")
+				.addPathPatterns("/historys/**")
+				.addPathPatterns("/historys/**/**")
 
-				.addPathPatterns("/institutions/**").addPathPatterns("/localization/**")
+				.addPathPatterns("/institutions/**")
+				.addPathPatterns("/localization/**")
 
 				.addPathPatterns("/file/upload/")
 
-				.addPathPatterns("/logout").addPathPatterns("/logout/**");
+				.addPathPatterns("/logout")
+				.addPathPatterns("/logout/**");
 
 		log.debug("add Permission Adapter");
 

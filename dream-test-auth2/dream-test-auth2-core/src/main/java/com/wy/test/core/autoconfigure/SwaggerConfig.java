@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springdoc.core.GroupedOpenApi;
 import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 import com.wy.test.core.properties.DreamAuthSwaggerProperties;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import lombok.AllArgsConstructor;
 
+@EnableConfigurationProperties(DreamAuthSwaggerProperties.class)
 @AutoConfiguration
 @AllArgsConstructor
 public class SwaggerConfig {
@@ -46,8 +48,11 @@ public class SwaggerConfig {
 
 		};
 		String[] packagedToMatch = { "org.dream.authz" };
-		return GroupedOpenApi.builder().group(dreamSwaggerProperties.getTitle()).pathsToMatch(paths)
-				.packagesToScan(packagedToMatch).build();
+		return GroupedOpenApi.builder()
+				.group(dreamSwaggerProperties.getTitle())
+				.pathsToMatch(paths)
+				.packagesToScan(packagedToMatch)
+				.build();
 	}
 
 	@Bean

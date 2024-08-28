@@ -2,6 +2,7 @@ package com.wy.test.web.mgt.autoconfigure;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,10 +13,12 @@ import com.wy.test.authentication.provider.authn.realm.jdbc.JdbcAuthenticationRe
 import com.wy.test.core.persistence.repository.LoginHistoryRepository;
 import com.wy.test.core.persistence.repository.LoginRepository;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
+import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.persistence.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
+@EnableConfigurationProperties(DreamAuthLoginProperties.class)
 @AutoConfiguration
 @Slf4j
 public class DreamMgtConfig implements InitializingBean {

@@ -10,7 +10,7 @@ com.wy.test.authentication.provider.autoconfigure.AuthnProviderAutoConfiguration
 com.wy.test.authentication.otp.autoconfigure.OneTimePasswordAutoConfiguration
 com.wy.test.authentication.sms.autoconfigure.SmsAutoConfiguration
 com.wy.test.sync.core.autoconfigure.SyncAutoConfiguration
-com.wy.test.web.mgt.autoconfigure.Oauth20ClientAutoConfiguration
 com.wy.test.web.mgt.autoconfigure.DreamMgtConfig
 com.wy.test.web.mgt.autoconfigure.DreamMgtMvcConfig
 com.wy.test.web.mgt.autoconfigure.DreamMgtListenerConfig
+com.wy.test.web.mgt.autoconfigure.OAuth2ClientAutoConfiguration

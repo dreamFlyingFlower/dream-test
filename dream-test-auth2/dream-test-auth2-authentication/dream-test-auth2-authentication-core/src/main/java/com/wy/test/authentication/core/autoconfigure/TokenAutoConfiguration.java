@@ -2,6 +2,7 @@ package com.wy.test.authentication.core.autoconfigure;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 import com.nimbusds.jose.JOSEException;
@@ -18,6 +19,7 @@ import com.wy.test.core.properties.DreamAuthStoreProperties;
 
 import lombok.extern.slf4j.Slf4j;
 
+@EnableConfigurationProperties(DreamAuthJwkProperties.class)
 @AutoConfiguration
 @Slf4j
 public class TokenAutoConfiguration implements InitializingBean {

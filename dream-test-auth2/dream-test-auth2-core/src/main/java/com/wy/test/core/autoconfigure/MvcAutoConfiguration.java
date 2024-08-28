@@ -1,7 +1,6 @@
 package com.wy.test.core.autoconfigure;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -26,9 +25,6 @@ import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
@@ -237,21 +233,23 @@ public class MvcAutoConfiguration implements InitializingBean, WebMvcConfigurer 
 		return new SecurityContextHolderAwareRequestFilter();
 	}
 
-	@Bean
-	FilterRegistrationBean<CorsFilter> corsFilter() {
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		CorsConfiguration corsConfiguration = new CorsConfiguration();
-		corsConfiguration.setAllowCredentials(true);
-		corsConfiguration.setAllowedOriginPatterns(Collections.singletonList(CorsConfiguration.ALL));
-		corsConfiguration.addAllowedHeader(CorsConfiguration.ALL);
-		corsConfiguration.addAllowedMethod(CorsConfiguration.ALL);
-		source.registerCorsConfiguration("/**", corsConfiguration);
-		FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>();
-		bean.setOrder(1);
-		bean.setFilter(new CorsFilter(source));
-		bean.addUrlPatterns("/*");
-		return bean;
-	}
+	// 会与SpringSecurity的跨域冲突
+	// @Bean
+	// FilterRegistrationBean<CorsFilter> corsFilter() {
+	// UrlBasedCorsConfigurationSource source = new
+	// UrlBasedCorsConfigurationSource();
+	// CorsConfiguration corsConfiguration = new CorsConfiguration();
+	// corsConfiguration.setAllowCredentials(true);
+	// corsConfiguration.setAllowedOriginPatterns(Collections.singletonList(CorsConfiguration.ALL));
+	// corsConfiguration.addAllowedHeader(CorsConfiguration.ALL);
+	// corsConfiguration.addAllowedMethod(CorsConfiguration.ALL);
+	// source.registerCorsConfiguration("/**", corsConfiguration);
+	// FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>();
+	// bean.setOrder(1);
+	// bean.setFilter(new CorsFilter(source));
+	// bean.addUrlPatterns("/*");
+	// return bean;
+	// }
 
 	@Bean
 	FilterRegistrationBean<Filter> delegatingFilterProxy() {

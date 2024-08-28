@@ -17,7 +17,6 @@ import lombok.Data;
 @Data
 @ConfigurationProperties("dream.auth.login")
 @Configuration
-
 public class DreamAuthLoginProperties {
 
 	private String defaultUri;

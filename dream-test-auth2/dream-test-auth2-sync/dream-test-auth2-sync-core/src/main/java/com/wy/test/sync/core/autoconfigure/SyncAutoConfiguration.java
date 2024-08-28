@@ -15,6 +15,7 @@ import org.quartz.SchedulerException;
 import org.quartz.TriggerBuilder;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -27,6 +28,7 @@ import com.wy.test.sync.core.synchronizer.SyncJob;
 
 import lombok.extern.slf4j.Slf4j;
 
+@EnableConfigurationProperties(DreamAuthJobProperties.class)
 @AutoConfiguration
 @Slf4j
 public class SyncAutoConfiguration implements InitializingBean {
@@ -53,7 +55,8 @@ public class SyncAutoConfiguration implements InitializingBean {
 
 	private void buildJob(Scheduler scheduler, SyncEntity synchronizer) throws SchedulerException {
 		JobDetail jobDetail = JobBuilder.newJob(SyncJob.class)
-				.withIdentity(synchronizer.getService() + "Job", "SynchronizerGroups").build();
+				.withIdentity(synchronizer.getService() + "Job", "SynchronizerGroups")
+				.build();
 
 		JobDataMap jobDataMap = new JobDataMap();
 		jobDataMap.put("synchronizer", synchronizer);
@@ -62,9 +65,11 @@ public class SyncAutoConfiguration implements InitializingBean {
 		log.debug("synchronizer service : " + synchronizer.getService());
 		log.debug("synchronizer Scheduler : " + synchronizer.getScheduler());
 		CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(synchronizer.getScheduler());
-		CronTrigger cronTrigger =
-				TriggerBuilder.newTrigger().withIdentity("trigger" + synchronizer.getService(), "SynchronizerGroups")
-						.usingJobData(jobDataMap).withSchedule(scheduleBuilder).build();
+		CronTrigger cronTrigger = TriggerBuilder.newTrigger()
+				.withIdentity("trigger" + synchronizer.getService(), "SynchronizerGroups")
+				.usingJobData(jobDataMap)
+				.withSchedule(scheduleBuilder)
+				.build();
 		scheduler.scheduleJob(jobDetail, cronTrigger);
 	}
 
@@ -78,24 +83,24 @@ public class SyncAutoConfiguration implements InitializingBean {
 						synchronizer.setId(rs.getString("id"));
 						synchronizer.setName(rs.getString("name"));
 						synchronizer.setScheduler(rs.getString("scheduler"));
-						synchronizer.setSourceType(rs.getString("sourcetype"));
-						synchronizer.setProviderUrl(rs.getString("providerurl"));
-						synchronizer.setDriverClass(rs.getString("driverclass"));
+						synchronizer.setSourceType(rs.getString("source_type"));
+						synchronizer.setProviderUrl(rs.getString("provider_url"));
+						synchronizer.setDriverClass(rs.getString("driver_class"));
 						synchronizer.setPrincipal(rs.getString("principal"));
 						synchronizer
 								.setCredentials(PasswordReciprocal.getInstance().decoder(rs.getString("credentials")));
-						synchronizer.setResumeTime(rs.getString("resumetime"));
-						synchronizer.setSuspendTime(rs.getString("suspendtime"));
-						synchronizer.setUserFilters(rs.getString("userfilters"));
-						synchronizer.setUserBasedn(rs.getString("userbasedn"));
-						synchronizer.setOrgFilters(rs.getString("orgfilters"));
-						synchronizer.setOrgBasedn(rs.getString("orgbasedn"));
-						synchronizer.setMsadDomain(rs.getString("msaddomain"));
-						synchronizer.setSslSwitch(rs.getInt("sslswitch"));
-						synchronizer.setTrustStore(rs.getString("truststore"));
+						synchronizer.setResumeTime(rs.getString("resume_time"));
+						synchronizer.setSuspendTime(rs.getString("suspend_time"));
+						synchronizer.setUserBasedn(rs.getString("user_basedn"));
+						synchronizer.setUserFilters(rs.getString("user_filters"));
+						synchronizer.setOrgBasedn(rs.getString("org_basedn"));
+						synchronizer.setOrgFilters(rs.getString("org_filters"));
+						synchronizer.setMsadDomain(rs.getString("msad_domain"));
+						synchronizer.setSslSwitch(rs.getInt("ssl_switch"));
+						synchronizer.setTrustStore(rs.getString("trust_store"));
 						synchronizer.setStatus(rs.getInt("status"));
-						synchronizer.setRemark(rs.getString("description"));
-						synchronizer.setSyncStartTime(rs.getInt("syncstarttime"));
+						synchronizer.setRemark(rs.getString("remark"));
+						synchronizer.setSyncStartTime(rs.getInt("sync_start_time"));
 						synchronizer.setService(rs.getString("service"));
 
 						return synchronizer;

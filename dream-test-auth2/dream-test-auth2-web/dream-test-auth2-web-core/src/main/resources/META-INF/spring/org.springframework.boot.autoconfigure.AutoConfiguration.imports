@@ -13,5 +13,5 @@ com.wy.test.protocol.cas.autoconfigure.CasAutoConfiguration
 com.wy.test.protocol.oauth2.autoconfigure.Oauth20AutoConfiguration
 com.wy.test.protocol.saml2.autoconfigure.Saml20AutoConfiguration
 com.wy.test.authentication.social.autoconfigure.SocialSignOnAutoConfiguration
-com.wy.test.web.core.autoconfigure.DreamMvcConfig
+com.wy.test.web.core.autoconfigure.DreamAuthMvcConfig
 com.wy.test.web.core.autoconfigure.DreamTestConfig
