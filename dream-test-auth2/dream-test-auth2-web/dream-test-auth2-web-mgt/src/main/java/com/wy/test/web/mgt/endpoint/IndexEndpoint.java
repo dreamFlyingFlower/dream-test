@@ -23,6 +23,6 @@ public class IndexEndpoint {
 	public ModelAndView index() {
 		log.debug("IndexEndpoint /.");
 		return new ModelAndView("index").addObject("appVersion",
-				WebContext.properties.getProperty("application.formatted-version"));
+				WebContext.properties.getProperty("dream.auth.app.version"));
 	}
 }

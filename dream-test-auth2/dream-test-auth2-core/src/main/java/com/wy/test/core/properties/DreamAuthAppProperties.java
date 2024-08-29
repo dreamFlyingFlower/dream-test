@@ -21,7 +21,7 @@ public class DreamAuthAppProperties {
 
 	private String name;
 
-	private String formattedVersion;
+	private String version;
 
 	private String issuer;
 }

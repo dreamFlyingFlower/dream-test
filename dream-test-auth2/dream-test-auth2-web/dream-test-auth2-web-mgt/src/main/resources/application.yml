@@ -2,7 +2,7 @@ dream:
   auth:
     app:
       title: Dream-Mgt
-      formatted-version: 1.0.0
+      version: 1.0.0
 
 spring:
   application:

@@ -45,9 +45,8 @@ public class LocaleTagDirective implements TemplateDirectiveModel {
 		if (code == null) {
 			message = RequestContextUtils.getLocale(request).getLanguage();
 		} else if (code.equals("global.application.version") || code.equals("application.version")) {
-			message = WebContext.properties.getProperty("application.formatted-version");
+			message = WebContext.properties.getProperty("dream.auth.app.version");
 		} else if (code.equals("global.logo")) {
-
 			if (!message.startsWith("http")) {
 				message = request.getContextPath() + message;
 			}

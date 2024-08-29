@@ -4,7 +4,7 @@ dream:
     app:
       name: Dream
       title: Dream
-      formatted-version: 1.0.0
+      version: 1.0.0
       issuer: CN=ConSec,CN=COM,CN=SH
     server:
       scheme: http

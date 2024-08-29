@@ -16,7 +16,7 @@ public class PathHelpers {
 
 	private String appPath;
 
-	public static String WEB_INFO = "/WEB-INF/";
+	public static String WEB_INF = "/WEB-INF/";
 
 	private static final String PATH_FILE_NAME = "PathUtils.properties";
 
@@ -60,11 +60,11 @@ public class PathHelpers {
 			e.printStackTrace();
 		}
 
-		classPath = classPath.substring(0, classPath.indexOf("/com/wy/test/util/" + PATH_FILE_NAME));
-		if (classPath.indexOf(WEB_INFO) == -1) {
+		classPath = classPath.substring(0, classPath.indexOf(PATH_FILE_NAME));
+		if (classPath.indexOf(WEB_INF) == -1) {
 			appPath = classPath.substring(0, classPath.lastIndexOf("/"));
 		} else {
-			appPath = classPath.substring(0, classPath.lastIndexOf(WEB_INFO));
+			appPath = classPath.substring(0, classPath.lastIndexOf(WEB_INF));
 		}
 
 		System.setProperty("APP_PATH", appPath);
@@ -80,6 +80,6 @@ public class PathHelpers {
 	}
 
 	public String getWebInf() {
-		return (classPath.lastIndexOf(WEB_INFO) > -1) ? (appPath + WEB_INFO) : "";
+		return (classPath.lastIndexOf(WEB_INF) > -1) ? (appPath + WEB_INF) : "";
 	}
 }

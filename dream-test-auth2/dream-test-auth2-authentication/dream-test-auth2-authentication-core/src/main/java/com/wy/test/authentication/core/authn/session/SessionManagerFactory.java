@@ -24,16 +24,16 @@ import lombok.extern.slf4j.Slf4j;
 public class SessionManagerFactory implements SessionManager {
 
 	private static final String DEFAULT_DEFAULT_SELECT_STATEMENT =
-			"select id,sessionid,userId,username,displayname,logintime from auth_history_login where sessionstatus = 1";
+			"select id,session_id,user_id,username,display_name,login_time from auth_history_login where session_status = 1";
 
 	private static final String LOGOUT_USERINFO_UPDATE_STATEMENT =
-			"update auth_user set lastlogofftime = ? , online = " + YesNoEnum.NO.getCode() + "  where id = ?";
+			"update auth_user set last_logoff_time = ? , online = " + YesNoEnum.NO.getCode() + "  where id = ?";
 
 	private static final String HISTORY_LOGOUT_UPDATE_STATEMENT =
-			"update auth_history_login set logouttime = ? ,sessionstatus = 7 where  sessionid = ?";
+			"update auth_history_login set logout_time = ? ,session_status = 7 where  session_id = ?";
 
 	private static final String NO_SESSION_UPDATE_STATEMENT =
-			"update auth_history_login set sessionstatus = 7 where sessionstatus = 1 and (sessionid is null or sessionid = '')";
+			"update auth_history_login set session_status = 7 where session_status = 1 and (session_id is null or session_id = '')";
 
 	private JdbcTemplate jdbcTemplate;
 

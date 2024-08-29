@@ -2,7 +2,7 @@ dream:
   auth:
     app:
       title: dream
-      formatted-version: 1.0.0
+      version: 1.0.0
       issuer: CN=ConSec,CN=COM,CN=SH
     server:
       scheme: http
@@ -86,4 +86,4 @@ dream:
       enabled: true
       title: 单点登录认证系统API文档
       description: 单点登录认证系统API文档
-      version: ${dream.auth.app.formatted-version}
+      version: ${dream.auth.app.version}

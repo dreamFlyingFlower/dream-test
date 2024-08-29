@@ -187,7 +187,7 @@ public class InitializeContext extends HttpServlet {
 		log.info("+                       Community  Edition ");
 		log.info("+                      Single   Sign  On ( SSO ) ");
 		log.info("+                           Version {}",
-				WebContext.properties.getProperty("application.formatted-version"));
+				WebContext.properties.getProperty("dream.auth.app.version"));
 		log.info("+");
 		log.info("+                 {}Copyright 2018 - {} https://www.top/", (char) 0xA9, new DateTime().getYear());
 		log.info("+                 Licensed under the Apache License, Version 2.0 ");

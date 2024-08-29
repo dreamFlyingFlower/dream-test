@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -43,9 +44,9 @@ public final class WebContext {
 
 	public final static String ipAddressRegex = "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}";
 
-	public static ArrayList<String> sessionAttributeNameList = new ArrayList<String>();
+	public static List<String> sessionAttributeNameList = new ArrayList<String>();
 
-	public static ArrayList<String> logoutAttributeNameList = new ArrayList<String>();
+	public static List<String> logoutAttributeNameList = new ArrayList<String>();
 
 	public static GeneratorStrategyContext idGenerator;
 
@@ -327,7 +328,7 @@ public final class WebContext {
 		if (domain != null) {
 			cookie.setDomain(domain);
 		}
-		// 如果cookie的值中含有中文时，需要对cookie进行编码，不然会产生乱码
+		// 如果cookie的值中含有中文时,需要对cookie进行编码,不然会产生乱码
 		try {
 			URLEncoder.encode(value, "utf-8");
 		} catch (UnsupportedEncodingException e) {
@@ -338,7 +339,7 @@ public final class WebContext {
 			cookie.setMaxAge(time);
 		}
 		// 将Cookie添加到Response中,使之生效
-		response.addCookie(cookie); // addCookie后，如果已经存在相同名字的cookie，则最新的覆盖旧的cookie
+		response.addCookie(cookie); // addCookie后,如果已经存在相同名字的cookie,则最新的覆盖旧的cookie
 		return response;
 	}
 
@@ -427,7 +428,6 @@ public final class WebContext {
 		try {
 			message = getApplicationContext().getMessage(code.toString(), null, getLocale());
 		} catch (Exception e) {
-			//
 			e.printStackTrace();
 		}
 		return message;
@@ -445,7 +445,6 @@ public final class WebContext {
 		try {
 			message = getApplicationContext().getMessage(code.toString(), filedValues, getLocale());
 		} catch (Exception e) {
-			//
 			e.printStackTrace();
 		}
 		return message;
