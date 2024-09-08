@@ -48,8 +48,8 @@
 			<artifactId>dream-test-auth2-protocol-saml2</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>dream.flying.flower</groupId>
-			<artifactId>dream-test-auth2-protocol-token</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
 
 		<dependency>

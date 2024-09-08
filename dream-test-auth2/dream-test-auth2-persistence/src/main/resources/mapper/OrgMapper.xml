@@ -53,7 +53,7 @@
 		</if>
 	</sql>
 
-	<select id="queryOrgs" resultType="OrgVO">
+	<select id="queryOrgs" resultType="com.wy.test.core.vo.OrgVO">
 		select
 		*
 		from auth_org

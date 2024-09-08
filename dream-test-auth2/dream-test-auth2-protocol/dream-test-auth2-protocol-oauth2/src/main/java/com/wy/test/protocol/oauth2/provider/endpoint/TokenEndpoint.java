@@ -40,23 +40,19 @@ import com.wy.test.protocol.oauth2.provider.request.DefaultOAuth2RequestValidato
 import dream.flying.flower.generator.StringGenerator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
- * Endpoint for token requests as described in the OAuth2 spec. Clients post
- * requests with a <code>grant_type</code> parameter (e.g. "authorization_code")
- * and other parameters as determined by the grant type. Supported grant types
- * are handled by the provided
- * {@link #setTokenGranter(com.wy.test.protocol.oauth2.provider.TokenGranter) token
- * granter}.
+ * Endpoint for token requests as described in the OAuth2 spec. Clients post requests with a <code>grant_type</code>
+ * parameter (e.g. "authorization_code") and other parameters as determined by the grant type. Supported grant types are
+ * handled by the provided {@link #setTokenGranter(com.wy.test.protocol.oauth2.provider.TokenGranter) token granter}.
  * </p>
  * 
  * <p>
- * Clients must be authenticated using a Spring Security {@link Authentication}
- * to access this endpoint, and the client id is extracted from the
- * authentication token. The best way to arrange this (as per the OAuth2 spec)
- * is to use HTTP basic authentication for this endpoint with standard Spring
- * Security support.
+ * Clients must be authenticated using a Spring Security {@link Authentication} to access this endpoint, and the client
+ * id is extracted from the authentication token. The best way to arrange this (as per the OAuth2 spec) is to use HTTP
+ * basic authentication for this endpoint with standard Spring Security support.
  * </p>
  * 
  * @author Dave Syer
@@ -64,6 +60,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  */
 @Tag(name = "2-1-OAuth v2.0 API文档模块")
 @Controller
+@Slf4j
 public class TokenEndpoint extends AbstractEndpoint {
 
 	private OAuth2RequestValidator oAuth2RequestValidator = new DefaultOAuth2RequestValidator();
@@ -133,12 +130,12 @@ public class TokenEndpoint extends AbstractEndpoint {
 			if (isAuthCodeRequest(parameters)) {
 				// The scope was requested or determined during the authorization step
 				if (!tokenRequest.getScope().isEmpty()) {
-					logger.debug("Clearing scope of incoming token request");
+					log.debug("Clearing scope of incoming token request");
 					tokenRequest.setScope(Collections.<String>emptySet());
 				}
 			}
 
-			logger.debug("request parameters " + parameters);
+			log.debug("request parameters " + parameters);
 			// The scope was requested or determined during the authorization step
 			/**
 			 * code must uuid format
@@ -191,12 +188,10 @@ public class TokenEndpoint extends AbstractEndpoint {
 	 * @param principal the currently authentication principal
 	 * @return a client id if there is one in the principal
 	 * 
-	 *         protected String getClientId(Principal principal) { Authentication
-	 *         client = (Authentication) principal; if (!client.isAuthenticated()) {
-	 *         throw new InsufficientAuthenticationException("The client is not
-	 *         authenticated."); } String clientId = client.getName(); if (client
-	 *         instanceof OAuth2Authentication) { // Might be a client and user
-	 *         combined authentication clientId = ((OAuth2Authentication)
+	 *         protected String getClientId(Principal principal) { Authentication client = (Authentication) principal;
+	 *         if (!client.isAuthenticated()) { throw new InsufficientAuthenticationException("The client is not
+	 *         authenticated."); } String clientId = client.getName(); if (client instanceof OAuth2Authentication) { //
+	 *         Might be a client and user combined authentication clientId = ((OAuth2Authentication)
 	 *         client).getOAuth2Request().getClientId(); } return clientId; }
 	 */
 
@@ -208,14 +203,12 @@ public class TokenEndpoint extends AbstractEndpoint {
 	}
 
 	private boolean isRefreshTokenRequest(Map<String, String> parameters) {
-		return OAuth2Constants.PARAMETER.GRANT_TYPE_REFRESH_TOKEN
-				.equals(parameters.get(OAuth2Utils.GRANT_TYPE))
+		return OAuth2Constants.PARAMETER.GRANT_TYPE_REFRESH_TOKEN.equals(parameters.get(OAuth2Utils.GRANT_TYPE))
 				&& parameters.get(OAuth2Constants.PARAMETER.GRANT_TYPE_REFRESH_TOKEN) != null;
 	}
 
 	private boolean isAuthCodeRequest(Map<String, String> parameters) {
-		return OAuth2Constants.PARAMETER.GRANT_TYPE_AUTHORIZATION_CODE
-				.equals(parameters.get(OAuth2Utils.GRANT_TYPE))
+		return OAuth2Constants.PARAMETER.GRANT_TYPE_AUTHORIZATION_CODE.equals(parameters.get(OAuth2Utils.GRANT_TYPE))
 				&& parameters.get(OAuth2Constants.PARAMETER.CODE) != null;
 	}
 

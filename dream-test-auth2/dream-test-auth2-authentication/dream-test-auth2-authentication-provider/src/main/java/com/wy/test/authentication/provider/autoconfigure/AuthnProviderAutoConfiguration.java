@@ -19,7 +19,6 @@ import com.wy.test.authentication.provider.authn.support.rememberme.AbstractReme
 import com.wy.test.authentication.provider.authn.support.rememberme.JdbcRemeberMeManager;
 import com.wy.test.authentication.sms.password.sms.SmsOtpAuthnService;
 import com.wy.test.core.persistence.repository.LoginHistoryRepository;
-import com.wy.test.core.persistence.repository.LoginRepository;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.properties.DreamAuthServerProperties;
@@ -71,12 +70,6 @@ public class AuthnProviderAutoConfiguration implements InitializingBean {
 	@ConditionalOnMissingBean
 	PasswordPolicyValidator passwordPolicyValidator(JdbcTemplate jdbcTemplate, MessageSource messageSource) {
 		return new PasswordPolicyValidator(jdbcTemplate, messageSource);
-	}
-
-	@Bean
-	@ConditionalOnMissingBean
-	LoginRepository loginRepository(JdbcTemplate jdbcTemplate) {
-		return new LoginRepository(jdbcTemplate);
 	}
 
 	@Bean

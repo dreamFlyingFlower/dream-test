@@ -47,11 +47,11 @@ public class JdbcClientDetailsService implements ClientDetailsService, ClientReg
 
 	private JsonMapper mapper = createJsonMapper();
 
-	private static final String CLIENT_FIELDS_FOR_UPDATE = "RESOURCE_IDS, SCOPE, "
-			+ "AUTHORIZED_GRANT_TYPES, WEB_SERVER_REDIRECT_URI, AUTHORITIES, ACCESS_TOKEN_VALIDITY, "
-			+ "REFRESH_TOKEN_VALIDITY, ADDITIONAL_INFORMATION, AUTOAPPROVE, APPROVALPROMPT , "
-			+ "ALGORITHM, ALGORITHMKEY, ENCRYPTIONMETHOD, SIGNATURE, SIGNATUREKEY, SUBJECT, "
-			+ "USERINFORESPONSE, ISSUER, AUDIENCE, PKCE, PROTOCOL , INSTID ";
+	private static final String CLIENT_FIELDS_FOR_UPDATE = "resource_ids, scope, "
+			+ "authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, "
+			+ "refresh_token_validity, additional_information, auto_approve, approval_prompt , "
+			+ "algorithm, algorithm_key, encryption_type, signature, signature_key, subject, "
+			+ "user_info_response, issuer, audience, pkce, protocol , inst_id ";
 
 	private static final String CLIENT_FIELDS = "client_secret, " + CLIENT_FIELDS_FOR_UPDATE;
 

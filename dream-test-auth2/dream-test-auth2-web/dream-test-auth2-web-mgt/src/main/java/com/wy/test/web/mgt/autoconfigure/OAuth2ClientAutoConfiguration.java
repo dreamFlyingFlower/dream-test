@@ -77,10 +77,10 @@ public class OAuth2ClientAutoConfiguration implements InitializingBean {
 	/**
 	 * ProviderManager.
 	 * 
-	 * @return oauth20ClientAuthenticationManager
+	 * @return oauth2ClientAuthenticationManager
 	 */
 	@Bean
-	ProviderManager oauth20ClientAuthenticationManager(JdbcClientDetailsService oauth20JdbcClientDetailsService,
+	ProviderManager oauth2ClientAuthenticationManager(JdbcClientDetailsService oauth20JdbcClientDetailsService,
 			PasswordEncoder passwordReciprocal) {
 
 		ClientDetailsUserDetailsService cientDetailsUserDetailsService =

@@ -77,7 +77,7 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 
 	private AuthenticationManager authenticationManager;
 
-	private AuthenticationManager oauth20ClientAuthenticationManager;
+	private AuthenticationManager oauth2ClientAuthenticationManager;
 
 	private OAuth2RequestFactory oAuth2RequestFactory;
 
@@ -110,14 +110,14 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 			throws IOException, ServletException {
 		_logger.debug("Authentication TokenEndpoint ");
 		if (authenticationManager == null) {
-			authenticationManager = WebContext.getBean("oauth20UserAuthenticationManager", AuthenticationManager.class);
+			authenticationManager = WebContext.getBean("oauth2UserAuthenticationManager", AuthenticationManager.class);
 		}
 		if (oAuth2RequestFactory == null) {
 			oAuth2RequestFactory = WebContext.getBean("oAuth2RequestFactory", OAuth2RequestFactory.class);
 		}
-		if (oauth20ClientAuthenticationManager == null) {
-			oauth20ClientAuthenticationManager =
-					WebContext.getBean("oauth20ClientAuthenticationManager", AuthenticationManager.class);
+		if (oauth2ClientAuthenticationManager == null) {
+			oauth2ClientAuthenticationManager =
+					WebContext.getBean("oauth2ClientAuthenticationManager", AuthenticationManager.class);
 		}
 
 		final boolean debug = _logger.isDebugEnabled();
@@ -178,7 +178,7 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 				String clientSecret = request.getParameter(OAuth2Constants.PARAMETER.CLIENT_SECRET);
 				UsernamePasswordAuthenticationToken authRequest =
 						new UsernamePasswordAuthenticationToken(clientId, clientSecret);
-				Authentication clientAuth = oauth20ClientAuthenticationManager.authenticate(authRequest);
+				Authentication clientAuth = oauth2ClientAuthenticationManager.authenticate(authRequest);
 				// Authentication clientAuth =
 				// SecurityContextHolder.getContext().getAuthentication();
 				if (clientAuth == null) {
@@ -252,7 +252,7 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 		UsernamePasswordAuthenticationToken authRequest =
 				new UsernamePasswordAuthenticationToken(clientId, clientSecret);
 
-		return this.oauth20ClientAuthenticationManager.authenticate(authRequest);
+		return this.oauth2ClientAuthenticationManager.authenticate(authRequest);
 	}
 
 	private Map<String, String> getSingleValueMap(HttpServletRequest request) {

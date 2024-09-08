@@ -222,12 +222,11 @@
 	<delete id="deleteDynamicRoleMember" parameterType="com.wy.test.core.vo.RoleVO">
 		delete from auth_role_member rm
 		where type = 'user-dynamic'
-		and rm.roleid=#{id}
+		and rm.role_id=#{id}
 		and not exists(
 		select 1
 		from auth_user u
-		where 1 = 1
-		and u.id=rm.memberid
+		where u.id=rm.memberid
 		<if test="filters != null and filters != ''">
 			and (${filters})
 		</if>

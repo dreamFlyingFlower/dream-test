@@ -41,7 +41,7 @@ public class IntrospectEndpoint {
 	private DefaultTokenServices oauth20tokenServices;
 
 	@Autowired
-	ProviderManager oauth20ClientAuthenticationManager;
+	ProviderManager oauth2ClientAuthenticationManager;
 
 	@Autowired
 	protected HttpResponseAdapter httpResponseAdapter;
@@ -86,7 +86,7 @@ public class IntrospectEndpoint {
 						&& StringUtils.isNotBlank(headerCredential.getCredential())) {
 					UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
 							headerCredential.getUsername(), headerCredential.getCredential());
-					authenticationToken = (UsernamePasswordAuthenticationToken) oauth20ClientAuthenticationManager
+					authenticationToken = (UsernamePasswordAuthenticationToken) oauth2ClientAuthenticationManager
 							.authenticate(authRequest);
 				}
 			}

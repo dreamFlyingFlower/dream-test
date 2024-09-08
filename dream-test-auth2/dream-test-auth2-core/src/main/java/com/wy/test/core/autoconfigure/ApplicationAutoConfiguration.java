@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
@@ -80,13 +81,14 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	PasswordEncoder passwordEncoder(DreamAuthCryptoProperties dreamAuthCryptoProperties) {
 		Map<String, PasswordEncoder> encoders = new HashMap<String, PasswordEncoder>();
 		encoders.put("bcrypt", new BCryptPasswordEncoder());
+		encoders.put("ldap", new LdapShaPasswordEncoder());
 		encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
+		encoders.put("plain", NoOpPasswordEncoder.getInstance());
+
 		encoders.put("scrypt", new SCryptPasswordEncoder());
 		encoders.put("sha256", new StandardPasswordEncoder());
 
 		encoders.put("sm3", new SM3PasswordEncoder());
-
-		encoders.put("ldap", new LdapShaPasswordEncoder());
 
 		// idForEncode is default for encoder
 		PasswordEncoder passwordEncoder =

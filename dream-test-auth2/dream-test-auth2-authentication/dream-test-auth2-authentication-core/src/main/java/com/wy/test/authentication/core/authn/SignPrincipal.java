@@ -1,7 +1,7 @@
 package com.wy.test.authentication.core.authn;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,9 +26,9 @@ public class SignPrincipal implements UserDetails {
 
 	Session session;
 
-	ArrayList<GrantedAuthority> grantedAuthority;
+	List<GrantedAuthority> grantedAuthority;
 
-	ArrayList<GrantedAuthority> grantedAuthorityApps;
+	List<GrantedAuthority> grantedAuthorityApps;
 
 	boolean authenticated;
 

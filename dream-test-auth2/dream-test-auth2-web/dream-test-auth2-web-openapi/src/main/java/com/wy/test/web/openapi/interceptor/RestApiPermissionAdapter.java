@@ -37,7 +37,7 @@ public class RestApiPermissionAdapter implements AsyncHandlerInterceptor {
 	DefaultTokenServices oauth20TokenServices;
 
 	@Autowired
-	ProviderManager oauth20ClientAuthenticationManager;
+	ProviderManager oauth2ClientAuthenticationManager;
 
 	static ConcurrentHashMap<String, String> navigationsMap = null;
 
@@ -61,7 +61,7 @@ public class RestApiPermissionAdapter implements AsyncHandlerInterceptor {
 						&& StrHelper.isNotBlank(headerCredential.getCredential())) {
 					UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
 							headerCredential.getUsername(), headerCredential.getCredential());
-					authenticationToken = (UsernamePasswordAuthenticationToken) oauth20ClientAuthenticationManager
+					authenticationToken = (UsernamePasswordAuthenticationToken) oauth2ClientAuthenticationManager
 							.authenticate(authRequest);
 				}
 			} else {

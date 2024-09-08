@@ -3,8 +3,6 @@ package com.wy.test.protocol.oauth2.provider.endpoint;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,8 +28,6 @@ import com.wy.test.protocol.oauth2.provider.token.AuthorizationServerTokenServic
 
 public class AbstractEndpoint implements InitializingBean {
 
-	protected final Log logger = LogFactory.getLog(getClass());
-
 	private TokenGranter tokenGranter;
 
 	@Autowired
@@ -55,7 +51,7 @@ public class AbstractEndpoint implements InitializingBean {
 	protected OAuth2RequestFactory defaultOAuth2RequestFactory;
 
 	@Autowired
-	@Qualifier("oauth20UserAuthenticationManager")
+	@Qualifier("oauth2UserAuthenticationManager")
 	AuthenticationManager authenticationManager;
 
 	@Autowired

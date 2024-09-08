@@ -30,6 +30,13 @@ public class WebInstRequestFilter extends GenericFilterBean {
 
 	DreamAuthServerProperties dreamServerProperties;
 
+	public WebInstRequestFilter(InstitutionsRepository institutionsRepository,
+			DreamAuthServerProperties dreamServerProperties) {
+		super();
+		this.institutionsRepository = institutionsRepository;
+		this.dreamServerProperties = dreamServerProperties;
+	}
+
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
 			throws IOException, ServletException {
@@ -64,12 +71,5 @@ public class WebInstRequestFilter extends GenericFilterBean {
 			}
 		}
 		chain.doFilter(servletRequest, servletResponse);
-	}
-
-	public WebInstRequestFilter(InstitutionsRepository institutionsRepository,
-			DreamAuthServerProperties dreamServerProperties) {
-		super();
-		this.institutionsRepository = institutionsRepository;
-		this.dreamServerProperties = dreamServerProperties;
 	}
 }

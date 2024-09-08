@@ -163,8 +163,8 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 			String redirectUriParameter = authorizationRequest.getRequestParameters().get(OAuth2Utils.REDIRECT_URI);
 			String resolvedRedirect = redirectResolver.resolveRedirect(redirectUriParameter, client);
 			if (!StringUtils.hasText(resolvedRedirect)) {
-				logger.info("Client redirectUri " + resolvedRedirect);
-				logger.info("Parameter redirectUri " + redirectUriParameter);
+				log.info("Client redirectUri " + resolvedRedirect);
+				log.info("Parameter redirectUri " + redirectUriParameter);
 
 				throw new RedirectMismatchException(
 						"A redirectUri must be either supplied or preconfigured in the ClientDetails");
@@ -278,7 +278,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 	// We need explicit approval from the user.
 	private ModelAndView getUserApprovalPageResponse(Map<String, Object> model,
 			AuthorizationRequest authorizationRequest, Authentication principal) {
-		logger.debug("Loading user approval page: " + userApprovalPage);
+		log.debug("Loading user approval page: " + userApprovalPage);
 		model.putAll(userApprovalHandler.getUserApprovalRequest(authorizationRequest, principal));
 		return new ModelAndView(userApprovalPage, model);
 	}

@@ -17,16 +17,16 @@ import lombok.extern.slf4j.Slf4j;
 public class JdbcRemeberMeManager extends AbstractRemeberMeManager {
 
 	private static final String DEFAULT_DEFAULT_INSERT_STATEMENT =
-			"insert into  auth_remember_me(id, userid,username,lastlogintime,expirationtime)values( ? , ? , ? , ? , ?)";
+			"insert into  auth_remember_me(id, userid,username,last_login_time,expirationtime)values( ? , ? , ? , ? , ?)";
 
 	private static final String DEFAULT_DEFAULT_SELECT_STATEMENT =
-			"select id, userid,username,lastlogintime,expirationtime  from auth_remember_me "
+			"select id, userid,username,last_login_time,expirationtime  from auth_remember_me "
 					+ " where id = ?  and username = ?";
 
 	private static final String DEFAULT_DEFAULT_DELETE_STATEMENT = "delete from  auth_remember_me where  username = ?";
 
 	private static final String DEFAULT_DEFAULT_UPDATE_STATEMENT =
-			"update auth_remember_me  set  lastlogintime = ? , expirationtime = ?  where id = ?";
+			"update auth_remember_me  set  last_login_time = ? , expirationtime = ?  where id = ?";
 
 	private final JdbcTemplate jdbcTemplate;
 

@@ -55,7 +55,7 @@ import me.zhyd.oauth.request.AuthWeiboRequest;
 public class SocialSignOnProviderService {
 
 	private static final String DEFAULT_SELECT_STATEMENT =
-			"select * from auth_social_provider where instid = ? and status = 1  order by sortindex";
+			"select * from auth_social_provider where inst_id = ? and status = 1  order by sort_index";
 
 	protected static final Cache<String, SocialsProviderLogin> socialsProviderLoginStore =
 			Caffeine.newBuilder().expireAfterWrite(ConstTimeInterval.ONE_HOUR, TimeUnit.MINUTES).build();
@@ -229,18 +229,18 @@ public class SocialSignOnProviderService {
 			SocialProviderEntity socialsProvider = new SocialProviderEntity();
 			socialsProvider.setId(rs.getString("id"));
 			socialsProvider.setProvider(rs.getString("provider"));
-			socialsProvider.setProviderName(rs.getString("providername"));
+			socialsProvider.setProviderName(rs.getString("provider_name"));
 			socialsProvider.setIcon(rs.getString("icon"));
-			socialsProvider.setClientId(rs.getString("clientid"));
-			String clientSecret = rs.getString("clientsecret");
+			socialsProvider.setClientId(rs.getString("client_id"));
+			String clientSecret = rs.getString("client_secret");
 			clientSecret = PasswordReciprocal.getInstance().decoder(clientSecret);
 			socialsProvider.setClientSecret(clientSecret);
-			socialsProvider.setAgentId(rs.getString("agentId"));
+			socialsProvider.setAgentId(rs.getString("agent_id"));
 			socialsProvider.setDisplay(rs.getString("display"));
-			socialsProvider.setSortIndex(rs.getInt("sortindex"));
-			socialsProvider.setScanCode(rs.getString("scancode"));
+			socialsProvider.setSortIndex(rs.getInt("sort_index"));
+			socialsProvider.setScanCode(rs.getString("scan_code"));
 			socialsProvider.setStatus(rs.getString("status"));
-			socialsProvider.setInstId(rs.getString("instid"));
+			socialsProvider.setInstId(rs.getString("inst_id"));
 			return socialsProvider;
 		}
 	}

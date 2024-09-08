@@ -43,14 +43,14 @@ import com.wy.test.persistence.service.UserService;
 import dream.flying.flower.framework.web.enums.AuthLoginType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "1-1-登录接口文档模块")
 @RestController
 @RequestMapping(value = "/login")
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class LoginEntryPoint {
 
 	Pattern mobileRegex = Pattern.compile("^(13[4,5,6,7,8,9]|15[0,8,9,1,7]|188|187)\\\\d{8}$");
@@ -164,7 +164,7 @@ public class LoginEntryPoint {
 			// 插入dream和社交服务的用户映射表
 			socialsAssociatesService.save(socialsAssociate);
 
-			// 设置完成后，进行登录认证
+			// 设置完成后,进行登录认证
 			LoginCredential loginCredential =
 					new LoginCredential(socialsAssociate.getUsername(), "", AuthLoginType.SOCIALSIGNON);
 

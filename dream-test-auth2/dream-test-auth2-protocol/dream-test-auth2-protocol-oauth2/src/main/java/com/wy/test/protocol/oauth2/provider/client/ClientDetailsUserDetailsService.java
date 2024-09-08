@@ -52,5 +52,4 @@ public class ClientDetailsUserDetailsService implements UserDetailsService {
 
 		return new User(username, clientSecret, clientDetails.getAuthorities());
 	}
-
 }

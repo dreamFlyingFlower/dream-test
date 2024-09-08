@@ -180,7 +180,7 @@ public class UserEntity extends AbstractStringEntity {
 	/**
 	 * 锁定时间
 	 */
-	private String unLockTime;
+	private Date unlockTime;
 
 	/**
 	 * 最近登录时间
@@ -466,7 +466,7 @@ public class UserEntity extends AbstractStringEntity {
 	/**
 	 * 机构
 	 */
-	private String organization;
+	private String orgId;
 
 	/**
 	 * 部门编号

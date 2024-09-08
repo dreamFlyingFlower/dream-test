@@ -411,16 +411,18 @@ public class UserVO implements Serializable, TransPojo {
 	private Date createTime;
 
 	/**
-	 * for extended Attribute from userType extraAttribute for database
-	 * extraAttributeName & extraAttributeValue for page submit
+	 * for extended Attribute from userType extraAttribute for database extraAttributeName & extraAttributeValue for
+	 * page submit
 	 */
 	private String extraAttribute;
 
 	private Integer online;
 
+	@Schema(description = "锁定状态")
 	private Integer isLocked;
 
-	private String unLockTime;
+	@Schema(description = "锁定时间")
+	private String unlockTime;
 
 	@Schema(description = "备注")
 	@Size(max = 256, message = "备注最大长度不能超过256", groups = { ValidAdd.class, ValidEdit.class })

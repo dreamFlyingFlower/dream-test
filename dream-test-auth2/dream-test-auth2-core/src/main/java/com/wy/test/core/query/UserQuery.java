@@ -119,6 +119,12 @@ public class UserQuery extends AbstractQuery {
 	@Schema(description = "后缀")
 	private String honorificSuffix;
 
+	@Schema(description = "是否锁定")
+	private Integer isLocked;
+
+	@Schema(description = "锁定时间")
+	private Date unlockTime;
+
 	@Schema(description = "登录次数统计")
 	private Integer loginCount;
 

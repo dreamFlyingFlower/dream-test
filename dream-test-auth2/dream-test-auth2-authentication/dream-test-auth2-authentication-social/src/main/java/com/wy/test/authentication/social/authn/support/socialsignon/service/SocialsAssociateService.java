@@ -6,14 +6,13 @@ import com.wy.test.core.entity.SocialAssociateEntity;
 
 public interface SocialsAssociateService {
 
-	public boolean insert(SocialAssociateEntity socialsAssociate);
+	boolean insert(SocialAssociateEntity socialsAssociate);
 
-	public List<SocialAssociateEntity> query(SocialAssociateEntity socialsAssociate);
+	List<SocialAssociateEntity> query(SocialAssociateEntity socialsAssociate);
 
-	public SocialAssociateEntity get(SocialAssociateEntity socialsAssociate);
+	SocialAssociateEntity get(SocialAssociateEntity socialsAssociate);
 
-	public boolean delete(SocialAssociateEntity socialsAssociate);
+	boolean delete(SocialAssociateEntity socialsAssociate);
 
-	public boolean update(SocialAssociateEntity socialsAssociate);
-
+	boolean update(SocialAssociateEntity socialsAssociate);
 }

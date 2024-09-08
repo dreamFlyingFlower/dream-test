@@ -1,6 +1,5 @@
 package com.wy.test.authentication.provider.authn.realm;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,11 +12,11 @@ import com.wy.test.authentication.provider.authn.realm.ldap.LdapAuthenticationRe
 import com.wy.test.core.entity.HistoryLoginEntity;
 import com.wy.test.core.entity.RoleEntity;
 import com.wy.test.core.persistence.repository.LoginHistoryRepository;
-import com.wy.test.core.persistence.repository.LoginRepository;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
+import com.wy.test.persistence.service.LoginService;
 import com.wy.test.persistence.service.UserService;
 
 import dream.flying.flower.framework.web.enums.AuthLoginType;
@@ -33,7 +32,7 @@ public abstract class AbstractAuthenticationRealm {
 
 	protected PasswordPolicyValidator passwordPolicyValidator;
 
-	protected LoginRepository loginRepository;
+	protected LoginService loginService;
 
 	protected LoginHistoryRepository loginHistoryRepository;
 
@@ -53,18 +52,18 @@ public abstract class AbstractAuthenticationRealm {
 		return passwordPolicyValidator;
 	}
 
-	public LoginRepository getLoginRepository() {
-		return loginRepository;
+	public LoginService getLoginRepository() {
+		return loginService;
 	}
 
 	public UserVO loadUserInfo(String username, String password) {
-		return loginRepository.find(username, password);
+		return loginService.find(username, password);
 	}
 
 	public abstract boolean passwordMatches(UserVO userInfo, String password);
 
 	public List<RoleEntity> queryGroups(UserVO userInfo) {
-		return loginRepository.queryRoles(userInfo);
+		return loginService.queryRoles(userInfo);
 	}
 
 	/**
@@ -73,8 +72,8 @@ public abstract class AbstractAuthenticationRealm {
 	 * @param userInfo
 	 * @return ArrayList<GrantedAuthority>
 	 */
-	public ArrayList<GrantedAuthority> grantAuthority(UserVO userInfo) {
-		return loginRepository.grantAuthority(userInfo);
+	public List<GrantedAuthority> grantAuthority(UserVO userInfo) {
+		return loginService.grantAuthority(userInfo);
 	}
 
 	/**
@@ -83,8 +82,8 @@ public abstract class AbstractAuthenticationRealm {
 	 * @param grantedAuthoritys
 	 * @return ArrayList<GrantedAuthority Apps>
 	 */
-	public ArrayList<GrantedAuthority> queryAuthorizedApps(ArrayList<GrantedAuthority> grantedAuthoritys) {
-		return loginRepository.queryAuthorizedApps(grantedAuthoritys);
+	public List<GrantedAuthority> queryAuthorizedApps(List<GrantedAuthority> grantedAuthoritys) {
+		return loginService.queryAuthorizedApps(grantedAuthoritys);
 	}
 
 	/**
@@ -127,7 +126,7 @@ public abstract class AbstractAuthenticationRealm {
 
 		loginHistoryRepository.login(historyLogin);
 
-		loginRepository.updateLastLogin(userInfo);
+		loginService.updateLastLogin(userInfo);
 
 		return true;
 	}

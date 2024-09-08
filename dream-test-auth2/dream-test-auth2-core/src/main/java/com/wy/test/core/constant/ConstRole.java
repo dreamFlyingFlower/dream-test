@@ -2,7 +2,9 @@ package com.wy.test.core.constant;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-public interface ConstRoles {
+public interface ConstRole {
+
+	String ROLE_PREFIX = "ROLE_";
 
 	SimpleGrantedAuthority ROLE_ADMINISTRATORS = new SimpleGrantedAuthority("ROLE_ADMINISTRATORS");
 

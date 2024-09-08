@@ -11,6 +11,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.ClassPathResource;
@@ -31,23 +32,24 @@ import com.wy.test.authentication.provider.authn.support.kerberos.RemoteKerberos
 import com.wy.test.core.enums.StoreType;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.core.persistence.repository.LoginHistoryRepository;
-import com.wy.test.core.persistence.repository.LoginRepository;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.properties.DreamAuthOtpProperties;
 import com.wy.test.core.properties.DreamAuthStoreProperties;
 import com.wy.test.persistence.service.LdapContextService;
+import com.wy.test.persistence.service.LoginService;
 import com.wy.test.persistence.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @AutoConfiguration
-@ComponentScan(basePackages = { "org.dream.authn", "org.dream.configuration", "org.dream.domain",
-		"org.dream.domain.apps", "org.dream.domain.userinfo", "org.dream.api.v1.contorller", "org.dream.web.endpoint",
-		"org.dream.web.contorller", "org.dream.web.interceptor",
-		// single sign on protocol
-		"org.dream.authz.endpoint", "org.dream.authz.desktop.endpoint", "org.dream.authz.exapi.endpoint",
-		"org.dream.authz.formbased.endpoint", "org.dream.authz.ltpa.endpoint", "org.dream.authz.token.endpoint" })
+@ComponentScan(basePackages = { "com.wy.dream.authn", "com.wy.dream.configuration", "com.wy.dream.domain",
+		"com.wy.dream.domain.apps", "com.wy.dream.domain.userinfo", "com.wy.dream.api.v1.contorller",
+		"com.wy.dream.web.endpoint", "com.wy.dream.web.contorller", "com.wy.dream.web.interceptor",
+		"com.wy.dream.authz.endpoint", "com.wy.dream.authz.desktop.endpoint", "com.wy.dream.authz.exapi.endpoint",
+		"com.wy.dream.authz.formbased.endpoint", "com.wy.dream.authz.ltpa.endpoint",
+		"com.wy.dream.authz.token.endpoint" })
+@EnableConfigurationProperties(DreamAuthOtpProperties.class)
 @Slf4j
 public class DreamTestConfig implements InitializingBean {
 
@@ -60,10 +62,10 @@ public class DreamTestConfig implements InitializingBean {
 		return otpKeyUriFormat;
 	}
 
-	// 可以在此实现其他的登陆认证方式，请实现AbstractAuthenticationRealm
+	// 可以在此实现其他的登陆认证方式,请实现AbstractAuthenticationRealm
 	@Bean
 	JdbcAuthenticationRealm authenticationRealm(PasswordEncoder passwordEncoder,
-			PasswordPolicyValidator passwordPolicyValidator, LoginRepository loginService,
+			PasswordPolicyValidator passwordPolicyValidator, LoginService loginService,
 			LoginHistoryRepository loginHistoryService, UserService userService, JdbcTemplate jdbcTemplate,
 			MailOtpAuthnService otpAuthnService, LdapContextService ldapContextService) {
 		LdapAuthenticationRealmService ldapRealmService = new LdapAuthenticationRealmService(ldapContextService);

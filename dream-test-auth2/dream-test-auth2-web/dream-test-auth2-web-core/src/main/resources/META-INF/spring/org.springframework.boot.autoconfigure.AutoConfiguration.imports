@@ -9,9 +9,9 @@ com.wy.test.authentication.provider.autoconfigure.JwtAuthnAutoConfiguration
 com.wy.test.authentication.provider.autoconfigure.AuthnProviderAutoConfiguration
 com.wy.test.authentication.otp.autoconfigure.OneTimePasswordAutoConfiguration
 com.wy.test.authentication.sms.autoconfigure.SmsAutoConfiguration
-com.wy.test.protocol.cas.autoconfigure.CasAutoConfiguration
-com.wy.test.protocol.oauth2.autoconfigure.Oauth20AutoConfiguration
-com.wy.test.protocol.saml2.autoconfigure.Saml20AutoConfiguration
 com.wy.test.authentication.social.autoconfigure.SocialSignOnAutoConfiguration
+com.wy.test.protocol.cas.autoconfigure.CasAutoConfiguration
+com.wy.test.protocol.oauth2.autoconfigure.OAuth2AutoConfiguration
+com.wy.test.protocol.saml2.autoconfigure.Saml20AutoConfiguration
 com.wy.test.web.core.autoconfigure.DreamAuthMvcConfig
 com.wy.test.web.core.autoconfigure.DreamTestConfig

@@ -1,6 +1,6 @@
 package com.wy.test.protocol.oauth2.provider;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,22 +11,24 @@ import org.springframework.security.oauth2.provider.NoSuchClientException;
 import com.wy.test.authentication.core.authn.SignPrincipal;
 import com.wy.test.authentication.core.authn.session.Session;
 import com.wy.test.authentication.provider.authn.provider.AbstractAuthenticationProvider;
-import com.wy.test.core.persistence.repository.LoginRepository;
 import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
+import com.wy.test.persistence.service.LoginService;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Data
 public class OAuth2UserDetailsService implements UserDetailsService {
 
-	LoginRepository loginRepository;
+	LoginService loginService;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		UserVO userInfo;
 		try {
-			userInfo = loginRepository.find(username, "");
+			userInfo = loginService.find(username, "");
 		} catch (NoSuchClientException e) {
 			throw new UsernameNotFoundException(e.getMessage(), e);
 		}
@@ -39,7 +41,7 @@ public class OAuth2UserDetailsService implements UserDetailsService {
 		// set OnlineTicket
 		principal.setSession(onlineTicket);
 
-		ArrayList<GrantedAuthority> grantedAuthoritys = loginRepository.grantAuthority(userInfo);
+		List<GrantedAuthority> grantedAuthoritys = loginService.grantAuthority(userInfo);
 		principal.setAuthenticated(true);
 
 		for (GrantedAuthority administratorsAuthority : AbstractAuthenticationProvider.grantedAdministratorsAuthoritys) {
@@ -54,9 +56,4 @@ public class OAuth2UserDetailsService implements UserDetailsService {
 
 		return principal;
 	}
-
-	public void setLoginRepository(LoginRepository loginRepository) {
-		this.loginRepository = loginRepository;
-	}
-
 }

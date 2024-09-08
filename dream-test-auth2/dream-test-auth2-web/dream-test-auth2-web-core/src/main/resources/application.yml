@@ -9,13 +9,17 @@ server:
       force: true
       charset: UTF-8
 
+debug: true
 spring:
   application:
     name: dream
   main:
     banner-mode: log
+  web:
+    resources:
+      static-locations: classpath:/META-INF/resources/, classpath:/resources/, classpath:/static/, classpath:/public/, classpath:/templates/
   profiles:
-    active: ${SERVER_PROFILES:dream}
+    active: ${SERVER_PROFILES:config}
   servlet:
     multipart:
       enabled: true
@@ -25,7 +29,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/dream_auth?autoReconnect=true&useUnicode=true&useSSL=false&characterEncoding=UTF8&serverTimezone=GMT%2B8
     username: ${DATABASE_USER:root}
-    password: ${DATABASE_PWD:dream}
+    password: ${DATABASE_PWD:123456}
   redis:
     host: localhost
     port: 6379
@@ -49,17 +53,23 @@ spring:
     properties:
       ssl: true
       sender: ${MAIL_SENDER:dream@163.com}
-      mailotp-message-subject: dream One Time PassWord
-      mailotp-message-template: "{0} You Token is {1} , it validity in {2}  minutes."
-      mailotp-message-type: html
-      mailotp-message-validity: 300
+      mailotp:
+        message:
+          subject: Dream One Time PassWord
+          template: "{0} You Token is {1} , it validity in {2}  minutes."
+          type: html
+          validity: 300
+#        mailotp-message-subject: Dream One Time PassWord
+#      mailotp-message-template: "{0} You Token is {1} , it validity in {2}  minutes."
+#      mailotp-message-type: html
+#      mailotp-message-validity: 300
 
   messages:
     basename: classpath:messages/message
     encoding: UTF-8
 
   freemarker:
-    template-loader-path: classpath:/templates/views
+    template-loader-path: classpath:/templates/views/
     cache: false
     charset: UTF-8
     check-template-location: true
@@ -96,10 +106,10 @@ management:
       mail:
         enabled: false
 
-mybatis:
-  type-aliases-package: com.wy.test.core.entity,com.wy.test.core.vo,com.wy.test.core.query
-  mapper-locations:
-  - classpath*:mapper/*.xml
+#mybatis-plus:
+#  type-aliases-package: com.wy.test.core.entity,com.wy.test.core.vo,com.wy.test.core.query
+#  mapper-locations:
+#  - classpath*:mapper/*.xml
 
 springdoc:
   swagger-ui:
@@ -117,5 +127,5 @@ springdoc:
 knife4j:
   enable: true
   setting:
-      language: zh_cn
-      swagger-model-name: "实体类列表"
+    language: zh_cn
+    swagger-model-name: "实体类列表"

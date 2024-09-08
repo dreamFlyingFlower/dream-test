@@ -19,14 +19,13 @@ import lombok.extern.slf4j.Slf4j;
 public class InstitutionsRepository {
 
 	private static final String SELECT_STATEMENT =
-			"select * from  auth_institution where id = ? or domain = ? or consoledomain = ?";
+			"select * from  auth_institution where id = ? or domain = ? or console_domain = ?";
 
 	private static final String DEFAULT_INSTID = "1";
 
 	protected static final Cache<String, InstitutionEntity> institutionsStore =
 			Caffeine.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES).build();
 
-	// id domain mapping
 	protected static final ConcurrentHashMap<String, String> mapper = new ConcurrentHashMap<String, String>();
 
 	protected JdbcTemplate jdbcTemplate;
@@ -38,7 +37,7 @@ public class InstitutionsRepository {
 	public InstitutionEntity get(String instIdOrDomain) {
 		log.trace(" instId {}", instIdOrDomain);
 		InstitutionEntity inst = getByInstIdOrDomain(instIdOrDomain);
-		if (inst == null) {// use default inst
+		if (inst == null) {
 			inst = getByInstIdOrDomain(DEFAULT_INSTID);
 			institutionsStore.put(instIdOrDomain, inst);
 		}
@@ -73,14 +72,14 @@ public class InstitutionsRepository {
 			InstitutionEntity institution = new InstitutionEntity();
 			institution.setId(rs.getString("id"));
 			institution.setName(rs.getString("name"));
-			institution.setFullName(rs.getString("fullname"));
+			institution.setFullName(rs.getString("full_name"));
 			institution.setLogo(rs.getString("logo"));
 			institution.setDomain(rs.getString("domain"));
-			institution.setFrontTitle(rs.getString("fronttitle"));
-			institution.setConsoleDomain(rs.getString("consoledomain"));
-			institution.setConsoleTitle(rs.getString("consoletitle"));
+			institution.setFrontTitle(rs.getString("front_title"));
+			institution.setConsoleDomain(rs.getString("console_domain"));
+			institution.setConsoleTitle(rs.getString("console_title"));
 			institution.setCaptcha(rs.getString("captcha"));
-			institution.setDefaultUri(rs.getString("defaultUri"));
+			institution.setDefaultUri(rs.getString("default_uri"));
 			return institution;
 		}
 	}

@@ -11,11 +11,11 @@ import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.PasswordPolicyEntity;
 import com.wy.test.core.persistence.repository.LoginHistoryRepository;
-import com.wy.test.core.persistence.repository.LoginRepository;
 import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;
+import com.wy.test.persistence.service.LoginService;
 import com.wy.test.persistence.service.UserService;
 
 import dream.flying.flower.framework.web.enums.AuthLoginType;
@@ -38,23 +38,23 @@ public class JdbcAuthenticationRealm extends AbstractAuthenticationRealm {
 	}
 
 	public JdbcAuthenticationRealm(PasswordEncoder passwordEncoder, PasswordPolicyValidator passwordPolicyValidator,
-			LoginRepository loginRepository, LoginHistoryRepository loginHistoryRepository, UserService userService,
+			LoginService loginService, LoginHistoryRepository loginHistoryRepository, UserService userService,
 			JdbcTemplate jdbcTemplate) {
 
 		this.passwordEncoder = passwordEncoder;
 		this.passwordPolicyValidator = passwordPolicyValidator;
-		this.loginRepository = loginRepository;
+		this.loginService = loginService;
 		this.loginHistoryRepository = loginHistoryRepository;
 		this.userService = userService;
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	public JdbcAuthenticationRealm(PasswordEncoder passwordEncoder, PasswordPolicyValidator passwordPolicyValidator,
-			LoginRepository loginRepository, LoginHistoryRepository loginHistoryRepository, UserService userService,
+			LoginService loginService, LoginHistoryRepository loginHistoryRepository, UserService userService,
 			JdbcTemplate jdbcTemplate, LdapAuthenticationRealmService ldapAuthenticationRealmService) {
 		this.passwordEncoder = passwordEncoder;
 		this.passwordPolicyValidator = passwordPolicyValidator;
-		this.loginRepository = loginRepository;
+		this.loginService = loginService;
 		this.loginHistoryRepository = loginHistoryRepository;
 		this.userService = userService;
 		this.jdbcTemplate = jdbcTemplate;

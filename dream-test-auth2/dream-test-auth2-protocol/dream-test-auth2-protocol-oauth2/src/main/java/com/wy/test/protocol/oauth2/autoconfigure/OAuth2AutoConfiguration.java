@@ -8,9 +8,11 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.ProviderManager;
@@ -21,9 +23,9 @@ import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWEAlgorithm;
 import com.wy.test.core.entity.oidc.OidcProviderMetadataDetail;
 import com.wy.test.core.persistence.redis.RedisConnectionFactory;
-import com.wy.test.core.persistence.repository.LoginRepository;
 import com.wy.test.core.properties.DreamAuthOidcProperties;
 import com.wy.test.core.properties.DreamAuthStoreProperties;
+import com.wy.test.persistence.service.LoginService;
 import com.wy.test.protocol.oauth2.common.OAuth2Constants;
 import com.wy.test.protocol.oauth2.oidc.OidcIdTokenEnhancer;
 import com.wy.test.protocol.oauth2.provider.ClientDetailsService;
@@ -46,15 +48,23 @@ import dream.flying.flower.framework.web.crypto.jwt.encryption.DefaultJwtEncrypt
 import dream.flying.flower.framework.web.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 参照OAuth2AuthorizationServerConfiguration
+ *
+ * @author 飞花梦影
+ * @date 2024-09-08 16:39:00
+ * @git {@link https://github.com/dreamFlyingFlower}
+ */
 @AutoConfiguration
 @ComponentScan(
 		basePackages = { "com.wy.authz.oauth2.provider.endpoint", "com.wy.authz.oauth2.provider.userinfo.endpoint",
 				"com.wy.authz.oauth2.provider.approval.controller", "com.wy.authz.oauth2.provider.wellknown.endpoint" })
+@EnableConfigurationProperties(DreamAuthOidcProperties.class)
 @Slf4j
-public class Oauth20AutoConfiguration implements InitializingBean {
+public class OAuth2AutoConfiguration implements InitializingBean {
 
 	@Bean
-	FilterRegistrationBean<Filter> TokenEndpointAuthenticationFilter() {
+	FilterRegistrationBean<Filter> tokenEndpointAuthenticationFilter() {
 		log.debug("TokenEndpointAuthenticationFilter init ");
 		FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<Filter>();
 		registration.setFilter(new TokenEndpointAuthenticationFilter());
@@ -70,7 +80,7 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 	 * http://openid.net/specs/openid-connect-core-1_0.html#SelfIssued
 	 */
 	@Bean(name = "oidcProviderMetadata")
-	OidcProviderMetadataDetail OIDCProviderMetadataDetails(DreamAuthOidcProperties dreamAuthOidcProperties) {
+	OidcProviderMetadataDetail oidcProviderMetadataDetails(DreamAuthOidcProperties dreamAuthOidcProperties) {
 		log.debug("OIDC Provider Metadata Details init .");
 		OidcProviderMetadataDetail oidcProviderMetadata = new OidcProviderMetadataDetail();
 		oidcProviderMetadata.setIssuer(dreamAuthOidcProperties.getMetadata().getIssuer());
@@ -262,15 +272,16 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 	}
 
 	/**
-	 * ProviderManager.
+	 * 本地用户登录处理器
 	 * 
-	 * @return oauth20UserAuthenticationManager
+	 * @return oauth2UserAuthenticationManager
 	 */
-	@Bean(name = "oauth20UserAuthenticationManager")
-	ProviderManager oauth20UserAuthenticationManager(PasswordEncoder passwordEncoder, LoginRepository loginRepository) {
+	@Bean(name = "oauth2UserAuthenticationManager")
+	@Primary
+	ProviderManager oauth2UserAuthenticationManager(PasswordEncoder passwordEncoder, LoginService loginService) {
 
 		OAuth2UserDetailsService userDetailsService = new OAuth2UserDetailsService();
-		userDetailsService.setLoginRepository(loginRepository);
+		userDetailsService.setLoginService(loginService);
 
 		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
 		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
@@ -281,12 +292,12 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 	}
 
 	/**
-	 * ProviderManager.
+	 * OAuth2客户端登录处理器
 	 * 
-	 * @return oauth20ClientAuthenticationManager
+	 * @return oauth2ClientAuthenticationManager
 	 */
-	@Bean(name = "oauth20ClientAuthenticationManager")
-	ProviderManager oauth20ClientAuthenticationManager(JdbcClientDetailsService oauth20JdbcClientDetailsService,
+	@Bean(name = "oauth2ClientAuthenticationManager")
+	ProviderManager oauth2ClientAuthenticationManager(JdbcClientDetailsService oauth20JdbcClientDetailsService,
 			PasswordEncoder passwordReciprocal) {
 
 		ClientDetailsUserDetailsService cientDetailsUserDetailsService =
@@ -297,6 +308,13 @@ public class Oauth20AutoConfiguration implements InitializingBean {
 		daoAuthenticationProvider.setUserDetailsService(cientDetailsUserDetailsService);
 		ProviderManager authenticationManager = new ProviderManager(daoAuthenticationProvider);
 		log.debug("OAuth 2 Client Authentication Manager init.");
+
+		// FIXME 改造成多个manager
+		// List<AuthenticationProvider> providers = authenticationManager.getProviders();
+		// providers.add(daoAuthenticationProvider);
+		//
+		// ProviderManager providerManager = new ProviderManager(providers);
+
 		return authenticationManager;
 	}
 

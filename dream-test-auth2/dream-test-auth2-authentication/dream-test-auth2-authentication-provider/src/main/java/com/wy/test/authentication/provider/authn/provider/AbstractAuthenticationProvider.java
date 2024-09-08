@@ -1,6 +1,7 @@
 package com.wy.test.authentication.provider.authn.provider;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -99,7 +100,7 @@ public abstract class AbstractAuthenticationProvider {
 		// set session with principal
 		SignPrincipal principal = new SignPrincipal(userInfo, session);
 
-		ArrayList<GrantedAuthority> grantedAuthoritys = authenticationRealm.grantAuthority(userInfo);
+		List<GrantedAuthority> grantedAuthoritys = authenticationRealm.grantAuthority(userInfo);
 		principal.setAuthenticated(true);
 
 		for (GrantedAuthority administratorsAuthority : grantedAdministratorsAuthoritys) {
@@ -132,8 +133,8 @@ public abstract class AbstractAuthenticationProvider {
 	}
 
 	/**
-	 * login user by j_username and j_cname first query user by j_cname if first
-	 * step userinfo is null,query user from system.
+	 * login user by j_username and j_cname first query user by j_cname if first step userinfo is null,query user from
+	 * system.
 	 * 
 	 * @param username String
 	 * @param password String
