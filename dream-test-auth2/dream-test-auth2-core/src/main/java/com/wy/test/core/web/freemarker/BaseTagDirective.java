@@ -1,4 +1,4 @@
-package com.wy.test.core.web.tag;
+package com.wy.test.core.web.freemarker;
 
 import java.io.IOException;
 import java.util.Map;
@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
@@ -14,10 +15,15 @@ import freemarker.template.TemplateException;
 import freemarker.template.TemplateModel;
 
 /**
- * 获取应用上下文标签 <@browser name=""></@browser>
+ * 获取应用上下文标签 <@base/>
+ *
+ * @author 飞花梦影
+ * @date 2024-09-09 23:30:45
+ * @git {@link https://github.com/dreamFlyingFlower}
  */
-@FreemarkerTag("browser")
-public class BrowserTagDirective implements TemplateDirectiveModel {
+@Component
+@FreemarkerTag("base")
+public class BaseTagDirective implements TemplateDirectiveModel {
 
 	@Autowired
 	private HttpServletRequest request;
@@ -26,13 +32,10 @@ public class BrowserTagDirective implements TemplateDirectiveModel {
 	@SuppressWarnings("rawtypes")
 	public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body)
 			throws TemplateException, IOException {
-		String browser = params.get("name").toString();
-		String userAgent = request.getHeader("User-Agent");
-		env.getOut().append("<!--<div style='display:none'>" + userAgent + "</div>-->");
+		// String url = params.get(URL).toString();
 
-		if (userAgent.indexOf(browser) > 0) {
-			body.render(env.getOut());
-		}
+		String base = request.getContextPath();
+
+		env.getOut().append(base);
 	}
-
 }

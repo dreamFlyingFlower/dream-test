@@ -1,4 +1,4 @@
-package com.wy.test.core.web.tag;
+package com.wy.test.core.web.freemarker;
 
 import java.io.IOException;
 import java.util.Map;
@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
@@ -20,8 +21,13 @@ import freemarker.template.TemplateModel;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 获取应用上下文标签 .<@locale/>
+ * 获取应用上下文标签 <@locale/>
+ *
+ * @author 飞花梦影
+ * @date 2024-09-09 23:33:19
+ * @git {@link https://github.com/dreamFlyingFlower}
  */
+@Component
 @FreemarkerTag("locale")
 @Slf4j
 public class LocaleTagDirective implements TemplateDirectiveModel {

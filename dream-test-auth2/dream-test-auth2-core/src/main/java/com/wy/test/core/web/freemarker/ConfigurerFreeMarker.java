@@ -1,4 +1,4 @@
-package com.wy.test.core.web;
+package com.wy.test.core.web.freemarker;
 
 import java.io.IOException;
 import java.util.Map;
@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
-
-import com.wy.test.core.web.tag.FreemarkerTag;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
@@ -26,15 +24,15 @@ public class ConfigurerFreeMarker implements ApplicationContextAware {
 	@Autowired
 	Configuration configuration;
 
-	@PostConstruct // 在项目启动时执行方法
+	@PostConstruct
 	public void setSharedVariable() throws IOException, TemplateException {
 		// 根据注解FreemarkerTag获取bean ,key is bean name ,value is bean object
 		Map<String, Object> map = this.applicationContext.getBeansWithAnnotation(FreemarkerTag.class);
 		for (String key : map.keySet()) {
-			configuration.setSharedVariable(key, map.get(key));
+			configuration.setSharedVariable(map.get(key).getClass().getAnnotation(FreemarkerTag.class).value(),
+					map.get(key));
 			log.trace("FreeMarker Template " + key);
 		}
-
 	}
 
 	@Override

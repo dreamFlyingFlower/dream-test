@@ -509,7 +509,7 @@ public class UserEntity extends AbstractStringEntity {
 	private String assistant;
 
 	/**
-	 * 入司时间
+	 * 入职日期
 	 */
 	private Date entryDate;
 

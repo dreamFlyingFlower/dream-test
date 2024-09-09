@@ -15,8 +15,9 @@ import com.wy.test.core.web.InitializeContext;
 
 import lombok.extern.slf4j.Slf4j;
 
-@SpringBootApplication(scanBasePackages = { "com.wy.test.persistence", "com.wy.test.authentication.core",
-		"com.wy.test.configuration", "com.wy.test.core.convert", "com.wy.test.provision", "com.wy.test.web.core" })
+@SpringBootApplication(scanBasePackages = { "com.wy.test.core.web", "com.wy.test.persistence",
+		"com.wy.test.authentication.core", "com.wy.test.configuration", "com.wy.test.core.convert",
+		"com.wy.test.provision", "com.wy.test.web.core" })
 @MapperScan("com.wy.test.persistence.mapper")
 @Slf4j
 public class DreamTestApplication extends SpringBootServletInitializer {

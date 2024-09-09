@@ -13,7 +13,7 @@
         Single   Sign  On ( SSO ) <br>
         Version ${appVersion}<br>
         <br>
-        ©Copyright 2018 - ${.now?string["yyyy"]} https://www.top/<br>
+        ©Copyright 2024 - ${.now?string["yyyy"]} https://www.top/<br>
         Licensed under the Apache License, Version 2.0 <br>
         <hr>
     </center>

@@ -8,7 +8,6 @@
 <body>
 <center>
     <form id="refuse_form" name="refuse_form" action="" method="get">
-    
 		<table style="width:400px">
 			<tr>
 				<td colspan='2'><@locale code="login.authz.refuse" /></td>
