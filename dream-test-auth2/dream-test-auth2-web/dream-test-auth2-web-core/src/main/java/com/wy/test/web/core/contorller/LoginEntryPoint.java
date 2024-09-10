@@ -103,7 +103,7 @@ public class LoginEntryPoint {
 			}
 		}
 		// for normal login
-		HashMap<String, Object> model = new HashMap<String, Object>();
+		HashMap<String, Object> model = new HashMap<>();
 		model.put("isRemeberMe", dreamLoginProperties.isRememberMe());
 		model.put("isKerberos", dreamLoginProperties.getKerberos().isEnabled());
 		if (dreamLoginProperties.getMfa().isEnabled()) {
@@ -126,7 +126,7 @@ public class LoginEntryPoint {
 		// load Social Sign On Providers
 		model.put("socials", socialSignOnProviderService.loadSocials(inst.getId()));
 
-		return new Message<HashMap<String, Object>>(model).buildResponse();
+		return new Message<>(model).buildResponse();
 	}
 
 	@GetMapping(value = { "/sendotp/{mobile}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -134,10 +134,10 @@ public class LoginEntryPoint {
 		UserEntity userInfo = userInfoService.findByEmailMobile(mobile);
 		if (userInfo != null) {
 			smsAuthnService.getByInstId(WebContext.getInst().getId()).produce(userInfo);
-			return new Message<AuthJwt>(Message.SUCCESS).buildResponse();
+			return new Message<>(Message.SUCCESS).buildResponse();
 		}
 
-		return new Message<AuthJwt>(Message.FAIL).buildResponse();
+		return new Message<>(Message.FAIL).buildResponse();
 	}
 
 	@PostMapping(value = { "/signin/bindusersocials" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -190,7 +190,7 @@ public class LoginEntryPoint {
 	@PostMapping(value = { "/signin" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> signin(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody LoginCredential credential) {
-		Message<AuthJwt> authJwtMessage = new Message<AuthJwt>(Message.FAIL);
+		Message<AuthJwt> authJwtMessage = new Message<>(Message.FAIL);
 		if (authTokenService.validateJwtToken(credential.getState())) {
 			AuthLoginType authType = credential.getAuthLoginType();
 			log.debug("Login AuthN Type  " + authType);
@@ -206,9 +206,10 @@ public class LoginEntryPoint {
 					if (WebContext.getAttribute(WebConstants.CURRENT_USER_PASSWORD_SET_TYPE) != null)
 						authJwt.setPasswordSetType(
 								(Integer) WebContext.getAttribute(WebConstants.CURRENT_USER_PASSWORD_SET_TYPE));
-					authJwtMessage = new Message<AuthJwt>(authJwt);
+					authJwtMessage = new Message<>(authJwt);
 
-				} else {// fail
+				} else {
+					// fail
 					String errorMsg = WebContext.getAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE) == null ? ""
 							: WebContext.getAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE).toString();
 					authJwtMessage.setMessage(errorMsg);
@@ -232,9 +233,9 @@ public class LoginEntryPoint {
 		if (StringUtils.isNotBlank(credential.getCongress())) {
 			AuthJwt authJwt = authTokenService.consumeCongress(credential.getCongress());
 			if (authJwt != null) {
-				return new Message<AuthJwt>(authJwt).buildResponse();
+				return new Message<>(authJwt).buildResponse();
 			}
 		}
-		return new Message<AuthJwt>(Message.FAIL).buildResponse();
+		return new Message<>(Message.FAIL).buildResponse();
 	}
 }

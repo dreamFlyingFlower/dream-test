@@ -4,8 +4,6 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
@@ -14,19 +12,19 @@ import com.wy.test.authentication.core.authn.SignPrincipal;
 import com.wy.test.authentication.core.authn.jwt.AuthTokenService;
 import com.wy.test.authentication.core.authn.session.SessionManager;
 import com.wy.test.authentication.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.properties.DreamAuthServerProperties;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * 权限Interceptor处理
+ * 拦截所有请求,检查请求头中是否有Authorization参数
+ * 
+ * @author 飞花梦影
+ * @date 2024-09-10 22:53:53
+ * @git {@link https://github.com/dreamFlyingFlower}
  */
 @Component
+@Slf4j
 public class PermissionInterceptor implements AsyncHandlerInterceptor {
-
-	private static final Logger _logger = LoggerFactory.getLogger(PermissionInterceptor.class);
-
-	// 无需Interceptor url
-	@Autowired
-	DreamAuthServerProperties dreamServerProperties;
 
 	@Autowired
 	SessionManager sessionManager;
@@ -39,18 +37,20 @@ public class PermissionInterceptor implements AsyncHandlerInterceptor {
 	/*
 	 * 请求前处理 (non-Javadoc)
 	 * 
-	 * @see org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle( javax.servlet.http.
-	 * HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object)
+	 * @see
+	 * org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(
+	 * javax.servlet.http. HttpServletRequest,
+	 * javax.servlet.http.HttpServletResponse, java.lang.Object)
 	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		_logger.trace("Permission Interceptor .");
+		log.trace("Permission Interceptor .");
 		AuthorizationUtils.authenticate(request, authTokenService, sessionManager);
 		SignPrincipal principal = AuthorizationUtils.getPrincipal();
 		// 判断用户是否登录,判断用户是否登录用户
 		if (principal == null) {
-			_logger.trace("No Authentication ... forward to /auth/entrypoint , request URI " + request.getRequestURI());
+			log.info("No Authentication ... forward to /auth/entrypoint , request URI " + request.getRequestURI());
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/auth/entrypoint");
 			dispatcher.forward(request, response);
 			return false;
@@ -58,7 +58,7 @@ public class PermissionInterceptor implements AsyncHandlerInterceptor {
 
 		// 管理端必须使用管理员登录,非管理员用户直接注销
 		if (this.mgmt && !principal.isRoleAdministrators()) {
-			_logger.debug("Not ADMINISTRATORS Authentication .");
+			log.debug("Not ADMINISTRATORS Authentication .");
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/auth/entrypoint");
 			dispatcher.forward(request, response);
 			return false;
@@ -69,7 +69,6 @@ public class PermissionInterceptor implements AsyncHandlerInterceptor {
 
 	public void setMgmt(boolean mgmt) {
 		this.mgmt = mgmt;
-		_logger.debug("Permission for ADMINISTRATORS {}", this.mgmt);
+		log.debug("Permission for ADMINISTRATORS {}", this.mgmt);
 	}
-
 }

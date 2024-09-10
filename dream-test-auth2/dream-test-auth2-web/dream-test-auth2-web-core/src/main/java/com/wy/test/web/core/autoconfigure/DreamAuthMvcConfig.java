@@ -69,7 +69,6 @@ public class DreamAuthMvcConfig implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		// addPathPatterns 用于添加拦截规则 , 先把所有路径都加入拦截, 再一个个排除
 		// excludePathPatterns 表示改路径不用拦截
-
 		log.debug("add Http Kerberos Entry Point");
 		registry.addInterceptor(
 				new HttpKerberosEntryPoint(authenticationProvider, kerberosService, dreamServerProperties, true))
@@ -87,18 +86,28 @@ public class DreamAuthMvcConfig implements WebMvcConfigurer {
 			log.debug("add Basic Entry Point");
 		}
 
-		// for frontend
-		registry.addInterceptor(permissionInterceptor).addPathPatterns("/config/**").addPathPatterns("/historys/**")
-				.addPathPatterns("/access/session/**").addPathPatterns("/access/session/**/**")
-				.addPathPatterns("/appList").addPathPatterns("/appList/**").addPathPatterns("/socialsignon/**")
-				.addPathPatterns("/authz/credential/**").addPathPatterns("/authz/oauth/v20/approval_confirm/**")
-				.addPathPatterns("/authz/oauth/v20/authorize/approval/**").addPathPatterns("/logon/oauth20/bind/**")
-				.addPathPatterns("/logout").addPathPatterns("/logout/**").addPathPatterns("/authz/refused");
+		// 添加权限拦截器拦截的URL,若拦截不通过,会跳转到/auth/entrypoint
+		registry.addInterceptor(permissionInterceptor)
+				.addPathPatterns("/config/**")
+				.addPathPatterns("/historys/**")
+				.addPathPatterns("/access/session/**")
+				.addPathPatterns("/access/session/**/**")
+				.addPathPatterns("/appList")
+				.addPathPatterns("/appList/**")
+				.addPathPatterns("/socialsignon/**")
+				.addPathPatterns("/authz/credential/**")
+				.addPathPatterns("/authz/oauth/v20/approval_confirm/**")
+				.addPathPatterns("/authz/oauth/v20/authorize/approval/**")
+				.addPathPatterns("/logon/oauth20/bind/**")
+				.addPathPatterns("/logout")
+				.addPathPatterns("/logout/**")
+				.addPathPatterns("/authz/refused");
 
 		log.debug("add Permission Interceptor");
 
-		// for Single Sign On
-		registry.addInterceptor(singleSignOnInterceptor).addPathPatterns("/authz/basic/*")
+		// 单点登录拦截器
+		registry.addInterceptor(singleSignOnInterceptor)
+				.addPathPatterns("/authz/basic/*")
 				// Form based
 				.addPathPatterns("/authz/formbased/*")
 				// Token based
@@ -106,34 +115,44 @@ public class DreamAuthMvcConfig implements WebMvcConfigurer {
 				// JWT
 				.addPathPatterns("/authz/jwt/*")
 				// SAML
-				.addPathPatterns("/authz/saml20/idpinit/*").addPathPatterns("/authz/saml20/assertion")
+				.addPathPatterns("/authz/saml20/idpinit/*")
+				.addPathPatterns("/authz/saml20/assertion")
 				.addPathPatterns("/authz/saml20/assertion/")
 				// CAS
-				.addPathPatterns("/authz/cas/*").addPathPatterns("/authz/cas/*/*").addPathPatterns("/authz/cas/login")
-				.addPathPatterns("/authz/cas/login/").addPathPatterns("/authz/cas/granting/*")
+				.addPathPatterns("/authz/cas/*")
+				.addPathPatterns("/authz/cas/*/*")
+				.addPathPatterns("/authz/cas/login")
+				.addPathPatterns("/authz/cas/login/")
+				.addPathPatterns("/authz/cas/granting/*")
 				// cas1.0 validate
 				.excludePathPatterns("/authz/cas/validate")
 				// cas2.0 Validate
-				.excludePathPatterns("/authz/cas/serviceValidate").excludePathPatterns("/authz/cas/proxyValidate")
+				.excludePathPatterns("/authz/cas/serviceValidate")
+				.excludePathPatterns("/authz/cas/proxyValidate")
 				.excludePathPatterns("/authz/cas/proxy")
 				// cas3.0 Validate
-				.excludePathPatterns("/authz/cas/p3/serviceValidate").excludePathPatterns("/authz/cas/p3/proxyValidate")
+				.excludePathPatterns("/authz/cas/p3/serviceValidate")
+				.excludePathPatterns("/authz/cas/p3/proxyValidate")
 				.excludePathPatterns("/authz/cas/p3/proxy")
 				// rest
-				.excludePathPatterns("/authz/cas/v1/tickets").excludePathPatterns("/authz/cas/v1/tickets/*")
+				.excludePathPatterns("/authz/cas/v1/tickets")
+				.excludePathPatterns("/authz/cas/v1/tickets/*")
 
 				// OAuth
-				.addPathPatterns("/authz/oauth/v20/authorize").addPathPatterns("/authz/oauth/v20/authorize/*")
+				.addPathPatterns("/authz/oauth/v20/authorize")
+				.addPathPatterns("/authz/oauth/v20/authorize/*")
 
 				// OAuth TENCENT_IOA
-				.addPathPatterns("/oauth2/authorize").addPathPatterns("/oauth2/authorize/*")
+				.addPathPatterns("/oauth2/authorize")
+				.addPathPatterns("/oauth2/authorize/*")
 
 				// online ticket Validate
 				.excludePathPatterns("/onlineticket/ticketValidate")
 				.excludePathPatterns("/onlineticket/ticketValidate/*");
 		log.debug("add Single SignOn Interceptor");
 
-		registry.addInterceptor(historySignOnAppInterceptor).addPathPatterns("/authz/basic/*")
+		registry.addInterceptor(historySignOnAppInterceptor)
+				.addPathPatterns("/authz/basic/*")
 				.addPathPatterns("/authz/ltpa/*")
 				// Extend api
 				.addPathPatterns("/authz/api/*")
@@ -144,7 +163,8 @@ public class DreamAuthMvcConfig implements WebMvcConfigurer {
 				// JWT
 				.addPathPatterns("/authz/jwt/*")
 				// SAML
-				.addPathPatterns("/authz/saml20/idpinit/*").addPathPatterns("/authz/saml20/assertion")
+				.addPathPatterns("/authz/saml20/idpinit/*")
+				.addPathPatterns("/authz/saml20/assertion")
 				// CAS
 				.addPathPatterns("/authz/cas/granting")
 				// OAuth
