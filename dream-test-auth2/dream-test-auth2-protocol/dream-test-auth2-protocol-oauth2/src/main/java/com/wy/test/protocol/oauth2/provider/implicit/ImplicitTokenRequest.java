@@ -3,12 +3,6 @@ package com.wy.test.protocol.oauth2.provider.implicit;
 import com.wy.test.protocol.oauth2.provider.OAuth2Request;
 import com.wy.test.protocol.oauth2.provider.TokenRequest;
 
-/**
- * @author Dave Syer
- * 
- * @since 2.0.2
- *
- */
 @SuppressWarnings("serial")
 public class ImplicitTokenRequest extends TokenRequest {
 
@@ -23,5 +17,4 @@ public class ImplicitTokenRequest extends TokenRequest {
 	public OAuth2Request getOAuth2Request() {
 		return oauth2Request;
 	}
-
 }
