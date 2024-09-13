@@ -8,11 +8,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.provider.NoSuchClientException;
 
-import com.wy.test.authentication.core.authn.SignPrincipal;
-import com.wy.test.authentication.core.authn.session.Session;
-import com.wy.test.authentication.provider.authn.provider.AbstractAuthenticationProvider;
+import com.wy.test.authentication.core.entity.SignPrincipal;
+import com.wy.test.authentication.core.session.Session;
+import com.wy.test.authentication.provider.provider.AbstractAuthenticationProvider;
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.vo.UserVO;
-import com.wy.test.core.web.WebConstants;
 import com.wy.test.persistence.service.LoginService;
 
 import lombok.Data;
@@ -34,7 +34,7 @@ public class OAuth2UserDetailsService implements UserDetailsService {
 		}
 
 		String onlineTickitId =
-				WebConstants.ONLINE_TICKET_PREFIX + "-" + java.util.UUID.randomUUID().toString().toLowerCase();
+				ConstAuthWeb.ONLINE_TICKET_PREFIX + "-" + java.util.UUID.randomUUID().toString().toLowerCase();
 
 		SignPrincipal principal = new SignPrincipal(userInfo);
 		Session onlineTicket = new Session(onlineTickitId);

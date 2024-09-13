@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import com.fhs.core.trans.vo.TransPojo;
 import com.wy.test.core.constant.ConstServiceMessage;
 import com.wy.test.core.exception.PasswordPolicyException;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 
 import dream.flying.flower.framework.web.valid.ValidEdit;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -102,42 +102,42 @@ public class PasswordPolicyVO implements Serializable, TransPojo {
 		String msg;
 		if (minLength != 0) {
 			// msg = "新密码长度为"+minLength+"-"+maxLength+"位";
-			msg = WebContext.getI18nValue("PasswordPolicy.TOO_SHORT", new Object[] { minLength });
+			msg = AuthWebContext.getI18nValue("PasswordPolicy.TOO_SHORT", new Object[] { minLength });
 			policyMessages.add(msg);
 		}
 		if (maxLength != 0) {
 			// msg = "新密码长度为"+minLength+"-"+maxLength+"位";
-			msg = WebContext.getI18nValue("PasswordPolicy.TOO_LONG", new Object[] { maxLength });
+			msg = AuthWebContext.getI18nValue("PasswordPolicy.TOO_LONG", new Object[] { maxLength });
 			policyMessages.add(msg);
 		}
 
 		if (lowerCase > 0) {
 			// msg = "新密码至少需要包含"+lowerCase+"位【a-z】小写字母";
-			msg = WebContext.getI18nValue("PasswordPolicy.INSUFFICIENT_LOWERCASE", new Object[] { lowerCase });
+			msg = AuthWebContext.getI18nValue("PasswordPolicy.INSUFFICIENT_LOWERCASE", new Object[] { lowerCase });
 			policyMessages.add(msg);
 		}
 
 		if (upperCase > 0) {
 			// msg = "新密码至少需要包含"+upperCase+"位【A-Z】大写字母";
-			msg = WebContext.getI18nValue("PasswordPolicy.INSUFFICIENT_UPPERCASE", new Object[] { upperCase });
+			msg = AuthWebContext.getI18nValue("PasswordPolicy.INSUFFICIENT_UPPERCASE", new Object[] { upperCase });
 			policyMessages.add(msg);
 		}
 
 		if (digits > 0) {
 			// msg = "新密码至少需要包含"+digits+"位【0-9】阿拉伯数字";
-			msg = WebContext.getI18nValue("PasswordPolicy.INSUFFICIENT_DIGIT", new Object[] { digits });
+			msg = AuthWebContext.getI18nValue("PasswordPolicy.INSUFFICIENT_DIGIT", new Object[] { digits });
 			policyMessages.add(msg);
 		}
 
 		if (specialChar > 0) {
 			// msg = "新密码至少需要包含"+specialChar+"位特殊字符";
-			msg = WebContext.getI18nValue("PasswordPolicy.INSUFFICIENT_SPECIAL", new Object[] { specialChar });
+			msg = AuthWebContext.getI18nValue("PasswordPolicy.INSUFFICIENT_SPECIAL", new Object[] { specialChar });
 			policyMessages.add(msg);
 		}
 
 		if (expiration > 0) {
 			// msg = "新密码有效期为"+expiration+"天";
-			msg = WebContext.getI18nValue("PasswordPolicy.INSUFFICIENT_EXPIRES_DAY", new Object[] { expiration });
+			msg = AuthWebContext.getI18nValue("PasswordPolicy.INSUFFICIENT_EXPIRES_DAY", new Object[] { expiration });
 			policyMessages.add(msg);
 		}
 	}

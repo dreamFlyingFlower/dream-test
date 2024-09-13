@@ -15,14 +15,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 
 import com.wy.test.core.constant.ConstStatus;
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.PasswordPolicyEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.enums.PasswordSetType;
 import com.wy.test.core.password.PasswordGen;
 import com.wy.test.core.vo.UserVO;
-import com.wy.test.core.web.WebConstants;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 
 import dream.flying.flower.helper.DateTimeHelper;
 import dream.flying.flower.lang.StrHelper;
@@ -93,7 +93,7 @@ public class PasswordPolicyValidator {
 				passwordPolicyMessage = passwordPolicyMessage + msg + "<br>";
 				log.debug("Rule Message {}", msg);
 			}
-			WebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT, passwordPolicyMessage);
+			AuthWebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT, passwordPolicyMessage);
 			return false;
 		}
 	}
@@ -130,7 +130,7 @@ public class PasswordPolicyValidator {
 				resetAttempts(userInfo);
 			} else {
 				lockUser(userInfo);
-				throw new BadCredentialsException(WebContext.getI18nValue("login.error.attempts",
+				throw new BadCredentialsException(AuthWebContext.getI18nValue("login.error.attempts",
 						new Object[] { userInfo.getBadPasswordCount(), passwordPolicy.getDuration() }));
 			}
 		}
@@ -138,11 +138,11 @@ public class PasswordPolicyValidator {
 		// locked
 		if (userInfo.getIsLocked() == ConstStatus.LOCK) {
 			throw new BadCredentialsException(
-					userInfo.getUsername() + " " + WebContext.getI18nValue("login.error.locked"));
+					userInfo.getUsername() + " " + AuthWebContext.getI18nValue("login.error.locked"));
 		}
 		// inactive
 		if (userInfo.getStatus() != ConstStatus.ACTIVE) {
-			throw new BadCredentialsException(userInfo.getUsername() + WebContext.getI18nValue("login.error.inactive"));
+			throw new BadCredentialsException(userInfo.getUsername() + AuthWebContext.getI18nValue("login.error.inactive"));
 		}
 
 		return true;
@@ -154,16 +154,16 @@ public class PasswordPolicyValidator {
 		DateTime currentdateTime = new DateTime();
 		// initial password need change
 		if (userInfo.getLoginCount() <= 0) {
-			WebContext.getSession().setAttribute(WebConstants.CURRENT_USER_PASSWORD_SET_TYPE,
+			AuthWebContext.getSession().setAttribute(ConstAuthWeb.CURRENT_USER_PASSWORD_SET_TYPE,
 					PasswordSetType.INITIAL_PASSWORD.ordinal());
 		}
 
 		if (userInfo.getPasswordSetType() != PasswordSetType.PASSWORD_NORMAL.ordinal()) {
-			WebContext.getSession().setAttribute(WebConstants.CURRENT_USER_PASSWORD_SET_TYPE,
+			AuthWebContext.getSession().setAttribute(ConstAuthWeb.CURRENT_USER_PASSWORD_SET_TYPE,
 					userInfo.getPasswordSetType());
 			return;
 		} else {
-			WebContext.getSession().setAttribute(WebConstants.CURRENT_USER_PASSWORD_SET_TYPE,
+			AuthWebContext.getSession().setAttribute(ConstAuthWeb.CURRENT_USER_PASSWORD_SET_TYPE,
 					PasswordSetType.PASSWORD_NORMAL.ordinal());
 		}
 
@@ -183,7 +183,7 @@ public class PasswordPolicyValidator {
 					"password Last Set duration day {} , " + "password policy Expiration {} , " + "validate result {}",
 					intDuration, passwordPolicy.getExpiration(), intDuration <= passwordPolicy.getExpiration());
 			if (intDuration > passwordPolicy.getExpiration()) {
-				WebContext.getSession().setAttribute(WebConstants.CURRENT_USER_PASSWORD_SET_TYPE,
+				AuthWebContext.getSession().setAttribute(ConstAuthWeb.CURRENT_USER_PASSWORD_SET_TYPE,
 						PasswordSetType.PASSWORD_EXPIRED.ordinal());
 			}
 		}

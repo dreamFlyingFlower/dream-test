@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
-import com.wy.test.authentication.core.authn.web.AuthorizationUtils;
+import com.wy.test.authentication.core.web.AuthorizationUtils;
 import com.wy.test.protocol.oauth2.provider.OAuth2Authentication;
 import com.wy.test.protocol.oauth2.provider.token.DefaultTokenServices;
 

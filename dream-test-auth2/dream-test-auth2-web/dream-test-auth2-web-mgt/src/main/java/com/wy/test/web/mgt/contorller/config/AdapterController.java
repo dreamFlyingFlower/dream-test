@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.entity.AppAdapterEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.query.AppAdapterQuery;
 import com.wy.test.persistence.service.AppAdapterService;
@@ -36,7 +36,7 @@ public class AdapterController {
 	@ResponseBody
 	public ResponseEntity<?> fetch(@RequestBody AppAdapterQuery appsAdapter) {
 		log.debug("" + appsAdapter);
-		return new Message<>(appsAdaptersService.listPage(appsAdapter)).buildResponse();
+		return new ResultResponse<>(appsAdaptersService.listPage(appsAdapter)).buildResponse();
 	}
 
 	@ResponseBody
@@ -44,16 +44,16 @@ public class AdapterController {
 	public ResponseEntity<?> query(@RequestBody AppAdapterQuery appsAdapter, @CurrentUser UserEntity currentUser) {
 		log.debug("-query  :" + appsAdapter);
 		if (CollectionUtils.isNotEmpty(appsAdaptersService.list(appsAdapter))) {
-			return new Message<AppAdapterEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppAdapterEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppAdapterEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppAdapterEntity>(ResultResponse.SUCCESS).buildResponse();
 		}
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
 		AppAdapterEntity appsAdapter = appsAdaptersService.getById(id);
-		return new Message<AppAdapterEntity>(appsAdapter).buildResponse();
+		return new ResultResponse<AppAdapterEntity>(appsAdapter).buildResponse();
 	}
 
 	@ResponseBody
@@ -61,9 +61,9 @@ public class AdapterController {
 	public ResponseEntity<?> insert(@RequestBody AppAdapterEntity appsAdapter, @CurrentUser UserEntity currentUser) {
 		log.debug("-Add  :" + appsAdapter);
 		if (appsAdaptersService.save(appsAdapter)) {
-			return new Message<AppAdapterEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppAdapterEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppAdapterEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppAdapterEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -72,9 +72,9 @@ public class AdapterController {
 	public ResponseEntity<?> update(@RequestBody AppAdapterEntity appsAdapter, @CurrentUser UserEntity currentUser) {
 		log.debug("-update  :" + appsAdapter);
 		if (appsAdaptersService.updateById(appsAdapter)) {
-			return new Message<AppAdapterEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppAdapterEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppAdapterEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppAdapterEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -83,9 +83,9 @@ public class AdapterController {
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete  ids : {} ", ids);
 		if (appsAdaptersService.removeByIds(Arrays.asList(ids.split(",")))) {
-			return new Message<AppAdapterEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppAdapterEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppAdapterEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppAdapterEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 }

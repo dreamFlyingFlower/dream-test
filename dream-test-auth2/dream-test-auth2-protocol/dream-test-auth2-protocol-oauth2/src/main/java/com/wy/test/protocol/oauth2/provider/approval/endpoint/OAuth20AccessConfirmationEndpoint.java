@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
-import com.wy.test.authentication.core.authn.jwt.AuthTokenService;
-import com.wy.test.authentication.core.authn.web.AuthorizationUtils;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.authentication.core.jwt.AuthTokenService;
+import com.wy.test.authentication.core.web.AuthorizationUtils;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.cache.MomentaryService;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.oauth2.ClientDetails;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.vo.AppVO;
@@ -163,7 +163,7 @@ public class OAuth20AccessConfirmationEndpoint {
 				log.trace("key " + key + "=" + model.get(key));
 			}
 		}
-		return new Message<Map<String, Object>>(model).buildResponse();
+		return new ResultResponse<Map<String, Object>>(model).buildResponse();
 	}
 
 	/**

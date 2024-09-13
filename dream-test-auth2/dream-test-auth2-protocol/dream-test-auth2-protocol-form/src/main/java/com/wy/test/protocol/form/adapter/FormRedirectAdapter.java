@@ -5,7 +5,7 @@ import java.time.Instant;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.core.vo.AppFormDetailVO;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.protocol.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 
 import dream.flying.flower.digest.DigestHelper;
@@ -46,15 +46,15 @@ public class FormRedirectAdapter extends AbstractAuthorizeAdapter {
 		modelAndView.addObject("password", password);
 		modelAndView.addObject("timestamp", "" + Instant.now().getEpochSecond());
 
-		if (WebContext.getAttribute("formbased_redirect_submint") == null) {
+		if (AuthWebContext.getAttribute("formbased_redirect_submint") == null) {
 			modelAndView.setViewName("authorize/formbased_redirect_submint");
-			WebContext.setAttribute("formbased_redirect_submint", "formbased_redirect_submint");
+			AuthWebContext.setAttribute("formbased_redirect_submint", "formbased_redirect_submint");
 		} else {
 			modelAndView.setViewName("authorize/formbased_redirect_post_submint");
 			if (details.getAuthorizeView() != null && !details.getAuthorizeView().equals("")) {
 				modelAndView.setViewName("authorize/" + details.getAuthorizeView());
 			}
-			WebContext.removeAttribute("formbased_redirect_submint");
+			AuthWebContext.removeAttribute("formbased_redirect_submint");
 		}
 
 		if (BooleanEnum.isTrue(details.getIsExtendAttr())) {

@@ -20,7 +20,7 @@ import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import com.wy.test.authentication.core.authn.web.AuthorizationUtils;
+import com.wy.test.authentication.core.web.AuthorizationUtils;
 import com.wy.test.core.entity.oauth2.ClientDetails;
 import com.wy.test.core.entity.oidc.OidcProviderMetadata;
 import com.wy.test.protocol.oauth2.common.DefaultOAuth2AccessToken;

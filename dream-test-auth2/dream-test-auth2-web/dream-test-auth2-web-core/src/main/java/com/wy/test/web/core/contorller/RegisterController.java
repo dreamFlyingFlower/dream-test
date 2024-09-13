@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.jwt.AuthTokenService;
-import com.wy.test.authentication.otp.password.onetimepwd.AbstractOtpAuthn;
+import com.wy.test.authentication.core.jwt.AuthTokenService;
+import com.wy.test.authentication.otp.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.authentication.sms.password.sms.SmsOtpAuthnService;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstStatus;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.persistence.service.UserService;
 
 import dream.flying.flower.lang.StrHelper;
@@ -59,12 +59,12 @@ public class RegisterController {
 			UserEntity userInfo = new UserEntity();
 			userInfo.setUsername(mobile);
 			userInfo.setMobile(mobile);
-			AbstractOtpAuthn smsOtpAuthn = smsOtpAuthnService.getByInstId(WebContext.getInst().getId());
+			AbstractOtpAuthn smsOtpAuthn = smsOtpAuthnService.getByInstId(AuthWebContext.getInst().getId());
 			smsOtpAuthn.produce(userInfo);
-			return new Message<UserEntity>(userInfo).buildResponse();
+			return new ResultResponse<UserEntity>(userInfo).buildResponse();
 		}
 
-		return new Message<UserEntity>(Message.FAIL).buildResponse();
+		return new ResultResponse<UserEntity>(ResultResponse.FAIL).buildResponse();
 	}
 
 	// 直接注册
@@ -75,17 +75,17 @@ public class RegisterController {
 		UserEntity validateUserInfo = new UserEntity();
 		validateUserInfo.setUsername(userInfo.getMobile());
 		validateUserInfo.setMobile(userInfo.getMobile());
-		AbstractOtpAuthn smsOtpAuthn = smsOtpAuthnService.getByInstId(WebContext.getInst().getId());
+		AbstractOtpAuthn smsOtpAuthn = smsOtpAuthnService.getByInstId(AuthWebContext.getInst().getId());
 		if (smsOtpAuthn != null && smsOtpAuthn.validate(validateUserInfo, captcha)) {
 			UserEntity temp = userInfoService.findByEmailMobile(userInfo.getEmail());
 
 			if (temp != null) {
-				return new Message<UserEntity>(Message.FAIL).buildResponse();
+				return new ResultResponse<UserEntity>(ResultResponse.FAIL).buildResponse();
 			}
 
 			temp = userInfoService.findByUsername(userInfo.getUsername());
 			if (temp != null) {
-				return new Message<UserEntity>(Message.FAIL).buildResponse();
+				return new ResultResponse<UserEntity>(ResultResponse.FAIL).buildResponse();
 			}
 
 			// default InstId
@@ -99,10 +99,10 @@ public class RegisterController {
 			userInfo.setStatus(ConstStatus.INACTIVE);
 
 			if (userInfoService.insert(userInfo)) {
-				return new Message<UserEntity>().buildResponse();
+				return new ResultResponse<UserEntity>().buildResponse();
 			}
 		}
-		return new Message<UserEntity>(Message.FAIL).buildResponse();
+		return new ResultResponse<UserEntity>(ResultResponse.FAIL).buildResponse();
 	}
 
 }

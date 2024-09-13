@@ -2,8 +2,8 @@ package com.wy.test.protocol.cas.endpoint.adapter;
 
 import org.springframework.web.servlet.ModelAndView;
 
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.vo.AppCasDetailVO;
-import com.wy.test.core.web.WebConstants;
 import com.wy.test.protocol.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.protocol.cas.endpoint.response.ServiceResponseBuilder;
 
@@ -53,7 +53,7 @@ public class CasPlainAdapter extends AbstractAuthorizeAdapter {
 		serviceResponseBuilder.setAttribute("departmentId", userInfo.getDepartmentId());
 		serviceResponseBuilder.setAttribute("workRegion", userInfo.getWorkRegion());
 		serviceResponseBuilder.setAttribute("institution", userInfo.getInstId());
-		serviceResponseBuilder.setAttribute(WebConstants.ONLINE_TICKET_NAME, principal.getSession().getFormattedId());
+		serviceResponseBuilder.setAttribute(ConstAuthWeb.ONLINE_TICKET_NAME, principal.getSession().getFormattedId());
 
 		return serviceResponseBuilder;
 	}

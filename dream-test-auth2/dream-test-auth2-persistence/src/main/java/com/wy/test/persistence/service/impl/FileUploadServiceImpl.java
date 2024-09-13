@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.convert.FileUploadConvert;
 import com.wy.test.core.entity.FileUploadEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.query.FileUploadQuery;
 import com.wy.test.core.vo.FileUploadVO;
@@ -53,6 +53,6 @@ public class FileUploadServiceImpl extends
 				log.error("FileUpload IOException", e);
 			}
 		}
-		return new Message<Object>(Message.SUCCESS, (Object) fileUpload.getId()).buildResponse();
+		return new ResultResponse<Object>(ResultResponse.SUCCESS, (Object) fileUpload.getId()).buildResponse();
 	}
 }

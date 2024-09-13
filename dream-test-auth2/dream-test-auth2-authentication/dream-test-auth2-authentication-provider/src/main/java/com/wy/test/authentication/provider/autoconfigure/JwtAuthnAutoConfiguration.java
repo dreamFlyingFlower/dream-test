@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 
 import com.nimbusds.jose.JOSEException;
-import com.wy.test.authentication.provider.authn.support.jwt.JwtLoginService;
+import com.wy.test.authentication.provider.support.jwt.JwtLoginService;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
 
 import dream.flying.flower.framework.web.crypto.jose.keystore.JWKSetKeyStore;

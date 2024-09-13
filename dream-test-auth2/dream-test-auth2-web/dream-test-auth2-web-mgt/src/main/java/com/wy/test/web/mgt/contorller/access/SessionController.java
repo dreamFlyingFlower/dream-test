@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
-import com.wy.test.authentication.core.authn.session.SessionManager;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.authentication.core.session.SessionManager;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.entity.HistoryLoginEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.UserVO;
 import com.wy.test.persistence.service.HistoryLoginService;
@@ -55,7 +55,7 @@ public class SessionController {
 	public ResponseEntity<?> fetch(HistoryLoginEntity historyLogin, @CurrentUser UserEntity currentUser) {
 		log.debug("history/session/fetch {}", historyLogin);
 		historyLogin.setInstId(currentUser.getInstId());
-		return new Message<>(historyLoginService.queryOnlineSession(historyLogin)).buildResponse();
+		return new ResultResponse<>(historyLoginService.queryOnlineSession(historyLogin)).buildResponse();
 	}
 
 	@ResponseBody
@@ -77,9 +77,9 @@ public class SessionController {
 		}
 
 		if (isTerminated) {
-			return new Message<HistoryLoginEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<HistoryLoginEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<HistoryLoginEntity>(Message.ERROR).buildResponse();
+			return new ResultResponse<HistoryLoginEntity>(ResultResponse.ERROR).buildResponse();
 		}
 	}
 

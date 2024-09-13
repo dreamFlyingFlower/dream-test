@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.entity.EmailSenderEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.persistence.service.EmailSenderService;
@@ -38,7 +38,7 @@ public class EmailSenderController {
 			emailSenders.setProtocol("smtp");
 			emailSenders.setEncoding("utf-8");
 		}
-		return new Message<EmailSenderEntity>(emailSenders).buildResponse();
+		return new ResultResponse<EmailSenderEntity>(emailSenders).buildResponse();
 	}
 
 	@PostMapping(value = { "/update" })
@@ -51,15 +51,15 @@ public class EmailSenderController {
 		if (StringUtils.isBlank(emailSenders.getId())) {
 			emailSenders.setId(emailSenders.getInstId());
 			if (emailSendersService.save(emailSenders)) {
-				return new Message<EmailSenderEntity>(Message.SUCCESS).buildResponse();
+				return new ResultResponse<EmailSenderEntity>(ResultResponse.SUCCESS).buildResponse();
 			} else {
-				return new Message<EmailSenderEntity>(Message.ERROR).buildResponse();
+				return new ResultResponse<EmailSenderEntity>(ResultResponse.ERROR).buildResponse();
 			}
 		} else {
 			if (emailSendersService.updateById(emailSenders)) {
-				return new Message<EmailSenderEntity>(Message.SUCCESS).buildResponse();
+				return new ResultResponse<EmailSenderEntity>(ResultResponse.SUCCESS).buildResponse();
 			} else {
-				return new Message<EmailSenderEntity>(Message.ERROR).buildResponse();
+				return new ResultResponse<EmailSenderEntity>(ResultResponse.ERROR).buildResponse();
 			}
 		}
 	}

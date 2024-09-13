@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstEntryType;
 import com.wy.test.core.constant.ConstOperateAction;
 import com.wy.test.core.constant.ConstOperateResult;
 import com.wy.test.core.convert.PasswordPolicyConvert;
 import com.wy.test.core.entity.ChangePassword;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.PasswordPolicyEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.enums.PasswordSetType;
 import com.wy.test.core.repository.PasswordPolicyValidator;
 import com.wy.test.core.vo.PasswordPolicyVO;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.persistence.service.HistorySysLogService;
 import com.wy.test.persistence.service.PasswordPolicyService;
 import com.wy.test.persistence.service.UserService;
@@ -48,7 +48,7 @@ public class ChangePasswodController {
 		PasswordPolicyVO passwordPolicyVO = PasswordPolicyConvert.INSTANCE.convertt(passwordPolicy);
 		// 构建密码强度说明
 		passwordPolicyVO.buildMessage();
-		return new Message<>(passwordPolicyVO).buildResponse();
+		return new ResultResponse<>(passwordPolicyVO).buildResponse();
 	}
 
 	@PostMapping(value = { "/changePassword" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -62,11 +62,11 @@ public class ChangePasswodController {
 		if (userService.changePassword(changePassword)) {
 			historySysLogService.insert(ConstEntryType.USERINFO, changePassword, ConstOperateAction.CHANGE_PASSWORD,
 					ConstOperateResult.SUCCESS, currentUser);
-			return new Message<ChangePassword>().buildResponse();
+			return new ResultResponse<ChangePassword>().buildResponse();
 		} else {
-			String message = (String) WebContext.getAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT);
+			String message = (String) AuthWebContext.getAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT);
 			log.info("-message:", message);
-			return new Message<ChangePassword>(Message.ERROR, message).buildResponse();
+			return new ResultResponse<ChangePassword>(ResultResponse.ERROR, message).buildResponse();
 		}
 	}
 }

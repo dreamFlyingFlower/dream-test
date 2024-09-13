@@ -56,7 +56,7 @@ public class WebXssRequestFilter extends GenericFilterBean {
 		boolean isWebXss = false;
 		HttpServletRequest request = ((HttpServletRequest) servletRequest);
 		if (log.isTraceEnabled()) {
-			WebContext.printRequest(request);
+			AuthWebContext.printRequest(request);
 		}
 		if (skipUrlMap.containsKey(request.getRequestURI().substring(request.getContextPath().length()))) {
 			isWebXss = false;

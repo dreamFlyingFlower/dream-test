@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstProtocols;
 import com.wy.test.core.convert.AppCasDetailConvert;
 import com.wy.test.core.entity.AppCasDetailEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.AppCasDetailVO;
 import com.wy.test.persistence.service.AppCasDetailService;
@@ -45,7 +45,7 @@ public class CasDetailController extends BaseAppContorller {
 		casDetails.setId(generatorStrategyContext.generate());
 		casDetails.setProtocol(ConstProtocols.CAS);
 		casDetails.setSecret(ReciprocalHelpers.generateKey(""));
-		return new Message<>(casDetails).buildResponse();
+		return new ResultResponse<>(casDetails).buildResponse();
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -53,7 +53,7 @@ public class CasDetailController extends BaseAppContorller {
 		AppCasDetailVO casDetails = appCasDetailService.getAppDetails(id, false);
 		super.decoderSecret(casDetails);
 		casDetails.transIconBase64();
-		return new Message<>(casDetails).buildResponse();
+		return new ResultResponse<>(casDetails).buildResponse();
 	}
 
 	@ResponseBody
@@ -63,9 +63,9 @@ public class CasDetailController extends BaseAppContorller {
 		transform(casDetails);
 		casDetails.setInstId(currentUser.getInstId());
 		if (appCasDetailService.save(appCasDetailConvert.convert(casDetails)) && null != appService.add(casDetails)) {
-			return new Message<AppCasDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppCasDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppCasDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppCasDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -76,9 +76,9 @@ public class CasDetailController extends BaseAppContorller {
 		transform(casDetails);
 		casDetails.setInstId(currentUser.getInstId());
 		if (appCasDetailService.updateById(appCasDetailConvert.convert(casDetails)) && appService.edit(casDetails)) {
-			return new Message<AppCasDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppCasDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppCasDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppCasDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -88,9 +88,9 @@ public class CasDetailController extends BaseAppContorller {
 		log.debug("-delete  ids : {} ", ids);
 		if (appCasDetailService.removeByIds(Arrays.asList(ids.split(",")))
 				&& appService.removeByIds(Arrays.asList(ids.split(",")))) {
-			return new Message<>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<>(Message.FAIL).buildResponse();
+			return new ResultResponse<>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 }

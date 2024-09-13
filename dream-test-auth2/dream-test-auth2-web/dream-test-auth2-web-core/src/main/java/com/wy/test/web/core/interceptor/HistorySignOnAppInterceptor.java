@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.authentication.core.authn.SignPrincipal;
-import com.wy.test.authentication.core.authn.web.AuthorizationUtils;
+import com.wy.test.authentication.core.entity.SignPrincipal;
+import com.wy.test.authentication.core.web.AuthorizationUtils;
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.HistoryLoginAppEntity;
 import com.wy.test.core.vo.UserVO;
-import com.wy.test.core.web.WebConstants;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.persistence.service.AppService;
 import com.wy.test.persistence.service.HistoryLoginAppService;
 
@@ -42,7 +42,7 @@ public class HistorySignOnAppInterceptor implements AsyncHandlerInterceptor {
 			ModelAndView modelAndView) throws Exception {
 		log.debug("postHandle");
 
-		final AppEntity app = (AppEntity) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
+		final AppEntity app = (AppEntity) AuthWebContext.getAttribute(ConstAuthWeb.AUTHORIZE_SIGN_ON_APP);
 
 		SignPrincipal principal = AuthorizationUtils.getPrincipal();
 		if (principal != null && app != null) {
@@ -58,8 +58,8 @@ public class HistorySignOnAppInterceptor implements AsyncHandlerInterceptor {
 			historyLoginApps.setDisplayName(userInfo.getDisplayName());
 			historyLoginApps.setInstId(userInfo.getInstId());
 			historyLoginAppsService.insert(historyLoginApps);
-			WebContext.removeAttribute(WebConstants.CURRENT_SINGLESIGNON_URI);
-			WebContext.removeAttribute(WebConstants.SINGLE_SIGN_ON_APP_ID);
+			AuthWebContext.removeAttribute(ConstAuthWeb.CURRENT_SINGLESIGNON_URI);
+			AuthWebContext.removeAttribute(ConstAuthWeb.SINGLE_SIGN_ON_APP_ID);
 		}
 	}
 }

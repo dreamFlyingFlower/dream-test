@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.springframework.core.env.StandardEnvironment;
 
-import com.wy.test.authentication.otp.password.onetimepwd.AbstractOtpAuthn;
+import com.wy.test.authentication.otp.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.core.entity.UserEntity;
 
 import lombok.extern.slf4j.Slf4j;

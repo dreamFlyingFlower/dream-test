@@ -35,16 +35,16 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
-import com.wy.test.authentication.core.authn.web.AuthorizationUtils;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.authentication.core.web.AuthorizationUtils;
+import com.wy.test.core.base.ResultResponse;
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.convert.AppConvert;
 import com.wy.test.core.entity.AppEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.oauth2.ClientDetails;
 import com.wy.test.core.vo.AppVO;
 import com.wy.test.core.vo.UserVO;
-import com.wy.test.core.web.WebConstants;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.protocol.oauth2.common.OAuth2AccessToken;
 import com.wy.test.protocol.oauth2.common.OAuth2Constants;
 import com.wy.test.protocol.oauth2.provider.AuthorizationRequest;
@@ -118,7 +118,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 
 		log.debug("authorizationUrl {}", authorizationUrl);
 
-		return WebContext.redirect(authorizationUrl);
+		return AuthWebContext.redirect(authorizationUrl);
 	}
 
 	@Operation(summary = "OAuth 2.0 认证接口", description = "传递参数client_id,response_type,redirect_uri等", method = "GET")
@@ -196,12 +196,12 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 							getAuthorizationCodeResponse(authorizationRequest, (Authentication) principal));
 				}
 			}
-			AppVO app = (AppVO) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
+			AppVO app = (AppVO) AuthWebContext.getAttribute(ConstAuthWeb.AUTHORIZE_SIGN_ON_APP);
 			// session中为空或者id不一致重新加载
 			if (app == null || !app.getId().equalsIgnoreCase(authorizationRequest.getClientId())) {
 				AppEntity appEntity = appService.getById(authorizationRequest.getClientId());
 				app = AppConvert.INSTANCE.convertt(appEntity);
-				WebContext.setAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP, app);
+				AuthWebContext.setAttribute(ConstAuthWeb.AUTHORIZE_SIGN_ON_APP, app);
 			}
 
 			// Place auth request into the model so that it is stored in the session
@@ -256,17 +256,17 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 			}
 
 			if (!authorizationRequest.isApproved()) {
-				return new Message<Object>(Message.FAIL,
+				return new ResultResponse<Object>(ResultResponse.FAIL,
 						(Object) getUnsuccessfulRedirect(authorizationRequest,
 								new UserDeniedAuthorizationException("User denied access"),
 								responseTypes.contains(OAuth2Constants.PARAMETER.TOKEN))).buildResponse();
 			}
 
 			if (responseTypes.contains(OAuth2Constants.PARAMETER.TOKEN)) {
-				return new Message<Object>((Object) getImplicitGrantResponse(authorizationRequest)).buildResponse();
+				return new ResultResponse<Object>((Object) getImplicitGrantResponse(authorizationRequest)).buildResponse();
 			}
 
-			return new Message<Object>(
+			return new ResultResponse<Object>(
 					(Object) getAuthorizationCodeResponse(authorizationRequest, (Authentication) principal))
 							.buildResponse();
 		} finally {

@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.wy.test.authentication.core.authn.session.SessionManager;
+import com.wy.test.authentication.core.session.SessionManager;
 import com.wy.test.core.properties.DreamAuthJobProperties;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.persistence.provision.thread.ProvisioningRunner;

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.entity.InstitutionEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.repository.InstitutionsRepository;
@@ -43,9 +44,9 @@ public class WebInstRequestFilter extends GenericFilterBean {
 		log.trace("WebInstRequestFilter");
 		HttpServletRequest request = ((HttpServletRequest) servletRequest);
 
-		if (request.getSession().getAttribute(WebConstants.CURRENT_INST) == null) {
+		if (request.getSession().getAttribute(ConstAuthWeb.CURRENT_INST) == null) {
 			if (log.isTraceEnabled()) {
-				WebContext.printRequest(request);
+				AuthWebContext.printRequest(request);
 			}
 			String host = request.getHeader(HEADER_HOSTNAME);
 			log.trace("hostname {}", host);
@@ -63,7 +64,7 @@ public class WebInstRequestFilter extends GenericFilterBean {
 			}
 			InstitutionEntity institution = institutionsRepository.get(host);
 			log.trace("{}", institution);
-			request.getSession().setAttribute(WebConstants.CURRENT_INST, institution);
+			request.getSession().setAttribute(ConstAuthWeb.CURRENT_INST, institution);
 
 			String origin = request.getHeader(HEADER_ORIGIN);
 			if (StringUtils.isEmpty(origin)) {

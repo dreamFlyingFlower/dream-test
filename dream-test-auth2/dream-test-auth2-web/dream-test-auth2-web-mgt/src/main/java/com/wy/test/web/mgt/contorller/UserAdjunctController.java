@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
-import com.wy.test.core.entity.Message;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.entity.UserAdjunctEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.query.UserAdjunctQuery;
@@ -64,9 +64,9 @@ public class UserAdjunctController {
 		log.debug("-Add  :" + userInfoAdjoint);
 		userInfoAdjoint.setInstId(currentUser.getInstId());
 		if (userAdjunctService.save(userInfoAdjoint)) {
-			return new Message<UserAdjunctEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<UserAdjunctEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<UserAdjunctEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<UserAdjunctEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -83,10 +83,10 @@ public class UserAdjunctController {
 		log.debug("-query  :" + userInfoAdjoint);
 		userInfoAdjoint.setInstId(currentUser.getInstId());
 		if (CollectionUtils.isNotEmpty(userAdjunctService.list(userInfoAdjoint))) {
-			return new Message<UserAdjunctEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<UserAdjunctEntity>(ResultResponse.SUCCESS).buildResponse();
 
 		} else {
-			return new Message<UserAdjunctEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<UserAdjunctEntity>(ResultResponse.FAIL).buildResponse();
 		}
 
 	}
@@ -104,9 +104,9 @@ public class UserAdjunctController {
 		log.debug("-update  userInfoAdjoint :" + userInfoAdjoint);
 		userInfoAdjoint.setInstId(currentUser.getInstId());
 		if (userAdjunctService.updateById(userInfoAdjoint)) {
-			return new Message<UserAdjunctEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<UserAdjunctEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<UserAdjunctEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<UserAdjunctEntity>(ResultResponse.FAIL).buildResponse();
 		}
 
 	}
@@ -115,9 +115,9 @@ public class UserAdjunctController {
 	public ResponseEntity<?> delete(@RequestBody UserAdjunctEntity userInfoAdjoint) {
 		log.debug("-delete  group :" + userInfoAdjoint);
 		if (userAdjunctService.removeById(userInfoAdjoint.getId())) {
-			return new Message<UserAdjunctEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<UserAdjunctEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<UserAdjunctEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<UserAdjunctEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 }

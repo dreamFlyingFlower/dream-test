@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
-import com.wy.test.authentication.core.authn.session.SessionManager;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.authentication.core.session.SessionManager;
 import com.wy.test.core.entity.HistoryLoginEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.UserVO;

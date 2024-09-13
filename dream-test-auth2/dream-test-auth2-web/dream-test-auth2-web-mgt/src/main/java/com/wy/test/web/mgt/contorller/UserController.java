@@ -30,19 +30,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Lists;
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstEntryType;
 import com.wy.test.core.constant.ConstOperateAction;
 import com.wy.test.core.constant.ConstOperateResult;
 import com.wy.test.core.convert.UserConvert;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.ExcelImport;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.enums.PasswordSetType;
 import com.wy.test.core.query.UserQuery;
 import com.wy.test.core.vo.UserVO;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.persistence.service.FileUploadService;
 import com.wy.test.persistence.service.HistorySysLogService;
 import com.wy.test.persistence.service.UserService;
@@ -70,20 +70,20 @@ public class UserController {
 	public ResponseEntity<?> fetch(@RequestBody UserQuery userInfo, @CurrentUser UserEntity currentUser) {
 		log.debug("" + userInfo);
 		userInfo.setInstId(currentUser.getInstId());
-		return new Message<>(userInfoService.listPage(userInfo)).buildResponse();
+		return new ResultResponse<>(userInfoService.listPage(userInfo)).buildResponse();
 	}
 
 	@PostMapping("query")
 	public ResponseEntity<?> query(@RequestBody UserEntity userInfo, @CurrentUser UserEntity currentUser) {
 		log.debug("-query  :" + userInfo);
-		return new Message<>(userInfoService.list(userInfo)).buildResponse();
+		return new ResultResponse<>(userInfoService.list(userInfo)).buildResponse();
 	}
 
 	@GetMapping("get/{id}")
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
 		UserVO userInfo = userInfoService.getInfo(id);
 		userInfo.trans();
-		return new Message<>(userInfo).buildResponse();
+		return new ResultResponse<>(userInfo).buildResponse();
 	}
 
 	@GetMapping("getByUsername/{username}")
@@ -91,13 +91,13 @@ public class UserController {
 		UserEntity userInfo = userInfoService.findByUsername(username);
 		UserVO userVO = UserConvert.INSTANCE.convertt(userInfo);
 		userVO.trans();
-		return new Message<>(userVO).buildResponse();
+		return new ResultResponse<>(userVO).buildResponse();
 	}
 
 	@PostMapping("add")
 	public ResponseEntity<?> add(@RequestBody UserVO userInfo, @CurrentUser UserEntity currentUser) {
 		log.debug("-Add  :" + userInfo);
-		userInfo.setId(WebContext.genId());
+		userInfo.setId(AuthWebContext.genId());
 		userInfo.setInstId(currentUser.getInstId());
 		if (StrHelper.isNotBlank(userInfo.getPictureId())) {
 			userInfo.setPicture(fileUploadService.getById(userInfo.getPictureId()).getUploaded());
@@ -106,9 +106,9 @@ public class UserController {
 		if (null != userInfoService.add(userInfo)) {
 			systemLog.insert(ConstEntryType.USERINFO, userInfo, ConstOperateAction.CREATE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<UserEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<UserEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<UserEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<UserEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -131,9 +131,9 @@ public class UserController {
 		if (userInfoService.edit(userInfo)) {
 			systemLog.insert(ConstEntryType.USERINFO, userInfo, ConstOperateAction.UPDATE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<UserEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<UserEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<UserEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<UserEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -144,15 +144,15 @@ public class UserController {
 		if (userInfoService.removeByIds(Arrays.asList(ids.split(",")))) {
 			systemLog.insert(ConstEntryType.USERINFO, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<UserEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<UserEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<UserEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<UserEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
 	@PostMapping("randomPassword")
 	public ResponseEntity<?> randomPassword() {
-		return new Message<Object>(Message.SUCCESS, (Object) userInfoService.randomPassword()).buildResponse();
+		return new ResultResponse<Object>(ResultResponse.SUCCESS, (Object) userInfoService.randomPassword()).buildResponse();
 	}
 
 	protected void convertExtraAttribute(UserVO userInfo) {
@@ -176,9 +176,9 @@ public class UserController {
 		if (userInfoService.changePassword(changePassword, true)) {
 			systemLog.insert(ConstEntryType.USERINFO, changePassword, ConstOperateAction.CHANGE_PASSWORD,
 					ConstOperateResult.SUCCESS, currentUser);
-			return new Message<UserEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<UserEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<UserEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<UserEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -192,9 +192,9 @@ public class UserController {
 		if (userInfoService.updateStatus(userInfo)) {
 			systemLog.insert(ConstEntryType.USERINFO, userInfo,
 					ConstOperateAction.statusActon.get(userInfo.getStatus()), ConstOperateResult.SUCCESS, currentUser);
-			return new Message<UserEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<UserEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<UserEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<UserEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -231,7 +231,7 @@ public class UserController {
 											() -> new TreeSet<>(Comparator.comparing(o -> o.getUsername()))),
 									ArrayList::new));
 					if (null != userInfoService.adds(userInfoList)) {
-						return new Message<UserEntity>(Message.SUCCESS).buildResponse();
+						return new ResultResponse<UserEntity>(ResultResponse.SUCCESS).buildResponse();
 					}
 				}
 			} catch (IOException e) {
@@ -240,7 +240,7 @@ public class UserController {
 				excelImportFile.closeWorkbook();
 			}
 		}
-		return new Message<UserEntity>(Message.FAIL).buildResponse();
+		return new ResultResponse<UserEntity>(ResultResponse.FAIL).buildResponse();
 	}
 
 	@InitBinder

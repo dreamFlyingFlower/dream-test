@@ -27,16 +27,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstProtocols;
 import com.wy.test.core.convert.AppSamlDetailConvert;
 import com.wy.test.core.entity.AppSamlDetailEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.vo.AppSamlDetailVO;
 import com.wy.test.persistence.service.AppSamlDetailService;
-import com.wy.test.protocol.saml2.authz.saml20.metadata.MetadataDescriptorUtil;
+import com.wy.test.protocol.saml2.saml20.metadata.MetadataDescriptorUtil;
 
 import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
 import dream.flying.flower.framework.web.crypto.cert.X509CertHelpers;
@@ -69,7 +69,7 @@ public class SamlDetailController extends BaseAppContorller {
 		saml20Details.setProtocol(ConstProtocols.SAML20);
 		GeneratorStrategyContext generatorStrategyContext = new GeneratorStrategyContext();
 		saml20Details.setId(generatorStrategyContext.generate());
-		return new Message<>(saml20Details).buildResponse();
+		return new ResultResponse<>(saml20Details).buildResponse();
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -78,7 +78,7 @@ public class SamlDetailController extends BaseAppContorller {
 		decoderSecret(saml20Details);
 		saml20Details.transIconBase64();
 		// modelAndView.addObject("authzURI",applicationConfig.getAuthzUri());
-		return new Message<>(saml20Details).buildResponse();
+		return new ResultResponse<>(saml20Details).buildResponse();
 	}
 
 	@ResponseBody
@@ -93,9 +93,9 @@ public class SamlDetailController extends BaseAppContorller {
 		saml20Details.setInstId(currentUser.getInstId());
 		saml20DetailsService.save(appSamlDetailConvert.convert(saml20Details));
 		if (null != appService.add(saml20Details)) {
-			return new Message<AppSamlDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppSamlDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppSamlDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppSamlDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -111,9 +111,9 @@ public class SamlDetailController extends BaseAppContorller {
 		saml20Details.setInstId(currentUser.getInstId());
 		saml20DetailsService.edit(saml20Details);
 		if (appService.edit(saml20Details)) {
-			return new Message<AppSamlDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppSamlDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppSamlDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppSamlDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -123,9 +123,9 @@ public class SamlDetailController extends BaseAppContorller {
 		log.debug("-delete  ids : {} ", ids);
 		if (saml20DetailsService.removeByIds(Arrays.asList(ids.split(",")))
 				&& appService.removeByIds(Arrays.asList(ids.split(",")))) {
-			return new Message<AppSamlDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppSamlDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppSamlDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppSamlDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 

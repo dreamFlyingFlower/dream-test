@@ -32,9 +32,9 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 
-import com.wy.test.authentication.core.authn.SignPrincipal;
-import com.wy.test.authentication.core.authn.web.AuthorizationUtils;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.authentication.core.entity.SignPrincipal;
+import com.wy.test.authentication.core.web.AuthorizationUtils;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.protocol.oauth2.common.OAuth2Constants;
 import com.wy.test.protocol.oauth2.provider.AuthorizationRequest;
 import com.wy.test.protocol.oauth2.provider.OAuth2Authentication;
@@ -110,14 +110,14 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 			throws IOException, ServletException {
 		_logger.debug("Authentication TokenEndpoint ");
 		if (authenticationManager == null) {
-			authenticationManager = WebContext.getBean("oauth2UserAuthenticationManager", AuthenticationManager.class);
+			authenticationManager = AuthWebContext.getBean("oauth2UserAuthenticationManager", AuthenticationManager.class);
 		}
 		if (oAuth2RequestFactory == null) {
-			oAuth2RequestFactory = WebContext.getBean("oAuth2RequestFactory", OAuth2RequestFactory.class);
+			oAuth2RequestFactory = AuthWebContext.getBean("oAuth2RequestFactory", OAuth2RequestFactory.class);
 		}
 		if (oauth2ClientAuthenticationManager == null) {
 			oauth2ClientAuthenticationManager =
-					WebContext.getBean("oauth2ClientAuthenticationManager", AuthenticationManager.class);
+					AuthWebContext.getBean("oauth2ClientAuthenticationManager", AuthenticationManager.class);
 		}
 
 		final boolean debug = _logger.isDebugEnabled();

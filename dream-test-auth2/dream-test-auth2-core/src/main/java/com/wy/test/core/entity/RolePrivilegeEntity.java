@@ -1,7 +1,7 @@
 package com.wy.test.core.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 
 import dream.flying.flower.framework.mybatis.plus.entity.AbstractStringEntity;
 import lombok.AllArgsConstructor;
@@ -61,7 +61,7 @@ public class RolePrivilegeEntity extends AbstractStringEntity {
 	}
 
 	public RolePrivilegeEntity(String appId, String roleId, String resourceId, String instId) {
-		this.setId(WebContext.genId());
+		this.setId(AuthWebContext.genId());
 		this.appId = appId;
 		this.roleId = roleId;
 		this.resourceId = resourceId;

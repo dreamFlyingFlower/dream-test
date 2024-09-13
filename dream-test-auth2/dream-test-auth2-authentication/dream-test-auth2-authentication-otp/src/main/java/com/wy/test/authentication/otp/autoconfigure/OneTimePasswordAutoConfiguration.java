@@ -4,8 +4,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
-import com.wy.test.authentication.otp.password.onetimepwd.MailOtpAuthnService;
-import com.wy.test.authentication.otp.password.onetimepwd.token.RedisOtpTokenStore;
+import com.wy.test.authentication.otp.onetimepwd.MailOtpAuthnService;
+import com.wy.test.authentication.otp.onetimepwd.token.RedisOtpTokenStore;
 import com.wy.test.core.enums.StoreType;
 import com.wy.test.core.properties.DreamAuthStoreProperties;
 import com.wy.test.core.redis.RedisConnectionFactory;

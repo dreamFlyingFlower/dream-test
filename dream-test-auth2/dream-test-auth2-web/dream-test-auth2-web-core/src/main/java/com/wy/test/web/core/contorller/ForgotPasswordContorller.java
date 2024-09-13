@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wy.test.authentication.core.authn.jwt.AuthTokenService;
-import com.wy.test.authentication.otp.password.onetimepwd.AbstractOtpAuthn;
-import com.wy.test.authentication.otp.password.onetimepwd.MailOtpAuthnService;
+import com.wy.test.authentication.core.jwt.AuthTokenService;
+import com.wy.test.authentication.otp.onetimepwd.AbstractOtpAuthn;
+import com.wy.test.authentication.otp.onetimepwd.MailOtpAuthnService;
 import com.wy.test.authentication.sms.password.sms.SmsOtpAuthnService;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.convert.PasswordPolicyConvert;
 import com.wy.test.core.convert.UserConvert;
 import com.wy.test.core.entity.ChangePassword;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.PasswordPolicyEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.PasswordPolicyVO;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.persistence.service.PasswordPolicyService;
 import com.wy.test.persistence.service.UserService;
 
@@ -82,11 +82,11 @@ public class ForgotPasswordContorller {
 	@GetMapping(value = { "/passwordpolicy" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> passwordpolicy() {
 		PasswordPolicyEntity passwordPolicy = passwordPolicyService
-				.listOne(PasswordPolicyEntity.builder().instId(WebContext.getInst().getId()).build());
+				.listOne(PasswordPolicyEntity.builder().instId(AuthWebContext.getInst().getId()).build());
 		PasswordPolicyVO passwordPolicyVO = PasswordPolicyConvert.INSTANCE.convertt(passwordPolicy);
 		// 构建密码强度说明
 		passwordPolicyVO.buildMessage();
-		return new Message<>(passwordPolicyVO).buildResponse();
+		return new ResultResponse<>(passwordPolicyVO).buildResponse();
 	}
 
 	@GetMapping(value = { "/validateCaptcha" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -98,11 +98,11 @@ public class ForgotPasswordContorller {
 		if (userInfo != null) {
 			AbstractOtpAuthn smsOtpAuthn = smsOtpAuthnService.getByInstId(userInfo.getInstId());
 			if (otpCaptcha == null || !smsOtpAuthn.validate(userInfo, otpCaptcha)) {
-				return new Message<ChangePassword>(Message.FAIL).buildResponse();
+				return new ResultResponse<ChangePassword>(ResultResponse.FAIL).buildResponse();
 			}
-			return new Message<ChangePassword>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<ChangePassword>(ResultResponse.SUCCESS).buildResponse();
 		}
-		return new Message<ChangePassword>(Message.FAIL).buildResponse();
+		return new ResultResponse<ChangePassword>(ResultResponse.FAIL).buildResponse();
 	}
 
 	@GetMapping(value = { "/produceOtp" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -112,7 +112,7 @@ public class ForgotPasswordContorller {
 		log.debug(" Mobile {}: ", mobile);
 		if (!authTokenService.validateCaptcha(state, captcha)) {
 			log.debug("login captcha valid error.");
-			return new Message<ChangePassword>(Message.FAIL).buildResponse();
+			return new ResultResponse<ChangePassword>(ResultResponse.FAIL).buildResponse();
 		}
 
 		ChangePassword change = null;
@@ -124,11 +124,11 @@ public class ForgotPasswordContorller {
 				change.clearPassword();
 				AbstractOtpAuthn smsOtpAuthn = smsOtpAuthnService.getByInstId(userInfo.getInstId());
 				smsOtpAuthn.produce(userInfo);
-				return new Message<ChangePassword>(change).buildResponse();
+				return new ResultResponse<ChangePassword>(change).buildResponse();
 			}
 		}
 
-		return new Message<ChangePassword>(Message.FAIL).buildResponse();
+		return new ResultResponse<ChangePassword>(ResultResponse.FAIL).buildResponse();
 	}
 
 	@GetMapping(value = { "/produceEmailOtp" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -137,7 +137,7 @@ public class ForgotPasswordContorller {
 		log.debug("/forgotpassword/produceEmailOtp Email {} : ", email);
 		if (!authTokenService.validateCaptcha(state, captcha)) {
 			log.debug("captcha valid error.");
-			return new Message<ChangePassword>(Message.FAIL).buildResponse();
+			return new ResultResponse<ChangePassword>(ResultResponse.FAIL).buildResponse();
 		}
 
 		ChangePassword change = null;
@@ -148,10 +148,10 @@ public class ForgotPasswordContorller {
 				change.clearPassword();
 				AbstractOtpAuthn mailOtpAuthn = mailOtpAuthnService.getMailOtpAuthn(userInfo.getInstId());
 				mailOtpAuthn.produce(userInfo);
-				return new Message<ChangePassword>(change).buildResponse();
+				return new ResultResponse<ChangePassword>(change).buildResponse();
 			}
 		}
-		return new Message<ChangePassword>(Message.FAIL).buildResponse();
+		return new ResultResponse<ChangePassword>(ResultResponse.FAIL).buildResponse();
 	}
 
 	@PostMapping(value = { "/setpassword" })
@@ -170,15 +170,15 @@ public class ForgotPasswordContorller {
 								&& smsOtpAuthn.validate(loadedUserInfo, otpCaptcha))) {
 
 					if (userService.changePassword(changePassword, true)) {
-						return new Message<ChangePassword>(Message.SUCCESS).buildResponse();
+						return new ResultResponse<ChangePassword>(ResultResponse.SUCCESS).buildResponse();
 					} else {
-						return new Message<ChangePassword>(Message.FAIL).buildResponse();
+						return new ResultResponse<ChangePassword>(ResultResponse.FAIL).buildResponse();
 					}
 				} else {
-					return new Message<ChangePassword>(Message.FAIL).buildResponse();
+					return new ResultResponse<ChangePassword>(ResultResponse.FAIL).buildResponse();
 				}
 			}
 		}
-		return new Message<ChangePassword>(Message.FAIL).buildResponse();
+		return new ResultResponse<ChangePassword>(ResultResponse.FAIL).buildResponse();
 	}
 }

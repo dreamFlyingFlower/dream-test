@@ -5,7 +5,7 @@ import java.sql.Types;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.wy.test.core.entity.HistoryLoginEntity;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 
 public class LoginHistoryRepository {
 
@@ -19,8 +19,8 @@ public class LoginHistoryRepository {
 	}
 
 	public void login(HistoryLoginEntity historyLogin) {
-		historyLogin.setId(WebContext.genId());
-		historyLogin.setLoginUrl(WebContext.getRequest().getRequestURI());
+		historyLogin.setId(AuthWebContext.genId());
+		historyLogin.setLoginUrl(AuthWebContext.getRequest().getRequestURI());
 		// Thread insert
 		new Thread(new HistoryLoginRunnable(jdbcTemplate, historyLogin)).start();
 	}

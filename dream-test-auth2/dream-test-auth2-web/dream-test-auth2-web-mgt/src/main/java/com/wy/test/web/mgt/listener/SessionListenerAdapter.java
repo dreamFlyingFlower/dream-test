@@ -6,8 +6,8 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import com.wy.test.authentication.core.authn.session.Session;
-import com.wy.test.authentication.core.authn.session.SessionManager;
+import com.wy.test.authentication.core.session.Session;
+import com.wy.test.authentication.core.session.SessionManager;
 import com.wy.test.core.entity.HistoryLoginEntity;
 
 import dream.flying.flower.helper.DateTimeHelper;

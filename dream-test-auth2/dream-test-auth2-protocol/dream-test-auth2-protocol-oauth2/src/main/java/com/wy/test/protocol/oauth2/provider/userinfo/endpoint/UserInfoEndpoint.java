@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.wy.test.authentication.core.authn.SignPrincipal;
+import com.wy.test.authentication.core.entity.SignPrincipal;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.entity.oauth2.ClientDetails;
 import com.wy.test.core.vo.AppVO;

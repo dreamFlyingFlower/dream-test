@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstProtocols;
 import com.wy.test.core.entity.AppFormDetailEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.AppFormDetailVO;
 import com.wy.test.persistence.service.AppFormDetailService;
@@ -41,7 +41,7 @@ public class FormDetailController extends BaseAppContorller {
 		formBasedDetails.setId(generatorStrategyContext.generate());
 		formBasedDetails.setProtocol(ConstProtocols.FORMBASED);
 		formBasedDetails.setSecret(ReciprocalHelpers.generateKey(""));
-		return new Message<>(formBasedDetails).buildResponse();
+		return new ResultResponse<>(formBasedDetails).buildResponse();
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -50,7 +50,7 @@ public class FormDetailController extends BaseAppContorller {
 		decoderSecret(formBasedDetails);
 		decoderSharedPassword(formBasedDetails);
 		formBasedDetails.transIconBase64();
-		return new Message<>(formBasedDetails).buildResponse();
+		return new ResultResponse<>(formBasedDetails).buildResponse();
 	}
 
 	@ResponseBody
@@ -61,9 +61,9 @@ public class FormDetailController extends BaseAppContorller {
 		transform(formBasedDetails);
 		formBasedDetails.setInstId(currentUser.getInstId());
 		if (null != appFormDetailService.add(formBasedDetails) && null != appService.add(formBasedDetails)) {
-			return new Message<AppFormDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppFormDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppFormDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppFormDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -75,9 +75,9 @@ public class FormDetailController extends BaseAppContorller {
 		transform(formBasedDetails);
 		formBasedDetails.setInstId(currentUser.getInstId());
 		if (appFormDetailService.edit(formBasedDetails) && appService.edit(formBasedDetails)) {
-			return new Message<AppFormDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppFormDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppFormDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppFormDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -87,9 +87,9 @@ public class FormDetailController extends BaseAppContorller {
 		log.debug("-delete  ids : {} ", ids);
 		if (appFormDetailService.removeByIds(Arrays.asList(ids.split(",")))
 				&& appService.removeByIds(Arrays.asList(ids.split(",")))) {
-			return new Message<AppFormDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppFormDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppFormDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppFormDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 }

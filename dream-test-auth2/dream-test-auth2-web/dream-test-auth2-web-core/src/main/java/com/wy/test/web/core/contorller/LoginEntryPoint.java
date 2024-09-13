@@ -19,24 +19,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wy.test.authentication.core.authn.LoginCredential;
-import com.wy.test.authentication.core.authn.jwt.AuthJwt;
-import com.wy.test.authentication.core.authn.jwt.AuthTokenService;
-import com.wy.test.authentication.otp.password.onetimepwd.AbstractOtpAuthn;
-import com.wy.test.authentication.provider.authn.provider.AbstractAuthenticationProvider;
-import com.wy.test.authentication.provider.authn.support.kerberos.KerberosService;
-import com.wy.test.authentication.provider.authn.support.rememberme.AbstractRemeberMeManager;
-import com.wy.test.authentication.provider.authn.support.rememberme.RemeberMe;
+import com.wy.test.authentication.core.entity.LoginCredential;
+import com.wy.test.authentication.core.jwt.AuthJwt;
+import com.wy.test.authentication.core.jwt.AuthTokenService;
+import com.wy.test.authentication.otp.onetimepwd.AbstractOtpAuthn;
+import com.wy.test.authentication.provider.provider.AbstractAuthenticationProvider;
+import com.wy.test.authentication.provider.support.kerberos.KerberosService;
+import com.wy.test.authentication.provider.support.rememberme.AbstractRemeberMeManager;
+import com.wy.test.authentication.provider.support.rememberme.RemeberMe;
 import com.wy.test.authentication.sms.password.sms.SmsOtpAuthnService;
-import com.wy.test.authentication.social.authn.support.socialsignon.service.SocialSignOnProviderService;
+import com.wy.test.authentication.social.sso.service.SocialSignOnProviderService;
+import com.wy.test.core.base.ResultResponse;
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.entity.InstitutionEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.SocialAssociateEntity;
 import com.wy.test.core.entity.SocialProviderEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
-import com.wy.test.core.web.WebConstants;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.persistence.service.SocialAssociateService;
 import com.wy.test.persistence.service.UserService;
 
@@ -96,7 +96,7 @@ public class LoginEntryPoint {
 					if (authentication != null) {
 						AuthJwt authJwt = authTokenService.genAuthJwt(authentication);
 						authJwt.setRemeberMe(remeberMeJwt);
-						return new Message<AuthJwt>(authJwt).buildResponse();
+						return new ResultResponse<AuthJwt>(authJwt).buildResponse();
 					}
 				}
 			} catch (ParseException e) {
@@ -115,7 +115,7 @@ public class LoginEntryPoint {
 			model.put("userDomainUrlJson", kerberosService.buildKerberosProxys());
 		}
 
-		InstitutionEntity inst = (InstitutionEntity) WebContext.getAttribute(WebConstants.CURRENT_INST);
+		InstitutionEntity inst = (InstitutionEntity) AuthWebContext.getAttribute(ConstAuthWeb.CURRENT_INST);
 		model.put("inst", inst);
 		if (dreamLoginProperties.getCaptcha().isEnabled()) {
 			model.put("captcha", "true");
@@ -126,18 +126,18 @@ public class LoginEntryPoint {
 		// load Social Sign On Providers
 		model.put("socials", socialSignOnProviderService.loadSocials(inst.getId()));
 
-		return new Message<>(model).buildResponse();
+		return new ResultResponse<>(model).buildResponse();
 	}
 
 	@GetMapping(value = { "/sendotp/{mobile}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> produceOtp(@PathVariable("mobile") String mobile) {
 		UserEntity userInfo = userInfoService.findByEmailMobile(mobile);
 		if (userInfo != null) {
-			smsAuthnService.getByInstId(WebContext.getInst().getId()).produce(userInfo);
-			return new Message<>(Message.SUCCESS).buildResponse();
+			smsAuthnService.getByInstId(AuthWebContext.getInst().getId()).produce(userInfo);
+			return new ResultResponse<>(ResultResponse.SUCCESS).buildResponse();
 		}
 
-		return new Message<>(Message.FAIL).buildResponse();
+		return new ResultResponse<>(ResultResponse.FAIL).buildResponse();
 	}
 
 	@PostMapping(value = { "/signin/bindusersocials" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -153,7 +153,7 @@ public class LoginEntryPoint {
 
 		UserEntity userInfo = userInfoService.findByEmailMobile(mobile);
 		// 验证码验证是否合法
-		if (smsAuthnService.getByInstId(WebContext.getInst().getId()).validate(userInfo, code)) {
+		if (smsAuthnService.getByInstId(AuthWebContext.getInst().getId()).validate(userInfo, code)) {
 			// 合法进行用户绑定
 			SocialAssociateEntity socialsAssociate = new SocialAssociateEntity();
 			socialsAssociate.setUserId(userInfo.getId());
@@ -175,10 +175,10 @@ public class LoginEntryPoint {
 
 			Authentication authentication = authenticationProvider.authenticate(loginCredential, true);
 
-			return new Message<AuthJwt>(authTokenService.genAuthJwt(authentication)).buildResponse();
+			return new ResultResponse<AuthJwt>(authTokenService.genAuthJwt(authentication)).buildResponse();
 
 		}
-		return new Message<AuthJwt>(Message.FAIL).buildResponse();
+		return new ResultResponse<AuthJwt>(ResultResponse.FAIL).buildResponse();
 	}
 
 	/**
@@ -190,7 +190,7 @@ public class LoginEntryPoint {
 	@PostMapping(value = { "/signin" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> signin(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody LoginCredential credential) {
-		Message<AuthJwt> authJwtMessage = new Message<>(Message.FAIL);
+		ResultResponse<AuthJwt> authJwtMessage = new ResultResponse<>(ResultResponse.FAIL);
 		if (authTokenService.validateJwtToken(credential.getState())) {
 			AuthLoginType authType = credential.getAuthLoginType();
 			log.debug("Login AuthN Type  " + authType);
@@ -203,15 +203,15 @@ public class LoginEntryPoint {
 						String remeberMe = remeberMeManager.createRemeberMe(authentication, request, response);
 						authJwt.setRemeberMe(remeberMe);
 					}
-					if (WebContext.getAttribute(WebConstants.CURRENT_USER_PASSWORD_SET_TYPE) != null)
+					if (AuthWebContext.getAttribute(ConstAuthWeb.CURRENT_USER_PASSWORD_SET_TYPE) != null)
 						authJwt.setPasswordSetType(
-								(Integer) WebContext.getAttribute(WebConstants.CURRENT_USER_PASSWORD_SET_TYPE));
-					authJwtMessage = new Message<>(authJwt);
+								(Integer) AuthWebContext.getAttribute(ConstAuthWeb.CURRENT_USER_PASSWORD_SET_TYPE));
+					authJwtMessage = new ResultResponse<>(authJwt);
 
 				} else {
 					// fail
-					String errorMsg = WebContext.getAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE) == null ? ""
-							: WebContext.getAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE).toString();
+					String errorMsg = AuthWebContext.getAttribute(ConstAuthWeb.LOGIN_ERROR_SESSION_MESSAGE) == null ? ""
+							: AuthWebContext.getAttribute(ConstAuthWeb.LOGIN_ERROR_SESSION_MESSAGE).toString();
 					authJwtMessage.setMessage(errorMsg);
 					log.debug("login fail , message {}", errorMsg);
 				}
@@ -233,9 +233,9 @@ public class LoginEntryPoint {
 		if (StringUtils.isNotBlank(credential.getCongress())) {
 			AuthJwt authJwt = authTokenService.consumeCongress(credential.getCongress());
 			if (authJwt != null) {
-				return new Message<>(authJwt).buildResponse();
+				return new ResultResponse<>(authJwt).buildResponse();
 			}
 		}
-		return new Message<>(Message.FAIL).buildResponse();
+		return new ResultResponse<>(ResultResponse.FAIL).buildResponse();
 	}
 }

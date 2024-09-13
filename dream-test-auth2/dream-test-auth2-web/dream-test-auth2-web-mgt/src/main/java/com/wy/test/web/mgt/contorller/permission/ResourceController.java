@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstEntryType;
 import com.wy.test.core.constant.ConstOperateAction;
 import com.wy.test.core.constant.ConstOperateResult;
 import com.wy.test.core.convert.ResourceConvert;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.ResourceEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.ResourceVO;
@@ -51,7 +51,7 @@ public class ResourceController {
 	public ResponseEntity<?> fetch(@RequestBody ResourceEntity resource, @CurrentUser UserEntity currentUser) {
 		log.debug("fetch {}", resource);
 		resource.setInstId(currentUser.getInstId());
-		return new Message<>(resourcesService.list(new LambdaQueryWrapper<>(resource))).buildResponse();
+		return new ResultResponse<>(resourcesService.list(new LambdaQueryWrapper<>(resource))).buildResponse();
 	}
 
 	@ResponseBody
@@ -61,16 +61,16 @@ public class ResourceController {
 		resource.setInstId(currentUser.getInstId());
 		List<ResourceEntity> resourceList = resourcesService.list(new LambdaQueryWrapper<>(resource));
 		if (resourceList != null) {
-			return new Message<List<ResourceEntity>>(Message.SUCCESS, resourceList).buildResponse();
+			return new ResultResponse<List<ResourceEntity>>(ResultResponse.SUCCESS, resourceList).buildResponse();
 		} else {
-			return new Message<List<ResourceEntity>>(Message.FAIL).buildResponse();
+			return new ResultResponse<List<ResourceEntity>>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
 		ResourceEntity resource = resourcesService.getById(id);
-		return new Message<ResourceEntity>(resource).buildResponse();
+		return new ResultResponse<ResourceEntity>(resource).buildResponse();
 	}
 
 	@ResponseBody
@@ -81,9 +81,9 @@ public class ResourceController {
 		if (resourcesService.save(resource)) {
 			systemLog.insert(ConstEntryType.RESOURCE, resource, ConstOperateAction.CREATE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<ResourceEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<ResourceEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<ResourceEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<ResourceEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -95,9 +95,9 @@ public class ResourceController {
 		if (resourcesService.updateById(resource)) {
 			systemLog.insert(ConstEntryType.RESOURCE, resource, ConstOperateAction.UPDATE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<ResourceEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<ResourceEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<ResourceEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<ResourceEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -108,9 +108,9 @@ public class ResourceController {
 		if (resourcesService.removeByIds(Arrays.asList(ids.split(",")))) {
 			systemLog.insert(ConstEntryType.RESOURCE, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<ResourceEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<ResourceEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<ResourceEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<ResourceEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -146,9 +146,9 @@ public class ResourceController {
 			treeAttributes.setRootNode(rootNode);
 
 			treeAttributes.setNodeCount(nodeCount);
-			return new Message<TreeAttributes>(Message.SUCCESS, treeAttributes).buildResponse();
+			return new ResultResponse<TreeAttributes>(ResultResponse.SUCCESS, treeAttributes).buildResponse();
 		} else {
-			return new Message<TreeAttributes>(Message.FAIL).buildResponse();
+			return new ResultResponse<TreeAttributes>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 }

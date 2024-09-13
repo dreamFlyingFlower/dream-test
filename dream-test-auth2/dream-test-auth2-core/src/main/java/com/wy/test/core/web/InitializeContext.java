@@ -49,7 +49,7 @@ public class InitializeContext extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 
-		WebContext.applicationContext = applicationContext;
+		AuthWebContext.applicationContext = applicationContext;
 
 		// List Environment Variables
 		listEnvVars();
@@ -129,11 +129,11 @@ public class InitializeContext extends HttpServlet {
 					((PropertySourcesPlaceholderConfigurer) applicationContext
 							.getBean("propertySourcesPlaceholderConfigurer"));
 
-			WebContext.properties = (StandardEnvironment) propertySourcesPlaceholderConfigurer
+			AuthWebContext.properties = (StandardEnvironment) propertySourcesPlaceholderConfigurer
 					.getAppliedPropertySources()
 					.get(PropertySourcesPlaceholderConfigurer.ENVIRONMENT_PROPERTIES_PROPERTY_SOURCE_NAME).getSource();
 
-			Iterator<PropertySource<?>> it = WebContext.properties.getPropertySources().iterator();
+			Iterator<PropertySource<?>> it = AuthWebContext.properties.getPropertySources().iterator();
 			while (it.hasNext()) {
 				log.debug("propertySource {}", it.next());
 			}
@@ -187,7 +187,7 @@ public class InitializeContext extends HttpServlet {
 		log.info("+                       Community  Edition ");
 		log.info("+                      Single   Sign  On ( SSO ) ");
 		log.info("+                           Version {}",
-				WebContext.properties.getProperty("dream.auth.app.version"));
+				AuthWebContext.properties.getProperty("dream.auth.app.version"));
 		log.info("+");
 		log.info("+                 {}Copyright 2018 - {} https://www.top/", (char) 0xA9, new DateTime().getYear());
 		log.info("+                 Licensed under the Apache License, Version 2.0 ");

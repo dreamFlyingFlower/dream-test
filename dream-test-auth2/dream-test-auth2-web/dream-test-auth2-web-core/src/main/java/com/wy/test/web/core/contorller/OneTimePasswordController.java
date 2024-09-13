@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
-import com.wy.test.authentication.otp.password.onetimepwd.algorithm.OtpKeyUri;
-import com.wy.test.authentication.otp.password.onetimepwd.algorithm.OtpSecret;
-import com.wy.test.authentication.otp.password.onetimepwd.impl.TimeBasedOtpAuthn;
-import com.wy.test.core.entity.Message;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.authentication.otp.onetimepwd.algorithm.OtpKeyUri;
+import com.wy.test.authentication.otp.onetimepwd.algorithm.OtpSecret;
+import com.wy.test.authentication.otp.onetimepwd.impl.TimeBasedOtpAuthn;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.persistence.service.UserService;
@@ -65,7 +65,7 @@ public class OneTimePasswordController {
 		timebased.put("sharedSecret", sharedSecret);
 		timebased.put("hexSharedSecret", hexSharedSecret);
 		timebased.put("rqCode", rqCode);
-		return new Message<HashMap<String, Object>>(timebased).buildResponse();
+		return new ResultResponse<HashMap<String, Object>>(timebased).buildResponse();
 	}
 
 	public void generate(String generate, @CurrentUser UserEntity currentUser) {
@@ -88,9 +88,9 @@ public class OneTimePasswordController {
 		// 计算当前时间对应的动态密码
 		boolean validate = timeBasedOtpAuthn.validate(currentUser, otp);
 		if (validate) {
-			return new Message<>(0, "One-Time Password verification succeeded").buildResponse();
+			return new ResultResponse<>(0, "One-Time Password verification succeeded").buildResponse();
 		} else {
-			return new Message<>(2, "One-Time Password verification failed").buildResponse();
+			return new ResultResponse<>(2, "One-Time Password verification failed").buildResponse();
 		}
 	}
 }

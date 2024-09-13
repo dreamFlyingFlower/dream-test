@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 
 import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
@@ -45,6 +45,6 @@ public class BasePathTagDirective implements TemplateDirectiveModel {
 	public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body)
 			throws TemplateException, IOException {
 
-		env.getOut().append(WebContext.getContextPath(request, true));
+		env.getOut().append(AuthWebContext.getContextPath(request, true));
 	}
 }

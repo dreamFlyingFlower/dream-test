@@ -14,7 +14,7 @@ import com.wy.test.core.entity.OrgEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.web.HttpRequestAdapter;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.persistence.provision.ProvisionAction;
 import com.wy.test.persistence.provision.ProvisionMessage;
 import com.wy.test.persistence.provision.ProvisionTopic;
@@ -118,7 +118,7 @@ public class ProvisioningRunner {
 			result = "fail";
 		}
 
-		jdbcTemplate.update(PROVISION_LOG_INSERT_STATEMENT, WebContext.genId(), conName, topic,
+		jdbcTemplate.update(PROVISION_LOG_INSERT_STATEMENT, AuthWebContext.genId(), conName, topic,
 				actionType.replace("_ACTION", "").toLowerCase(), sourceId, sourceName, DateTimeHelper.formatDateTime(),
 				result, instid);
 	}

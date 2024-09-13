@@ -6,12 +6,12 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.authentication.core.authn.SignPrincipal;
+import com.wy.test.authentication.core.entity.SignPrincipal;
 import com.wy.test.core.entity.AccountEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.vo.AppVO;
 import com.wy.test.core.vo.UserVO;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 
 import dream.flying.flower.binary.Base64Helper;
 import dream.flying.flower.framework.core.enums.BooleanEnum;
@@ -41,7 +41,7 @@ public abstract class AbstractAuthorizeAdapter {
 
 	public Object sign(Object data, String signatureKey, String signature) {
 		if (BooleanEnum.isTrue(app.getIsSignature())) {
-			KeyStoreLoader keyStoreLoader = WebContext.getBean("keyStoreLoader", KeyStoreLoader.class);
+			KeyStoreLoader keyStoreLoader = AuthWebContext.getBean("keyStoreLoader", KeyStoreLoader.class);
 			try {
 				byte[] signData = CertSigner.sign(data.toString().getBytes(), keyStoreLoader.getKeyStore(),
 						keyStoreLoader.getEntityName(), keyStoreLoader.getKeystorePassword());

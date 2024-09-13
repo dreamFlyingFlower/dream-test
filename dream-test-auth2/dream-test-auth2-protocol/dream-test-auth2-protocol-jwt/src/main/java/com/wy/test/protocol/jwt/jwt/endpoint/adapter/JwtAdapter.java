@@ -20,8 +20,8 @@ import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.PlainJWT;
 import com.nimbusds.jwt.SignedJWT;
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.vo.AppJwtDetailVO;
-import com.wy.test.core.web.WebConstants;
 import com.wy.test.protocol.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 
 import dream.flying.flower.framework.web.crypto.jwt.encryption.DefaultJwtEncryptionAndDecryptionHandler;
@@ -61,7 +61,7 @@ public class JwtAdapter extends AbstractAuthorizeAdapter {
 				.claim("email", userInfo.getWorkEmail()).claim("name", userInfo.getUsername())
 				.claim("user_id", userInfo.getId()).claim("external_id", userInfo.getId())
 				.claim("locale", userInfo.getLocale())
-				.claim(WebConstants.ONLINE_TICKET_NAME, principal.getSession().getFormattedId())
+				.claim(ConstAuthWeb.ONLINE_TICKET_NAME, principal.getSession().getFormattedId())
 				.claim("kid", jwtDetails.getId() + "_sig").claim("institution", userInfo.getInstId()).build();
 
 		log.trace("jwt Claims : {}", jwtClaims);

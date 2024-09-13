@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.session.Session;
-import com.wy.test.authentication.core.authn.session.SessionManager;
+import com.wy.test.authentication.core.session.Session;
+import com.wy.test.authentication.core.session.SessionManager;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

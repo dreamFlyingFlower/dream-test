@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.authentication.core.authn.session.Session;
-import com.wy.test.authentication.core.authn.web.AuthorizationUtils;
+import com.wy.test.authentication.core.session.Session;
+import com.wy.test.authentication.core.web.AuthorizationUtils;
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.vo.AppCasDetailVO;
-import com.wy.test.core.web.WebConstants;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.protocol.authorize.singlelogout.LogoutType;
 import com.wy.test.protocol.cas.endpoint.ticket.CasConstants;
 import com.wy.test.protocol.cas.endpoint.ticket.ServiceTicketImpl;
@@ -63,7 +63,7 @@ public class CasAuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 		}
 
 		log.debug("Detail {}", casDetails);
-		Map<String, String> parameterMap = WebContext.getRequestParameterMap(request);
+		Map<String, String> parameterMap = AuthWebContext.getRequestParameterMap(request);
 		String service = casService;
 		log.debug("CAS Parameter service = {}", service);
 		if (casService.indexOf("?") > -1) {
@@ -76,11 +76,11 @@ public class CasAuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 			}
 			log.debug("CAS service with Parameter : {}", parameterMap);
 		}
-		WebContext.setAttribute(CasConstants.PARAMETER.PARAMETER_MAP, parameterMap);
-		WebContext.setAttribute(CasConstants.PARAMETER.ENDPOINT_CAS_DETAILS, casDetails);
-		WebContext.setAttribute(WebConstants.SINGLE_SIGN_ON_APP_ID, casDetails.getId());
-		WebContext.setAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP, casDetails);
-		return WebContext.redirect(CasConstants.ENDPOINT.ENDPOINT_SERVICE_TICKET_GRANTING);
+		AuthWebContext.setAttribute(CasConstants.PARAMETER.PARAMETER_MAP, parameterMap);
+		AuthWebContext.setAttribute(CasConstants.PARAMETER.ENDPOINT_CAS_DETAILS, casDetails);
+		AuthWebContext.setAttribute(ConstAuthWeb.SINGLE_SIGN_ON_APP_ID, casDetails.getId());
+		AuthWebContext.setAttribute(ConstAuthWeb.AUTHORIZE_SIGN_ON_APP, casDetails);
+		return AuthWebContext.redirect(CasConstants.ENDPOINT.ENDPOINT_SERVICE_TICKET_GRANTING);
 
 	}
 
@@ -88,7 +88,7 @@ public class CasAuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 	public ModelAndView grantingTicket(Principal principal, HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView("authorize/cas_sso_submint");
 		AppCasDetailVO casDetails =
-				(AppCasDetailVO) WebContext.getAttribute(CasConstants.PARAMETER.ENDPOINT_CAS_DETAILS);
+				(AppCasDetailVO) AuthWebContext.getAttribute(CasConstants.PARAMETER.ENDPOINT_CAS_DETAILS);
 
 		ServiceTicketImpl serviceTicket = new ServiceTicketImpl(AuthorizationUtils.getAuthentication(), casDetails);
 
@@ -113,10 +113,10 @@ public class CasAuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 		callbackUrl.append(CasConstants.PARAMETER.SERVICE).append("=").append(casDetails.getService());
 
 		// 增加可自定义的参数
-		if (WebContext.getAttribute(CasConstants.PARAMETER.PARAMETER_MAP) != null) {
+		if (AuthWebContext.getAttribute(CasConstants.PARAMETER.PARAMETER_MAP) != null) {
 			@SuppressWarnings("unchecked")
 			Map<String, String> parameterMap =
-					(Map<String, String>) WebContext.getAttribute(CasConstants.PARAMETER.PARAMETER_MAP);
+					(Map<String, String>) AuthWebContext.getAttribute(CasConstants.PARAMETER.PARAMETER_MAP);
 			parameterMap.remove(CasConstants.PARAMETER.TICKET);
 			parameterMap.remove(CasConstants.PARAMETER.SERVICE);
 			for (String key : parameterMap.keySet()) {

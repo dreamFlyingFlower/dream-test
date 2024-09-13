@@ -8,14 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.entity.AccountEntity;
 import com.wy.test.core.enums.CredentialType;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.vo.AppVO;
 import com.wy.test.core.vo.UserVO;
-import com.wy.test.core.web.WebConstants;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.persistence.service.AccountService;
 import com.wy.test.persistence.service.AppService;
 import com.wy.test.protocol.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
@@ -35,7 +35,7 @@ public class AuthorizeBaseEndpoint {
 	protected AccountService accountService;
 
 	protected AppVO getApp(String id) {
-		AppVO app = (AppVO) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
+		AppVO app = (AppVO) AuthWebContext.getAttribute(ConstAuthWeb.AUTHORIZE_SIGN_ON_APP);
 		if (StringUtils.isBlank(id)) {
 			log.error("parameter for app id " + id + "  is null.");
 		} else {
@@ -43,7 +43,7 @@ public class AuthorizeBaseEndpoint {
 			if (app == null || !app.getId().equalsIgnoreCase(id)) {
 				app = appService.get(id, true);
 			}
-			WebContext.setAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP, app);
+			AuthWebContext.setAttribute(ConstAuthWeb.AUTHORIZE_SIGN_ON_APP, app);
 		}
 		if (app == null) {
 			log.error("Applications id " + id + "  is not exist.");

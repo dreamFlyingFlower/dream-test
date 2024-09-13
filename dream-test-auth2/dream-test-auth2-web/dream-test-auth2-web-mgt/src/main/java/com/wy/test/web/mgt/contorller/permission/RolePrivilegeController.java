@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
-import com.wy.test.core.entity.Message;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.entity.RolePrivilegeEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.HistorySysLogService;
@@ -82,10 +82,10 @@ public class RolePrivilegeController {
 
 		if (!newRolePrivilegesList.isEmpty() && rolePrivilegesService.insertRolePrivileges(newRolePrivilegesList)) {
 			log.debug("-insert  : " + newRolePrivilegesList);
-			return new Message<RolePrivilegeEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<RolePrivilegeEntity>(ResultResponse.SUCCESS).buildResponse();
 
 		} else {
-			return new Message<RolePrivilegeEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<RolePrivilegeEntity>(ResultResponse.SUCCESS).buildResponse();
 		}
 
 	}
@@ -99,6 +99,6 @@ public class RolePrivilegeController {
 				new RolePrivilegeEntity(rolePrivileges.getAppId(), rolePrivileges.getRoleId(), currentUser.getInstId());
 		List<RolePrivilegeEntity> rolePrivilegeList = rolePrivilegesService.queryRolePrivileges(queryRolePrivilege);
 
-		return new Message<List<RolePrivilegeEntity>>(rolePrivilegeList).buildResponse();
+		return new ResultResponse<List<RolePrivilegeEntity>>(rolePrivilegeList).buildResponse();
 	}
 }

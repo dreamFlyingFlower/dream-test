@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.wy.test.authentication.otp.password.onetimepwd.AbstractOtpAuthn;
-import com.wy.test.authentication.otp.password.onetimepwd.impl.TimeBasedOtpAuthn;
-import com.wy.test.authentication.provider.authn.realm.jdbc.JdbcAuthenticationRealm;
+import com.wy.test.authentication.otp.onetimepwd.AbstractOtpAuthn;
+import com.wy.test.authentication.otp.onetimepwd.impl.TimeBasedOtpAuthn;
+import com.wy.test.authentication.provider.realm.jdbc.JdbcAuthenticationRealm;
 import com.wy.test.core.repository.LoginHistoryRepository;
 import com.wy.test.core.repository.PasswordPolicyValidator;
 import com.wy.test.persistence.service.LoginService;

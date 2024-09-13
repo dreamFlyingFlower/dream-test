@@ -24,10 +24,10 @@ import com.nimbusds.jose.jwk.OctetSequenceKey;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.gen.OctetSequenceKeyGenerator;
 import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstProtocols;
 import com.wy.test.core.entity.AppEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.query.AppQuery;
 import com.wy.test.core.vo.AppVO;
@@ -48,7 +48,7 @@ public class AppController extends BaseAppContorller {
 		app.setId(generatorStrategyContext.generate());
 		app.setProtocol(ConstProtocols.BASIC);
 		app.setSecret(ReciprocalHelpers.generateKey(""));
-		return new Message<AppEntity>(app).buildResponse();
+		return new ResultResponse<AppEntity>(app).buildResponse();
 	}
 
 	@GetMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -62,7 +62,7 @@ public class AppController extends BaseAppContorller {
 			app.setSharedPassword(null);
 		}
 		log.debug("List " + appsList);
-		return new Message<>(appsList).buildResponse();
+		return new ResultResponse<>(appsList).buildResponse();
 	}
 
 	@ResponseBody
@@ -70,9 +70,9 @@ public class AppController extends BaseAppContorller {
 	public ResponseEntity<?> query(AppEntity apps, @CurrentUser UserEntity currentUser) {
 		log.debug("-query  :" + apps);
 		if (CollectionUtils.isNotEmpty(appService.list(apps))) {
-			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppEntity>(ResultResponse.SUCCESS).buildResponse();
 		}
 	}
 
@@ -81,7 +81,7 @@ public class AppController extends BaseAppContorller {
 		AppVO apps = appService.getInfo(id);
 		decoderSecret(apps);
 		apps.transIconBase64();
-		return new Message<>(apps).buildResponse();
+		return new ResultResponse<>(apps).buildResponse();
 	}
 
 	@ResponseBody
@@ -91,9 +91,9 @@ public class AppController extends BaseAppContorller {
 		transform(apps);
 		apps.setInstId(currentUser.getInstId());
 		if (null != appService.add(apps)) {
-			return new Message<>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<>(Message.FAIL).buildResponse();
+			return new ResultResponse<>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -104,9 +104,9 @@ public class AppController extends BaseAppContorller {
 		transform(apps);
 		apps.setInstId(currentUser.getInstId());
 		if (appService.edit(apps)) {
-			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -115,9 +115,9 @@ public class AppController extends BaseAppContorller {
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete  ids : {} ", ids);
 		if (appService.removeByIds(Arrays.asList(ids.split(",")))) {
-			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -126,9 +126,9 @@ public class AppController extends BaseAppContorller {
 	public ResponseEntity<?> updateExtendAttr(@RequestBody AppEntity app) {
 		log.debug("-updateExtendAttr  id : {} , ExtendAttr : {}", app.getId(), app.getExtendAttr());
 		if (appService.updateExtendAttr(app)) {
-			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -178,6 +178,6 @@ public class AppController extends BaseAppContorller {
 			secret = ReciprocalHelpers.generateKey("");
 		}
 
-		return new Message<Object>(Message.SUCCESS, (Object) secret).buildResponse();
+		return new ResultResponse<Object>(ResultResponse.SUCCESS, (Object) secret).buildResponse();
 	}
 }

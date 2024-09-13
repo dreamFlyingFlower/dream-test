@@ -25,12 +25,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstEntryType;
 import com.wy.test.core.constant.ConstOperateAction;
 import com.wy.test.core.constant.ConstOperateResult;
 import com.wy.test.core.entity.ExcelImport;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.OrgEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.query.OrgQuery;
@@ -59,7 +59,7 @@ public class OrgController {
 	public ResponseEntity<?> fetch(OrgQuery org, @CurrentUser UserEntity currentUser) {
 		log.debug("fetch {}", org);
 		org.setInstId(currentUser.getInstId());
-		return new Message<>(organizationsService.listPage(org)).buildResponse();
+		return new ResultResponse<>(organizationsService.listPage(org)).buildResponse();
 	}
 
 	@ResponseBody
@@ -69,16 +69,16 @@ public class OrgController {
 		org.setInstId(currentUser.getInstId());
 		List<OrgVO> orgList = organizationsService.list(org);
 		if (orgList != null) {
-			return new Message<>(Message.SUCCESS, orgList).buildResponse();
+			return new ResultResponse<>(ResultResponse.SUCCESS, orgList).buildResponse();
 		} else {
-			return new Message<>(Message.FAIL).buildResponse();
+			return new ResultResponse<>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
 		OrgEntity org = organizationsService.getById(id);
-		return new Message<OrgEntity>(org).buildResponse();
+		return new ResultResponse<OrgEntity>(org).buildResponse();
 	}
 
 	@ResponseBody
@@ -89,9 +89,9 @@ public class OrgController {
 		if (organizationsService.insert(org)) {
 			systemLog.insert(ConstEntryType.ORGANIZATION, org, ConstOperateAction.CREATE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<OrgEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<OrgEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<OrgEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<OrgEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -103,9 +103,9 @@ public class OrgController {
 		if (organizationsService.update(org)) {
 			systemLog.insert(ConstEntryType.ORGANIZATION, org, ConstOperateAction.UPDATE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<OrgEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<OrgEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<OrgEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<OrgEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -116,9 +116,9 @@ public class OrgController {
 		if (organizationsService.removeByIds(Arrays.asList(ids.split(",")))) {
 			systemLog.insert(ConstEntryType.ORGANIZATION, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<OrgEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<OrgEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<OrgEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<OrgEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -155,9 +155,9 @@ public class OrgController {
 				}
 			}
 			treeAttributes.setNodeCount(nodeCount);
-			return new Message<TreeAttributes>(Message.SUCCESS, treeAttributes).buildResponse();
+			return new ResultResponse<TreeAttributes>(ResultResponse.SUCCESS, treeAttributes).buildResponse();
 		} else {
-			return new Message<TreeAttributes>(Message.FAIL).buildResponse();
+			return new ResultResponse<TreeAttributes>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -189,9 +189,9 @@ public class OrgController {
 									Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(o -> o.getId()))),
 									ArrayList::new));
 					if (organizationsService.saveBatch(orgsList)) {
-						return new Message<OrgEntity>(Message.SUCCESS).buildResponse();
+						return new ResultResponse<OrgEntity>(ResultResponse.SUCCESS).buildResponse();
 					} else {
-						return new Message<OrgEntity>(Message.FAIL).buildResponse();
+						return new ResultResponse<OrgEntity>(ResultResponse.FAIL).buildResponse();
 					}
 				}
 			} catch (IOException e) {
@@ -201,7 +201,7 @@ public class OrgController {
 			}
 		}
 
-		return new Message<OrgEntity>(Message.FAIL).buildResponse();
+		return new ResultResponse<OrgEntity>(ResultResponse.FAIL).buildResponse();
 
 	}
 

@@ -6,7 +6,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 
 import com.wy.test.core.entity.SyncEntity;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.persistence.service.SyncService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +46,7 @@ public class SyncJob implements Job {
 					+ synchronizer.getSourceType() + ")");
 			log.debug("synchronizer service : " + synchronizer.getService());
 			log.debug("synchronizer Scheduler : " + synchronizer.getScheduler());
-			SyncProcessor service = (SyncProcessor) WebContext.getBean(synchronizer.getService());
+			SyncProcessor service = (SyncProcessor) AuthWebContext.getBean(synchronizer.getService());
 			service.setSynchronizer(synchronizer);
 			service.sync();
 			jobStatus.put(synchronizer.getId(), JOBSTATUS.FINISHED);
@@ -61,7 +61,7 @@ public class SyncJob implements Job {
 	public SyncEntity readSynchronizer(JobExecutionContext context) {
 		SyncEntity jobSynchronizer = (SyncEntity) context.getMergedJobDataMap().get("synchronizer");
 		if (synchronizersService == null) {
-			synchronizersService = (SyncService) WebContext.getBean("syncService");
+			synchronizersService = (SyncService) AuthWebContext.getBean("syncService");
 		}
 		// read synchronizer by id from database
 		SyncEntity synchronizer = synchronizersService.getById(jobSynchronizer.getId());

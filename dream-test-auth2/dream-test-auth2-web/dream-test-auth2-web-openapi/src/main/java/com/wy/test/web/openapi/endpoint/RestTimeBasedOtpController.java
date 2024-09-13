@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.otp.password.onetimepwd.AbstractOtpAuthn;
+import com.wy.test.authentication.otp.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.UserService;
 

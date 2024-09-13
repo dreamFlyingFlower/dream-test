@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.entity.HistorySysLogEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.HistorySysLogService;
 
@@ -46,7 +46,7 @@ public class SystemLogController {
 	public ResponseEntity<?> fetch(@RequestBody HistorySysLogEntity historyLog, @CurrentUser UserEntity currentUser) {
 		log.debug("historys/historyLog/fetch {} ", historyLog);
 		historyLog.setInstId(currentUser.getInstId());
-		return new Message<>(historySystemLogsService.list(historyLog)).buildResponse();
+		return new ResultResponse<>(historySystemLogsService.list(historyLog)).buildResponse();
 	}
 
 	@InitBinder

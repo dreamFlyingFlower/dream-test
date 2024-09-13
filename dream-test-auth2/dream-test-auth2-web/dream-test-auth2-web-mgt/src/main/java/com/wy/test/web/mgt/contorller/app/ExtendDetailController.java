@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstProtocols;
 import com.wy.test.core.entity.AppExtendDetailEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.AppExtendDetailVO;
 import com.wy.test.core.vo.AppVO;
@@ -38,7 +38,7 @@ public class ExtendDetailController extends BaseAppContorller {
 		extendApiDetails.setId(generatorStrategyContext.generate());
 		extendApiDetails.setProtocol(ConstProtocols.EXTEND_API);
 		extendApiDetails.setSecret(ReciprocalHelpers.generateKey(""));
-		return new Message<>(extendApiDetails).buildResponse();
+		return new ResultResponse<>(extendApiDetails).buildResponse();
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -48,7 +48,7 @@ public class ExtendDetailController extends BaseAppContorller {
 		AppExtendDetailVO extendApiDetails = new AppExtendDetailVO();
 		BeanUtils.copyProperties(application, extendApiDetails);
 		extendApiDetails.transIconBase64();
-		return new Message<>(extendApiDetails).buildResponse();
+		return new ResultResponse<>(extendApiDetails).buildResponse();
 	}
 
 	@ResponseBody
@@ -59,9 +59,9 @@ public class ExtendDetailController extends BaseAppContorller {
 		transform(extendApiDetails);
 		extendApiDetails.setInstId(currentUser.getInstId());
 		if (null != appService.add(extendApiDetails)) {
-			return new Message<AppExtendDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppExtendDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppExtendDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppExtendDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -73,9 +73,9 @@ public class ExtendDetailController extends BaseAppContorller {
 		transform(extendApiDetails);
 		extendApiDetails.setInstId(currentUser.getInstId());
 		if (appService.edit(extendApiDetails)) {
-			return new Message<AppExtendDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppExtendDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppExtendDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppExtendDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -84,9 +84,9 @@ public class ExtendDetailController extends BaseAppContorller {
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete  ids : {} ", ids);
 		if (appService.removeByIds(Arrays.asList(ids.split(",")))) {
-			return new Message<AppExtendDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppExtendDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppExtendDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppExtendDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 }

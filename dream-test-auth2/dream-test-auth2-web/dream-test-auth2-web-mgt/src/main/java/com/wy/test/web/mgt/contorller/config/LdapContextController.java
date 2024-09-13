@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.entity.LdapContextEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.ldap.ActiveDirectoryHelpers;
 import com.wy.test.core.ldap.LdapHelpers;
@@ -37,7 +37,7 @@ public class LdapContextController {
 		if (ldapContext != null && StringUtils.isNoneBlank(ldapContext.getCredentials())) {
 			ldapContext.setCredentials(PasswordReciprocal.getInstance().decoder(ldapContext.getCredentials()));
 		}
-		return new Message<LdapContextEntity>(ldapContext).buildResponse();
+		return new ResultResponse<LdapContextEntity>(ldapContext).buildResponse();
 	}
 
 	@PostMapping(value = { "/update" })
@@ -55,9 +55,9 @@ public class LdapContextController {
 			updateResult = ldapContextService.updateById(ldapContext);
 		}
 		if (updateResult) {
-			return new Message<LdapContextEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<LdapContextEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<LdapContextEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<LdapContextEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -82,9 +82,9 @@ public class LdapContextController {
 
 		if (ldapUtils.openConnection() != null) {
 			ldapUtils.close();
-			return new Message<LdapContextEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<LdapContextEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<LdapContextEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<LdapContextEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 }

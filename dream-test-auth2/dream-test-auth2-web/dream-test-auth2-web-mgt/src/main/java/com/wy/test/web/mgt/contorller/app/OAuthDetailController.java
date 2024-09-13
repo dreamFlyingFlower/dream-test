@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstProtocols;
 import com.wy.test.core.entity.AppOauthClientDetailEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.entity.oauth2.client.BaseClientDetails;
 import com.wy.test.core.vo.AppOauthClientDetailVO;
@@ -47,7 +47,7 @@ public class OAuthDetailController extends BaseAppContorller {
 		oauth20Details.setClientId(oauth20Details.getId());
 		oauth20Details.setClientSecret(oauth20Details.getSecret());
 		oauth20Details.setProtocol(ConstProtocols.OAUTH20);
-		return new Message<>(oauth20Details).buildResponse();
+		return new ResultResponse<>(oauth20Details).buildResponse();
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -61,7 +61,7 @@ public class OAuthDetailController extends BaseAppContorller {
 		oauth20Details.setClientSecret(application.getSecret());
 		log.debug("forwardUpdate " + oauth20Details);
 		oauth20Details.transIconBase64();
-		return new Message<>(oauth20Details).buildResponse();
+		return new ResultResponse<>(oauth20Details).buildResponse();
 	}
 
 	@ResponseBody
@@ -80,9 +80,9 @@ public class OAuthDetailController extends BaseAppContorller {
 
 		oauth20JdbcClientDetailsService.addClientDetails(oauth20Details.clientDetailsRowMapper());
 		if (null != appService.add(oauth20Details)) {
-			return new Message<AppOauthClientDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppOauthClientDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppOauthClientDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppOauthClientDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -105,9 +105,9 @@ public class OAuthDetailController extends BaseAppContorller {
 				oauth20Details.getClientSecret());
 
 		if (appService.edit(oauth20Details)) {
-			return new Message<AppOauthClientDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppOauthClientDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppOauthClientDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppOauthClientDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -119,9 +119,9 @@ public class OAuthDetailController extends BaseAppContorller {
 			oauth20JdbcClientDetailsService.removeClientDetails(id);
 		}
 		if (appService.removeByIds(Arrays.asList(ids.split(",")))) {
-			return new Message<AppOauthClientDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppOauthClientDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppOauthClientDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppOauthClientDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 }

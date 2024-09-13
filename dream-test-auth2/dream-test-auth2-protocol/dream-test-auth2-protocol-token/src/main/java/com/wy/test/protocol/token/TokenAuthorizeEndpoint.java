@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
-import com.wy.test.authentication.core.authn.web.AuthorizationUtils;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.authentication.core.web.AuthorizationUtils;
 import com.wy.test.core.convert.AppTokenDetailConvert;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.vo.AppTokenDetailVO;
 import com.wy.test.core.vo.AppVO;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.persistence.service.AppTokenDetailService;
 import com.wy.test.protocol.authorize.endpoint.AuthorizeBaseEndpoint;
 import com.wy.test.protocol.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
@@ -92,7 +92,7 @@ public class TokenAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 			response.addCookie(cookie);
 
 			if (appTokenDetailVO.getRedirectUri().indexOf(dreamServerProperties.getBaseDomain()) > -1) {
-				return WebContext.redirect(appTokenDetailVO.getRedirectUri());
+				return AuthWebContext.redirect(appTokenDetailVO.getRedirectUri());
 			} else {
 				log.error(
 						appTokenDetailVO.getRedirectUri() + " not in domain " + dreamServerProperties.getBaseDomain());

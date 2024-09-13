@@ -5,8 +5,8 @@ import java.io.UnsupportedEncodingException;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.vo.AppCasDetailVO;
-import com.wy.test.core.web.WebConstants;
 import com.wy.test.protocol.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.protocol.cas.endpoint.response.ServiceResponseBuilder;
 
@@ -61,7 +61,7 @@ public class CasDefaultAdapter extends AbstractAuthorizeAdapter {
 		serviceResponseBuilder.setAttribute("departmentId", userInfo.getDepartmentId());
 		serviceResponseBuilder.setAttribute("workRegion", base64Attr(userInfo.getWorkRegion()));
 		serviceResponseBuilder.setAttribute("institution", userInfo.getInstId());
-		serviceResponseBuilder.setAttribute(WebConstants.ONLINE_TICKET_NAME, principal.getSession().getFormattedId());
+		serviceResponseBuilder.setAttribute(ConstAuthWeb.ONLINE_TICKET_NAME, principal.getSession().getFormattedId());
 
 		return serviceResponseBuilder;
 	}

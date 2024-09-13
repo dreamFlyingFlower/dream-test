@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstProtocols;
 import com.wy.test.core.convert.AppTokenDetailConvert;
 import com.wy.test.core.entity.AppJwtDetailEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.AppTokenDetailVO;
 import com.wy.test.persistence.service.AppTokenDetailService;
@@ -47,7 +47,7 @@ public class TokenDetailController extends BaseAppContorller {
 		tokenBasedDetails.setSecret(ReciprocalHelpers.generateKey(ReciprocalHelpers.Algorithm.AES));
 		tokenBasedDetails.setAlgorithmKey(tokenBasedDetails.getSecret());
 		tokenBasedDetails.setUserPropertys("userPropertys");
-		return new Message<>(tokenBasedDetails).buildResponse();
+		return new ResultResponse<>(tokenBasedDetails).buildResponse();
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -57,7 +57,7 @@ public class TokenDetailController extends BaseAppContorller {
 		String algorithmKey = passwordReciprocal.decoder(tokenBasedDetails.getAlgorithmKey());
 		tokenBasedDetails.setAlgorithmKey(algorithmKey);
 		tokenBasedDetails.transIconBase64();
-		return new Message<>(tokenBasedDetails).buildResponse();
+		return new ResultResponse<>(tokenBasedDetails).buildResponse();
 	}
 
 	@ResponseBody
@@ -68,9 +68,9 @@ public class TokenDetailController extends BaseAppContorller {
 		tokenBasedDetails.setAlgorithmKey(tokenBasedDetails.getSecret());
 		tokenBasedDetails.setInstId(currentUser.getInstId());
 		if (null != tokenBasedDetailsService.add(tokenBasedDetails) && null != appService.add(tokenBasedDetails)) {
-			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppJwtDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppJwtDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppJwtDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -83,9 +83,9 @@ public class TokenDetailController extends BaseAppContorller {
 		tokenBasedDetails.setAlgorithmKey(tokenBasedDetails.getSecret());
 		tokenBasedDetails.setInstId(currentUser.getInstId());
 		if (tokenBasedDetailsService.edit(tokenBasedDetails) && appService.edit(tokenBasedDetails)) {
-			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppJwtDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppJwtDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppJwtDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -95,9 +95,9 @@ public class TokenDetailController extends BaseAppContorller {
 		log.debug("-delete  ids : {} ", ids);
 		if (tokenBasedDetailsService.removeByIds(Arrays.asList(ids.split(",")))
 				&& appService.removeByIds(Arrays.asList(ids.split(",")))) {
-			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppJwtDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppJwtDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppJwtDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 }

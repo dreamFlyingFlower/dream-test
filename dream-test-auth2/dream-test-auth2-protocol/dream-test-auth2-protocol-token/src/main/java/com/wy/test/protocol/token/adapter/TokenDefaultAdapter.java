@@ -5,8 +5,8 @@ import java.util.HashMap;
 
 import org.springframework.web.servlet.ModelAndView;
 
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.vo.AppTokenDetailVO;
-import com.wy.test.core.web.WebConstants;
 import com.wy.test.protocol.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
@@ -57,7 +57,7 @@ public class TokenDefaultAdapter extends AbstractAuthorizeAdapter {
 		}
 
 		beanMap.put("displayName", userInfo.getDisplayName());
-		beanMap.put(WebConstants.ONLINE_TICKET_NAME, principal.getSession().getFormattedId());
+		beanMap.put(ConstAuthWeb.ONLINE_TICKET_NAME, principal.getSession().getFormattedId());
 
 		/*
 		 * use UTC date time format current date plus expires minute

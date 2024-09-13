@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
 
-import com.wy.test.authentication.core.authn.SignPrincipal;
+import com.wy.test.authentication.core.entity.SignPrincipal;
 import com.wy.test.core.vo.AppVO;
 
 import dream.flying.flower.ConstDate;

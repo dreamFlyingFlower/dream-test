@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.entity.AccountEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.enums.CredentialType;
 import com.wy.test.core.password.PasswordReciprocal;
@@ -60,7 +60,7 @@ public class AppListController {
 			app.transIconBase64();
 		}
 		// AuthorizationUtils.setAuthentication(null);
-		return new Message<List<UserApps>>(appList).buildResponse();
+		return new ResultResponse<List<UserApps>>(appList).buildResponse();
 	}
 
 	@GetMapping(value = { "/account/get" })
@@ -83,7 +83,7 @@ public class AppListController {
 			account.setUsername(currentUser.getUsername());
 			account.setDisplayName(currentUser.getDisplayName());
 		}
-		return new Message<AccountEntity>(account).buildResponse();
+		return new ResultResponse<AccountEntity>(account).buildResponse();
 
 	}
 
@@ -116,6 +116,6 @@ public class AppListController {
 			}
 		}
 
-		return new Message<AccountEntity>().buildResponse();
+		return new ResultResponse<AccountEntity>().buildResponse();
 	}
 }

@@ -6,11 +6,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 
 import com.nimbusds.jose.JOSEException;
-import com.wy.test.authentication.core.authn.jwt.AuthRefreshTokenService;
-import com.wy.test.authentication.core.authn.jwt.AuthTokenService;
-import com.wy.test.authentication.core.authn.jwt.CongressService;
-import com.wy.test.authentication.core.authn.jwt.InMemoryCongressService;
-import com.wy.test.authentication.core.authn.jwt.RedisCongressService;
+import com.wy.test.authentication.core.jwt.AuthRefreshTokenService;
+import com.wy.test.authentication.core.jwt.AuthTokenService;
+import com.wy.test.authentication.core.jwt.CongressService;
+import com.wy.test.authentication.core.jwt.InMemoryCongressService;
+import com.wy.test.authentication.core.jwt.RedisCongressService;
 import com.wy.test.core.cache.MomentaryService;
 import com.wy.test.core.enums.StoreType;
 import com.wy.test.core.properties.DreamAuthJwkProperties;

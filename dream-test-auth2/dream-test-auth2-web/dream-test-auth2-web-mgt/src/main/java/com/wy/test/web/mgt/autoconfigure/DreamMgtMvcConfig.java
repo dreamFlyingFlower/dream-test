@@ -11,9 +11,9 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.wy.test.authentication.core.authn.web.CurrentUserMethodArgumentResolver;
-import com.wy.test.authentication.core.authn.web.interceptor.PermissionInterceptor;
-import com.wy.test.authentication.provider.authn.provider.AbstractAuthenticationProvider;
+import com.wy.test.authentication.core.web.CurrentUserMethodArgumentResolver;
+import com.wy.test.authentication.core.web.interceptor.PermissionInterceptor;
+import com.wy.test.authentication.provider.provider.AbstractAuthenticationProvider;
 
 import lombok.extern.slf4j.Slf4j;
 

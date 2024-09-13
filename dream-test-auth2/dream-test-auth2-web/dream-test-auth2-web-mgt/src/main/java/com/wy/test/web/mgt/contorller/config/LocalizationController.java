@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.entity.LocalizationEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserAdjunctEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.repository.LocalizationRepository;
@@ -62,15 +62,15 @@ public class LocalizationController {
 			GeneratorStrategyContext generatorStrategyContext = new GeneratorStrategyContext();
 			localization.setId(generatorStrategyContext.generate());
 			if (localizationRepository.insert(localization)) {
-				return new Message<UserAdjunctEntity>(Message.SUCCESS).buildResponse();
+				return new ResultResponse<UserAdjunctEntity>(ResultResponse.SUCCESS).buildResponse();
 			} else {
-				return new Message<UserAdjunctEntity>(Message.FAIL).buildResponse();
+				return new ResultResponse<UserAdjunctEntity>(ResultResponse.FAIL).buildResponse();
 			}
 		} else {
 			if (localizationRepository.update(localization)) {
-				return new Message<UserAdjunctEntity>(Message.SUCCESS).buildResponse();
+				return new ResultResponse<UserAdjunctEntity>(ResultResponse.SUCCESS).buildResponse();
 			} else {
-				return new Message<UserAdjunctEntity>(Message.FAIL).buildResponse();
+				return new ResultResponse<UserAdjunctEntity>(ResultResponse.FAIL).buildResponse();
 			}
 		}
 	}

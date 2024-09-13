@@ -1,6 +1,6 @@
 package com.wy.test.core.exception;
 
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 
 public class PasswordPolicyException extends Exception {
 
@@ -36,9 +36,9 @@ public class PasswordPolicyException extends Exception {
 	@Override
 	public String getMessage() {
 		if (filedValue != null)
-			return WebContext.getI18nValue(getKey(), new Object[] { filedValue });
+			return AuthWebContext.getI18nValue(getKey(), new Object[] { filedValue });
 		else
-			return WebContext.getI18nValue(getKey());
+			return AuthWebContext.getI18nValue(getKey());
 	}
 
 }

@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
-import com.wy.test.core.entity.Message;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.entity.RolePermissionEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.query.RolePermissionQuery;
 import com.wy.test.core.vo.AppVO;
 import com.wy.test.core.vo.RolePermissionVO;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.persistence.service.HistorySysLogService;
 import com.wy.test.persistence.service.RolePermissionService;
 
@@ -48,7 +48,7 @@ public class RolePermissionController {
 				app.transIconBase64();
 			}
 		}
-		return new Message<>(Message.FAIL, rolePermissions).buildResponse();
+		return new ResultResponse<>(ResultResponse.FAIL, rolePermissions).buildResponse();
 	}
 
 	@GetMapping(value = { "/appsNotInRole" })
@@ -62,7 +62,7 @@ public class RolePermissionController {
 				app.transIconBase64();
 			}
 		}
-		return new Message<>(Message.FAIL, rolePermissions).buildResponse();
+		return new ResultResponse<>(ResultResponse.FAIL, rolePermissions).buildResponse();
 	}
 
 	@PostMapping(value = { "/add" })
@@ -70,7 +70,7 @@ public class RolePermissionController {
 	public ResponseEntity<?> insertPermission(@RequestBody RolePermissionEntity rolePermission,
 			@CurrentUser UserEntity currentUser) {
 		if (rolePermission == null || rolePermission.getRoleId() == null) {
-			return new Message<RolePermissionEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<RolePermissionEntity>(ResultResponse.FAIL).buildResponse();
 		}
 		String roleId = rolePermission.getRoleId();
 
@@ -81,14 +81,14 @@ public class RolePermissionController {
 			for (int i = 0; i < arrAppIds.length; i++) {
 				RolePermissionEntity newRolePermissions =
 						new RolePermissionEntity(roleId, arrAppIds[i], currentUser.getInstId());
-				newRolePermissions.setId(WebContext.genId());
+				newRolePermissions.setId(AuthWebContext.genId());
 				result = rolePermissionssService.save(newRolePermissions);
 			}
 			if (result) {
-				return new Message<RolePermissionEntity>(Message.SUCCESS).buildResponse();
+				return new ResultResponse<RolePermissionEntity>(ResultResponse.SUCCESS).buildResponse();
 			}
 		}
-		return new Message<RolePermissionEntity>(Message.FAIL).buildResponse();
+		return new ResultResponse<RolePermissionEntity>(ResultResponse.FAIL).buildResponse();
 	}
 
 	@ResponseBody
@@ -96,9 +96,9 @@ public class RolePermissionController {
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete ids : {}", ids);
 		if (rolePermissionssService.removeByIds(Arrays.asList(ids.split(",")))) {
-			return new Message<RolePermissionEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<RolePermissionEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<RolePermissionEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<RolePermissionEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 }

@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
-import com.wy.test.authentication.core.authn.web.AuthorizationUtils;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.authentication.core.web.AuthorizationUtils;
 import com.wy.test.core.entity.AccountEntity;
 import com.wy.test.core.enums.CredentialType;
 import com.wy.test.core.vo.AppVO;

@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.wy.test.authentication.core.authn.LoginCredential;
-import com.wy.test.authentication.core.authn.web.AuthorizationUtils;
-import com.wy.test.authentication.provider.authn.provider.AbstractAuthenticationProvider;
+import com.wy.test.authentication.core.entity.LoginCredential;
+import com.wy.test.authentication.core.web.AuthorizationUtils;
+import com.wy.test.authentication.provider.provider.AbstractAuthenticationProvider;
 import com.wy.test.core.vo.AppCasDetailVO;
 import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.HttpResponseConstants;

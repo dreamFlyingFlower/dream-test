@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.test.core.entity.oauth2.ClientDetails;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.protocol.oauth2.common.OAuth2Constants;
 import com.wy.test.protocol.oauth2.provider.endpoint.AbstractEndpoint;
 import com.wy.test.protocol.oauth2.provider.wellknown.OpenidConfiguration;
@@ -48,7 +48,7 @@ public class OpenidConfigurationEndpoint extends AbstractEndpoint {
 			@RequestParam(value = "client_id", required = false) String client_id) {
 		log.debug("instId {} , client_id {}", instId, client_id);
 
-		String baseUrl = WebContext.getContextPath(true);
+		String baseUrl = AuthWebContext.getContextPath(true);
 
 		ClientDetails clientDetails = null;
 

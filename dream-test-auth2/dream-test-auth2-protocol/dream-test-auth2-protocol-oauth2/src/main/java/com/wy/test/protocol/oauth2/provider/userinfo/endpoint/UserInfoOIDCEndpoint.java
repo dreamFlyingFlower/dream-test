@@ -31,13 +31,13 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.JWTClaimsSet.Builder;
 import com.nimbusds.jwt.PlainJWT;
 import com.nimbusds.jwt.SignedJWT;
-import com.wy.test.authentication.core.authn.SignPrincipal;
+import com.wy.test.authentication.core.entity.SignPrincipal;
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.constant.ContentType;
 import com.wy.test.core.convert.UserConvert;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.entity.oauth2.ClientDetails;
 import com.wy.test.core.web.HttpResponseAdapter;
-import com.wy.test.core.web.WebConstants;
 import com.wy.test.persistence.service.AppService;
 import com.wy.test.persistence.service.UserService;
 import com.wy.test.protocol.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
@@ -118,7 +118,7 @@ public class UserInfoOIDCEndpoint {
 
 			jwtClaimsSetBuilder.claim("sub", subject);
 			jwtClaimsSetBuilder.claim("institution", userInfo.getInstId());
-			jwtClaimsSetBuilder.claim(WebConstants.ONLINE_TICKET_NAME, authentication.getSession().getFormattedId());
+			jwtClaimsSetBuilder.claim(ConstAuthWeb.ONLINE_TICKET_NAME, authentication.getSession().getFormattedId());
 
 			if (scopes.contains("profile")) {
 				jwtClaimsSetBuilder.claim("userId", userInfo.getId());

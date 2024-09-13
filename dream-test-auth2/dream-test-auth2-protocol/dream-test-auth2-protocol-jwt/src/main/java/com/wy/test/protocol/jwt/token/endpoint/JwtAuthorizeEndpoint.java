@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
-import com.wy.test.authentication.core.authn.web.AuthorizationUtils;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.authentication.core.web.AuthorizationUtils;
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.constant.ContentType;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.AppJwtDetailVO;
 import com.wy.test.core.vo.AppVO;
-import com.wy.test.core.web.WebConstants;
 import com.wy.test.persistence.service.AppJwtDetailService;
 import com.wy.test.protocol.authorize.endpoint.AuthorizeBaseEndpoint;
 import com.wy.test.protocol.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
@@ -82,7 +82,7 @@ public class JwtAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 	}
 
 	@Operation(summary = "JWT JWK元数据接口", description = "参数auth_metadata_APPID", method = "GET")
-	@RequestMapping(value = "/metadata/jwt/" + WebConstants.DREAM_METADATA_PREFIX + "{appid}.{mediaType}",
+	@RequestMapping(value = "/metadata/jwt/" + ConstAuthWeb.DREAM_METADATA_PREFIX + "{appid}.{mediaType}",
 			method = { RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody
 	public String metadata(HttpServletRequest request, HttpServletResponse response,

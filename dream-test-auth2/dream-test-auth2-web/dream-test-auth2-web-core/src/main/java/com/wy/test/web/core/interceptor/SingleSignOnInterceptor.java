@@ -10,14 +10,14 @@ import org.springframework.security.web.util.UrlUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
-import com.wy.test.authentication.core.authn.SignPrincipal;
-import com.wy.test.authentication.core.authn.jwt.AuthTokenService;
-import com.wy.test.authentication.core.authn.session.SessionManager;
-import com.wy.test.authentication.core.authn.web.AuthorizationUtils;
+import com.wy.test.authentication.core.entity.SignPrincipal;
+import com.wy.test.authentication.core.jwt.AuthTokenService;
+import com.wy.test.authentication.core.session.SessionManager;
+import com.wy.test.authentication.core.web.AuthorizationUtils;
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.vo.AppVO;
-import com.wy.test.core.web.WebConstants;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.persistence.service.AppCasDetailService;
 import com.wy.test.persistence.service.AppService;
 import com.wy.test.protocol.cas.endpoint.ticket.CasConstants;
@@ -64,7 +64,7 @@ public class SingleSignOnInterceptor implements AsyncHandlerInterceptor {
 		// 判断应用访问权限
 		if (AuthorizationUtils.isAuthenticated()) {
 			log.debug("preHandle {}", request.getRequestURI());
-			AppVO app = (AppVO) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
+			AppVO app = (AppVO) AuthWebContext.getAttribute(ConstAuthWeb.AUTHORIZE_SIGN_ON_APP);
 			if (app == null) {
 
 				String requestURI = request.getRequestURI();

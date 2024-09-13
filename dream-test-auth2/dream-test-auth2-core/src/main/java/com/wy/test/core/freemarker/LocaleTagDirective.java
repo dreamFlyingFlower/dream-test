@@ -11,7 +11,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.wy.test.core.repository.LocalizationRepository;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 
 import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
@@ -51,7 +51,7 @@ public class LocaleTagDirective implements TemplateDirectiveModel {
 		if (code == null) {
 			message = RequestContextUtils.getLocale(request).getLanguage();
 		} else if (code.equals("global.application.version") || code.equals("application.version")) {
-			message = WebContext.properties.getProperty("dream.auth.app.version");
+			message = AuthWebContext.properties.getProperty("dream.auth.app.version");
 		} else if (code.equals("global.logo")) {
 			if (!message.startsWith("http")) {
 				message = request.getContextPath() + message;

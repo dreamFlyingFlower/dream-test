@@ -26,8 +26,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.wy.test.authentication.core.authn.SignPrincipal;
-import com.wy.test.authentication.core.authn.web.AuthorizationUtils;
+import com.wy.test.authentication.core.entity.SignPrincipal;
+import com.wy.test.authentication.core.web.AuthorizationUtils;
 import com.wy.test.core.entity.oauth2.ClientDetails;
 import com.wy.test.protocol.oauth2.common.DefaultOAuth2AccessToken;
 import com.wy.test.protocol.oauth2.common.OAuth2AccessToken;

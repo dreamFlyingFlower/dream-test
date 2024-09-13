@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
-import com.wy.test.core.web.WebConstants;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 
 @Controller
 public class AuthorizeProtectedEndpoint {
@@ -29,8 +29,8 @@ public class AuthorizeProtectedEndpoint {
 	public ModelAndView authorizeProtected(@RequestParam("password") String password,
 			@RequestParam("redirect_uri") String redirect_uri, @CurrentUser UserEntity currentUser) {
 		if (currentUser.getAppLoginPassword().equals(PasswordReciprocal.getInstance().encode(password))) {
-			WebContext.setAttribute(WebConstants.CURRENT_SINGLESIGNON_URI, redirect_uri);
-			return WebContext.redirect(redirect_uri);
+			AuthWebContext.setAttribute(ConstAuthWeb.CURRENT_SINGLESIGNON_URI, redirect_uri);
+			return AuthWebContext.redirect(redirect_uri);
 		}
 
 		ModelAndView modelAndView = new ModelAndView("authorize/protected/forward");

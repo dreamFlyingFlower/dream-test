@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wy.test.core.constant.ConstProtocols;
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.vo.AppVO;
-import com.wy.test.core.web.WebConstants;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.persistence.service.AppCasDetailService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,28 +32,28 @@ public class AuthorizeEndpoint extends AuthorizeBaseEndpoint {
 	public ModelAndView authorize(HttpServletRequest request, @PathVariable("id") String id) {
 		ModelAndView modelAndView = null;
 		AppVO app = getApp(id);
-		WebContext.setAttribute(WebConstants.SINGLE_SIGN_ON_APP_ID, app.getId());
+		AuthWebContext.setAttribute(ConstAuthWeb.SINGLE_SIGN_ON_APP_ID, app.getId());
 
 		if (app.getProtocol().equalsIgnoreCase(ConstProtocols.EXTEND_API)) {
-			modelAndView = WebContext.forward("/authz/api/" + app.getId());
+			modelAndView = AuthWebContext.forward("/authz/api/" + app.getId());
 		} else if (app.getProtocol().equalsIgnoreCase(ConstProtocols.FORMBASED)) {
-			modelAndView = WebContext.forward("/authz/formbased/" + app.getId());
+			modelAndView = AuthWebContext.forward("/authz/formbased/" + app.getId());
 		} else if (app.getProtocol().equalsIgnoreCase(ConstProtocols.OAUTH20)) {
-			modelAndView = WebContext.forward("/authz/oauth/v20/" + app.getId());
+			modelAndView = AuthWebContext.forward("/authz/oauth/v20/" + app.getId());
 		} else if (app.getProtocol().equalsIgnoreCase(ConstProtocols.OAUTH21)) {
-			modelAndView = WebContext.redirect(app.getLoginUrl());
+			modelAndView = AuthWebContext.redirect(app.getLoginUrl());
 		} else if (app.getProtocol().equalsIgnoreCase(ConstProtocols.OPEN_ID_CONNECT10)) {
-			modelAndView = WebContext.forward("/authz/oauth/v20/" + app.getId());
+			modelAndView = AuthWebContext.forward("/authz/oauth/v20/" + app.getId());
 		} else if (app.getProtocol().equalsIgnoreCase(ConstProtocols.SAML20)) {
-			modelAndView = WebContext.forward("/authz/saml20/idpinit/" + app.getId());
+			modelAndView = AuthWebContext.forward("/authz/saml20/idpinit/" + app.getId());
 		} else if (app.getProtocol().equalsIgnoreCase(ConstProtocols.TOKENBASED)) {
-			modelAndView = WebContext.forward("/authz/tokenbased/" + app.getId());
+			modelAndView = AuthWebContext.forward("/authz/tokenbased/" + app.getId());
 		} else if (app.getProtocol().equalsIgnoreCase(ConstProtocols.CAS)) {
-			modelAndView = WebContext.forward("/authz/cas/" + app.getId());
+			modelAndView = AuthWebContext.forward("/authz/cas/" + app.getId());
 		} else if (app.getProtocol().equalsIgnoreCase(ConstProtocols.JWT)) {
-			modelAndView = WebContext.forward("/authz/jwt/" + app.getId());
+			modelAndView = AuthWebContext.forward("/authz/jwt/" + app.getId());
 		} else if (app.getProtocol().equalsIgnoreCase(ConstProtocols.BASIC)) {
-			modelAndView = WebContext.redirect(app.getLoginUrl());
+			modelAndView = AuthWebContext.redirect(app.getLoginUrl());
 		}
 
 		log.debug(modelAndView.getViewName());
@@ -64,7 +64,7 @@ public class AuthorizeEndpoint extends AuthorizeBaseEndpoint {
 	@GetMapping("/authz/refused")
 	public ModelAndView refused() {
 		ModelAndView modelAndView = new ModelAndView("authorize/authorize_refused");
-		AppVO app = (AppVO) WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
+		AppVO app = (AppVO) AuthWebContext.getAttribute(ConstAuthWeb.AUTHORIZE_SIGN_ON_APP);
 		app.transIconBase64();
 		modelAndView.addObject("model", app);
 		return modelAndView;

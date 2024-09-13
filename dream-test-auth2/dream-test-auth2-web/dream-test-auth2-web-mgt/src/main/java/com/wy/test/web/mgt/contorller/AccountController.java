@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstEntryType;
 import com.wy.test.core.constant.ConstOperateAction;
 import com.wy.test.core.constant.ConstOperateResult;
 import com.wy.test.core.entity.AccountEntity;
 import com.wy.test.core.entity.AccountStrategyEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.vo.AccountVO;
@@ -57,7 +57,7 @@ public class AccountController {
 	public ResponseEntity<?> fetch(AccountEntity accounts, @CurrentUser UserEntity currentUser) {
 		log.debug("" + accounts);
 		accounts.setInstId(currentUser.getInstId());
-		return new Message<>(accountsService.list(accounts)).buildResponse();
+		return new ResultResponse<>(accountsService.list(accounts)).buildResponse();
 	}
 
 	@PostMapping(value = { "/query" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -66,9 +66,9 @@ public class AccountController {
 		account.setInstId(currentUser.getInstId());
 		List<AccountVO> accountVOs = accountsService.list(account);
 		if (CollectionUtils.isNotEmpty(accountsService.list(account))) {
-			return new Message<>(accountVOs).buildResponse();
+			return new ResultResponse<>(accountVOs).buildResponse();
 		} else {
-			return new Message<>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<>(ResultResponse.SUCCESS).buildResponse();
 		}
 	}
 
@@ -76,7 +76,7 @@ public class AccountController {
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
 		AccountEntity account = accountsService.getById(id);
 		account.setRelatedPassword(PasswordReciprocal.getInstance().decoder(account.getRelatedPassword()));
-		return new Message<AccountEntity>(account).buildResponse();
+		return new ResultResponse<AccountEntity>(account).buildResponse();
 	}
 
 	@PostMapping(value = { "/add" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -87,9 +87,9 @@ public class AccountController {
 		if (accountsService.insert(account)) {
 			systemLog.insert(ConstEntryType.ACCOUNT, account, ConstOperateAction.CREATE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<AccountEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AccountEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AccountEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AccountEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -101,9 +101,9 @@ public class AccountController {
 		if (accountsService.update(account)) {
 			systemLog.insert(ConstEntryType.ACCOUNT, account, ConstOperateAction.UPDATE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<AccountEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AccountEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AccountEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AccountEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -121,9 +121,9 @@ public class AccountController {
 		if (accountsService.updateStatus(accounts)) {
 			systemLog.insert(ConstEntryType.ACCOUNT, accounts, ConstOperateAction.statusActon.get(accounts.getStatus()),
 					ConstOperateResult.SUCCESS, currentUser);
-			return new Message<AccountEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AccountEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AccountEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AccountEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -134,9 +134,9 @@ public class AccountController {
 		if (accountsService.removeByIds(Arrays.asList(ids.split(",")))) {
 			systemLog.insert(ConstEntryType.ACCOUNT, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<>(Message.FAIL).buildResponse();
+			return new ResultResponse<>(ResultResponse.FAIL).buildResponse();
 		}
 
 	}
@@ -145,7 +145,7 @@ public class AccountController {
 	public ResponseEntity<?> generate(AccountEntity account) {
 		AccountStrategyEntity accountsStrategy = accountsStrategyService.getById(account.getStrategyId());
 		UserEntity userInfo = userInfoService.getById(account.getUserId());
-		return new Message<>(Message.SUCCESS, (Object) accountsService.generateAccount(userInfo, accountsStrategy))
+		return new ResultResponse<>(ResultResponse.SUCCESS, (Object) accountsService.generateAccount(userInfo, accountsStrategy))
 				.buildResponse();
 	}
 }

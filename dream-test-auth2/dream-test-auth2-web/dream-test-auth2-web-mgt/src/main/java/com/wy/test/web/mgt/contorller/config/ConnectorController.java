@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.entity.ConnectorEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.query.ConnectorQuery;
@@ -39,7 +39,7 @@ public class ConnectorController {
 	public ResponseEntity<?> fetch(ConnectorQuery connector, @CurrentUser UserEntity currentUser) {
 		log.debug("" + connector);
 		connector.setInstId(currentUser.getInstId());
-		return new Message<>(connectorsService.listPage(connector)).buildResponse();
+		return new ResultResponse<>(connectorsService.listPage(connector)).buildResponse();
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -48,7 +48,7 @@ public class ConnectorController {
 		if (StringUtils.isNotBlank(connector.getCredentials())) {
 			connector.setCredentials(PasswordReciprocal.getInstance().decoder(connector.getCredentials()));
 		}
-		return new Message<>(connector).buildResponse();
+		return new ResultResponse<>(connector).buildResponse();
 	}
 
 	@ResponseBody
@@ -60,9 +60,9 @@ public class ConnectorController {
 			connector.setCredentials(PasswordReciprocal.getInstance().encode(connector.getCredentials()));
 		}
 		if (connectorsService.save(connector)) {
-			return new Message<ConnectorEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<ConnectorEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<ConnectorEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<ConnectorEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -73,9 +73,9 @@ public class ConnectorController {
 		connector.setInstId(currentUser.getInstId());
 		connector.setCredentials(PasswordReciprocal.getInstance().encode(connector.getCredentials()));
 		if (connectorsService.updateById(connector)) {
-			return new Message<ConnectorEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<ConnectorEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<ConnectorEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<ConnectorEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -84,9 +84,9 @@ public class ConnectorController {
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete  ids : {} ", ids);
 		if (connectorsService.removeByIds(Arrays.asList(ids.split(",")))) {
-			return new Message<ConnectorEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<ConnectorEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<ConnectorEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<ConnectorEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 }

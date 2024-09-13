@@ -35,7 +35,7 @@ import com.wy.test.core.properties.DreamAuthStoreProperties;
 import com.wy.test.core.redis.RedisConnectionFactory;
 import com.wy.test.core.repository.InstitutionsRepository;
 import com.wy.test.core.repository.LocalizationRepository;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 
 import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
 import dream.flying.flower.generator.GeneratorStrategyContext;
@@ -154,7 +154,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 		SnowFlakeGenerator SnowFlakeId =
 				new SnowFlakeGenerator(dreamAuthIdProperties.getDatacenterId(), dreamAuthIdProperties.getMachineId());
 		idGenerator.setSnowFlakeGenerator(SnowFlakeId);
-		WebContext.idGenerator = idGenerator;
+		AuthWebContext.idGenerator = idGenerator;
 		return idGenerator;
 	}
 

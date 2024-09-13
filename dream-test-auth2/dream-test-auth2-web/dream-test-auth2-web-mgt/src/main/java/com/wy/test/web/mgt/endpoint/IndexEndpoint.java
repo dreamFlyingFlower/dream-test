@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +23,6 @@ public class IndexEndpoint {
 	public ModelAndView index() {
 		log.debug("IndexEndpoint /.");
 		return new ModelAndView("index").addObject("appVersion",
-				WebContext.properties.getProperty("dream.auth.app.version"));
+				AuthWebContext.properties.getProperty("dream.auth.app.version"));
 	}
 }

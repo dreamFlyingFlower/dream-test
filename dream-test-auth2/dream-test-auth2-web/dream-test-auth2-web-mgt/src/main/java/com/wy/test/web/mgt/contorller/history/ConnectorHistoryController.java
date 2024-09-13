@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.entity.HistoryConnectorEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.HistoryConnectorService;
 
@@ -45,7 +45,7 @@ public class ConnectorHistoryController {
 			@CurrentUser UserEntity currentUser) {
 		log.debug("historys/historyConnector/fetch/ {}", historyConnector);
 		historyConnector.setInstId(currentUser.getInstId());
-		return new Message<>(historyConnectorService.list(historyConnector)).buildResponse();
+		return new ResultResponse<>(historyConnectorService.list(historyConnector)).buildResponse();
 	}
 
 	@InitBinder

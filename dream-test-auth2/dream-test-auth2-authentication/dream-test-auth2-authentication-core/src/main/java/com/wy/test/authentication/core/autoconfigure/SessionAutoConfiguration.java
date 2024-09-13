@@ -9,10 +9,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.wy.test.authentication.core.authn.session.SessionManager;
-import com.wy.test.authentication.core.authn.session.SessionManagerFactory;
-import com.wy.test.authentication.core.authn.web.HttpSessionListenerAdapter;
-import com.wy.test.authentication.core.authn.web.SavedRequestAwareAuthenticationSuccessHandler;
+import com.wy.test.authentication.core.session.SessionManager;
+import com.wy.test.authentication.core.session.SessionManagerFactory;
+import com.wy.test.authentication.core.web.HttpSessionListenerAdapter;
+import com.wy.test.authentication.core.web.SavedRequestAwareAuthenticationSuccessHandler;
 import com.wy.test.core.properties.DreamAuthStoreProperties;
 import com.wy.test.core.redis.RedisConnectionFactory;
 

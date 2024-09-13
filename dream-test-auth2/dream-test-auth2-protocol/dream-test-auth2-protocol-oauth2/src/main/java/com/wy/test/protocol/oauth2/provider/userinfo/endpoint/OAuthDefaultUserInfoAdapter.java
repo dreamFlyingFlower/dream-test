@@ -2,8 +2,8 @@ package com.wy.test.protocol.oauth2.provider.userinfo.endpoint;
 
 import java.util.HashMap;
 
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.entity.oauth2.ClientDetails;
-import com.wy.test.core.web.WebConstants;
 import com.wy.test.protocol.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
@@ -48,7 +48,7 @@ public class OAuthDefaultUserInfoAdapter extends AbstractAuthorizeAdapter {
 		beanMap.put("state", userInfo.getWorkRegion());
 		beanMap.put("gender", userInfo.getGender());
 		beanMap.put("institution", userInfo.getInstId());
-		beanMap.put(WebConstants.ONLINE_TICKET_NAME, principal.getSession().getFormattedId());
+		beanMap.put(ConstAuthWeb.ONLINE_TICKET_NAME, principal.getSession().getFormattedId());
 
 		String info = JsonHelpers.toString(beanMap);
 

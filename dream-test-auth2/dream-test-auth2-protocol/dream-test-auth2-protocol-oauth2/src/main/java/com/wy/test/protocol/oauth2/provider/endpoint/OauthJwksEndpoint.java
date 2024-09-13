@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.constant.ContentType;
 import com.wy.test.core.entity.oauth2.ClientDetails;
-import com.wy.test.core.web.WebConstants;
 import com.wy.test.protocol.oauth2.common.OAuth2Constants;
 
 import dream.flying.flower.framework.web.crypto.jose.keystore.JWKSetKeyStore;
@@ -36,7 +36,7 @@ public class OauthJwksEndpoint extends AbstractEndpoint {
 	}
 
 	@Operation(summary = "OAuth JWk 元数据接口", description = "参数auth_metadata_APPID", method = "GET")
-	@RequestMapping(value = "/metadata/oauth/v20/" + WebConstants.DREAM_METADATA_PREFIX + "{appid}.{mediaType}",
+	@RequestMapping(value = "/metadata/oauth/v20/" + ConstAuthWeb.DREAM_METADATA_PREFIX + "{appid}.{mediaType}",
 			method = { RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody
 	public String metadata(HttpServletRequest request, HttpServletResponse response,

@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
-import com.wy.test.core.entity.Message;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.entity.SmsProviderEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
@@ -35,7 +35,7 @@ public class SmsProviderController {
 		if (smsProvider != null && StringUtils.isNoneBlank(smsProvider.getId())) {
 			smsProvider.setAppSecret(PasswordReciprocal.getInstance().decoder(smsProvider.getAppSecret()));
 		}
-		return new Message<SmsProviderEntity>(smsProvider).buildResponse();
+		return new ResultResponse<SmsProviderEntity>(smsProvider).buildResponse();
 	}
 
 	@PostMapping(value = { "/update" })
@@ -53,9 +53,9 @@ public class SmsProviderController {
 			updateResult = smsProviderService.updateById(smsProvider);
 		}
 		if (updateResult) {
-			return new Message<SmsProviderEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<SmsProviderEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<SmsProviderEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<SmsProviderEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 }

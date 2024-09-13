@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.wy.test.authentication.social.authn.support.socialsignon.service.JdbcSocialsAssociateService;
-import com.wy.test.authentication.social.authn.support.socialsignon.service.SocialSignOnProviderService;
-import com.wy.test.authentication.social.authn.support.socialsignon.token.RedisTokenStore;
+import com.wy.test.authentication.social.sso.service.JdbcSocialsAssociateService;
+import com.wy.test.authentication.social.sso.service.SocialSignOnProviderService;
+import com.wy.test.authentication.social.sso.token.RedisTokenStore;
 import com.wy.test.core.entity.SocialProviderEntity;
 import com.wy.test.core.redis.RedisConnectionFactory;
 

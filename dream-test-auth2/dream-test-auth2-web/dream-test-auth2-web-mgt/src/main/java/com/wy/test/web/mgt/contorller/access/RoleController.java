@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstEntryType;
 import com.wy.test.core.constant.ConstOperateAction;
 import com.wy.test.core.constant.ConstOperateResult;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.RoleEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.HistorySysLogService;
@@ -46,7 +46,7 @@ public class RoleController {
 	public ResponseEntity<?> fetch(RoleEntity role, @CurrentUser UserEntity currentUser) {
 		log.debug("" + role);
 		role.setInstId(currentUser.getInstId());
-		return new Message<>(rolesService.list(new LambdaQueryWrapper<>(role))).buildResponse();
+		return new ResultResponse<>(rolesService.list(new LambdaQueryWrapper<>(role))).buildResponse();
 	}
 
 	@ResponseBody
@@ -55,9 +55,9 @@ public class RoleController {
 		log.debug("-query  :" + role);
 		role.setInstId(currentUser.getInstId());
 		if (CollectionUtils.isNotEmpty(rolesService.list(role))) {
-			return new Message<>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<>(Message.FAIL).buildResponse();
+			return new ResultResponse<>(ResultResponse.FAIL).buildResponse();
 		}
 
 	}
@@ -65,7 +65,7 @@ public class RoleController {
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id, @CurrentUser UserEntity currentUser) {
 		RoleEntity role = rolesService.getById(id);
-		return new Message<RoleEntity>(role).buildResponse();
+		return new ResultResponse<RoleEntity>(role).buildResponse();
 	}
 
 	@ResponseBody
@@ -82,9 +82,9 @@ public class RoleController {
 			rolesService.refreshDynamicRoles(role);
 			systemLog.insert(ConstEntryType.ROLE, role, ConstOperateAction.CREATE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<RoleEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<RoleEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<RoleEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<RoleEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -100,9 +100,9 @@ public class RoleController {
 			rolesService.refreshDynamicRoles(role);
 			systemLog.insert(ConstEntryType.ROLE, role, ConstOperateAction.UPDATE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<RoleEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<RoleEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<RoleEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<RoleEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -114,9 +114,9 @@ public class RoleController {
 		if (rolesService.removeByIds(Arrays.asList(ids.split(",")))) {
 			systemLog.insert(ConstEntryType.ROLE, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
-			return new Message<RoleEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<RoleEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<RoleEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<RoleEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 }

@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.entity.AccountEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.vo.AppVO;
@@ -43,7 +43,7 @@ public class AuthorizeCredentialEndpoint extends AuthorizeBaseEndpoint {
 			account.setCreateType("manual");
 			account.setStatus(ConstStatus.ACTIVE);
 		}
-		return new Message<AccountEntity>(account).buildResponse();
+		return new ResultResponse<AccountEntity>(account).buildResponse();
 	}
 
 	@PostMapping("/update")
@@ -53,15 +53,15 @@ public class AuthorizeCredentialEndpoint extends AuthorizeBaseEndpoint {
 			account.setRelatedPassword(PasswordReciprocal.getInstance().encode(account.getRelatedPassword()));
 			if (accountService.getById(account.getId()) == null) {
 				if (accountService.insert(account)) {
-					return new Message<AccountEntity>().buildResponse();
+					return new ResultResponse<AccountEntity>().buildResponse();
 				}
 			} else {
 				if (accountService.update(account)) {
-					return new Message<AccountEntity>().buildResponse();
+					return new ResultResponse<AccountEntity>().buildResponse();
 				}
 			}
 		}
 
-		return new Message<AccountEntity>(Message.FAIL).buildResponse();
+		return new ResultResponse<AccountEntity>(ResultResponse.FAIL).buildResponse();
 	}
 }

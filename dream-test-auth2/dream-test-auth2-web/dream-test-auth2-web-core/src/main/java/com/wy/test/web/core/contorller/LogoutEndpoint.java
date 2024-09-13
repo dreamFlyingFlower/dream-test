@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
-import com.wy.test.authentication.core.authn.session.Session;
-import com.wy.test.authentication.core.authn.session.SessionManager;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.authentication.core.session.Session;
+import com.wy.test.authentication.core.session.SessionManager;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstProtocols;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.vo.AppVO;
 import com.wy.test.core.vo.UserVO;
@@ -78,7 +78,7 @@ public class LogoutEndpoint {
 			// terminate session
 			sessionManager.terminate(session.getId(), currentUser.getId(), currentUser.getUsername());
 		}
-		return new Message<String>().buildResponse();
+		return new ResultResponse<String>().buildResponse();
 	}
 
 	@Operation(summary = "单点注销接口", description = "redirect_uri跳转地址", method = "GET")

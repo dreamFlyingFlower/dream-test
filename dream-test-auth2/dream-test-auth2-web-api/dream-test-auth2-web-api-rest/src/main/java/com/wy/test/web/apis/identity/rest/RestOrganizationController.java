@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.wy.test.core.entity.Message;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.entity.OrgEntity;
 import com.wy.test.core.query.OrgQuery;
 import com.wy.test.persistence.service.OrgService;
@@ -82,6 +82,6 @@ public class RestOrganizationController {
 		if (StrHelper.isBlank(org.getInstId())) {
 			org.setInstId("1");
 		}
-		return new Message<>(orgService.listPage(org)).buildResponse();
+		return new ResultResponse<>(orgService.listPage(org)).buildResponse();
 	}
 }

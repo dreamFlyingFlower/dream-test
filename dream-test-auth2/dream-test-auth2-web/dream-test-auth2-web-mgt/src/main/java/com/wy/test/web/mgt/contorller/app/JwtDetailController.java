@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstProtocols;
 import com.wy.test.core.entity.AppJwtDetailEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.AppJwtDetailVO;
 import com.wy.test.persistence.service.AppJwtDetailService;
@@ -42,7 +42,7 @@ public class JwtDetailController extends BaseAppContorller {
 		jwtDetails.setProtocol(ConstProtocols.JWT);
 		jwtDetails.setSecret(ReciprocalHelpers.generateKey(""));
 		jwtDetails.setUserPropertys("userPropertys");
-		return new Message<>(jwtDetails).buildResponse();
+		return new ResultResponse<>(jwtDetails).buildResponse();
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -50,7 +50,7 @@ public class JwtDetailController extends BaseAppContorller {
 		AppJwtDetailVO jwtDetails = jwtDetailsService.getAppDetails(id, false);
 		decoderSecret(jwtDetails);
 		jwtDetails.transIconBase64();
-		return new Message<>(jwtDetails).buildResponse();
+		return new ResultResponse<>(jwtDetails).buildResponse();
 	}
 
 	@ResponseBody
@@ -60,9 +60,9 @@ public class JwtDetailController extends BaseAppContorller {
 		transform(jwtDetails);
 		jwtDetails.setInstId(currentUser.getInstId());
 		if (null != jwtDetailsService.add(jwtDetails) && null != appService.add(jwtDetails)) {
-			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppJwtDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppJwtDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppJwtDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -73,9 +73,9 @@ public class JwtDetailController extends BaseAppContorller {
 		transform(jwtDetails);
 		jwtDetails.setInstId(currentUser.getInstId());
 		if (jwtDetailsService.edit(jwtDetails) && appService.edit(jwtDetails)) {
-			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppJwtDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<>(Message.FAIL).buildResponse();
+			return new ResultResponse<>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -85,9 +85,9 @@ public class JwtDetailController extends BaseAppContorller {
 		log.debug("-delete  ids : {} ", ids);
 		if (jwtDetailsService.removeByIds(Arrays.asList(ids.split(",")))
 				&& appService.removeByIds(Arrays.asList(ids.split(",")))) {
-			return new Message<AppJwtDetailEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppJwtDetailEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppJwtDetailEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppJwtDetailEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 }

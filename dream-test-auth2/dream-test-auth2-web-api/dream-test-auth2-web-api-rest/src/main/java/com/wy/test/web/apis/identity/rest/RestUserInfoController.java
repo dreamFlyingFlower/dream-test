@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.convert.UserConvert;
 import com.wy.test.core.entity.ChangePassword;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.query.UserQuery;
 import com.wy.test.persistence.service.UserService;
@@ -98,6 +98,6 @@ public class RestUserInfoController {
 		if (StrHelper.isBlank(userInfo.getInstId())) {
 			userInfo.setInstId("1");
 		}
-		return new Message<>(userService.listPage(userInfo)).buildResponse();
+		return new ResultResponse<>(userService.listPage(userInfo)).buildResponse();
 	}
 }

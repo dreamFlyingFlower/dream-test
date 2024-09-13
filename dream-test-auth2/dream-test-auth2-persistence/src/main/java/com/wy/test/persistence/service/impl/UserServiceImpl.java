@@ -17,7 +17,7 @@ import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.query.UserQuery;
 import com.wy.test.core.repository.PasswordPolicyValidator;
 import com.wy.test.core.vo.UserVO;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.persistence.mapper.UserMapper;
 import com.wy.test.persistence.provision.ProvisionAction;
 import com.wy.test.persistence.provision.ProvisionService;
@@ -238,7 +238,7 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity, UserVO, Use
 	@Override
 	public boolean changePassword(ChangePassword changePassword) {
 		try {
-			WebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT, "");
+			AuthWebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT, "");
 			UserEntity userInfo = this.findByUsername(changePassword.getUsername());
 			if (changePassword.getPassword().equals(changePassword.getConfirmPassword())) {
 				if (StrHelper.isNotBlank(changePassword.getOldPassword())
@@ -250,16 +250,16 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity, UserVO, Use
 				} else {
 					if (StrHelper.isNotBlank(changePassword.getOldPassword())
 							&& passwordEncoder.matches(changePassword.getPassword(), userInfo.getPassword())) {
-						WebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT,
-								WebContext.getI18nValue("PasswordPolicy.OLD_PASSWORD_MATCH"));
+						AuthWebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT,
+								AuthWebContext.getI18nValue("PasswordPolicy.OLD_PASSWORD_MATCH"));
 					} else {
-						WebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT,
-								WebContext.getI18nValue("PasswordPolicy.OLD_PASSWORD_NOT_MATCH"));
+						AuthWebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT,
+								AuthWebContext.getI18nValue("PasswordPolicy.OLD_PASSWORD_NOT_MATCH"));
 					}
 				}
 			} else {
-				WebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT,
-						WebContext.getI18nValue("PasswordPolicy.CONFIRMPASSWORD_NOT_MATCH"));
+				AuthWebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT,
+						AuthWebContext.getI18nValue("PasswordPolicy.CONFIRMPASSWORD_NOT_MATCH"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

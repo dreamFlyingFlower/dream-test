@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.entity.AppEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.SocialAssociateEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.SocialAssociateService;
@@ -34,7 +34,7 @@ public class SocialSignOnListController {
 
 		List<SocialAssociateEntity> listSocialsAssociate = socialsAssociatesService.queryByUser(currentUser);
 
-		return new Message<List<SocialAssociateEntity>>(listSocialsAssociate).buildResponse();
+		return new ResultResponse<List<SocialAssociateEntity>>(listSocialsAssociate).buildResponse();
 	}
 
 	@ResponseBody
@@ -42,9 +42,9 @@ public class SocialSignOnListController {
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete  ids : {} ", ids);
 		if (socialsAssociatesService.removeById(ids)) {
-			return new Message<AppEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AppEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AppEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AppEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 }

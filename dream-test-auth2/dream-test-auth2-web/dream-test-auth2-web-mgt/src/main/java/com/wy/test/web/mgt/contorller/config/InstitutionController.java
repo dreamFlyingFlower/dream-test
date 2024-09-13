@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.entity.InstitutionEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.InstitutionService;
 
@@ -29,7 +29,7 @@ public class InstitutionController {
 	@GetMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@CurrentUser UserEntity currentUser) {
 		InstitutionEntity institutions = institutionsService.getById(currentUser.getInstId());
-		return new Message<InstitutionEntity>(Message.SUCCESS, institutions).buildResponse();
+		return new ResultResponse<InstitutionEntity>(ResultResponse.SUCCESS, institutions).buildResponse();
 	}
 
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -37,9 +37,9 @@ public class InstitutionController {
 			BindingResult result) {
 		log.debug("updateRole institutions : " + institutions);
 		if (institutionsService.updateById(institutions)) {
-			return new Message<InstitutionEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<InstitutionEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<InstitutionEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<InstitutionEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 }

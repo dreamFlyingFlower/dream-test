@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.entity.AccountStrategyEntity;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.query.AccountStrategyQuery;
 import com.wy.test.core.vo.AccountStrategyVO;
@@ -48,7 +48,7 @@ public class AccountStrategyController {
 			strategy.transIconBase64();
 		}
 		log.debug("Accounts Strategy " + page);
-		return new Message<>(page).buildResponse();
+		return new ResultResponse<>(page).buildResponse();
 	}
 
 	@ResponseBody
@@ -57,16 +57,16 @@ public class AccountStrategyController {
 			@CurrentUser UserEntity currentUser) {
 		log.debug("-query  :" + accountsStrategy);
 		if (CollectionUtils.isNotEmpty(accountsStrategyService.list(accountsStrategy))) {
-			return new Message<AccountStrategyEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AccountStrategyEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AccountStrategyEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AccountStrategyEntity>(ResultResponse.SUCCESS).buildResponse();
 		}
 	}
 
 	@GetMapping(value = { "/get/{id}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
 		AccountStrategyEntity accountsStrategy = accountsStrategyService.getById(id);
-		return new Message<AccountStrategyEntity>(accountsStrategy).buildResponse();
+		return new ResultResponse<AccountStrategyEntity>(accountsStrategy).buildResponse();
 	}
 
 	@ResponseBody
@@ -77,9 +77,9 @@ public class AccountStrategyController {
 
 		if (accountsStrategyService.save(accountsStrategy)) {
 			accountsService.refreshByStrategy(accountsStrategy);
-			return new Message<AccountStrategyEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AccountStrategyEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AccountStrategyEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AccountStrategyEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -90,9 +90,9 @@ public class AccountStrategyController {
 		log.debug("-update  :" + accountsStrategy);
 		if (accountsStrategyService.updateById(accountsStrategy)) {
 			accountsService.refreshByStrategy(accountsStrategy);
-			return new Message<AccountStrategyEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AccountStrategyEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AccountStrategyEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AccountStrategyEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 
@@ -101,9 +101,9 @@ public class AccountStrategyController {
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete  ids : {} ", ids);
 		if (accountsStrategyService.removeByIds(Arrays.asList(ids.split(",")))) {
-			return new Message<AccountStrategyEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<AccountStrategyEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
-			return new Message<AccountStrategyEntity>(Message.FAIL).buildResponse();
+			return new ResultResponse<AccountStrategyEntity>(ResultResponse.FAIL).buildResponse();
 		}
 	}
 }

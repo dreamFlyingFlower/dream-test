@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.protocol.cas.endpoint.ticket.CasConstants;
 
 import dream.flying.flower.lang.StrHelper;
@@ -42,6 +42,6 @@ public class CasLogoutEndpoint extends CasBaseAuthorizeEndpoint {
 		if (StrHelper.isNotBlank(casService)) {
 			logoutUrl.append("?").append("redirect_uri=").append(casService);
 		}
-		return WebContext.forward(logoutUrl.toString());
+		return AuthWebContext.forward(logoutUrl.toString());
 	}
 }

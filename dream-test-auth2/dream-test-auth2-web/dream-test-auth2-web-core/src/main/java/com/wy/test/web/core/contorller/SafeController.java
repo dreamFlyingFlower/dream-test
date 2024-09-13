@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.constant.ConstTimeInterval;
-import com.wy.test.core.entity.Message;
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.entity.UserEntity;
-import com.wy.test.core.web.WebConstants;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.persistence.service.UserService;
 
 @Controller
@@ -51,10 +51,10 @@ public class SafeController {
 		currentUser.setEmail(email);
 
 		currentUser.setTheme(theme);
-		WebContext.setCookie(response, null, WebConstants.THEME_COOKIE_NAME, theme, ConstTimeInterval.ONE_WEEK);
+		AuthWebContext.setCookie(response, null, ConstAuthWeb.THEME_COOKIE_NAME, theme, ConstTimeInterval.ONE_WEEK);
 
 		userService.updateEmail(currentUser);
 
-		return new Message<UserEntity>(Message.SUCCESS).buildResponse();
+		return new ResultResponse<UserEntity>(ResultResponse.SUCCESS).buildResponse();
 	}
 }

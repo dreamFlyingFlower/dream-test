@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
-import com.wy.test.authentication.core.authn.session.SessionManager;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.authentication.core.session.SessionManager;
 import com.wy.test.core.vo.UserVO;
 
 import dream.flying.flower.framework.web.controller.BaseResponseController;

@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wy.test.authentication.core.authn.LoginCredential;
-import com.wy.test.authentication.core.authn.jwt.AuthJwt;
-import com.wy.test.authentication.core.authn.jwt.AuthTokenService;
-import com.wy.test.authentication.provider.authn.provider.AbstractAuthenticationProvider;
+import com.wy.test.authentication.core.entity.LoginCredential;
+import com.wy.test.authentication.core.jwt.AuthJwt;
+import com.wy.test.authentication.core.jwt.AuthTokenService;
+import com.wy.test.authentication.provider.provider.AbstractAuthenticationProvider;
+import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.entity.InstitutionEntity;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
-import com.wy.test.core.web.WebConstants;
-import com.wy.test.core.web.WebContext;
+import com.wy.test.core.web.AuthWebContext;
 
 import dream.flying.flower.framework.web.controller.BaseResponseController;
 import dream.flying.flower.result.Result;
@@ -49,7 +49,7 @@ public class LoginEndpoint implements BaseResponseController {
 
 		HashMap<String, Object> model = new HashMap<>();
 		model.put("isRemeberMe", dreamLoginProperties.isRememberMe());
-		InstitutionEntity inst = (InstitutionEntity) WebContext.getAttribute(WebConstants.CURRENT_INST);
+		InstitutionEntity inst = (InstitutionEntity) AuthWebContext.getAttribute(ConstAuthWeb.CURRENT_INST);
 		model.put("inst", inst);
 		if (dreamLoginProperties.getCaptcha().isEnabled()) {
 			model.put("captcha", "true");
@@ -70,8 +70,8 @@ public class LoginEndpoint implements BaseResponseController {
 			AuthJwt authJwt = authTokenService.genAuthJwt(authentication);
 			return ResponseEntity.ok(Result.ok(authJwt));
 		} else {
-			String errorMsg = WebContext.getAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE) == null ? ""
-					: WebContext.getAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE).toString();
+			String errorMsg = AuthWebContext.getAttribute(ConstAuthWeb.LOGIN_ERROR_SESSION_MESSAGE) == null ? ""
+					: AuthWebContext.getAttribute(ConstAuthWeb.LOGIN_ERROR_SESSION_MESSAGE).toString();
 			log.debug("login fail , message {}", errorMsg);
 			return error(errorMsg);
 		}

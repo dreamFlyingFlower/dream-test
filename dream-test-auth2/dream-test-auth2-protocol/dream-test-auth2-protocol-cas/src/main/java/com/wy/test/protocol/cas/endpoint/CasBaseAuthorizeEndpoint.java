@@ -3,7 +3,7 @@ package com.wy.test.protocol.cas.endpoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.wy.test.authentication.core.authn.session.SessionManager;
+import com.wy.test.authentication.core.session.SessionManager;
 import com.wy.test.core.web.HttpRequestAdapter;
 import com.wy.test.core.web.HttpResponseAdapter;
 import com.wy.test.persistence.service.AppCasDetailService;

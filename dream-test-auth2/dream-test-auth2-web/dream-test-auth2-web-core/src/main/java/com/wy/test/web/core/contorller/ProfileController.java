@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wy.test.authentication.core.authn.annotation.CurrentUser;
+import com.wy.test.authentication.core.annotation.CurrentUser;
+import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.convert.UserConvert;
-import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.UserVO;
 import com.wy.test.persistence.service.FileUploadService;
@@ -39,7 +39,7 @@ public class ProfileController {
 		UserEntity userInfo = userInfoService.findByUsername(currentUser.getUsername());
 		UserVO userVO = userConvert.convertt(userInfo);
 		userVO.trans();
-		return new Message<>(userVO).buildResponse();
+		return new ResultResponse<>(userVO).buildResponse();
 	}
 
 	/**
@@ -71,9 +71,9 @@ public class ProfileController {
 		}
 
 		if (userInfoService.updateProfile(userInfo) > 0) {
-			return new Message<UserEntity>(Message.SUCCESS).buildResponse();
+			return new ResultResponse<UserEntity>(ResultResponse.SUCCESS).buildResponse();
 		}
 
-		return new Message<UserEntity>(Message.FAIL).buildResponse();
+		return new ResultResponse<UserEntity>(ResultResponse.FAIL).buildResponse();
 	}
 }
