@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 
-import com.wy.test.core.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.redis.RedisConnectionFactory;
 
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.JedisPoolConfig;

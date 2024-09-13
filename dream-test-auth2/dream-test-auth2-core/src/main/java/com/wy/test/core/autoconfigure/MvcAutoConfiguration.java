@@ -36,8 +36,8 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import com.wy.test.core.constant.ConstTimeInterval;
 import com.wy.test.core.entity.xml.UserInfoXML;
-import com.wy.test.core.persistence.repository.InstitutionsRepository;
 import com.wy.test.core.properties.DreamAuthServerProperties;
+import com.wy.test.core.repository.InstitutionsRepository;
 import com.wy.test.core.web.WebInstRequestFilter;
 import com.wy.test.core.web.WebXssRequestFilter;
 

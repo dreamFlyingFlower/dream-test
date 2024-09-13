@@ -1,7 +1,7 @@
 package com.wy.test.protocol.oauth2.provider.code;
 
-import com.wy.test.core.persistence.redis.RedisConnection;
-import com.wy.test.core.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.redis.RedisConnection;
+import com.wy.test.core.redis.RedisConnectionFactory;
 import com.wy.test.protocol.oauth2.provider.OAuth2Authentication;
 
 /**

@@ -1,4 +1,4 @@
-package com.wy.test.core.persistence.cache;
+package com.wy.test.core.cache;
 
 import java.util.concurrent.TimeUnit;
 

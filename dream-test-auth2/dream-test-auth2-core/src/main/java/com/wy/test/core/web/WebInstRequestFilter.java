@@ -12,8 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
 import com.wy.test.core.entity.InstitutionEntity;
-import com.wy.test.core.persistence.repository.InstitutionsRepository;
 import com.wy.test.core.properties.DreamAuthServerProperties;
+import com.wy.test.core.repository.InstitutionsRepository;
 
 import lombok.extern.slf4j.Slf4j;
 

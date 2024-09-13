@@ -22,19 +22,19 @@ import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 import com.nimbusds.jose.JOSEException;
+import com.wy.test.core.cache.InMemoryMomentaryService;
+import com.wy.test.core.cache.MomentaryService;
+import com.wy.test.core.cache.RedisMomentaryService;
 import com.wy.test.core.enums.StoreType;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.core.password.SM3PasswordEncoder;
-import com.wy.test.core.persistence.cache.InMemoryMomentaryService;
-import com.wy.test.core.persistence.cache.MomentaryService;
-import com.wy.test.core.persistence.cache.RedisMomentaryService;
-import com.wy.test.core.persistence.redis.RedisConnectionFactory;
-import com.wy.test.core.persistence.repository.InstitutionsRepository;
-import com.wy.test.core.persistence.repository.LocalizationRepository;
 import com.wy.test.core.properties.DreamAuthCryptoProperties;
 import com.wy.test.core.properties.DreamAuthIdProperties;
 import com.wy.test.core.properties.DreamAuthSamlProperties;
 import com.wy.test.core.properties.DreamAuthStoreProperties;
+import com.wy.test.core.redis.RedisConnectionFactory;
+import com.wy.test.core.repository.InstitutionsRepository;
+import com.wy.test.core.repository.LocalizationRepository;
 import com.wy.test.core.web.WebContext;
 
 import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;

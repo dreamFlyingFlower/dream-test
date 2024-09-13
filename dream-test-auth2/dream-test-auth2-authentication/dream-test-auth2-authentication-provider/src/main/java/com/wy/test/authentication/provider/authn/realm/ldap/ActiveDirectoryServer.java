@@ -1,7 +1,7 @@
 package com.wy.test.authentication.provider.authn.realm.ldap;
 
 import com.wy.test.authentication.provider.authn.realm.IAuthenticationServer;
-import com.wy.test.core.persistence.ldap.ActiveDirectoryHelpers;
+import com.wy.test.core.ldap.ActiveDirectoryHelpers;
 
 import lombok.extern.slf4j.Slf4j;
 

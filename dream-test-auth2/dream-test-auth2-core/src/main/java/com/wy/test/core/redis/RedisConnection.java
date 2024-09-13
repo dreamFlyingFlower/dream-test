@@ -1,4 +1,4 @@
-package com.wy.test.core.persistence.redis;
+package com.wy.test.core.redis;
 
 import java.io.Serializable;
 import java.util.List;

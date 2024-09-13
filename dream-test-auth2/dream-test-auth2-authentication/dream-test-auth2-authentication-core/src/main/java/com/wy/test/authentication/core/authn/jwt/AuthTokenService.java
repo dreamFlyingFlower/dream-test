@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
 
 import com.nimbusds.jose.JOSEException;
-import com.wy.test.core.persistence.cache.MomentaryService;
+import com.wy.test.core.cache.MomentaryService;
 import com.wy.test.core.properties.DreamAuthJwkProperties;
 import com.wy.test.core.web.WebContext;
 

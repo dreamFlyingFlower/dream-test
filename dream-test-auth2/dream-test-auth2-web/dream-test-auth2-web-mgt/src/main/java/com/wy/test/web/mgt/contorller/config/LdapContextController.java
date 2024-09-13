@@ -16,9 +16,9 @@ import com.wy.test.authentication.core.authn.annotation.CurrentUser;
 import com.wy.test.core.entity.LdapContextEntity;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserEntity;
+import com.wy.test.core.ldap.ActiveDirectoryHelpers;
+import com.wy.test.core.ldap.LdapHelpers;
 import com.wy.test.core.password.PasswordReciprocal;
-import com.wy.test.core.persistence.ldap.ActiveDirectoryHelpers;
-import com.wy.test.core.persistence.ldap.LdapHelpers;
 import com.wy.test.persistence.service.LdapContextService;
 
 import lombok.extern.slf4j.Slf4j;

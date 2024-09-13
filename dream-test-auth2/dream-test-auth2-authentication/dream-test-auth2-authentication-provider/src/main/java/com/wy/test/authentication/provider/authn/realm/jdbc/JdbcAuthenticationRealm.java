@@ -10,8 +10,8 @@ import com.wy.test.authentication.provider.authn.realm.ldap.LdapAuthenticationRe
 import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.PasswordPolicyEntity;
-import com.wy.test.core.persistence.repository.LoginHistoryRepository;
-import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
+import com.wy.test.core.repository.LoginHistoryRepository;
+import com.wy.test.core.repository.PasswordPolicyValidator;
 import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.WebConstants;
 import com.wy.test.core.web.WebContext;

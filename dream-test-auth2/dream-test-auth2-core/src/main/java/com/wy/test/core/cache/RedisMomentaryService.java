@@ -1,7 +1,7 @@
-package com.wy.test.core.persistence.cache;
+package com.wy.test.core.cache;
 
-import com.wy.test.core.persistence.redis.RedisConnection;
-import com.wy.test.core.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.redis.RedisConnection;
+import com.wy.test.core.redis.RedisConnectionFactory;
 
 import lombok.extern.slf4j.Slf4j;
 

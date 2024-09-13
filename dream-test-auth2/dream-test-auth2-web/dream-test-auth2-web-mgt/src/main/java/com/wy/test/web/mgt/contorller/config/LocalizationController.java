@@ -17,7 +17,7 @@ import com.wy.test.core.entity.LocalizationEntity;
 import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.UserAdjunctEntity;
 import com.wy.test.core.entity.UserEntity;
-import com.wy.test.core.persistence.repository.LocalizationRepository;
+import com.wy.test.core.repository.LocalizationRepository;
 
 import dream.flying.flower.generator.GeneratorStrategyContext;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;

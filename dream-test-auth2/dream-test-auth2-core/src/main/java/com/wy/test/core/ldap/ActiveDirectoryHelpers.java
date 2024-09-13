@@ -1,4 +1,4 @@
-package com.wy.test.core.persistence.ldap;
+package com.wy.test.core.ldap;
 
 import java.util.Properties;
 

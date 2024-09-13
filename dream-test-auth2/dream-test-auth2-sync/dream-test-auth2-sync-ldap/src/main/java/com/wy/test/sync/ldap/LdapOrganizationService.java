@@ -15,11 +15,11 @@ import org.springframework.stereotype.Service;
 import com.wy.test.core.constant.ConstCommon;
 import com.wy.test.core.constant.ConstOrg;
 import com.wy.test.core.constant.ConstStatus;
-import com.wy.test.core.constant.ldap.OrganizationalUnit;
+import com.wy.test.core.constant.OrganizationalUnit;
 import com.wy.test.core.entity.HistorySyncEntity;
 import com.wy.test.core.entity.OrgEntity;
 import com.wy.test.core.entity.SyncRelatedEntity;
-import com.wy.test.core.persistence.ldap.LdapHelpers;
+import com.wy.test.core.ldap.LdapHelpers;
 import com.wy.test.sync.core.synchronizer.AbstractSyncProcessor;
 import com.wy.test.sync.core.synchronizer.SyncProcessor;
 

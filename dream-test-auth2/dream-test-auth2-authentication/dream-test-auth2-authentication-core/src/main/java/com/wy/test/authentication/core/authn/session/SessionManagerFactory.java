@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.wy.test.core.entity.HistoryLoginEntity;
 import com.wy.test.core.enums.StoreType;
-import com.wy.test.core.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.redis.RedisConnectionFactory;
 
 import dream.flying.flower.enums.YesNoEnum;
 import dream.flying.flower.helper.DateTimeHelper;

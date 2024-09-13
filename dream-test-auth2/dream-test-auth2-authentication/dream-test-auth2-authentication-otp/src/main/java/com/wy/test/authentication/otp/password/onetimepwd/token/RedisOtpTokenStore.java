@@ -5,8 +5,8 @@ import org.joda.time.DateTime;
 import com.wy.test.authentication.otp.password.onetimepwd.OneTimePassword;
 import com.wy.test.core.constant.ConstTimeInterval;
 import com.wy.test.core.entity.UserEntity;
-import com.wy.test.core.persistence.redis.RedisConnection;
-import com.wy.test.core.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.redis.RedisConnection;
+import com.wy.test.core.redis.RedisConnectionFactory;
 
 public class RedisOtpTokenStore extends AbstractOtpTokenStore {
 

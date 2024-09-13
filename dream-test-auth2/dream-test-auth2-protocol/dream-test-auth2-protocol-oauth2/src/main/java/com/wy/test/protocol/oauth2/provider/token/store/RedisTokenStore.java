@@ -10,8 +10,8 @@ import org.springframework.security.oauth2.common.ExpiringOAuth2RefreshToken;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 
 import com.wy.test.core.constant.ConstRedisToken;
-import com.wy.test.core.persistence.redis.RedisConnection;
-import com.wy.test.core.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.redis.RedisConnection;
+import com.wy.test.core.redis.RedisConnectionFactory;
 import com.wy.test.protocol.oauth2.common.OAuth2AccessToken;
 import com.wy.test.protocol.oauth2.provider.OAuth2Authentication;
 import com.wy.test.protocol.oauth2.provider.token.AuthenticationKeyGenerator;

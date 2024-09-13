@@ -10,9 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.wy.test.authentication.otp.password.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.authentication.otp.password.onetimepwd.impl.TimeBasedOtpAuthn;
 import com.wy.test.authentication.provider.authn.realm.jdbc.JdbcAuthenticationRealm;
-import com.wy.test.core.persistence.repository.LoginHistoryRepository;
-import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
+import com.wy.test.core.repository.LoginHistoryRepository;
+import com.wy.test.core.repository.PasswordPolicyValidator;
 import com.wy.test.persistence.service.LoginService;
 import com.wy.test.persistence.service.UserService;
 

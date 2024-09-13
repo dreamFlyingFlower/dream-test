@@ -1,4 +1,4 @@
-package com.wy.test.core.persistence.repository;
+package com.wy.test.core.repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

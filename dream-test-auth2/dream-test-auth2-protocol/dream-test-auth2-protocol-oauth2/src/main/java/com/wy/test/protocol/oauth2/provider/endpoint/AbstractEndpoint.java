@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.util.Assert;
 
-import com.wy.test.core.persistence.cache.MomentaryService;
+import com.wy.test.core.cache.MomentaryService;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.persistence.service.AppService;
 import com.wy.test.protocol.oauth2.provider.ClientDetailsService;

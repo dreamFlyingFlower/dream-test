@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.wy.test.core.entity.InstitutionEntity;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.persistence.repository.InstitutionsRepository;
 import com.wy.test.core.properties.DreamAuthServerProperties;
+import com.wy.test.core.repository.InstitutionsRepository;
 
 import lombok.extern.slf4j.Slf4j;
 

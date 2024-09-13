@@ -1,4 +1,4 @@
-package com.wy.test.core.persistence.repository;
+package com.wy.test.core.repository;
 
 import java.io.InputStreamReader;
 import java.sql.ResultSet;

@@ -30,12 +30,12 @@ import com.wy.test.authentication.provider.authn.realm.ldap.LdapAuthenticationRe
 import com.wy.test.authentication.provider.authn.support.kerberos.KerberosProxy;
 import com.wy.test.authentication.provider.authn.support.kerberos.RemoteKerberosService;
 import com.wy.test.core.enums.StoreType;
-import com.wy.test.core.persistence.redis.RedisConnectionFactory;
-import com.wy.test.core.persistence.repository.LoginHistoryRepository;
-import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.properties.DreamAuthOtpProperties;
 import com.wy.test.core.properties.DreamAuthStoreProperties;
+import com.wy.test.core.redis.RedisConnectionFactory;
+import com.wy.test.core.repository.LoginHistoryRepository;
+import com.wy.test.core.repository.PasswordPolicyValidator;
 import com.wy.test.persistence.service.LdapContextService;
 import com.wy.test.persistence.service.LoginService;
 import com.wy.test.persistence.service.UserService;

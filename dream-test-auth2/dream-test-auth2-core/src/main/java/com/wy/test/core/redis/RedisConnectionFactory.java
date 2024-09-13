@@ -1,4 +1,4 @@
-package com.wy.test.core.persistence.redis;
+package com.wy.test.core.redis;
 
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;

@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.core.properties.DreamAuthStoreProperties;
+import com.wy.test.core.redis.RedisConnectionFactory;
 import com.wy.test.protocol.cas.endpoint.ticket.TicketServices;
 import com.wy.test.protocol.cas.endpoint.ticket.pgt.ProxyGrantingTicketServicesFactory;
 import com.wy.test.protocol.cas.endpoint.ticket.st.TicketServicesFactory;

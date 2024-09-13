@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 
-import com.wy.test.core.constant.ldap.ActiveDirectoryUser;
+import com.wy.test.core.constant.ActiveDirectoryUser;
 import com.wy.test.core.entity.ExtraAttr;
 import com.wy.test.core.entity.ExtraAttrs;
 import com.wy.test.core.entity.UserEntity;

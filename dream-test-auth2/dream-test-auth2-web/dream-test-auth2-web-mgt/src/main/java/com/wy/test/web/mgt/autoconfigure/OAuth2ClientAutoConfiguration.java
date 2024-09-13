@@ -11,8 +11,8 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.wy.test.core.enums.StoreType;
-import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.core.properties.DreamAuthStoreProperties;
+import com.wy.test.core.redis.RedisConnectionFactory;
 import com.wy.test.protocol.oauth2.provider.client.ClientDetailsUserDetailsService;
 import com.wy.test.protocol.oauth2.provider.client.JdbcClientDetailsService;
 import com.wy.test.protocol.oauth2.provider.token.DefaultTokenServices;

@@ -3,7 +3,7 @@ package com.wy.test.protocol.oauth2.provider.code;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.wy.test.core.enums.StoreType;
-import com.wy.test.core.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.redis.RedisConnectionFactory;
 
 import lombok.extern.slf4j.Slf4j;
 

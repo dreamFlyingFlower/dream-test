@@ -1,4 +1,4 @@
-package com.wy.test.core.constant.ldap;
+package com.wy.test.core.constant;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -6,7 +6,7 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
 import com.wy.test.authentication.provider.authn.realm.IAuthenticationServer;
-import com.wy.test.core.persistence.ldap.LdapHelpers;
+import com.wy.test.core.ldap.LdapHelpers;
 
 import lombok.extern.slf4j.Slf4j;
 

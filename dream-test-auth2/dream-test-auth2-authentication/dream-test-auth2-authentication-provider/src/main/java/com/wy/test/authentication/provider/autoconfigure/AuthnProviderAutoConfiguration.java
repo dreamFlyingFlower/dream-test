@@ -18,10 +18,10 @@ import com.wy.test.authentication.provider.authn.realm.AbstractAuthenticationRea
 import com.wy.test.authentication.provider.authn.support.rememberme.AbstractRemeberMeManager;
 import com.wy.test.authentication.provider.authn.support.rememberme.JdbcRemeberMeManager;
 import com.wy.test.authentication.sms.password.sms.SmsOtpAuthnService;
-import com.wy.test.core.persistence.repository.LoginHistoryRepository;
-import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.properties.DreamAuthServerProperties;
+import com.wy.test.core.repository.LoginHistoryRepository;
+import com.wy.test.core.repository.PasswordPolicyValidator;
 
 import lombok.extern.slf4j.Slf4j;
 

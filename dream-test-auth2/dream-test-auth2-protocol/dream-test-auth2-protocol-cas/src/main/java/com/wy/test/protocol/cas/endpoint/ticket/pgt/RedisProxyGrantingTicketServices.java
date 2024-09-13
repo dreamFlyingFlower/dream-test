@@ -1,7 +1,7 @@
 package com.wy.test.protocol.cas.endpoint.ticket.pgt;
 
-import com.wy.test.core.persistence.redis.RedisConnection;
-import com.wy.test.core.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.redis.RedisConnection;
+import com.wy.test.core.redis.RedisConnectionFactory;
 import com.wy.test.protocol.cas.endpoint.ticket.RandomServiceTicketServices;
 import com.wy.test.protocol.cas.endpoint.ticket.Ticket;
 

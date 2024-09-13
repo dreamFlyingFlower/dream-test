@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 
 import com.wy.test.core.constant.ConstCommon;
 import com.wy.test.core.constant.ConstUser;
-import com.wy.test.core.constant.ldap.InetOrgPerson;
+import com.wy.test.core.constant.InetOrgPerson;
 import com.wy.test.core.entity.HistorySyncEntity;
 import com.wy.test.core.entity.OrgEntity;
 import com.wy.test.core.entity.SyncRelatedEntity;
 import com.wy.test.core.entity.UserEntity;
-import com.wy.test.core.persistence.ldap.LdapHelpers;
+import com.wy.test.core.ldap.LdapHelpers;
 import com.wy.test.sync.core.synchronizer.AbstractSyncProcessor;
 import com.wy.test.sync.core.synchronizer.SyncProcessor;
 

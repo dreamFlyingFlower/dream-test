@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wy.test.core.entity.SyncEntity;
-import com.wy.test.core.persistence.ldap.LdapHelpers;
+import com.wy.test.core.ldap.LdapHelpers;
 import com.wy.test.sync.core.synchronizer.SyncProcessor;
 
 import lombok.extern.slf4j.Slf4j;

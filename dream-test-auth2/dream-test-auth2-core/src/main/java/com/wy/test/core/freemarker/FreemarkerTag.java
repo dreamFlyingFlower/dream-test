@@ -1,4 +1,4 @@
-package com.wy.test.core.web.freemarker;
+package com.wy.test.core.freemarker;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

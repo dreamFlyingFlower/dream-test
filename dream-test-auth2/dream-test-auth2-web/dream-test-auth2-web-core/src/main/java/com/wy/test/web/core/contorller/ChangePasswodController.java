@@ -18,7 +18,7 @@ import com.wy.test.core.entity.Message;
 import com.wy.test.core.entity.PasswordPolicyEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.enums.PasswordSetType;
-import com.wy.test.core.persistence.repository.PasswordPolicyValidator;
+import com.wy.test.core.repository.PasswordPolicyValidator;
 import com.wy.test.core.vo.PasswordPolicyVO;
 import com.wy.test.core.web.WebContext;
 import com.wy.test.persistence.service.HistorySysLogService;

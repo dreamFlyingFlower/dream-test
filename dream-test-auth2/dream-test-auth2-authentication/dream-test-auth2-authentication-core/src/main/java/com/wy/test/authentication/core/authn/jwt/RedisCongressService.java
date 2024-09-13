@@ -1,7 +1,7 @@
 package com.wy.test.authentication.core.authn.jwt;
 
-import com.wy.test.core.persistence.redis.RedisConnection;
-import com.wy.test.core.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.redis.RedisConnection;
+import com.wy.test.core.redis.RedisConnectionFactory;
 
 public class RedisCongressService implements CongressService {
 

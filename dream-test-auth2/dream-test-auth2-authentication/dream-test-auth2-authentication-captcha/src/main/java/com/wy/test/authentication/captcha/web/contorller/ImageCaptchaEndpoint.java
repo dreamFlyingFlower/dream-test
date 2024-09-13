@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.google.code.kaptcha.Producer;
 import com.wy.test.authentication.core.authn.jwt.AuthTokenService;
+import com.wy.test.core.cache.MomentaryService;
 import com.wy.test.core.entity.Message;
-import com.wy.test.core.persistence.cache.MomentaryService;
 
 import dream.flying.flower.helper.ImageHelper;
 import lombok.AllArgsConstructor;

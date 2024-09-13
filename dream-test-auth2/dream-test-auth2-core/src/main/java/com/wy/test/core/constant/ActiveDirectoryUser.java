@@ -1,4 +1,4 @@
-package com.wy.test.core.constant.ldap;
+package com.wy.test.core.constant;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;

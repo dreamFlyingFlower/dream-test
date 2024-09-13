@@ -13,8 +13,8 @@ import com.wy.test.authentication.core.authn.session.SessionManager;
 import com.wy.test.authentication.core.authn.session.SessionManagerFactory;
 import com.wy.test.authentication.core.authn.web.HttpSessionListenerAdapter;
 import com.wy.test.authentication.core.authn.web.SavedRequestAwareAuthenticationSuccessHandler;
-import com.wy.test.core.persistence.redis.RedisConnectionFactory;
 import com.wy.test.core.properties.DreamAuthStoreProperties;
+import com.wy.test.core.redis.RedisConnectionFactory;
 
 import lombok.extern.slf4j.Slf4j;
 

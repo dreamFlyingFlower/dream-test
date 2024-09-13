@@ -13,7 +13,7 @@ import com.wy.test.authentication.social.authn.support.socialsignon.service.Jdbc
 import com.wy.test.authentication.social.authn.support.socialsignon.service.SocialSignOnProviderService;
 import com.wy.test.authentication.social.authn.support.socialsignon.token.RedisTokenStore;
 import com.wy.test.core.entity.SocialProviderEntity;
-import com.wy.test.core.persistence.redis.RedisConnectionFactory;
+import com.wy.test.core.redis.RedisConnectionFactory;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,4 +1,4 @@
-package com.wy.test.core.web.freemarker;
+package com.wy.test.core.freemarker;
 
 import java.io.IOException;
 import java.util.Map;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.wy.test.core.persistence.repository.LocalizationRepository;
+import com.wy.test.core.repository.LocalizationRepository;
 import com.wy.test.core.web.WebContext;
 
 import freemarker.core.Environment;
