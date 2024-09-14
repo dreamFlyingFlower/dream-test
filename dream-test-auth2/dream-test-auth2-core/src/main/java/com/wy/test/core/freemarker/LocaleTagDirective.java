@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.wy.test.core.repository.LocalizationRepository;
 import com.wy.test.core.web.AuthWebContext;
 
 import freemarker.core.Environment;
@@ -34,9 +33,6 @@ public class LocaleTagDirective implements TemplateDirectiveModel {
 
 	@Autowired
 	private HttpServletRequest request;
-
-	@Autowired
-	LocalizationRepository localizationService;
 
 	@SuppressWarnings("rawtypes")
 	@Override
