@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wy.test.authentication.core.annotation.CurrentUser;
 import com.wy.test.core.base.ResultResponse;
-import com.wy.test.core.constant.ConstEntryType;
-import com.wy.test.core.constant.ConstOperateAction;
+import com.wy.test.core.constant.ConstLogEntryType;
+import com.wy.test.core.constant.ConstLogOperateType;
 import com.wy.test.core.constant.ConstOperateResult;
 import com.wy.test.core.entity.RoleEntity;
 import com.wy.test.core.entity.UserEntity;
@@ -80,7 +80,7 @@ public class RoleController {
 		}
 		if (rolesService.save(role)) {
 			rolesService.refreshDynamicRoles(role);
-			systemLog.insert(ConstEntryType.ROLE, role, ConstOperateAction.CREATE, ConstOperateResult.SUCCESS,
+			systemLog.insert(ConstLogEntryType.ROLE, role, ConstLogOperateType.CREATE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new ResultResponse<RoleEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
@@ -98,7 +98,7 @@ public class RoleController {
 		role.setInstId(currentUser.getInstId());
 		if (rolesService.updateById(role)) {
 			rolesService.refreshDynamicRoles(role);
-			systemLog.insert(ConstEntryType.ROLE, role, ConstOperateAction.UPDATE, ConstOperateResult.SUCCESS,
+			systemLog.insert(ConstLogEntryType.ROLE, role, ConstLogOperateType.UPDATE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new ResultResponse<RoleEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
@@ -112,7 +112,7 @@ public class RoleController {
 		log.debug("-delete ids : {}", ids);
 		ids = ids.replaceAll("ROLE_ALL_USER", "-1").replaceAll("ROLE_ADMINISTRATORS", "-1");
 		if (rolesService.removeByIds(Arrays.asList(ids.split(",")))) {
-			systemLog.insert(ConstEntryType.ROLE, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
+			systemLog.insert(ConstLogEntryType.ROLE, ids, ConstLogOperateType.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new ResultResponse<RoleEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {

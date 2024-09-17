@@ -22,7 +22,7 @@ import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 import com.nimbusds.jose.JOSEException;
-import com.wy.test.core.cache.InMemoryMomentaryService;
+import com.wy.test.core.cache.MemoryMomentaryService;
 import com.wy.test.core.cache.MomentaryService;
 import com.wy.test.core.cache.RedisMomentaryService;
 import com.wy.test.core.enums.StoreType;
@@ -165,7 +165,7 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 		if (dreamAuthRedisProperties.getStoreType() == StoreType.REDIS) {
 			momentaryService = new RedisMomentaryService(redisConnFactory);
 		} else {
-			momentaryService = new InMemoryMomentaryService();
+			momentaryService = new MemoryMomentaryService();
 		}
 		return momentaryService;
 	}

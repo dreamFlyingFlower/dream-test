@@ -2,7 +2,7 @@ package com.wy.test.core.constant;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class ConstOperateAction {
+public final class ConstLogOperateType {
 
 	public static final String CREATE = "create";
 

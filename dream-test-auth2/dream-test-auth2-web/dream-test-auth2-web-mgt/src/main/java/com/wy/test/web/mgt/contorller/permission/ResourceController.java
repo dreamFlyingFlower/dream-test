@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wy.test.authentication.core.annotation.CurrentUser;
 import com.wy.test.core.base.ResultResponse;
-import com.wy.test.core.constant.ConstEntryType;
-import com.wy.test.core.constant.ConstOperateAction;
+import com.wy.test.core.constant.ConstLogEntryType;
+import com.wy.test.core.constant.ConstLogOperateType;
 import com.wy.test.core.constant.ConstOperateResult;
 import com.wy.test.core.convert.ResourceConvert;
 import com.wy.test.core.entity.ResourceEntity;
@@ -79,7 +79,7 @@ public class ResourceController {
 		log.debug("-Add  :" + resource);
 		resource.setInstId(currentUser.getInstId());
 		if (resourcesService.save(resource)) {
-			systemLog.insert(ConstEntryType.RESOURCE, resource, ConstOperateAction.CREATE, ConstOperateResult.SUCCESS,
+			systemLog.insert(ConstLogEntryType.RESOURCE, resource, ConstLogOperateType.CREATE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new ResultResponse<ResourceEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
@@ -93,7 +93,7 @@ public class ResourceController {
 		log.debug("-update  :" + resource);
 		resource.setInstId(currentUser.getInstId());
 		if (resourcesService.updateById(resource)) {
-			systemLog.insert(ConstEntryType.RESOURCE, resource, ConstOperateAction.UPDATE, ConstOperateResult.SUCCESS,
+			systemLog.insert(ConstLogEntryType.RESOURCE, resource, ConstLogOperateType.UPDATE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new ResultResponse<ResourceEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
@@ -106,7 +106,7 @@ public class ResourceController {
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete  ids : {} ", ids);
 		if (resourcesService.removeByIds(Arrays.asList(ids.split(",")))) {
-			systemLog.insert(ConstEntryType.RESOURCE, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
+			systemLog.insert(ConstLogEntryType.RESOURCE, ids, ConstLogOperateType.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new ResultResponse<ResourceEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {

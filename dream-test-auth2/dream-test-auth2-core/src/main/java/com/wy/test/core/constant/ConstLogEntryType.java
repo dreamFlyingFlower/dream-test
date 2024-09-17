@@ -1,6 +1,6 @@
 package com.wy.test.core.constant;
 
-public interface ConstEntryType {
+public interface ConstLogEntryType {
 
 	String USERINFO = "user";
 

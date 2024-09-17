@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wy.test.authentication.core.annotation.CurrentUser;
 import com.wy.test.core.base.ResultResponse;
-import com.wy.test.core.constant.ConstEntryType;
-import com.wy.test.core.constant.ConstOperateAction;
+import com.wy.test.core.constant.ConstLogEntryType;
+import com.wy.test.core.constant.ConstLogOperateType;
 import com.wy.test.core.constant.ConstOperateResult;
 import com.wy.test.core.convert.PasswordPolicyConvert;
 import com.wy.test.core.entity.ChangePassword;
@@ -60,7 +60,7 @@ public class ChangePasswodController {
 		changePassword.setInstId(currentUser.getInstId());
 		changePassword.setPasswordSetType(PasswordSetType.PASSWORD_NORMAL.ordinal());
 		if (userService.changePassword(changePassword)) {
-			historySysLogService.insert(ConstEntryType.USERINFO, changePassword, ConstOperateAction.CHANGE_PASSWORD,
+			historySysLogService.insert(ConstLogEntryType.USERINFO, changePassword, ConstLogOperateType.CHANGE_PASSWORD,
 					ConstOperateResult.SUCCESS, currentUser);
 			return new ResultResponse<ChangePassword>().buildResponse();
 		} else {

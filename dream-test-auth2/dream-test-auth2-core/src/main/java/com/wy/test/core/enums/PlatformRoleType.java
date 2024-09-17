@@ -2,7 +2,7 @@ package com.wy.test.core.enums;
 
 import java.util.stream.Stream;
 
-import dream.flying.flower.common.StatusMsg;
+import dream.flying.flower.common.CodeMsg;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public enum PlatformRoleType implements StatusMsg {
+public enum PlatformRoleType implements CodeMsg {
 
 	/**
 	 * 平台超级管理员

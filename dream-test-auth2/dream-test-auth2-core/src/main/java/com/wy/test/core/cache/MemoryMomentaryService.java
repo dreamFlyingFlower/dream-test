@@ -8,12 +8,12 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class InMemoryMomentaryService implements MomentaryService {
+public class MemoryMomentaryService implements MomentaryService {
 
 	protected static Cache<String, Object> momentaryStore =
 			Caffeine.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).maximumSize(200000).build();
 
-	public InMemoryMomentaryService() {
+	public MemoryMomentaryService() {
 		super();
 	}
 

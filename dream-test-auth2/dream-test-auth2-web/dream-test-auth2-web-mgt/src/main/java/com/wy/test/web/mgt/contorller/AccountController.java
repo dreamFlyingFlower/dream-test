@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.wy.test.authentication.core.annotation.CurrentUser;
 import com.wy.test.core.base.ResultResponse;
-import com.wy.test.core.constant.ConstEntryType;
-import com.wy.test.core.constant.ConstOperateAction;
+import com.wy.test.core.constant.ConstLogEntryType;
+import com.wy.test.core.constant.ConstLogOperateType;
 import com.wy.test.core.constant.ConstOperateResult;
 import com.wy.test.core.entity.AccountEntity;
 import com.wy.test.core.entity.AccountStrategyEntity;
@@ -85,7 +85,7 @@ public class AccountController {
 		account.setInstId(currentUser.getInstId());
 		account.setRelatedPassword(PasswordReciprocal.getInstance().encode(account.getRelatedPassword()));
 		if (accountsService.insert(account)) {
-			systemLog.insert(ConstEntryType.ACCOUNT, account, ConstOperateAction.CREATE, ConstOperateResult.SUCCESS,
+			systemLog.insert(ConstLogEntryType.ACCOUNT, account, ConstLogOperateType.CREATE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new ResultResponse<AccountEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
@@ -99,7 +99,7 @@ public class AccountController {
 		account.setInstId(currentUser.getInstId());
 		account.setRelatedPassword(PasswordReciprocal.getInstance().encode(account.getRelatedPassword()));
 		if (accountsService.update(account)) {
-			systemLog.insert(ConstEntryType.ACCOUNT, account, ConstOperateAction.UPDATE, ConstOperateResult.SUCCESS,
+			systemLog.insert(ConstLogEntryType.ACCOUNT, account, ConstLogOperateType.UPDATE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new ResultResponse<AccountEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
@@ -119,7 +119,7 @@ public class AccountController {
 		accounts.setDisplayName(loadAccount.getDisplayName());
 		accounts.setRelatedUsername(loadAccount.getRelatedUsername());
 		if (accountsService.updateStatus(accounts)) {
-			systemLog.insert(ConstEntryType.ACCOUNT, accounts, ConstOperateAction.statusActon.get(accounts.getStatus()),
+			systemLog.insert(ConstLogEntryType.ACCOUNT, accounts, ConstLogOperateType.statusActon.get(accounts.getStatus()),
 					ConstOperateResult.SUCCESS, currentUser);
 			return new ResultResponse<AccountEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
@@ -132,7 +132,7 @@ public class AccountController {
 		log.debug("-delete ids : {} ", ids);
 
 		if (accountsService.removeByIds(Arrays.asList(ids.split(",")))) {
-			systemLog.insert(ConstEntryType.ACCOUNT, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
+			systemLog.insert(ConstLogEntryType.ACCOUNT, ids, ConstLogOperateType.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new ResultResponse<>(ResultResponse.SUCCESS).buildResponse();
 		} else {

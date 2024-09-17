@@ -27,8 +27,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.common.collect.Lists;
 import com.wy.test.authentication.core.annotation.CurrentUser;
 import com.wy.test.core.base.ResultResponse;
-import com.wy.test.core.constant.ConstEntryType;
-import com.wy.test.core.constant.ConstOperateAction;
+import com.wy.test.core.constant.ConstLogEntryType;
+import com.wy.test.core.constant.ConstLogOperateType;
 import com.wy.test.core.constant.ConstOperateResult;
 import com.wy.test.core.entity.ExcelImport;
 import com.wy.test.core.entity.OrgEntity;
@@ -87,7 +87,7 @@ public class OrgController {
 		log.debug("-Add  :" + org);
 		org.setInstId(currentUser.getInstId());
 		if (organizationsService.insert(org)) {
-			systemLog.insert(ConstEntryType.ORGANIZATION, org, ConstOperateAction.CREATE, ConstOperateResult.SUCCESS,
+			systemLog.insert(ConstLogEntryType.ORGANIZATION, org, ConstLogOperateType.CREATE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new ResultResponse<OrgEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
@@ -101,7 +101,7 @@ public class OrgController {
 		log.debug("-update  :" + org);
 		org.setInstId(currentUser.getInstId());
 		if (organizationsService.update(org)) {
-			systemLog.insert(ConstEntryType.ORGANIZATION, org, ConstOperateAction.UPDATE, ConstOperateResult.SUCCESS,
+			systemLog.insert(ConstLogEntryType.ORGANIZATION, org, ConstLogOperateType.UPDATE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new ResultResponse<OrgEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
@@ -114,7 +114,7 @@ public class OrgController {
 	public ResponseEntity<?> delete(@RequestParam("ids") String ids, @CurrentUser UserEntity currentUser) {
 		log.debug("-delete  ids : {} ", ids);
 		if (organizationsService.removeByIds(Arrays.asList(ids.split(",")))) {
-			systemLog.insert(ConstEntryType.ORGANIZATION, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
+			systemLog.insert(ConstLogEntryType.ORGANIZATION, ids, ConstLogOperateType.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new ResultResponse<OrgEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {

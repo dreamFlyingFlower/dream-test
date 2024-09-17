@@ -2,7 +2,7 @@ package com.wy.test.core.enums;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import dream.flying.flower.common.CodeMsg;
+import dream.flying.flower.common.StatusMsg;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public enum OrdinaryRoleType implements CodeMsg<String> {
+public enum OrdinaryRoleType implements StatusMsg<String> {
 
 	ROLE_ADMINISTRATORS("ROLE_ADMINISTRATORS", new SimpleGrantedAuthority("ROLE_ADMINISTRATORS")),
 

@@ -32,8 +32,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.common.collect.Lists;
 import com.wy.test.authentication.core.annotation.CurrentUser;
 import com.wy.test.core.base.ResultResponse;
-import com.wy.test.core.constant.ConstEntryType;
-import com.wy.test.core.constant.ConstOperateAction;
+import com.wy.test.core.constant.ConstLogEntryType;
+import com.wy.test.core.constant.ConstLogOperateType;
 import com.wy.test.core.constant.ConstOperateResult;
 import com.wy.test.core.convert.UserConvert;
 import com.wy.test.core.entity.ChangePassword;
@@ -104,7 +104,7 @@ public class UserController {
 			fileUploadService.removeById(userInfo.getPictureId());
 		}
 		if (null != userInfoService.add(userInfo)) {
-			systemLog.insert(ConstEntryType.USERINFO, userInfo, ConstOperateAction.CREATE, ConstOperateResult.SUCCESS,
+			systemLog.insert(ConstLogEntryType.USERINFO, userInfo, ConstLogOperateType.CREATE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new ResultResponse<UserEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
@@ -129,7 +129,7 @@ public class UserController {
 			fileUploadService.removeById(userInfo.getPictureId());
 		}
 		if (userInfoService.edit(userInfo)) {
-			systemLog.insert(ConstEntryType.USERINFO, userInfo, ConstOperateAction.UPDATE, ConstOperateResult.SUCCESS,
+			systemLog.insert(ConstLogEntryType.USERINFO, userInfo, ConstLogOperateType.UPDATE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new ResultResponse<UserEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
@@ -142,7 +142,7 @@ public class UserController {
 		log.debug("-delete  ids : {} ", ids);
 
 		if (userInfoService.removeByIds(Arrays.asList(ids.split(",")))) {
-			systemLog.insert(ConstEntryType.USERINFO, ids, ConstOperateAction.DELETE, ConstOperateResult.SUCCESS,
+			systemLog.insert(ConstLogEntryType.USERINFO, ids, ConstLogOperateType.DELETE, ConstOperateResult.SUCCESS,
 					currentUser);
 			return new ResultResponse<UserEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
@@ -174,7 +174,7 @@ public class UserController {
 		log.debug("UserId {}", changePassword.getUserId());
 		changePassword.setPasswordSetType(PasswordSetType.PASSWORD_NORMAL.ordinal());
 		if (userInfoService.changePassword(changePassword, true)) {
-			systemLog.insert(ConstEntryType.USERINFO, changePassword, ConstOperateAction.CHANGE_PASSWORD,
+			systemLog.insert(ConstLogEntryType.USERINFO, changePassword, ConstLogOperateType.CHANGE_PASSWORD,
 					ConstOperateResult.SUCCESS, currentUser);
 			return new ResultResponse<UserEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
@@ -190,8 +190,8 @@ public class UserController {
 		userInfo.setUsername(loadUserInfo.getUsername());
 		userInfo.setDisplayName(loadUserInfo.getDisplayName());
 		if (userInfoService.updateStatus(userInfo)) {
-			systemLog.insert(ConstEntryType.USERINFO, userInfo,
-					ConstOperateAction.statusActon.get(userInfo.getStatus()), ConstOperateResult.SUCCESS, currentUser);
+			systemLog.insert(ConstLogEntryType.USERINFO, userInfo,
+					ConstLogOperateType.statusActon.get(userInfo.getStatus()), ConstOperateResult.SUCCESS, currentUser);
 			return new ResultResponse<UserEntity>(ResultResponse.SUCCESS).buildResponse();
 		} else {
 			return new ResultResponse<UserEntity>(ResultResponse.FAIL).buildResponse();
