@@ -23,7 +23,7 @@ import dream.flying.flower.test.entity.TestUserEntity;
  * @git {@link https://github.com/dreamFlyingFlower}
  */
 @CryptionController
-@RequestMapping("testCrypt")
+@RequestMapping("testValid")
 @RestController
 public class TestValidController {
 
