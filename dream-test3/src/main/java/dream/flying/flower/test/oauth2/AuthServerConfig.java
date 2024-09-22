@@ -95,7 +95,13 @@ public class AuthServerConfig {
 				.oidc(Customizer.withDefaults())
 				// 设置自定义用户确认授权页
 				.authorizationEndpoint(
-						authorizationEndpoint -> authorizationEndpoint.consentPage(CUSTOM_CONSENT_PAGE_URI));
+						authorizationEndpoint -> authorizationEndpoint.consentPage(CUSTOM_CONSENT_PAGE_URI))
+				// 设置设备码用户验证url(自定义用户验证页)
+				.deviceAuthorizationEndpoint(
+						deviceAuthorizationEndpoint -> deviceAuthorizationEndpoint.verificationUri("/activate"))
+				// 设置验证设备码用户确认页面
+				.deviceVerificationEndpoint(
+						deviceVerificationEndpoint -> deviceVerificationEndpoint.consentPage(CUSTOM_CONSENT_PAGE_URI));
 		http
 				// 当未登录时访问认证端点时重定向至login页面
 				.exceptionHandling((exceptions) -> exceptions
@@ -352,6 +358,7 @@ public class AuthServerConfig {
 				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
 				.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
 				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+				.postLogoutRedirectUri("http://127.0.0.1:8080/logout")
 				.scope("message.read")
 				.clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
 				.tokenSettings(TokenSettings.builder()

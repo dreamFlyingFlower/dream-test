@@ -47,6 +47,7 @@ public class AuthServerMemoryConfig {
 				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
 				.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
 				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+				.postLogoutRedirectUri("http://127.0.0.1:8080/logout")
 				.scope("message.read")
 				.clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
 				.tokenSettings(TokenSettings.builder()
