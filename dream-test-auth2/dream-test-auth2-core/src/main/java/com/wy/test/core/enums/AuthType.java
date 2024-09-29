@@ -32,11 +32,16 @@ public enum AuthType {
 	/** 基于时间 */
 	TIME_BASED,
 
+	TFA,
+
+	TRUSTED,
+
 	/** 基于计数器 */
 	COUNTER_BASED,
 
 	/**  */
 	HOTP,
+
 	/** RSA非对称加密 */
 	RSA,
 

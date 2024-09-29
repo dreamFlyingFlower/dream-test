@@ -19,8 +19,8 @@ import com.wy.test.authentication.core.web.AuthorizationUtils;
 import com.wy.test.authentication.otp.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.authentication.otp.onetimepwd.MailOtpAuthnService;
 import com.wy.test.authentication.provider.realm.AbstractAuthenticationRealm;
-import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.constant.ConstAuthWeb;
+import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.vo.UserVO;
@@ -31,23 +31,16 @@ import dream.flying.flower.generator.GeneratorStrategyContext;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * login Authentication abstract class.
+ * 登录认证抽象类
+ *
+ * @author 飞花梦影
+ * @date 2024-09-29 23:36:47
+ * @git {@link https://github.com/dreamFlyingFlower}
  */
 @Slf4j
 public abstract class AbstractAuthenticationProvider {
 
-	public static String PROVIDER_SUFFIX = "AuthenticationProvider";
-
-	public class AuthType {
-
-		public final static String NORMAL = "normal";
-
-		public final static String TFA = "tfa";
-
-		public final static String MOBILE = "mobile";
-
-		public final static String TRUSTED = "trusted";
-	}
+	public static final String PROVIDER_SUFFIX = "AuthenticationProvider";
 
 	protected DreamAuthServerProperties dreamServerProperties;
 
@@ -63,7 +56,7 @@ public abstract class AbstractAuthenticationProvider {
 
 	protected AuthTokenService authTokenService;
 
-	public static ArrayList<GrantedAuthority> grantedAdministratorsAuthoritys = new ArrayList<GrantedAuthority>();
+	public static List<GrantedAuthority> grantedAdministratorsAuthoritys = new ArrayList<GrantedAuthority>();
 
 	static {
 		grantedAdministratorsAuthoritys.add(new SimpleGrantedAuthority("ROLE_ADMINISTRATORS"));
@@ -133,8 +126,8 @@ public abstract class AbstractAuthenticationProvider {
 	}
 
 	/**
-	 * login user by j_username and j_cname first query user by j_cname if first step userinfo is null,query user from
-	 * system.
+	 * login user by j_username and j_cname first query user by j_cname if first
+	 * step userinfo is null,query user from system.
 	 * 
 	 * @param username String
 	 * @param password String
@@ -208,11 +201,11 @@ public abstract class AbstractAuthenticationProvider {
 			throw new BadCredentialsException(i18nMessage);
 		} else {
 			if (userInfo.getIsLocked() == ConstStatus.LOCK) {
-				authenticationRealm.insertLoginHistory(userInfo, loginCredential.getLoginType(),
+				authenticationRealm.insertLoginHistory(userInfo, AuthLoginType.getByMsg(loginCredential.getAuthType()),
 						loginCredential.getProvider(), loginCredential.getCode(),
 						ConstAuthWeb.LOGIN_RESULT.USER_LOCKED);
 			} else if (userInfo.getStatus() != ConstStatus.ACTIVE) {
-				authenticationRealm.insertLoginHistory(userInfo, loginCredential.getLoginType(),
+				authenticationRealm.insertLoginHistory(userInfo, AuthLoginType.getByMsg(loginCredential.getAuthType()),
 						loginCredential.getProvider(), loginCredential.getCode(),
 						ConstAuthWeb.LOGIN_RESULT.USER_INACTIVE);
 			}

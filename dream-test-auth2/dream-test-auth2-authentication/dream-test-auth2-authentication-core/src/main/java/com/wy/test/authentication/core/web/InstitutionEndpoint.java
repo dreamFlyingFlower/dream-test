@@ -33,6 +33,15 @@ public class InstitutionEndpoint {
 	@Autowired
 	DreamAuthServerProperties dreamServerProperties;
 
+	/**
+	 * 单点登录系统调用,获得当前登录者的组织机构信息
+	 * 
+	 * @param request 请求
+	 * @param originURL 原始Origin
+	 * @param headerHostName 域名
+	 * @param headerHost 域名
+	 * @return 结果
+	 */
 	@GetMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> get(HttpServletRequest request,
 			@RequestHeader(value = "Origin", required = false) String originURL,

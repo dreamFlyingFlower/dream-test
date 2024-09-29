@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.security.core.Authentication;
 
 import com.wy.test.authentication.core.entity.LoginCredential;
+import com.wy.test.core.enums.AuthType;
 
 public class AuthenticationProviderFactory extends AbstractAuthenticationProvider {
 
@@ -13,18 +14,19 @@ public class AuthenticationProviderFactory extends AbstractAuthenticationProvide
 
 	@Override
 	public Authentication authenticate(LoginCredential authentication) {
-		if (authentication.getLoginType().getMsg().equalsIgnoreCase("trusted")) {
+		if (authentication.getAuthType().equalsIgnoreCase("trusted")) {
 			// risk remove
 			return null;
 		}
-		AbstractAuthenticationProvider provider = providers.get(authentication.getLoginType() + PROVIDER_SUFFIX);
+		AbstractAuthenticationProvider provider = providers.get(authentication.getAuthType() + PROVIDER_SUFFIX);
 
 		return provider == null ? null : provider.doAuthenticate(authentication);
 	}
 
 	@Override
 	public Authentication authenticate(LoginCredential authentication, boolean trusted) {
-		AbstractAuthenticationProvider provider = providers.get(AuthType.TRUSTED + PROVIDER_SUFFIX);
+		AbstractAuthenticationProvider provider =
+				providers.get(AuthType.TRUSTED.name().toLowerCase() + PROVIDER_SUFFIX);
 		return provider.doAuthenticate(authentication);
 	}
 

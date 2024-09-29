@@ -79,12 +79,14 @@ public class HttpWsFederationEntryPoint implements AsyncHandlerInterceptor {
 
 					// Give the library user a chance to change the attributes as necessary
 					if (wsFederationService.getWsFederationConfiguration().getAttributeMutator() != null) {
-						wsFederationService.getWsFederationConfiguration().getAttributeMutator().modifyAttributes(
-								wsFederationCredential.getAttributes(),
-								wsFederationService.getWsFederationConfiguration().getUpnSuffix());
+						wsFederationService.getWsFederationConfiguration()
+								.getAttributeMutator()
+								.modifyAttributes(wsFederationCredential.getAttributes(),
+										wsFederationService.getWsFederationConfiguration().getUpnSuffix());
 					}
-					LoginCredential loginCredential = new LoginCredential(
-							wsFederationCredential.getAttributes().get("").toString(), "", AuthLoginType.WSFEDERATION);
+					LoginCredential loginCredential =
+							new LoginCredential(wsFederationCredential.getAttributes().get("").toString(), "",
+									AuthLoginType.WS_FEDERATION.getMsg());
 					authenticationProvider.authenticate(loginCredential, true);
 					return true;
 				} else {

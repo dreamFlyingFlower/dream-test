@@ -48,7 +48,7 @@ public class HttpJwtEntryPoint {
 
 			if (signedJWT != null) {
 				String username = signedJWT.getJWTClaimsSet().getSubject();
-				LoginCredential loginCredential = new LoginCredential(username, "", AuthLoginType.JWT);
+				LoginCredential loginCredential = new LoginCredential(username, "", AuthLoginType.JWT.name());
 				Authentication authentication = authenticationProvider.authenticate(loginCredential, true);
 				log.debug("JWT Logined in , username " + username);
 				AuthJwt authJwt = authTokenService.genAuthJwt(authentication);
@@ -76,7 +76,7 @@ public class HttpJwtEntryPoint {
 
 			if (authTokenService.validateJwtToken(jwt)) {
 				String username = authTokenService.resolve(jwt).getSubject();
-				LoginCredential loginCredential = new LoginCredential(username, "", AuthLoginType.JWT);
+				LoginCredential loginCredential = new LoginCredential(username, "", AuthLoginType.JWT.name());
 				Authentication authentication = authenticationProvider.authenticate(loginCredential, true);
 				log.debug("JWT Logined in , username " + username);
 				AuthJwt authJwt = authTokenService.genAuthJwt(authentication);

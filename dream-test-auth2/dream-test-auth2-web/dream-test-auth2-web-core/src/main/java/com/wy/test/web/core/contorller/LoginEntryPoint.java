@@ -148,8 +148,8 @@ public class LoginEntryPoint {
 		String username = credential.getUsername();
 		// dream存储的手机号
 		String mobile = credential.getMobile();
-		// 社交服务类型
-		AuthLoginType authType = credential.getLoginType();
+		// 认证类型
+		String authType = credential.getAuthType();
 
 		UserEntity userInfo = userInfoService.findByEmailMobile(mobile);
 		// 验证码验证是否合法
@@ -158,7 +158,7 @@ public class LoginEntryPoint {
 			SocialAssociateEntity socialsAssociate = new SocialAssociateEntity();
 			socialsAssociate.setUserId(userInfo.getId());
 			socialsAssociate.setUsername(userInfo.getUsername());
-			socialsAssociate.setProvider(authType.getMsg());
+			socialsAssociate.setProvider(authType);
 			socialsAssociate.setSocialUserId(username);
 			socialsAssociate.setInstId(userInfo.getInstId());
 			// 插入dream和社交服务的用户映射表
@@ -166,7 +166,7 @@ public class LoginEntryPoint {
 
 			// 设置完成后,进行登录认证
 			LoginCredential loginCredential =
-					new LoginCredential(socialsAssociate.getUsername(), "", AuthLoginType.SOCIALSIGNON);
+					new LoginCredential(socialsAssociate.getUsername(), "", AuthLoginType.SOCIAL_SIGN_ON.getMsg());
 
 			SocialProviderEntity socialSignOnProvider =
 					socialSignOnProviderService.get(socialsAssociate.getInstId(), socialsAssociate.getProvider());
@@ -182,24 +182,26 @@ public class LoginEntryPoint {
 	}
 
 	/**
-	 * normal
+	 * 首页登录
 	 * 
-	 * @param loginCredential
-	 * @return
+	 * @param request 请求
+	 * @param response 响应
+	 * @param loginCredential 登录参数
+	 * @return 结果
 	 */
 	@PostMapping(value = { "/signin" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> signin(HttpServletRequest request, HttpServletResponse response,
-			@RequestBody LoginCredential credential) {
+			@RequestBody LoginCredential loginCredential) {
 		ResultResponse<AuthJwt> authJwtMessage = new ResultResponse<>(ResultResponse.FAIL);
-		if (authTokenService.validateJwtToken(credential.getState())) {
-			AuthLoginType authType = credential.getLoginType();
+		if (authTokenService.validateJwtToken(loginCredential.getState())) {
+			AuthLoginType authType = AuthLoginType.getByMsg(loginCredential.getAuthType());
 			log.debug("Login AuthN Type  " + authType);
 			if (null != authType) {
-				Authentication authentication = authenticationProvider.authenticate(credential);
+				Authentication authentication = authenticationProvider.authenticate(loginCredential);
 				if (authentication != null) {
 					AuthJwt authJwt = authTokenService.genAuthJwt(authentication);
-					if (StringUtils.isNotBlank(credential.getRemeberMe())
-							&& credential.getRemeberMe().equalsIgnoreCase("true")) {
+					if (StringUtils.isNotBlank(loginCredential.getRemeberMe())
+							&& loginCredential.getRemeberMe().equalsIgnoreCase("true")) {
 						String remeberMe = remeberMeManager.createRemeberMe(authentication, request, response);
 						authJwt.setRemeberMe(remeberMe);
 					}
@@ -210,8 +212,8 @@ public class LoginEntryPoint {
 
 				} else {
 					// fail
-					String errorMsg = AuthWebContext.getAttribute(ConstAuthWeb.LOGIN_ERROR_SESSION_MESSAGE) == null
-							? "" : AuthWebContext.getAttribute(ConstAuthWeb.LOGIN_ERROR_SESSION_MESSAGE).toString();
+					String errorMsg = AuthWebContext.getAttribute(ConstAuthWeb.LOGIN_ERROR_SESSION_MESSAGE) == null ? ""
+							: AuthWebContext.getAttribute(ConstAuthWeb.LOGIN_ERROR_SESSION_MESSAGE).toString();
 					authJwtMessage.setMessage(errorMsg);
 					log.debug("login fail , message {}", errorMsg);
 				}

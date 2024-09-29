@@ -11,6 +11,7 @@ import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.AuthWebContext;
 
+import dream.flying.flower.framework.web.enums.AuthLoginType;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -46,8 +47,7 @@ public class TrustedAuthenticationProvider extends AbstractAuthenticationProvide
 			authenticationRealm.getPasswordPolicyValidator().applyPasswordPolicy(loadeduserInfo);
 			Authentication authentication = createOnlineTicket(loginCredential, loadeduserInfo);
 
-			authenticationRealm.insertLoginHistory(loadeduserInfo, loginCredential
-					.getLoginType(),
+			authenticationRealm.insertLoginHistory(loadeduserInfo, AuthLoginType.getByMsg(loginCredential.getAuthType()),
 					loginCredential.getProvider(), loginCredential.getCode(), loginCredential.getMessage());
 
 			return authentication;

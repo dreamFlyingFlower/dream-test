@@ -62,7 +62,7 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 						"No credentials are provided or extracted to authenticate the REST request");
 			}
 
-			LoginCredential loginCredential = new LoginCredential(username, password, AuthLoginType.NORMAL);
+			LoginCredential loginCredential = new LoginCredential(username, password, AuthLoginType.NORMAL.name());
 
 			// authenticationProvider.authenticate(loginCredential, false);
 			Authentication authentication = authenticationProvider.authenticate(loginCredential);
@@ -166,7 +166,7 @@ public class CasRestV1Endpoint extends CasBaseAuthorizeEndpoint {
 						"No credentials are provided or extracted to authenticate the REST request");
 			}
 
-			LoginCredential loginCredential = new LoginCredential(username, password, AuthLoginType.CASREST);
+			LoginCredential loginCredential = new LoginCredential(username, password, AuthLoginType.CAS_REST.getMsg());
 
 			authenticationProvider.authenticate(loginCredential, false);
 			UserVO userInfo = AuthorizationUtils.getUserInfo();

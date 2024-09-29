@@ -125,7 +125,8 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 				// 如果存在第三方ID并且在数据库无法找到映射关系，则进行绑定逻辑
 				if (StringUtils.isNotEmpty(socialsAssociate.getSocialUserId())) {
 					// 返回message为第三方用户标识
-					return new ResultResponse<AuthJwt>(ResultResponse.PROMPT, socialsAssociate.getSocialUserId()).buildResponse();
+					return new ResultResponse<AuthJwt>(ResultResponse.PROMPT, socialsAssociate.getSocialUserId())
+							.buildResponse();
 				}
 			}
 
@@ -134,7 +135,7 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 					socialsAssociate.getUsername());
 
 			LoginCredential loginCredential =
-					new LoginCredential(socialsAssociate.getUsername(), "", AuthLoginType.SOCIALSIGNON);
+					new LoginCredential(socialsAssociate.getUsername(), "", AuthLoginType.SOCIAL_SIGN_ON.getMsg());
 			SocialProviderEntity socialSignOnProvider = socialSignOnProviderService.get(instId, provider);
 			loginCredential.setProvider(socialSignOnProvider.getProviderName());
 
@@ -227,7 +228,7 @@ public class SocialSignOnEndpoint extends AbstractSocialSignOnEndpoint {
 					socialsAssociate.getUsername());
 
 			LoginCredential loginCredential =
-					new LoginCredential(socialsAssociate.getUsername(), "", AuthLoginType.SOCIALSIGNON);
+					new LoginCredential(socialsAssociate.getUsername(), "", AuthLoginType.SOCIAL_SIGN_ON.getMsg());
 			SocialProviderEntity socialSignOnProvider = socialSignOnProviderService.get(instId, provider);
 			loginCredential.setProvider(socialSignOnProvider.getProviderName());
 

@@ -37,10 +37,15 @@ public class AuthJwtService {
 		Date expirationTime = currentDateTime.plusSeconds(expires).toDate();
 		log.trace("jwt subject : {} , expiration Time : {}", subject, expirationTime);
 
-		JWTClaimsSet jwtClaims = new JWTClaimsSet.Builder().issuer(issuer).subject(subject)
-				.jwtID(principal.getSession().getId()).issueTime(currentDateTime.toDate())
-				.expirationTime(expirationTime).claim("locale", userInfo.getLocale())
-				.claim("kid", HMAC512Service.DREAM_AUTH_JWK).claim("institution", userInfo.getInstId()).build();
+		JWTClaimsSet jwtClaims = new JWTClaimsSet.Builder().issuer(issuer)
+				.subject(subject)
+				.jwtID(principal.getSession().getId())
+				.issueTime(currentDateTime.toDate())
+				.expirationTime(expirationTime)
+				.claim("locale", userInfo.getLocale())
+				.claim("kid", HMAC512Service.DREAM_AUTH_JWK)
+				.claim("institution", userInfo.getInstId())
+				.build();
 
 		return signedJWT(jwtClaims);
 	}
@@ -56,8 +61,12 @@ public class AuthJwtService {
 		Date expirationTime = currentDateTime.plusSeconds(expires).toDate();
 		log.trace("jwt subject : {} , expiration Time : {}", subject, expirationTime);
 
-		JWTClaimsSet jwtClaims = new JWTClaimsSet.Builder().issuer(issuer).subject(subject).jwtID(AuthWebContext.genId())
-				.issueTime(currentDateTime.toDate()).expirationTime(expirationTime).build();
+		JWTClaimsSet jwtClaims = new JWTClaimsSet.Builder().issuer(issuer)
+				.subject(subject)
+				.jwtID(AuthWebContext.genId())
+				.issueTime(currentDateTime.toDate())
+				.expirationTime(expirationTime)
+				.build();
 
 		return signedJWT(jwtClaims);
 	}

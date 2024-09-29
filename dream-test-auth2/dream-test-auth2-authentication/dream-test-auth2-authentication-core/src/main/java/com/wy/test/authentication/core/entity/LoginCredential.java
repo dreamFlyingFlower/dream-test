@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import com.wy.test.core.constant.ConstAuthWeb;
 
-import dream.flying.flower.framework.web.enums.AuthLoginType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,7 +36,8 @@ public class LoginCredential implements Authentication {
 
 	private String remeberMe;
 
-	private AuthLoginType loginType;
+	@Schema(description = "认证类型")
+	private String authType;
 
 	private String jwtToken;
 
@@ -62,10 +63,10 @@ public class LoginCredential implements Authentication {
 	/**
 	 * BasicAuthentication.
 	 */
-	public LoginCredential(String username, String password, AuthLoginType loginType) {
+	public LoginCredential(String username, String password, String authType) {
 		this.username = username;
 		this.password = password;
-		this.loginType = loginType;
+		this.authType = authType;
 	}
 
 	@Override

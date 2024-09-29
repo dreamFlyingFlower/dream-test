@@ -171,7 +171,7 @@ public class ConsumerEndpoint {
 		log.debug("assertion.getSubject().getNameID().getValue() ", username);
 
 		log.debug("assertion.getID() ", assertion.getAuthnStatements());
-		LoginCredential loginCredential = new LoginCredential(username, "", AuthLoginType.SAMLTRUST);
+		LoginCredential loginCredential = new LoginCredential(username, "", AuthLoginType.SAML_TRUST.getMsg());
 
 		Authentication authentication = authenticationProvider.authenticate(loginCredential, true);
 		if (authentication == null) {
