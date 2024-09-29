@@ -46,7 +46,8 @@ public class TrustedAuthenticationProvider extends AbstractAuthenticationProvide
 			authenticationRealm.getPasswordPolicyValidator().applyPasswordPolicy(loadeduserInfo);
 			Authentication authentication = createOnlineTicket(loginCredential, loadeduserInfo);
 
-			authenticationRealm.insertLoginHistory(loadeduserInfo, loginCredential.getAuthLoginType(),
+			authenticationRealm.insertLoginHistory(loadeduserInfo, loginCredential
+					.getLoginType(),
 					loginCredential.getProvider(), loginCredential.getCode(), loginCredential.getMessage());
 
 			return authentication;

@@ -1,7 +1,6 @@
 package com.wy.test.core.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 import com.wy.test.core.enums.StoreType;
 
@@ -16,7 +15,6 @@ import lombok.Data;
  */
 @Data
 @ConfigurationProperties("dream.auth.server")
-@Configuration
 public class DreamAuthServerProperties {
 
 	private String scheme;
@@ -37,6 +35,9 @@ public class DreamAuthServerProperties {
 
 	private String authzUri;
 
+	/**
+	 * CAS未登录时跳转地址
+	 */
 	private String frontendUri = "http://sso.dream.top:4200";
 
 	private Integer frontendPort = 4200;

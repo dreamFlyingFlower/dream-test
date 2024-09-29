@@ -3,7 +3,6 @@ package com.wy.test.core.properties;
 import java.util.List;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 import com.wy.test.core.enums.LoginType;
 
@@ -18,7 +17,6 @@ import lombok.Data;
  */
 @Data
 @ConfigurationProperties("dream.auth.login")
-@Configuration
 public class DreamAuthLoginProperties {
 
 	private LoginType loginType = LoginType.NORMAL_MOBILE;

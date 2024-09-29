@@ -27,7 +27,7 @@ import com.wy.test.protocol.saml2.saml20.binding.BindingAdapter;
 import com.wy.test.protocol.saml2.saml20.binding.ExtractBindingAdapter;
 import com.wy.test.protocol.saml2.saml20.xml.SAML2ValidatorSuite;
 
-import dream.flying.flower.framework.web.crypto.keystore.KeyStoreHelpers;
+import dream.flying.flower.framework.crypto.keystore.KeyStoreHelpers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

@@ -16,7 +16,7 @@ import com.nimbusds.jwt.PlainJWT;
 import com.nimbusds.jwt.SignedJWT;
 import com.wy.test.core.web.AuthWebContext;
 
-import dream.flying.flower.framework.web.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
+import dream.flying.flower.framework.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

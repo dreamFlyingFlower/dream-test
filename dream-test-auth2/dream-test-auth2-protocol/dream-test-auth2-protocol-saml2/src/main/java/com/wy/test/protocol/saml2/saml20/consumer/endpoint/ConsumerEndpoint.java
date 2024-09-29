@@ -56,7 +56,7 @@ import com.wy.test.protocol.saml2.saml20.consumer.spring.ServiceProviderAuthenti
 import com.wy.test.protocol.saml2.saml20.provider.xml.AuthnResponseGenerator;
 import com.wy.test.protocol.saml2.saml20.xml.SAML2ValidatorSuite;
 
-import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.crypto.keystore.KeyStoreLoader;
 import dream.flying.flower.framework.web.enums.AuthLoginType;
 import lombok.extern.slf4j.Slf4j;
 

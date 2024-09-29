@@ -1,7 +1,6 @@
 package com.wy.test.core.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 import lombok.Data;
 
@@ -13,7 +12,6 @@ import lombok.Data;
  * @git {@link https://github.com/dreamFlyingFlower}
  */
 @Data
-@Configuration
 @ConfigurationProperties("dream.auth.swagger")
 public class DreamAuthSwaggerProperties {
 

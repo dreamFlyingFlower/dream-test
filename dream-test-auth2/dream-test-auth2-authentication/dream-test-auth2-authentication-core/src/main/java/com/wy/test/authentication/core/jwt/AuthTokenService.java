@@ -10,7 +10,7 @@ import com.wy.test.core.cache.MomentaryService;
 import com.wy.test.core.properties.DreamAuthJwkProperties;
 import com.wy.test.core.web.AuthWebContext;
 
-import dream.flying.flower.framework.web.crypto.jwt.HMAC512Service;
+import dream.flying.flower.framework.crypto.jwt.HMAC512Service;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

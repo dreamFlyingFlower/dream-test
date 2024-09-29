@@ -8,10 +8,10 @@ import java.util.TimeZone;
 
 import org.apache.commons.codec.binary.Hex;
 
-import com.wy.test.authentication.otp.password.onetimepwd.algorithm.TimeBasedOTP;
+import com.wy.test.authentication.otp.onetimepwd.algorithm.TimeBasedOTP;
 
 import dream.flying.flower.binary.HexHelper;
-import dream.flying.flower.framework.core.crypto.Base32Helpers;
+import dream.flying.flower.framework.crypto.helper.Base32Helpers;
 
 public class TimeBasedOTPTest {
 

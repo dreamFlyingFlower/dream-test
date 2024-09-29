@@ -43,9 +43,9 @@ import com.wy.test.protocol.oauth2.provider.token.TokenStore;
 import com.wy.test.protocol.oauth2.provider.token.store.JwtAccessTokenConverter;
 import com.wy.test.protocol.oauth2.provider.token.store.TokenStoreFactory;
 
-import dream.flying.flower.framework.web.crypto.jose.keystore.JWKSetKeyStore;
-import dream.flying.flower.framework.web.crypto.jwt.encryption.DefaultJwtEncryptionAndDecryptionHandler;
-import dream.flying.flower.framework.web.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
+import dream.flying.flower.framework.crypto.jose.keystore.JWKSetKeyStore;
+import dream.flying.flower.framework.crypto.jwt.encryption.DefaultJwtEncryptionAndDecryptionHandler;
+import dream.flying.flower.framework.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
 import lombok.extern.slf4j.Slf4j;
 
 /**

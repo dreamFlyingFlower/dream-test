@@ -32,7 +32,7 @@ import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.query.AppQuery;
 import com.wy.test.core.vo.AppVO;
 
-import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
+import dream.flying.flower.framework.crypto.helper.ReciprocalHelpers;
 import dream.flying.flower.generator.GeneratorStrategyContext;
 import lombok.extern.slf4j.Slf4j;
 

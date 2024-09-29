@@ -13,11 +13,11 @@ public class AuthenticationProviderFactory extends AbstractAuthenticationProvide
 
 	@Override
 	public Authentication authenticate(LoginCredential authentication) {
-		if (authentication.getAuthLoginType().getMsg().equalsIgnoreCase("trusted")) {
+		if (authentication.getLoginType().getMsg().equalsIgnoreCase("trusted")) {
 			// risk remove
 			return null;
 		}
-		AbstractAuthenticationProvider provider = providers.get(authentication.getAuthLoginType() + PROVIDER_SUFFIX);
+		AbstractAuthenticationProvider provider = providers.get(authentication.getLoginType() + PROVIDER_SUFFIX);
 
 		return provider == null ? null : provider.doAuthenticate(authentication);
 	}

@@ -1,7 +1,6 @@
 package com.wy.test.core.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -16,7 +15,6 @@ import lombok.Data;
  */
 @Data
 @ConfigurationProperties("dream.auth.saml")
-@Configuration
 public class DreamAuthSamlProperties {
 
 	private int maxParserPoolSize = 2;

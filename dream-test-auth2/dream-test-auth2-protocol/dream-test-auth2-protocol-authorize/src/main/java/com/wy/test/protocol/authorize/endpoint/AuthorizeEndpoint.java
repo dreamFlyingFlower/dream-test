@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wy.test.core.constant.ConstProtocols;
 import com.wy.test.core.constant.ConstAuthWeb;
+import com.wy.test.core.constant.ConstProtocols;
 import com.wy.test.core.vo.AppVO;
 import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.persistence.service.AppCasDetailService;

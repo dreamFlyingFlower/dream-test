@@ -3,6 +3,8 @@ package com.wy.test.core.persistence.ldap;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 
+import com.wy.test.core.ldap.ActiveDirectoryHelpers;
+
 public class ActiveDirectoryHelpersTest {
 
 	public static void main(String[] args) throws Exception {

@@ -35,7 +35,7 @@ import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.protocol.saml2.saml.common.TrustResolver;
 import com.wy.test.protocol.saml2.saml20.metadata.MetadataGenerator;
 
-import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.crypto.keystore.KeyStoreLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 

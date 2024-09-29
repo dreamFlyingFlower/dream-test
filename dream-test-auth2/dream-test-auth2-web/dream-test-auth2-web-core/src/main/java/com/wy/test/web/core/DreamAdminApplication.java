@@ -15,17 +15,23 @@ import com.wy.test.core.web.InitializeContext;
 
 import lombok.extern.slf4j.Slf4j;
 
-@SpringBootApplication(scanBasePackages = { "com.wy.test.core.web", "com.wy.test.persistence",
-		"com.wy.test.authentication.core", "com.wy.test.configuration", "com.wy.test.core.convert",
+@SpringBootApplication(scanBasePackages = { 
+		// 基础数据
+		"com.wy.test.core", "com.wy.test.persistence",
+		// 验证码
+		"com.wy.test.authentication.captcha",
+		// social
+		"com.wy.test.authentication.social",
+		"com.wy.test.authentication.core",
 		"com.wy.test.provision", "com.wy.test.web.core" })
 @MapperScan("com.wy.test.persistence.mapper")
 @Slf4j
-public class DreamTestApplication extends SpringBootServletInitializer {
+public class DreamAdminApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		log.info("Start dream Application ...");
 
-		ConfigurableApplicationContext applicationContext = SpringApplication.run(DreamTestApplication.class, args);
+		ConfigurableApplicationContext applicationContext = SpringApplication.run(DreamAdminApplication.class, args);
 		InitializeContext initWebContext = new InitializeContext(applicationContext);
 		try {
 			initWebContext.init(null);
@@ -39,6 +45,6 @@ public class DreamTestApplication extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(DreamTestApplication.class);
+		return application.sources(DreamAdminApplication.class);
 	}
 }

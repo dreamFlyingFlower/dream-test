@@ -41,6 +41,7 @@ import com.wy.test.persistence.service.SocialAssociateService;
 import com.wy.test.persistence.service.UserService;
 
 import dream.flying.flower.framework.web.enums.AuthLoginType;
+import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -76,18 +77,17 @@ public class LoginEntryPoint {
 	private final AbstractRemeberMeManager remeberMeManager;
 
 	/**
-	 * init login
-	 * 
-	 * @return
+	 * 获得登录配置
 	 */
 	@Operation(summary = "登录接口", description = "用户登录地址", method = "GET")
 	@GetMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> get(@RequestParam(value = "remember_me", required = false) String rememberMeJwt) {
+	public ResponseEntity<?>
+			get(@ApiParam("是否记住用户名密码") @RequestParam(value = "remember_me", required = false) String rememberMe) {
 		log.debug("/get.");
 		// Remember Me
-		if (StringUtils.isNotBlank(rememberMeJwt) && authTokenService.validateJwtToken(rememberMeJwt)) {
+		if (StringUtils.isNotBlank(rememberMe) && authTokenService.validateJwtToken(rememberMe)) {
 			try {
-				RemeberMe remeberMe = remeberMeManager.resolve(rememberMeJwt);
+				RemeberMe remeberMe = remeberMeManager.resolve(rememberMe);
 				if (remeberMe != null) {
 					LoginCredential credential = new LoginCredential();
 					String remeberMeJwt = remeberMeManager.updateRemeberMe(remeberMe);
@@ -149,7 +149,7 @@ public class LoginEntryPoint {
 		// dream存储的手机号
 		String mobile = credential.getMobile();
 		// 社交服务类型
-		AuthLoginType authType = credential.getAuthLoginType();
+		AuthLoginType authType = credential.getLoginType();
 
 		UserEntity userInfo = userInfoService.findByEmailMobile(mobile);
 		// 验证码验证是否合法
@@ -192,7 +192,7 @@ public class LoginEntryPoint {
 			@RequestBody LoginCredential credential) {
 		ResultResponse<AuthJwt> authJwtMessage = new ResultResponse<>(ResultResponse.FAIL);
 		if (authTokenService.validateJwtToken(credential.getState())) {
-			AuthLoginType authType = credential.getAuthLoginType();
+			AuthLoginType authType = credential.getLoginType();
 			log.debug("Login AuthN Type  " + authType);
 			if (null != authType) {
 				Authentication authentication = authenticationProvider.authenticate(credential);
@@ -210,8 +210,8 @@ public class LoginEntryPoint {
 
 				} else {
 					// fail
-					String errorMsg = AuthWebContext.getAttribute(ConstAuthWeb.LOGIN_ERROR_SESSION_MESSAGE) == null ? ""
-							: AuthWebContext.getAttribute(ConstAuthWeb.LOGIN_ERROR_SESSION_MESSAGE).toString();
+					String errorMsg = AuthWebContext.getAttribute(ConstAuthWeb.LOGIN_ERROR_SESSION_MESSAGE) == null
+							? "" : AuthWebContext.getAttribute(ConstAuthWeb.LOGIN_ERROR_SESSION_MESSAGE).toString();
 					authJwtMessage.setMessage(errorMsg);
 					log.debug("login fail , message {}", errorMsg);
 				}

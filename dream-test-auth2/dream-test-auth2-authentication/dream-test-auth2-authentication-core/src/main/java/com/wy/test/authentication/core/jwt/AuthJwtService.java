@@ -14,7 +14,7 @@ import com.wy.test.authentication.core.entity.SignPrincipal;
 import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.AuthWebContext;
 
-import dream.flying.flower.framework.web.crypto.jwt.HMAC512Service;
+import dream.flying.flower.framework.crypto.jwt.HMAC512Service;
 import dream.flying.flower.lang.StrHelper;
 import lombok.extern.slf4j.Slf4j;
 

@@ -22,7 +22,7 @@ import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.AppJwtDetailVO;
 import com.wy.test.persistence.service.AppJwtDetailService;
 
-import dream.flying.flower.framework.web.crypto.ReciprocalHelpers;
+import dream.flying.flower.framework.crypto.helper.ReciprocalHelpers;
 import dream.flying.flower.generator.GeneratorStrategyContext;
 import lombok.extern.slf4j.Slf4j;
 

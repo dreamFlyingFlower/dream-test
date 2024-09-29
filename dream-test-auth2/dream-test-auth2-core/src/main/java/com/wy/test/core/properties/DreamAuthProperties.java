@@ -1,7 +1,6 @@
 package com.wy.test.core.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 import lombok.Data;
 
@@ -14,7 +13,6 @@ import lombok.Data;
  */
 @Data
 @ConfigurationProperties("dream.auth")
-@Configuration
 public class DreamAuthProperties {
 
 	private boolean kafkaSupported = false;

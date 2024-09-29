@@ -36,7 +36,7 @@ public class LoginCredential implements Authentication {
 
 	private String remeberMe;
 
-	private AuthLoginType authLoginType;
+	private AuthLoginType loginType;
 
 	private String jwtToken;
 
@@ -62,10 +62,10 @@ public class LoginCredential implements Authentication {
 	/**
 	 * BasicAuthentication.
 	 */
-	public LoginCredential(String username, String password, AuthLoginType authLoginType) {
+	public LoginCredential(String username, String password, AuthLoginType loginType) {
 		this.username = username;
 		this.password = password;
-		this.authLoginType = authLoginType;
+		this.loginType = loginType;
 	}
 
 	@Override

@@ -3,10 +3,10 @@ package com.wy.test.otp.algorithm;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
-import com.wy.test.authentication.otp.password.onetimepwd.algorithm.HOTP;
-import com.wy.test.authentication.otp.password.onetimepwd.algorithm.HmacOTP;
+import com.wy.test.authentication.otp.onetimepwd.algorithm.HOTP;
+import com.wy.test.authentication.otp.onetimepwd.algorithm.HmacOTP;
 
-import dream.flying.flower.framework.core.crypto.Base32Helpers;
+import dream.flying.flower.framework.crypto.helper.Base32Helpers;
 
 public class HmacOTPTest {
 

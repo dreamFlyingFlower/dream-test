@@ -34,8 +34,8 @@ import com.wy.test.protocol.saml2.saml.common.TrustResolver;
 import com.wy.test.protocol.saml2.saml20.binding.BindingAdapter;
 import com.wy.test.protocol.saml2.saml20.binding.ExtractBindingAdapter;
 
-import dream.flying.flower.framework.web.crypto.keystore.KeyStoreHelpers;
-import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.crypto.keystore.KeyStoreHelpers;
+import dream.flying.flower.framework.crypto.keystore.KeyStoreLoader;
 
 public class PostBindingAdapter implements BindingAdapter, InitializingBean {
 

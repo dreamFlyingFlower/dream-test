@@ -208,11 +208,11 @@ public abstract class AbstractAuthenticationProvider {
 			throw new BadCredentialsException(i18nMessage);
 		} else {
 			if (userInfo.getIsLocked() == ConstStatus.LOCK) {
-				authenticationRealm.insertLoginHistory(userInfo, loginCredential.getAuthLoginType(),
+				authenticationRealm.insertLoginHistory(userInfo, loginCredential.getLoginType(),
 						loginCredential.getProvider(), loginCredential.getCode(),
 						ConstAuthWeb.LOGIN_RESULT.USER_LOCKED);
 			} else if (userInfo.getStatus() != ConstStatus.ACTIVE) {
-				authenticationRealm.insertLoginHistory(userInfo, loginCredential.getAuthLoginType(),
+				authenticationRealm.insertLoginHistory(userInfo, loginCredential.getLoginType(),
 						loginCredential.getProvider(), loginCredential.getCode(),
 						ConstAuthWeb.LOGIN_RESULT.USER_INACTIVE);
 			}

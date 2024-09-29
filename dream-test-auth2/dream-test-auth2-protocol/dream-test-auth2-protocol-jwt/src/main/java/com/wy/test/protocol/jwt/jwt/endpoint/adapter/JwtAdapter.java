@@ -24,8 +24,8 @@ import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.vo.AppJwtDetailVO;
 import com.wy.test.protocol.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 
-import dream.flying.flower.framework.web.crypto.jwt.encryption.DefaultJwtEncryptionAndDecryptionHandler;
-import dream.flying.flower.framework.web.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
+import dream.flying.flower.framework.crypto.jwt.encryption.DefaultJwtEncryptionAndDecryptionHandler;
+import dream.flying.flower.framework.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
 
 public class JwtAdapter extends AbstractAuthorizeAdapter {
 

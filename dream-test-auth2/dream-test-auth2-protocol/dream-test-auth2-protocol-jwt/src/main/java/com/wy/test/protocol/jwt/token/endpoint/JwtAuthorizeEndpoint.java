@@ -29,7 +29,7 @@ import com.wy.test.protocol.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 import com.wy.test.protocol.jwt.jwt.endpoint.adapter.JwtAdapter;
 
 import dream.flying.flower.framework.core.enums.BooleanEnum;
-import dream.flying.flower.framework.web.crypto.jose.keystore.JWKSetKeyStore;
+import dream.flying.flower.framework.crypto.jose.keystore.JWKSetKeyStore;
 import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

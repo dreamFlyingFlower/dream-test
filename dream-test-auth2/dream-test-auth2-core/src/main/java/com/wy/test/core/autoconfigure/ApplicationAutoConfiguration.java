@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -37,7 +38,7 @@ import com.wy.test.core.repository.InstitutionsRepository;
 import com.wy.test.core.repository.LocalizationRepository;
 import com.wy.test.core.web.AuthWebContext;
 
-import dream.flying.flower.framework.web.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.crypto.keystore.KeyStoreLoader;
 import dream.flying.flower.generator.GeneratorStrategyContext;
 import dream.flying.flower.generator.SnowFlakeGenerator;
 import lombok.extern.slf4j.Slf4j;
@@ -50,21 +51,25 @@ import lombok.extern.slf4j.Slf4j;
 public class ApplicationAutoConfiguration implements InitializingBean {
 
 	@Bean
+	@ConditionalOnMissingBean
 	PasswordReciprocal passwordReciprocal() {
 		return new PasswordReciprocal();
 	}
 
 	@Bean
+	@ConditionalOnMissingBean
 	DataSourceTransactionManager transactionManager(DataSource dataSource) {
 		return new DataSourceTransactionManager(dataSource);
 	}
 
 	@Bean
+	@ConditionalOnMissingBean
 	InstitutionsRepository institutionsRepository(JdbcTemplate jdbcTemplate) {
 		return new InstitutionsRepository(jdbcTemplate);
 	}
 
 	@Bean
+	@ConditionalOnMissingBean
 	LocalizationRepository localizationRepository(JdbcTemplate jdbcTemplate,
 			InstitutionsRepository institutionsRepository) {
 		return new LocalizationRepository(jdbcTemplate, institutionsRepository);
