@@ -3,6 +3,7 @@ package com.wy.test.authentication.provider.provider;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,18 +43,25 @@ public abstract class AbstractAuthenticationProvider {
 
 	public static final String PROVIDER_SUFFIX = "AuthenticationProvider";
 
+	@Autowired
 	protected DreamAuthServerProperties dreamServerProperties;
 
-	protected DreamAuthLoginProperties dreamLoginProperties;
+	@Autowired
+	protected DreamAuthLoginProperties dreamAuthLoginProperties;
 
+	@Autowired
 	protected AbstractAuthenticationRealm authenticationRealm;
 
+	@Autowired
 	protected AbstractOtpAuthn tfaOtpAuthn;
 
+	@Autowired
 	protected MailOtpAuthnService otpAuthnService;
 
+	@Autowired
 	protected SessionManager sessionManager;
 
+	@Autowired
 	protected AuthTokenService authTokenService;
 
 	public static List<GrantedAuthority> grantedAdministratorsAuthoritys = new ArrayList<GrantedAuthority>();

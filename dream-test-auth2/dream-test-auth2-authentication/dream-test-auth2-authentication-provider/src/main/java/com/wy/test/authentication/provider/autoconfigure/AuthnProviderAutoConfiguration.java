@@ -25,6 +25,13 @@ import com.wy.test.core.repository.PasswordPolicyValidator;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 自动配置登录认证提供者
+ *
+ * @author 飞花梦影
+ * @date 2024-09-30 10:44:11
+ * @git {@link https://github.com/dreamFlyingFlower}
+ */
 @AutoConfiguration
 @Slf4j
 public class AuthnProviderAutoConfiguration implements InitializingBean {
@@ -37,7 +44,6 @@ public class AuthnProviderAutoConfiguration implements InitializingBean {
 		authenticationProvider.addAuthenticationProvider(normalAuthenticationProvider);
 		authenticationProvider.addAuthenticationProvider(mobileAuthenticationProvider);
 		authenticationProvider.addAuthenticationProvider(trustedAuthenticationProvider);
-
 		return authenticationProvider;
 	}
 

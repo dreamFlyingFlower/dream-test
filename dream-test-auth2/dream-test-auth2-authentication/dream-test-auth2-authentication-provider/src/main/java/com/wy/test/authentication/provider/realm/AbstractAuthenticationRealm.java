@@ -3,6 +3,7 @@ package com.wy.test.authentication.provider.realm;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,14 +31,19 @@ public abstract class AbstractAuthenticationRealm {
 
 	protected JdbcTemplate jdbcTemplate;
 
+	@Autowired
 	protected PasswordPolicyValidator passwordPolicyValidator;
 
+	@Autowired
 	protected LoginService loginService;
 
+	@Autowired
 	protected LoginHistoryRepository loginHistoryRepository;
 
+	@Autowired
 	protected UserService userService;
 
+	@Autowired
 	protected LdapAuthenticationRealmService ldapAuthenticationRealmService;
 
 	public AbstractAuthenticationRealm() {

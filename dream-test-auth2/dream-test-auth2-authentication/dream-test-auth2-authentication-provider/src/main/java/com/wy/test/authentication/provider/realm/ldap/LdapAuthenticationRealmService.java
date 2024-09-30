@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.stereotype.Component;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -14,6 +16,7 @@ import com.wy.test.core.ldap.LdapHelpers;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.persistence.service.LdapContextService;
 
+@Component
 public class LdapAuthenticationRealmService {
 
 	protected static final Cache<String, LdapAuthenticationRealm> ldapRealmStore =
@@ -28,8 +31,9 @@ public class LdapAuthenticationRealmService {
 	public LdapAuthenticationRealm getByInstId(String instId) {
 		LdapAuthenticationRealm authenticationRealm = ldapRealmStore.getIfPresent(instId);
 		if (authenticationRealm == null) {
-			List<LdapContextEntity> ldapContexts = ldapContextService.list(new LambdaQueryWrapper<LdapContextEntity>()
-					.eq(LdapContextEntity::getInstId, instId).eq(LdapContextEntity::getStatus, 1));
+			List<LdapContextEntity> ldapContexts = ldapContextService
+					.list(new LambdaQueryWrapper<LdapContextEntity>().eq(LdapContextEntity::getInstId, instId)
+							.eq(LdapContextEntity::getStatus, 1));
 			authenticationRealm = new LdapAuthenticationRealm(false);
 			if (ldapContexts != null && ldapContexts.size() > 0) {
 				authenticationRealm.setLdapSupport(true);

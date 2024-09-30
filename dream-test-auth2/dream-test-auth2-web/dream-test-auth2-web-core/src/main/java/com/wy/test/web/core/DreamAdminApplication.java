@@ -15,15 +15,16 @@ import com.wy.test.core.web.InitializeContext;
 
 import lombok.extern.slf4j.Slf4j;
 
-@SpringBootApplication(scanBasePackages = { 
+@SpringBootApplication(scanBasePackages = {
 		// 基础数据
 		"com.wy.test.core", "com.wy.test.persistence",
 		// 验证码
 		"com.wy.test.authentication.captcha",
 		// social
 		"com.wy.test.authentication.social",
-		"com.wy.test.authentication.core",
-		"com.wy.test.provision", "com.wy.test.web.core" })
+		// 认证服务提供者
+		"com.wy.test.authentication.provider", "com.wy.test.authentication.core", "com.wy.test.provision",
+		"com.wy.test.web.core" })
 @MapperScan("com.wy.test.persistence.mapper")
 @Slf4j
 public class DreamAdminApplication extends SpringBootServletInitializer {

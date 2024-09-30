@@ -22,7 +22,11 @@ import dream.flying.flower.framework.web.enums.AuthLoginType;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * database Authentication provider.
+ * 本地数据库用户名密码认证服务
+ *
+ * @author 飞花梦影
+ * @date 2024-09-30 13:46:14
+ * @git {@link https://github.com/dreamFlyingFlower}
  */
 @Slf4j
 public class NormalAuthenticationProvider extends AbstractAuthenticationProvider {
@@ -55,7 +59,7 @@ public class NormalAuthenticationProvider extends AbstractAuthenticationProvider
 
 			InstitutionEntity inst = (InstitutionEntity) AuthWebContext.getAttribute(ConstAuthWeb.CURRENT_INST);
 
-			if (dreamLoginProperties.getCaptcha().isEnabled()) {
+			if (dreamAuthLoginProperties.getCaptcha().isEnabled()) {
 				captchaValid(loginCredential.getState(), loginCredential.getCaptcha());
 
 			} else if (!inst.getCaptcha().equalsIgnoreCase("NONE")) {
@@ -87,10 +91,12 @@ public class NormalAuthenticationProvider extends AbstractAuthenticationProvider
 			authenticationRealm.insertLoginHistory(userInfo, AuthLoginType.LOCAL, "", "xe00000004",
 					ConstAuthWeb.LOGIN_RESULT.SUCCESS);
 		} catch (AuthenticationException e) {
+			e.printStackTrace();
 			log.error("Failed to authenticate user {} via {}: {}",
 					new Object[] { loginCredential.getPrincipal(), getProviderName(), e.getMessage() });
 			AuthWebContext.setAttribute(ConstAuthWeb.LOGIN_ERROR_SESSION_MESSAGE, e.getMessage());
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error("Login error Unexpected exception in {} authentication:\n{}", getProviderName(), e.getMessage());
 		}
 

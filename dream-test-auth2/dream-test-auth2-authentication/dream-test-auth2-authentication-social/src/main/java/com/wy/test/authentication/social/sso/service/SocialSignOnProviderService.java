@@ -1,15 +1,11 @@
 package com.wy.test.authentication.social.sso.service;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.wy.test.authentication.social.request.AuthDreamRequest;
@@ -20,8 +16,9 @@ import com.wy.test.authentication.social.sso.token.RedisTokenStore;
 import com.wy.test.core.constant.ConstTimeInterval;
 import com.wy.test.core.entity.SocialProviderEntity;
 import com.wy.test.core.entity.SocialsProviderLogin;
-import com.wy.test.core.password.PasswordReciprocal;
+import com.wy.test.persistence.mapper.SocialProviderMapper;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.model.AuthResponse;
@@ -52,23 +49,18 @@ import me.zhyd.oauth.request.AuthWeChatOpenRequest;
 import me.zhyd.oauth.request.AuthWeiboRequest;
 
 @Slf4j
+@RequiredArgsConstructor
 public class SocialSignOnProviderService {
 
-	private static final String DEFAULT_SELECT_STATEMENT =
-			"select * from auth_social_provider where inst_id = ? and status = 1  order by sort_index";
+	private final SocialProviderMapper socialProviderMapper;
+
+	private final RedisTokenStore redisTokenStore;
 
 	protected static final Cache<String, SocialsProviderLogin> socialsProviderLoginStore =
 			Caffeine.newBuilder().expireAfterWrite(ConstTimeInterval.ONE_HOUR, TimeUnit.MINUTES).build();
 
-	HashMap<String, SocialProviderEntity> socialSignOnProviderMaps = new HashMap<String, SocialProviderEntity>();
-
-	private final JdbcTemplate jdbcTemplate;
-
-	RedisTokenStore redisTokenStore;
-
-	public SocialSignOnProviderService(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
+	protected HashMap<String, SocialProviderEntity> socialSignOnProviderMaps =
+			new HashMap<String, SocialProviderEntity>();
 
 	public SocialProviderEntity get(String instId, String provider) {
 		return socialSignOnProviderMaps.get(instId + "_" + provider);
@@ -92,9 +84,11 @@ public class SocialSignOnProviderService {
 
 	public AuthRequest getAuthRequest(String instId, String provider, String baseUri) throws Exception {
 		AuthRequest authRequest = null;
-		AuthConfig authConfig = AuthConfig.builder().clientId(this.get(instId, provider).getClientId())
+		AuthConfig authConfig = AuthConfig.builder()
+				.clientId(this.get(instId, provider).getClientId())
 				.clientSecret(this.get(instId, provider).getClientSecret())
-				.redirectUri(getRedirectUri(baseUri, provider)).build();
+				.redirectUri(getRedirectUri(baseUri, provider))
+				.build();
 
 		if (provider.equalsIgnoreCase("WeChatOpen")) {
 			authRequest = new AuthWeChatOpenRequest(authConfig);
@@ -193,15 +187,17 @@ public class SocialSignOnProviderService {
 	public SocialsProviderLogin loadSocials(String instId) {
 		SocialsProviderLogin socialsLogin = socialsProviderLoginStore.getIfPresent(instId);
 		if (socialsLogin == null) {
-			List<SocialProviderEntity> listSocialsProvider =
-					jdbcTemplate.query(DEFAULT_SELECT_STATEMENT, new SocialsProviderRowMapper(), instId);
+			List<SocialProviderEntity> listSocialsProvider = socialProviderMapper
+					.selectList(new LambdaQueryWrapper<SocialProviderEntity>().eq(SocialProviderEntity::getStatus, 1)
+							.eq(SocialProviderEntity::getInstId, instId)
+							.orderByAsc(SocialProviderEntity::getSortIndex));
+
 			log.trace("query SocialsProvider " + listSocialsProvider);
 
 			List<SocialProviderEntity> socialSignOnProviders = new ArrayList<SocialProviderEntity>();
 			socialsLogin = new SocialsProviderLogin(socialSignOnProviders);
 			for (SocialProviderEntity socialsProvider : listSocialsProvider) {
-				log.debug("Social Provider {} ({})", socialsProvider.getProvider(),
-						socialsProvider.getProviderName());
+				log.debug("Social Provider {} ({})", socialsProvider.getProvider(), socialsProvider.getProviderName());
 
 				if (socialsProvider.getDisplay().equals("true")) {
 					socialSignOnProviders.add(new SocialProviderEntity(socialsProvider));
@@ -220,32 +216,5 @@ public class SocialSignOnProviderService {
 			socialsProviderLoginStore.put(instId, socialsLogin);
 		}
 		return socialsLogin;
-	}
-
-	private final class SocialsProviderRowMapper implements RowMapper<SocialProviderEntity> {
-
-		@Override
-		public SocialProviderEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
-			SocialProviderEntity socialsProvider = new SocialProviderEntity();
-			socialsProvider.setId(rs.getString("id"));
-			socialsProvider.setProvider(rs.getString("provider"));
-			socialsProvider.setProviderName(rs.getString("provider_name"));
-			socialsProvider.setIcon(rs.getString("icon"));
-			socialsProvider.setClientId(rs.getString("client_id"));
-			String clientSecret = rs.getString("client_secret");
-			clientSecret = PasswordReciprocal.getInstance().decoder(clientSecret);
-			socialsProvider.setClientSecret(clientSecret);
-			socialsProvider.setAgentId(rs.getString("agent_id"));
-			socialsProvider.setDisplay(rs.getString("display"));
-			socialsProvider.setSortIndex(rs.getInt("sort_index"));
-			socialsProvider.setScanCode(rs.getString("scan_code"));
-			socialsProvider.setStatus(rs.getString("status"));
-			socialsProvider.setInstId(rs.getString("inst_id"));
-			return socialsProvider;
-		}
-	}
-
-	public void setRedisTokenStore(RedisTokenStore redisTokenStore) {
-		this.redisTokenStore = redisTokenStore;
 	}
 }

@@ -43,12 +43,12 @@ import com.wy.test.persistence.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 
 @AutoConfiguration
-@ComponentScan(basePackages = { "com.wy.dream.authn", "com.wy.dream.configuration", "com.wy.dream.domain",
-		"com.wy.dream.domain.apps", "com.wy.dream.domain.userinfo", "com.wy.dream.api.v1.contorller",
-		"com.wy.dream.web.endpoint", "com.wy.dream.web.contorller", "com.wy.dream.web.interceptor",
-		"com.wy.dream.authz.endpoint", "com.wy.dream.authz.desktop.endpoint", "com.wy.dream.authz.exapi.endpoint",
-		"com.wy.dream.authz.formbased.endpoint", "com.wy.dream.authz.ltpa.endpoint",
-		"com.wy.dream.authz.token.endpoint" })
+@ComponentScan(basePackages = { "com.wy.test.authentication.provider", "com.wy.dream.authn",
+		"com.wy.dream.configuration", "com.wy.dream.domain", "com.wy.dream.domain.apps", "com.wy.dream.domain.userinfo",
+		"com.wy.dream.api.v1.contorller", "com.wy.dream.web.endpoint", "com.wy.dream.web.contorller",
+		"com.wy.dream.web.interceptor", "com.wy.dream.authz.endpoint", "com.wy.dream.authz.desktop.endpoint",
+		"com.wy.dream.authz.exapi.endpoint", "com.wy.dream.authz.formbased.endpoint",
+		"com.wy.dream.authz.ltpa.endpoint", "com.wy.dream.authz.token.endpoint" })
 @EnableConfigurationProperties(DreamAuthOtpProperties.class)
 @Slf4j
 public class DreamTestConfig implements InitializingBean {

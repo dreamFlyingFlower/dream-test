@@ -9,13 +9,14 @@ import org.joda.time.format.DateTimeFormat;
 import org.passay.PasswordData;
 import org.passay.PasswordValidator;
 import org.passay.RuleResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 
-import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.constant.ConstAuthWeb;
+import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.entity.ChangePassword;
 import com.wy.test.core.entity.PasswordPolicyEntity;
 import com.wy.test.core.entity.UserEntity;
@@ -32,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PasswordPolicyValidator {
 
+	@Autowired
 	PasswordPolicyRepository passwordPolicyRepository;
 
 	protected JdbcTemplate jdbcTemplate;
@@ -59,7 +61,6 @@ public class PasswordPolicyValidator {
 		this.messageSource = messageSource;
 		this.jdbcTemplate = jdbcTemplate;
 		this.passwordPolicyRepository = new PasswordPolicyRepository(jdbcTemplate);
-
 	}
 
 	/**
@@ -142,7 +143,8 @@ public class PasswordPolicyValidator {
 		}
 		// inactive
 		if (userInfo.getStatus() != ConstStatus.ACTIVE) {
-			throw new BadCredentialsException(userInfo.getUsername() + AuthWebContext.getI18nValue("login.error.inactive"));
+			throw new BadCredentialsException(
+					userInfo.getUsername() + AuthWebContext.getI18nValue("login.error.inactive"));
 		}
 
 		return true;
@@ -154,21 +156,24 @@ public class PasswordPolicyValidator {
 		DateTime currentdateTime = new DateTime();
 		// initial password need change
 		if (userInfo.getLoginCount() <= 0) {
-			AuthWebContext.getSession().setAttribute(ConstAuthWeb.CURRENT_USER_PASSWORD_SET_TYPE,
-					PasswordSetType.INITIAL_PASSWORD.ordinal());
+			AuthWebContext.getSession()
+					.setAttribute(ConstAuthWeb.CURRENT_USER_PASSWORD_SET_TYPE,
+							PasswordSetType.INITIAL_PASSWORD.ordinal());
 		}
 
 		if (userInfo.getPasswordSetType() != PasswordSetType.PASSWORD_NORMAL.ordinal()) {
-			AuthWebContext.getSession().setAttribute(ConstAuthWeb.CURRENT_USER_PASSWORD_SET_TYPE,
-					userInfo.getPasswordSetType());
+			AuthWebContext.getSession()
+					.setAttribute(ConstAuthWeb.CURRENT_USER_PASSWORD_SET_TYPE, userInfo.getPasswordSetType());
 			return;
 		} else {
-			AuthWebContext.getSession().setAttribute(ConstAuthWeb.CURRENT_USER_PASSWORD_SET_TYPE,
-					PasswordSetType.PASSWORD_NORMAL.ordinal());
+			AuthWebContext.getSession()
+					.setAttribute(ConstAuthWeb.CURRENT_USER_PASSWORD_SET_TYPE,
+							PasswordSetType.PASSWORD_NORMAL.ordinal());
 		}
 
 		/*
-		 * check password is Expired,Expiration is Expired date ,if Expiration equals 0,not need check
+		 * check password is Expired,Expiration is Expired date ,if Expiration equals
+		 * 0,not need check
 		 *
 		 */
 		if (passwordPolicy.getExpiration() > 0) {
@@ -183,8 +188,9 @@ public class PasswordPolicyValidator {
 					"password Last Set duration day {} , " + "password policy Expiration {} , " + "validate result {}",
 					intDuration, passwordPolicy.getExpiration(), intDuration <= passwordPolicy.getExpiration());
 			if (intDuration > passwordPolicy.getExpiration()) {
-				AuthWebContext.getSession().setAttribute(ConstAuthWeb.CURRENT_USER_PASSWORD_SET_TYPE,
-						PasswordSetType.PASSWORD_EXPIRED.ordinal());
+				AuthWebContext.getSession()
+						.setAttribute(ConstAuthWeb.CURRENT_USER_PASSWORD_SET_TYPE,
+								PasswordSetType.PASSWORD_EXPIRED.ordinal());
 			}
 		}
 

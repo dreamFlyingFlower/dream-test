@@ -14,6 +14,7 @@ import com.wy.test.authentication.social.sso.service.SocialSignOnProviderService
 import com.wy.test.authentication.social.sso.token.RedisTokenStore;
 import com.wy.test.core.entity.SocialProviderEntity;
 import com.wy.test.core.redis.RedisConnectionFactory;
+import com.wy.test.persistence.mapper.SocialProviderMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,15 +25,13 @@ public class SocialSignOnAutoConfiguration implements InitializingBean {
 
 	@Bean(name = "socialSignOnProviderService")
 	@ConditionalOnClass(SocialProviderEntity.class)
-	SocialSignOnProviderService socialSignOnProviderService(JdbcTemplate jdbcTemplate,
+	SocialSignOnProviderService socialSignOnProviderService(SocialProviderMapper socialProviderMapper,
 			RedisConnectionFactory redisConnFactory) throws IOException {
-		SocialSignOnProviderService socialSignOnProviderService = new SocialSignOnProviderService(jdbcTemplate);
+		RedisTokenStore redisTokenStore = new RedisTokenStore();
+		SocialSignOnProviderService socialSignOnProviderService =
+				new SocialSignOnProviderService(socialProviderMapper, redisTokenStore);
 		// load default Social Providers from database
 		socialSignOnProviderService.loadSocials("1");
-
-		RedisTokenStore redisTokenStore = new RedisTokenStore();
-		socialSignOnProviderService.setRedisTokenStore(redisTokenStore);
-
 		log.debug("SocialSignOnProviderService inited.");
 		return socialSignOnProviderService;
 	}

@@ -21,6 +21,7 @@ import org.passay.dictionary.DictionaryBuilder;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -29,6 +30,7 @@ import com.wy.test.core.entity.PasswordPolicyEntity;
 
 import lombok.extern.slf4j.Slf4j;
 
+@Component
 @Slf4j
 public class PasswordPolicyRepository {
 
