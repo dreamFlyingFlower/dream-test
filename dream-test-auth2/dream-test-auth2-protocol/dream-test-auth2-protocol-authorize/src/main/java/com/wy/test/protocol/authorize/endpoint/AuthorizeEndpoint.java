@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.wy.test.core.constant.ConstAuthView;
 import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.constant.ConstProtocols;
 import com.wy.test.core.vo.AppVO;
@@ -61,11 +62,13 @@ public class AuthorizeEndpoint extends AuthorizeBaseEndpoint {
 		return modelAndView;
 	}
 
-	@GetMapping("/authz/refused")
-	public ModelAndView refused() {
+	@GetMapping(ConstAuthView.AUTHZ_REFUSED)
+	public ModelAndView refused(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView("authorize/authorize_refused");
 		AppVO app = (AppVO) AuthWebContext.getAttribute(ConstAuthWeb.AUTHORIZE_SIGN_ON_APP);
 		app.transIconBase64();
+		// 删除Session缓存
+		AuthWebContext.removeAttribute(ConstAuthWeb.AUTHORIZE_SIGN_ON_APP);
 		modelAndView.addObject("model", app);
 		return modelAndView;
 	}

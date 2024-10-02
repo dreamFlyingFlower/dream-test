@@ -1,4 +1,4 @@
-package com.wy.test.protocol.oauth2.provider.endpoint;
+package com.wy.test.protocol.oauth2.endpoint;
 
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 

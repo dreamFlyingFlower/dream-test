@@ -3,8 +3,8 @@ package com.wy.test.protocol.oauth2.provider;
 import org.springframework.security.oauth2.common.exceptions.InvalidScopeException;
 
 import com.wy.test.core.entity.oauth2.ClientDetails;
-import com.wy.test.protocol.oauth2.provider.endpoint.AuthorizationEndpoint;
-import com.wy.test.protocol.oauth2.provider.endpoint.TokenEndpoint;
+import com.wy.test.protocol.oauth2.endpoint.AuthorizationEndpoint;
+import com.wy.test.protocol.oauth2.endpoint.TokenEndpoint;
 
 /**
  * Validation interface for OAuth2 requests to the {@link AuthorizationEndpoint}

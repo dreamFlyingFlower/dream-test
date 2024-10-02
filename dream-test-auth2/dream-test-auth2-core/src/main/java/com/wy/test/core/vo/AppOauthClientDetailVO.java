@@ -165,7 +165,7 @@ public class AppOauthClientDetailVO extends AppVO implements Serializable, Trans
 		this.setVisible(application.getVisible());
 
 		this.setIsAdapter(application.getIsAdapter());
-		this.setAdapter(application.getAdapter());
+		this.setAdapterClass(application.getAdapterClass());
 		this.setAdapterId(application.getAdapterId());
 		this.setAdapterName(application.getAdapterName());
 		this.setFrequently(application.getFrequently());

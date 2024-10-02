@@ -41,10 +41,10 @@ public class ExtendAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 		AppVO apps = getApp(id);
 		log.debug("" + apps);
 		if (BooleanEnum.isTrue(apps.getIsAdapter())) {
-			log.debug("Adapter {}", apps.getAdapter());
+			log.debug("Adapter {}", apps.getAdapterClass());
 			try {
 				AbstractAuthorizeAdapter adapter =
-						(AbstractAuthorizeAdapter) ReflectHelper.newInstance(apps.getAdapter());
+						(AbstractAuthorizeAdapter) ReflectHelper.newInstance(apps.getAdapterClass());
 				AccountEntity account = getAccounts(apps, currentUser);
 				if (apps.getCredential().equalsIgnoreCase(CredentialType.USER_DEFINED.name()) && account == null) {
 					return initCredentialView(id, "/authorize/api/" + id);

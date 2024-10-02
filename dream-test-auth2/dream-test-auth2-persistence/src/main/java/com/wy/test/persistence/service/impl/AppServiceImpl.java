@@ -37,7 +37,8 @@ public class AppServiceImpl extends AbstractServiceImpl<AppEntity, AppVO, AppQue
 
 	@Override
 	public boolean updateExtendAttr(AppEntity app) {
-		return lambdaUpdate().set(AppEntity::getExtendAttr, app.getExtendAttr()).eq(AppEntity::getId, app.getId())
+		return lambdaUpdate().set(AppEntity::getExtendAttr, app.getExtendAttr())
+				.eq(AppEntity::getId, app.getId())
 				.update();
 	}
 
@@ -57,14 +58,21 @@ public class AppServiceImpl extends AbstractServiceImpl<AppEntity, AppVO, AppQue
 		AppVO appDetails = null;
 		if (cached) {
 			appDetails = DETAILS_CACHE.getIfPresent(appId + DETAIL_SUFFIX);
-			if (appDetails == null) {
+			if (null == appDetails) {
 				AppEntity appEntity = this.getById(appId);
-				appDetails = baseConvert.convertt(appEntity);
-				DETAILS_CACHE.put(appId, appDetails);
+				// 没有指定App的访问权限,直接跳转
+				if (null != appEntity) {
+					appDetails = baseConvert.convertt(appEntity);
+					DETAILS_CACHE.put(appId, appDetails);
+				}
 			}
 		} else {
-			appDetails = baseConvert.convertt(this.getById(appId));
+			AppEntity appEntity = this.getById(appId);
+			if (null != appEntity) {
+				appDetails = baseConvert.convertt(appEntity);
+			}
 		}
 		return appDetails;
 	}
+
 }

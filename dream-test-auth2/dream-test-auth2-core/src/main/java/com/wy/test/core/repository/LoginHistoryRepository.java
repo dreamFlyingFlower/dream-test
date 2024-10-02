@@ -10,7 +10,7 @@ import com.wy.test.core.web.AuthWebContext;
 public class LoginHistoryRepository {
 
 	private static final String HISTORY_LOGIN_INSERT_STATEMENT =
-			"insert into auth_history_login (id , sessionid , userid , username , displayname , logintype , message , code , provider , sourceip , ipregion , iplocation, browser , platform , application , loginurl , sessionstatus ,instid)values( ? , ? , ? , ? , ? , ? , ? , ? , ?, ? , ? , ?, ? , ? , ?, ? , ? , ?)";
+			"insert into auth_history_login (id , session_id , user_id , username , display_name , login_type , message , code , provider , source_ip , ip_region , ip_location, browser , platform , application , login_url , session_status ,inst_id)values( ? , ? , ? , ? , ? , ? , ? , ? , ?, ? , ? , ?, ? , ? , ?, ? , ? , ?)";
 
 	protected JdbcTemplate jdbcTemplate;
 

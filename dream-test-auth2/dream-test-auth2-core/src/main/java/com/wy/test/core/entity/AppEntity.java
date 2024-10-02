@@ -88,8 +88,9 @@ public class AppEntity extends AbstractStringEntity {
 	private String userPropertys;
 
 	/**
-	 * Signature for client verify create by SignaturePublicKey & SignaturePrivateKey issuer is domain name subject is
-	 * app id append domain name
+	 * Signature for client verify create by SignaturePublicKey &
+	 * SignaturePrivateKey issuer is domain name subject is app id append domain
+	 * name
 	 */
 	private Integer isSignature;
 
@@ -100,7 +101,7 @@ public class AppEntity extends AbstractStringEntity {
 
 	private String adapterName;
 
-	private String adapter;
+	private String adapterClass;
 
 	/**
 	 * 获取第三方token凭证

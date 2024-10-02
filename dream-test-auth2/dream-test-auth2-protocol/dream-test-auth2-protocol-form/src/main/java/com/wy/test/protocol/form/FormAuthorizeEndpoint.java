@@ -46,7 +46,7 @@ public class FormAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 		AppFormDetailVO appFormDetailVO = appFormDetailService.getAppDetails(id, true);
 		log.debug("formBasedDetails {}", appFormDetailVO);
 		AppVO application = getApp(id);
-		appFormDetailVO.setAdapter(application.getAdapter());
+		appFormDetailVO.setAdapterClass(application.getAdapterClass());
 		appFormDetailVO.setIsAdapter(application.getIsAdapter());
 		ModelAndView modelAndView = null;
 
@@ -61,7 +61,7 @@ public class FormAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 			AbstractAuthorizeAdapter adapter;
 
 			if (BooleanEnum.isTrue(appFormDetailVO.getIsAdapter())) {
-				Object formBasedAdapter = ReflectHelper.newInstance(appFormDetailVO.getAdapter());
+				Object formBasedAdapter = ReflectHelper.newInstance(appFormDetailVO.getAdapterClass());
 				adapter = (AbstractAuthorizeAdapter) formBasedAdapter;
 			} else {
 				FormDefaultAdapter formBasedDefaultAdapter = new FormDefaultAdapter();

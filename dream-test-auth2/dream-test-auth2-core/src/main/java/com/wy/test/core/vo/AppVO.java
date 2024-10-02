@@ -108,7 +108,7 @@ public class AppVO implements Serializable, TransPojo {
 
 	private String adapterName;
 
-	private String adapter;
+	private String adapterClass;
 
 	@Schema(description = "第三方凭证")
 	private String principal;

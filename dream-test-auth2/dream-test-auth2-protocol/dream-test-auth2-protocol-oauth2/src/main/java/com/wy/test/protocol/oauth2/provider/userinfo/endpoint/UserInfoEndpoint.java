@@ -84,7 +84,7 @@ public class UserInfoEndpoint {
 
 			AbstractAuthorizeAdapter adapter;
 			if (BooleanEnum.isTrue(app.getIsAdapter())) {
-				adapter = (AbstractAuthorizeAdapter) ReflectHelper.newInstance(app.getAdapter());
+				adapter = (AbstractAuthorizeAdapter) ReflectHelper.newInstance(app.getAdapterClass());
 				try {
 					BeanUtils.setProperty(adapter, "clientDetails", clientDetails);
 				} catch (IllegalAccessException | InvocationTargetException e) {

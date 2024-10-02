@@ -1,4 +1,4 @@
-package com.wy.test.protocol.oauth2.provider.endpoint;
+package com.wy.test.protocol.oauth2.endpoint;
 
 import java.security.Principal;
 import java.util.Map;

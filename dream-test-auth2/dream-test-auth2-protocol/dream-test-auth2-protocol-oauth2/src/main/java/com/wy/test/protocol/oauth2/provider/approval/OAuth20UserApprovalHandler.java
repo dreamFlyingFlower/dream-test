@@ -1,4 +1,4 @@
-package com.wy.test.protocol.oauth2.provider.approval.endpoint;
+package com.wy.test.protocol.oauth2.provider.approval;
 
 import java.util.Collection;
 
@@ -8,7 +8,6 @@ import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import com.wy.test.core.entity.oauth2.ClientDetails;
 import com.wy.test.protocol.oauth2.provider.AuthorizationRequest;
 import com.wy.test.protocol.oauth2.provider.ClientDetailsService;
-import com.wy.test.protocol.oauth2.provider.approval.ApprovalStoreUserApprovalHandler;
 
 public class OAuth20UserApprovalHandler extends ApprovalStoreUserApprovalHandler {
 

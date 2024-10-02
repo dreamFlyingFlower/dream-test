@@ -1,4 +1,4 @@
-package com.wy.test.protocol.oauth2.provider.endpoint;
+package com.wy.test.protocol.oauth2.endpoint;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

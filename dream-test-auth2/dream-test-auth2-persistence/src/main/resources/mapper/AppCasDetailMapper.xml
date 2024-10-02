@@ -23,7 +23,8 @@
 		auth_app_cas_detail cd,
 		auth_app app
 		WHERE
-		app.instid = cd.instid
+		app.inst_id =
+		cd.inst_id
 		AND cd.id = app.id
 		AND
 		(

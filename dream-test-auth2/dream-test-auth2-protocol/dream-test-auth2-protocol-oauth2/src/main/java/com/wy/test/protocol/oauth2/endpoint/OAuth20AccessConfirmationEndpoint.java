@@ -1,4 +1,4 @@
-package com.wy.test.protocol.oauth2.provider.approval.endpoint;
+package com.wy.test.protocol.oauth2.endpoint;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -30,6 +30,7 @@ import com.wy.test.persistence.service.AppService;
 import com.wy.test.protocol.oauth2.common.OAuth2Constants;
 import com.wy.test.protocol.oauth2.provider.AuthorizationRequest;
 import com.wy.test.protocol.oauth2.provider.ClientDetailsService;
+import com.wy.test.protocol.oauth2.provider.approval.OAuth20UserApprovalHandler;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,7 +43,6 @@ import lombok.extern.slf4j.Slf4j;
 public class OAuth20AccessConfirmationEndpoint {
 
 	@Autowired
-	@Qualifier("appService")
 	protected AppService appService;
 
 	@Autowired
@@ -72,7 +72,6 @@ public class OAuth20AccessConfirmationEndpoint {
 	 * @param model Map
 	 * @return throws Exception
 	 */
-
 	@GetMapping(OAuth2Constants.ENDPOINT.ENDPOINT_APPROVAL_CONFIRM)
 	public ModelAndView getAccessConfirmation(@RequestParam Map<String, Object> model,
 			@CurrentUser UserVO currentUser) {

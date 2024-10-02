@@ -1,4 +1,4 @@
-package com.wy.test.protocol.oauth2.provider.endpoint;
+package com.wy.test.protocol.oauth2.endpoint;
 
 import java.net.URI;
 import java.security.Principal;
@@ -65,15 +65,18 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
- * Implementation of the Authorization Endpoint from the OAuth2 specification. Accepts authorization requests, and
- * handles user approval if the grant type is authorization code. The tokens themselves are obtained from the
- * {@link TokenEndpoint Token Endpoint}, except in the implicit grant type (where they come from the Authorization
- * Endpoint via <code>response_type=token</code>.
+ * Implementation of the Authorization Endpoint from the OAuth2 specification.
+ * Accepts authorization requests, and handles user approval if the grant type
+ * is authorization code. The tokens themselves are obtained from the
+ * {@link TokenEndpoint Token Endpoint}, except in the implicit grant type
+ * (where they come from the Authorization Endpoint via
+ * <code>response_type=token</code>.
  * </p>
  * 
  * <p>
- * This endpoint should be secured so that it is only accessible to fully authenticated users (as a minimum requirement)
- * since it represents a request from a valid user to act on his or her behalf.
+ * This endpoint should be secured so that it is only accessible to fully
+ * authenticated users (as a minimum requirement) since it represents a request
+ * from a valid user to act on his or her behalf.
  * </p>
  * 
  */
@@ -102,25 +105,15 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 		this.errorPage = errorPage;
 	}
 
-	@Operation(summary = "OAuth 2.0 认证接口", description = "传递参数应用ID，自动完成跳转认证拼接", method = "GET")
-	@GetMapping(value = { OAuth2Constants.ENDPOINT.ENDPOINT_BASE + "/{id}" })
-	public ModelAndView authorize(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable("id") String id) {
-		ClientDetails clientDetails = getClientDetailsService().loadClientByClientId(id, true);
-		log.debug("" + clientDetails);
-		String authorizationUrl = "";
-		try {
-			authorizationUrl = String.format(OAUTH_V20_AUTHORIZATION_URL, clientDetails.getClientId(),
-					UrlHelper.encode(clientDetails.getRegisteredRedirectUri().toArray()[0].toString()));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		log.debug("authorizationUrl {}", authorizationUrl);
-
-		return AuthWebContext.redirect(authorizationUrl);
-	}
-
+	/**
+	 * 入口:第三方客户端直接调用本接口,带上相关参数
+	 * 
+	 * @param model
+	 * @param parameters
+	 * @param currentUser
+	 * @param sessionStatus
+	 * @return
+	 */
 	@Operation(summary = "OAuth 2.0 认证接口", description = "传递参数client_id,response_type,redirect_uri等", method = "GET")
 	@GetMapping(value = { OAuth2Constants.ENDPOINT.ENDPOINT_AUTHORIZE,
 			OAuth2Constants.ENDPOINT.ENDPOINT_TENCENT_IOA_AUTHORIZE })
@@ -220,6 +213,25 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 
 	}
 
+	@Operation(summary = "OAuth 2.0 认证接口", description = "传递参数应用ID，自动完成跳转认证拼接", method = "GET")
+	@GetMapping(value = { OAuth2Constants.ENDPOINT.ENDPOINT_BASE + "/{id}" })
+	public ModelAndView authorize(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("id") String id) {
+		ClientDetails clientDetails = getClientDetailsService().loadClientByClientId(id, true);
+		log.debug("" + clientDetails);
+		String authorizationUrl = "";
+		try {
+			authorizationUrl = String.format(OAUTH_V20_AUTHORIZATION_URL, clientDetails.getClientId(),
+					UrlHelper.encode(clientDetails.getRegisteredRedirectUri().toArray()[0].toString()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		log.debug("authorizationUrl {}", authorizationUrl);
+
+		return AuthWebContext.redirect(authorizationUrl);
+	}
+
 	// approval must post
 	@PostMapping(value = { OAuth2Constants.ENDPOINT.ENDPOINT_AUTHORIZE + "/approval" },
 			params = OAuth2Utils.USER_OAUTH_APPROVAL)
@@ -263,7 +275,8 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 			}
 
 			if (responseTypes.contains(OAuth2Constants.PARAMETER.TOKEN)) {
-				return new ResultResponse<Object>((Object) getImplicitGrantResponse(authorizationRequest)).buildResponse();
+				return new ResultResponse<Object>((Object) getImplicitGrantResponse(authorizationRequest))
+						.buildResponse();
 			}
 
 			return new ResultResponse<Object>(
@@ -469,8 +482,11 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 			redirectUri = builder.build().toUri();
 			builder = UriComponentsBuilder.fromUri(redirectUri);
 		}
-		template.scheme(redirectUri.getScheme()).port(redirectUri.getPort()).host(redirectUri.getHost())
-				.userInfo(redirectUri.getUserInfo()).path(redirectUri.getPath());
+		template.scheme(redirectUri.getScheme())
+				.port(redirectUri.getPort())
+				.host(redirectUri.getHost())
+				.userInfo(redirectUri.getUserInfo())
+				.path(redirectUri.getPath());
 
 		if (fragment) {
 			StringBuilder values = new StringBuilder();

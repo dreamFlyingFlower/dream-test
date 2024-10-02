@@ -208,7 +208,7 @@ public class Cas20AuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 
 			if (BooleanEnum.isTrue(storedTicket.getCasDetails().getIsAdapter())) {
 				try {
-					Object samlAdapter = ReflectHelper.newInstance(storedTicket.getCasDetails().getAdapter());
+					Object samlAdapter = ReflectHelper.newInstance(storedTicket.getCasDetails().getAdapterClass());
 					BeanUtils.setProperty(samlAdapter, "serviceResponseBuilder", serviceResponseBuilder);
 					AbstractAuthorizeAdapter adapter = (AbstractAuthorizeAdapter) samlAdapter;
 					adapter.setPrincipal(authentication);
@@ -309,7 +309,7 @@ public class Cas20AuthorizeEndpoint extends CasBaseAuthorizeEndpoint {
 			SignPrincipal authentication = ((SignPrincipal) storedTicket.getAuthentication().getPrincipal());
 			if (BooleanEnum.isTrue(storedTicket.getCasDetails().getIsAdapter())) {
 				try {
-					Object samlAdapter = ReflectHelper.newInstance(storedTicket.getCasDetails().getAdapter());
+					Object samlAdapter = ReflectHelper.newInstance(storedTicket.getCasDetails().getAdapterClass());
 					BeanUtils.setProperty(samlAdapter, "serviceResponseBuilder", serviceResponseBuilder);
 					AbstractAuthorizeAdapter adapter = (AbstractAuthorizeAdapter) samlAdapter;
 					adapter.setPrincipal(authentication);

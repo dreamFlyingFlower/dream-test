@@ -35,12 +35,13 @@ import com.wy.test.core.entity.oauth2.client.BaseClientDetails;
 import com.wy.test.protocol.oauth2.provider.ClientDetailsService;
 import com.wy.test.protocol.oauth2.provider.ClientRegistrationService;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Basic, JDBC implementation of the client details service.
  */
+@Slf4j
 public class JdbcClientDetailsService implements ClientDetailsService, ClientRegistrationService {
-
-	private static final Log logger = LogFactory.getLog(JdbcClientDetailsService.class);
 
 	protected final static Cache<String, ClientDetails> detailsCache =
 			Caffeine.newBuilder().expireAfterWrite(30, TimeUnit.MINUTES).maximumSize(200000).build();
@@ -181,7 +182,7 @@ public class JdbcClientDetailsService implements ClientDetailsService, ClientReg
 		try {
 			json = mapper.write(clientDetails.getAdditionalInformation());
 		} catch (Exception e) {
-			logger.warn("Could not serialize additional information: " + clientDetails, e);
+			log.warn("Could not serialize additional information: " + clientDetails, e);
 		}
 		return new Object[] {
 				clientDetails.getResourceIds() != null
@@ -285,19 +286,19 @@ public class JdbcClientDetailsService implements ClientDetailsService, ClientReg
 			}
 
 			details.setAlgorithm(rs.getString("algorithm"));
-			details.setAlgorithmKey(rs.getString("algorithmKey"));
-			details.setEncryptionMethod(rs.getString("encryptionMethod"));
+			details.setAlgorithmKey(rs.getString("algorithm_key"));
+			details.setEncryptionMethod(rs.getString("encryption_type"));
 
 			details.setSignature(rs.getString("signature"));
-			details.setSignatureKey(rs.getString("signatureKey"));
+			details.setSignatureKey(rs.getString("signature_key"));
 			details.setSubject(rs.getString("subject"));
-			details.setUserInfoResponse(rs.getString("userInfoResponse"));
+			details.setUserInfoResponse(rs.getString("user_info_response"));
 			details.setAudience(rs.getString("audience"));
 			details.setIssuer(rs.getString("issuer"));
-			details.setApprovalPrompt(rs.getString("APPROVALPROMPT"));
-			details.setPkce(rs.getString("PKCE"));
-			details.setProtocol(rs.getString("PROTOCOL"));
-			details.setInstId(rs.getString("INSTID"));
+			details.setApprovalPrompt(rs.getString("approval_prompt"));
+			details.setPkce(rs.getString("pkce"));
+			details.setProtocol(rs.getString("protocol"));
+			details.setInstId(rs.getString("inst_id"));
 			String json = rs.getString(10);
 			if (json != null) {
 				try {
@@ -305,7 +306,7 @@ public class JdbcClientDetailsService implements ClientDetailsService, ClientReg
 					Map<String, Object> additionalInformation = mapper.read(json, Map.class);
 					details.setAdditionalInformation(additionalInformation);
 				} catch (Exception e) {
-					logger.warn("Could not decode JSON for additional information: " + details, e);
+					log.warn("Could not decode JSON for additional information: " + details, e);
 				}
 			}
 			String scopes = rs.getString(11);

@@ -13,6 +13,13 @@ import com.wy.test.protocol.cas.endpoint.response.ServiceResponseBuilder;
 import dream.flying.flower.helper.DateTimeHelper;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * CAS默认认证处理器,由Cas20AuthorizeEndpoint调用
+ *
+ * @author 飞花梦影
+ * @date 2024-10-02 16:46:43
+ * @git {@link https://github.com/dreamFlyingFlower}
+ */
 @Slf4j
 public class CasDefaultAdapter extends AbstractAuthorizeAdapter {
 

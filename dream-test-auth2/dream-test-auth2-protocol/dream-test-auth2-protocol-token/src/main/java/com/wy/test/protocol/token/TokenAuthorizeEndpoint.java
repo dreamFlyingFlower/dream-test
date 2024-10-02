@@ -55,12 +55,12 @@ public class TokenAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 		AppTokenDetailVO appTokenDetailVO = appTokenDetailService.getAppDetails(id, true);
 		log.debug("" + appTokenDetailVO);
 
-		appTokenDetailVO.setAdapter(application.getAdapter());
+		appTokenDetailVO.setAdapterClass(application.getAdapterClass());
 		appTokenDetailVO.setIsAdapter(application.getIsAdapter());
 
 		AbstractAuthorizeAdapter adapter;
 		if (BooleanEnum.isTrue(appTokenDetailVO.getIsAdapter())) {
-			adapter = (AbstractAuthorizeAdapter) ReflectHelper.newInstance(appTokenDetailVO.getAdapter());
+			adapter = (AbstractAuthorizeAdapter) ReflectHelper.newInstance(appTokenDetailVO.getAdapterClass());
 		} else {
 			adapter = (AbstractAuthorizeAdapter) new TokenDefaultAdapter();
 		}

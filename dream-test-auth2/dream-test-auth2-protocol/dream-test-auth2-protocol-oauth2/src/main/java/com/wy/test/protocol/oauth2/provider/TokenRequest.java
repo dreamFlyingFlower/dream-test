@@ -7,8 +7,8 @@ import java.util.Map;
 import org.springframework.security.oauth2.common.util.OAuth2Utils;
 
 import com.wy.test.core.entity.oauth2.ClientDetails;
-import com.wy.test.protocol.oauth2.provider.endpoint.AuthorizationEndpoint;
-import com.wy.test.protocol.oauth2.provider.endpoint.TokenEndpoint;
+import com.wy.test.protocol.oauth2.endpoint.AuthorizationEndpoint;
+import com.wy.test.protocol.oauth2.endpoint.TokenEndpoint;
 
 /**
  * Represents an OAuth2 token request, made at the {@link TokenEndpoint}. The

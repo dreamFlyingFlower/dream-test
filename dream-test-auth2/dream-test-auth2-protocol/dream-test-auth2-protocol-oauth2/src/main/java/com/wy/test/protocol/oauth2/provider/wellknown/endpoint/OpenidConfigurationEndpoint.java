@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wy.test.core.entity.oauth2.ClientDetails;
 import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.protocol.oauth2.common.OAuth2Constants;
-import com.wy.test.protocol.oauth2.provider.endpoint.AbstractEndpoint;
+import com.wy.test.protocol.oauth2.endpoint.AbstractEndpoint;
 import com.wy.test.protocol.oauth2.provider.wellknown.OpenidConfiguration;
 
 import dream.flying.flower.framework.core.pretty.strategy.JsonPretty;

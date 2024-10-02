@@ -142,12 +142,12 @@ public class PasswordPolicyRepository {
 		public PasswordPolicyEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
 			PasswordPolicyEntity passwordPolicy = new PasswordPolicyEntity();
 			passwordPolicy.setId(rs.getString("id"));
-			passwordPolicy.setMinLength(rs.getInt("minlength"));
-			passwordPolicy.setMaxLength(rs.getInt("maxlength"));
-			passwordPolicy.setLowerCase(rs.getInt("lowercase"));
-			passwordPolicy.setUpperCase(rs.getInt("uppercase"));
+			passwordPolicy.setMinLength(rs.getInt("min_length"));
+			passwordPolicy.setMaxLength(rs.getInt("max_length"));
+			passwordPolicy.setLowerCase(rs.getInt("lower_case"));
+			passwordPolicy.setUpperCase(rs.getInt("upper_case"));
 			passwordPolicy.setDigits(rs.getInt("digits"));
-			passwordPolicy.setSpecialChar(rs.getInt("specialchar"));
+			passwordPolicy.setSpecialChar(rs.getInt("special_char"));
 			passwordPolicy.setAttempts(rs.getInt("attempts"));
 			passwordPolicy.setDuration(rs.getInt("duration"));
 			passwordPolicy.setExpiration(rs.getInt("expiration"));
@@ -160,6 +160,5 @@ public class PasswordPolicyRepository {
 			passwordPolicy.setOccurances(rs.getInt("occurances"));
 			return passwordPolicy;
 		}
-
 	}
 }

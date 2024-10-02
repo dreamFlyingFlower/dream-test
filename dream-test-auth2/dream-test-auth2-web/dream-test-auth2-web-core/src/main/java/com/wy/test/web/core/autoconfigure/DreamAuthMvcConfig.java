@@ -18,6 +18,7 @@ import com.wy.test.authentication.provider.support.basic.BasicEntryPoint;
 import com.wy.test.authentication.provider.support.httpheader.HttpHeaderEntryPoint;
 import com.wy.test.authentication.provider.support.kerberos.HttpKerberosEntryPoint;
 import com.wy.test.authentication.provider.support.kerberos.KerberosService;
+import com.wy.test.core.constant.ConstAuthView;
 import com.wy.test.core.properties.DreamAuthLoginProperties;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.web.core.interceptor.HistorySignOnAppInterceptor;
@@ -101,7 +102,8 @@ public class DreamAuthMvcConfig implements WebMvcConfigurer {
 				.addPathPatterns("/logon/oauth20/bind/**")
 				.addPathPatterns("/logout")
 				.addPathPatterns("/logout/**")
-				.addPathPatterns("/authz/refused");
+				// 权限拒绝重定向地址
+				.addPathPatterns(ConstAuthView.AUTHZ_REFUSED);
 
 		log.debug("add Permission Interceptor");
 

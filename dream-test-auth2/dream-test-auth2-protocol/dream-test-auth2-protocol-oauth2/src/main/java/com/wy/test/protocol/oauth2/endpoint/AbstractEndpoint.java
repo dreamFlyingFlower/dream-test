@@ -1,4 +1,4 @@
-package com.wy.test.protocol.oauth2.provider.endpoint;
+package com.wy.test.protocol.oauth2.endpoint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,11 +55,9 @@ public class AbstractEndpoint implements InitializingBean {
 	AuthenticationManager authenticationManager;
 
 	@Autowired
-	@Qualifier("appsService")
 	protected AppService appService;
 
 	@Autowired
-	@Qualifier("applicationConfig")
 	protected DreamAuthServerProperties dreamServerProperties;
 
 	@Autowired

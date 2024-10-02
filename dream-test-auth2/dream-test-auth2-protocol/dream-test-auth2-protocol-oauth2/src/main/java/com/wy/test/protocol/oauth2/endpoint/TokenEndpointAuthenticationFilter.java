@@ -1,4 +1,4 @@
-package com.wy.test.protocol.oauth2.provider.endpoint;
+package com.wy.test.protocol.oauth2.endpoint;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,8 +15,6 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -43,32 +41,36 @@ import com.wy.test.protocol.oauth2.provider.OAuth2RequestFactory;
 
 import dream.flying.flower.framework.core.helper.TokenHeader;
 import dream.flying.flower.framework.core.helper.TokenHelpers;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
- * An optional authentication filter for the {@link TokenEndpoint}. It sits downstream of another filter (usually
- * {@link BasicAuthenticationFilter}) for the client, and creates an {@link OAuth2Authentication} for the Spring
- * {@link SecurityContext} if the request also contains user credentials, e.g. as typically would be the case in a
- * password grant. This filter is only required if the TokenEndpoint (or one of it's dependencies) needs to know about
- * the authenticated user. In a vanilla password grant this <b>isn't</b> normally necessary because the token granter
- * will also authenticate the user.
+ * An optional authentication filter for the {@link TokenEndpoint}. It sits
+ * downstream of another filter (usually {@link BasicAuthenticationFilter}) for
+ * the client, and creates an {@link OAuth2Authentication} for the Spring
+ * {@link SecurityContext} if the request also contains user credentials, e.g.
+ * as typically would be the case in a password grant. This filter is only
+ * required if the TokenEndpoint (or one of it's dependencies) needs to know
+ * about the authenticated user. In a vanilla password grant this <b>isn't</b>
+ * normally necessary because the token granter will also authenticate the user.
  * </p>
  * 
  * <p>
- * If this filter is used the Spring Security context will contain an OAuth2Authentication encapsulating (as the
- * authorization request) the form parameters coming into the filter and the client id from the already authenticated
- * client authentication, and the authenticated user token extracted from the request and validated using the
- * authentication manager.
+ * If this filter is used the Spring Security context will contain an
+ * OAuth2Authentication encapsulating (as the authorization request) the form
+ * parameters coming into the filter and the client id from the already
+ * authenticated client authentication, and the authenticated user token
+ * extracted from the request and validated using the authentication manager.
  * </p>
  * 
  * @author Dave Syer
  * 
  */
-@WebFilter(filterName = "TokenEndpointAuthenticationFilter", urlPatterns = {
-		OAuth2Constants.ENDPOINT.ENDPOINT_TOKEN + "/*", OAuth2Constants.ENDPOINT.ENDPOINT_TENCENT_IOA_TOKEN + "/*" })
+@WebFilter(filterName = "TokenEndpointAuthenticationFilter",
+		urlPatterns = { OAuth2Constants.ENDPOINT.ENDPOINT_TOKEN + "/*",
+				OAuth2Constants.ENDPOINT.ENDPOINT_TENCENT_IOA_TOKEN + "/*" })
+@Slf4j
 public class TokenEndpointAuthenticationFilter implements Filter {
-
-	final static Logger _logger = LoggerFactory.getLogger(TokenEndpointAuthenticationFilter.class);
 
 	private AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource =
 			new WebAuthenticationDetailsSource();
@@ -86,7 +88,8 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 	}
 
 	/**
-	 * @param authenticationManager an AuthenticationManager for the incoming request
+	 * @param authenticationManager an AuthenticationManager for the incoming
+	 *        request
 	 */
 	public TokenEndpointAuthenticationFilter(AuthenticationManager authenticationManager,
 			OAuth2RequestFactory oAuth2RequestFactory) {
@@ -96,7 +99,8 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 	}
 
 	/**
-	 * A source of authentication details for requests that result in authentication.
+	 * A source of authentication details for requests that result in
+	 * authentication.
 	 * 
 	 * @param authenticationDetailsSource the authenticationDetailsSource to set
 	 */
@@ -108,9 +112,10 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
-		_logger.debug("Authentication TokenEndpoint ");
+		log.debug("Authentication TokenEndpoint ");
 		if (authenticationManager == null) {
-			authenticationManager = AuthWebContext.getBean("oauth2UserAuthenticationManager", AuthenticationManager.class);
+			authenticationManager =
+					AuthWebContext.getBean("oauth2UserAuthenticationManager", AuthenticationManager.class);
 		}
 		if (oAuth2RequestFactory == null) {
 			oAuth2RequestFactory = AuthWebContext.getBean("oAuth2RequestFactory", OAuth2RequestFactory.class);
@@ -120,7 +125,7 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 					AuthWebContext.getBean("oauth2ClientAuthenticationManager", AuthenticationManager.class);
 		}
 
-		final boolean debug = _logger.isDebugEnabled();
+		final boolean debug = log.isDebugEnabled();
 		final HttpServletRequest request = (HttpServletRequest) req;
 		final HttpServletResponse response = (HttpServletResponse) res;
 
@@ -131,7 +136,7 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 				usernamepassword(request, response);
 			} else {
 				Authentication authentication = ClientCredentials(request, response);
-				_logger.trace("getPrincipal " + authentication.getPrincipal().getClass());
+				log.trace("getPrincipal " + authentication.getPrincipal().getClass());
 				SignPrincipal auth = null;
 				if (authentication.getPrincipal() instanceof SignPrincipal) {
 					// authorization_code
@@ -150,7 +155,7 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 			SecurityContextHolder.clearContext();
 
 			if (debug) {
-				_logger.debug("Authentication request for failed: " + failed);
+				log.debug("Authentication request for failed: " + failed);
 			}
 
 			onUnsuccessfulAuthentication(request, response, failed);
@@ -163,17 +168,17 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 
 	public void usernamepassword(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		_logger.debug("Authentication TokenEndpoint ");
+		log.debug("Authentication TokenEndpoint ");
 
 		try {
 			Authentication credentials = extractCredentials(request);
 
 			if (credentials != null) {
-				_logger.debug("Authentication credentials found for '" + credentials.getName() + "'");
+				log.debug("Authentication credentials found for '" + credentials.getName() + "'");
 
 				Authentication authResult = authenticationManager.authenticate(credentials);
 
-				_logger.debug("Authentication success: " + authResult.getName());
+				log.debug("Authentication success: " + authResult.getName());
 				String clientId = request.getParameter(OAuth2Utils.CLIENT_ID);
 				String clientSecret = request.getParameter(OAuth2Constants.PARAMETER.CLIENT_SECRET);
 				UsernamePasswordAuthenticationToken authRequest =
@@ -207,7 +212,7 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 		} catch (AuthenticationException failed) {
 			SecurityContextHolder.clearContext();
 
-			_logger.debug("Authentication request for failed: " + failed);
+			log.debug("Authentication request for failed: " + failed);
 
 			onUnsuccessfulAuthentication(request, response, failed);
 
@@ -231,7 +236,7 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 			clientSecret = ahc.getCredential();
 		}
 
-		_logger.trace("clientId " + clientId + " , clientSecret " + clientSecret);
+		log.trace("clientId " + clientId + " , clientSecret " + clientSecret);
 
 		// If the request is already authenticated we can assume that this
 		// filter is not needed
@@ -274,12 +279,14 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 	}
 
 	/**
-	 * If the incoming request contains user credentials in headers or parameters then extract them here into an
-	 * Authentication token that can be validated later. This implementation only recognises password grant requests and
+	 * If the incoming request contains user credentials in headers or parameters
+	 * then extract them here into an Authentication token that can be validated
+	 * later. This implementation only recognises password grant requests and
 	 * extracts the username and password.
 	 * 
 	 * @param request the incoming request, possibly with user credentials
-	 * @return an authentication for validation (or null if there is no further authentication)
+	 * @return an authentication for validation (or null if there is no further
+	 *         authentication)
 	 */
 	protected Authentication extractCredentials(HttpServletRequest request) {
 		String grantType = request.getParameter(OAuth2Utils.GRANT_TYPE);

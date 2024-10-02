@@ -21,12 +21,13 @@ import com.wy.test.persistence.service.LoginService;
 import com.wy.test.persistence.service.UserService;
 
 import dream.flying.flower.framework.web.enums.AuthLoginType;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * AbstractAuthenticationRealm.
- */
 @Slf4j
+@Getter
+@NoArgsConstructor
 public abstract class AbstractAuthenticationRealm {
 
 	protected JdbcTemplate jdbcTemplate;
@@ -46,27 +47,15 @@ public abstract class AbstractAuthenticationRealm {
 	@Autowired
 	protected LdapAuthenticationRealmService ldapAuthenticationRealmService;
 
-	public AbstractAuthenticationRealm() {
-
-	}
+	public abstract boolean passwordMatches(UserVO userInfo, String password);
 
 	public AbstractAuthenticationRealm(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public PasswordPolicyValidator getPasswordPolicyValidator() {
-		return passwordPolicyValidator;
-	}
-
-	public LoginService getLoginRepository() {
-		return loginService;
-	}
-
 	public UserVO loadUserInfo(String username, String password) {
 		return loginService.find(username, password);
 	}
-
-	public abstract boolean passwordMatches(UserVO userInfo, String password);
 
 	public List<RoleEntity> queryGroups(UserVO userInfo) {
 		return loginService.queryRoles(userInfo);

@@ -53,12 +53,12 @@ public class JwtAuthorizeEndpoint extends AuthorizeBaseEndpoint {
 		AppVO application = getApp(id);
 		AppJwtDetailVO jwtDetails = appJwtDetailService.getAppDetails(application.getId(), true);
 		log.debug("" + jwtDetails);
-		jwtDetails.setAdapter(application.getAdapter());
+		jwtDetails.setAdapterClass(application.getAdapterClass());
 		jwtDetails.setIsAdapter(application.getIsAdapter());
 
 		AbstractAuthorizeAdapter adapter;
 		if (BooleanEnum.isTrue(jwtDetails.getIsAdapter())) {
-			Object jwtAdapter = ReflectHelper.newInstance(jwtDetails.getAdapter());
+			Object jwtAdapter = ReflectHelper.newInstance(jwtDetails.getAdapterClass());
 			try {
 				BeanUtils.setProperty(jwtAdapter, "jwtDetails", jwtDetails);
 			} catch (IllegalAccessException | InvocationTargetException e) {
