@@ -117,11 +117,10 @@ public class OAuth20AccessConfirmationEndpoint {
 		return modelAndView;
 	}
 
-	@GetMapping(OAuth2Constants.ENDPOINT.ENDPOINT_APPROVAL_CONFIRM + "/get/{oauth_approval}")
-	public ResponseEntity<?> getAccess(@PathVariable("oauth_approval") String oauth_approval,
-			@CurrentUser UserVO currentUser) {
+	@GetMapping(OAuth2Constants.ENDPOINT.ENDPOINT_APPROVAL_CONFIRM + "/get/{oauthApproval}")
+	public ResponseEntity<?> getAccess(@PathVariable String oauthApproval, @CurrentUser UserVO currentUser) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		if (authTokenService.validateJwtToken(oauth_approval)) {
+		if (authTokenService.validateJwtToken(oauthApproval)) {
 			try {
 				AuthorizationRequest clientAuth =
 						(AuthorizationRequest) momentaryService.get(currentUser.getSessionId(), "authorizationRequest");

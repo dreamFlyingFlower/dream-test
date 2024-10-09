@@ -22,8 +22,11 @@ import com.wy.test.core.web.AuthWebContext;
 import com.wy.test.persistence.service.AppCasDetailService;
 import com.wy.test.persistence.service.AppService;
 import com.wy.test.protocol.cas.endpoint.ticket.CasConstants;
+import com.wy.test.protocol.oauth2.common.OAuth2Constants;
 
 import dream.flying.flower.binary.Base64Helper;
+import dream.flying.flower.lang.StrHelper;
+import dream.flying.flower.result.ResultException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -93,9 +96,13 @@ public class SingleSignOnInterceptor implements AsyncHandlerInterceptor {
 					String appId = requestURIs[requestURIs.length - 1];
 					log.debug("appId {}", appId);
 					app = appsService.get(appId, true);
-				} else if (requestURI.contains("/authz/oauth/v20/authorize")) {
+				} else if (requestURI.contains(OAuth2Constants.ENDPOINT.ENDPOINT_AUTHORIZE)) {
 					// OAuth2,OAuth2.1认证回调
-					app = appsService.get(request.getParameter(OAuth2Utils.CLIENT_ID), true);
+					String clientId = request.getParameter(OAuth2Utils.CLIENT_ID);
+					if (StrHelper.isBlank(clientId)) {
+						clientId = request.getParameter("clientId");
+					}
+					app = appsService.get(clientId, true);
 					// 防止用户登录但没有权限,跳转到/authz/refused时渲染报错
 					AuthWebContext.setAttribute(ConstAuthWeb.AUTHORIZE_SIGN_ON_APP, app);
 				}

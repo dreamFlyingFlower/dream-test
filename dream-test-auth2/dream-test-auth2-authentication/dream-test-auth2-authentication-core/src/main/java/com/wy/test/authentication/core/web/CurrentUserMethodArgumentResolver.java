@@ -28,9 +28,16 @@ public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentR
 		throw new MissingServletRequestPartException("currentUser");
 	}
 
+	/**
+	 * 判断是否对参数进行解析
+	 * 
+	 * @param parameter 参数
+	 * @return true->是;false->否
+	 */
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-		return parameter.getParameterType().isAssignableFrom(UserEntity.class)
+		return (parameter.getParameterType().isAssignableFrom(UserEntity.class)
+				|| parameter.getParameterType().isAssignableFrom(UserVO.class))
 				&& parameter.hasParameterAnnotation(CurrentUser.class);
 	}
 }

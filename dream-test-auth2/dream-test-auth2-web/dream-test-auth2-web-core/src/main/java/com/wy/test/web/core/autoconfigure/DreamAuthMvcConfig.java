@@ -11,6 +11,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.wy.test.authentication.core.annotation.CurrentUser;
 import com.wy.test.authentication.core.web.CurrentUserMethodArgumentResolver;
 import com.wy.test.authentication.core.web.interceptor.PermissionInterceptor;
 import com.wy.test.authentication.provider.provider.AbstractAuthenticationProvider;
@@ -175,11 +176,21 @@ public class DreamAuthMvcConfig implements WebMvcConfigurer {
 
 	}
 
+	/**
+	 * 注入自定义参数解析器CurrentUserMethodArgumentResolver
+	 * 
+	 * @param argumentResolvers 参数解析器
+	 */
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
 		argumentResolvers.add(currentUserMethodArgumentResolver());
 	}
 
+	/**
+	 * 注入CurrentUserMethodArgumentResolver,解析{@link CurrentUser}注解
+	 * 
+	 * @return CurrentUserMethodArgumentResolver
+	 */
 	@Bean
 	CurrentUserMethodArgumentResolver currentUserMethodArgumentResolver() {
 		return new CurrentUserMethodArgumentResolver();

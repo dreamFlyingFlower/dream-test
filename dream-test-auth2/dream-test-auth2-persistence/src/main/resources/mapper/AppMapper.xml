@@ -11,7 +11,7 @@
 		a.protocol
 	</sql>
 
-	<select id="queryMyApps" resultType="com.wy.test.core.vo.AppVO">
+	<select id="queryMyApps" resultType="com.wy.test.core.vo.UserApps">
 		SELECT DISTINCT
 		app.*
 		FROM

@@ -21,5 +21,11 @@ import dream.flying.flower.framework.mybatis.plus.mapper.BaseMappers;
 @Mapper
 public interface AppMapper extends BaseMappers<AppEntity, AppVO, AppQuery> {
 
+	/**
+	 * 查询用户已授权的APP列表
+	 * 
+	 * @param userApplications
+	 * @return 授权列表
+	 */
 	List<UserApps> queryMyApps(UserApps userApplications);
 }

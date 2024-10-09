@@ -3,7 +3,7 @@
 <head>
 	<#include  "authorize_common.ftl">
 	<script type="text/javascript">
-	   window.top.location.href = "${model.authorizeApproveUri}?oauth_approval=${model.oauth_approval}&clientId=${model.client.clientId!}";
+	   window.top.location.href = "${model.authorizeApproveUri}?oauth_approval=${model.oauth_approval}&client_id=${model.client.clientId!}";
 	</script>
 </head>
 
@@ -18,7 +18,7 @@
                         <tr>
                             <td colspan="2">
                                 <div style="text-align: center;">                            
-                                    <!--<p>You hereby authorize "${model.client.clientId!}" to access your protected resources.</p>-->
+                                    <p>You hereby authorize "${model.client.clientId!}" to access your protected resources.</p>
                                     <form id="confirmationForm" name="confirmationForm" action="<@base/>/authz/oauth/v20/authorize" method="post">
                                         <input id="user_oauth_approval" name="user_oauth_approval" value="true" type="hidden"/>
                                         <input class="button btn btn-primary mr-3" name="authorize"

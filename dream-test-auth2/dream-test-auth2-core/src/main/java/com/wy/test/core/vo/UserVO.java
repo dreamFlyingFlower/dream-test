@@ -66,6 +66,7 @@ public class UserVO implements Serializable, TransPojo {
 	@Schema(description = "密码")
 	@NotBlank(message = "密码不能为空", groups = { ValidAdd.class })
 	@Size(max = 128, message = "密码最大长度不能超过128", groups = { ValidAdd.class, ValidEdit.class })
+	@JsonIgnore
 	private String password;
 
 	@Schema(description = "DE密码")
@@ -113,6 +114,7 @@ public class UserVO implements Serializable, TransPojo {
 
 	@Schema(description = "应用登录密码")
 	@Size(max = 64, message = "应用登录密码最大长度不能超过64", groups = { ValidAdd.class, ValidEdit.class })
+	@JsonIgnore
 	private String appLoginPassword;
 
 	@Schema(description = "应用登录密码保护应用")
@@ -411,8 +413,8 @@ public class UserVO implements Serializable, TransPojo {
 	private Date createTime;
 
 	/**
-	 * for extended Attribute from userType extraAttribute for database extraAttributeName & extraAttributeValue for
-	 * page submit
+	 * for extended Attribute from userType extraAttribute for database
+	 * extraAttributeName & extraAttributeValue for page submit
 	 */
 	private String extraAttribute;
 

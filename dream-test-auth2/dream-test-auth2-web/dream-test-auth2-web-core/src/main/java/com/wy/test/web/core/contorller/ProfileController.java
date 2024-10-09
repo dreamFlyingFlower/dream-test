@@ -35,7 +35,7 @@ public class ProfileController {
 	private FileUploadService fileUploadService;
 
 	@GetMapping(value = { "/get" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> get(@CurrentUser UserEntity currentUser) {
+	public ResponseEntity<?> get(@CurrentUser UserVO currentUser) {
 		UserEntity userInfo = userInfoService.findByUsername(currentUser.getUsername());
 		UserVO userVO = userConvert.convertt(userInfo);
 		userVO.trans();

@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fasterxml.jackson.core.exc.StreamWriteException;
@@ -30,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UnauthorizedEntryPoint {
 
-	@GetMapping(value = { "/entrypoint" })
+	@RequestMapping({ "/entrypoint" })
 	public void entryPoint(HttpServletRequest request, HttpServletResponse response)
 			throws StreamWriteException, DatabindException, IOException {
 		log.trace("UnauthorizedEntryPoint /entrypoint.");

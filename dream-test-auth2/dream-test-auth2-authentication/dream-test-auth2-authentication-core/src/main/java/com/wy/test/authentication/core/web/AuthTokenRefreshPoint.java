@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -36,7 +35,7 @@ public class AuthTokenRefreshPoint {
 	@Autowired
 	SessionManager sessionManager;
 
-	@GetMapping(value = { "/token/refresh" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@RequestMapping(value = { "/token/refresh" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> refresh(HttpServletRequest request,
 			@RequestParam(name = "refresh_token", required = false) String refreshToken) {
 		log.debug("try to refresh token ");
