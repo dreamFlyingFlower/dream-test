@@ -16,7 +16,7 @@ import com.wy.test.core.web.InitializeContext;
 import lombok.extern.slf4j.Slf4j;
 
 @SpringBootApplication(scanBasePackages = {
-		//
+		// Mybatis-Plus通用字段处理
 		"dream.flying.flower.framework.mybatis.plus.handler",
 		// 基础数据
 		"com.wy.test.core", "com.wy.test.persistence", "com.wy.test.authentication.core",
@@ -30,8 +30,14 @@ import lombok.extern.slf4j.Slf4j;
 		"com.wy.test.protocol.authorize.endpoint",
 		// CAS单点登录服务
 		"com.wy.test.protocol.cas.endpoint",
+		// Form表单
+		"com.wy.test.protocol.form.endpoint",
 		// OAuth
-		"com.wy.test.protocol.oauth2.endpoint", "com.wy.test.web.core" })
+		"com.wy.test.protocol.oauth2.endpoint",
+		// Jwt
+		"com.wy.test.protocol.jwt.endpoint",
+		// 认证服务
+		"com.wy.test.web.core" })
 @MapperScan("com.wy.test.persistence.mapper")
 @Slf4j
 public class DreamAdminApplication extends SpringBootServletInitializer {

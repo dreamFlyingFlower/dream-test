@@ -21,12 +21,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
-@Tag(name = "2-1-OAuth v2.0 API文档模块")
+@Tag(name = "OAuth2.0 JWK API")
 @Controller
 @Slf4j
 public class OauthJwksEndpoint extends AbstractEndpoint {
 
-	@Operation(summary = "OAuth JWk 元数据接口", description = "参数auth_metadata_APPID", method = "GET")
+	@Operation(summary = "JWK 元数据", description = "参数auth_metadata_APPID", method = "GET")
 	@RequestMapping(value = OAuth2Constants.ENDPOINT.ENDPOINT_BASE + "/jwks",
 			method = { RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody
@@ -35,7 +35,7 @@ public class OauthJwksEndpoint extends AbstractEndpoint {
 		return metadata(request, response, client_id, null);
 	}
 
-	@Operation(summary = "OAuth JWk 元数据接口", description = "参数auth_metadata_APPID", method = "GET")
+	@Operation(summary = "JWK 元数据", description = "参数auth_metadata_APPID", method = "GET")
 	@RequestMapping(value = "/metadata/oauth/v20/" + ConstAuthWeb.DREAM_METADATA_PREFIX + "{appid}.{mediaType}",
 			method = { RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody

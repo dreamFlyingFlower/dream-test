@@ -44,10 +44,8 @@ public class SwaggerConfig {
 	@Bean
 	GroupedOpenApi userApi() {
 		String[] paths = { "/login", "/logout", "/login/**", "/logout/**", "/authz/**", "/authz/**/**",
-				"/metadata/saml20/**", "/onlineticket/validate/**", "/api/connect/v10/userinfo", "/api/oauth/v20/me"
-
-		};
-		String[] packagedToMatch = { "org.dream.authz" };
+				"/metadata/saml20/**", "/onlineticket/validate/**", "/api/connect/v10/userinfo", "/api/oauth/v20/me" };
+		String[] packagedToMatch = { "com.wy.test" };
 		return GroupedOpenApi.builder()
 				.group(dreamSwaggerProperties.getTitle())
 				.pathsToMatch(paths)

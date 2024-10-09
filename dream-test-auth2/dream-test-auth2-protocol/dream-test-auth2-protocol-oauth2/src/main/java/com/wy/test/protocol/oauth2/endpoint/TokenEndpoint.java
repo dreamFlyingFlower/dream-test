@@ -44,21 +44,26 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
- * Endpoint for token requests as described in the OAuth2 spec. Clients post requests with a <code>grant_type</code>
- * parameter (e.g. "authorization_code") and other parameters as determined by the grant type. Supported grant types are
- * handled by the provided {@link #setTokenGranter(com.wy.test.protocol.oauth2.provider.TokenGranter) token granter}.
+ * Endpoint for token requests as described in the OAuth2 spec. Clients post
+ * requests with a <code>grant_type</code> parameter (e.g. "authorization_code")
+ * and other parameters as determined by the grant type. Supported grant types
+ * are handled by the provided
+ * {@link #setTokenGranter(com.wy.test.protocol.oauth2.provider.TokenGranter)
+ * token granter}.
  * </p>
  * 
  * <p>
- * Clients must be authenticated using a Spring Security {@link Authentication} to access this endpoint, and the client
- * id is extracted from the authentication token. The best way to arrange this (as per the OAuth2 spec) is to use HTTP
- * basic authentication for this endpoint with standard Spring Security support.
+ * Clients must be authenticated using a Spring Security {@link Authentication}
+ * to access this endpoint, and the client id is extracted from the
+ * authentication token. The best way to arrange this (as per the OAuth2 spec)
+ * is to use HTTP basic authentication for this endpoint with standard Spring
+ * Security support.
  * </p>
  * 
  * @author Dave Syer
  * 
  */
-@Tag(name = "2-1-OAuth v2.0 API文档模块")
+@Tag(name = "OAuth2.0 Token API")
 @Controller
 @Slf4j
 public class TokenEndpoint extends AbstractEndpoint {
@@ -76,7 +81,7 @@ public class TokenEndpoint extends AbstractEndpoint {
 	 * @return OAuth2AccessToken Entity
 	 * @throws HttpRequestMethodNotSupportedException
 	 */
-	@Operation(summary = "OAuth 2.0 获取AccessToken接口", description = "传递参数token等", method = "GET")
+	@Operation(summary = "获取AccessToken", description = "传递参数token等", method = "GET")
 	@GetMapping(
 			value = { OAuth2Constants.ENDPOINT.ENDPOINT_TOKEN, OAuth2Constants.ENDPOINT.ENDPOINT_TENCENT_IOA_TOKEN })
 	public ResponseEntity<OAuth2AccessToken> getAccessToken(@RequestParam Map<String, String> parameters)
@@ -87,7 +92,7 @@ public class TokenEndpoint extends AbstractEndpoint {
 		return postAccessToken(parameters);
 	}
 
-	@Operation(summary = "OAuth 2.0 获取AccessToken接口", description = "传递参数token等", method = "POST")
+	@Operation(summary = "获取AccessToken", description = "传递参数token等", method = "POST")
 	@PostMapping(
 			value = { OAuth2Constants.ENDPOINT.ENDPOINT_TOKEN, OAuth2Constants.ENDPOINT.ENDPOINT_TENCENT_IOA_TOKEN })
 	public ResponseEntity<OAuth2AccessToken> postAccessToken(@RequestParam Map<String, String> parameters)
@@ -188,10 +193,12 @@ public class TokenEndpoint extends AbstractEndpoint {
 	 * @param principal the currently authentication principal
 	 * @return a client id if there is one in the principal
 	 * 
-	 *         protected String getClientId(Principal principal) { Authentication client = (Authentication) principal;
-	 *         if (!client.isAuthenticated()) { throw new InsufficientAuthenticationException("The client is not
-	 *         authenticated."); } String clientId = client.getName(); if (client instanceof OAuth2Authentication) { //
-	 *         Might be a client and user combined authentication clientId = ((OAuth2Authentication)
+	 *         protected String getClientId(Principal principal) { Authentication
+	 *         client = (Authentication) principal; if (!client.isAuthenticated()) {
+	 *         throw new InsufficientAuthenticationException("The client is not
+	 *         authenticated."); } String clientId = client.getName(); if (client
+	 *         instanceof OAuth2Authentication) { // Might be a client and user
+	 *         combined authentication clientId = ((OAuth2Authentication)
 	 *         client).getOAuth2Request().getClientId(); } return clientId; }
 	 */
 
@@ -219,5 +226,4 @@ public class TokenEndpoint extends AbstractEndpoint {
 	public void setAllowedRequestMethods(Set<HttpMethod> allowedRequestMethods) {
 		this.allowedRequestMethods = allowedRequestMethods;
 	}
-
 }

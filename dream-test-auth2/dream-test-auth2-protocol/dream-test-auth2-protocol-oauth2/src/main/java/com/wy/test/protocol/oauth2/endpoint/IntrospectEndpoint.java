@@ -25,9 +25,12 @@ import dream.flying.flower.framework.core.helper.TokenHelpers;
 import dream.flying.flower.framework.core.json.JsonHelpers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Tag(name = "2-1-OAuth v2.0 API文档模块")
+@Tag(name = "OAuth2.0 令牌验证API")
 @Controller
 @Slf4j
 public class IntrospectEndpoint {
@@ -46,8 +49,7 @@ public class IntrospectEndpoint {
 	@Autowired
 	protected HttpResponseAdapter httpResponseAdapter;
 
-	@Operation(summary = "OAuth 2.0 令牌验证接口", description = "请求参数access_token , header Authorization , token ",
-			method = "POST,GET")
+	@Operation(summary = "令牌验证", description = "请求参数access_token , header Authorization , token ", method = "POST,GET")
 	@RequestMapping(value = OAuth2Constants.ENDPOINT.ENDPOINT_BASE + "/introspect",
 			method = { RequestMethod.POST, RequestMethod.GET })
 	public void introspect(HttpServletRequest request, HttpServletResponse response) {
@@ -101,6 +103,9 @@ public class IntrospectEndpoint {
 		this.oauth20tokenServices = oauth20tokenServices;
 	}
 
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
 	public class Introspection {
 
 		String token;
@@ -108,26 +113,6 @@ public class IntrospectEndpoint {
 		boolean active;
 
 		String sub;
-
-		public String getToken() {
-			return token;
-		}
-
-		public void setToken(String token) {
-			this.token = token;
-		}
-
-		public boolean isActive() {
-			return active;
-		}
-
-		public void setActive(boolean active) {
-			this.active = active;
-		}
-
-		public String getSub() {
-			return sub;
-		}
 
 		public void setSub(String sub, boolean active) {
 			this.sub = sub;
@@ -138,13 +123,5 @@ public class IntrospectEndpoint {
 			this.token = token;
 			this.active = false;
 		}
-
-		public Introspection(String token, boolean active, String sub) {
-			this.token = token;
-			this.active = active;
-			this.sub = sub;
-		}
-
 	}
-
 }

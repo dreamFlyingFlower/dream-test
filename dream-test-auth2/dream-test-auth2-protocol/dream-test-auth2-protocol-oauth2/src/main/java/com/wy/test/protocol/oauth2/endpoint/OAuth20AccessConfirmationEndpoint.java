@@ -32,12 +32,14 @@ import com.wy.test.protocol.oauth2.provider.AuthorizationRequest;
 import com.wy.test.protocol.oauth2.provider.ClientDetailsService;
 import com.wy.test.protocol.oauth2.provider.approval.OAuth20UserApprovalHandler;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * Controller for retrieving the model for and displaying the confirmation page
  * for access to a protected resource.
  */
+@Tag(name = "OAuth2.0 权限API")
 @Controller
 @Slf4j
 public class OAuth20AccessConfirmationEndpoint {

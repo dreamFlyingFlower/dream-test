@@ -1,9 +1,8 @@
-package com.wy.test.web.mgt.contorller.history;
+package com.wy.test.web.core.controller.history;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
@@ -14,31 +13,35 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wy.test.authentication.core.annotation.CurrentUser;
 import com.wy.test.core.base.ResultResponse;
-import com.wy.test.core.entity.HistoryLoginEntity;
+import com.wy.test.core.entity.HistoryLoginAppEntity;
 import com.wy.test.core.entity.UserEntity;
-import com.wy.test.persistence.service.HistoryLoginService;
+import com.wy.test.persistence.service.HistoryLoginAppService;
 
 import dream.flying.flower.ConstDate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Tag(name = "1-10 用户登录日志API")
+@Tag(name = "1-11 APP登录日志API")
 @Slf4j
 @RestController
+@AllArgsConstructor
 @RequestMapping(value = { "/historys" })
-public class LoginHistoryController {
+public class LoginAppsHistoryController {
 
-	@Autowired
-	HistoryLoginService loginHistoryService;
+	protected final HistoryLoginAppService historyLoginAppsService;
 
 	@Operation(summary = "查询列表", description = "查询列表", method = "POST")
-	@PostMapping(value = { "/loginHistory/fetch" })
-	public ResponseEntity<?> fetch(@RequestBody HistoryLoginEntity historyLogin, @CurrentUser UserEntity currentUser) {
-		log.debug("historys/loginHistory/fetch/ {}", historyLogin);
-		historyLogin.setInstId(currentUser.getInstId());
-		return new ResultResponse<>(loginHistoryService.list(historyLogin)).buildResponse();
+	@PostMapping(value = { "/loginAppsHistory/fetch" })
+	public ResponseEntity<?> fetch(@RequestBody HistoryLoginAppEntity historyLoginApp,
+			@CurrentUser UserEntity currentUser) {
+		log.debug("historys/loginAppsHistory/fetch/  {}", historyLoginApp);
+		historyLoginApp.setId(null);
+		historyLoginApp.setUserId(currentUser.getId());
+		historyLoginApp.setInstId(currentUser.getInstId());
+		return new ResultResponse<>(historyLoginAppsService.list(historyLoginApp)).buildResponse();
 	}
 
 	@InitBinder

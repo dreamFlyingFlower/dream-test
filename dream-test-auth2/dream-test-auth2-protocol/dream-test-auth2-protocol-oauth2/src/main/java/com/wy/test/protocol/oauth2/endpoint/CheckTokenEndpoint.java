@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * @author Luke Taylor
  * @author Joel D'sa
  */
-@Tag(name = "2-1-OAuth v2.0 API文档模块")
+@Tag(name = "OAuth2.0 Token验证API")
 @Controller
 public class CheckTokenEndpoint {
 
@@ -48,7 +48,7 @@ public class CheckTokenEndpoint {
 		this.accessTokenConverter = accessTokenConverter;
 	}
 
-	@Operation(summary = "OAuth 2.0 token检查接口", description = "传递参数token", method = "POST")
+	@Operation(summary = "Token检查", description = "传递参数token", method = "POST")
 	@PostMapping(value = OAuth2Constants.ENDPOINT.ENDPOINT_CHECK_TOKEN)
 	@ResponseBody
 	public Map<String, ?> checkToken(@RequestParam(OAuth2Constants.PARAMETER.TOKEN) String value) {
@@ -68,5 +68,4 @@ public class CheckTokenEndpoint {
 
 		return response;
 	}
-
 }

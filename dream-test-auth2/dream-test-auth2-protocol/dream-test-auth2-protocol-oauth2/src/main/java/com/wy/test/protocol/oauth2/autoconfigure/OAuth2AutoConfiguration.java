@@ -27,7 +27,7 @@ import com.wy.test.core.properties.DreamAuthStoreProperties;
 import com.wy.test.core.redis.RedisConnectionFactory;
 import com.wy.test.persistence.service.LoginService;
 import com.wy.test.protocol.oauth2.common.OAuth2Constants;
-import com.wy.test.protocol.oauth2.endpoint.TokenEndpointAuthenticationFilter;
+import com.wy.test.protocol.oauth2.filter.TokenEndpointAuthenticationFilter;
 import com.wy.test.protocol.oauth2.oidc.OidcIdTokenEnhancer;
 import com.wy.test.protocol.oauth2.provider.ClientDetailsService;
 import com.wy.test.protocol.oauth2.provider.OAuth2UserDetailsService;

@@ -1,4 +1,4 @@
-package com.wy.test.web.mgt.contorller.history;
+package com.wy.test.web.core.controller.history;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,10 +34,11 @@ public class LoginHistoryController {
 	HistoryLoginService loginHistoryService;
 
 	@Operation(summary = "查询列表", description = "查询列表", method = "POST")
-	@PostMapping(value = { "/loginHistory/fetch" })
+	@PostMapping("/loginHistory/fetch")
 	public ResponseEntity<?> fetch(@RequestBody HistoryLoginEntity historyLogin, @CurrentUser UserEntity currentUser) {
 		log.debug("historys/loginHistory/fetch/ {}", historyLogin);
 		historyLogin.setInstId(currentUser.getInstId());
+		historyLogin.setUserId(currentUser.getId());
 		return new ResultResponse<>(loginHistoryService.list(historyLogin)).buildResponse();
 	}
 

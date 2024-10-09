@@ -57,6 +57,8 @@ import com.wy.test.protocol.oauth2.provider.approval.UserApprovalHandler;
 import com.wy.test.protocol.oauth2.provider.code.AuthorizationCodeServices;
 import com.wy.test.protocol.oauth2.provider.implicit.ImplicitTokenRequest;
 import com.wy.test.protocol.oauth2.provider.request.DefaultOAuth2RequestValidator;
+import com.wy.test.protocol.oauth2.resolver.DefaultRedirectResolver;
+import com.wy.test.protocol.oauth2.resolver.RedirectResolver;
 
 import dream.flying.flower.helper.UrlHelper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -80,7 +82,7 @@ import lombok.extern.slf4j.Slf4j;
  * </p>
  * 
  */
-@Tag(name = "2-1-OAuth v2.0 API文档模块")
+@Tag(name = "OAuth2.0 授权认证API")
 @Controller
 @Slf4j
 public class AuthorizationEndpoint extends AbstractEndpoint {
@@ -114,7 +116,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 	 * @param sessionStatus
 	 * @return
 	 */
-	@Operation(summary = "OAuth 2.0 认证接口", description = "传递参数client_id,response_type,redirect_uri等", method = "GET")
+	@Operation(summary = "认证接口", description = "传递参数client_id,response_type,redirect_uri等", method = "GET")
 	@GetMapping(value = { OAuth2Constants.ENDPOINT.ENDPOINT_AUTHORIZE,
 			OAuth2Constants.ENDPOINT.ENDPOINT_TENCENT_IOA_AUTHORIZE })
 	public ModelAndView authorize(Map<String, Object> model, @RequestParam Map<String, String> parameters,
@@ -213,7 +215,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 
 	}
 
-	@Operation(summary = "OAuth 2.0 认证接口", description = "传递参数应用ID，自动完成跳转认证拼接", method = "GET")
+	@Operation(summary = "认证接口", description = "传递参数应用ID，自动完成跳转认证拼接", method = "GET")
 	@GetMapping(value = { OAuth2Constants.ENDPOINT.ENDPOINT_BASE + "/{id}" })
 	public ModelAndView authorize(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("id") String id) {
