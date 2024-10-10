@@ -24,10 +24,18 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
+/**
+ * 将接口调整到{@link ProfileController}中
+ *
+ * @author 飞花梦影
+ * @date 2024-10-10 17:27:03
+ * @git {@link https://github.com/dreamFlyingFlower}
+ */
 @Tag(name = "1-8 安全设置API")
 @Controller
 @AllArgsConstructor
 @RequestMapping(value = { "/safe" })
+@Deprecated
 public class SafeController {
 
 	private final UserService userService;

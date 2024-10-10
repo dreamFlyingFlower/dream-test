@@ -16,5 +16,4 @@ import dream.flying.flower.framework.mybatis.plus.service.BaseServices;
 public interface HistoryLoginAppService
 		extends BaseServices<HistoryLoginAppEntity, HistoryLoginAppVO, HistoryLoginAppQuery> {
 
-	boolean insert(HistoryLoginAppEntity loginAppsHistory);
 }

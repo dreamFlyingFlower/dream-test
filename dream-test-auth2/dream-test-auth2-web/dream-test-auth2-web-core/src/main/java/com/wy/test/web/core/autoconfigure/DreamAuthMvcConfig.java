@@ -108,7 +108,7 @@ public class DreamAuthMvcConfig implements WebMvcConfigurer {
 
 		log.debug("add Permission Interceptor");
 
-		// 单点登录拦截器
+		// Cas,OAuth2.0,OAuth2.1等APP登录拦截器
 		registry.addInterceptor(singleSignOnInterceptor)
 				.addPathPatterns("/authz/basic/*")
 				// Form based

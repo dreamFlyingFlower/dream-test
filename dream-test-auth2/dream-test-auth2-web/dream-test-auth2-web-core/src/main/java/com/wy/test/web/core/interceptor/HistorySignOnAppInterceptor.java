@@ -3,7 +3,6 @@ package com.wy.test.web.core.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,27 +14,25 @@ import com.wy.test.core.entity.HistoryLoginAppEntity;
 import com.wy.test.core.vo.AppVO;
 import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.AuthWebContext;
-import com.wy.test.persistence.service.AppService;
 import com.wy.test.persistence.service.HistoryLoginAppService;
+import com.wy.test.web.core.autoconfigure.DreamAuthMvcConfig;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * CAS单点登录成功后记录日志
+ * Cas,OAuth2.0,OAuth2.1等APP登录成功后记录日志,由{@link DreamAuthMvcConfig}注入
  *
  * @author 飞花梦影
  * @date 2024-10-02 13:26:54
  * @git {@link https://github.com/dreamFlyingFlower}
  */
-@Component
 @Slf4j
+@Component
+@AllArgsConstructor
 public class HistorySignOnAppInterceptor implements AsyncHandlerInterceptor {
 
-	@Autowired
-	private HistoryLoginAppService historyLoginAppsService;
-
-	@Autowired
-	protected AppService appsService;
+	private final HistoryLoginAppService historyLoginAppService;
 
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
@@ -49,15 +46,16 @@ public class HistorySignOnAppInterceptor implements AsyncHandlerInterceptor {
 			final UserVO userInfo = principal.getUserInfo();
 			String sessionId = principal.getSession().getId();
 			log.debug("sessionId : " + sessionId + " ,appId : " + appVo.getId());
-			HistoryLoginAppEntity historyLoginApps = new HistoryLoginAppEntity();
-			historyLoginApps.setAppId(appVo.getId());
-			historyLoginApps.setSessionId(sessionId);
-			historyLoginApps.setAppName(appVo.getAppName());
-			historyLoginApps.setUserId(userInfo.getId());
-			historyLoginApps.setUsername(userInfo.getUsername());
-			historyLoginApps.setDisplayName(userInfo.getDisplayName());
-			historyLoginApps.setInstId(userInfo.getInstId());
-			historyLoginAppsService.insert(historyLoginApps);
+			HistoryLoginAppEntity historyLoginAppEntity = HistoryLoginAppEntity.builder()
+					.appId(appVo.getId())
+					.sessionId(sessionId)
+					.appName(appVo.getAppName())
+					.userId(userInfo.getId())
+					.username(userInfo.getUsername())
+					.displayName(userInfo.getDisplayName())
+					.instId(userInfo.getInstId())
+					.build();
+			historyLoginAppService.save(historyLoginAppEntity);
 			AuthWebContext.removeAttribute(ConstAuthWeb.CURRENT_SINGLESIGNON_URI);
 			AuthWebContext.removeAttribute(ConstAuthWeb.SINGLE_SIGN_ON_APP_ID);
 		}

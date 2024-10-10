@@ -22,8 +22,4 @@ import dream.flying.flower.framework.mybatis.plus.service.impl.AbstractServiceIm
 public class HistoryLoginAppServiceImpl extends AbstractServiceImpl<HistoryLoginAppEntity, HistoryLoginAppVO,
 		HistoryLoginAppQuery, HistoryLoginAppConvert, HistoryLoginAppMapper> implements HistoryLoginAppService {
 
-	@Override
-	public boolean insert(HistoryLoginAppEntity loginAppsHistory) {
-		return baseMapper.insert(loginAppsHistory) > 0;
-	}
 }

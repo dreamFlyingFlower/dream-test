@@ -87,11 +87,8 @@ public class SingleSignOnInterceptor implements AsyncHandlerInterceptor {
 				} else if (requestURI.contains("/authz/jwt/") || requestURI.contains("/authz/api/")
 						|| requestURI.contains("/authz/formbased/") || requestURI.contains("/authz/tokenbased/")
 						|| requestURI.contains("/authz/api/") || requestURI.contains("/authz/saml20/consumer/")
-						|| requestURI.contains("/authz/saml20/idpinit/") || requestURI.contains("/authz/cas/")) {// for
-																													// id
-																													// end
-																													// of
-																													// URL
+						|| requestURI.contains("/authz/saml20/idpinit/") || requestURI.contains("/authz/cas/")) {
+					// for id end of URL
 					String[] requestURIs = requestURI.split("/");
 					String appId = requestURIs[requestURIs.length - 1];
 					log.debug("appId {}", appId);

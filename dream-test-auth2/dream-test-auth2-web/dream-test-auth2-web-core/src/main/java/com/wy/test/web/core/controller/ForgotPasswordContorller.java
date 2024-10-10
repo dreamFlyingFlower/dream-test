@@ -33,10 +33,18 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 将接口调整到{@link ProfileController}中
+ *
+ * @author 飞花梦影
+ * @date 2024-10-10 17:24:27
+ * @git {@link https://github.com/dreamFlyingFlower}
+ */
 @Tag(name = "1-5 忘记密码API")
 @RestController
 @RequestMapping(value = { "/forgotpassword" })
 @Slf4j
+@Deprecated
 public class ForgotPasswordContorller {
 
 	Pattern emailRegex =

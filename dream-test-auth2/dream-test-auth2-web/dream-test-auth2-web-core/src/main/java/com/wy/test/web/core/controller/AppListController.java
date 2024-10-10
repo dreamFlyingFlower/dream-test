@@ -3,7 +3,6 @@ package com.wy.test.web.core.controller;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,26 +28,19 @@ import dream.flying.flower.generator.GeneratorStrategyContext;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 
 @Tag(name = "1-7 APP应用API")
 @RestController
+@AllArgsConstructor
 public class AppListController {
 
-	@Autowired
-	private UserService userService;
+	final UserService userService;
 
-	@Autowired
-	AccountService accountService;
+	final AccountService accountService;
 
-	@Autowired
-	AppService appService;
+	final AppService appService;
 
-	/**
-	 * gridList.
-	 * 
-	 * @param gridList 类型
-	 * @return
-	 */
 	@Operation(summary = "获得用户APP列表", description = "获得用户APP列表", method = "GET")
 	@GetMapping(value = { "/appList" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> appList(@RequestParam(value = "gridList", required = false) String gridList,

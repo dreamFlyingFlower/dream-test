@@ -29,10 +29,18 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 使用{@link ProfileController}相同接口
+ *
+ * @author 飞花梦影
+ * @date 2024-10-10 17:18:44
+ * @git {@link https://github.com/dreamFlyingFlower}
+ */
 @Tag(name = "1-6 修改密码API")
 @Slf4j
 @RestController
 @RequestMapping(value = { "/config" })
+@Deprecated
 public class ChangePasswodController {
 
 	@Autowired
