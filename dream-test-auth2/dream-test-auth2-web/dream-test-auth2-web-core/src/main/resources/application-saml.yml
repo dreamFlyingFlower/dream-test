@@ -15,6 +15,7 @@ dream:
         keystore-private-key-password: dream
         issuing-entity-id: dream.top
         issuer: ${dream.auth.server.authz-uri}saml
+#        issuer: https://sso.dream.top/dream/saml
         receiver-endpoint: https://sso.dream.top/
       sp:
         keystore: classpath:config/samlClientKeystore.jks

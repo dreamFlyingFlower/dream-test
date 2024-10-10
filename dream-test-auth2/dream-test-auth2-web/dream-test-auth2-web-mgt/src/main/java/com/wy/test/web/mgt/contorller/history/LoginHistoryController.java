@@ -1,13 +1,7 @@
 package com.wy.test.web.mgt.contorller.history;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +12,6 @@ import com.wy.test.core.entity.HistoryLoginEntity;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.persistence.service.HistoryLoginService;
 
-import dream.flying.flower.ConstDate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,10 +34,11 @@ public class LoginHistoryController {
 		return new ResultResponse<>(loginHistoryService.list(historyLogin)).buildResponse();
 	}
 
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat(ConstDate.TIME);
-		dateFormat.setLenient(false);
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
-	}
+	// @InitBinder
+	// public void initBinder(WebDataBinder binder) {
+	// SimpleDateFormat dateFormat = new SimpleDateFormat(ConstDate.TIME);
+	// dateFormat.setLenient(false);
+	// binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,
+	// true));
+	// }
 }

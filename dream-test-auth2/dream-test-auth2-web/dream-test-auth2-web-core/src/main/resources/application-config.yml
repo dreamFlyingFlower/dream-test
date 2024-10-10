@@ -1,6 +1,8 @@
 dream:
   auth:
+    kafka-supported: false
     app:
+      name: dream
       title: dream
       version: 1.0.0
       issuer: CN=ConSec,CN=COM,CN=SH
@@ -19,69 +21,28 @@ dream:
       frontend-port: ${SERVER_FRONTEND_PORT:4200}
       frontend-uri: /dream
     jwk:
-      issuer: ${dream.auth.server.uri}
+      issuer: ${dream.auth.server.default-uri}
       secret: 7heM-14BtxjyKPuH3ITIm7q2-ps5MuBirWCsrrdbzzSAOuSPrbQYiaJ54AeA0uH2XdkYy3hHAkTFIsieGkyqxOJZ_dQzrCbaYISH9rhUZAKYx8tUY0wkE4ArOC6LqHDJarR6UIcMsARakK9U4dhoOPO1cj74XytemI-w6ACYfzRUn_Rn4e-CQMcnD1C56oNEukwalf06xVgXl41h6K8IBEzLVod58y_VfvFn-NGWpNG0fy_Qxng6dg8Dgva2DobvzMN2eejHGLGB-x809MvC4zbG7CKNVlcrzMYDt2Gt2sOVDrt2l9YqJNfgaLFjrOEVw5cuXemGkX1MvHj6TAsbLg
       refresh-secret: 7heM-14BtxjyKPuH3ITIm7q2-ps5MuBirWCsrrdbzzSAOuSPrbQYiaJ54AeA0uH2XdkYy3hHAkTFIsieGkyqxOJZ_dQzrCbaYISH9rhUZAKYx8tUY0wkE4ArOC6LqHDJarR6UIcMsARakK9U4dhoOPO1cj74XytemI-w6ACYfzRUn_Rn4e-CQMcnD1C56oNEukwalf06xVgXl41h6K8IBEzLVod58y_VfvFn-NGWpNG0fy_Qxng6dg8Dgva2DobvzMN2eejHGLGB-x809MvC4zbG7CKNVlcrzMYDt2Gt2sOVDrt2l9YqJNfgaLFjrOEVw5cuXemGkX1MvHj6TAsbLg
       expires: 600
     crypto:
       password-type: bcrypt
       
-    login:
-      default-uri: appList
-      captcha:
-        enabled: ${LOGIN_CAPTCHA:false}
-      mfa:
-        enabled: ${LOGIN_MFA_ENABLED:true}
-        # TimeBasedOtpAuthn MailOtpAuthn SmsOtpAuthnYunxin SmsOtpAuthnAliyun SmsOtpAuthnTencentCloud
-        type: ${LOGIN_MFA_TYPE:TimeBasedOtpAuthn}
-      social-sign:
-        enabled: ${LOGIN_SOCIAL_ENABLED:true}
-        providers: sinaweibo,google,qq,dingtalk,microsoft,facebook
-      kerberos: 
-        enabled: false
-        default-user-domain: DREAM
-        default-full-user-domain: DREAM.ORG
-        default-crypto: 846KZSzYq56M6d5o
-        default-redirect-uri: http://sso.dream.top/kerberos/authn/
-      http-header:
-        enabled: false
-        header-name: header-user
-      basic:
-        enabled: false
-      ws-federation: 
-        enabled: false
-        identifier: http://adfs.dream.top/adfs/services/trust
-        url: https://adfs.dream.top/adfs/ls/
-        principal: upn
-        relying-party: urn:federation:connsec
-        signing-certificate: adfs-signing.crt
-        tolerance: 10000
-        upn-suffix: dream.org
-        logout-url: https://adfs.dream.top/adfs/ls/?wa=wsignout1.0
-      remember-me: ${LOGIN_REMEBERME:true}
-      remember-me-validity: 0
-      jwt:
-        enabled: ${LOGIN_JWT:true}
-        issuer: ${LOGIN_JWT_ISSUER:${dream.auth.server.authz-uri}}
     ip:
       white: false
     notice:
       visible: false
       
-    otp:
-      policy:
-        type: totp
-        digits: 6
-        issuer: ${OTP_POLICY_ISSUER:dream}
-        domain: ${dream.auth.server.domain}
-        period: 30
-
     oidc:
       metadata:
         issuer: ${dream.auth.server.authz-uri}
+#        issuer: ${dream.auth.server.name}/dream
         authorization-endpoint: ${dream.auth.server.authz-uri}/authz/oauth/v20/authorize
+#        authorization-endpoint: ${dream.auth.server.name}/dream/authz/oauth/v20/authorize
         token-endpoint: ${dream.auth.server.authz-uri}/authz/oauth/v20/token
+#        token-endpoint: ${dream.auth.server.name}/dream/authz/oauth/v20/token
         userinfo-endpoint: ${dream.auth.server.authz-uri}/api/connect/userinfo
+#        userinfo-endpoint: ${dream.auth.server.name}/dream/api/connect/userinfo
 
     swagger:
       enabled: true

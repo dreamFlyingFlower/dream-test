@@ -1,0 +1,36 @@
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+    show-extensions: true
+  api-docs:
+    path: /v3/api-docs
+  group-configs: 
+    - group: default
+      paths-to-match: /**
+      packages-to-scan: com.wy.test.web.core.controller
+    - group: Captcha
+      paths-to-match: /**
+      packages-to-scan: com.wy.test.authentication.captcha.controller
+    - group: Cas
+      paths-to-match: /**
+      packages-to-scan: com.wy.test.protocol.cas.endpoint
+    - group: Form
+      paths-to-match: /**
+      packages-to-scan: com.wy.test.protocol.form.endpoint
+    - group: Jwt
+      paths-to-match: /**
+      packages-to-scan: com.wy.test.protocol.jwt.endpoint
+    - group: OAuth2.0
+      paths-to-match: /**
+      packages-to-scan: com.wy.test.protocol.oauth2.endpoint
+    - group: Token
+      paths-to-match: /**
+      packages-to-scan: com.wy.test.protocol.token.endpoint
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+    swagger-model-name: "实体类列表"

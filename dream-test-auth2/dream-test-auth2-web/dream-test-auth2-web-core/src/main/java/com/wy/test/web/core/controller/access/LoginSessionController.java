@@ -1,13 +1,7 @@
 package com.wy.test.web.core.controller.access;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +13,6 @@ import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.UserVO;
 import com.wy.test.persistence.service.HistoryLoginService;
 
-import dream.flying.flower.ConstDate;
 import dream.flying.flower.lang.StrHelper;
 import dream.flying.flower.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -86,10 +79,11 @@ public class LoginSessionController {
 		}
 	}
 
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat(ConstDate.TIME);
-		dateFormat.setLenient(false);
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
-	}
+	// @InitBinder
+	// public void initBinder(WebDataBinder binder) {
+	// SimpleDateFormat dateFormat = new SimpleDateFormat(ConstDate.TIME);
+	// dateFormat.setLenient(false);
+	// binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,
+	// true));
+	// }
 }

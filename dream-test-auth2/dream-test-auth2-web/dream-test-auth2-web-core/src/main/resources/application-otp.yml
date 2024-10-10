@@ -1,6 +1,12 @@
 dream:
   auth:
     otp:
+      policy:
+        type: totp
+        digits: 6
+        issuer: ${OTP_POLICY_ISSUER:dream}
+        domain: ${dream.auth.server.domain}
+        period: 30
       sms:
         # SmsOtpAuthnYunxin SmsOtpAuthnAliyun SmsOtpAuthnTencentCloud
         class-name: "com.wy.test.sms.password.sms.impl.SmsOtpAuthnYunxin"
