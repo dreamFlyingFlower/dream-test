@@ -22,6 +22,7 @@ import com.wy.test.authentication.core.jwt.AuthTokenService;
 import com.wy.test.authentication.core.web.AuthorizationUtils;
 import com.wy.test.core.base.ResultResponse;
 import com.wy.test.core.cache.MomentaryService;
+import com.wy.test.core.constant.ConstAuthView;
 import com.wy.test.core.entity.oauth2.ClientDetails;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 import com.wy.test.core.vo.AppVO;
@@ -69,14 +70,14 @@ public class OAuth20AccessConfirmationEndpoint {
 	AuthTokenService authTokenService;
 
 	/**
-	 * getAccessConfirmation.
+	 * 用户授权确认页面请求,渲染ConstAuthView#AUTHZ_APPROVE_VIEW,之后会调用{@link #getAccess(String, UserVO)}
 	 * 
-	 * @param model Map
-	 * @return throws Exception
+	 * @param model 页面参数
+	 * @param currentUser 当前用户
+	 * @return {@link ConstAuthView#AUTHZ_APPROVE_VIEW}
 	 */
 	@GetMapping(OAuth2Constants.ENDPOINT.ENDPOINT_APPROVAL_CONFIRM)
-	public ModelAndView getAccessConfirmation(@RequestParam Map<String, Object> model,
-			@CurrentUser UserVO currentUser) {
+	public ModelAndView approvalConfirm(@RequestParam Map<String, Object> model, @CurrentUser UserVO currentUser) {
 		try {
 			// Map<String, Object> model
 			AuthorizationRequest clientAuth =
@@ -107,12 +108,14 @@ public class OAuth20AccessConfirmationEndpoint {
 			log.debug("OAuth Access Confirmation process error.", e);
 		}
 
+		// 跳转到授权确认页面:authorize/oauth_access_confirmation
 		ModelAndView modelAndView = new ModelAndView("authorize/oauth_access_confirmation");
 		log.trace("Confirmation details ");
 		for (Object key : model.keySet()) {
 			log.trace("key " + key + "=" + model.get(key));
 		}
 
+		// 设置认证URI
 		model.put("authorizeApproveUri", dreamServerProperties.getFrontendUri() + "/#/authz/oauth2approve");
 
 		modelAndView.addObject("model", model);

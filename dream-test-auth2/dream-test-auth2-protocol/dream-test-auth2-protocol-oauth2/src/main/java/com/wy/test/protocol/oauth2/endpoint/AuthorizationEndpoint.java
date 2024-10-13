@@ -114,7 +114,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 	 * @param parameters
 	 * @param currentUser
 	 * @param sessionStatus
-	 * @return
+	 * @return {@link OAuth20AccessConfirmationEndpoint#approvalConfirm}
 	 */
 	@Operation(summary = "认证接口", description = "传递参数client_id,response_type,redirect_uri等", method = "GET")
 	@GetMapping(value = { OAuth2Constants.ENDPOINT.ENDPOINT_AUTHORIZE,
@@ -143,7 +143,6 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 		}
 
 		try {
-
 			if (!(principal instanceof Authentication) || !((Authentication) principal).isAuthenticated()) {
 				throw new InsufficientAuthenticationException(
 						"User must be authenticated with Spring Security before authorization can be completed.");
@@ -205,14 +204,11 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 			// so any auth request parameters passed to approveOrDeny will be ignored and
 			// retrieved from the session.
 			momentaryService.put(currentUser.getSessionId(), "authorizationRequest", authorizationRequest);
-
 			return getUserApprovalPageResponse(model, authorizationRequest, (Authentication) principal);
-
 		} catch (RuntimeException e) {
 			sessionStatus.setComplete();
 			throw e;
 		}
-
 	}
 
 	@Operation(summary = "认证接口", description = "传递参数应用ID，自动完成跳转认证拼接", method = "GET")

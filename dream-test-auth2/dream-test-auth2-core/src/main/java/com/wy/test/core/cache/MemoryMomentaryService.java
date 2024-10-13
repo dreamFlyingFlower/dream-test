@@ -7,15 +7,18 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 内存方式存储Session
+ *
+ * @author 飞花梦影
+ * @date 2024-09-17 08:14:07
+ * @git {@link https://github.com/dreamFlyingFlower}
+ */
 @Slf4j
 public class MemoryMomentaryService implements MomentaryService {
 
 	protected static Cache<String, Object> momentaryStore =
 			Caffeine.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES).maximumSize(200000).build();
-
-	public MemoryMomentaryService() {
-		super();
-	}
 
 	@Override
 	public void put(String sessionId, String name, Object value) {

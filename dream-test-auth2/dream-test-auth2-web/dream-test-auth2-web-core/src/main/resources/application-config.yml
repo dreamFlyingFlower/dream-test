@@ -11,8 +11,8 @@ dream:
       domain: ${SERVER_DOMAIN:dream.top}
       sub-domain: sso.${dream.auth.server.domain}
       name: ${dream.auth.server.scheme}://${dream.auth.server.sub-domain}
-#      uri: ${dream.auth.server.name}:${server.port}${server.servlet.context-path}
-      default-uri: ${dream.auth.server.uri}/dream/appList
+      uri: ${dream.auth.server.name}:${server.port}${server.servlet.context-path}
+      default-uri: ${dream.auth.server.uri}/appList
       mgt-uri: ${dream.auth.server.name}:9521/dream-mgt/login
 #      authz-uri: ${dream.auth.server.name}:${server.port}${server.servlet.context-path}
       authz-uri: ${dream.auth.server.name}:${server.port}

@@ -22,7 +22,6 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
-import com.nimbusds.jose.JOSEException;
 import com.wy.test.core.cache.MemoryMomentaryService;
 import com.wy.test.core.cache.MomentaryService;
 import com.wy.test.core.cache.RedisMomentaryService;
@@ -148,9 +147,9 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 	}
 
 	/**
-	 * Id Generator .
+	 * id生成器
 	 * 
-	 * @return
+	 * @return GeneratorStrategyContext
 	 */
 	@Bean
 	GeneratorStrategyContext idGenerator(DreamAuthIdProperties dreamAuthIdProperties) {
@@ -163,9 +162,16 @@ public class ApplicationAutoConfiguration implements InitializingBean {
 		return idGenerator;
 	}
 
+	/**
+	 * 注入Session管理服务
+	 * 
+	 * @param redisHelpers
+	 * @param dreamAuthRedisProperties
+	 * @return
+	 */
 	@Bean
 	MomentaryService momentaryService(RedisConnectionFactory redisConnFactory,
-			DreamAuthStoreProperties dreamAuthRedisProperties) throws JOSEException {
+			DreamAuthStoreProperties dreamAuthRedisProperties) {
 		MomentaryService momentaryService;
 		if (dreamAuthRedisProperties.getStoreType() == StoreType.REDIS) {
 			momentaryService = new RedisMomentaryService(redisConnFactory);
