@@ -54,7 +54,7 @@ public class ExtendCndnsApiMailAdapter extends AbstractAuthorizeAdapter {
 	@SuppressWarnings("unchecked")
 	@Override
 	public ModelAndView authorize(ModelAndView modelAndView) {
-		HttpsTrust.beforeConnection();
+		HttpsTrust.trustAllCerts();
 		AppVO details = app;
 		// extraAttrs from Applications
 		ExtraAttrs extraAttrs = null;

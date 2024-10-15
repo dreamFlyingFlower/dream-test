@@ -42,7 +42,7 @@ public class ExtendQqExmailAdapter extends AbstractAuthorizeAdapter {
 
 	@Override
 	public ModelAndView authorize(ModelAndView modelAndView) {
-		HttpsTrust.beforeConnection();
+		HttpsTrust.trustAllCerts();
 
 		AppVO details = app;
 		// extraAttrs from Applications
