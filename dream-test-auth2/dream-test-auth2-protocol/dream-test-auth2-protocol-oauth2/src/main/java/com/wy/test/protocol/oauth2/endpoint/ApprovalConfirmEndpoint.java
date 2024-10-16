@@ -43,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 @Tag(name = "OAuth2.0 权限API")
 @Controller
 @Slf4j
-public class OAuth20AccessConfirmationEndpoint {
+public class ApprovalConfirmEndpoint {
 
 	@Autowired
 	protected AppService appService;
@@ -122,6 +122,13 @@ public class OAuth20AccessConfirmationEndpoint {
 		return modelAndView;
 	}
 
+	/**
+	 * 获得权限访问列表
+	 * 
+	 * @param oauthApproval
+	 * @param currentUser 当前用户
+	 * @return 结果
+	 */
 	@GetMapping(OAuth2Constants.ENDPOINT.ENDPOINT_APPROVAL_CONFIRM + "/get/{oauthApproval}")
 	public ResponseEntity<?> getAccess(@PathVariable String oauthApproval, @CurrentUser UserVO currentUser) {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -170,9 +177,9 @@ public class OAuth20AccessConfirmationEndpoint {
 	}
 
 	/**
-	 * handleError.
+	 * 授权认证错误请求,页面跳转
 	 * 
-	 * @param model Map
+	 * @param model 页面数据
 	 * @return throws Exception
 	 */
 	@GetMapping(OAuth2Constants.ENDPOINT.ENDPOINT_ERROR)

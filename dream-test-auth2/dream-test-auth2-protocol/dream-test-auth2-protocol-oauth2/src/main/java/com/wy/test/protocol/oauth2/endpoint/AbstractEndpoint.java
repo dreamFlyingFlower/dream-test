@@ -26,6 +26,11 @@ import com.wy.test.protocol.oauth2.provider.refresh.RefreshTokenGranter;
 import com.wy.test.protocol.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import com.wy.test.protocol.oauth2.provider.token.AuthorizationServerTokenServices;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class AbstractEndpoint implements InitializingBean {
 
 	private TokenGranter tokenGranter;
@@ -94,33 +99,4 @@ public class AbstractEndpoint implements InitializingBean {
 			oAuth2RequestFactory = defaultOAuth2RequestFactory;
 		}
 	}
-
-	public void setTokenGranter(TokenGranter tokenGranter) {
-		this.tokenGranter = tokenGranter;
-	}
-
-	protected TokenGranter getTokenGranter() {
-		return tokenGranter;
-	}
-
-	protected OAuth2RequestFactory getOAuth2RequestFactory() {
-		return oAuth2RequestFactory;
-	}
-
-	protected OAuth2RequestFactory getDefaultOAuth2RequestFactory() {
-		return defaultOAuth2RequestFactory;
-	}
-
-	public void setOAuth2RequestFactory(OAuth2RequestFactory oAuth2RequestFactory) {
-		this.oAuth2RequestFactory = oAuth2RequestFactory;
-	}
-
-	protected ClientDetailsService getClientDetailsService() {
-		return clientDetailsService;
-	}
-
-	public void setClientDetailsService(ClientDetailsService clientDetailsService) {
-		this.clientDetailsService = clientDetailsService;
-	}
-
 }

@@ -1,5 +1,7 @@
 package com.wy.test.protocol.oauth2.common;
 
+import com.wy.test.protocol.oauth2.endpoint.ApprovalConfirmEndpoint;
+
 public class OAuth2Constants {
 
 	public static final class PARAMETER {
@@ -58,24 +60,42 @@ public class OAuth2Constants {
 
 		public final static String ENDPOINT_BASE = "/authz/oauth/v20";
 
+		/**
+		 * OAuth2自定义认证接口
+		 */
 		public final static String ENDPOINT_AUTHORIZE = ENDPOINT_BASE + "/authorize";
 
+		/**
+		 * OAuth2原生认证接口
+		 */
+		public final static String ENDPOINT_TENCENT_IOA_AUTHORIZE = "/oauth2/authorize";
+
+		/**
+		 * OAuth2自定义获取Token接口
+		 */
 		public final static String ENDPOINT_TOKEN = ENDPOINT_BASE + "/token";
+
+		/**
+		 * OAuth2原生获取Token接口
+		 */
+		public final static String ENDPOINT_TENCENT_IOA_TOKEN = "/oauth2/token";
 
 		public final static String ENDPOINT_CHECK_TOKEN = ENDPOINT_BASE + "/check_token";
 
 		public final static String ENDPOINT_TOKEN_KEY = ENDPOINT_BASE + "/token_key";
 
+		/**
+		 * OAuth2获取权限确认API,跳转{@link ApprovalConfirmEndpoint#approvalConfirm}
+		 */
 		public final static String ENDPOINT_APPROVAL_CONFIRM = ENDPOINT_BASE + "/approval_confirm";
 
+		/**
+		 * OAuth2授权错误API,跳转{@link ApprovalConfirmEndpoint#handleError}
+		 */
 		public final static String ENDPOINT_ERROR = ENDPOINT_BASE + "/error";
 
 		public final static String ENDPOINT_USERINFO = "/api/oauth/v20/me";
 
 		public final static String ENDPOINT_OPENID_CONNECT_USERINFO = "/api/connect/v10/userinfo";
-
-		public final static String ENDPOINT_TENCENT_IOA_AUTHORIZE = "/oauth2/authorize";
-
-		public final static String ENDPOINT_TENCENT_IOA_TOKEN = "/oauth2/token";
 	}
 }

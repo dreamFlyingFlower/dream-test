@@ -16,17 +16,10 @@ import com.wy.test.protocol.cas.endpoint.ticket.tgt.TicketGrantingTicketServices
 import lombok.extern.slf4j.Slf4j;
 
 @AutoConfiguration
-@ComponentScan(basePackages = { "org.dream.authz.cas.endpoint" })
+@ComponentScan(basePackages = { "com.wy.test.protocol.cas.endpoint" })
 @Slf4j
 public class CasAutoConfiguration implements InitializingBean {
 
-	/**
-	 * TicketServices.
-	 * 
-	 * @param persistence int
-	 * @param validity int
-	 * @return casTicketServices
-	 */
 	@Bean(name = "casTicketServices")
 	TicketServices casTicketServices(DreamAuthStoreProperties dreamAuthStoreProperties, JdbcTemplate jdbcTemplate,
 			RedisConnectionFactory redisConnFactory) {
@@ -35,12 +28,6 @@ public class CasAutoConfiguration implements InitializingBean {
 				redisConnFactory);
 	}
 
-	/**
-	 * TicketServices.
-	 * 
-	 * @param persistence int
-	 * @return casTicketServices
-	 */
 	@Bean(name = "casTicketGrantingTicketServices")
 	TicketServices casTicketGrantingTicketServices(DreamAuthStoreProperties dreamAuthStoreProperties,
 			JdbcTemplate jdbcTemplate, RedisConnectionFactory redisConnFactory) {

@@ -19,12 +19,12 @@ import org.springframework.security.oauth2.common.exceptions.InvalidRequestExcep
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.common.exceptions.UnsupportedGrantTypeException;
 import org.springframework.security.oauth2.common.util.OAuth2Utils;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.wy.test.authentication.core.entity.SignPrincipal;
 import com.wy.test.authentication.core.web.AuthorizationUtils;
@@ -64,7 +64,7 @@ import lombok.extern.slf4j.Slf4j;
  * 
  */
 @Tag(name = "OAuth2.0 Token API")
-@Controller
+@RestController
 @Slf4j
 public class TokenEndpoint extends AbstractEndpoint {
 

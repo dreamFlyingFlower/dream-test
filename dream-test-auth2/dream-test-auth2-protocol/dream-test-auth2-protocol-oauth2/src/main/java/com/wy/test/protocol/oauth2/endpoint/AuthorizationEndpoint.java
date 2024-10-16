@@ -98,14 +98,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 
 	private String userApprovalPage = "forward:" + OAuth2Constants.ENDPOINT.ENDPOINT_APPROVAL_CONFIRM;
 
-	@SuppressWarnings("unused")
-	private String errorPage = "forward:" + OAuth2Constants.ENDPOINT.ENDPOINT_ERROR;
-
 	private Object implicitLock = new Object();
-
-	public void setErrorPage(String errorPage) {
-		this.errorPage = errorPage;
-	}
 
 	/**
 	 * 入口:第三方客户端直接调用本接口,带上相关参数
@@ -114,7 +107,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 	 * @param parameters
 	 * @param currentUser
 	 * @param sessionStatus
-	 * @return {@link OAuth20AccessConfirmationEndpoint#approvalConfirm}
+	 * @return {@link ApprovalConfirmEndpoint#approvalConfirm}
 	 */
 	@Operation(summary = "认证接口", description = "传递参数client_id,response_type,redirect_uri等", method = "GET")
 	@GetMapping(value = { OAuth2Constants.ENDPOINT.ENDPOINT_AUTHORIZE,
@@ -211,7 +204,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 		}
 	}
 
-	@Operation(summary = "认证接口", description = "传递参数应用ID，自动完成跳转认证拼接", method = "GET")
+	@Operation(summary = "认证接口", description = "传递参数应用ID,自动完成跳转认证拼接", method = "GET")
 	@GetMapping(value = { OAuth2Constants.ENDPOINT.ENDPOINT_BASE + "/{id}" })
 	public ModelAndView authorize(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("id") String id) {
@@ -230,7 +223,15 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 		return AuthWebContext.redirect(authorizationUrl);
 	}
 
-	// approval must post
+	/**
+	 * OAuth2.0授权接口
+	 * 
+	 * @param approvalParameters 授权参数
+	 * @param currentUser 当前用户
+	 * @param sessionStatus Session信息
+	 * @return 结果
+	 */
+	@Operation(summary = "授权接口", description = "完成用户授权")
 	@PostMapping(value = { OAuth2Constants.ENDPOINT.ENDPOINT_AUTHORIZE + "/approval" },
 			params = OAuth2Utils.USER_OAUTH_APPROVAL)
 	public ResponseEntity<?> authorizeApproveOrDeny(@RequestParam Map<String, String> approvalParameters,
@@ -277,13 +278,11 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 						.buildResponse();
 			}
 
-			return new ResultResponse<Object>(
-					(Object) getAuthorizationCodeResponse(authorizationRequest, (Authentication) principal))
-							.buildResponse();
+			return new ResultResponse<>(getAuthorizationCodeResponse(authorizationRequest, (Authentication) principal))
+					.buildResponse();
 		} finally {
 			sessionStatus.setComplete();
 		}
-
 	}
 
 	// We need explicit approval from the user.
@@ -391,37 +390,26 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 
 	private String generateCode(AuthorizationRequest authorizationRequest, Authentication authentication)
 			throws AuthenticationException {
-
 		try {
-
 			OAuth2Request storedOAuth2Request = getOAuth2RequestFactory().createOAuth2Request(authorizationRequest);
-
 			OAuth2Authentication combinedAuth = new OAuth2Authentication(storedOAuth2Request, authentication);
 			String code = authorizationCodeServices.createAuthorizationCode(combinedAuth);
-
 			return code;
-
 		} catch (OAuth2Exception e) {
-
 			if (authorizationRequest.getState() != null) {
 				e.addAdditionalInformation(OAuth2Utils.STATE, authorizationRequest.getState());
 			}
-
 			throw e;
-
 		}
 	}
 
 	// Successful Redirect
 	private String getSuccessfulRedirect(AuthorizationRequest authorizationRequest, String authorizationCode) {
-
 		if (authorizationCode == null) {
 			throw new IllegalStateException("No authorization code found in the current request scope.");
 		}
-
 		Map<String, String> query = new LinkedHashMap<String, String>();
 		query.put(OAuth2Constants.PARAMETER.CODE, authorizationCode);
-
 		String state = authorizationRequest.getState();
 		if (state != null) {
 			query.put(OAuth2Utils.STATE, state);
@@ -432,23 +420,19 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 		if (service != null) {
 			query.put("service", service);
 		}
-
 		return append(authorizationRequest.getRedirectUri(), query, false);
 	}
 
 	private String getUnsuccessfulRedirect(AuthorizationRequest authorizationRequest, OAuth2Exception failure,
 			boolean fragment) {
-
 		if (authorizationRequest == null || authorizationRequest.getRedirectUri() == null) {
 			// we have no redirect for the user. very sad.
 			throw new UnapprovedClientAuthenticationException("Authorization failure, and no redirect URI.", failure);
 		}
 
 		Map<String, String> query = new LinkedHashMap<String, String>();
-
 		query.put("error", failure.getOAuth2ErrorCode());
 		query.put("error_description", failure.getMessage());
-
 		if (authorizationRequest.getState() != null) {
 			query.put(OAuth2Utils.STATE, authorizationRequest.getState());
 		}
@@ -458,9 +442,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 				query.put(additionalInfo.getKey(), additionalInfo.getValue());
 			}
 		}
-
 		return append(authorizationRequest.getRedirectUri(), query, fragment);
-
 	}
 
 	private String append(String base, Map<String, ?> query, boolean fragment) {
@@ -468,7 +450,6 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 	}
 
 	private String append(String base, Map<String, ?> query, Map<String, String> keys, boolean fragment) {
-
 		UriComponentsBuilder template = UriComponentsBuilder.newInstance();
 		UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(base);
 		URI redirectUri;
@@ -519,15 +500,14 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 			UriComponents encoded = template.build().expand(query).encode();
 			builder.query(encoded.getQuery());
 		}
-
 		return builder.build().toUriString();
-
 	}
 
 	public void setUserApprovalPage(String userApprovalPage) {
 		this.userApprovalPage = userApprovalPage;
 	}
 
+	@Override
 	public void setAuthorizationCodeServices(AuthorizationCodeServices authorizationCodeServices) {
 		this.authorizationCodeServices = authorizationCodeServices;
 	}
@@ -543,5 +523,4 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 	public void setOAuth2RequestValidator(OAuth2RequestValidator oauth2RequestValidator) {
 		this.oauth2RequestValidator = oauth2RequestValidator;
 	}
-
 }
