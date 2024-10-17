@@ -37,6 +37,7 @@ public class InstitutionsRepository {
 	public InstitutionEntity get(String instIdOrDomain) {
 		log.trace(" instId {}", instIdOrDomain);
 		InstitutionEntity inst = getByInstIdOrDomain(instIdOrDomain);
+		// TODO 有大问题,InstitutionEntity丧失了他的作用,没有就是没有,不能使用默认
 		if (inst == null) {
 			inst = getByInstIdOrDomain(DEFAULT_INSTID);
 			institutionsStore.put(instIdOrDomain, inst);

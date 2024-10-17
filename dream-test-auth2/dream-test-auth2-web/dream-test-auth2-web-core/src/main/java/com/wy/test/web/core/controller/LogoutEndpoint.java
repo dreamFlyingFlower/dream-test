@@ -72,7 +72,7 @@ public class LogoutEndpoint {
 			// terminate session
 			sessionManager.terminate(session.getId(), currentUser.getId(), currentUser.getUsername());
 		}
-		return new ResultResponse<String>().buildResponse();
+		return new ResultResponse<>().buildResponse();
 	}
 
 	@Operation(summary = "单点注销", description = "redirect_uri跳转地址", method = "GET")

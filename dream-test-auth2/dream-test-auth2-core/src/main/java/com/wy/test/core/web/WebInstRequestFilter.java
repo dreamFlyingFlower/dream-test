@@ -9,6 +9,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.filter.GenericFilterBean;
 
 import com.wy.test.core.constant.ConstAuthWeb;
@@ -24,8 +25,6 @@ public class WebInstRequestFilter extends GenericFilterBean {
 	public final static String HEADER_HOST = "host";
 
 	public final static String HEADER_HOSTNAME = "hostname";
-
-	public final static String HEADER_ORIGIN = "Origin";
 
 	InstitutionsRepository institutionsRepository;
 
@@ -62,11 +61,12 @@ public class WebInstRequestFilter extends GenericFilterBean {
 				host = host.split(":")[0];
 				log.trace("domain split {}", host);
 			}
+			// TODO 可能为null,未处理
 			InstitutionEntity institution = institutionsRepository.get(host);
 			log.trace("{}", institution);
 			request.getSession().setAttribute(ConstAuthWeb.CURRENT_INST, institution);
 
-			String origin = request.getHeader(HEADER_ORIGIN);
+			String origin = request.getHeader(HttpHeaders.ORIGIN);
 			if (StringUtils.isEmpty(origin)) {
 				origin = dreamServerProperties.getFrontendUri();
 			}

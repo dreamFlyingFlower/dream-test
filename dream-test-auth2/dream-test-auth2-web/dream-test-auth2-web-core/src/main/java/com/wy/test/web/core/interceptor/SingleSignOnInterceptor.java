@@ -96,9 +96,6 @@ public class SingleSignOnInterceptor implements AsyncHandlerInterceptor {
 				} else if (requestURI.contains(OAuth2Constants.ENDPOINT.ENDPOINT_AUTHORIZE)) {
 					// OAuth2,OAuth2.1认证回调
 					String clientId = request.getParameter(OAuth2Utils.CLIENT_ID);
-					if (StrHelper.isBlank(clientId)) {
-						clientId = request.getParameter("clientId");
-					}
 					app = appsService.get(clientId, true);
 					// 防止用户登录但没有权限,跳转到/authz/refused时渲染报错
 					AuthWebContext.setAttribute(ConstAuthWeb.AUTHORIZE_SIGN_ON_APP, app);

@@ -169,13 +169,9 @@ public class LoginEndpoint {
 
 			SocialProviderEntity socialSignOnProvider =
 					socialSignOnProviderService.get(socialsAssociate.getInstId(), socialsAssociate.getProvider());
-
 			loginCredential.setProvider(socialSignOnProvider.getProviderName());
-
 			Authentication authentication = authenticationProvider.authenticate(loginCredential, true);
-
 			return new ResultResponse<AuthJwt>(authTokenService.genAuthJwt(authentication)).buildResponse();
-
 		}
 		return new ResultResponse<AuthJwt>(ResultResponse.FAIL).buildResponse();
 	}
@@ -221,6 +217,7 @@ public class LoginEndpoint {
 				log.error("Login AuthN type must eq normal , tfa or mobile . ");
 			}
 		}
+		authJwtMessage.setMessage("Token验证失效,请刷新页面");
 		return authJwtMessage.buildResponse();
 	}
 
