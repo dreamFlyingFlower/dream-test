@@ -42,6 +42,7 @@ import com.wy.test.protocol.oauth2.provider.OAuth2RequestFactory;
 
 import dream.flying.flower.framework.core.helper.TokenHeader;
 import dream.flying.flower.framework.core.helper.TokenHelpers;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -71,6 +72,7 @@ import lombok.extern.slf4j.Slf4j;
 		urlPatterns = { OAuth2Constants.ENDPOINT.ENDPOINT_TOKEN + "/*",
 				OAuth2Constants.ENDPOINT.ENDPOINT_TENCENT_IOA_TOKEN + "/*" })
 @Slf4j
+@NoArgsConstructor
 public class TokenEndpointAuthenticationFilter implements Filter {
 
 	private AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource =
@@ -83,10 +85,6 @@ public class TokenEndpointAuthenticationFilter implements Filter {
 	private AuthenticationManager oauth2ClientAuthenticationManager;
 
 	private OAuth2RequestFactory oAuth2RequestFactory;
-
-	public TokenEndpointAuthenticationFilter() {
-
-	}
 
 	/**
 	 * @param authenticationManager an AuthenticationManager for the incoming
