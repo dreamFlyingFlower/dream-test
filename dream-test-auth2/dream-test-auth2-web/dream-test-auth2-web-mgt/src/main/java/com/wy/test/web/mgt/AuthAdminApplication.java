@@ -31,12 +31,12 @@ import lombok.extern.slf4j.Slf4j;
 				"com.wy.test.sync", "com.wy.test.web.mgt.listener", "com.wy.test.web.mgt.contorller",
 				"com.wy.test.web.mgt.endpoint", "com.wy.test.web.mgt.interceptor" })
 @Slf4j
-public class MgtApplication extends SpringBootServletInitializer {
+public class AuthAdminApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		log.info("Start Mgt Application ...");
 
-		ConfigurableApplicationContext applicationContext = SpringApplication.run(MgtApplication.class, args);
+		ConfigurableApplicationContext applicationContext = SpringApplication.run(AuthAdminApplication.class, args);
 		InitializeContext initWebContext = new InitializeContext(applicationContext);
 
 		try {
@@ -51,6 +51,6 @@ public class MgtApplication extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(MgtApplication.class);
+		return application.sources(AuthAdminApplication.class);
 	}
 }

@@ -11,13 +11,15 @@
 	<div id="top">
 
 	</div>
-	<div class="container">	
+	<div class="container">
+		<p>授权确认页面Body</p>
 		<#if 'oauth 2.0'==model.oauth_version>
 			 <!-- oauth 2.0 -->
 			 <table  class="table table-bordered">
                         <tr>
                             <td colspan="2">
-                                <div style="text-align: center;">                            
+                                <div style="text-align: center;">
+                                	<p>授权确认页面Test</p>
                                     <p>You hereby authorize "${model.client.clientId!}" to access your protected resources.</p>
                                     <form id="confirmationForm" name="confirmationForm" action="<@base/>/authz/oauth/v20/authorize" method="post">
                                         <input id="user_oauth_approval" name="user_oauth_approval" value="true" type="hidden"/>

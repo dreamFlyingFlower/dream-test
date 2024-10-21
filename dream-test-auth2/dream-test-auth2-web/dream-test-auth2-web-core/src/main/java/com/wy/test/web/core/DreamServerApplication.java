@@ -40,12 +40,12 @@ import lombok.extern.slf4j.Slf4j;
 		"com.wy.test.web.core" })
 @MapperScan("com.wy.test.persistence.mapper")
 @Slf4j
-public class DreamAdminApplication extends SpringBootServletInitializer {
+public class DreamServerApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		log.info("Start dream Application ...");
 
-		ConfigurableApplicationContext applicationContext = SpringApplication.run(DreamAdminApplication.class, args);
+		ConfigurableApplicationContext applicationContext = SpringApplication.run(DreamServerApplication.class, args);
 		InitializeContext initWebContext = new InitializeContext(applicationContext);
 		try {
 			initWebContext.init(null);
@@ -59,6 +59,6 @@ public class DreamAdminApplication extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(DreamAdminApplication.class);
+		return application.sources(DreamServerApplication.class);
 	}
 }
