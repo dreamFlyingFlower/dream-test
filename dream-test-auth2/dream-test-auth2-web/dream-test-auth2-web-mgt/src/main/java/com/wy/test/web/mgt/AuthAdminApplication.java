@@ -24,12 +24,10 @@ import lombok.extern.slf4j.Slf4j;
  * @git {@link https://github.com/dreamFlyingFlower}
  */
 @MapperScan("com.wy.test.persistence.mapper")
-@SpringBootApplication(
-		scanBasePackages = { "com.wy.test.core.convert", "com.wy.test.core.web", "com.wy.test.persistence",
-				"com.wy.test.authentication.core", "com.wy.test.configuration", "com.wy.test.web.apis.identity.kafka",
-				"com.wy.test.web.apis.identity.rest", "com.wy.test.web.apis.identity.scim", "com.wy.test.provision",
-				"com.wy.test.sync", "com.wy.test.web.mgt.listener", "com.wy.test.web.mgt.contorller",
-				"com.wy.test.web.mgt.endpoint", "com.wy.test.web.mgt.interceptor" })
+@SpringBootApplication(scanBasePackages = { "com.wy.test.core", "com.wy.test.core.web", "com.wy.test.persistence",
+		"com.wy.test.authentication.core", "com.wy.test.authentication.provider", "com.wy.test.configuration",
+		"com.wy.test.web.apis.identity.kafka", "com.wy.test.web.api.rest", "com.wy.test.web.api.scim",
+		"com.wy.test.provision", "com.wy.test.sync", "com.wy.test.web.mgt" })
 @Slf4j
 public class AuthAdminApplication extends SpringBootServletInitializer {
 

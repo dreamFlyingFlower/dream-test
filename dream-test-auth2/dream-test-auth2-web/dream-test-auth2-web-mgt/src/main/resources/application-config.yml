@@ -43,10 +43,10 @@ dream:
         period: 30
     oidc:
       metadata:
-        issuer: ${dream.server.authz.uri}
-        authorizationEndpoint: ${dream.server.authz.uri}/authz/oauth/v20/authorize
-        tokenEndpoint: ${dream.server.authz.uri}/authz/oauth/v20/token
-        userinfoEndpoint: ${dream.server.authz.uri}/api/connect/userinfo
+        issuer: ${dream.auth.server.authz.uri}
+        authorization-endpoint: ${dream.auth.server.authz-uri}/authz/oauth/v20/authorize
+        token-endpoint: ${dream.auth.server.authz-uri}/authz/oauth/v20/token
+        userinfo-endpoint: ${dream.auth.server.authz-uri}/api/connect/userinfo
     saml:
       max-parser-pool-size: 2
       replay:

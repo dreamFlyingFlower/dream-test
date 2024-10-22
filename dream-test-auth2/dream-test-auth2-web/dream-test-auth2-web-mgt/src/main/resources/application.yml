@@ -1,7 +1,7 @@
 server:
     port: ${SERVER_PORT:9526}
     servlet:
-      context-path: /dream-mgt-api/
+      context-path: /dream-mgt-api
       encoding:
         enabled: true
         force: true
@@ -12,7 +12,10 @@ spring:
     name: dream-mgt
   main.banner-mode: log
   profiles:
-    active: ${SERVER_PROFILES:mgt}
+    active: ${SERVER_PROFILES:config}
+  devtools:
+    restart:
+      trigger-file: classpath:restart.txt
   servlet:
     multipart:
       enabled: true

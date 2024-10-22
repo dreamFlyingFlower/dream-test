@@ -1,4 +1,4 @@
-package com.wy.test.web.apis.identity.rest;
+package com.wy.test.web.api.rest;
 
 import java.io.IOException;
 
