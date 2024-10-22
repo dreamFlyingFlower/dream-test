@@ -53,7 +53,5 @@ public class FeishuSynchronizerService implements SyncProcessor {
 	@Override
 	public void setSynchronizer(SyncEntity synchronizer) {
 		this.synchronizer = synchronizer;
-
 	}
-
 }

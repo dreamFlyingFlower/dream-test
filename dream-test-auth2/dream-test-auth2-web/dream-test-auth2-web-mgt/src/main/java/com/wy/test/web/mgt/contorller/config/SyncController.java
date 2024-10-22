@@ -3,14 +3,13 @@ package com.wy.test.web.mgt.contorller.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.wy.test.authentication.core.annotation.CurrentUser;
 import com.wy.test.core.base.ResultResponse;
@@ -23,9 +22,18 @@ import com.wy.test.persistence.service.SyncService;
 import com.wy.test.sync.core.synchronizer.SyncProcessor;
 
 import dream.flying.flower.lang.StrHelper;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
-@Controller
+/**
+ * 数据同步
+ *
+ * @author 飞花梦影
+ * @date 2024-10-22 23:18:44
+ * @git {@link https://github.com/dreamFlyingFlower}
+ */
+@Tag(name = "数据同步API", description = "第三方数据同步API")
+@RestController
 @RequestMapping(value = { "/config/synchronizers" })
 @Slf4j
 public class SyncController {
@@ -34,7 +42,6 @@ public class SyncController {
 	SyncService synchronizersService;
 
 	@GetMapping(value = { "/fetch" }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	@ResponseBody
 	public ResponseEntity<?> fetch(SyncQuery synchronizers, @CurrentUser UserEntity currentUser) {
 		log.debug("" + synchronizers);
 		synchronizers.setInstId(currentUser.getInstId());
@@ -48,7 +55,6 @@ public class SyncController {
 		return new ResultResponse<SyncEntity>(synchronizers).buildResponse();
 	}
 
-	@ResponseBody
 	@PostMapping(value = { "/update" }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> update(@RequestBody SyncEntity synchronizers, @CurrentUser UserEntity currentUser) {
 		log.debug("-update  :" + synchronizers);
@@ -61,7 +67,6 @@ public class SyncController {
 		}
 	}
 
-	@ResponseBody
 	@GetMapping(value = { "/synchr" })
 	public ResponseEntity<?> synchr(@RequestParam("id") String id) {
 		log.debug("-sync ids :" + id);

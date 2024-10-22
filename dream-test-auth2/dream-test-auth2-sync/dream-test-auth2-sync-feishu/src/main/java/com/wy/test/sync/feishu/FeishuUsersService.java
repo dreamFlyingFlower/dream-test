@@ -58,15 +58,12 @@ public class FeishuUsersService extends AbstractSyncProcessor implements SyncPro
 
 						synchroRelated.setOriginId(feiShuUser.getUnion_id());
 						socialsAssociate(synchroRelated, "feishu");
-
 					}
 				}
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public void postSync(UserEntity userInfo) {
