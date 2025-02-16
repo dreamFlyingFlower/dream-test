@@ -21,7 +21,7 @@ import com.wy.test.core.vo.AppSamlDetailVO;
 import com.wy.test.protocol.saml2.saml.common.TrustResolver;
 import com.wy.test.protocol.saml2.saml20.binding.ExtractBindingAdapter;
 
-import dream.flying.flower.framework.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.safe.keystore.KeyStoreLoader;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

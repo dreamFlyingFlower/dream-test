@@ -3,7 +3,7 @@ package com.wy.test.core.password;
 import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import dream.flying.flower.framework.crypto.helper.SM3Helpers;
+import dream.flying.flower.framework.safe.helper.SM3Helpers;
 
 /**
  * SM3加密

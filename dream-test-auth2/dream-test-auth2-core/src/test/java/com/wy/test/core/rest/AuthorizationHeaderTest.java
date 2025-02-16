@@ -2,8 +2,8 @@ package com.wy.test.core.rest;
 
 import org.junit.jupiter.api.Test;
 
-import dream.flying.flower.framework.core.helper.TokenHeader;
-import dream.flying.flower.framework.core.helper.TokenHelpers;
+import dream.flying.flower.framework.web.helper.TokenHeader;
+import dream.flying.flower.framework.web.helper.TokenHelpers;
 
 public class AuthorizationHeaderTest {
 

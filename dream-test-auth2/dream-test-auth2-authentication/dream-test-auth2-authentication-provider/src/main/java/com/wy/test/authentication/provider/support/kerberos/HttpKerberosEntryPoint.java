@@ -14,7 +14,7 @@ import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.properties.DreamAuthServerProperties;
 
 import dream.flying.flower.framework.core.json.JsonHelpers;
-import dream.flying.flower.framework.crypto.helper.ReciprocalHelpers;
+import dream.flying.flower.framework.safe.helper.ReciprocalHelpers;
 import dream.flying.flower.framework.web.enums.AuthLoginType;
 import dream.flying.flower.helper.DateTimeHelper;
 import lombok.extern.slf4j.Slf4j;

@@ -112,7 +112,6 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity, UserVO, Use
 		return false;
 	}
 
-	// 更新账号状态
 	@Override
 	public void accountUpdate(UserVO userInfo) {
 		if (userInfo.getStatus() != ConstStatus.ACTIVE) {
@@ -212,7 +211,7 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity, UserVO, Use
 
 	@Override
 	public ChangePassword passwordEncoder(ChangePassword changePassword) {
-		// 密码不为空，则需要进行加密处理
+		// 密码不为空,则需要进行加密处理
 		if (StrHelper.isNotBlank(changePassword.getPassword())) {
 			String password = passwordEncoder.encode(changePassword.getPassword());
 			changePassword.setDecipherable(PasswordReciprocal.getInstance().encode(changePassword.getPassword()));
@@ -326,67 +325,9 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity, UserVO, Use
 		return false;
 	}
 
-	/**
-	 * 锁定用户：islock：1 用户解锁 2 用户锁定
-	 * 
-	 * @param userInfo
-	 */
-	@Override
-	public void updateLocked(UserEntity userInfo) {
-		try {
-			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
-				userInfo.setIsLocked(ConstStatus.LOCK);
-				baseMapper.updateLocked(userInfo);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * 用户登录成功后，重置错误密码次数和解锁用户
-	 * 
-	 * @param userInfo
-	 */
-	@Override
-	public void updateLockout(UserEntity userInfo) {
-		try {
-			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
-				userInfo.setIsLocked(ConstStatus.START);
-				userInfo.setBadPasswordCount(0);
-				baseMapper.updateLockout(userInfo);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * 更新错误密码次数
-	 * 
-	 * @param userInfo
-	 */
-	@Override
-	public void updateBadPasswordCount(UserEntity userInfo) {
-		try {
-			if (userInfo != null && StrHelper.isNotEmpty(userInfo.getId())) {
-				int updateBadPWDCount = userInfo.getBadPasswordCount() + 1;
-				userInfo.setBadPasswordCount(updateBadPWDCount);
-				baseMapper.updateBadPWDCount(userInfo);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	public boolean updateSharedSecret(UserEntity userInfo) {
 		return baseMapper.updateSharedSecret(userInfo) > 0;
-	}
-
-	@Override
-	public boolean updatePasswordQuestion(UserEntity userInfo) {
-		return baseMapper.updatePasswordQuestion(userInfo) > 0;
 	}
 
 	@Override

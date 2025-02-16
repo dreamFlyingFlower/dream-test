@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 
 import com.wy.test.core.constant.ContentType;
 
-import dream.flying.flower.framework.core.helper.TokenHelpers;
+import dream.flying.flower.framework.web.helper.TokenHelpers;
 import dream.flying.flower.framework.core.json.JsonHelpers;
 import lombok.extern.slf4j.Slf4j;
 

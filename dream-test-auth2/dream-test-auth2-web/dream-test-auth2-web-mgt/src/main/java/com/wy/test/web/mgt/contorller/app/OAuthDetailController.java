@@ -25,7 +25,7 @@ import com.wy.test.core.vo.AppVO;
 import com.wy.test.protocol.oauth2.common.OAuth2Constants;
 import com.wy.test.protocol.oauth2.provider.client.JdbcClientDetailsService;
 
-import dream.flying.flower.framework.crypto.helper.ReciprocalHelpers;
+import dream.flying.flower.framework.safe.helper.ReciprocalHelpers;
 import dream.flying.flower.generator.GeneratorStrategyContext;
 import dream.flying.flower.lang.StrHelper;
 import lombok.extern.slf4j.Slf4j;

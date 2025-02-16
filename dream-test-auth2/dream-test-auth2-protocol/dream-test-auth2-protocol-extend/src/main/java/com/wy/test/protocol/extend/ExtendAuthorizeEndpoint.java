@@ -18,7 +18,7 @@ import com.wy.test.core.vo.UserVO;
 import com.wy.test.protocol.authorize.endpoint.AuthorizeBaseEndpoint;
 import com.wy.test.protocol.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 
-import dream.flying.flower.framework.core.enums.BooleanEnum;
+import dream.flying.flower.enums.BooleanEnum;
 import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

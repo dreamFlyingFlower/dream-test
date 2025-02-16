@@ -69,30 +69,7 @@ public interface UserService extends BaseServices<UserEntity, UserVO, UserQuery>
 
 	boolean updateAppLoginPassword(UserEntity userinfo);
 
-	/**
-	 * 锁定用户:1-用户解锁;2-用户锁定
-	 * 
-	 * @param userInfo
-	 */
-	void updateLocked(UserEntity userInfo);
-
-	/**
-	 * 用户登录成功后,重置错误密码次数和解锁用户
-	 * 
-	 * @param userInfo
-	 */
-	void updateLockout(UserEntity userInfo);
-
-	/**
-	 * 更新错误密码次数
-	 * 
-	 * @param userInfo
-	 */
-	void updateBadPasswordCount(UserEntity userInfo);
-
 	boolean updateSharedSecret(UserEntity userInfo);
-
-	boolean updatePasswordQuestion(UserEntity userInfo);
 
 	boolean updateAuthnType(UserEntity userInfo);
 

@@ -2,7 +2,6 @@ package com.wy.test.persistence.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.wy.test.core.constant.ConstRole;
-import com.wy.test.core.constant.ConstStatus;
 import com.wy.test.core.convert.UserConvert;
 import com.wy.test.core.entity.AppEntity;
 import com.wy.test.core.entity.RoleEntity;
@@ -31,7 +29,6 @@ import com.wy.test.persistence.service.UserService;
 
 import dream.flying.flower.collection.CollectionHelper;
 import dream.flying.flower.enums.YesNoEnum;
-import dream.flying.flower.lang.StrHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -82,67 +79,18 @@ public class LoginServiceImpl implements LoginService {
 
 	@Override
 	public List<UserEntity> findByUsernameOrMobile(String username, String password) {
-		return userService.list(new LambdaQueryWrapper<UserEntity>().eq(UserEntity::getUsername, username).or()
+		return userService.list(new LambdaQueryWrapper<UserEntity>().eq(UserEntity::getUsername, username)
+				.or()
 				.eq(UserEntity::getMobile, username));
 	}
 
 	@Override
 	public List<UserEntity> findByUsernameOrMobileOrEmail(String username, String password) {
-		return userService.list(new LambdaQueryWrapper<UserEntity>().eq(UserEntity::getUsername, username).or()
-				.eq(UserEntity::getMobile, username).or().eq(UserEntity::getEmail, username));
-	}
-
-	@Override
-	public void updateLock(UserEntity userEntity) {
-		if (null == userEntity || StrHelper.isBlank(userEntity.getId())) {
-			return;
-		}
-		userService.lambdaUpdate().set(UserEntity::getIsLocked, ConstStatus.LOCK)
-				.set(UserEntity::getUnlockTime, new Date()).eq(UserEntity::getId, userEntity.getId()).update();
-		userEntity.setIsLocked(ConstStatus.LOCK);
-	}
-
-	@Override
-	public void updateUnlock(UserEntity userEntity) {
-		if (null == userEntity || StrHelper.isBlank(userEntity.getId())) {
-			return;
-		}
-		userService.lambdaUpdate().set(UserEntity::getIsLocked, ConstStatus.ACTIVE)
-				.set(UserEntity::getUnlockTime, new Date()).eq(UserEntity::getId, userEntity.getId()).update();
-		userEntity.setIsLocked(ConstStatus.ACTIVE);
-	}
-
-	/**
-	 * reset BadPasswordCount And Lockout
-	 * 
-	 * @param userInfo
-	 */
-	@Override
-	public void updateLockout(UserEntity userEntity) {
-		if (null == userEntity || StrHelper.isBlank(userEntity.getId())) {
-			return;
-		}
-		userService.lambdaUpdate().set(UserEntity::getBadPasswordCount, 0)
-				.set(UserEntity::getIsLocked, ConstStatus.ACTIVE).set(UserEntity::getUnlockTime, new Date())
-				.eq(UserEntity::getId, userEntity.getId()).update();
-		userEntity.setIsLocked(ConstStatus.ACTIVE);
-	}
-
-	/**
-	 * if login password is error ,BadPasswordCount++ and set bad date
-	 * 
-	 * @param userEntity
-	 */
-	@Override
-	public void updateBadPasswordCount(UserEntity userEntity) {
-		if (null == userEntity || StrHelper.isBlank(userEntity.getId())) {
-			return;
-		}
-		int badPasswordCount = userEntity.getBadPasswordCount() + 1;
-		userEntity.setBadPasswordCount(badPasswordCount);
-
-		userService.lambdaUpdate().set(UserEntity::getBadPasswordCount, badPasswordCount)
-				.set(UserEntity::getBadPasswordTime, new Date()).eq(UserEntity::getId, userEntity.getId()).update();
+		return userService.list(new LambdaQueryWrapper<UserEntity>().eq(UserEntity::getUsername, username)
+				.or()
+				.eq(UserEntity::getMobile, username)
+				.or()
+				.eq(UserEntity::getEmail, username));
 	}
 
 	@Override
@@ -156,7 +104,9 @@ public class LoginServiceImpl implements LoginService {
 				new MPJLambdaWrapper<AppEntity>().select(AppEntity::getId)
 						.innerJoin(RolePermissionEntity.class, RolePermissionEntity::getAppId, AppEntity::getId)
 						.innerJoin(RoleEntity.class, RoleEntity::getId, RolePermissionEntity::getRoleId)
-						.eq(AppEntity::getStatus, 1).in(RoleEntity::getId, grantedAuthorities).distinct());
+						.eq(AppEntity::getStatus, 1)
+						.in(RoleEntity::getId, grantedAuthorities)
+						.distinct());
 		if (CollectionHelper.isNotEmpty(appEntities)) {
 			return appEntities.stream().map(t -> new SimpleGrantedAuthority(t.getId())).collect(Collectors.toList());
 		}
@@ -171,7 +121,8 @@ public class LoginServiceImpl implements LoginService {
 						.select(RoleEntity::getId, RoleEntity::getRoleCode, RoleEntity::getRoleName)
 						.innerJoin(RoleMemberEntity.class, RoleMemberEntity::getRoleId, RoleEntity::getId)
 						.innerJoin(UserEntity.class, UserEntity::getId, RoleMemberEntity::getMemberId)
-						.eq(UserEntity::getId, userVo.getId()).distinct());
+						.eq(UserEntity::getId, userVo.getId())
+						.distinct());
 		if (CollectionHelper.isNotEmpty(roleEntities)) {
 			roleEntities.forEach(t -> t.setIsDefault(0));
 		}
@@ -202,10 +153,13 @@ public class LoginServiceImpl implements LoginService {
 
 	@Override
 	public boolean updateLastLogin(UserVO userVo) {
-		return userService.lambdaUpdate().set(UserEntity::getLastLoginTime, userVo.getLastLoginTime())
+		return userService.lambdaUpdate()
+				.set(UserEntity::getLastLoginTime, userVo.getLastLoginTime())
 				.set(UserEntity::getLastLoginIp, userVo.getLastLoginIp())
 				.set(UserEntity::getLoginCount, userVo.getLoginCount() + 1)
-				.set(UserEntity::getOnline, YesNoEnum.YES.getCode()).eq(UserEntity::getId, userVo.getId()).update();
+				.set(UserEntity::getOnline, YesNoEnum.YES.getValue())
+				.eq(UserEntity::getId, userVo.getId())
+				.update();
 	}
 
 	// public class UserInfoRowMapper implements RowMapper<UserEntity> {
@@ -226,7 +180,8 @@ public class LoginServiceImpl implements LoginService {
 	// userInfo.setDisplayName(rs.getString("display_name"));
 	// userInfo.setNickName(rs.getString("nick_name"));
 	// userInfo.setNameZhSpell(rs.getString("name_zh_spell"));// nameZHSpell
-	// userInfo.setNameZhShortSpell(rs.getString("name_zh_short_spell"));// nameZHSpell
+	// userInfo.setNameZhShortSpell(rs.getString("name_zh_short_spell"));//
+	// nameZHSpell
 	// userInfo.setGivenName(rs.getString("given_name"));
 	// userInfo.setMiddleName(rs.getString("middle_name"));
 	// userInfo.setFamilyName(rs.getString("family_name"));
@@ -319,7 +274,8 @@ public class LoginServiceImpl implements LoginService {
 	// userInfo.setRemark(rs.getString("remark"));
 	// userInfo.setTheme(rs.getString("theme"));
 	// userInfo.setInstId(rs.getString("inst_id"));
-	// if (userInfo.getTheme() == null || userInfo.getTheme().equalsIgnoreCase("")) {
+	// if (userInfo.getTheme() == null || userInfo.getTheme().equalsIgnoreCase(""))
+	// {
 	// userInfo.setTheme("default");
 	// }
 	//

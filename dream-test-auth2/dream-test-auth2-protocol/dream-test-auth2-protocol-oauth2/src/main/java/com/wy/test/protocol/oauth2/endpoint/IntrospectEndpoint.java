@@ -20,9 +20,9 @@ import com.wy.test.protocol.oauth2.provider.ClientDetailsService;
 import com.wy.test.protocol.oauth2.provider.OAuth2Authentication;
 import com.wy.test.protocol.oauth2.provider.token.DefaultTokenServices;
 
-import dream.flying.flower.framework.core.helper.TokenHeader;
-import dream.flying.flower.framework.core.helper.TokenHelpers;
 import dream.flying.flower.framework.core.json.JsonHelpers;
+import dream.flying.flower.framework.web.helper.TokenHeader;
+import dream.flying.flower.framework.web.helper.TokenHelpers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;

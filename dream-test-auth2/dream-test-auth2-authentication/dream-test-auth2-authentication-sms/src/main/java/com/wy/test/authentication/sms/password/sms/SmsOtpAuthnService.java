@@ -19,7 +19,7 @@ import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.persistence.service.EmailSenderService;
 import com.wy.test.persistence.service.SmsProviderService;
 
-import dream.flying.flower.framework.core.enums.BooleanEnum;
+import dream.flying.flower.enums.BooleanEnum;
 
 public class SmsOtpAuthnService {
 

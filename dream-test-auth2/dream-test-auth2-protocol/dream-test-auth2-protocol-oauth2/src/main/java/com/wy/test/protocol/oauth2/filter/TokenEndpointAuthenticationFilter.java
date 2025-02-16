@@ -40,8 +40,8 @@ import com.wy.test.protocol.oauth2.provider.OAuth2Authentication;
 import com.wy.test.protocol.oauth2.provider.OAuth2Request;
 import com.wy.test.protocol.oauth2.provider.OAuth2RequestFactory;
 
-import dream.flying.flower.framework.core.helper.TokenHeader;
-import dream.flying.flower.framework.core.helper.TokenHelpers;
+import dream.flying.flower.framework.web.helper.TokenHeader;
+import dream.flying.flower.framework.web.helper.TokenHelpers;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

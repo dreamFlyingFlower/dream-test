@@ -12,7 +12,7 @@ import org.opensaml.xml.security.credential.CredentialResolver;
 
 import com.wy.test.core.vo.AppSamlDetailVO;
 
-import dream.flying.flower.framework.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.safe.keystore.KeyStoreLoader;
 
 /**
  * Abstracts the SAML Binding used to send/receive messages.

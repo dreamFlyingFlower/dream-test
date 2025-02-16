@@ -15,8 +15,8 @@ import com.wy.test.sync.core.synchronizer.SyncProcessor;
 import com.wy.test.sync.feishu.entity.FeishuUsers;
 import com.wy.test.sync.feishu.entity.FeishuUsersResponse;
 
-import dream.flying.flower.framework.core.helper.TokenHelpers;
 import dream.flying.flower.framework.core.json.JsonHelpers;
+import dream.flying.flower.framework.web.helper.TokenHelpers;
 import dream.flying.flower.generator.GeneratorStrategyContext;
 import lombok.extern.slf4j.Slf4j;
 

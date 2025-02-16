@@ -47,10 +47,10 @@ import com.wy.test.protocol.oauth2.provider.OAuth2Authentication;
 import com.wy.test.protocol.oauth2.provider.token.DefaultTokenServices;
 
 import dream.flying.flower.enums.GenderType;
-import dream.flying.flower.framework.core.helper.TokenHelpers;
 import dream.flying.flower.framework.core.json.JsonHelpers;
-import dream.flying.flower.framework.crypto.jwt.encryption.DefaultJwtEncryptionAndDecryptionHandler;
-import dream.flying.flower.framework.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
+import dream.flying.flower.framework.safe.jwt.encryption.DefaultJwtEncryptionAndDecryptionHandler;
+import dream.flying.flower.framework.safe.jwt.sign.DefaultJwtSigningAndValidationHandler;
+import dream.flying.flower.framework.web.helper.TokenHelpers;
 import dream.flying.flower.generator.StringGenerator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

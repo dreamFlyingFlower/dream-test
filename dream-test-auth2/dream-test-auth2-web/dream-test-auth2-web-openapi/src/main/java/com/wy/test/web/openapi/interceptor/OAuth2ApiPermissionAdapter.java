@@ -14,7 +14,7 @@ import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.protocol.oauth2.provider.OAuth2Authentication;
 import com.wy.test.protocol.oauth2.provider.token.DefaultTokenServices;
 
-import dream.flying.flower.framework.core.helper.TokenHelpers;
+import dream.flying.flower.framework.web.helper.TokenHelpers;
 import lombok.extern.slf4j.Slf4j;
 
 /**

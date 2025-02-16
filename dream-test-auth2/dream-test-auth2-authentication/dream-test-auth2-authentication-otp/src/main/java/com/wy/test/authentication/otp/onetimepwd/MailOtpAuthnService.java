@@ -13,7 +13,7 @@ import com.wy.test.core.entity.EmailSenderEntity;
 import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.persistence.service.EmailSenderService;
 
-import dream.flying.flower.framework.core.enums.BooleanEnum;
+import dream.flying.flower.enums.BooleanEnum;
 
 public class MailOtpAuthnService {
 

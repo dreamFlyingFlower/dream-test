@@ -20,7 +20,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>dream.flying.flower</groupId>
-			<artifactId>dream-framework-crypto</artifactId>
+			<artifactId>dream-framework-safe</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>dream.flying.flower</groupId>
@@ -61,7 +61,6 @@
 		<dependency>
 			<groupId>org.springframework.security.oauth</groupId>
 			<artifactId>spring-security-oauth2</artifactId>
-			<version>${spring-security-oauth2.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -84,7 +83,6 @@
 		<dependency>
 			<groupId>org.passay</groupId>
 			<artifactId>passay</artifactId>
-			<version>1.6.4</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-fileupload</groupId>

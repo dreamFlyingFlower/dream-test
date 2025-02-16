@@ -15,7 +15,7 @@ import com.wy.test.core.constant.ContentType;
 import com.wy.test.core.entity.oauth2.ClientDetails;
 import com.wy.test.protocol.oauth2.common.OAuth2Constants;
 
-import dream.flying.flower.framework.crypto.jose.keystore.JWKSetKeyStore;
+import dream.flying.flower.framework.safe.jose.keystore.JWKSetKeyStore;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

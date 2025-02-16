@@ -27,7 +27,7 @@ public class SessionManagerFactory implements SessionManager {
 			"select id,session_id,user_id,username,display_name,login_time from auth_history_login where session_status = 1";
 
 	private static final String LOGOUT_USERINFO_UPDATE_STATEMENT =
-			"update auth_user set last_logoff_time = ? , online = " + YesNoEnum.NO.getCode() + "  where id = ?";
+			"update auth_user set last_logoff_time = ? , online = " + YesNoEnum.NO.getValue() + "  where id = ?";
 
 	private static final String HISTORY_LOGOUT_UPDATE_STATEMENT =
 			"update auth_history_login set logout_time = ? ,session_status = 7 where  session_id = ?";

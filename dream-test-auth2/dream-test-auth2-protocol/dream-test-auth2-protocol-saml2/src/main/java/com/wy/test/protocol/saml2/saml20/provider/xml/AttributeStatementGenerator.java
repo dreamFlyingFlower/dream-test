@@ -26,7 +26,7 @@ import com.wy.test.core.entity.ExtraAttrs;
 import com.wy.test.core.entity.UserEntity;
 import com.wy.test.core.vo.AppSamlDetailVO;
 
-import dream.flying.flower.framework.core.enums.BooleanEnum;
+import dream.flying.flower.enums.BooleanEnum;
 
 public class AttributeStatementGenerator {
 

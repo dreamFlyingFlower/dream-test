@@ -27,9 +27,9 @@ import com.wy.test.protocol.oauth2.provider.ClientDetailsService;
 import com.wy.test.protocol.oauth2.provider.OAuth2Authentication;
 import com.wy.test.protocol.oauth2.provider.token.DefaultTokenServices;
 
-import dream.flying.flower.framework.core.enums.BooleanEnum;
-import dream.flying.flower.framework.core.helper.TokenHelpers;
+import dream.flying.flower.enums.BooleanEnum;
 import dream.flying.flower.framework.core.json.JsonHelpers;
+import dream.flying.flower.framework.web.helper.TokenHelpers;
 import dream.flying.flower.generator.StringGenerator;
 import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;

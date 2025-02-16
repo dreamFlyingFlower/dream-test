@@ -25,24 +25,6 @@ public interface LoginService {
 
 	List<UserEntity> findByUsernameOrMobileOrEmail(String username, String password);
 
-	/**
-	 * 用户锁定
-	 * 
-	 * @param userEntity 用户信息
-	 */
-	void updateLock(UserEntity userEntity);
-
-	/**
-	 * 用户解锁
-	 * 
-	 * @param userEntity 用户信息
-	 */
-	void updateUnlock(UserEntity userEntity);
-
-	void updateLockout(UserEntity userEntity);
-
-	void updateBadPasswordCount(UserEntity userInfo);
-
 	List<GrantedAuthority> queryAuthorizedApps(List<GrantedAuthority> grantedAuthoritys);
 
 	/**

@@ -15,7 +15,7 @@ import com.wy.test.core.constant.ConstAuthWeb;
 import com.wy.test.core.vo.UserVO;
 import com.wy.test.core.web.AuthWebContext;
 
-import dream.flying.flower.framework.core.helper.TokenHelpers;
+import dream.flying.flower.framework.web.helper.TokenHelpers;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

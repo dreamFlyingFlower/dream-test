@@ -38,10 +38,10 @@ import com.wy.test.core.vo.AppSamlDetailVO;
 import com.wy.test.persistence.service.AppSamlDetailService;
 import com.wy.test.protocol.saml2.saml20.metadata.MetadataDescriptorUtil;
 
-import dream.flying.flower.framework.crypto.cert.X509CertHelpers;
-import dream.flying.flower.framework.crypto.helper.ReciprocalHelpers;
-import dream.flying.flower.framework.crypto.keystore.KeyStoreHelpers;
-import dream.flying.flower.framework.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.safe.cert.X509CertHelpers;
+import dream.flying.flower.framework.safe.helper.ReciprocalHelpers;
+import dream.flying.flower.framework.safe.keystore.KeyStoreHelpers;
+import dream.flying.flower.framework.safe.keystore.KeyStoreLoader;
 import dream.flying.flower.generator.GeneratorStrategyContext;
 import lombok.extern.slf4j.Slf4j;
 

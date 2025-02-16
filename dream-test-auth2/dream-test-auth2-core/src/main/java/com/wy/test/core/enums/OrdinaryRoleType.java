@@ -33,7 +33,7 @@ public enum OrdinaryRoleType implements StatusMsg<String> {
 	private final SimpleGrantedAuthority simpleGrantedAuthority;
 
 	@Override
-	public String getCode() {
+	public String getValue() {
 		return code;
 	}
 

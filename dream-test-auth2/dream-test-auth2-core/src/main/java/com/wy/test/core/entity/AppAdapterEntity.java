@@ -48,7 +48,7 @@ public class AppAdapterEntity extends AbstractStringEntity {
 	/**
 	 * 排序
 	 */
-	@Sort(direction = SortType.DESC)
+	@Sort(sortType = SortType.DESC)
 	private Integer sortIndex;
 
 	/**

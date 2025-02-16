@@ -7,7 +7,7 @@ import com.wy.test.authentication.otp.onetimepwd.AbstractOtpAuthn;
 import com.wy.test.authentication.otp.onetimepwd.algorithm.HOTP;
 import com.wy.test.core.entity.UserEntity;
 
-import dream.flying.flower.framework.crypto.helper.Base32Helpers;
+import dream.flying.flower.framework.safe.helper.Base32Helpers;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

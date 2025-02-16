@@ -12,9 +12,9 @@ import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import com.wy.test.authentication.core.entity.LoginCredential;
 import com.wy.test.authentication.provider.provider.AbstractAuthenticationProvider;
 
-import dream.flying.flower.framework.core.helper.TokenHeader;
-import dream.flying.flower.framework.core.helper.TokenHelpers;
 import dream.flying.flower.framework.web.enums.AuthLoginType;
+import dream.flying.flower.framework.web.helper.TokenHeader;
+import dream.flying.flower.framework.web.helper.TokenHelpers;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

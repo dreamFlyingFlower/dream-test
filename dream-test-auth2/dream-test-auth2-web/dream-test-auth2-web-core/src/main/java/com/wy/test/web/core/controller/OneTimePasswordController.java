@@ -24,7 +24,7 @@ import com.wy.test.core.password.PasswordReciprocal;
 import com.wy.test.persistence.service.UserService;
 
 import dream.flying.flower.framework.core.qrcode.QrCodeHelpers;
-import dream.flying.flower.framework.crypto.helper.Base32Helpers;
+import dream.flying.flower.framework.safe.helper.Base32Helpers;
 import dream.flying.flower.helper.ImageHelper;
 import lombok.SneakyThrows;
 

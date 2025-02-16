@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import dream.flying.flower.framework.crypto.helper.ReciprocalHelpers;
+import dream.flying.flower.framework.safe.helper.ReciprocalHelpers;
 
 /**
  * PasswordReciprocal

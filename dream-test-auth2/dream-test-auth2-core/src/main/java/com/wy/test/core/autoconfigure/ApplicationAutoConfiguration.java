@@ -37,7 +37,7 @@ import com.wy.test.core.repository.InstitutionsRepository;
 import com.wy.test.core.repository.LocalizationRepository;
 import com.wy.test.core.web.AuthWebContext;
 
-import dream.flying.flower.framework.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.safe.keystore.KeyStoreLoader;
 import dream.flying.flower.generator.GeneratorStrategyContext;
 import dream.flying.flower.generator.SnowFlakeGenerator;
 import lombok.extern.slf4j.Slf4j;

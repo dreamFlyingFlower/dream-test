@@ -5,7 +5,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.wy.test.core.vo.AppFormDetailVO;
 import com.wy.test.protocol.authorize.endpoint.adapter.AbstractAuthorizeAdapter;
 
-import dream.flying.flower.framework.core.enums.BooleanEnum;
+import dream.flying.flower.enums.BooleanEnum;
 
 public class FormNetease163EmailAdapter extends AbstractAuthorizeAdapter {
 

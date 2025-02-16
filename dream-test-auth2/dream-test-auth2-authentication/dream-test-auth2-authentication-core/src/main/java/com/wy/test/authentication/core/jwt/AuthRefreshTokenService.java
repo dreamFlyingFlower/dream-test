@@ -5,7 +5,7 @@ import org.springframework.security.core.Authentication;
 import com.nimbusds.jose.JOSEException;
 import com.wy.test.core.properties.DreamAuthJwkProperties;
 
-import dream.flying.flower.framework.crypto.jwt.HMAC512Service;
+import dream.flying.flower.framework.safe.jwt.HMAC512Service;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

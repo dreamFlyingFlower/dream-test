@@ -11,7 +11,7 @@ import org.apache.commons.codec.binary.Hex;
 import com.wy.test.authentication.otp.onetimepwd.algorithm.TimeBasedOTP;
 
 import dream.flying.flower.binary.HexHelper;
-import dream.flying.flower.framework.crypto.helper.Base32Helpers;
+import dream.flying.flower.framework.safe.helper.Base32Helpers;
 
 public class TimeBasedOTPTest {
 

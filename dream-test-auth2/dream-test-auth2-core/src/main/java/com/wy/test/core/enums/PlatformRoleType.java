@@ -36,7 +36,7 @@ public enum PlatformRoleType implements CodeMsg {
 	private final String msg;
 
 	@Override
-	public Integer getCode() {
+	public Integer getValue() {
 		return this.ordinal();
 	}
 

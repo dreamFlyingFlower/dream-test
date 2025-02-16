@@ -33,7 +33,7 @@ import com.wy.test.protocol.saml2.saml20.provider.xml.AuthnResponseGenerator;
 import com.wy.test.protocol.saml2.saml20.xml.SAML2ValidatorSuite;
 import com.wy.test.protocol.saml2.velocity.VelocityEngineFactoryBean;
 
-import dream.flying.flower.framework.crypto.keystore.KeyStoreLoader;
+import dream.flying.flower.framework.safe.keystore.KeyStoreLoader;
 import lombok.extern.slf4j.Slf4j;
 
 // import org.dromara.dream.authz.saml20.binding.decoder.OpenHTTPPostDecoder;

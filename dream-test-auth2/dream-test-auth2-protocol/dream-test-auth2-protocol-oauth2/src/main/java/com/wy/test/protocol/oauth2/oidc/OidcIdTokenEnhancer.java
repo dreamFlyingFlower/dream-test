@@ -30,8 +30,8 @@ import com.wy.test.protocol.oauth2.provider.OAuth2Authentication;
 import com.wy.test.protocol.oauth2.provider.OAuth2Request;
 import com.wy.test.protocol.oauth2.provider.token.TokenEnhancer;
 
-import dream.flying.flower.framework.crypto.jwt.encryption.DefaultJwtEncryptionAndDecryptionHandler;
-import dream.flying.flower.framework.crypto.jwt.sign.DefaultJwtSigningAndValidationHandler;
+import dream.flying.flower.framework.safe.jwt.encryption.DefaultJwtEncryptionAndDecryptionHandler;
+import dream.flying.flower.framework.safe.jwt.sign.DefaultJwtSigningAndValidationHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

@@ -21,7 +21,7 @@ import com.wy.test.protocol.cas.endpoint.ticket.ProxyGrantingTicketImpl;
 import com.wy.test.protocol.cas.endpoint.ticket.ProxyTicketImpl;
 import com.wy.test.protocol.cas.endpoint.ticket.Ticket;
 
-import dream.flying.flower.framework.core.enums.BooleanEnum;
+import dream.flying.flower.enums.BooleanEnum;
 import dream.flying.flower.lang.StrHelper;
 import dream.flying.flower.reflect.ReflectHelper;
 import io.swagger.v3.oas.annotations.Operation;
