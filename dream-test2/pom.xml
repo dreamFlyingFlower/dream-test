@@ -64,11 +64,6 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid-spring-boot-starter</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
-			<version>${flyway.version}</version><!--$NO-MVN-MAN-VER$-->
-		</dependency>
 
 		<dependency>
 			<groupId>com.mysql</groupId>
