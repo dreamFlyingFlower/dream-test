@@ -3,10 +3,10 @@ server:
   servlet:
     context-path: /test
 
-logging:
-  level:
-    '[org.zalando.logbook]': trace
-    '[org.flywaydb]': debug
+#logging:
+#  level:
+#    '[org.zalando.logbook]': trace
+#    '[org.flywaydb]': debug
 
 spring:
   application:
@@ -23,6 +23,6 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/dream_auth?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&allowMultiQueries=true&useSSL=false&serverTimezone=UTC&&allowPublicKeyRetrieval=true
     username: root
     password: 123456
-  flyway:
-    # 首次迁移时基线化非空数据库
-    baseline-on-migrate: true
+#  flyway:
+#    # 首次迁移时基线化非空数据库
+#    baseline-on-migrate: true

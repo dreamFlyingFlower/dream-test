@@ -12,6 +12,7 @@ import dream.flying.flower.autoconfigure.cryption.annotation.CryptionController;
 import dream.flying.flower.autoconfigure.cryption.annotation.DecryptRequest;
 import dream.flying.flower.autoconfigure.cryption.annotation.EncryptResponse;
 import dream.flying.flower.digest.DigestHelper;
+import dream.flying.flower.logger.Logger;
 import dream.flying.flower.result.Result;
 import dream.flying.flower.test.entity.TestUserEntity;
 
@@ -27,6 +28,7 @@ import dream.flying.flower.test.entity.TestUserEntity;
 @RestController
 public class TestValidController {
 
+	@Logger
 	@GetMapping("test-result-encrypt")
 	@EncryptResponse
 	public Result<?> testResultEncrypt() {
